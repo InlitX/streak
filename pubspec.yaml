@@ -1,0 +1,79 @@
+name: streak
+description: "Streak: a minimal habit tracker that helps you build lasting streaks."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  file_picker: ^10.3.7
+  fl_chart: ^0.69.2
+  flutter_colorpicker: ^1.1.0
+  flutter_local_notifications: ^19.5.0
+  flutter_timezone: ^5.0.1
+  hive_ce_flutter: ^2.3.3
+  home_widget: ^0.8.1
+  image_picker: ^1.1.2
+  intl: ^0.20.2
+  path_provider: ^2.1.5
+  lucide_icons_flutter: ^3.1.6
+  package_info_plus: ^9.0.0
+  permission_handler: ^12.0.1
+  provider: ^6.1.5+1
+  share_plus: ^10.1.4
+  timezone: ^0.10.1
+  url_launcher: ^6.3.1
+  uuid: ^4.5.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.1
+
+# Run: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon.png"
+  adaptive_icon_background: "#0D0D0D"
+  adaptive_icon_foreground: "assets/icon_foreground.png"
+  adaptive_icon_monochrome: "assets/icon_foreground.png"
+  min_sdk_android: 23
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/profile_default.jpg
+    - assets/icon.png
+
+  fonts:
+    - family: Figtree
+      fonts:
+        - asset: fonts/Figtree-Light.ttf
+          weight: 300
+        - asset: fonts/Figtree-Regular.ttf
+          weight: 400
+        - asset: fonts/Figtree-Medium.ttf
+          weight: 500
+        - asset: fonts/Figtree-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Figtree-Bold.ttf
+          weight: 700
+        - asset: fonts/Figtree-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Figtree-Black.ttf
+          weight: 900
+    - family: PlayfairDisplay
+      fonts:
+        - asset: fonts/PlayfairDisplay.ttf
+        - asset: fonts/PlayfairDisplay-Italic.ttf
+          style: italic

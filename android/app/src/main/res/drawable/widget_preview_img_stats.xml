@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Static widget-picker preview (mirrors the live widget). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="252dp" android:height="128dp"
+    android:viewportWidth="256" android:viewportHeight="130">
+    <path android:fillColor="#101014" android:pathData="M20,4 H236 a16,16 0 0 1 16,16 V110 a16,16 0 0 1 -16,16 H20 a16,16 0 0 1 -16,-16 V20 a16,16 0 0 1 16,-16 z" />
+    <path android:fillColor="#7C5CFC" android:pathData="M88,38h80v30h-80z" />
+    <path android:fillColor="#3A3A44" android:pathData="M98,78h60v9h-60z" />
+    <path android:fillColor="#55FFFFFF" android:pathData="M86,98h84v9h-84z" />
+</vector>

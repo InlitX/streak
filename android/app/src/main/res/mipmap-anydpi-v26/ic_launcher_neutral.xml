@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Green" variant: the exact default grid, recoloured green, same dark bg. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+  <background android:drawable="@color/ic_launcher_background"/>
+  <foreground>
+      <inset
+          android:drawable="@mipmap/ic_launcher_fg_green"
+          android:inset="16%" />
+  </foreground>
+  <monochrome>
+      <inset
+          android:drawable="@mipmap/ic_launcher_monochrome"
+          android:inset="16%" />
+  </monochrome>
+</adaptive-icon>

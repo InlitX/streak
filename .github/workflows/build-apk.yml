@@ -1,0 +1,125 @@
+name: Build & Release
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build split APKs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show versions
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      # ABI splits keep each APK small (~15-20 MB) instead of one ~58 MB fat APK.
+      - name: Build split APKs
+        run: flutter build apk --release --split-per-abi
+
+      - name: Rename APKs
+        run: |
+          cd build/app/outputs/flutter-apk
+          mv app-arm64-v8a-release.apk     Streak-arm64-v8a.apk
+          mv app-armeabi-v7a-release.apk   Streak-armeabi-v7a.apk
+          mv app-x86_64-release.apk        Streak-x86_64.apk
+
+      - name: Upload APK artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-apks
+          path: build/app/outputs/flutter-apk/Streak-*.apk
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build split APKs
+        run: flutter build apk --release --split-per-abi
+
+      - name: Rename APKs
+        run: |
+          cd build/app/outputs/flutter-apk
+          mv app-arm64-v8a-release.apk     Streak-arm64-v8a.apk
+          mv app-armeabi-v7a-release.apk   Streak-armeabi-v7a.apk
+          mv app-x86_64-release.apk        Streak-x86_64.apk
+
+      # Clean source archive straight from the git tree (no build artifacts).
+      - name: Package source code
+        run: git archive --format=zip --prefix=streak-${{ github.ref_name }}/ -o Streak-source-${{ github.ref_name }}.zip HEAD
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Streak ${{ github.ref_name }}
+          generate_release_notes: true
+          body: |
+            ## Streak ${{ github.ref_name }}
+
+            A minimal, open-source habit tracker — build lasting streaks with a single tap.
+            No accounts, no ads, no tracking. Everything stays on your device.
+
+            ### 📦 Downloads
+            Pick the APK that matches your phone (most modern devices are **arm64-v8a**):
+
+            | Architecture | File | Use if… |
+            |---|---|---|
+            | `arm64-v8a` | `Streak-arm64-v8a.apk` | You have a modern 64-bit phone (recommended) |
+            | `armeabi-v7a` | `Streak-armeabi-v7a.apk` | You have an older 32-bit device |
+            | `x86_64` | `Streak-x86_64.apk` | Emulators / x86 tablets |
+
+            The full source code is attached as a ZIP below.
+          files: |
+            build/app/outputs/flutter-apk/Streak-arm64-v8a.apk
+            build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
+            build/app/outputs/flutter-apk/Streak-x86_64.apk
+            Streak-source-${{ github.ref_name }}.zip
