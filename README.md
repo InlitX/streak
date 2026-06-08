@@ -41,11 +41,11 @@ to feel calm rather than demanding.
 
 <table>
 <tr>
-<td align="center"><img src="docs/screenshots/01-today.png" width="170"/><br/><sub><b>Today</b></sub></td>
-<td align="center"><img src="docs/screenshots/02-stats.png" width="170"/><br/><sub><b>Statistics</b></sub></td>
-<td align="center"><img src="docs/screenshots/03-insights.png" width="170"/><br/><sub><b>Insights</b></sub></td>
-<td align="center"><img src="docs/screenshots/04-customize.png" width="170"/><br/><sub><b>Personalize</b></sub></td>
-<td align="center"><img src="docs/screenshots/05-free.png" width="170"/><br/><sub><b>Free &amp; private</b></sub></td>
+<td align="center" width="20%"><img src="docs/screenshots/01-today.png" width="160" height="347"/><br/><sub><b>Today</b></sub></td>
+<td align="center" width="20%"><img src="docs/screenshots/02-stats.png" width="160" height="347"/><br/><sub><b>Statistics</b></sub></td>
+<td align="center" width="20%"><img src="docs/screenshots/03-insights.png" width="160" height="347"/><br/><sub><b>Insights</b></sub></td>
+<td align="center" width="20%"><img src="docs/screenshots/04-customize.png" width="160" height="347"/><br/><sub><b>Personalize</b></sub></td>
+<td align="center" width="20%"><img src="docs/screenshots/05-free.png" width="160" height="347"/><br/><sub><b>Free &amp; private</b></sub></td>
 </tr>
 </table>
 
