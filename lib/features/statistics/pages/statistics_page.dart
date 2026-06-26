@@ -176,6 +176,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   child: StreakLine(
                     values: stats.streakSeries,
                     color: accent,
+                    startDate: DateTime.now().atMidnight.subtract(
+                      const Duration(days: 89),
+                    ),
                     height: 210,
                   ),
                 ),
@@ -216,16 +219,6 @@ class _Stats {
   final int bestStreak;
   final int monthRate;
 
-  static int _streakAt(Habit habit, DateTime date) {
-    var cursor = date.atMidnight;
-    var streak = 0;
-    while (habit.isCompletedOn(cursor)) {
-      streak++;
-      cursor = cursor.subtract(const Duration(days: 1));
-    }
-    return streak;
-  }
-
   static _Stats compute(List<Habit> habits, int year) {
     final daily = <String, int>{};
     final monthly = List<int>.filled(12, 0);
@@ -250,15 +243,17 @@ class _Stats {
       }
     }
 
-    // Serie de racha de los últimos 90 días (suma sobre los hábitos).
+    // Curva de progreso acumulado de los últimos 90 días: cada día suma los
+    // hábitos completados, de forma que la línea crece suave y con sentido en
+    // lugar de oscilar a cero cada vez que se rompe una racha puntual.
     final today = DateTime.now().atMidnight;
+    var running = 0;
     final streakSeries = List<double>.generate(90, (i) {
       final date = today.subtract(Duration(days: 89 - i));
-      var sum = 0;
       for (final habit in habits) {
-        sum += _streakAt(habit, date);
+        if (habit.isCompletedOn(date)) running++;
       }
-      return sum.toDouble();
+      return running.toDouble();
     });
 
     // Tasa de cumplimiento de los últimos 30 días.

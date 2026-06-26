@@ -18,6 +18,10 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
   <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat-square" />
 </p>
 
+<br/>
+
+**English** · [Español](README.es.md) · [中文](README.zh-CN.md)
+
 </div>
 
 ---

@@ -1,8 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 
 /// Area chart of completions per month across a year (12 values, Jan–Dec).
+/// Built on fl_chart for a smooth spline, filled area and entry animation,
+/// matching the rest of the statistics charts.
 class MonthlyAreaChart extends StatelessWidget {
   const MonthlyAreaChart({super.key, required this.values});
 
@@ -11,25 +14,61 @@ class MonthlyAreaChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
+    final color = scheme.primary;
     final maxValue = values.isEmpty ? 1 : values.reduce((a, b) => a > b ? a : b);
+    final maxY = (maxValue <= 0 ? 1 : maxValue) * 1.18;
 
     return Column(
       children: [
         SizedBox(
           height: 130,
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: 1),
+          child: LineChart(
             duration: const Duration(milliseconds: 750),
             curve: Curves.easeOutCubic,
-            builder: (context, t, _) => CustomPaint(
-              size: Size.infinite,
-              painter: _AreaPainter(
-                values: values,
-                maxValue: maxValue == 0 ? 1 : maxValue,
-                color: scheme.primary,
-                grid: scheme.surfaceContainerHighest,
-                progress: t,
+            LineChartData(
+              minX: 0,
+              maxX: 11,
+              minY: 0,
+              maxY: maxY,
+              // Keep the spline and area strictly inside the card.
+              clipData: const FlClipData.all(),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                horizontalInterval: (maxY / 3).clamp(1, 9999),
+                getDrawingHorizontalLine: (_) => FlLine(
+                  color: scheme.surfaceContainerHighest,
+                  strokeWidth: 1,
+                ),
               ),
+              titlesData: const FlTitlesData(show: false),
+              borderData: FlBorderData(show: false),
+              lineTouchData: const LineTouchData(enabled: false),
+              lineBarsData: [
+                LineChartBarData(
+                  spots: [
+                    for (var i = 0; i < values.length; i++)
+                      FlSpot(i.toDouble(), values[i].toDouble()),
+                  ],
+                  isCurved: true,
+                  curveSmoothness: 0.35,
+                  preventCurveOverShooting: true,
+                  color: color,
+                  barWidth: 3,
+                  dotData: const FlDotData(show: false),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        color.withValues(alpha: 0.4),
+                        color.withValues(alpha: 0.02),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -56,81 +95,4 @@ class MonthlyAreaChart extends StatelessWidget {
       ],
     );
   }
-}
-
-class _AreaPainter extends CustomPainter {
-  _AreaPainter({
-    required this.values,
-    required this.maxValue,
-    required this.color,
-    required this.grid,
-    required this.progress,
-  });
-
-  final List<int> values;
-  final int maxValue;
-  final Color color;
-  final Color grid;
-  final double progress;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (values.length < 2) return;
-
-    final gridPaint = Paint()
-      ..color = grid
-      ..strokeWidth = 1;
-    for (var i = 0; i <= 3; i++) {
-      final y = size.height * i / 3;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
-    }
-
-    final stepX = size.width / (values.length - 1);
-    final points = <Offset>[];
-    for (var i = 0; i < values.length; i++) {
-      final norm = values[i] / maxValue;
-      final x = stepX * i;
-      final y = size.height - size.height * norm * 0.9 * progress - 4;
-      points.add(Offset(x, y));
-    }
-
-    final line = Path()..moveTo(points.first.dx, points.first.dy);
-    for (var i = 1; i < points.length; i++) {
-      final prev = points[i - 1];
-      final curr = points[i];
-      final midX = (prev.dx + curr.dx) / 2;
-      line.cubicTo(midX, prev.dy, midX, curr.dy, curr.dx, curr.dy);
-    }
-
-    final area = Path.from(line)
-      ..lineTo(points.last.dx, size.height)
-      ..lineTo(points.first.dx, size.height)
-      ..close();
-
-    canvas.drawPath(
-      area,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            color.withValues(alpha: 0.4),
-            color.withValues(alpha: 0.02),
-          ],
-        ).createShader(Offset.zero & size),
-    );
-
-    canvas.drawPath(
-      line,
-      Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 3
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_AreaPainter old) => old.progress != progress;
 }

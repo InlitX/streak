@@ -37,6 +37,15 @@ class LocalStore {
 
   static Future<void> removeHabit(String id) => _habits.delete(id);
 
+  /// Closes and reopens the habits box so writes made by another isolate
+  /// (e.g. the home-screen widget's background toggle) are picked up. Hive
+  /// caches a box per isolate, so without reopening the foreground keeps a
+  /// stale in-memory copy and never sees the widget's changes.
+  static Future<void> reloadHabits() async {
+    if (_habits.isOpen) await _habits.close();
+    _habits = await Hive.openBox(_habitsBox);
+  }
+
   static List<Category> readCategories() {
     final result = <Category>[];
     for (final raw in _categories.values) {

@@ -28,7 +28,9 @@ class AppEmptyState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 40,
+          // Compact lives inside narrow half-width cards, so keep the
+          // horizontal padding small to avoid mid-word wrapping.
+          horizontal: compact ? 8 : 40,
           vertical: compact ? 28 : 40,
         ),
         child: Column(
@@ -59,10 +61,11 @@ class AppEmptyState extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: compact ? 16 : 21,
+                fontSize: compact ? 14 : 21,
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.2,
                 color: scheme.onSurface,
+                height: 1.25,
               ),
             ),
             if (message != null) ...[

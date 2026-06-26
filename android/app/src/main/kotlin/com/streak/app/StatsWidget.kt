@@ -9,6 +9,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.state.GlanceStateDefinition
 import HomeWidgetGlanceState
 import HomeWidgetGlanceStateDefinition
@@ -28,7 +29,12 @@ class StatsWidget : GlanceAppWidget() {
         get() = HomeWidgetGlanceStateDefinition()
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        provideContent { Content(context) }
+        provideContent {
+            // Observe state so home_widget updates recompose the widget;
+            // otherwise the stats render once and never refresh.
+            currentState<HomeWidgetGlanceState>()
+            Content(context)
+        }
     }
 
     @Composable

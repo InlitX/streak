@@ -221,7 +221,7 @@ class AppStrings {
   static const Map<String, String> _es = {
     'app_tagline': 'Rastreador de hábitos',
     'today': 'Hoy',
-    'stats': 'Stats',
+    'stats': 'Progreso',
     'settings': 'Ajustes',
     'new': 'Nuevo',
     'save': 'Guardar',

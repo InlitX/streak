@@ -30,7 +30,10 @@ class HabitsController extends ChangeNotifier {
 
   Habit? byId(String id) => _habits[id];
 
-  void reload() {
+  /// Reopens the store from disk and refreshes state. Called when the app
+  /// resumes so completions toggled from the home-screen widget show up.
+  Future<void> reload() async {
+    await LocalStore.reloadHabits();
     _habits = LocalStore.readHabits();
     notifyListeners();
   }

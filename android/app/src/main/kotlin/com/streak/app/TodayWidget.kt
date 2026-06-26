@@ -34,7 +34,13 @@ class TodayWidget : GlanceAppWidget() {
         get() = HomeWidgetGlanceStateDefinition()
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        provideContent { Content(context) }
+        provideContent {
+            // Subscribe to the widget state so home_widget data updates trigger
+            // a recompose. Without reading currentState() Glance renders once and
+            // never refreshes, leaving the check mark and the counter stale.
+            currentState<HomeWidgetGlanceState>()
+            Content(context)
+        }
     }
 
     @Composable

@@ -68,6 +68,9 @@ Future<void> _widgetCallback(Uri? uri) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStore.init();
+  // Force a fresh read from disk: this isolate may be reused across taps and
+  // would otherwise toggle against a stale cached box.
+  await LocalStore.reloadHabits();
 
   final habitId = uri.queryParameters['habitId'];
   final dayIndex = int.tryParse(uri.queryParameters['dayIndex'] ?? '');
@@ -83,7 +86,8 @@ Future<void> _widgetCallback(Uri? uri) async {
   if (habit.isCompletedOn(target)) {
     completions.remove(target.dayKey);
   } else {
-    completions[target.dayKey] = Completion(date: target.dayKey);
+    completions[target.dayKey] =
+        Completion(date: target.dayKey, hour: DateTime.now().hour);
   }
 
   final updated = habit.copyWith(completions: completions);

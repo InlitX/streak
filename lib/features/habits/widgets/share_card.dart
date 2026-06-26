@@ -4,13 +4,16 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/app_strings.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/color_picker.dart';
 
 /// Opens a bottom sheet that previews a polished, shareable card for [habit]
 /// and lets the user export it as an image.
@@ -39,6 +42,48 @@ class _ShareSheet extends StatefulWidget {
 class _ShareSheetState extends State<_ShareSheet> {
   final _cardKey = GlobalKey();
   bool _busy = false;
+
+  // Per-share overrides for the card background. Null means "use the habit's
+  // own value"; these only affect the exported image, not the saved habit.
+  String? _coverOverride;
+  Color? _colorOverride;
+
+  String get _cover => _coverOverride ?? widget.habit.coverPath;
+  Color get _accent => _colorOverride ?? widget.habit.color;
+  bool get _hasCover => _cover.isNotEmpty && File(_cover).existsSync();
+
+  Future<void> _pickPhoto() async {
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1400,
+      imageQuality: 85,
+    );
+    if (picked == null) return;
+    if (mounted) setState(() => _coverOverride = picked.path);
+  }
+
+  void _removePhoto() => setState(() => _coverOverride = '');
+
+  Future<void> _pickColor() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: ColorPicker(
+            selected: _accent,
+            onSelected: (c) => setState(() => _colorOverride = c),
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<void> _share() async {
     if (_busy) return;
@@ -81,9 +126,40 @@ class _ShareSheetState extends State<_ShareSheet> {
           children: [
             RepaintBoundary(
               key: _cardKey,
-              child: ShareCard(habit: widget.habit, width: width),
+              child: ShareCard(
+                habit: widget.habit,
+                width: width,
+                coverPath: _cover,
+                accent: _accent,
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+            // Background editor: swap the photo or recolour the card before
+            // sharing it.
+            Row(
+              children: [
+                _EditButton(
+                  icon: LucideIcons.image,
+                  label: context.tr(_hasCover ? 'change_photo' : 'add_image'),
+                  onTap: _busy ? null : _pickPhoto,
+                ),
+                const SizedBox(width: 10),
+                _EditButton(
+                  icon: LucideIcons.palette,
+                  label: context.tr('color'),
+                  onTap: _busy ? null : _pickColor,
+                ),
+                if (_hasCover) ...[
+                  const SizedBox(width: 10),
+                  _EditButton(
+                    icon: LucideIcons.trash2,
+                    label: context.tr('remove_photo'),
+                    onTap: _busy ? null : _removePhoto,
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
@@ -111,30 +187,102 @@ class _ShareSheetState extends State<_ShareSheet> {
   }
 }
 
+/// Compact pill button used by the share sheet's background editor.
+class _EditButton extends StatelessWidget {
+  const _EditButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    final enabled = onTap != null;
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Opacity(
+            opacity: enabled ? 1 : 0.5,
+            child: Column(
+              children: [
+                Icon(icon, size: 18, color: scheme.onSurface),
+                const SizedBox(height: 5),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: context.tokens.muted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// The shareable card — a self-contained dark graphic built from the habit's colour.
 class ShareCard extends StatelessWidget {
-  const ShareCard({super.key, required this.habit, this.width = 360});
+  const ShareCard({
+    super.key,
+    required this.habit,
+    this.width = 360,
+    this.coverPath,
+    this.accent,
+  });
 
   final Habit habit;
   final double width;
 
+  /// Optional background photo override. Falls back to the habit's own cover.
+  /// An empty string forces "no photo" even when the habit has a cover.
+  final String? coverPath;
+
+  /// Optional accent override. Falls back to the habit's colour.
+  final Color? accent;
+
   @override
   Widget build(BuildContext context) {
-    final color = habit.color;
+    final color = accent ?? habit.color;
     final white60 = Colors.white.withValues(alpha: 0.6);
+
+    final cover = coverPath ?? habit.coverPath;
+    final hasCover = cover.isNotEmpty && File(cover).existsSync();
 
     return Container(
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(34),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.lerp(color, const Color(0xFF111114), 0.66)!,
-            const Color(0xFF09090B),
-          ],
-        ),
+        gradient: hasCover
+            ? const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF111114), Color(0xFF09090B)],
+              )
+            : LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.lerp(color, const Color(0xFF111114), 0.66)!,
+                  const Color(0xFF09090B),
+                ],
+              ),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.08),
           width: 1,
@@ -152,8 +300,50 @@ class ShareCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(34),
         child: Stack(
           children: [
-            // Corner glow.
-            Positioned(top: -90, right: -70, child: _Glow(color: color)),
+            if (hasCover) ...[
+              // Habit photo as a full-bleed background.
+              Positioned.fill(
+                child: Image.file(
+                  File(cover),
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                ),
+              ),
+              // Dark scrim so the text stays readable over any photo, with a
+              // subtle tint of the habit colour to keep the brand cohesive.
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.34),
+                        Colors.black.withValues(alpha: 0.62),
+                        Colors.black.withValues(alpha: 0.86),
+                      ],
+                      stops: const [0.0, 0.55, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        color.withValues(alpha: 0.22),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ] else
+              // Corner glow.
+              Positioned(top: -90, right: -70, child: _Glow(color: color)),
             Padding(
               padding: const EdgeInsets.fromLTRB(26, 24, 26, 22),
               child: Column(
@@ -163,22 +353,14 @@ class ShareCard extends StatelessWidget {
                   // Branding pill.
                   Row(
                     children: [
-                      Container(
-                        width: 26,
-                        height: 26,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              color,
-                              Color.lerp(color, Colors.black, 0.3)!,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(8),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          'assets/icon.png',
+                          width: 28,
+                          height: 28,
+                          fit: BoxFit.cover,
                         ),
-                        child: const Icon(LucideIcons.flame,
-                            size: 15, color: Colors.white),
                       ),
                       const SizedBox(width: 9),
                       const Text(

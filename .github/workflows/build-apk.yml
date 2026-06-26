@@ -1,11 +1,14 @@
 name: Build & Release
 
 on:
-  push:
-    tags: ['v*']
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag / version, e.g. v1.1.0'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -62,7 +65,9 @@ jobs:
     name: Publish release
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    # Only when manually dispatched with a tag. The release body is left empty
+    # on purpose so it can be filled in by hand after publishing.
+    if: github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout
@@ -83,8 +88,17 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # The app version comes entirely from the tag you type when running the
+      # workflow: "v1.2.3" -> build-name 1.2.3. The Android versionCode uses the
+      # workflow run number so every release is unique and increasing.
       - name: Build split APKs
-        run: flutter build apk --release --split-per-abi
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          VERSION="${TAG#v}"
+          flutter build apk --release --split-per-abi \
+            --build-name="$VERSION" \
+            --build-number="${{ github.run_number }}"
 
       - name: Rename APKs
         run: |
@@ -95,31 +109,15 @@ jobs:
 
       # Clean source archive straight from the git tree (no build artifacts).
       - name: Package source code
-        run: git archive --format=zip --prefix=streak-${{ github.ref_name }}/ -o Streak-source-${{ github.ref_name }}.zip HEAD
+        run: git archive --format=zip --prefix=streak-${{ inputs.tag }}/ -o Streak-source-${{ inputs.tag }}.zip HEAD
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Streak ${{ github.ref_name }}
-          generate_release_notes: true
-          body: |
-            ## Streak ${{ github.ref_name }}
-
-            A minimal, open-source habit tracker — build lasting streaks with a single tap.
-            No accounts, no ads, no tracking. Everything stays on your device.
-
-            ### 📦 Downloads
-            Pick the APK that matches your phone (most modern devices are **arm64-v8a**):
-
-            | Architecture | File | Use if… |
-            |---|---|---|
-            | `arm64-v8a` | `Streak-arm64-v8a.apk` | You have a modern 64-bit phone (recommended) |
-            | `armeabi-v7a` | `Streak-armeabi-v7a.apk` | You have an older 32-bit device |
-            | `x86_64` | `Streak-x86_64.apk` | Emulators / x86 tablets |
-
-            The full source code is attached as a ZIP below.
+          tag_name: ${{ inputs.tag }}
+          name: Streak ${{ inputs.tag }}
           files: |
             build/app/outputs/flutter-apk/Streak-arm64-v8a.apk
             build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
             build/app/outputs/flutter-apk/Streak-x86_64.apk
-            Streak-source-${{ github.ref_name }}.zip
+            Streak-source-${{ inputs.tag }}.zip
