@@ -1,0 +1,29 @@
+Streak es un seguidor de hábitos que te respeta. Crea todos los hábitos que quieras, regístralos con un solo toque y sigue tu progreso con una cuadrícula de actividad estilo GitHub, contadores de racha y un panel de estadísticas. Es rápido, funciona sin conexión y está diseñado para transmitir calma, no exigencia.
+
+Tuyo, por completo. Sin cuentas, sin suscripciones, sin anuncios, sin rastreo. Cada hábito y ajuste se queda en tu dispositivo, y todo el código fuente es abierto.
+
+Seguimiento
+* Registro con un toque desde la pantalla de inicio
+* Metas diarias, semanales y mensuales
+* Contadores de racha actual y mejor racha
+* "Fuerza" del hábito según tu constancia reciente
+
+Visualización
+* Cuadrícula de actividad estilo GitHub (semana / mes / año)
+* Panel de estadísticas con tendencias y totales
+* Tarjeta de progreso para compartir como imagen
+
+Personalización
+* Conjunto de iconos minimalista y soporte de emojis
+* Color de acento personalizado con selector de color completo
+* Temas claro / oscuro y fondos seleccionables
+* Categorías, reordenar, nombre y foto de perfil
+
+Datos y plataforma
+* Recordatorios por hábito en los días que elijas
+* Copia de seguridad y restauración en un archivo JSON portable
+* Tres widgets para la pantalla de inicio
+* Totalmente sin conexión
+
+Privacidad
+Streak no tiene analíticas, ni SDK de publicidad, ni backend de red. La app nunca envía tus datos a ningún sitio; se quedan en tu dispositivo. Las únicas acciones salientes son los enlaces que tú decidas abrir.

@@ -1,0 +1,29 @@
+Streak is a habit tracker that respects you. Create as many habits as you like, log them with a single tap, and follow your progress through a GitHub-style activity grid, streak counters and a statistics dashboard. It is fast, offline, and built to feel calm rather than demanding.
+
+Yours, completely. No accounts, no subscriptions, no ads, no tracking. Every habit and setting stays on your device, and the full source is open.
+
+Tracking
+* One-tap logging from the home screen
+* Daily, weekly and monthly goals
+* Current and best streak counters
+* Habit "strength" based on recent consistency
+
+Visualization
+* GitHub-style activity grid (week / month / year)
+* Statistics dashboard with trends and totals
+* Shareable progress card as a polished image
+
+Personalization
+* Minimalist icon pack and emoji support
+* Custom accent color with a full color picker
+* Light / dark themes and selectable backgrounds
+* Categories, reordering, profile name and photo
+
+Data & platform
+* Per-habit reminders on the days you choose
+* Backup and restore as a portable JSON file
+* Three home-screen widgets
+* Fully offline
+
+Privacy
+Streak has no analytics, no advertising SDK and no network backend. The app never sends your data anywhere; it stays on your device. The only outbound actions are links you choose to open yourself.

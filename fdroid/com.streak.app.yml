@@ -1,0 +1,31 @@
+Categories:
+  - Time
+License: MIT
+AuthorName: InlitX
+WebSite: https://github.com/InlitX/streak
+SourceCode: https://github.com/InlitX/streak
+IssueTracker: https://github.com/InlitX/streak/issues
+Donate: https://ko-fi.com/inlitx
+
+RepoType: git
+Repo: https://github.com/InlitX/streak.git
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: v1.0.0
+    output: build/app/outputs/flutter-apk/app-release.apk
+    srclibs:
+      - flutter@stable
+    rm:
+      - streak-marketing
+    prebuild:
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get
+    build:
+      - $$flutter$$/bin/flutter build apk --release
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
