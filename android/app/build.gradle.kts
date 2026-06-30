@@ -37,6 +37,12 @@ android {
         versionName = flutter.versionName
     }
 
+    // F-Droid: drop the Google "Dependency metadata" signing block from the APK
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     if (keystorePropertiesFile.exists()) {
         signingConfigs {
             create("release") {
