@@ -1,0 +1,10 @@
+First release of Streak.
+
+* One-tap habit logging from the home screen
+* Daily, weekly and monthly goals with current/best streak counters
+* GitHub-style activity grid and a statistics dashboard
+* Shareable progress card
+* Custom accent color, light/dark themes and selectable backgrounds
+* Per-habit reminders, JSON backup and restore
+* Three home-screen widgets
+* Fully offline, no ads, no tracking

@@ -1,0 +1,10 @@
+Primera versión de Streak.
+
+* Registro de hábitos con un toque desde la pantalla de inicio
+* Metas diarias, semanales y mensuales con contadores de racha actual/mejor
+* Cuadrícula de actividad estilo GitHub y panel de estadísticas
+* Tarjeta de progreso para compartir
+* Color de acento personalizado, temas claro/oscuro y fondos seleccionables
+* Recordatorios por hábito, copia y restauración en JSON
+* Tres widgets para la pantalla de inicio
+* Totalmente sin conexión, sin anuncios, sin rastreo
