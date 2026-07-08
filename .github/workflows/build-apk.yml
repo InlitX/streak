@@ -95,17 +95,28 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # The app version comes entirely from the tag you type when running the
-      # workflow: "v1.2.3" -> build-name 1.2.3. The Android versionCode uses the
-      # workflow run number so every release is unique and increasing.
-      - name: Build split APKs
+      # Sign the release APKs with the release keystore (kept in GitHub Secrets)
+      # so the published binaries match F-Droid's reproducible build.
+      - name: Set up signing
         env:
-          TAG: ${{ inputs.tag }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          VERSION="${TAG#v}"
-          flutter build apk --release --split-per-abi \
-            --build-name="$VERSION" \
-            --build-number="${{ github.run_number }}"
+          echo "$KEYSTORE_BASE64" | base64 -d > android/app/streak-release.jks
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=streak-release.jks
+          EOF
+
+      # Reproducible build: version name AND code come entirely from pubspec.yaml
+      # (1.1.0+2), exactly like F-Droid builds it. Do NOT pass --build-name or
+      # --build-number here, or the APK won't match F-Droid's.
+      - name: Build split APKs
+        run: flutter build apk --release --split-per-abi
 
       - name: Rename APKs
         run: |
