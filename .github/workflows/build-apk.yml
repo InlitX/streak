@@ -75,6 +75,12 @@ jobs:
     # on purpose so it can be filled in by hand after publishing.
     if: github.event_name == 'workflow_dispatch'
 
+    # Reproducible build: keep the pub cache at a fixed path inside the workspace
+    # (/home/runner/work/streak/streak/.pub-cache). F-Droid relocates its build to
+    # this exact same path and uses the same PUB_CACHE, so the embedded paths match.
+    env:
+      PUB_CACHE: ${{ github.workspace }}/.pub-cache
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,6 +100,12 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      # Reproducibility: the jni package bakes a unique build-id into libdartjni.so.
+      # Force --build-id=none so the native lib is deterministic. F-Droid applies
+      # this exact same patch in its recipe.
+      - name: Patch jni build-id
+        run: sed -i -e 's/-Wl,/-Wl,--build-id=none,/' "$PUB_CACHE"/hosted/pub.dev/jni-*/src/CMakeLists.txt
 
       # Sign the release APKs with the release keystore (kept in GitHub Secrets)
       # so the published binaries match F-Droid's reproducible build.
@@ -115,8 +127,10 @@ jobs:
       # Reproducible build: version name AND code come entirely from pubspec.yaml
       # (1.1.0+2), exactly like F-Droid builds it. Do NOT pass --build-name or
       # --build-number here, or the APK won't match F-Droid's.
+      # --split-debug-info moves the path-laden debug symbols out of libapp.so so it
+      # builds deterministically. F-Droid uses the same flag.
       - name: Build split APKs
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi --split-debug-info=build/symbols
 
       - name: Rename APKs
         run: |
