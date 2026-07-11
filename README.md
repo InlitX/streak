@@ -11,13 +11,20 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 <br/>
 
 <p>
-  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" />
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white" />
-  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white" />
-  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat-square" />
-  <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat-square" />
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
+  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
+  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 
+<br/>
+
+<a href="https://f-droid.org/packages/com.streak.app/"><img alt="Get it on F-Droid" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
+&nbsp;
+<a href="https://github.com/InlitX/streak/releases"><img alt="Get it on GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+
+<br/>
 <br/>
 
 **English** · [Español](README.es.md) · [中文](README.zh-CN.md)
@@ -41,26 +48,25 @@ to feel calm rather than demanding.
 
 ## Screenshots
 
-<div align="center">
+<p align="center">
+  <img src="docs/screenshots/01-today.png" alt="Today" width="150" />
+  <img src="docs/screenshots/02-stats.png" alt="Statistics" width="150" />
+  <img src="docs/screenshots/03-insights.png" alt="Insights" width="150" />
+  <img src="docs/screenshots/04-customize.png" alt="Personalize" width="150" />
+  <img src="docs/screenshots/05-free.png" alt="Free &amp; private" width="150" />
+</p>
 
-<table>
-<tr>
-<td align="center" width="20%"><img src="docs/screenshots/01-today.png" width="160" height="347"/><br/><sub><b>Today</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/02-stats.png" width="160" height="347"/><br/><sub><b>Statistics</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/03-insights.png" width="160" height="347"/><br/><sub><b>Insights</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/04-customize.png" width="160" height="347"/><br/><sub><b>Personalize</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/05-free.png" width="160" height="347"/><br/><sub><b>Free &amp; private</b></sub></td>
-</tr>
-</table>
-
-</div>
+<div align="center"><sub><b>Today</b> · <b>Statistics</b> · <b>Insights</b> · <b>Personalize</b> · <b>Free &amp; private</b></sub></div>
 
 ---
 
 ## Download
 
-Grab the latest APK from the [**Releases**](https://github.com/InlitX/streak/releases) page.
-Builds are split per CPU architecture to keep each download small — pick the one
+The easiest way is [**F-Droid**](https://f-droid.org/packages/com.streak.app/), which
+installs Streak and keeps it up to date automatically.
+
+Prefer the raw APK? Grab it from the [**Releases**](https://github.com/InlitX/streak/releases)
+page. Builds are split per CPU architecture to keep each download small — pick the one
 that matches your phone (most modern devices are **arm64-v8a**):
 
 | APK | For |
@@ -245,6 +251,8 @@ If Streak helps you show up more often, a star or a coffee goes a long way:
 
 Issues and pull requests are welcome. For larger changes, please open an issue
 first to discuss the direction.
+
+---
 
 ## License
 

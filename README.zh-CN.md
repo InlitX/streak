@@ -11,13 +11,20 @@
 <br/>
 
 <p>
-  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" />
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white" />
-  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white" />
-  <img alt="MIT 许可证" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat-square" />
-  <img alt="无广告、无追踪" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat-square" />
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
+  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
+  <img alt="MIT 许可证" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="无广告、无追踪" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 
+<br/>
+
+<a href="https://f-droid.org/packages/com.streak.app/"><img alt="在 F-Droid 上获取" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
+&nbsp;
+<a href="https://github.com/InlitX/streak/releases"><img alt="在 GitHub 上获取" src="assets/badges/get-it-on-github.png" height="60" /></a>
+
+<br/>
 <br/>
 
 [English](README.md) · [Español](README.es.md) · **中文**
@@ -40,25 +47,24 @@ GitHub 的活动网格、连续记录计数器和统计面板来跟踪你的进�
 
 ## 截图
 
-<div align="center">
+<p align="center">
+  <img src="docs/screenshots/01-today.png" alt="今天" width="150" />
+  <img src="docs/screenshots/02-stats.png" alt="统计" width="150" />
+  <img src="docs/screenshots/03-insights.png" alt="洞察" width="150" />
+  <img src="docs/screenshots/04-customize.png" alt="个性化" width="150" />
+  <img src="docs/screenshots/05-free.png" alt="免费且私密" width="150" />
+</p>
 
-<table>
-<tr>
-<td align="center" width="20%"><img src="docs/screenshots/01-today.png" width="160" height="347"/><br/><sub><b>今天</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/02-stats.png" width="160" height="347"/><br/><sub><b>统计</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/03-insights.png" width="160" height="347"/><br/><sub><b>洞察</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/04-customize.png" width="160" height="347"/><br/><sub><b>个性化</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/05-free.png" width="160" height="347"/><br/><sub><b>免费且私密</b></sub></td>
-</tr>
-</table>
-
-</div>
+<div align="center"><sub><b>今天</b> · <b>统计</b> · <b>洞察</b> · <b>个性化</b> · <b>免费且私密</b></sub></div>
 
 ---
 
 ## 下载
 
-前往 [**Releases**](https://github.com/InlitX/streak/releases) 页面获取最新的 APK。
+最简单的方式是 [**F-Droid**](https://f-droid.org/packages/com.streak.app/)，它会安装
+Streak 并自动保持更新。
+
+想要直接下载 APK？前往 [**Releases**](https://github.com/InlitX/streak/releases) 页面获取。
 构建按 CPU 架构拆分，以保持每个下载包都很小——请选择与你手机匹配的版本（大多数
 现代设备为 **arm64-v8a**）：
 
@@ -242,6 +248,8 @@ flutter build apk --release --split-per-abi
 ## 贡献
 
 欢迎提交 issue 和 pull request。对于较大的改动，请先开一个 issue 讨论方向。
+
+---
 
 ## 许可证
 

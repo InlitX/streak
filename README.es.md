@@ -11,13 +11,20 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 <br/>
 
 <p>
-  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" />
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white" />
-  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white" />
-  <img alt="Licencia MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat-square" />
-  <img alt="Sin anuncios, sin rastreo" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat-square" />
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
+  <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
+  <img alt="Licencia MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="Sin anuncios, sin rastreo" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 
+<br/>
+
+<a href="https://f-droid.org/packages/com.streak.app/"><img alt="Disponible en F-Droid" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
+&nbsp;
+<a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+
+<br/>
 <br/>
 
 [English](README.md) · **Español** · [中文](README.zh-CN.md)
@@ -42,25 +49,24 @@ exigir.
 
 ## Capturas
 
-<div align="center">
+<p align="center">
+  <img src="docs/screenshots/01-today.png" alt="Hoy" width="150" />
+  <img src="docs/screenshots/02-stats.png" alt="Estadísticas" width="150" />
+  <img src="docs/screenshots/03-insights.png" alt="Análisis" width="150" />
+  <img src="docs/screenshots/04-customize.png" alt="Personaliza" width="150" />
+  <img src="docs/screenshots/05-free.png" alt="Libre y privada" width="150" />
+</p>
 
-<table>
-<tr>
-<td align="center" width="20%"><img src="docs/screenshots/01-today.png" width="160" height="347"/><br/><sub><b>Hoy</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/02-stats.png" width="160" height="347"/><br/><sub><b>Estadísticas</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/03-insights.png" width="160" height="347"/><br/><sub><b>Análisis</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/04-customize.png" width="160" height="347"/><br/><sub><b>Personaliza</b></sub></td>
-<td align="center" width="20%"><img src="docs/screenshots/05-free.png" width="160" height="347"/><br/><sub><b>Libre y privada</b></sub></td>
-</tr>
-</table>
-
-</div>
+<div align="center"><sub><b>Hoy</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub></div>
 
 ---
 
 ## Descarga
 
-Consigue el APK más reciente en la página de [**Releases**](https://github.com/InlitX/streak/releases).
+La forma más fácil es [**F-Droid**](https://f-droid.org/packages/com.streak.app/), que
+instala Streak y lo mantiene actualizado automáticamente.
+
+¿Prefieres el APK directo? Consíguelo en la página de [**Releases**](https://github.com/InlitX/streak/releases).
 Las compilaciones están divididas por arquitectura de CPU para que cada descarga
 sea pequeña: elige la que corresponda a tu teléfono (la mayoría de los
 dispositivos modernos son **arm64-v8a**):
@@ -239,7 +245,7 @@ Release de GitHub.
 
 <div align="center">
 
-Si Streak te ayuda a aparecer más a menudo, una estrella o un café significan mucho:
+Si Streak te ayuda a mantener la constancia, una estrella o un café significan mucho:
 
 <a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Estrella en GitHub" height="38" /></a>
 &nbsp;&nbsp;
@@ -253,6 +259,8 @@ Si Streak te ayuda a aparecer más a menudo, una estrella o un café significan 
 
 Las incidencias y pull requests son bienvenidas. Para cambios grandes, abre
 primero una incidencia para comentar la dirección.
+
+---
 
 ## Licencia
 
