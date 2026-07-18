@@ -15,4 +15,8 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <!-- Selector de hábito del widget de heatmap: oscuro como el widget. -->
+    <style name="HeatmapConfigTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#101014</item>
+    </style>
 </resources>

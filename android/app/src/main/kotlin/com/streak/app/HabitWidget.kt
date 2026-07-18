@@ -37,6 +37,12 @@ import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import org.json.JSONObject
 
 private val brandColor = androidx.compose.ui.graphics.Color(0xFF6C5CE7)
+private val dangerColor = androidx.compose.ui.graphics.Color(0xFFEF4444)
+
+// Mirrors HabitKind in lib/features/habits/data/habit.dart.
+private const val KIND_POSITIVE = 0
+private const val KIND_NEGATIVE = 1
+private const val KIND_QUANTITATIVE = 2
 
 class HabitWidget : GlanceAppWidget() {
 
@@ -53,7 +59,6 @@ class HabitWidget : GlanceAppWidget() {
     private fun WidgetContent(context: Context, currentState: HomeWidgetGlanceState) {
         val data = loadWidgetData(context)
 
-        // Use the first habit's cover photo as the widget background if present.
         val cover = firstCover(data)
         val bitmap = loadBitmap(cover)
 
@@ -65,7 +70,6 @@ class HabitWidget : GlanceAppWidget() {
                     contentScale = ContentScale.Crop,
                     modifier = GlanceModifier.fillMaxSize().cornerRadius(20.dp)
                 )
-                // Dark scrim keeps the grid readable over the photo.
                 Box(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -154,7 +158,17 @@ class HabitWidget : GlanceAppWidget() {
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
+        val color = androidx.compose.ui.graphics.Color(colorInt)
         val completions = habit.getJSONArray("completions")
+        val kind = habit.optInt("kind", KIND_POSITIVE)
+        val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
+        val incrementAmount = habit.optInt("incrementAmount", 1)
+        val counts = habit.optJSONArray("counts")
+        val action = when (kind) {
+            KIND_NEGATIVE -> "relapse"
+            KIND_QUANTITATIVE -> "progress"
+            else -> "toggle"
+        }
 
         Row(
             modifier = GlanceModifier
@@ -186,6 +200,7 @@ class HabitWidget : GlanceAppWidget() {
             ) {
                 for (i in 0 until 7) {
                     val isCompleted = if (i < completions.length()) completions.getBoolean(i) else false
+                    val count = if (counts != null && i < counts.length()) counts.optInt(i, 0) else 0
                     Box(
                         modifier = GlanceModifier
                             .defaultWeight()
@@ -200,16 +215,25 @@ class HabitWidget : GlanceAppWidget() {
                                     onClick = actionRunCallback<ToggleHabitAction>(
                                         parameters = actionParametersOf(
                                             ActionParameters.Key<String>("habitId") to habitId,
-                                            ActionParameters.Key<Int>("dayIndex") to i
+                                            ActionParameters.Key<Int>("dayIndex") to i,
+                                            ActionParameters.Key<String>("action") to action,
+                                            ActionParameters.Key<Int>("delta") to incrementAmount
                                         )
                                     )
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            CompletionIndicator(
-                                isCompleted = isCompleted,
-                                color = androidx.compose.ui.graphics.Color(colorInt)
-                            )
+                            when (kind) {
+                                KIND_NEGATIVE -> CompletionIndicator(
+                                    isCompleted = count > 0,
+                                    color = if (count > 0) dangerColor else color
+                                )
+                                KIND_QUANTITATIVE -> ProgressIndicator(
+                                    ratio = count.toFloat() / perDayTarget,
+                                    color = color
+                                )
+                                else -> CompletionIndicator(isCompleted = isCompleted, color = color)
+                            }
                         }
                     }
                 }
@@ -227,6 +251,21 @@ class HabitWidget : GlanceAppWidget() {
                 .size(size)
                 .background(ColorProvider(color.copy(alpha = alpha)))
                 .cornerRadius(radius),
+            content = {}
+        )
+    }
+
+    // Dot whose size/alpha scale with today's progress.
+    @Composable
+    private fun ProgressIndicator(ratio: Float, color: androidx.compose.ui.graphics.Color) {
+        val clamped = ratio.coerceIn(0f, 1f)
+        val size = (8 + 10 * clamped).dp
+        val alpha = if (clamped > 0f) (0.4f + 0.6f * clamped) else 0.35f
+        Box(
+            modifier = GlanceModifier
+                .size(size)
+                .background(ColorProvider(color.copy(alpha = alpha)))
+                .cornerRadius(size / 2),
             content = {}
         )
     }
@@ -287,10 +326,16 @@ class ToggleHabitAction : ActionCallback {
     ) {
         val habitId = parameters[ActionParameters.Key<String>("habitId")]
         val dayIndex = parameters[ActionParameters.Key<Int>("dayIndex")]
+        // action: "toggle" | "relapse" | "progress" (see HabitKind, Dart side).
+        val action = parameters[ActionParameters.Key<String>("action")] ?: "toggle"
+        val delta = parameters[ActionParameters.Key<Int>("delta")] ?: 1
         if (habitId != null && dayIndex != null) {
             val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(
                 context,
-                Uri.parse("streak://toggleHabit?habitId=$habitId&dayIndex=$dayIndex")
+                Uri.parse(
+                    "streak://toggleHabit?habitId=$habitId&dayIndex=$dayIndex" +
+                        "&action=$action&delta=$delta"
+                )
             )
             backgroundIntent.send()
         }

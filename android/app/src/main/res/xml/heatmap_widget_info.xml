@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Default width: the width decides how much history shows. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="80dp"
+    android:updatePeriodMillis="1800000"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:configure="com.streak.app.HeatmapConfigActivity"
+    android:description="@string/widget_description"
+    android:previewLayout="@layout/widget_preview_heatmap"
+    android:previewImage="@drawable/widget_preview_img_heatmap" />

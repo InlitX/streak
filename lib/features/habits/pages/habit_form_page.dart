@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -13,6 +11,7 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -41,6 +40,7 @@ class HabitFormPage extends StatefulWidget {
 class _HabitFormPageState extends State<HabitFormPage> {
   late final TextEditingController _name;
   late final TextEditingController _description;
+  late final TextEditingController _unitLabel;
 
   String _icon = HabitIcons.defaultIcon;
   String _category = '';
@@ -51,7 +51,22 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool _advanced = false;
   late List<Reminder> _reminders;
 
-  bool get _canSave => _name.text.trim().isNotEmpty;
+  HabitKind _kind = HabitKind.positive;
+  QuantKind _quantKind = QuantKind.generic;
+  int _quantTarget = 8;
+  int _quantIncrement = 1;
+  String _bookCover = '';
+
+  // Locked on edit: changing kind would reinterpret past completions.
+  bool get _kindLocked => widget.isEditing;
+
+  bool get _canSave {
+    if (_name.text.trim().isEmpty) return false;
+    if (_kind == HabitKind.quantitative && _unitLabel.text.trim().isEmpty) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   void initState() {
@@ -59,6 +74,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
     final habit = widget.habit;
     _name = TextEditingController(text: habit?.name ?? '');
     _description = TextEditingController(text: habit?.description ?? '');
+    _unitLabel = TextEditingController(text: habit?.unitLabel ?? '');
     if (habit != null) {
       _icon = habit.icon;
       _category = habit.category;
@@ -67,7 +83,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _frequency = habit.targetFrequency;
       _cover = habit.coverPath;
       _reminders = List.of(habit.reminders);
-      // Expande las opciones avanzadas si el hábito ya usa alguna.
+      _kind = habit.kind;
+      _quantKind = habit.quantKind;
+      _quantTarget = habit.kind == HabitKind.quantitative ? habit.perDayTarget : 8;
+      _quantIncrement = habit.incrementAmount;
+      _bookCover = habit.bookCoverPath;
       _advanced = habit.description.isNotEmpty ||
           habit.category.isNotEmpty ||
           habit.reminders.isNotEmpty ||
@@ -82,13 +102,38 @@ class _HabitFormPageState extends State<HabitFormPage> {
   void dispose() {
     _name.dispose();
     _description.dispose();
+    _unitLabel.dispose();
     super.dispose();
+  }
+
+  void _applyQuantPreset(QuantKind preset) {
+    setState(() {
+      _quantKind = preset;
+      switch (preset) {
+        case QuantKind.water:
+          _unitLabel.text = context.tr('quant_unit_ml');
+          _quantTarget = 2000;
+          _quantIncrement = 250;
+          break;
+        case QuantKind.reading:
+          _unitLabel.text = context.tr('quant_unit_pages');
+          _quantTarget = 20;
+          _quantIncrement = 1;
+          break;
+        case QuantKind.generic:
+          break;
+      }
+    });
   }
 
   void _submit() {
     final controller = context.read<HabitsController>();
     final name = _name.text.trim();
     final description = _description.text.trim();
+    final quantitative = _kind == HabitKind.quantitative;
+    final negative = _kind == HabitKind.negative;
+    final interval = negative ? HabitInterval.daily : _interval;
+    final frequency = negative ? 1 : _frequency;
 
     if (widget.isEditing) {
       controller.update(
@@ -98,10 +143,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
           category: _category,
           description: description,
           color: _color,
-          interval: _interval,
-          targetFrequency: _frequency,
+          interval: interval,
+          targetFrequency: frequency,
           reminders: _reminders,
           coverPath: _cover,
+          perDayTarget: quantitative ? _quantTarget : widget.habit!.perDayTarget,
+          unitLabel: quantitative ? _unitLabel.text.trim() : widget.habit!.unitLabel,
+          incrementAmount:
+              quantitative ? _quantIncrement : widget.habit!.incrementAmount,
+          quantKind: quantitative ? _quantKind : widget.habit!.quantKind,
+          bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
         ),
       );
     } else {
@@ -111,29 +162,29 @@ class _HabitFormPageState extends State<HabitFormPage> {
         category: _category,
         description: description,
         color: _color.toARGB32(),
-        interval: _interval,
-        targetFrequency: _frequency,
+        interval: interval,
+        targetFrequency: frequency,
         reminders: _reminders,
         coverPath: _cover,
+        kind: _kind,
+        perDayTarget: quantitative ? _quantTarget : 1,
+        unitLabel: quantitative ? _unitLabel.text.trim() : '',
+        incrementAmount: quantitative ? _quantIncrement : 1,
+        quantKind: quantitative ? _quantKind : QuantKind.generic,
+        bookCoverPath: quantitative ? _bookCover : '',
       );
     }
     AppNavigator.pop();
   }
 
   Future<void> _pickCover() async {
-    final picked = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1200,
-      imageQuality: 80,
-    );
-    if (picked == null) return;
-    // Copia la imagen a un lugar persistente del almacenamiento de la app.
-    final dir = await getApplicationDocumentsDirectory();
-    final covers = Directory('${dir.path}/covers');
-    if (!covers.existsSync()) covers.createSync(recursive: true);
-    final dest = '${covers.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    await File(picked.path).copy(dest);
-    if (mounted) setState(() => _cover = dest);
+    final dest = await CoverStorage.pick();
+    if (dest != null && mounted) setState(() => _cover = dest);
+  }
+
+  Future<void> _pickBookCover() async {
+    final dest = await CoverStorage.pick();
+    if (dest != null && mounted) setState(() => _bookCover = dest);
   }
 
   Future<void> _confirmDelete() async {
@@ -204,7 +255,6 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 name: _name.text.trim(),
               ),
               const SizedBox(height: 20),
-              // --- Esenciales ---
               SectionLabel(context.tr('name')),
               AppTextField(
                 hint: context.tr('name_hint'),
@@ -217,6 +267,40 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 hint: context.tr('description_hint'),
                 controller: _description,
               ),
+              const SizedBox(height: 20),
+              SectionLabel(context.tr('habit_kind')),
+              _KindSelector(
+                kind: _kind,
+                locked: _kindLocked,
+                onChanged: (kind) => setState(() => _kind = kind),
+              ),
+              if (_kind == HabitKind.quantitative) ...[
+                const SizedBox(height: 12),
+                _QuantitativeFields(
+                  quantKind: _quantKind,
+                  unitController: _unitLabel,
+                  target: _quantTarget,
+                  increment: _quantIncrement,
+                  onPresetSelected: _applyQuantPreset,
+                  onUnitChanged: () => setState(() {}),
+                  onTargetChanged: (v) => setState(() => _quantTarget = v),
+                  onIncrementChanged: (v) => setState(() => _quantIncrement = v),
+                ),
+                if (_quantKind == QuantKind.reading) ...[
+                  const SizedBox(height: 20),
+                  SectionLabel(context.tr('book_cover')),
+                  _CoverPicker(
+                    path: _bookCover,
+                    color: _color,
+                    onPick: _pickBookCover,
+                    onRemove: () => setState(() => _bookCover = ''),
+                  ),
+                ],
+              ],
+              if (_kind == HabitKind.negative) ...[
+                const SizedBox(height: 12),
+                _NegativeHint(color: _color),
+              ],
               const SizedBox(height: 20),
               SectionLabel(context.tr('icon')),
               _IconPicker(
@@ -236,7 +320,6 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              // --- Opciones avanzadas (colapsable) ---
               _AdvancedToggle(
                 expanded: _advanced,
                 onTap: () => setState(() => _advanced = !_advanced),
@@ -264,22 +347,24 @@ class _HabitFormPageState extends State<HabitFormPage> {
                       selected: _category,
                       onSelected: (c) => setState(() => _category = c),
                     ),
-                    const SizedBox(height: 20),
-                    SectionLabel(context.tr('frequency')),
-                    _IntervalSelector(
-                      interval: _interval,
-                      frequency: _frequency,
-                      onIntervalChanged: (interval) => setState(() {
-                        _interval = interval;
-                        _frequency = switch (interval) {
-                          HabitInterval.daily => 1,
-                          HabitInterval.weekly => 3,
-                          HabitInterval.monthly => 10,
-                        };
-                      }),
-                      onFrequencyChanged: (value) =>
-                          setState(() => _frequency = value),
-                    ),
+                    if (_kind != HabitKind.negative) ...[
+                      const SizedBox(height: 20),
+                      SectionLabel(context.tr('frequency')),
+                      _IntervalSelector(
+                        interval: _interval,
+                        frequency: _frequency,
+                        onIntervalChanged: (interval) => setState(() {
+                          _interval = interval;
+                          _frequency = switch (interval) {
+                            HabitInterval.daily => 1,
+                            HabitInterval.weekly => 3,
+                            HabitInterval.monthly => 10,
+                          };
+                        }),
+                        onFrequencyChanged: (value) =>
+                            setState(() => _frequency = value),
+                      ),
+                    ],
                     const SizedBox(height: 20),
                     SectionLabel(context.tr('reminders')),
                     for (final reminder in _reminders)
@@ -513,7 +598,6 @@ class _IconPickerState extends State<_IconPicker> {
   @override
   void initState() {
     super.initState();
-    // Empieza en modo emoji si el hábito ya usa uno.
     _emoji = HabitEmojis.isEmoji(widget.selected);
   }
 
@@ -533,7 +617,6 @@ class _IconPickerState extends State<_IconPicker> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Toggle Iconos / Emojis.
             _Segment2(
               left: context.tr('icons_tab'),
               right: context.tr('emojis_tab'),
@@ -541,7 +624,6 @@ class _IconPickerState extends State<_IconPicker> {
               onChanged: (v) => setState(() => _emoji = v),
             ),
             const SizedBox(height: 12),
-            // Tabs de categoría.
             SizedBox(
               height: 32,
               child: ListView(
@@ -821,7 +903,6 @@ class _CategoryPicker extends StatelessWidget {
               ),
             ),
           ),
-        // Botón "+ Nueva categoría".
         GestureDetector(
           onTap: () => _create(context),
           child: Container(
@@ -1027,6 +1108,355 @@ class _AddReminderButton extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _KindSelector extends StatelessWidget {
+  const _KindSelector({
+    required this.kind,
+    required this.locked,
+    required this.onChanged,
+  });
+
+  final HabitKind kind;
+  final bool locked;
+  final ValueChanged<HabitKind> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final options = [
+      (HabitKind.positive, context.tr('kind_positive'), LucideIcons.circleCheck),
+      (HabitKind.negative, context.tr('kind_negative'), LucideIcons.ban),
+      (HabitKind.quantitative, context.tr('kind_quantitative'), LucideIcons.gauge),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            for (var i = 0; i < options.length; i++) ...[
+              if (i > 0) const SizedBox(width: 8),
+              Expanded(
+                child: _KindOption(
+                  active: options[i].$1 == kind,
+                  dimmed: locked && options[i].$1 != kind,
+                  label: options[i].$2,
+                  icon: options[i].$3,
+                  onTap: locked ? null : () => onChanged(options[i].$1),
+                ),
+              ),
+            ],
+          ],
+        ),
+        if (locked) ...[
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Icon(LucideIcons.lock, size: 13, color: context.tokens.muted),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  context.tr('kind_locked_hint'),
+                  style: TextStyle(fontSize: 12, color: context.tokens.muted),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _KindOption extends StatelessWidget {
+  const _KindOption({
+    required this.active,
+    required this.dimmed,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final bool active;
+  final bool dimmed;
+  final String label;
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 180),
+        opacity: dimmed ? 0.35 : 1,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: active ? scheme.primary : scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            children: [
+              Icon(icon,
+                  size: 20, color: active ? scheme.onPrimary : context.tokens.muted),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: active ? scheme.onPrimary : context.tokens.muted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NegativeHint extends StatelessWidget {
+  const _NegativeHint({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(LucideIcons.shieldCheck, size: 18, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              context.tr('kind_negative_hint'),
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.4,
+                color: context.tokens.muted,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuantitativeFields extends StatelessWidget {
+  const _QuantitativeFields({
+    required this.quantKind,
+    required this.unitController,
+    required this.target,
+    required this.increment,
+    required this.onPresetSelected,
+    required this.onUnitChanged,
+    required this.onTargetChanged,
+    required this.onIncrementChanged,
+  });
+
+  final QuantKind quantKind;
+  final TextEditingController unitController;
+  final int target;
+  final int increment;
+  final ValueChanged<QuantKind> onPresetSelected;
+  final VoidCallback onUnitChanged;
+  final ValueChanged<int> onTargetChanged;
+  final ValueChanged<int> onIncrementChanged;
+
+  int get _step => switch (quantKind) {
+        QuantKind.water => 50,
+        QuantKind.reading => 1,
+        QuantKind.generic => 1,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final unit = unitController.text.trim();
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: _PresetChip(
+                    icon: LucideIcons.droplet,
+                    label: context.tr('quant_preset_water'),
+                    selected: quantKind == QuantKind.water,
+                    onTap: () => onPresetSelected(QuantKind.water),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _PresetChip(
+                    icon: LucideIcons.bookOpen,
+                    label: context.tr('quant_preset_reading'),
+                    selected: quantKind == QuantKind.reading,
+                    onTap: () => onPresetSelected(QuantKind.reading),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _PresetChip(
+                    icon: LucideIcons.gauge,
+                    label: context.tr('quant_preset_generic'),
+                    selected: quantKind == QuantKind.generic,
+                    onTap: () => onPresetSelected(QuantKind.generic),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            AppTextField(
+              hint: context.tr('quant_unit_hint'),
+              controller: unitController,
+              onChanged: (_) => onUnitChanged(),
+            ),
+            const SizedBox(height: 12),
+            _QuantityStepperRow(
+              label: context.tr('quant_daily_goal'),
+              value: target,
+              unit: unit,
+              step: _step,
+              min: _step,
+              onChanged: onTargetChanged,
+            ),
+            const SizedBox(height: 8),
+            _QuantityStepperRow(
+              label: context.tr('quant_tap_amount'),
+              value: increment,
+              unit: unit,
+              step: _step,
+              min: _step,
+              onChanged: onIncrementChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PresetChip extends StatelessWidget {
+  const _PresetChip({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: selected
+              ? scheme.primary.withValues(alpha: 0.16)
+              : scheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+          border: selected ? Border.all(color: scheme.primary, width: 1.4) : null,
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 17, color: selected ? scheme.primary : context.tokens.muted),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: selected ? scheme.primary : context.tokens.muted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuantityStepperRow extends StatelessWidget {
+  const _QuantityStepperRow({
+    required this.label,
+    required this.value,
+    required this.unit,
+    required this.step,
+    required this.min,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int value;
+  final String unit;
+  final int step;
+  final int min;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w600),
+            ),
+          ),
+          _StepButton(
+            icon: LucideIcons.minus,
+            onTap: value > min ? () => onChanged(value - step) : null,
+          ),
+          SizedBox(
+            width: 64,
+            child: Text(
+              unit.isEmpty ? '$value' : '$value $unit',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: scheme.onSurface,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: LucideIcons.plus,
+            onTap: () => onChanged(value + step),
+          ),
+        ],
       ),
     );
   }

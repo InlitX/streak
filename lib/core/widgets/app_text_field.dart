@@ -8,12 +8,16 @@ class AppTextField extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.maxLines = 1,
+    this.keyboardType,
+    this.autofocus = false,
   });
 
   final String? hint;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final int maxLines;
+  final TextInputType? keyboardType;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,11 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       maxLines: maxLines,
-      textCapitalization: TextCapitalization.sentences,
+      keyboardType: keyboardType,
+      autofocus: autofocus,
+      textCapitalization: keyboardType == TextInputType.number
+          ? TextCapitalization.none
+          : TextCapitalization.sentences,
       style: TextStyle(color: context.colors.onSurface, fontSize: 16),
       decoration: InputDecoration(
         hintText: hint,

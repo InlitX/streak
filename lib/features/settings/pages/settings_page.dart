@@ -149,7 +149,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
-              // Rebuilds so the selected swatch updates live.
               Consumer<SettingsController>(
                 builder: (_, s, __) => ColorPicker(
                   selected: s.accentColor,
@@ -194,7 +193,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 18),
-              // Rebuilds so the selected option updates live.
               Consumer<SettingsController>(
                 builder: (_, s, __) => Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,6 +330,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       options: [context.tr('mon'), context.tr('sun')],
                       index: settings.weekStart == 7 ? 1 : 0,
                       onChanged: (i) => settings.setWeekStart(i == 1 ? 7 : 1),
+                    ),
+                  ),
+                  _divider(context),
+                  _SettingRow(
+                    icon: LucideIcons.arrowDownWideNarrow,
+                    title: context.tr('sort_completed_last'),
+                    trailing: _Segmented(
+                      options: [context.tr('off'), context.tr('on')],
+                      index: settings.sortCompletedLast ? 1 : 0,
+                      onChanged: (i) => settings.setSortCompletedLast(i == 1),
                     ),
                   ),
                   _divider(context),
@@ -497,6 +505,12 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: context.tr('report_bug'),
                     onTap: () => _open(_kIssuesUrl),
                   ),
+                  _divider(context),
+                  _MinimalRow(
+                    icon: LucideIcons.lightbulb,
+                    title: context.tr('request_feature'),
+                    onTap: () => _open('$_kIssuesUrl/new'),
+                  ),
                 ],
               ),
             ),
@@ -514,7 +528,6 @@ class _SettingsPageState extends State<SettingsPage> {
       );
 }
 
-/// Avatar + name shown at the very top of Settings. Both are editable.
 class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({
     required this.name,
@@ -658,7 +671,6 @@ class _NavRow extends StatelessWidget {
   }
 }
 
-/// Fila minimalista para soporte: icono gris pequeño, sin fondo de color.
 class _MinimalRow extends StatelessWidget {
   const _MinimalRow({
     required this.icon,
@@ -687,7 +699,6 @@ class _MinimalRow extends StatelessWidget {
   }
 }
 
-/// Insignia de icono monocroma (fondo gris oscuro, icono gris claro).
 class _IconBadge extends StatelessWidget {
   const _IconBadge({required this.icon});
 
@@ -847,7 +858,6 @@ class _BackgroundOption extends StatelessWidget {
   }
 }
 
-/// "Custom" tile in the background sheet: image thumbnail or an add prompt.
 class _CustomBackgroundOption extends StatelessWidget {
   const _CustomBackgroundOption({
     required this.selected,

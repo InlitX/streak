@@ -16,6 +16,7 @@ class StreakSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final negative = habit.kind == HabitKind.negative;
     return Row(
       children: [
         Expanded(
@@ -38,9 +39,9 @@ class StreakSummary extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatBox(
-            icon: LucideIcons.circleCheck,
-            iconColor: context.tokens.success,
-            label: context.tr('total'),
+            icon: negative ? LucideIcons.triangleAlert : LucideIcons.circleCheck,
+            iconColor: negative ? context.tokens.danger : context.tokens.success,
+            label: context.tr(negative ? 'relapses' : 'total'),
             value: '${habit.totalCompletions}',
           ),
         ),

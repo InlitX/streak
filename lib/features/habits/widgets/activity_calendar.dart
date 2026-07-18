@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
@@ -141,14 +142,45 @@ class _CalendarCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    final completed = habit.isCompletedOn(date);
+    final negative = habit.kind == HabitKind.negative;
+    final quantitative = habit.kind == HabitKind.quantitative;
     final future = date.isAfter(DateTime.now());
-    final tappable = isCurrentMonth && !future;
+    final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
+    final outOfScope = future || beforeCreation;
+    // For negative habits isCompletedOn means "clean" (no relapse logged).
+    final completed = habit.isCompletedOn(date);
+    final relapsed = negative && !completed && !outOfScope;
+    final tappable = isCurrentMonth && !outOfScope;
+    final danger = context.tokens.danger;
+    final count = habit.completions[date.dayKey]?.count ?? 0;
+
+    final Color? fillColor;
+    if (isCurrentMonth && relapsed) {
+      fillColor = danger;
+    } else if (isCurrentMonth && negative && !outOfScope) {
+      fillColor = habit.color.withValues(alpha: 0.24);
+    } else if (isCurrentMonth && quantitative && count > 0) {
+      final ratio = (count / habit.perDayTarget).clamp(0.25, 1.0);
+      fillColor = Color.lerp(
+        habit.color.withValues(alpha: 0.4),
+        habit.color,
+        ratio,
+      );
+    } else if (isCurrentMonth && !negative && !quantitative && completed) {
+      fillColor = habit.color;
+    } else {
+      fillColor = null;
+    }
+    final filledStrong = isCurrentMonth &&
+        (relapsed ||
+            (!negative && !quantitative && completed) ||
+            (quantitative && count > 0));
 
     final Color textColor;
-    if (completed && isCurrentMonth) {
-      textColor =
-          habit.color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    if (filledStrong) {
+      textColor = (relapsed ? danger : habit.color).computeLuminance() > 0.5
+          ? Colors.black
+          : Colors.white;
     } else if (!isCurrentMonth) {
       textColor = context.tokens.muted.withValues(alpha: 0.3);
     } else if (future) {
@@ -166,13 +198,10 @@ class _CalendarCell extends StatelessWidget {
           duration: const Duration(milliseconds: 280),
           height: 38,
           decoration: BoxDecoration(
-            color: completed && isCurrentMonth
-                ? habit.color
-                : isToday
-                    ? scheme.surfaceContainerHighest
-                    : Colors.transparent,
+            color: fillColor ??
+                (isToday ? scheme.surfaceContainerHighest : Colors.transparent),
             borderRadius: BorderRadius.circular(10),
-            border: isToday && !completed
+            border: isToday && !filledStrong
                 ? Border.all(color: habit.color.withValues(alpha: 0.5))
                 : null,
           ),

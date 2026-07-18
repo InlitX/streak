@@ -15,8 +15,6 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 
-/// Opens a bottom sheet that previews a polished, shareable card for [habit]
-/// and lets the user export it as an image.
 Future<void> showShareCard(BuildContext context, Habit habit) {
   return showModalBottomSheet<void>(
     context: context,
@@ -43,8 +41,7 @@ class _ShareSheetState extends State<_ShareSheet> {
   final _cardKey = GlobalKey();
   bool _busy = false;
 
-  // Per-share overrides for the card background. Null means "use the habit's
-  // own value"; these only affect the exported image, not the saved habit.
+  // Background overrides for the exported image only; null = use the habit's.
   String? _coverOverride;
   Color? _colorOverride;
 
@@ -90,7 +87,6 @@ class _ShareSheetState extends State<_ShareSheet> {
     setState(() => _busy = true);
     try {
       HapticFeedback.mediumImpact();
-      // Let the current frame settle so the card is fully painted.
       await WidgetsBinding.instance.endOfFrame;
       final boundary =
           _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
@@ -134,8 +130,6 @@ class _ShareSheetState extends State<_ShareSheet> {
               ),
             ),
             const SizedBox(height: 16),
-            // Background editor: swap the photo or recolour the card before
-            // sharing it.
             Row(
               children: [
                 _EditButton(
@@ -187,7 +181,6 @@ class _ShareSheetState extends State<_ShareSheet> {
   }
 }
 
-/// Compact pill button used by the share sheet's background editor.
 class _EditButton extends StatelessWidget {
   const _EditButton({
     required this.icon,
@@ -237,7 +230,6 @@ class _EditButton extends StatelessWidget {
   }
 }
 
-/// The shareable card — a self-contained dark graphic built from the habit's colour.
 class ShareCard extends StatelessWidget {
   const ShareCard({
     super.key,
@@ -250,11 +242,8 @@ class ShareCard extends StatelessWidget {
   final Habit habit;
   final double width;
 
-  /// Optional background photo override. Falls back to the habit's own cover.
-  /// An empty string forces "no photo" even when the habit has a cover.
+  // Override cover; '' forces no photo. Null falls back to the habit's cover.
   final String? coverPath;
-
-  /// Optional accent override. Falls back to the habit's colour.
   final Color? accent;
 
   @override
@@ -301,7 +290,6 @@ class ShareCard extends StatelessWidget {
         child: Stack(
           children: [
             if (hasCover) ...[
-              // Habit photo as a full-bleed background.
               Positioned.fill(
                 child: Image.file(
                   File(cover),
@@ -309,8 +297,6 @@ class ShareCard extends StatelessWidget {
                   errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                 ),
               ),
-              // Dark scrim so the text stays readable over any photo, with a
-              // subtle tint of the habit colour to keep the brand cohesive.
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -342,7 +328,6 @@ class ShareCard extends StatelessWidget {
                 ),
               ),
             ] else
-              // Corner glow.
               Positioned(top: -90, right: -70, child: _Glow(color: color)),
             Padding(
               padding: const EdgeInsets.fromLTRB(26, 24, 26, 22),
@@ -350,7 +335,6 @@ class ShareCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Branding pill.
                   Row(
                     children: [
                       ClipRRect(
@@ -376,7 +360,6 @@ class ShareCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 28),
 
-                  // Habit identity.
                   Row(
                     children: [
                       Container(
@@ -427,7 +410,6 @@ class ShareCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 26),
 
-                  // Hero streak number.
                   Center(
                     child: Column(
                       children: [
@@ -478,7 +460,6 @@ class ShareCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 26),
 
-                  // Secondary stats.
                   Row(
                     children: [
                       _StatChip(
@@ -489,7 +470,9 @@ class ShareCard extends StatelessWidget {
                       const SizedBox(width: 10),
                       _StatChip(
                         value: '${habit.totalCompletions}',
-                        label: context.tr('total'),
+                        label: context.tr(
+                          habit.kind == HabitKind.negative ? 'relapses' : 'total',
+                        ),
                         color: color,
                       ),
                       const SizedBox(width: 10),
@@ -508,7 +491,6 @@ class ShareCard extends StatelessWidget {
                   Divider(color: Colors.white.withValues(alpha: 0.07), height: 1),
                   const SizedBox(height: 14),
 
-                  // Footer: date + tagline.
                   Row(
                     children: [
                       Text(
@@ -545,7 +527,6 @@ class ShareCard extends StatelessWidget {
   }
 }
 
-/// Radial glow in the card corner.
 class _Glow extends StatelessWidget {
   const _Glow({required this.color});
 
@@ -621,7 +602,6 @@ class _StatChip extends StatelessWidget {
   }
 }
 
-/// Last 35 days as a compact heatmap, oldest (top-left) to today (bottom-right).
 class _MiniGrid extends StatelessWidget {
   const _MiniGrid({required this.habit, required this.color});
 

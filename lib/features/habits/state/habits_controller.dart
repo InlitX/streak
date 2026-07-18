@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion.dart';
+import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/services/backup_service.dart';
@@ -30,8 +31,7 @@ class HabitsController extends ChangeNotifier {
 
   Habit? byId(String id) => _habits[id];
 
-  /// Reopens the store from disk and refreshes state. Called when the app
-  /// resumes so completions toggled from the home-screen widget show up.
+  // Reopen from disk on resume so widget-toggled completions show up.
   Future<void> reload() async {
     await LocalStore.reloadHabits();
     _habits = LocalStore.readHabits();
@@ -48,6 +48,12 @@ class HabitsController extends ChangeNotifier {
     required int targetFrequency,
     required List<Reminder> reminders,
     String coverPath = '',
+    HabitKind kind = HabitKind.positive,
+    int perDayTarget = 1,
+    String unitLabel = '',
+    int incrementAmount = 1,
+    QuantKind quantKind = QuantKind.generic,
+    String bookCoverPath = '',
   }) async {
     final id = _uuid.v4();
     final habit = Habit(
@@ -62,6 +68,12 @@ class HabitsController extends ChangeNotifier {
       targetFrequency: targetFrequency,
       reminders: reminders,
       coverPath: coverPath,
+      kind: kind,
+      perDayTarget: perDayTarget,
+      unitLabel: unitLabel,
+      incrementAmount: incrementAmount,
+      quantKind: quantKind,
+      bookCoverPath: bookCoverPath,
     );
     _habits[id] = habit;
     await LocalStore.writeHabit(habit);
@@ -81,17 +93,41 @@ class HabitsController extends ChangeNotifier {
   Future<void> toggle(String id, DateTime date) async {
     final habit = _habits[id];
     if (habit == null) return;
+    await _apply(habit, CompletionOps.toggle(habit, date));
+  }
 
-    final completions = {...habit.completions};
-    if (habit.isCompletedOn(date)) {
-      completions.remove(date.dayKey);
-    } else {
-      completions[date.dayKey] =
-          Completion(date: date.dayKey, hour: DateTime.now().hour);
-    }
+  // Breaks the clean streak. Home card confirms first; calendar toggles directly.
+  Future<void> logRelapse(String id, DateTime date) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _apply(habit, CompletionOps.logRelapse(habit, date));
+  }
 
+  Future<void> clearRelapse(String id, DateTime date) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _apply(habit, CompletionOps.clearRelapse(habit, date));
+  }
+
+  Future<void> addProgress(String id, DateTime date, int delta) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _apply(habit, CompletionOps.addProgress(habit, date, delta));
+  }
+
+  Future<void> setProgress(String id, DateTime date, int value) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    final current = habit.completions[date.dayKey]?.count ?? 0;
+    await _apply(habit, CompletionOps.addProgress(habit, date, value - current));
+  }
+
+  Future<void> _apply(
+    Habit habit,
+    Map<String, Completion> completions,
+  ) async {
     final updated = habit.copyWith(completions: completions);
-    _habits[id] = updated;
+    _habits[habit.id] = updated;
     await LocalStore.writeHabit(updated);
     notifyListeners();
     await HomeWidgetService.sync(_habits);
@@ -128,8 +164,7 @@ class HabitsController extends ChangeNotifier {
     }
   }
 
-  /// Importa hábitos desde un archivo. Si [replace] es true, borra todo lo
-  /// existente antes de añadir; si no, hace merge (sobrescribe por id).
+  // replace = wipe first; otherwise merge by id.
   Future<String?> importBackup({bool replace = false}) async {
     try {
       final imported = await BackupService.import();

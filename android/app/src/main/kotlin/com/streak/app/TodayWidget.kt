@@ -28,6 +28,13 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
+private val dangerColor = androidx.compose.ui.graphics.Color(0xFFEF4444)
+
+// Mirrors HabitKind in lib/features/habits/data/habit.dart.
+private const val KIND_POSITIVE = 0
+private const val KIND_NEGATIVE = 1
+private const val KIND_QUANTITATIVE = 2
+
 class TodayWidget : GlanceAppWidget() {
 
     override val stateDefinition: GlanceStateDefinition<*>
@@ -35,9 +42,7 @@ class TodayWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            // Subscribe to the widget state so home_widget data updates trigger
-            // a recompose. Without reading currentState() Glance renders once and
-            // never refreshes, leaving the check mark and the counter stale.
+            // Read state or Glance renders once and never refreshes.
             currentState<HomeWidgetGlanceState>()
             Content(context)
         }
@@ -92,10 +97,38 @@ class TodayWidget : GlanceAppWidget() {
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
+        val color = androidx.compose.ui.graphics.Color(colorInt)
+        val kind = habit.optInt("kind", KIND_POSITIVE)
+        val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
+        val incrementAmount = habit.optInt("incrementAmount", 1)
+        val counts = habit.optJSONArray("counts")
+        val todayCount = if (counts != null && counts.length() == 7) counts.optInt(6, 0) else 0
         val completions = habit.optJSONArray("completions")
         val doneToday = completions != null && completions.length() == 7 &&
             completions.getBoolean(6)
-        val color = androidx.compose.ui.graphics.Color(colorInt)
+
+        val action = when (kind) {
+            KIND_NEGATIVE -> "relapse"
+            KIND_QUANTITATIVE -> "progress"
+            else -> "toggle"
+        }
+        val boxColor: androidx.compose.ui.graphics.Color
+        val icon: String
+        when (kind) {
+            KIND_NEGATIVE -> {
+                boxColor = if (todayCount > 0) dangerColor else color.copy(alpha = 0.18f)
+                icon = if (todayCount > 0) "✕" else ""
+            }
+            KIND_QUANTITATIVE -> {
+                val ratio = (todayCount.toFloat() / perDayTarget).coerceIn(0f, 1f)
+                boxColor = color.copy(alpha = 0.25f + 0.75f * ratio)
+                icon = "+"
+            }
+            else -> {
+                boxColor = if (doneToday) color else color.copy(alpha = 0.18f)
+                icon = if (doneToday) "✓" else ""
+            }
+        }
 
         Row(
             modifier = GlanceModifier
@@ -103,36 +136,46 @@ class TodayWidget : GlanceAppWidget() {
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = name,
-                style = TextStyle(
-                    color = ColorProvider(androidx.compose.ui.graphics.Color.White),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                ),
-                maxLines = 1,
-                modifier = GlanceModifier.defaultWeight()
-            )
+            Column(modifier = GlanceModifier.defaultWeight()) {
+                Text(
+                    text = name,
+                    style = TextStyle(
+                        color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    maxLines = 1
+                )
+                if (kind == KIND_QUANTITATIVE) {
+                    Text(
+                        text = "$todayCount/$perDayTarget",
+                        style = TextStyle(
+                            color = ColorProvider(androidx.compose.ui.graphics.Color(0xFF9E9E9E)),
+                            fontSize = 11.sp
+                        )
+                    )
+                }
+            }
             Box(
                 modifier = GlanceModifier
                     .size(28.dp)
                     .cornerRadius(9.dp)
-                    .background(
-                        ColorProvider(if (doneToday) color else color.copy(alpha = 0.18f))
-                    )
+                    .background(ColorProvider(boxColor))
                     .clickable(
                         onClick = actionRunCallback<ToggleHabitAction>(
                             parameters = actionParametersOf(
                                 ActionParameters.Key<String>("habitId") to habitId,
-                                ActionParameters.Key<Int>("dayIndex") to 6
+                                ActionParameters.Key<Int>("dayIndex") to 6,
+                                ActionParameters.Key<String>("action") to action,
+                                ActionParameters.Key<Int>("delta") to incrementAmount
                             )
                         )
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                if (doneToday) {
+                if (icon.isNotEmpty()) {
                     Text(
-                        text = "✓",
+                        text = icon,
                         style = TextStyle(
                             color = ColorProvider(androidx.compose.ui.graphics.Color.White),
                             fontSize = 15.sp,

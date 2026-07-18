@@ -39,3 +39,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local scratch notes for GitHub issues (not for commit)
+/issues/

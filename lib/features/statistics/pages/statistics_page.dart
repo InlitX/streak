@@ -40,7 +40,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
               );
             }
 
-            // Si el hábito filtrado se borró, vuelve a "todos".
             if (_habitId != null && controller.byId(_habitId!) == null) {
               _habitId = null;
             }
@@ -191,7 +190,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 }
 
-/// Cálculos estadísticos para el conjunto de hábitos en el año dado.
 class _Stats {
   _Stats({
     required this.dailyCounts,
@@ -228,6 +226,8 @@ class _Stats {
     var hourSamples = 0;
 
     for (final habit in habits) {
+      // Negatives store relapses (failures): exclude from completion totals.
+      if (habit.kind == HabitKind.negative) continue;
       for (final entry in habit.completions.values) {
         if (entry.count < habit.perDayTarget) continue;
         final date = parseDayKey(entry.date);
@@ -243,9 +243,7 @@ class _Stats {
       }
     }
 
-    // Curva de progreso acumulado de los últimos 90 días: cada día suma los
-    // hábitos completados, de forma que la línea crece suave y con sentido en
-    // lugar de oscilar a cero cada vez que se rompe una racha puntual.
+    // Cumulative completions over the last 90 days.
     final today = DateTime.now().atMidnight;
     var running = 0;
     final streakSeries = List<double>.generate(90, (i) {
@@ -256,7 +254,6 @@ class _Stats {
       return running.toDouble();
     });
 
-    // Tasa de cumplimiento de los últimos 30 días.
     var done = 0;
     for (var i = 0; i < 30; i++) {
       final date = today.subtract(Duration(days: i));
@@ -551,22 +548,30 @@ class _ChartCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: context.colors.onSurface,
+            // Fixed 2-line height: a wrapping Text mismeasures inside IntrinsicHeight.
+            SizedBox(
+              height: 44,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.25,
+                        fontWeight: FontWeight.w800,
+                        color: context.colors.onSurface,
+                      ),
                     ),
                   ),
-                ),
-                _IconSquare(icon: icon, color: color),
-              ],
+                  _IconSquare(icon: icon, color: color),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             child,
           ],
         ),
@@ -582,8 +587,9 @@ class _ChartPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 160,
+    // No fixed height so the empty state never clips; minHeight matches the charts.
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 120),
       child: AppEmptyState(
         icon: LucideIcons.sparkles,
         title: text,

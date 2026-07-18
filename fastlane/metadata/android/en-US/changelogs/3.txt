@@ -1,0 +1,6 @@
+🚭 New "Avoid" habits — quit smoking and more; days stay clean, tap only if you slip
+💧 New "Amount" habits — water, reading or anything measurable, with daily goals and their own animations
+📊 New activity heatmap widget, and home-screen widgets now support every habit type
+🗓️ Cards show each habit's frequency; "Today" remembers your week/month/year view
+↕️ Optional "completed habits last" sorting
+✨ Polish and fixes throughout

@@ -1,6 +1,7 @@
 package com.streak.app
 
 import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -9,6 +10,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
 
     private val channelName = "streak/app_icon"
+    private var channel: MethodChannel? = null
 
     // Alias suffixes must match the activity-alias names in AndroidManifest.
     private val aliases = mapOf(
@@ -19,17 +21,32 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
-            .setMethodCallHandler { call, result ->
+        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
+            setMethodCallHandler { call, result ->
                 when (call.method) {
                     "setIcon" -> {
-                        val key = call.argument<String>("icon") ?: "default"
-                        setIcon(key)
+                        setIcon(call.argument<String>("icon") ?: "default")
                         result.success(true)
                     }
+                    // Cold start: the app pulls the habit it was launched for.
+                    "consumeLaunchHabit" -> result.success(takeHabitId(intent))
                     else -> result.notImplemented()
                 }
             }
+        }
+    }
+
+    // Warm start: the app is already running when a widget is tapped.
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        takeHabitId(intent)?.let { channel?.invokeMethod("openHabit", it) }
+    }
+
+    private fun takeHabitId(intent: Intent?): String? {
+        val habitId = intent?.getStringExtra("openHabitId") ?: return null
+        intent.removeExtra("openHabitId")
+        return habitId
     }
 
     private fun setIcon(key: String) {

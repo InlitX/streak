@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/features/habits/data/completion.dart';
+import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -19,10 +20,7 @@ Future<void> main() async {
 
   await LocalStore.init();
 
-  // Abrir el hábito al pulsar su notificación. La inicialización de
-  // notificaciones/widget no es crítica para arrancar: si falla (p. ej. un
-  // recurso de icono ausente), la capturamos para no abortar `main()` antes de
-  // `runApp` y dejar la app en pantalla negra.
+  // Non-critical at startup: don't let a failure black-screen the app.
   NotificationService.onOpenHabit = _openHabit;
   try {
     await NotificationService().initialize();
@@ -31,13 +29,24 @@ Future<void> main() async {
     debugPrint('Startup init (notifications/widget) failed: $e\n$s');
   }
 
-  // Si la app arrancó desde una notificación, navega tras el primer frame.
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  // A per-habit widget tap opens that habit: warm start pushes 'openHabit'.
+  _appChannel.setMethodCallHandler((call) async {
+    if (call.method == 'openHabit') {
+      final id = call.arguments as String?;
+      if (id != null) _openHabit(id);
+    }
+    return null;
+  });
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     final pending = NotificationService().pendingHabitId;
     if (pending != null) {
       NotificationService().pendingHabitId = null;
       _openHabit(pending);
     }
+    // Cold start: pull the habit the app was launched for, if any.
+    final launched = await _appChannel.invokeMethod<String>('consumeLaunchHabit');
+    if (launched != null) _openHabit(launched);
   });
 
   runApp(
@@ -58,6 +67,8 @@ Future<void> main() async {
   );
 }
 
+const _appChannel = MethodChannel('streak/app_icon');
+
 void _openHabit(String habitId) {
   AppNavigator.push(HabitDetailsPage(habitId: habitId), fade: true);
 }
@@ -68,8 +79,7 @@ Future<void> _widgetCallback(Uri? uri) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStore.init();
-  // Force a fresh read from disk: this isolate may be reused across taps and
-  // would otherwise toggle against a stale cached box.
+  // This isolate can be reused across taps; drop any stale cached box.
   await LocalStore.reloadHabits();
 
   final habitId = uri.queryParameters['habitId'];
@@ -82,13 +92,18 @@ Future<void> _widgetCallback(Uri? uri) async {
 
   final target =
       DateTime.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
-  final completions = {...habit.completions};
-  if (habit.isCompletedOn(target)) {
-    completions.remove(target.dayKey);
-  } else {
-    completions[target.dayKey] =
-        Completion(date: target.dayKey, hour: DateTime.now().hour);
-  }
+
+  // No dialog from the widget, so a relapse tap toggles straight away.
+  final action = uri.queryParameters['action'] ?? 'toggle';
+  final delta = int.tryParse(uri.queryParameters['delta'] ?? '') ??
+      habit.incrementAmount;
+  final completions = switch (action) {
+    'relapse' => habit.completions.containsKey(target.dayKey)
+        ? CompletionOps.clearRelapse(habit, target)
+        : CompletionOps.logRelapse(habit, target),
+    'progress' => CompletionOps.addProgress(habit, target, delta),
+    _ => CompletionOps.toggle(habit, target),
+  };
 
   final updated = habit.copyWith(completions: completions);
   habits[habitId] = updated;

@@ -134,6 +134,28 @@
                 android:resource="@xml/stats_widget_info" />
         </receiver>
 
+        <!-- Picks the habit when placing the heatmap widget. -->
+        <activity
+            android:name=".HeatmapConfigActivity"
+            android:exported="true"
+            android:theme="@style/HeatmapConfigTheme">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".HeatmapWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="es.antonborri.home_widget.action.UPDATE_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/heatmap_widget_info" />
+        </receiver>
+
         <!-- Home Widget Background Receiver for Interactive Widgets -->
         <receiver
             android:name="es.antonborri.home_widget.HomeWidgetBackgroundReceiver"

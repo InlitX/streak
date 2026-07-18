@@ -1,5 +1,5 @@
 Categories:
-  - Time
+  - Habit Tracker
   - Sports & Health
 License: MIT
 AuthorName: InlitX
@@ -21,10 +21,10 @@ Builds:
     prebuild:
       - $$flutter$$/bin/flutter config --no-analytics
       - $$flutter$$/bin/flutter pub get
-    build:
-      - $$flutter$$/bin/flutter build apk --release
+    build: $$flutter$$/bin/flutter build apk --release
 
 AutoUpdateMode: Version v%v
-UpdateCheckMode: Tags
+UpdateCheckMode: HTTP
+UpdateCheckData: https://raw.githubusercontent.com/InlitX/streak/main/pubspec.yaml|version:\s.*\+(\d+)|https://raw.githubusercontent.com/InlitX/streak/main/pubspec.yaml|version:\s(.*)\+
 CurrentVersion: 1.1.0
 CurrentVersionCode: 2

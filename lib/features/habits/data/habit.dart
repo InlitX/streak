@@ -22,6 +22,11 @@ extension HabitIntervalLabel on HabitInterval {
       };
 }
 
+// negative = relapse-logged (clean by default); quantitative = amount-based.
+enum HabitKind { positive, negative, quantitative }
+
+enum QuantKind { generic, water, reading }
+
 class Habit {
   Habit({
     required this.id,
@@ -37,6 +42,11 @@ class Habit {
     this.targetFrequency = 1,
     this.reminders = const [],
     this.coverPath = '',
+    this.kind = HabitKind.positive,
+    this.unitLabel = '',
+    this.incrementAmount = 1,
+    this.quantKind = QuantKind.generic,
+    this.bookCoverPath = '',
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -47,18 +57,33 @@ class Habit {
   final String description;
   final Color color;
   final int order;
+
+  // Daily goal: check count, or target amount for quantitative habits.
   final int perDayTarget;
   final Map<String, Completion> completions;
   final HabitInterval interval;
   final int targetFrequency;
   final List<Reminder> reminders;
 
-  /// Ruta local opcional a una imagen de portada para la card del hábito.
   final String coverPath;
   final DateTime createdAt;
 
+  final HabitKind kind;
+  final String unitLabel;
+  final int incrementAmount;
+  final QuantKind quantKind;
+
+  // Book cover for the reading visual; separate from [coverPath].
+  final String bookCoverPath;
+
+  // Bounded to [createdAt, today]; unbounded "clean by default" freezes the walk.
   bool isCompletedOn(DateTime date) {
+    final day = date.atMidnight;
+    if (day.isBefore(createdAt.atMidnight) || day.isAfter(DateTime.now().atMidnight)) {
+      return false;
+    }
     final entry = completions[date.dayKey];
+    if (kind == HabitKind.negative) return entry == null;
     if (entry == null) return false;
     return entry.count >= perDayTarget;
   }
@@ -66,10 +91,42 @@ class Habit {
   int get totalCompletions =>
       completions.values.where((c) => c.count >= perDayTarget).length;
 
-  /// Habit strength in 0..1: an exponentially-weighted average of recent
-  /// completions (recent days weigh more), à la Loop Habit Tracker.
+  bool get isDoneForNow {
+    // Negatives are clean by default; sinking them would hide them.
+    if (kind == HabitKind.negative) return false;
+    final now = DateTime.now();
+    switch (interval) {
+      case HabitInterval.daily:
+        return isCompletedOn(now);
+      case HabitInterval.weekly:
+        final start = now.subtract(Duration(days: now.weekday - 1));
+        return _countInRange(start, start.add(const Duration(days: 6))) >=
+            targetFrequency;
+      case HabitInterval.monthly:
+        final start = DateTime(now.year, now.month, 1);
+        final end = DateTime(now.year, now.month + 1, 0);
+        return _countInRange(start, end) >= targetFrequency;
+    }
+  }
+
+  // Day's contribution to [strength], 0..1. Fractional for quantitative.
+  double _dayValue(DateTime date) {
+    final day = date.atMidnight;
+    if (day.isBefore(createdAt.atMidnight) ||
+        day.isAfter(DateTime.now().atMidnight)) {
+      return 0;
+    }
+    if (kind == HabitKind.negative) {
+      return completions.containsKey(date.dayKey) ? 0.0 : 1.0;
+    }
+    final count = completions[date.dayKey]?.count ?? 0;
+    if (perDayTarget <= 0) return count > 0 ? 1 : 0;
+    return (count / perDayTarget).clamp(0.0, 1.0);
+  }
+
+  // EWMA of recent _dayValues; for negatives an empty map means "never relapsed".
   double get strength {
-    if (completions.isEmpty) return 0;
+    if (completions.isEmpty && kind != HabitKind.negative) return 0;
     final now = DateTime.now().atMidnight;
     const halfLife = 12.0; // days
     const window = 90;
@@ -78,7 +135,7 @@ class Habit {
     for (var i = 0; i < window; i++) {
       final weight = math.pow(0.5, i / halfLife).toDouble();
       norm += weight;
-      if (isCompletedOn(now.subtract(Duration(days: i)))) score += weight;
+      score += weight * _dayValue(now.subtract(Duration(days: i)));
     }
     return norm == 0 ? 0 : (score / norm).clamp(0.0, 1.0);
   }
@@ -92,6 +149,17 @@ class Habit {
   }
 
   int get currentStreak {
+    // Negatives: walk back counting clean days (isCompletedOn bounds the walk).
+    if (kind == HabitKind.negative) {
+      var cursor = DateTime.now();
+      var streak = 0;
+      while (isCompletedOn(cursor)) {
+        streak++;
+        cursor = cursor.subtract(const Duration(days: 1));
+      }
+      return streak;
+    }
+
     if (completions.isEmpty) return 0;
     final now = DateTime.now();
 
@@ -144,6 +212,24 @@ class Habit {
   }
 
   int get longestStreak {
+    // Negatives: longest run of clean days from creation to today.
+    if (kind == HabitKind.negative) {
+      var cursor = createdAt.atMidnight;
+      final end = DateTime.now().atMidnight;
+      var best = 0;
+      var run = 0;
+      while (!cursor.isAfter(end)) {
+        if (isCompletedOn(cursor)) {
+          run++;
+          if (run > best) best = run;
+        } else {
+          run = 0;
+        }
+        cursor = cursor.add(const Duration(days: 1));
+      }
+      return best;
+    }
+
     if (completions.isEmpty) return 0;
     final dates = completions.keys.map(parseDayKey).toList()
       ..sort((a, b) => a.compareTo(b));
@@ -216,6 +302,11 @@ class Habit {
     int? targetFrequency,
     List<Reminder>? reminders,
     String? coverPath,
+    HabitKind? kind,
+    String? unitLabel,
+    int? incrementAmount,
+    QuantKind? quantKind,
+    String? bookCoverPath,
   }) {
     return Habit(
       id: id,
@@ -231,6 +322,11 @@ class Habit {
       targetFrequency: targetFrequency ?? this.targetFrequency,
       reminders: reminders ?? this.reminders,
       coverPath: coverPath ?? this.coverPath,
+      kind: kind ?? this.kind,
+      unitLabel: unitLabel ?? this.unitLabel,
+      incrementAmount: incrementAmount ?? this.incrementAmount,
+      quantKind: quantKind ?? this.quantKind,
+      bookCoverPath: bookCoverPath ?? this.bookCoverPath,
       createdAt: createdAt,
     );
   }
@@ -251,6 +347,11 @@ class Habit {
         'reminders': reminders.map((r) => r.toMap()).toList(),
         'coverPath': coverPath,
         'createdAt': createdAt.toIso8601String(),
+        'kind': kind.index,
+        'unitLabel': unitLabel,
+        'incrementAmount': incrementAmount,
+        'quantKind': quantKind.index,
+        'bookCoverPath': bookCoverPath,
       };
 
   factory Habit.fromMap(Map<String, dynamic> map) => Habit(
@@ -280,6 +381,11 @@ class Habit {
         createdAt: map['createdAt'] != null
             ? DateTime.tryParse(map['createdAt'] as String)
             : null,
+        kind: HabitKind.values[(map['kind'] ?? 0) as int],
+        unitLabel: (map['unitLabel'] ?? '') as String,
+        incrementAmount: (map['incrementAmount'] ?? 1) as int,
+        quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],
+        bookCoverPath: (map['bookCoverPath'] ?? '') as String,
       );
 
   String toJson() => json.encode(toMap());

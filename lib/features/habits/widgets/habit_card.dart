@@ -1,13 +1,20 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/i18n/app_strings.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class HabitCard extends StatelessWidget {
@@ -52,7 +59,6 @@ class HabitCard extends StatelessWidget {
               Positioned.fill(
                 child: Image.file(File(habit.coverPath), fit: BoxFit.cover),
               ),
-              // Overlay oscuro (~70%) para mantener el grid legible.
               Positioned.fill(
                 child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
               ),
@@ -105,13 +111,28 @@ class HabitCard extends StatelessWidget {
                                 color: context.tokens.muted,
                               ),
                             ),
-                            if (habit.category.isNotEmpty) ...[
+                            if (habitHasExplicitFrequency(habit)) ...[
                               const SizedBox(width: 8),
                               Text(
-                                '·  ${habit.category}',
+                                '·  ${habitFrequencyLabel(context, habit)}',
                                 style: TextStyle(
                                   fontSize: 13,
+                                  fontWeight: FontWeight.w600,
                                   color: context.tokens.muted,
+                                ),
+                              ),
+                            ],
+                            if (habit.category.isNotEmpty) ...[
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  '·  ${habit.category}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: context.tokens.muted,
+                                  ),
                                 ),
                               ),
                             ],
@@ -127,14 +148,11 @@ class HabitCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 14),
-                  _TodayButton(
-                    color: habit.color,
-                    done: doneToday,
+                  _ActionButton(
+                    habit: habit,
+                    doneToday: doneToday,
                     circle: circleCheck,
-                    onTap: () {
-                      HapticFeedback.mediumImpact();
-                      onToggleToday();
-                    },
+                    onToggleToday: onToggleToday,
                   ),
                 ],
               ),
@@ -171,24 +189,210 @@ class _StrengthBar extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(3),
+          borderRadius: BorderRadius.circular(4),
           child: Stack(
             children: [
-              Container(height: 4, color: track),
+              Container(height: 6, color: track),
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: value.clamp(0.0, 1.0)),
-                duration: const Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 700),
                 curve: Curves.easeOutCubic,
                 builder: (context, t, _) => Container(
-                  height: 4,
+                  height: 6,
                   width: constraints.maxWidth * t,
-                  color: color,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.lerp(color, Colors.white, 0.28)!,
+                        color,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: t > 0.02
+                        ? [
+                            BoxShadow(
+                              color: color.withValues(alpha: 0.4),
+                              blurRadius: 5,
+                              offset: const Offset(0, 1),
+                            ),
+                          ]
+                        : null,
+                  ),
                 ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({
+    required this.habit,
+    required this.doneToday,
+    required this.circle,
+    required this.onToggleToday,
+  });
+
+  final Habit habit;
+  final bool doneToday;
+  final bool circle;
+  final VoidCallback onToggleToday;
+
+  Future<void> _handleRelapseTap(BuildContext context, bool relapsed) async {
+    final controller = context.read<HabitsController>();
+    final today = DateTime.now();
+    if (relapsed) {
+      // Undoing a mistake shouldn't have friction — only logging one does.
+      HapticFeedback.mediumImpact();
+      await controller.clearRelapse(habit.id, today);
+      return;
+    }
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.tr('log_relapse_title'),
+      message: context.tr('log_relapse_body', {'name': habit.name}),
+      confirmLabel: context.tr('log_relapse_confirm'),
+      icon: LucideIcons.ban,
+    );
+    if (confirmed == true) {
+      HapticFeedback.heavyImpact();
+      await controller.logRelapse(habit.id, today);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (habit.kind) {
+      case HabitKind.positive:
+        return _TodayButton(
+          color: habit.color,
+          done: doneToday,
+          circle: circle,
+          onTap: () {
+            HapticFeedback.mediumImpact();
+            onToggleToday();
+          },
+        );
+      case HabitKind.negative:
+        final relapsed = !doneToday;
+        return _RelapseButton(
+          color: habit.color,
+          relapsed: relapsed,
+          circle: circle,
+          onTap: () => _handleRelapseTap(context, relapsed),
+        );
+      case HabitKind.quantitative:
+        final today = DateTime.now();
+        final count = habit.completions[today.dayKey]?.count ?? 0;
+        final ratio =
+            habit.perDayTarget <= 0 ? 0.0 : count / habit.perDayTarget;
+        void addProgress() {
+          HapticFeedback.mediumImpact();
+          context
+              .read<HabitsController>()
+              .addProgress(habit.id, today, habit.incrementAmount);
+        }
+
+        switch (habit.quantKind) {
+          case QuantKind.water:
+            return _WaterButton(
+                ratio: ratio.clamp(0.0, 1.0), onTap: addProgress);
+          case QuantKind.reading:
+            return _BookButton(
+              color: habit.color,
+              ratio: ratio.clamp(0.0, 1.0),
+              done: doneToday,
+              onTap: addProgress,
+            );
+          case QuantKind.generic:
+            return _QuantityButton(
+              color: habit.color,
+              ratio: ratio,
+              done: doneToday,
+              circle: circle,
+              onTap: addProgress,
+            );
+        }
+    }
+  }
+}
+
+class _WaterButton extends StatelessWidget {
+  const _WaterButton({required this.ratio, required this.onTap});
+
+  final double ratio;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: ratio),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => SizedBox(
+              width: 30,
+              height: 40,
+              child: CustomPaint(painter: WaterCupPainter(fill: t)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BookButton extends StatelessWidget {
+  const _BookButton({
+    required this.color,
+    required this.ratio,
+    required this.done,
+    required this.onTap,
+  });
+
+  final Color color;
+  final double ratio;
+  final bool done;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: ratio),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => SizedBox(
+              width: 30,
+              height: 38,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CustomPaint(
+                    size: const Size(30, 38),
+                    painter: BookPainter(fill: t, color: color),
+                  ),
+                  if (done)
+                    const Icon(LucideIcons.check, size: 15, color: Colors.white),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -220,7 +424,6 @@ class _TodayButtonState extends State<_TodayButton>
   @override
   void didUpdateWidget(_TodayButton old) {
     super.didUpdateWidget(old);
-    // Pop only when transitioning into the completed state.
     if (widget.done && !old.done) {
       _pop.forward(from: 0);
     }
@@ -239,8 +442,6 @@ class _TodayButtonState extends State<_TodayButton>
       child: AnimatedBuilder(
         animation: _pop,
         builder: (context, child) {
-          // Brief scale bounce: 1 -> 1.18 -> 1. Transform doesn't affect
-          // layout, so the row never jiggles.
           final t = _pop.value;
           final scale = 1 + 0.18 * (t < 0.5 ? t * 2 : (1 - t) * 2);
           return Transform.scale(scale: scale, child: child);
@@ -265,6 +466,169 @@ class _TodayButtonState extends State<_TodayButton>
             LucideIcons.check,
             size: 22,
             color: widget.done ? Colors.white : widget.color,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RelapseButton extends StatefulWidget {
+  const _RelapseButton({
+    required this.color,
+    required this.relapsed,
+    required this.onTap,
+    this.circle = false,
+  });
+
+  final Color color;
+  final bool relapsed;
+  final VoidCallback onTap;
+  final bool circle;
+
+  @override
+  State<_RelapseButton> createState() => _RelapseButtonState();
+}
+
+class _RelapseButtonState extends State<_RelapseButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _shake = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 380),
+  );
+
+  @override
+  void didUpdateWidget(_RelapseButton old) {
+    super.didUpdateWidget(old);
+    if (widget.relapsed && !old.relapsed) _shake.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _shake.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final danger = context.tokens.danger;
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _shake,
+        builder: (context, child) {
+          final t = _shake.value;
+          final dx = math.sin(t * math.pi * 6) * (1 - t) * 4;
+          return Transform.translate(offset: Offset(dx, 0), child: child);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: widget.relapsed ? danger : widget.color.withValues(alpha: 0.14),
+            borderRadius: BorderRadius.circular(widget.circle ? 22 : 14),
+            border: widget.relapsed
+                ? null
+                : Border.all(color: widget.color.withValues(alpha: 0.5), width: 1.6),
+          ),
+          child: Icon(
+            widget.relapsed ? LucideIcons.x : LucideIcons.shield,
+            size: 22,
+            color: widget.relapsed ? Colors.white : widget.color,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuantityButton extends StatefulWidget {
+  const _QuantityButton({
+    required this.color,
+    required this.ratio,
+    required this.done,
+    required this.onTap,
+    this.circle = false,
+  });
+
+  final Color color;
+  final double ratio;
+  final bool done;
+  final VoidCallback onTap;
+  final bool circle;
+
+  @override
+  State<_QuantityButton> createState() => _QuantityButtonState();
+}
+
+class _QuantityButtonState extends State<_QuantityButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pop = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 260),
+  );
+
+  @override
+  void didUpdateWidget(_QuantityButton old) {
+    super.didUpdateWidget(old);
+    if (widget.done && !old.done) _pop.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _pop.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _pop,
+        builder: (context, child) {
+          final t = _pop.value;
+          final scale = 1 + 0.18 * (t < 0.5 ? t * 2 : (1 - t) * 2);
+          return Transform.scale(scale: scale, child: child);
+        },
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: widget.ratio.clamp(0.0, 1.0)),
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOutCubic,
+                builder: (context, t, _) => SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: CircularProgressIndicator(
+                    value: t,
+                    strokeWidth: 3,
+                    backgroundColor: widget.color.withValues(alpha: 0.14),
+                    valueColor: AlwaysStoppedAnimation(widget.color),
+                  ),
+                ),
+              ),
+              Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: widget.done ? widget.color : widget.color.withValues(alpha: 0.14),
+                  shape: widget.circle ? BoxShape.circle : BoxShape.rectangle,
+                  borderRadius: widget.circle ? null : BorderRadius.circular(9),
+                ),
+                child: Icon(
+                  widget.done ? LucideIcons.check : LucideIcons.plus,
+                  size: 15,
+                  color: widget.done ? Colors.white : widget.color,
+                ),
+              ),
+            ],
           ),
         ),
       ),

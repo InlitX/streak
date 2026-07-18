@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/app_strings.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -13,9 +14,12 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
+import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class HabitDetailsPage extends StatefulWidget {
   const HabitDetailsPage({super.key, required this.habitId});
@@ -27,7 +31,19 @@ class HabitDetailsPage extends StatefulWidget {
 }
 
 class _HabitDetailsPageState extends State<HabitDetailsPage> {
-  HeatmapMode _mode = HeatmapMode.week;
+  late HeatmapMode _mode;
+
+  @override
+  void initState() {
+    super.initState();
+    final saved = context.read<SettingsController>().heatmapMode;
+    _mode = HeatmapMode.values[saved.clamp(0, 2)];
+  }
+
+  void _changeMode(HeatmapMode mode) {
+    setState(() => _mode = mode);
+    context.read<SettingsController>().setHeatmapMode(mode.index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +59,20 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
 
         void toggle(DateTime date) {
           HapticFeedback.selectionClick();
-          controller.toggle(habit.id, date);
+          switch (habit.kind) {
+            case HabitKind.positive:
+              controller.toggle(habit.id, date);
+              break;
+            case HabitKind.negative:
+              final relapsed = habit.completions.containsKey(date.dayKey);
+              relapsed
+                  ? controller.clearRelapse(habit.id, date)
+                  : controller.logRelapse(habit.id, date);
+              break;
+            case HabitKind.quantitative:
+              controller.addProgress(habit.id, date, habit.incrementAmount);
+              break;
+          }
         }
 
         return Scaffold(
@@ -83,6 +112,11 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FrequencyChip(habit: habit),
+                ),
+                const SizedBox(height: 14),
                 if (habit.description.isNotEmpty) ...[
                   Text(
                     habit.description,
@@ -94,6 +128,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   ),
                   const SizedBox(height: 20),
                 ],
+                if (habit.kind == HabitKind.quantitative) ...[
+                  QuantitativeProgress(habit: habit),
+                  const SizedBox(height: 20),
+                ],
                 SectionLabel(context.tr('streaks')),
                 StreakSummary(habit: habit),
                 const SizedBox(height: 20),
@@ -101,7 +139,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   context.tr('activity'),
                   trailing: _ModeToggle(
                     mode: _mode,
-                    onChanged: (m) => setState(() => _mode = m),
+                    onChanged: _changeMode,
                   ),
                 ),
                 _ActivityView(habit: habit, mode: _mode, onToggle: toggle),
@@ -115,7 +153,6 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
   }
 }
 
-/// Muestra la foto del hábito como fondo con overlay oscuro si existe.
 class _DetailBackground extends StatelessWidget {
   const _DetailBackground({required this.coverPath, required this.child});
 

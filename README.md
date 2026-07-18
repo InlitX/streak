@@ -22,6 +22,8 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 
 <a href="https://f-droid.org/packages/com.streak.app/"><img alt="Get it on F-Droid" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
 &nbsp;
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Get it on IzzyOnDroid" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Get it on GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>
@@ -90,6 +92,8 @@ that matches your phone (most modern devices are **arm64-v8a**):
 **Tracking**
 - One-tap logging from the home screen
 - Daily, weekly and monthly goals
+- Avoidance habits (quit smoking, etc.) with relapse tracking
+- Quantitative habits (water, reading, ...) with daily amount goals
 - Current and best streak counters
 - Habit "strength" based on recent consistency
 

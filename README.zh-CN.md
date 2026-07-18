@@ -22,6 +22,8 @@
 
 <a href="https://f-droid.org/packages/com.streak.app/"><img alt="在 F-Droid 上获取" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
 &nbsp;
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="在 IzzyOnDroid 上获取" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="在 GitHub 上获取" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>

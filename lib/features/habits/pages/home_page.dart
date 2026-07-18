@@ -16,6 +16,7 @@ import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,8 +29,20 @@ class _HomePageState extends State<HomePage> {
   bool _wasAllDone = false;
   int _confetti = 0;
   String? _category;
-  HeatmapMode _mode = HeatmapMode.month;
+  late HeatmapMode _mode;
   bool _reordering = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final saved = context.read<SettingsController>().heatmapMode;
+    _mode = HeatmapMode.values[saved.clamp(0, 2)];
+  }
+
+  void _changeMode(HeatmapMode mode) {
+    setState(() => _mode = mode);
+    context.read<SettingsController>().setHeatmapMode(mode.index);
+  }
 
   void _maybeCelebrate(bool allDone) {
     if (allDone == _wasAllDone) return;
@@ -112,6 +125,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
     return Scaffold(
       appBar: AppBar(
         title: Text(_reordering ? context.tr('reorder') : context.tr('today')),
@@ -163,9 +177,13 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 final categories = _categoriesOf(all);
-                final visible = _category == null
+                final filtered = _category == null
                     ? all
                     : all.where((h) => h.category == _category).toList();
+                // Keep saved order while reordering, or indexes move the wrong habit.
+                final visible = _reordering || !sortCompletedLast
+                    ? filtered
+                    : _completedLast(filtered);
 
                 return RefreshIndicator(
                   onRefresh: () async {
@@ -196,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(height: 16),
                             _ViewSelector(
                               mode: _mode,
-                              onChanged: (m) => setState(() => _mode = m),
+                              onChanged: _changeMode,
                             ),
                             if (categories.isNotEmpty)
                               _CategoryBar(
@@ -267,6 +285,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  // Two lists (not a sort) so manual order survives within each group.
+  List<Habit> _completedLast(List<Habit> habits) {
+    final pending = <Habit>[];
+    final done = <Habit>[];
+    for (final habit in habits) {
+      (habit.isDoneForNow ? done : pending).add(habit);
+    }
+    return [...pending, ...done];
   }
 
   List<String> _categoriesOf(List<Habit> habits) {

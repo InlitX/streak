@@ -21,11 +21,8 @@ class HabitHeatmap extends StatefulWidget {
   final HeatmapMode mode;
   final void Function(DateTime date)? onToggle;
 
-  /// When true the grid renders a width-filling, read-only variant suited
-  /// to home cards (week strip, dense month, or dense year).
+  // Width-filling, read-only variant for home cards.
   final bool compact;
-
-  /// When true cells are circles instead of rounded squares.
   final bool circle;
 
   @override
@@ -44,15 +41,30 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   Color _cell(BuildContext context, DateTime date, {bool inScope = true}) {
     final scheme = context.colors;
     if (!inScope) return Colors.transparent;
-    final count = widget.habit.completions[date.dayKey]?.count ?? 0;
+    final habit = widget.habit;
+
+    final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
+
+    if (habit.kind == HabitKind.negative) {
+      if (beforeCreation) {
+        final base = scheme.surfaceContainerHighest;
+        return base.withValues(alpha: 0.4);
+      }
+      final relapsed = habit.completions.containsKey(date.dayKey);
+      if (relapsed) return context.tokens.danger;
+      final clean = habit.color.withValues(alpha: 0.4);
+      return date.isAfter(_today) ? clean.withValues(alpha: 0.18) : clean;
+    }
+
+    final count = habit.completions[date.dayKey]?.count ?? 0;
     if (count <= 0) {
       final base = scheme.surfaceContainerHighest;
       return date.isAfter(_today) ? base.withValues(alpha: 0.4) : base;
     }
-    final ratio = (count / widget.habit.perDayTarget).clamp(0.25, 1.0);
+    final ratio = (count / habit.perDayTarget).clamp(0.25, 1.0);
     return Color.lerp(
-      widget.habit.color.withValues(alpha: 0.4),
-      widget.habit.color,
+      habit.color.withValues(alpha: 0.4),
+      habit.color,
       ratio,
     )!;
   }
@@ -191,8 +203,6 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     );
   }
 
-  /// Full-width month view: a 7-column calendar grid of rounded squares
-  /// (one column per weekday) topped with the month + year.
   Widget _monthCalendar(BuildContext context) {
     final monthStart = DateTime(_today.year, _today.month, 1);
     final first = _mondayOf(monthStart);
@@ -264,8 +274,6 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
   }
 
-  /// Scrollable yearly grid (53 weeks) with month labels above — the same
-  /// component used on the habit detail screen.
   Widget _yearGrid(BuildContext context) {
     const columns = 53;
     const gap = 3.0;
@@ -282,8 +290,6 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
       }
     });
 
-    // Canonical heatmap: a single horizontal Row of week-columns. Each
-    // column carries its month label as the first slot.
     return SingleChildScrollView(
       controller: _scroll,
       scrollDirection: Axis.horizontal,

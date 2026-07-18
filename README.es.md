@@ -22,6 +22,8 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <a href="https://f-droid.org/packages/com.streak.app/"><img alt="Disponible en F-Droid" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
 &nbsp;
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Disponible en IzzyOnDroid" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>

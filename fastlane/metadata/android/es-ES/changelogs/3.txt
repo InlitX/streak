@@ -1,0 +1,6 @@
+🚭 Nuevos hábitos de "Evitar" — dejar de fumar y más; cada día cuenta como limpio, toca solo si recaes
+💧 Nuevos hábitos de "Cantidad" — agua, lectura o cualquier cosa medible, con metas diarias y animaciones propias
+📊 Nuevo widget de mapa de actividad, y los widgets de inicio ya funcionan con todos los tipos de hábito
+🗓️ Las tarjetas muestran la frecuencia de cada hábito; "Hoy" recuerda tu vista de semana/mes/año
+↕️ Opción para ordenar los hábitos completados al final
+✨ Mejoras y correcciones en toda la app

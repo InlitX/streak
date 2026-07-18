@@ -16,6 +16,8 @@ class SettingsController extends ChangeNotifier {
     _profilePhoto = LocalStore.setting('profilePhoto', '');
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
+    _heatmapMode = LocalStore.setting('heatmapMode', 0);
+    _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
   }
 
   late ThemeMode _themeMode;
@@ -29,6 +31,8 @@ class SettingsController extends ChangeNotifier {
   late String _profilePhoto;
   late int _appIcon;
   late int _accentColor;
+  late int _heatmapMode;
+  late bool _sortCompletedLast;
 
   ThemeMode get themeMode => _themeMode;
   int get weekStart => _weekStart;
@@ -46,19 +50,35 @@ class SettingsController extends ChangeNotifier {
   int get checkStyle => _checkStyle;
   bool get isCircleCheck => _checkStyle == 1;
 
-  /// Empty until the user sets one. Used to personalize notifications.
   String get profileName => _profileName;
   String get profilePhoto => _profilePhoto;
 
   /// 0 = default, 1 = neutral, 2 = accent.
   int get appIcon => _appIcon;
 
-  /// User-chosen accent (primary) colour for the whole app.
   Color get accentColor => Color(_accentColor);
 
   Future<void> setAccentColor(Color color) async {
     _accentColor = color.toARGB32();
     await LocalStore.writeSetting('accentColor', _accentColor);
+    notifyListeners();
+  }
+
+  /// Heatmap zoom shared by Home and details: 0 = week, 1 = month, 2 = year.
+  int get heatmapMode => _heatmapMode;
+
+  Future<void> setHeatmapMode(int value) async {
+    _heatmapMode = value;
+    await LocalStore.writeSetting('heatmapMode', value);
+    notifyListeners();
+  }
+
+  // When on, completed habits sink to the bottom of Today.
+  bool get sortCompletedLast => _sortCompletedLast;
+
+  Future<void> setSortCompletedLast(bool value) async {
+    _sortCompletedLast = value;
+    await LocalStore.writeSetting('sortCompletedLast', value);
     notifyListeners();
   }
 
