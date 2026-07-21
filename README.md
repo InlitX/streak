@@ -12,7 +12,6 @@ only, so `main` stays clean.
 └── assets/         # logo, app screenshots and store badges
 ```
 
-No framework, no build — just open `index.html`, or host it anywhere static.
 
 ## Preview locally
 
