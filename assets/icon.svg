@@ -1,0 +1,43 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="230" fill="#0D0D0D"/>
+
+  <!-- GitHub-style heatmap grid of violet intensities.
+       Empty cells use a dim violet; filled cells climb through the brand ramp. -->
+  <g>
+    <!-- Row 0 -->
+    <rect x="160" y="160" width="122" height="122" rx="24" fill="#5B21B6"/>
+    <rect x="306" y="160" width="122" height="122" rx="24" fill="#7C3AED"/>
+    <rect x="452" y="160" width="122" height="122" rx="24" fill="#3B0764"/>
+    <rect x="598" y="160" width="122" height="122" rx="24" fill="#6D28D9"/>
+    <rect x="744" y="160" width="122" height="122" rx="24" fill="#A78BFA"/>
+
+    <!-- Row 1 -->
+    <rect x="160" y="306" width="122" height="122" rx="24" fill="#C4B5FD"/>
+    <rect x="306" y="306" width="122" height="122" rx="24" fill="#6D28D9"/>
+    <rect x="452" y="306" width="122" height="122" rx="24" fill="#7C3AED"/>
+    <rect x="598" y="306" width="122" height="122" rx="24" fill="#5B21B6"/>
+    <rect x="744" y="306" width="122" height="122" rx="24" fill="#241B33"/>
+
+    <!-- Row 2 -->
+    <rect x="160" y="452" width="122" height="122" rx="24" fill="#3B0764"/>
+    <rect x="306" y="452" width="122" height="122" rx="24" fill="#5B21B6"/>
+    <rect x="452" y="452" width="122" height="122" rx="24" fill="#A78BFA"/>
+    <rect x="598" y="452" width="122" height="122" rx="24" fill="#7C3AED"/>
+    <rect x="744" y="452" width="122" height="122" rx="24" fill="#6D28D9"/>
+
+    <!-- Row 3 -->
+    <rect x="160" y="598" width="122" height="122" rx="24" fill="#7C3AED"/>
+    <rect x="306" y="598" width="122" height="122" rx="24" fill="#C4B5FD"/>
+    <rect x="452" y="598" width="122" height="122" rx="24" fill="#5B21B6"/>
+    <rect x="598" y="598" width="122" height="122" rx="24" fill="#6D28D9"/>
+    <rect x="744" y="598" width="122" height="122" rx="24" fill="#241B33"/>
+
+    <!-- Row 4 -->
+    <rect x="160" y="744" width="122" height="122" rx="24" fill="#6D28D9"/>
+    <rect x="306" y="744" width="122" height="122" rx="24" fill="#3B0764"/>
+    <rect x="452" y="744" width="122" height="122" rx="24" fill="#7C3AED"/>
+    <rect x="598" y="744" width="122" height="122" rx="24" fill="#A78BFA"/>
+    <rect x="744" y="744" width="122" height="122" rx="24" fill="#5B21B6"/>
+  </g>
+</svg>
