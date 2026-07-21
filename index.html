@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streak — A calm, private habit tracker</title>
+  <meta name="description" content="Streak is a minimal, private, ad-free habit tracker built with Flutter. One-tap logging, activity heatmaps, streaks, checklists and vacation mode. Free and open source." />
+  <meta name="theme-color" content="#0B0B0D" />
+
+  <meta property="og:title" content="Streak — A calm, private habit tracker" />
+  <meta property="og:description" content="One-tap logging, activity heatmaps and streaks. Free, offline and open source." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/screenshots/01-today.png" />
+
+  <link rel="icon" type="image/png" href="assets/icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--2" aria-hidden="true"></div>
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top" aria-label="Streak home">
+      <img class="nav__mark" src="assets/icon.svg" width="34" height="34" alt="" />
+      <span class="nav__word">Streak</span>
+    </a>
+    <button class="nav__burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span>
+    </button>
+    <div class="nav__collapse" id="navMenu">
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#features" data-i18n="nav_features">Features</a>
+        <a href="#gallery" data-i18n="nav_screens">Screenshots</a>
+        <a href="#download" data-i18n="nav_download">Download</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="lang" id="langToggle" type="button" aria-label="Switch language">
+          <span class="lang__opt is-on" data-lang="en">EN</span>
+          <span class="lang__sep">/</span>
+          <span class="lang__opt" data-lang="es">ES</span>
+        </button>
+        <a class="nav__stars" id="starPill" href="https://github.com/InlitX/streak" target="_blank" rel="noopener" aria-label="Star on GitHub" title="Star on GitHub">
+          <svg class="nav__stars-gh" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+          <span class="nav__stars-ic" data-icon="star" aria-hidden="true"></span>
+          <span class="nav__stars-n" id="starCount">0</span>
+        </a>
+        <span class="nav__kofi-wrap">
+          <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'J3J41W702I');kofiwidget2.draw();</script>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow reveal" data-i18n="hero_eyebrow">Open source · No ads · No tracking</p>
+        <h1 class="hero__title reveal">
+          <span data-i18n="hero_title_1">Small steps,</span>
+          <em data-i18n="hero_title_2">every day.</em>
+        </h1>
+        <p class="hero__sub reveal" data-i18n="hero_sub">
+          Streak is a calm, private habit tracker. Log a habit in a single tap,
+          keep your momentum, and watch your streaks grow — no accounts, no
+          subscriptions, nothing leaves your phone.
+        </p>
+        <div class="hero__cta reveal">
+          <a class="badge-link" href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener">
+            <img src="assets/badges/get-it-on-fdroid.png" alt="Get it on F-Droid" height="54" />
+          </a>
+          <a class="badge-link" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
+            <img src="assets/badges/get-it-on-github.png" alt="Get it on GitHub" height="54" />
+          </a>
+        </div>
+        <div class="hero__meta reveal">
+          <span><strong>MIT</strong> <span data-i18n="hero_meta_license">licensed</span></span>
+          <span class="hero__meta-sep"></span>
+          <span data-i18n="hero_meta_platform">Android · Flutter</span>
+          <span class="hero__meta-sep"></span>
+          <span data-i18n="hero_meta_langs">English · Español</span>
+        </div>
+      </div>
+
+      <div class="hero__stage reveal">
+        <div class="phone">
+          <img class="phone__img" src="assets/phone.png" alt="Streak — Today screen" width="1022" height="2082" />
+        </div>
+        <div class="float-card float-card--streak">
+          <span class="flame" data-icon="flame" aria-hidden="true"></span>
+          <div>
+            <strong>128</strong>
+            <small data-i18n="float_streak">day streak</small>
+          </div>
+        </div>
+        <div class="float-card float-card--grid">
+          <div class="mini-heat" id="miniHeat" aria-hidden="true"></div>
+          <small data-i18n="float_grid">This year</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust" aria-label="Highlights">
+      <ul class="trust__row">
+        <li><span class="trust__ic" data-icon="lock" aria-hidden="true"></span><span data-i18n="trust_private">Fully private</span></li>
+        <li><span class="trust__ic" data-icon="wifi-off" aria-hidden="true"></span><span data-i18n="trust_offline">Works offline</span></li>
+        <li><span class="trust__ic" data-icon="gift" aria-hidden="true"></span><span data-i18n="trust_free">Free forever</span></li>
+        <li><span class="trust__ic" data-icon="code" aria-hidden="true"></span><span data-i18n="trust_open">Open source</span></li>
+        <li><span class="trust__ic" data-icon="user" aria-hidden="true"></span><span data-i18n="trust_noacc">No accounts</span></li>
+      </ul>
+    </section>
+
+    <section class="section" id="features">
+      <header class="section__head reveal">
+        <p class="kicker" data-i18n="feat_kicker">Everything, nothing more</p>
+        <h2 class="section__title" data-i18n="feat_title">Built to feel calm, not demanding</h2>
+      </header>
+
+      <div class="bento">
+        <article class="tile tile--wide reveal">
+          <div class="tile__icon" data-icon="circle-check" aria-hidden="true"></div>
+          <h3 data-i18n="f_onetap_t">One-tap logging</h3>
+          <p data-i18n="f_onetap_d">Mark today done from the home screen — daily, weekly or monthly goals with a habit “strength” that tracks your consistency.</p>
+          <button class="demo-check" type="button" aria-label="Log today">
+            <span class="demo-check__ic" data-icon="check"></span>
+          </button>
+        </article>
+
+        <article class="tile tile--heat reveal">
+          <div class="tile__icon" data-icon="grid" aria-hidden="true"></div>
+          <h3 data-i18n="f_heat_t">Activity heatmap</h3>
+          <p data-i18n="f_heat_d">A GitHub-style grid for every habit — week, month or year at a glance.</p>
+          <div class="big-heat" id="bigHeat" aria-hidden="true"></div>
+        </article>
+
+        <article class="tile reveal">
+          <div class="tile__icon" data-icon="shapes" aria-hidden="true"></div>
+          <h3 data-i18n="f_types_t">Three habit types</h3>
+          <p data-i18n="f_types_d">Build good ones, quit bad ones, or hit an amount.</p>
+          <ul class="chips">
+            <li class="chip chip--pos" data-i18n="type_normal">Normal</li>
+            <li class="chip chip--neg" data-i18n="type_avoid">Avoid</li>
+            <li class="chip chip--amt" data-i18n="type_amount">Amount</li>
+          </ul>
+        </article>
+
+        <article class="tile tile--new reveal">
+          <span class="tag" data-i18n="tag_new">New</span>
+          <div class="tile__icon" data-icon="list-checks" aria-hidden="true"></div>
+          <h3 data-i18n="f_check_t">Checklists</h3>
+          <p data-i18n="f_check_d">Break a habit into steps — the day is done only when every step is ticked. Perfect for a morning routine.</p>
+          <ul class="check-demo">
+            <li class="is-done"><i></i><span data-i18n="check_1">Wash face</span></li>
+            <li class="is-done"><i></i><span data-i18n="check_2">Brush teeth</span></li>
+            <li><i></i><span data-i18n="check_3">Stretch 5 min</span></li>
+          </ul>
+        </article>
+
+        <article class="tile tile--new reveal">
+          <span class="tag" data-i18n="tag_new">New</span>
+          <div class="tile__icon" data-icon="palm" aria-hidden="true"></div>
+          <h3 data-i18n="f_vac_t">Vacation mode</h3>
+          <p data-i18n="f_vac_d">Pause a habit while you’re away. Skipped days don’t count as missed and never break your streak.</p>
+          <div class="vac-strip" aria-hidden="true">
+            <span></span><span></span><span class="v"></span><span class="v"></span><span class="v"></span><span></span><span></span>
+          </div>
+        </article>
+
+        <article class="tile tile--color reveal">
+          <div class="tile__icon" data-icon="palette" aria-hidden="true"></div>
+          <h3 data-i18n="f_person_t">Make it yours</h3>
+          <p data-i18n="f_person_d">Icons, emoji, a full color picker, light/dark themes and home-screen widgets.</p>
+          <div class="swatches" id="swatches" aria-hidden="true"></div>
+        </article>
+
+        <article class="tile reveal">
+          <div class="tile__icon" data-icon="bar-chart" aria-hidden="true"></div>
+          <h3 data-i18n="f_stats_t">Statistics</h3>
+          <p data-i18n="f_stats_d">Trends, totals and the times of day you’re most consistent.</p>
+          <div class="mini-bars" aria-hidden="true">
+            <span style="height:34%"></span><span style="height:58%"></span><span style="height:44%"></span><span style="height:82%"></span><span style="height:54%"></span><span style="height:96%"></span><span style="height:68%"></span>
+          </div>
+        </article>
+
+        <article class="tile reveal">
+          <div class="tile__icon" data-icon="bell" aria-hidden="true"></div>
+          <h3 data-i18n="f_remind_t">Smart reminders</h3>
+          <p data-i18n="f_remind_d">Per-habit notifications on exactly the days you choose.</p>
+          <div class="mini-remind" aria-hidden="true">
+            <span class="mini-remind__time">08:00</span>
+            <div class="mini-remind__days">
+              <i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
+            </div>
+          </div>
+        </article>
+
+        <article class="tile reveal">
+          <div class="tile__icon" data-icon="download" aria-hidden="true"></div>
+          <h3 data-i18n="f_backup_t">Backup &amp; restore</h3>
+          <p data-i18n="f_backup_d">Export everything to a portable JSON file. Your data, in your hands.</p>
+          <div class="mini-file" aria-hidden="true">
+            <span class="mini-file__ic" data-icon="file"></span>
+            <span class="mini-file__name">streak-backup.json</span>
+            <span class="mini-file__dl" data-icon="download"></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section gallery" id="gallery">
+      <header class="section__head reveal">
+        <p class="kicker" data-i18n="gal_kicker">A look inside</p>
+        <h2 class="section__title" data-i18n="gal_title">Calm by design</h2>
+      </header>
+      <div class="shots" id="shots">
+        <figure class="shot reveal"><img src="assets/screenshots/01-today.png" alt="Today" loading="lazy" /><figcaption data-i18n="cap_today">Today</figcaption></figure>
+        <figure class="shot reveal"><img src="assets/screenshots/02-stats.png" alt="Statistics" loading="lazy" /><figcaption data-i18n="cap_stats">Statistics</figcaption></figure>
+        <figure class="shot reveal"><img src="assets/screenshots/03-insights.png" alt="Insights" loading="lazy" /><figcaption data-i18n="cap_insights">Insights</figcaption></figure>
+        <figure class="shot reveal"><img src="assets/screenshots/04-customize.png" alt="Personalize" loading="lazy" /><figcaption data-i18n="cap_person">Personalize</figcaption></figure>
+        <figure class="shot reveal"><img src="assets/screenshots/05-free.png" alt="Free and private" loading="lazy" /><figcaption data-i18n="cap_free">Free &amp; private</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section download" id="download">
+      <div class="download__card reveal">
+        <img class="download__mark" src="assets/icon.svg" width="72" height="72" alt="" />
+        <h2 class="download__title" data-i18n="dl_title">Start your first streak</h2>
+        <p class="download__sub" data-i18n="dl_sub">Install from F-Droid to get automatic updates, or grab the APK directly.</p>
+        <div class="download__badges">
+          <a class="badge-link" href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-fdroid.png" alt="Get it on F-Droid" height="56" /></a>
+          <a class="badge-link" href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-izzyondroid.png" alt="Get it on IzzyOnDroid" height="56" /></a>
+          <a class="badge-link" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-github.png" alt="Get it on GitHub" height="56" /></a>
+        </div>
+        <p class="download__note" data-i18n="dl_note">Not on the Play Store. Android may ask you to allow installs the first time.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__brand">
+      <img src="assets/icon.svg" width="30" height="30" alt="" />
+      <span>Streak</span>
+    </div>
+    <p class="footer__tag" data-i18n="foot_tag">Crafted with care and a lot of free time.</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="https://github.com/InlitX/streak" target="_blank" rel="noopener"><span class="footer__ic" data-icon="github" aria-hidden="true"></span>GitHub</a>
+      <a href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener"><span class="footer__ic" data-icon="package" aria-hidden="true"></span>F-Droid</a>
+      <a href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener"><span class="footer__ic" data-icon="tag" aria-hidden="true"></span><span data-i18n="foot_releases">Releases</span></a>
+      <a href="https://github.com/InlitX/streak/issues" target="_blank" rel="noopener"><span class="footer__ic" data-icon="bug" aria-hidden="true"></span><span data-i18n="foot_issues">Report a bug</span></a>
+      <a href="https://github.com/InlitX/streak/issues/new" target="_blank" rel="noopener"><span class="footer__ic" data-icon="lightbulb" aria-hidden="true"></span><span data-i18n="foot_feature">Request a feature</span></a>
+    </nav>
+    <p class="footer__copy">
+      <span data-i18n="foot_open">Open source · MIT</span> · <a class="footer__handle" href="https://github.com/InlitX" target="_blank" rel="noopener">@inlitx</a>
+    </p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
