@@ -47,11 +47,11 @@
 
 <div align="center">
 
-<img src="docs/screenshots/01-today.png" alt="今天" width="150" />
-<img src="docs/screenshots/02-stats.png" alt="统计" width="150" />
-<img src="docs/screenshots/03-insights.png" alt="洞察" width="150" />
-<img src="docs/screenshots/04-customize.png" alt="个性化" width="150" />
-<img src="docs/screenshots/05-free.png" alt="免费且私密" width="150" />
+<img src="screenshots/01-today.png" alt="今天" width="150" />
+<img src="screenshots/02-stats.png" alt="统计" width="150" />
+<img src="screenshots/03-insights.png" alt="洞察" width="150" />
+<img src="screenshots/04-customize.png" alt="个性化" width="150" />
+<img src="screenshots/05-free.png" alt="免费且私密" width="150" />
 
 <sub><b>今天</b> · <b>统计</b> · <b>洞察</b> · <b>个性化</b> · <b>免费且私密</b></sub>
 

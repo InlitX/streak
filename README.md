@@ -47,11 +47,11 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 
 <div align="center">
 
-<img src="docs/screenshots/01-today.png" alt="Today" width="150" />
-<img src="docs/screenshots/02-stats.png" alt="Statistics" width="150" />
-<img src="docs/screenshots/03-insights.png" alt="Insights" width="150" />
-<img src="docs/screenshots/04-customize.png" alt="Personalize" width="150" />
-<img src="docs/screenshots/05-free.png" alt="Free &amp; private" width="150" />
+<img src="screenshots/01-today.png" alt="Today" width="150" />
+<img src="screenshots/02-stats.png" alt="Statistics" width="150" />
+<img src="screenshots/03-insights.png" alt="Insights" width="150" />
+<img src="screenshots/04-customize.png" alt="Personalize" width="150" />
+<img src="screenshots/05-free.png" alt="Free &amp; private" width="150" />
 
 <sub><b>Today</b> · <b>Statistics</b> · <b>Insights</b> · <b>Personalize</b> · <b>Free &amp; private</b></sub>
 

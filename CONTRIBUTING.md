@@ -88,6 +88,7 @@ lib/
 
 android/            Android host project and the Glance widgets
 fastlane/           Store listing and changelogs — F-Droid reads these
+screenshots/        Screenshots used by the READMEs and app stores
 test/               Unit tests
 ```
 

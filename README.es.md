@@ -47,11 +47,11 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <div align="center">
 
-<img src="docs/screenshots/01-today.png" alt="Hoy" width="150" />
-<img src="docs/screenshots/02-stats.png" alt="Estadísticas" width="150" />
-<img src="docs/screenshots/03-insights.png" alt="Análisis" width="150" />
-<img src="docs/screenshots/04-customize.png" alt="Personaliza" width="150" />
-<img src="docs/screenshots/05-free.png" alt="Libre y privada" width="150" />
+<img src="screenshots/01-today.png" alt="Hoy" width="150" />
+<img src="screenshots/02-stats.png" alt="Estadísticas" width="150" />
+<img src="screenshots/03-insights.png" alt="Análisis" width="150" />
+<img src="screenshots/04-customize.png" alt="Personaliza" width="150" />
+<img src="screenshots/05-free.png" alt="Libre y privada" width="150" />
 
 <sub><b>Hoy</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub>
 
