@@ -1,10 +1,14 @@
+<div align="right">
+  <sub><a href="README.md">English</a> · <b>Español</b> · <a href="README.zh-CN.md">中文</a></sub>
+</div>
+
 <div align="center">
 
 <img src="assets/icon.svg" width="120" alt="Logo de Streak" />
 
 # Streak
 
-### Un rastreador de hábitos minimalista, privado y sin anuncios hecho con Flutter
+### Un rastreador de hábitos minimalista, privado y sin anuncios
 
 Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus rachas.
 
@@ -17,6 +21,7 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
   <img alt="Licencia MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
   <img alt="Sin anuncios, sin rastreo" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
+<a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
 <br/>
 
@@ -27,62 +32,47 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 <a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>
-<br/>
 
-[English](README.md) · **Español** · [中文](README.zh-CN.md)
+<sub>
+  <a href="#características">Características</a> ·
+  <a href="#vienes-de-otra-app">Importar</a> ·
+  <a href="#descarga">Descarga</a> ·
+  <a href="#privacidad">Privacidad</a> ·
+  <a href="#traducciones">Traducciones</a>
+</sub>
 
 </div>
 
 ---
 
-> [!TIP]
-> **Tuya, por completo.** Sin cuentas, sin suscripciones, sin anuncios, sin rastreo.
-> Cada hábito y ajuste se queda en tu dispositivo, y todo el código es abierto.
+<div align="center">
+
+<img src="docs/screenshots/01-today.png" alt="Hoy" width="150" />
+<img src="docs/screenshots/02-stats.png" alt="Estadísticas" width="150" />
+<img src="docs/screenshots/03-insights.png" alt="Análisis" width="150" />
+<img src="docs/screenshots/04-customize.png" alt="Personaliza" width="150" />
+<img src="docs/screenshots/05-free.png" alt="Libre y privada" width="150" />
+
+<sub><b>Hoy</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub>
+
+</div>
+
+---
 
 ## Resumen
 
-Streak es un rastreador de hábitos que te respeta. Crea todos los hábitos que
-quieras, regístralos con un toque y sigue tu progreso a través de una cuadrícula
-de actividad al estilo de GitHub, contadores de racha y un panel de estadísticas.
+Streak es un rastreador de hábitos de código abierto para Android que te respeta.
+Crea todos los hábitos que quieras, regístralos con un toque y mira tu progreso
+crecer en una cuadrícula de actividad al estilo de GitHub, contadores de racha y
+un panel de estadísticas.
+
 Es rápido, funciona sin conexión y está pensado para transmitir calma en lugar de
 exigir.
 
----
-
-## Capturas
-
-<p align="center">
-  <img src="docs/screenshots/01-today.png" alt="Hoy" width="150" />
-  <img src="docs/screenshots/02-stats.png" alt="Estadísticas" width="150" />
-  <img src="docs/screenshots/03-insights.png" alt="Análisis" width="150" />
-  <img src="docs/screenshots/04-customize.png" alt="Personaliza" width="150" />
-  <img src="docs/screenshots/05-free.png" alt="Libre y privada" width="150" />
-</p>
-
-<div align="center"><sub><b>Hoy</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub></div>
-
----
-
-## Descarga
-
-La forma más fácil es [**F-Droid**](https://f-droid.org/packages/com.streak.app/), que
-instala Streak y lo mantiene actualizado automáticamente.
-
-¿Prefieres el APK directo? Consíguelo en la página de [**Releases**](https://github.com/InlitX/streak/releases).
-Las compilaciones están divididas por arquitectura de CPU para que cada descarga
-sea pequeña: elige la que corresponda a tu teléfono (la mayoría de los
-dispositivos modernos son **arm64-v8a**):
-
-| APK | Para |
-|-----|------|
-| `Streak-arm64-v8a.apk` | Teléfonos modernos de 64 bits (recomendado) |
-| `Streak-armeabi-v7a.apk` | Dispositivos antiguos de 32 bits |
-| `Streak-x86_64.apk` | Emuladores / tablets x86 |
-
-> [!NOTE]
-> Streak no está en la Play Store. Como el APK no proviene de una tienda, puede
-> que Android te pida permitir instalaciones desde tu navegador o gestor de
-> archivos la primera vez.
+> [!TIP]
+> **Tuya, por completo.** Sin cuentas, sin suscripciones, sin anuncios, sin
+> rastreo. Cada hábito y ajuste se queda en tu dispositivo, y todo el código es
+> abierto.
 
 ---
 
@@ -92,38 +82,61 @@ dispositivos modernos son **arm64-v8a**):
 <tr>
 <td width="50%" valign="top">
 
-**Seguimiento**
-- Registro con un toque desde la pantalla de inicio
-- Metas diarias, semanales y mensuales
+### ✅ Seguimiento
+
+- Registro con un toque desde la pantalla de inicio o desde un widget
+- Tres tipos de hábito — **normal**, **evitar** (con registro de recaídas) y
+  **cantidad** (agua, lectura o tu propia unidad y meta diaria)
+- Las **listas de pasos** dividen un hábito en partes, hecho solo cuando están
+  todas marcadas
+- **Horarios flexibles** — diario, X veces por semana o mes, días concretos
+  o cada N días
+- **Rellena el pasado** — toca cualquier día para añadirlo o quitarlo, y las
+  rachas se recalculan
 - Contadores de racha actual y mejor racha
-- "Fuerza" del hábito basada en la constancia reciente
+- El **modo vacaciones** pausa un hábito sin romper nada
+- Los hábitos terminados bajan al final, así ves lo que te queda
 
 </td>
 <td width="50%" valign="top">
 
-**Visualización**
-- Cuadrícula de actividad al estilo de GitHub (semana / mes / año)
-- Panel de estadísticas con tendencias y totales
-- Tarjeta de progreso para compartir como una imagen cuidada
+### 📊 Ver tu progreso
+
+- **Cuadrícula de actividad** al estilo de GitHub — semana, mes o año
+- **Calendario mensual**, con la semana empezando en lunes, sábado o domingo
+- **Completados por mes**, para ver la forma de un año entero
+- **Evolución de la racha** en una gráfica, para verla subir
+- **"¿Cuándo eres más constante?"** encuentra las horas a las que de verdad cumples
+- Totales, mejor racha, racha actual y tasa de cumplimiento en una fila
+- Puntuación de **fuerza** por hábito, con más peso en tus días recientes
+- Una **tarjeta de progreso** para compartir, exportada como imagen cuidada
 
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
 
-**Personalización**
-- Pack de iconos minimalista y soporte de emojis
-- Color de acento personalizado con un selector de color completo
-- Temas claro / oscuro y fondos seleccionables
-- Categorías, reordenación, nombre y foto de perfil
+### 🎨 Hacerla tuya
+
+- Pack de iconos minimalista, o cualquier emoji
+- Color de acento personalizado con selector completo
+- Temas claro y oscuro, más cinco fondos — sólido, degradado, puntos,
+  negro puro OLED o una foto tuya
+- Portadas, categorías, reordenar arrastrando, nombre y foto de perfil
+- Tres iconos de aplicación, para que Streak pegue con tu pantalla de inicio
+- Una lluvia de confeti el día que lo completas todo
 
 </td>
 <td width="50%" valign="top">
 
-**Datos y plataforma**
-- Recordatorios por hábito en los días que elijas
-- Copia de seguridad y restauración como archivo JSON portable
-- Tres widgets para la pantalla de inicio
+### 🔔 Recordatorios, widgets y copias
+
+- Recordatorios por hábito, los días que elijas o cada N días, cada uno con
+  una frase de ánimo en vez de un aviso vacío
+- **Cuatro widgets de inicio** — hábito, hoy, estadísticas y cuadrícula de
+  actividad — cada uno con su estilo: color o foto, opacidad y borde
+- Marca un día desde el widget, se guarda sin abrir la app
+- Copia de seguridad y restauración en un solo archivo que guardas tú
 - Inglés y español, totalmente sin conexión
 
 </td>
@@ -132,114 +145,68 @@ dispositivos modernos son **arm64-v8a**):
 
 ---
 
-## Tecnologías
+## ¿Vienes de otra app?
 
-| Área | Elección |
-|------|----------|
-| Framework | Flutter (Dart) |
-| Gestión de estado | provider |
-| Almacenamiento local | hive_ce |
-| Gráficos | fl_chart |
-| Notificaciones | flutter_local_notifications + timezone |
-| Widgets de inicio | home_widget + Jetpack Glance (Kotlin) |
-| Iconos | Lucide |
+Tráete tu historial. Streak lee exportaciones de **Loop Habit Tracker** y
+**HabitKit**, así que tus días pasados y tus rachas sobreviven a la mudanza.
+Pronto habrá soporte para más apps.
+
+<div align="center"><sub><b>Ajustes → Datos → Importar de otra app</b></sub></div>
 
 ---
 
-## Estructura del proyecto
+## Descarga
 
-<details open>
-<summary><b>Distribución de carpetas</b></summary>
+[**F-Droid**](https://f-droid.org/packages/com.streak.app/) es lo más cómodo:
+instala Streak y lo mantiene actualizado por ti.
 
-```
-lib/
-├── main.dart                 Punto de entrada y callback del widget de inicio
-├── app/                      Estructura de la app, navegación y temas
-│   └── theme/                Paleta, tokens de diseño, temas claro/oscuro
-├── core/                     Bloques transversales
-│   ├── database/             Persistencia local (Hive)
-│   ├── extensions/           Utilidades de fecha
-│   ├── i18n/                 Cadenas localizadas
-│   ├── icons/                Catálogos de iconos y emojis
-│   ├── routing/              Navegación y transiciones de página
-│   ├── utils/                Snackbars y utilidades
-│   └── widgets/              Componentes de UI compartidos
-├── features/                 Módulos organizados por funcionalidad
-│   ├── habits/               data · state · pages · widgets
-│   ├── statistics/           Panel de estadísticas
-│   ├── settings/             Preferencias y Acerca de
-│   └── onboarding/           Experiencia de primer uso
-└── services/                 Notificaciones, widgets de inicio, copias
+¿Prefieres el APK directo? Está en la página de
+[**Releases**](https://github.com/InlitX/streak/releases), un archivo por tipo de
+teléfono para que cada descarga sea pequeña:
 
-android/                      Proyecto Android y layouts de los widgets
-assets/                       Icono de la app e imágenes incluidas
-fonts/                        Figtree y Playfair Display
-docs/screenshots/             Capturas usadas en este README
-tool/                         Scripts de generación de iconos (solo desarrollo)
-```
+| APK | Para |
+|-----|------|
+| `Streak-arm64-v8a.apk` | Teléfonos modernos de 64 bits — **elige este** |
+| `Streak-armeabi-v7a.apk` | Dispositivos antiguos de 32 bits |
+| `Streak-x86_64.apk` | Emuladores y tablets x86 |
 
-</details>
+Funciona en **Android 9 (Pie) o superior**.
 
----
-
-## Primeros pasos
-
-### Requisitos
-
-- SDK de Flutter (canal stable)
-- Android Studio o el SDK de Android, con un dispositivo o emulador
-
-### Ejecutar
-
-```bash
-git clone https://github.com/InlitX/streak.git
-cd streak
-flutter pub get
-flutter run
-```
-
-### Compilar los APK de release
-
-```bash
-# un APK por arquitectura (arm64-v8a, armeabi-v7a, x86_64)
-flutter build apk --release --split-per-abi
-```
-
-Al publicar una etiqueta `v*` se ejecuta el flujo de GitHub Actions, que compila
-estos APK divididos más un archivo con el código fuente y los adjunta a una nueva
-Release de GitHub.
-
-> [!TIP]
-> Para firmar una compilación de release, crea `android/key.properties` con los
-> datos de tu keystore. Ese archivo y cualquier keystore están ignorados por git
-> a propósito; sin ellos, las compilaciones de release usan la clave de firma de
-> depuración.
-
----
-
-## Notas de arquitectura
-
-- **Organización por funcionalidad.** Cada funcionalidad posee sus propios
-  modelos de datos, controladores de estado, páginas y widgets, manteniendo los
-  límites claros.
-- **Una única fuente de verdad.** Hábitos, categorías y ajustes se persisten en
-  Hive y se exponen a través de controladores `ChangeNotifier`.
-- **Almacenamiento resiliente.** Los registros corruptos o con esquema no
-  coincidente se omiten en lugar de bloquear el arranque, y el trabajo no
-  crítico de inicio (notificaciones, widgets) está aislado para que nunca pueda
-  impedir que la app se abra.
-- **Navegación consistente.** Cada navegación pasa por un único navigator con
-  transiciones de página opacas, de modo que las pantallas nunca se transparentan
-  durante las animaciones.
+> [!NOTE]
+> Streak no está en la Play Store. Como el APK no viene de una tienda, puede que
+> Android te pida permitir instalaciones desde tu navegador o gestor de archivos
+> la primera vez.
 
 ---
 
 ## Privacidad
 
 > [!IMPORTANT]
-> Streak **no tiene analíticas, ni SDK de publicidad, ni backend de red**.
-> La app nunca envía tus datos a ningún sitio: se quedan en tu dispositivo. Las
-> únicas acciones salientes son los enlaces que tú decides abrir.
+> Streak **no tiene analíticas, ni SDK de publicidad, ni backend de red**. La app
+> nunca envía tus datos a ningún sitio: se quedan en tu dispositivo. Las únicas
+> acciones salientes son los enlaces que tú decides abrir.
+
+---
+
+## Traducciones
+
+Streak habla inglés y español, y cualquier idioma nuevo es bienvenido. Las
+traducciones se gestionan en [**Weblate**](https://hosted.weblate.org/engage/streak/):
+no hace falta programar, solo son frases cortas que traduces en el navegador.
+
+[![Estado de la traducción por idioma](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Estado de la traducción](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
+
+Cómo funciona → [**TRANSLATING.md**](TRANSLATING.md)
+
+---
+
+## Contribuir
+
+Los informes de fallos, las ideas y los pull requests son bienvenidos — mira
+[**CONTRIBUTING.md**](CONTRIBUTING.md). Para algo más grande que un arreglo, abre
+antes una incidencia y acordamos la dirección.
 
 ---
 
@@ -247,23 +214,26 @@ Release de GitHub.
 
 <div align="center">
 
-Si Streak te ayuda a mantener la constancia, una estrella o un café significan mucho:
+Si Streak te ayuda a mantener la constancia, una estrella o un café significan mucho.
 
 <a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Estrella en GitHub" height="38" /></a>
 &nbsp;&nbsp;
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Apóyame en Ko-fi" height="38" /></a>
 
+<br/>
+<br/>
+
+<a href="https://www.star-history.com/?repos=InlitX%2Fstreak&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=InlitX/streak&type=date&theme=dark&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=InlitX/streak&type=date&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+   <img alt="Historial de estrellas" src="https://api.star-history.com/chart?repos=InlitX/streak&type=date&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+ </picture>
+</a>
+
+<br/>
+<br/>
+
+Publicado bajo la <a href="LICENSE"><b>Licencia MIT</b></a>.
+
 </div>
-
----
-
-## Contribuir
-
-Las incidencias y pull requests son bienvenidas. Para cambios grandes, abre
-primero una incidencia para comentar la dirección.
-
----
-
-## Licencia
-
-Publicado bajo la [Licencia MIT](LICENSE).

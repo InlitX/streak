@@ -79,7 +79,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 <tr>
 <td width="50%" valign="top">
 
-### Tracking
+### ✅ Tracking
 
 - One-tap logging from the home screen or a widget
 - Three kinds of habit — **normal**, **avoid** (with relapse tracking) and
@@ -95,7 +95,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 </td>
 <td width="50%" valign="top">
 
-### Seeing your progress
+### 📊 Seeing your progress
 
 - GitHub-style **activity grid** — week, month or year
 - **Month calendar**, with your week starting on Monday, Saturday or Sunday
@@ -111,23 +111,26 @@ It is fast, offline, and built to feel calm rather than demanding.
 <tr>
 <td width="50%" valign="top">
 
-### Making it yours
+### 🎨 Making it yours
 
 - Minimalist icon pack, or any emoji
 - Custom accent color with a full picker
-- Light and dark themes, selectable backgrounds
-- Cover photos, categories, reordering, profile name and photo
-- Three launcher icons to match your home screen
+- Light and dark themes, plus five app backgrounds — solid, gradient, dots,
+  true-black OLED or a photo of your own
+- Cover photos, categories, drag-to-reorder, profile name and photo
+- Three launcher icons, so Streak matches the rest of your home screen
+- A burst of confetti the day you finish everything
 
 </td>
 <td width="50%" valign="top">
 
-### Reminders, widgets and backup
+### 🔔 Reminders, widgets and backup
 
 - Reminders per habit, on the days you choose or every N days, each with a
   short encouraging line instead of a blank alert
 - **Four home-screen widgets** — habit, today, stats and activity grid — each
   styled on its own, with color or photo, opacity and border
+- Tick a day straight from a widget — it saves without opening the app
 - Backup and restore with a single file you keep yourself
 - English and Spanish, fully offline
 
@@ -186,13 +189,11 @@ Streak speaks English and Spanish today, and more languages are very welcome.
 Translations are managed on [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no coding needed, just short phrases you translate in your browser.
 
-<p align="center">
-  <a href="https://hosted.weblate.org/engage/streak/"><img src="https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg" alt="Translation status per language" /></a>
-</p>
-<p align="center">
-  <a href="https://hosted.weblate.org/engage/streak/"><img src="https://hosted.weblate.org/widget/streak/287x66-grey.png" alt="Translation status" /></a>
-</p>
-<p align="center"><sub>How it works → <a href="TRANSLATING.md"><b>TRANSLATING.md</b></a></sub></p>
+[![Translation status per language](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Translation status](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
+
+How it works → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
 
@@ -213,6 +214,17 @@ If Streak helps you show up more often, a star or a coffee goes a long way.
 <a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star on GitHub" height="38" /></a>
 &nbsp;&nbsp;
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" height="38" /></a>
+
+<br/>
+<br/>
+
+<a href="https://www.star-history.com/?repos=InlitX%2Fstreak&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=InlitX/streak&type=date&theme=dark&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=InlitX/streak&type=date&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=InlitX/streak&type=date&legend=top-left&sealed_token=aNqDTOocHK1NkSrMsZrD1iFDpo1AtZvvUo3ZqETCzSujh-eSh0ekwpay4FpVGocizt1wmR5QWrkuMUAl2r9yllwF4v9e3tnsI6c1lv0upumuFVgsXGvAwA" />
+ </picture>
+</a>
 
 <br/>
 <br/>
