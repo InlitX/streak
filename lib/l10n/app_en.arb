@@ -63,7 +63,7 @@
   "import_backup": "Import backup",
   "import_backup_sub": "Restore habits from a file",
   "import_from_app": "Import from another app",
-  "import_from_app_sub": "Loop, HabitKit, Habitica, CSV…",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
   "import_from_app_done": "Imported {habits} habits ({days} days) from {source}",
   "@import_from_app_done": {
     "placeholders": {
