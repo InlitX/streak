@@ -124,12 +124,26 @@
     el.classList.add('is-pop');
   }
 
-  document.querySelectorAll('.demo-check').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      btn.classList.toggle('is-on');
-      hapticPop(btn);
-    });
-  });
+  const CHECK_SVG = SVG_OPEN + ICONS.check + '</svg>';
+
+  function buildWeek(el, preset) {
+    if (!el) return;
+    for (let i = 0; i < 7; i++) {
+      const b = document.createElement('b');
+      b.innerHTML = CHECK_SVG;
+      if (preset && preset.indexOf(i) !== -1) b.classList.add('on');
+      b.addEventListener('click', function () {
+        b.classList.toggle('on');
+        b.classList.remove('pop');
+        void b.offsetWidth;
+        b.classList.add('pop');
+      });
+      el.appendChild(b);
+    }
+  }
+
+  buildWeek(document.getElementById('weekRound'), [0, 1, 2, 4]);
+  buildWeek(document.getElementById('weekSquare'), [0, 2, 3]);
 
   document.querySelectorAll('.check-demo li').forEach(function (li) {
     li.addEventListener('click', function () { li.classList.toggle('is-done'); });
@@ -137,14 +151,41 @@
 
   document.querySelectorAll('.chips').forEach(function (group) {
     const chips = group.querySelectorAll('.chip');
+    const demo = document.getElementById('typeDemo');
+    const show = function (type) {
+      if (!demo) return;
+      demo.querySelectorAll('[data-panel]').forEach(function (p) {
+        p.hidden = p.getAttribute('data-panel') !== type;
+      });
+    };
     chips.forEach(function (chip, i) {
       if (i === 0) chip.classList.add('sel');
       chip.addEventListener('click', function () {
         chips.forEach(function (c) { c.classList.remove('sel'); });
         chip.classList.add('sel');
+        show(chip.getAttribute('data-type'));
       });
     });
   });
+
+  buildWeek(document.querySelector('[data-panel="normal"]'), [0, 1, 3, 4, 5]);
+  buildWeek(document.querySelector('[data-panel="avoid"]'), []);
+
+  (function () {
+    const glass = document.querySelector('.glass');
+    if (!glass) return;
+    const water = document.getElementById('glassWater');
+    const label = glass.querySelector('.glass__n');
+    const GOAL = 8, TRAVEL = 45.2;
+    let n = 0;
+    glass.addEventListener('click', function () {
+      const full = n >= GOAL;
+      glass.classList.toggle('spill', full);
+      n = full ? 0 : n + 1;
+      water.setAttribute('transform', 'translate(0 ' + (TRAVEL * (1 - n / GOAL)).toFixed(2) + ')');
+      label.textContent = n + ' / ' + GOAL;
+    });
+  })();
 
   if (swatches) {
     swatches.addEventListener('click', function (e) {
@@ -160,28 +201,103 @@
   });
 
   (function () {
-    const el = document.getElementById('starCount');
+    const t = document.getElementById('remindTime');
+    if (!t) return;
+    const TIMES = ['06:30', '08:00', '12:00', '18:30', '21:00', '22:45'];
+    let i = 1;
+    t.addEventListener('click', function () {
+      i = (i + 1) % TIMES.length;
+      t.textContent = TIMES[i];
+      t.classList.remove('bump');
+      void t.offsetWidth;
+      t.classList.add('bump');
+    });
+  })();
+
+  (function () {
+    const btn = document.getElementById('fileDl');
+    const box = document.getElementById('miniFile');
+    if (!btn || !box) return;
+    let busy = false;
+    btn.addEventListener('click', function () {
+      if (busy) return;
+      busy = true;
+      btn.classList.add('go');
+      setTimeout(function () { box.classList.add('done'); }, 420);
+      setTimeout(function () {
+        btn.classList.remove('go');
+        box.classList.remove('done');
+        busy = false;
+      }, 1900);
+    });
+  })();
+
+  function fmtCount(n) {
+    return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+  }
+
+  function countUp(el, target) {
     if (!el) return;
+    if (reduceMotion || target <= 0) { el.textContent = fmtCount(target); return; }
+    const dur = 1100, start = performance.now();
+    const ease = function (t) { return 1 - Math.pow(1 - t, 3); };
+    (function frame(now) {
+      const p = Math.min((now - start) / dur, 1);
+      el.textContent = fmtCount(Math.round(ease(p) * target));
+      if (p < 1) requestAnimationFrame(frame);
+    })(start);
+  }
+
+  (function () {
+    const el = document.getElementById('starCount');
+    const hero = document.getElementById('heroStars');
+    if (!el && !hero) return;
     const pill = document.getElementById('starPill');
-    const fmt = function (n) {
-      return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
-    };
-    const countUp = function (target) {
-      if (reduceMotion || target <= 0) { el.textContent = fmt(target); return; }
-      const dur = 1100, start = performance.now();
-      const ease = function (t) { return 1 - Math.pow(1 - t, 3); };
-      (function frame(now) {
-        const p = Math.min((now - start) / dur, 1);
-        el.textContent = fmt(Math.round(ease(p) * target));
-        if (p < 1) requestAnimationFrame(frame);
-      })(start);
-    };
     fetch('https://api.github.com/repos/InlitX/streak')
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (d) { countUp(d.stargazers_count || 0); })
+      .then(function (d) {
+        const n = d.stargazers_count || 0;
+        countUp(el, n);
+        countUp(hero, n);
+      })
       .catch(function () {
-        el.textContent = 'Star';
+        if (el) el.textContent = 'Star';
         if (pill) pill.classList.add('is-fallback');
+      });
+  })();
+
+  (function () {
+    const el = document.getElementById('dlCount');
+    const pill = document.getElementById('heroStats');
+    if (!el || !pill) return;
+
+    const CACHE_KEY = 'streak.downloads';
+    const MAX_AGE = 6 * 60 * 60 * 1000;
+
+    const show = function (target) {
+      if (target <= 0) return;
+      pill.hidden = false;
+      countUp(el, target);
+    };
+
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch (e) { cached = null; }
+    if (cached && Date.now() - cached.at < MAX_AGE) { show(cached.n); return; }
+
+    fetch('https://api.github.com/repos/InlitX/streak/releases?per_page=100')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (releases) {
+        let total = 0;
+        releases.forEach(function (rel) {
+          (rel.assets || []).forEach(function (a) {
+            if (/\.apk$/i.test(a.name)) total += a.download_count || 0;
+          });
+        });
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({ n: total, at: Date.now() })); } catch (e) {}
+        show(total);
+      })
+      .catch(function () {
+        if (cached) show(cached.n);
       });
   })();
 
@@ -192,6 +308,7 @@
       hero_title_1: 'Small steps,', hero_title_2: 'every day.',
       hero_sub: 'Streak is a calm, private habit tracker. Log a habit in a single tap, keep your momentum, and watch your streaks grow — no accounts, no subscriptions, nothing leaves your phone.',
       hero_meta_license: 'licensed', hero_meta_platform: 'Android · Flutter', hero_meta_langs: 'English · Español',
+      stat_dl: 'total downloads', stat_stars: 'stars on GitHub',
       float_streak: 'day streak', float_grid: 'This year',
       trust_private: 'Fully private', trust_offline: 'Works offline', trust_free: 'Free forever', trust_open: 'Open source', trust_noacc: 'No accounts',
       feat_kicker: 'Everything, nothing more', feat_title: 'Built to feel calm, not demanding',
@@ -219,6 +336,7 @@
       hero_title_1: 'Pequeños pasos,', hero_title_2: 'cada día.',
       hero_sub: 'Streak es un rastreador de hábitos tranquilo y privado. Marca un hábito con un solo toque, mantén tu constancia y ve crecer tus rachas — sin cuentas, sin suscripciones, nada sale de tu teléfono.',
       hero_meta_license: 'con licencia', hero_meta_platform: 'Android · Flutter', hero_meta_langs: 'English · Español',
+      stat_dl: 'descargas totales', stat_stars: 'estrellas en GitHub',
       float_streak: 'días de racha', float_grid: 'Este año',
       trust_private: 'Totalmente privado', trust_offline: 'Funciona sin conexión', trust_free: 'Gratis para siempre', trust_open: 'Código abierto', trust_noacc: 'Sin cuentas',
       feat_kicker: 'Todo, nada más', feat_title: 'Hecho para calmar, no para exigir',

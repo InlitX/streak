@@ -84,6 +84,22 @@
           <span class="hero__meta-sep"></span>
           <span data-i18n="hero_meta_langs">English · Español</span>
         </div>
+        <div class="hero__stats reveal" id="heroStats" hidden>
+          <a class="stat" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
+            <span class="stat__ic" data-icon="download" aria-hidden="true"></span>
+            <span class="stat__txt">
+              <strong id="dlCount">0</strong>
+              <small data-i18n="stat_dl">total downloads</small>
+            </span>
+          </a>
+          <a class="stat stat--star" href="https://github.com/InlitX/streak/stargazers" target="_blank" rel="noopener">
+            <span class="stat__ic" data-icon="star" aria-hidden="true"></span>
+            <span class="stat__txt">
+              <strong id="heroStars">0</strong>
+              <small data-i18n="stat_stars">stars on GitHub</small>
+            </span>
+          </a>
+        </div>
       </div>
 
       <div class="hero__stage reveal">
@@ -125,9 +141,8 @@
           <div class="tile__icon" data-icon="circle-check" aria-hidden="true"></div>
           <h3 data-i18n="f_onetap_t">One-tap logging</h3>
           <p data-i18n="f_onetap_d">Mark today done from the home screen — daily, weekly or monthly goals with a habit “strength” that tracks your consistency.</p>
-          <button class="demo-check" type="button" aria-label="Log today">
-            <span class="demo-check__ic" data-icon="check"></span>
-          </button>
+          <div class="week" id="weekRound" data-shape="round"></div>
+          <div class="week" id="weekSquare" data-shape="square"></div>
         </article>
 
         <article class="tile tile--heat reveal">
@@ -141,10 +156,33 @@
           <div class="tile__icon" data-icon="shapes" aria-hidden="true"></div>
           <h3 data-i18n="f_types_t">Three habit types</h3>
           <p data-i18n="f_types_d">Build good ones, quit bad ones, or hit an amount.</p>
-          <ul class="chips">
-            <li class="chip chip--pos" data-i18n="type_normal">Normal</li>
-            <li class="chip chip--neg" data-i18n="type_avoid">Avoid</li>
-            <li class="chip chip--amt" data-i18n="type_amount">Amount</li>
+          <div class="type-demo" id="typeDemo">
+            <div class="week week--sm" data-panel="normal"></div>
+            <div class="week week--sm week--neg" data-panel="avoid" hidden></div>
+            <button class="glass" type="button" data-panel="amount" hidden aria-label="Fill the glass">
+              <svg class="glass__svg" viewBox="0 0 40 58" width="40" height="58" aria-hidden="true">
+                <defs>
+                  <clipPath id="cupOuter"><path d="M0.44 6.38 Q0 0 6.4 0 L33.6 0 Q40 0 39.56 6.38 L36.44 51.62 Q36 58 29.6 58 L10.4 58 Q4 58 3.56 51.62 Z"/></clipPath>
+                  <clipPath id="cupInner"><path d="M6.96 12.77 Q6.4 6.4 12.8 6.4 L27.2 6.4 Q33.6 6.4 33.04 12.77 L30.16 45.23 Q29.6 51.6 23.2 51.6 L16.8 51.6 Q10.4 51.6 9.84 45.23 Z"/></clipPath>
+                </defs>
+                <g clip-path="url(#cupOuter)">
+                  <path d="M0.44 6.38 Q0 0 6.4 0 L33.6 0 Q40 0 39.56 6.38 L36.44 51.62 Q36 58 29.6 58 L10.4 58 Q4 58 3.56 51.62 Z" fill="#E3EAF8"/>
+                  <rect x="8" y="8.7" width="4" height="30.2" rx="2.4" fill="#F4F7FD"/>
+                </g>
+                <g clip-path="url(#cupInner)">
+                  <g class="glass__water" id="glassWater" transform="translate(0 45.2)">
+                    <rect x="0" y="6.4" width="40" height="45.2" fill="#2E7BF6"/>
+                    <rect x="10.2" y="9.4" width="3.3" height="39.2" rx="1.6" fill="#63A0FA" opacity="0.7"/>
+                  </g>
+                </g>
+              </svg>
+              <span class="glass__n">0 / 8</span>
+            </button>
+          </div>
+          <ul class="chips" id="typeChips">
+            <li class="chip chip--pos" data-type="normal" data-i18n="type_normal">Normal</li>
+            <li class="chip chip--neg" data-type="avoid" data-i18n="type_avoid">Avoid</li>
+            <li class="chip chip--amt" data-type="amount" data-i18n="type_amount">Amount</li>
           </ul>
         </article>
 
@@ -181,8 +219,8 @@
           <div class="tile__icon" data-icon="bar-chart" aria-hidden="true"></div>
           <h3 data-i18n="f_stats_t">Statistics</h3>
           <p data-i18n="f_stats_d">Trends, totals and the times of day you’re most consistent.</p>
-          <div class="mini-bars" aria-hidden="true">
-            <span style="height:34%"></span><span style="height:58%"></span><span style="height:44%"></span><span style="height:82%"></span><span style="height:54%"></span><span style="height:96%"></span><span style="height:68%"></span>
+          <div class="mini-bars" id="miniBars">
+            <span style="height:34%" data-v="12"></span><span style="height:58%" data-v="21"></span><span style="height:44%" data-v="16"></span><span style="height:82%" data-v="29"></span><span style="height:54%" data-v="19"></span><span style="height:96%" data-v="34"></span><span style="height:68%" data-v="24"></span>
           </div>
         </article>
 
@@ -190,8 +228,8 @@
           <div class="tile__icon" data-icon="bell" aria-hidden="true"></div>
           <h3 data-i18n="f_remind_t">Smart reminders</h3>
           <p data-i18n="f_remind_d">Per-habit notifications on exactly the days you choose.</p>
-          <div class="mini-remind" aria-hidden="true">
-            <span class="mini-remind__time">08:00</span>
+          <div class="mini-remind">
+            <button class="mini-remind__time" id="remindTime" type="button" aria-label="Change time">08:00</button>
             <div class="mini-remind__days">
               <i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
             </div>
@@ -202,10 +240,10 @@
           <div class="tile__icon" data-icon="download" aria-hidden="true"></div>
           <h3 data-i18n="f_backup_t">Backup &amp; restore</h3>
           <p data-i18n="f_backup_d">Export everything to a portable JSON file. Your data, in your hands.</p>
-          <div class="mini-file" aria-hidden="true">
+          <div class="mini-file" id="miniFile">
             <span class="mini-file__ic" data-icon="file"></span>
             <span class="mini-file__name">streak-backup.json</span>
-            <span class="mini-file__dl" data-icon="download"></span>
+            <button class="mini-file__dl" id="fileDl" type="button" data-icon="download" aria-label="Download backup"></button>
           </div>
         </article>
       </div>
