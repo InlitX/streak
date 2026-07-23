@@ -1,0 +1,332 @@
+{
+  "@@locale": "en",
+  "app_tagline": "Habit tracker",
+  "today": "Today",
+  "stats": "Stats",
+  "settings": "Settings",
+  "new_label": "New",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "good_morning": "Good morning",
+  "good_afternoon": "Good afternoon",
+  "good_evening": "Good evening",
+  "no_habits_yet": "No habits yet",
+  "all_done_today": "All done today!",
+  "x_of_y_completed": "{done} of {total} completed",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Start your first streak",
+  "empty_body": "Create a habit and tap a day to log it. Small steps, every day.",
+  "add_habit": "Add habit",
+  "all": "All",
+  "onb1_title": "Build real streaks",
+  "onb1_body": "Log a habit in a single tap and watch your momentum grow day after day.",
+  "onb2_title": "Stay on track",
+  "onb2_body": "Daily, weekly or monthly goals with smart reminders so nothing slips.",
+  "onb3_title": "See your progress",
+  "onb3_body": "Rich statistics and a yearly grid reveal exactly how far you have come.",
+  "skip": "Skip",
+  "next": "Next",
+  "get_started": "Get started",
+  "statistics": "Statistics",
+  "done_today": "Done today",
+  "best_streak": "Best streak",
+  "active_habits": "Active habits",
+  "total_logs": "Total logs",
+  "last_7_days": "Last 7 days",
+  "last_30_days": "Last 30 days",
+  "your_habits": "Your habits",
+  "stats_empty": "Add habits to see your statistics",
+  "completion_rate": "Completion rate",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "system": "System",
+  "light": "Light",
+  "dark": "Dark",
+  "week_starts_on": "Week starts on",
+  "mon": "Mon",
+  "sat": "Sat",
+  "sun": "Sun",
+  "language": "Language",
+  "data": "Data",
+  "export_backup": "Export backup",
+  "export_backup_sub": "Save all habits to a file",
+  "import_backup": "Import backup",
+  "import_backup_sub": "Restore habits from a file",
+  "import_from_app": "Import from another app",
+  "import_from_app_sub": "Loop, HabitKit, Habitica, CSV…",
+  "import_from_app_done": "Imported {habits} habits ({days} days) from {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": { "type": "int" },
+      "days": { "type": "int" },
+      "source": { "type": "String" }
+    }
+  },
+  "import_failed": "Couldn't import that file",
+  "about": "About",
+  "backup_saved": "Backup saved",
+  "export_cancelled": "Export cancelled",
+  "habits_imported": "Habits imported",
+  "new_habit": "New habit",
+  "edit_habit": "Edit habit",
+  "name": "Name",
+  "name_hint": "e.g. Morning run",
+  "description": "Description",
+  "description_hint": "Optional note",
+  "icon": "Icon",
+  "color": "Color",
+  "category": "Category",
+  "habit_kind": "Habit type",
+  "kind_positive": "Normal",
+  "kind_negative": "Avoid",
+  "kind_quantitative": "Amount",
+  "kind_locked_hint": "Type can't be changed after creating the habit.",
+  "kind_negative_hint": "Every day counts as clean by default — your streak grows on its own. Tap the check only if you slip; that day turns red and you can undo it.",
+  "quant_preset_water": "Water",
+  "quant_preset_reading": "Reading",
+  "quant_preset_generic": "Custom",
+  "quant_unit_hint": "Unit (e.g. ml, pages, reps)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "pages",
+  "quant_edit_title": "Today's amount",
+  "quant_daily_goal": "Daily goal",
+  "quant_tap_amount": "Amount per tap",
+  "frequency": "Frequency",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "sched_days": "Days",
+  "sched_interval": "Interval",
+  "times_per_week": "{n} times per week",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} times per month",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/week",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/month",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Reminders",
+  "add_reminder": "Add reminder",
+  "delete_habit": "Delete habit",
+  "delete_habit_body": "Delete \"{name}\"? This cannot be undone.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Log a relapse?",
+  "log_relapse_body": "This breaks today's clean streak for \"{name}\". You can undo it by tapping again.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Yes, log it",
+  "permission_required": "Notification permission is required",
+  "streaks": "Streaks",
+  "activity": "Activity",
+  "current": "Current",
+  "best": "Best",
+  "total": "Total",
+  "relapses": "Relapses",
+  "strength": "Strength",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
+  "new_reminder": "New reminder",
+  "edit_reminder": "Edit reminder",
+  "days": "Days",
+  "time": "Time",
+  "save_reminder": "Save reminder",
+  "select_one_day": "Select at least one day",
+  "every_day": "Every day",
+  "no_days": "No days",
+  "repeat_weekly": "Specific days",
+  "repeat_interval": "Every N days",
+  "every_n_days": "Every {n} days",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "Uncategorized",
+  "more_icons": "More icons",
+  "less_icons": "Fewer icons",
+  "completions": "Completions",
+  "completion_time": "Completion time",
+  "current_streak": "Current streak",
+  "days_active": "Days active",
+  "completions_per_month": "Completions / Month",
+  "overview": "Overview",
+  "preferences": "Preferences",
+  "support": "Support",
+  "profile": "Profile",
+  "about_app": "About this app",
+  "about_app_sub": "Version, credits and source code",
+  "my_heatmap": "My heatmap",
+  "my_heatmap_sub": "Open the yearly activity grid",
+  "rate_github": "Star on GitHub",
+  "rate_github_sub": "Support the project with a star",
+  "buy_coffee": "Buy me a coffee",
+  "buy_coffee_sub": "Help keep the app free",
+  "view_source": "View source on GitHub",
+  "about_title": "Built for you. Free, forever.",
+  "about_footer": "Made with ☕ and a lot of free time.",
+  "about_body": "Streak was born from a simple idea: why pay to track your own habits?\n\nThis app is completely open source. Anyone can see exactly how it works, suggest improvements, or even build their own version. No black boxes. No surprises.\n\nYour privacy is total — everything stays on your phone. No accounts, no servers, no ads. Not a single byte leaves your device.\n\nNo limits. Create as many habits as you want. No subscriptions, no \"pro version\", no pop-ups asking you to pay. Ever.\n\nIf the app brings you something, you can support it with a star on GitHub or by buying me a coffee. But it is completely optional — the app is yours either way.",
+  "close": "Close",
+  "no_data_yet": "No data yet",
+  "import_question_body": "Replace all your current habits with the backup, or merge them together?",
+  "import_replace": "Replace all",
+  "import_merge": "Merge",
+  "go": "Go",
+  "motiv_start": "Start the day strong 💪",
+  "motiv_progress": "You're on track, keep going",
+  "motiv_almost": "Almost there! Just a bit more",
+  "motiv_perfect": "Perfect day! 🔥",
+  "app_background": "Background",
+  "widgets": "Widgets",
+  "customize_widgets": "Customize widgets",
+  "customize_widgets_sub": "Background, opacity, border",
+  "widget_background": "Background color",
+  "widget_opacity": "Opacity",
+  "widget_border": "Border",
+  "widget_preview": "Preview",
+  "bg_solid": "Solid",
+  "bg_gradient": "Gradient",
+  "bg_dots": "Dots",
+  "bg_oled": "OLED",
+  "weekdays": "Weekdays",
+  "weekends": "Weekends",
+  "reminder_message": "Message (optional)",
+  "reminder_message_hint": "Leave empty for a motivational quote",
+  "new_category": "New category",
+  "edit_category": "Edit category",
+  "add_category": "New",
+  "delete_category": "Delete category",
+  "edit": "Edit",
+  "cover_image": "Cover image",
+  "book_cover": "Book cover",
+  "add_image": "Add image",
+  "when_best": "When are you most consistent?",
+  "streak_evolution": "Streak evolution",
+  "streak_on": "🔥 {n} days in a row. Don't break it!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 Today you can start a new streak",
+  "not_enough_data": "Not enough data yet",
+  "about_inline": "Streak is an open-source app for tracking your habits. No accounts, no limits, no payments. Everything stays on your phone.\n\nAnyone can see the code, improve it, or use it freely.",
+  "about_subtitle": "For the days you choose to show up.",
+  "about_story": "This app was born out of frustration with the habit trackers out there. Most cap how many habits you can create, hide basic features behind a paywall, track you, or bombard you with ads. So I decided to build Streak: completely free, no ads, no payments, no tracking. Everything runs locally — your data is yours. Open source, no catch.",
+  "made_by": "Made with ❤️ by @inlitx",
+  "share": "Share",
+  "share_progress": "Share progress",
+  "share_failed": "Couldn't create the image",
+  "about_developer": "The developer",
+  "about_credits": "Credits",
+  "about_credits_body": "Built with Flutter. Icons by Lucide. Charts by fl_chart. Set in Figtree & Playfair Display.",
+  "dev_handle": "@inlitx",
+  "dev_role": "Indie maker · Streak",
+  "check_style": "Check style",
+  "square": "Square",
+  "circle": "Circle",
+  "github_star_row": "View source & give a star",
+  "icons_tab": "Icons",
+  "emojis_tab": "Emojis",
+  "report_bug": "Report a bug",
+  "request_feature": "Request a feature",
+  "advanced_options": "Advanced options",
+  "default_user": "Inlitx",
+  "your_name": "Your name",
+  "edit_name": "Edit name",
+  "change_photo": "Change photo",
+  "remove_photo": "Remove photo",
+  "notif_greeting": "Hi {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "App icon",
+  "icon_default": "Default",
+  "icon_neutral": "Green",
+  "icon_accent": "Tricolor",
+  "custom": "Custom",
+  "see_more": "See more",
+  "colors_tab": "Colors",
+  "reorder": "Reorder",
+  "reorder_hint": "Drag the habits to reorder them",
+  "done": "Done",
+  "accent_color": "Accent color",
+  "sort_completed_last": "Completed last",
+  "on": "On",
+  "off": "Off",
+  "checklist": "Checklist",
+  "checklist_hint": "Break the habit into steps. It's done only when every step is checked.",
+  "add_step": "Add step",
+  "step_hint": "Step name",
+  "todays_checklist": "Today's checklist",
+  "steps_done": "{done}/{total} steps",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_mode": "Vacation mode",
+  "vacation_on_desc": "Paused — these days won't count as missed or completed.",
+  "vacation_off_desc": "Pause this habit. Skipped days won't break your streak.",
+  "paused": "Paused",
+  "start_vacation": "Start vacation",
+  "end_vacation": "End vacation"
+}
