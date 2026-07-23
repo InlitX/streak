@@ -1,1 +1,172 @@
-{}
+{
+  "app_tagline": "Rastreador de hábitos",
+  "today": "Hoje",
+  "stats": "Estatísticas",
+  "settings": "Configurações",
+  "new_label": "Novo",
+  "save": "Salvar",
+  "cancel": "Cancelar",
+  "delete": "Excluir",
+  "good_morning": "Bom dia",
+  "good_afternoon": "Boa tarde",
+  "good_evening": "Boa noite",
+  "no_habits_yet": "Nenhum hábito ainda",
+  "all_done_today": "Tudo feito por hoje!",
+  "x_of_y_completed": "{done} de {total} concluídos",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Comece sua primeira sequência",
+  "empty_body": "Crie um hábito e clique no dia para registrar. Pequenos passos, todos os dias.",
+  "add_habit": "Adicionar hábito",
+  "all": "Todos",
+  "onb1_title": "Crie sequências consistentes",
+  "onb1_body": "Registre um hábito com um toque e veja sua sequência crescer dia após dia.",
+  "onb2_title": "Mantenha sua rotina",
+  "onb2_body": "Objetivos diários, semanais ou mensais, com lembretes recorrentes para que nada se perca.",
+  "onb3_title": "Veja seu progresso",
+  "onb3_body": "Estatísticas detalhadas e uma grade anual mostram exatamente o quanto você evoluiu.",
+  "skip": "Pular",
+  "next": "Próximo",
+  "get_started": "Iniciar",
+  "statistics": "Estatísticas",
+  "done_today": "Concluído hoje",
+  "best_streak": "Melhor sequência",
+  "active_habits": "Hábitos ativos",
+  "total_logs": "Total de registros",
+  "last_7_days": "Últimos 7 dias",
+  "last_30_days": "Últimos 30 dias",
+  "your_habits": "Seus hábitos",
+  "stats_empty": "Adicione hábitos para ver suas estatísticas",
+  "completion_rate": "Taxa de conclusão",
+  "appearance": "Aparência",
+  "theme": "Tema",
+  "system": "Sistema",
+  "light": "Claro",
+  "dark": "Escuro",
+  "week_starts_on": "A semana começa em",
+  "mon": "Seg",
+  "sat": "Sáb",
+  "sun": "Dom",
+  "language": "Idioma",
+  "data": "Dados",
+  "export_backup": "Exportar backup",
+  "export_backup_sub": "Salve todos os hábitos em um arquivo",
+  "import_backup": "Importar backup",
+  "import_backup_sub": "Restaure os hábitos de um arquivo",
+  "import_from_app": "Importar de outro aplicativo",
+  "import_from_app_sub": "Loop, HabitKit, Habitica, CSV…",
+  "import_from_app_done": "{habits} hábitos ({days} dias) importados de {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Não foi possível importar o arquivo",
+  "about": "Sobre",
+  "backup_saved": "Backup salvo",
+  "export_cancelled": "Exportação cancelada",
+  "habits_imported": "Hábitos importados",
+  "new_habit": "Novo hábito",
+  "edit_habit": "Editar hábito",
+  "name": "Nome",
+  "name_hint": "Ex.: Corrida matinal",
+  "description": "Descrição",
+  "description_hint": "Observação opcional",
+  "icon": "Ícone",
+  "color": "Cor",
+  "category": "Categoria",
+  "habit_kind": "Tipo de Hábito",
+  "kind_positive": "Normal",
+  "kind_negative": "Evitar",
+  "kind_quantitative": "Quantidade",
+  "kind_locked_hint": "O tipo não pode ser alterado após a criação do hábito.",
+  "kind_negative_hint": "Todos os dias contam como concluídos por padrão, então sua sequência cresce automaticamente. Toque na marca de verificação apenas se você falhar. Esse dia ficará vermelho, e você poderá desfazer a ação.",
+  "quant_preset_water": "Água",
+  "quant_preset_reading": "Leitura",
+  "quant_preset_generic": "Personalizado",
+  "quant_unit_hint": "Unidade (ex.: ml, páginas, repetições)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "Páginas",
+  "quant_edit_title": "Quantidade de hoje",
+  "quant_daily_goal": "Meta diária",
+  "quant_tap_amount": "Quantidade por toque",
+  "frequency": "Frequência",
+  "daily": "Diária",
+  "weekly": "Semanal",
+  "monthly": "Mensal",
+  "sched_days": "Dias",
+  "sched_interval": "Intervalo",
+  "times_per_week": "{n} vezes por semana",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} vezes por mês",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/semana",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/mês",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Lembretes",
+  "add_reminder": "Adicionar lembrete",
+  "delete_habit": "Excluir hábito",
+  "delete_habit_body": "Excluir \"{name}\"? Esta ação não pode ser desfeita.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Registrar recaída?",
+  "log_relapse_body": "Isso interromperá a sequência de hoje para \"{name}\". Você pode desfazer a ação tocando novamente.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Sim, registrar",
+  "permission_required": "É necessário conceder permissão para notificações",
+  "streaks": "Sequências",
+  "activity": "Atividade",
+  "current": "Atual"
+}
