@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 
@@ -7,9 +8,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/cover_storage.dart';
-import 'package:streak/core/widgets/app_text_field.dart';
+import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
@@ -20,9 +21,13 @@ class QuantitativeProgress extends StatelessWidget {
   final Habit habit;
 
   Future<void> _editAmount(BuildContext context, int current) async {
-    final result = await showDialog<int>(
-      context: context,
-      builder: (_) => _AmountEditDialog(current: current, unit: habit.unitLabel),
+    final result = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.quant_edit_title,
+      value: current,
+      unit: habit.unitLabel,
+      target: habit.perDayTarget,
+      accent: habit.color,
     );
     if (result != null && result >= 0 && result != current && context.mounted) {
       context.read<HabitsController>().setProgress(habit.id, DateTime.now(), result);
@@ -38,7 +43,7 @@ class QuantitativeProgress extends StatelessWidget {
     final controller = context.read<HabitsController>();
 
     void add(int delta) {
-      HapticFeedback.mediumImpact();
+      HapticFeedback.selectionClick();
       controller.addProgress(habit.id, today, delta);
     }
 
@@ -78,7 +83,7 @@ class QuantitativeProgress extends StatelessWidget {
             ),
             const SizedBox(height: 3),
             Text(
-              context.tr('quant_daily_goal'),
+              context.l10n.quant_daily_goal,
               style: TextStyle(fontSize: 13, color: context.tokens.muted),
             ),
             const SizedBox(height: 18),
@@ -106,102 +111,7 @@ class QuantitativeProgress extends StatelessWidget {
   }
 }
 
-class _AmountEditDialog extends StatefulWidget {
-  const _AmountEditDialog({required this.current, required this.unit});
-
-  final int current;
-  final String unit;
-
-  @override
-  State<_AmountEditDialog> createState() => _AmountEditDialogState();
-}
-
-class _AmountEditDialogState extends State<_AmountEditDialog> {
-  // Stateful so the controller is disposed after the route's exit animation.
-  late final TextEditingController _input =
-      TextEditingController(text: '${widget.current}');
-
-  @override
-  void dispose() {
-    _input.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = context.colors;
-    return Dialog(
-      backgroundColor: scheme.surface,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(22, 24, 22, 18),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              context.tr('quant_edit_title'),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: scheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 16),
-            AppTextField(
-              controller: _input,
-              keyboardType: TextInputType.number,
-              hint: widget.unit,
-              autofocus: true,
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: scheme.surfaceContainerHighest,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: Text(
-                      context.tr('cancel'),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, color: scheme.onSurface),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () => Navigator.of(context)
-                        .pop(int.tryParse(_input.text) ?? widget.current),
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: Text(
-                      context.tr('save'),
-                      style: const TextStyle(fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RoundActionButton extends StatelessWidget {
+class _RoundActionButton extends StatefulWidget {
   const _RoundActionButton({
     required this.icon,
     required this.color,
@@ -215,10 +125,51 @@ class _RoundActionButton extends StatelessWidget {
   final bool filled;
 
   @override
+  State<_RoundActionButton> createState() => _RoundActionButtonState();
+}
+
+class _RoundActionButtonState extends State<_RoundActionButton> {
+  Timer? _timer;
+  int _count = 0;
+
+  void _tick() {
+    final onTap = widget.onTap;
+    if (onTap == null) {
+      _stop();
+      return;
+    }
+    onTap();
+    _count++;
+    final ms = _count < 5 ? 140 : (_count < 12 ? 80 : 45);
+    _timer = Timer(Duration(milliseconds: ms), _tick);
+  }
+
+  void _startRepeat() {
+    if (widget.onTap == null) return;
+    _count = 0;
+    _tick();
+  }
+
+  void _stop() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    _stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final disabled = onTap == null;
+    final color = widget.color;
+    final disabled = widget.onTap == null;
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
+      onLongPressStart: disabled ? null : (_) => _startRepeat(),
+      onLongPressEnd: (_) => _stop(),
+      onLongPressCancel: _stop,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
         width: 52,
@@ -227,16 +178,16 @@ class _RoundActionButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: disabled
               ? color.withValues(alpha: 0.08)
-              : filled
+              : widget.filled
                   ? color
                   : color.withValues(alpha: 0.14),
         ),
         child: Icon(
-          icon,
+          widget.icon,
           size: 22,
           color: disabled
               ? color.withValues(alpha: 0.3)
-              : filled
+              : widget.filled
                   ? Colors.white
                   : color,
         ),
@@ -256,7 +207,6 @@ class _WaterCups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Guard target <= 0 and non-finite before the clamp.
     final perCup = target <= 0 ? 1.0 : target / cupCount;
     var progress = perCup <= 0 ? 0.0 : count / perCup;
     if (!progress.isFinite) progress = 0.0;

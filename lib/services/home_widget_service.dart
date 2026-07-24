@@ -26,6 +26,26 @@ class HomeWidgetService {
     } catch (_) {}
   }
 
+  static Future<void> syncWidgetStyle({
+    required int bgColor,
+    required int opacity,
+    required bool border,
+  }) async {
+    try {
+      await HomeWidget.saveWidgetData<String>(
+        'widget_style',
+        json.encode({
+          'bgColor': bgColor,
+          'opacity': opacity,
+          'border': border,
+        }),
+      );
+      for (final provider in _providers) {
+        await HomeWidget.updateWidget(androidName: provider);
+      }
+    } catch (_) {}
+  }
+
   static String _encode(Map<String, Habit> habits) {
     final today = DateTime.now();
     final dates = List.generate(
@@ -41,7 +61,7 @@ class HomeWidgetService {
         'cover': habit.coverPath,
         'completions': dates.map(habit.isCompletedOn).toList(),
         'kind': habit.kind.index,
-        'perDayTarget': habit.perDayTarget,
+        'perDayTarget': habit.effectiveTarget,
         'incrementAmount': habit.incrementAmount,
         'counts': dates
             .map((d) => habit.completions[d.dayKey]?.count ?? 0)
@@ -76,7 +96,6 @@ class HomeWidgetService {
     });
   }
 
-  // Monday-aligned whole weeks so the widget columns line up.
   static List<DateTime> _heatmapDays(DateTime midnight) {
     final monday = midnight.subtract(Duration(days: midnight.weekday - 1));
     final start = monday.subtract(
@@ -88,16 +107,13 @@ class HomeWidgetService {
     );
   }
 
-  // Level per day across all habits (1..4, 0 none, -1 future).
   static List<int> _heatmapLevels(Iterable<Habit> habits, DateTime today) {
     final midnight = today.atMidnight;
-    // Negatives are clean by default and would paint everything at max.
     final tracked =
         habits.where((h) => h.kind != HabitKind.negative).toList();
 
     return _heatmapDays(midnight).map((day) {
       if (day.isAfter(midnight)) return -1;
-      // Don't dim days before a habit existed.
       final active =
           tracked.where((h) => !day.isBefore(h.createdAt.atMidnight)).toList();
       if (active.isEmpty) return 0;
@@ -107,19 +123,17 @@ class HomeWidgetService {
     }).toList();
   }
 
-  // Same, for a single chosen habit.
   static List<int> _levelsOf(Habit habit, DateTime today) {
     final midnight = today.atMidnight;
     return _heatmapDays(midnight).map((day) {
       if (day.isAfter(midnight)) return -1;
       if (day.isBefore(habit.createdAt.atMidnight)) return 0;
-      // For negatives a clean day is the good one, not a relapse.
       if (habit.kind == HabitKind.negative) {
         return habit.completions.containsKey(day.dayKey) ? 0 : 4;
       }
       final count = habit.completions[day.dayKey]?.count ?? 0;
       if (count <= 0) return 0;
-      final target = habit.perDayTarget <= 0 ? 1 : habit.perDayTarget;
+      final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
       return (count / target * 4).ceil().clamp(1, 4);
     }).toList();
   }

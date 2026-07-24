@@ -3,11 +3,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart' as cp;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 
-/// Colour selector with a "Colors / Custom" toggle (mirroring the icon/emoji
-/// switcher): the left tab shows the curated palette, the right tab reveals a
-/// full colour wheel inline.
 class ColorPicker extends StatefulWidget {
   const ColorPicker({
     super.key,
@@ -34,8 +31,8 @@ class _ColorPickerState extends State<ColorPicker> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _Segment2(
-          left: context.tr('colors_tab'),
-          right: context.tr('custom'),
+          left: context.l10n.colors_tab,
+          right: context.l10n.custom,
           rightActive: _custom,
           onChanged: (v) => setState(() => _custom = v),
         ),
@@ -78,7 +75,6 @@ class _ColorPickerState extends State<ColorPicker> {
   }
 }
 
-/// Two-option pill toggle, matching the icon/emoji switcher.
 class _Segment2 extends StatelessWidget {
   const _Segment2({
     required this.left,
@@ -148,7 +144,6 @@ class _Swatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Contrast the check against light swatches (e.g. white/yellow).
     final checkColor =
         color.computeLuminance() > 0.6 ? const Color(0xFF1C1C1E) : Colors.white;
     final borderColor =

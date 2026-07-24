@@ -7,6 +7,8 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.state.GlanceStateDefinition
@@ -40,22 +42,24 @@ class TodayWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>
         get() = HomeWidgetGlanceStateDefinition()
 
+    override val sizeMode = SizeMode.Exact
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+        // Read inside composition: update() recomposes without re-running this.
         provideContent {
-            // Read state or Glance renders once and never refreshes.
             currentState<HomeWidgetGlanceState>()
-            Content(context)
+            Content(context, WidgetStyle.loadFor(context, appWidgetId))
         }
     }
 
     @Composable
-    private fun Content(context: Context) {
+    private fun Content(context: Context, style: WidgetStyle) {
         val data = loadData(context)
+        WidgetSurface(style) {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(androidx.compose.ui.graphics.Color(0xFF101014)))
-                .cornerRadius(20.dp)
                 .padding(16.dp)
                 .clickable(actionStartActivity<MainActivity>())
         ) {
@@ -67,7 +71,7 @@ class TodayWidget : GlanceAppWidget() {
             Text(
                 text = "Today  $done/$total",
                 style = TextStyle(
-                    color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                    color = ColorProvider(style.content),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -77,23 +81,24 @@ class TodayWidget : GlanceAppWidget() {
             if (habits != null && habits.length() > 0) {
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
                     items(habits.length()) { i ->
-                        Row(habits.getJSONObject(i))
+                        Row(style, habits.getJSONObject(i))
                     }
                 }
             } else {
                 Text(
                     text = "Open Streak to sync",
                     style = TextStyle(
-                        color = ColorProvider(androidx.compose.ui.graphics.Color(0xFF808080)),
+                        color = ColorProvider(style.muted),
                         fontSize = 13.sp
                     )
                 )
             }
         }
+        }
     }
 
     @Composable
-    private fun Row(habit: JSONObject) {
+    private fun Row(style: WidgetStyle, habit: JSONObject) {
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
@@ -140,7 +145,7 @@ class TodayWidget : GlanceAppWidget() {
                 Text(
                     text = name,
                     style = TextStyle(
-                        color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                        color = ColorProvider(style.content),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     ),
@@ -150,7 +155,7 @@ class TodayWidget : GlanceAppWidget() {
                     Text(
                         text = "$todayCount/$perDayTarget",
                         style = TextStyle(
-                            color = ColorProvider(androidx.compose.ui.graphics.Color(0xFF9E9E9E)),
+                            color = ColorProvider(style.muted),
                             fontSize = 11.sp
                         )
                     )

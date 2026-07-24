@@ -134,9 +134,9 @@
                 android:resource="@xml/stats_widget_info" />
         </receiver>
 
-        <!-- Picks the habit when placing the heatmap widget. -->
+        <!-- Per-widget appearance (and habit, for the heatmap) config screen. -->
         <activity
-            android:name=".HeatmapConfigActivity"
+            android:name=".WidgetConfigActivity"
             android:exported="true"
             android:theme="@style/HeatmapConfigTheme">
             <intent-filter>

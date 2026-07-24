@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 
@@ -9,15 +9,18 @@ class ReminderTile extends StatelessWidget {
   const ReminderTile({
     super.key,
     required this.reminder,
+    required this.onEdit,
     required this.onDelete,
   });
 
   final Reminder reminder;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   String _daysLabel(BuildContext context) {
-    if (reminder.days.length == 7) return context.tr('every_day');
-    if (reminder.days.isEmpty) return context.tr('no_days');
+    if (reminder.isInterval) return context.l10n.every_n_days(reminder.everyDays);
+    if (reminder.days.length == 7) return context.l10n.every_day;
+    if (reminder.days.isEmpty) return context.l10n.no_days;
     final names = WeekdayLabels.shortMonFirst(
       Localizations.localeOf(context).languageCode,
     );
@@ -64,6 +67,10 @@ class ReminderTile extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: Icon(LucideIcons.pencil, color: scheme.primary, size: 18),
+            onPressed: onEdit,
           ),
           IconButton(
             icon: Icon(LucideIcons.trash2, color: context.tokens.danger, size: 18),

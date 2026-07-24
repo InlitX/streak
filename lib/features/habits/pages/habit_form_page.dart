@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_emojis.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/icons/habit_icons.dart';
@@ -14,10 +16,12 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
+import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
@@ -47,8 +51,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
   Color _color = AppPalette.brand;
   HabitInterval _interval = HabitInterval.daily;
   int _frequency = 1;
+  List<int> _scheduleWeekdays = const [1, 3, 5];
+  int _scheduleEvery = 2;
   String _cover = '';
-  bool _advanced = false;
   late List<Reminder> _reminders;
 
   HabitKind _kind = HabitKind.positive;
@@ -56,6 +61,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   int _quantTarget = 8;
   int _quantIncrement = 1;
   String _bookCover = '';
+  late List<Substep> _substeps;
 
   // Locked on edit: changing kind would reinterpret past completions.
   bool get _kindLocked => widget.isEditing;
@@ -63,6 +69,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool get _canSave {
     if (_name.text.trim().isEmpty) return false;
     if (_kind == HabitKind.quantitative && _unitLabel.text.trim().isEmpty) {
+      return false;
+    }
+    if (_kind != HabitKind.negative &&
+        _interval == HabitInterval.weekdays &&
+        _scheduleWeekdays.isEmpty) {
       return false;
     }
     return true;
@@ -81,6 +92,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _color = habit.color;
       _interval = habit.interval;
       _frequency = habit.targetFrequency;
+      if (habit.scheduleWeekdays.isNotEmpty) {
+        _scheduleWeekdays = List.of(habit.scheduleWeekdays);
+      }
+      _scheduleEvery = habit.scheduleEvery;
       _cover = habit.coverPath;
       _reminders = List.of(habit.reminders);
       _kind = habit.kind;
@@ -88,13 +103,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _quantTarget = habit.kind == HabitKind.quantitative ? habit.perDayTarget : 8;
       _quantIncrement = habit.incrementAmount;
       _bookCover = habit.bookCoverPath;
-      _advanced = habit.description.isNotEmpty ||
-          habit.category.isNotEmpty ||
-          habit.reminders.isNotEmpty ||
-          habit.coverPath.isNotEmpty ||
-          habit.interval != HabitInterval.daily;
+      _substeps = List.of(habit.substeps);
     } else {
       _reminders = [];
+      _substeps = [];
     }
   }
 
@@ -111,12 +123,12 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _quantKind = preset;
       switch (preset) {
         case QuantKind.water:
-          _unitLabel.text = context.tr('quant_unit_ml');
+          _unitLabel.text = context.l10n.quant_unit_ml;
           _quantTarget = 2000;
           _quantIncrement = 250;
           break;
         case QuantKind.reading:
-          _unitLabel.text = context.tr('quant_unit_pages');
+          _unitLabel.text = context.l10n.quant_unit_pages;
           _quantTarget = 20;
           _quantIncrement = 1;
           break;
@@ -134,6 +146,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
     final negative = _kind == HabitKind.negative;
     final interval = negative ? HabitInterval.daily : _interval;
     final frequency = negative ? 1 : _frequency;
+    final substeps = _kind == HabitKind.positive
+        ? _substeps.where((s) => s.title.trim().isNotEmpty).toList()
+        : <Substep>[];
 
     if (widget.isEditing) {
       controller.update(
@@ -145,6 +160,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
           color: _color,
           interval: interval,
           targetFrequency: frequency,
+          scheduleWeekdays: negative ? const [] : _scheduleWeekdays,
+          scheduleEvery: negative ? 2 : _scheduleEvery,
           reminders: _reminders,
           coverPath: _cover,
           perDayTarget: quantitative ? _quantTarget : widget.habit!.perDayTarget,
@@ -153,6 +170,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
               quantitative ? _quantIncrement : widget.habit!.incrementAmount,
           quantKind: quantitative ? _quantKind : widget.habit!.quantKind,
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
+          substeps: substeps,
         ),
       );
     } else {
@@ -164,6 +182,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
         color: _color.toARGB32(),
         interval: interval,
         targetFrequency: frequency,
+        scheduleWeekdays: negative ? const [] : _scheduleWeekdays,
+        scheduleEvery: negative ? 2 : _scheduleEvery,
         reminders: _reminders,
         coverPath: _cover,
         kind: _kind,
@@ -172,6 +192,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         incrementAmount: quantitative ? _quantIncrement : 1,
         quantKind: quantitative ? _quantKind : QuantKind.generic,
         bookCoverPath: quantitative ? _bookCover : '',
+        substeps: substeps,
       );
     }
     AppNavigator.pop();
@@ -190,9 +211,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
   Future<void> _confirmDelete() async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: context.tr('delete_habit'),
-      message: context.tr('delete_habit_body', {'name': widget.habit!.name}),
-      confirmLabel: context.tr('delete'),
+      title: context.l10n.delete_habit,
+      message: context.l10n.delete_habit_body(widget.habit!.name),
+      confirmLabel: context.l10n.delete,
     );
     if (confirmed == true && mounted) {
       context.read<HabitsController>().remove(widget.habit!.id);
@@ -203,7 +224,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   Future<void> _addReminder() async {
     final granted = await NotificationService().requestPermissions();
     if (!granted) {
-      if (mounted) AppSnackbar.error(context, context.tr('permission_required'));
+      if (mounted) AppSnackbar.error(context, context.l10n.permission_required);
       return;
     }
     if (!mounted) return;
@@ -216,6 +237,24 @@ class _HabitFormPageState extends State<HabitFormPage> {
     if (reminder != null) setState(() => _reminders.add(reminder));
   }
 
+  Future<void> _editReminder(Reminder reminder) async {
+    final updated = await showModalBottomSheet<Reminder>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) => ReminderEditorSheet(initial: reminder),
+    );
+    if (updated == null) return;
+    setState(() {
+      final index = _reminders.indexWhere((r) => r.id == reminder.id);
+      if (index == -1) {
+        _reminders.add(updated);
+      } else {
+        _reminders[index] = updated;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -223,7 +262,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.isEditing ? context.tr('edit_habit') : context.tr('new_habit'),
+            widget.isEditing ? context.l10n.edit_habit : context.l10n.new_habit,
           ),
           leading: IconButton(
             icon: const Icon(LucideIcons.x),
@@ -238,7 +277,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             TextButton(
               onPressed: _canSave ? _submit : null,
               child: Text(
-                context.tr('save'),
+                context.l10n.save,
                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),
             ),
@@ -255,20 +294,20 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 name: _name.text.trim(),
               ),
               const SizedBox(height: 20),
-              SectionLabel(context.tr('name')),
+              SectionLabel(context.l10n.name),
               AppTextField(
-                hint: context.tr('name_hint'),
+                hint: context.l10n.name_hint,
                 controller: _name,
                 onChanged: (_) => setState(() {}),
               ),
               const SizedBox(height: 20),
-              SectionLabel(context.tr('description')),
+              SectionLabel(context.l10n.description),
               AppTextField(
-                hint: context.tr('description_hint'),
+                hint: context.l10n.description_hint,
                 controller: _description,
               ),
               const SizedBox(height: 20),
-              SectionLabel(context.tr('habit_kind')),
+              SectionLabel(context.l10n.habit_kind),
               _KindSelector(
                 kind: _kind,
                 locked: _kindLocked,
@@ -288,7 +327,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 ),
                 if (_quantKind == QuantKind.reading) ...[
                   const SizedBox(height: 20),
-                  SectionLabel(context.tr('book_cover')),
+                  SectionLabel(context.l10n.book_cover),
                   _CoverPicker(
                     path: _bookCover,
                     color: _color,
@@ -301,15 +340,24 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 const SizedBox(height: 12),
                 _NegativeHint(color: _color),
               ],
+              if (_kind == HabitKind.positive) ...[
+                const SizedBox(height: 20),
+                SectionLabel(context.l10n.checklist),
+                _SubstepsEditor(
+                  substeps: _substeps,
+                  color: _color,
+                  onChanged: (list) => _substeps = list,
+                ),
+              ],
               const SizedBox(height: 20),
-              SectionLabel(context.tr('icon')),
+              SectionLabel(context.l10n.icon),
               _IconPicker(
                 selected: _icon,
                 color: _color,
                 onSelected: (icon) => setState(() => _icon = icon),
               ),
               const SizedBox(height: 20),
-              SectionLabel(context.tr('color')),
+              SectionLabel(context.l10n.color),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -320,67 +368,55 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              _AdvancedToggle(
-                expanded: _advanced,
-                onTap: () => setState(() => _advanced = !_advanced),
+              SectionLabel(context.l10n.cover_image),
+              _CoverPicker(
+                path: _cover,
+                color: _color,
+                onPick: _pickCover,
+                onRemove: () => setState(() => _cover = ''),
               ),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 240),
-                sizeCurve: Curves.easeOutCubic,
-                crossFadeState: _advanced
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                firstChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    SectionLabel(context.tr('cover_image')),
-                    _CoverPicker(
-                      path: _cover,
-                      color: _color,
-                      onPick: _pickCover,
-                      onRemove: () => setState(() => _cover = ''),
-                    ),
-                    const SizedBox(height: 20),
-                    SectionLabel(context.tr('category')),
-                    _CategoryPicker(
-                      selected: _category,
-                      onSelected: (c) => setState(() => _category = c),
-                    ),
-                    if (_kind != HabitKind.negative) ...[
-                      const SizedBox(height: 20),
-                      SectionLabel(context.tr('frequency')),
-                      _IntervalSelector(
-                        interval: _interval,
-                        frequency: _frequency,
-                        onIntervalChanged: (interval) => setState(() {
-                          _interval = interval;
-                          _frequency = switch (interval) {
-                            HabitInterval.daily => 1,
-                            HabitInterval.weekly => 3,
-                            HabitInterval.monthly => 10,
-                          };
-                        }),
-                        onFrequencyChanged: (value) =>
-                            setState(() => _frequency = value),
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    SectionLabel(context.tr('reminders')),
-                    for (final reminder in _reminders)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: ReminderTile(
-                          reminder: reminder,
-                          onDelete: () =>
-                              setState(() => _reminders.remove(reminder)),
-                        ),
-                      ),
-                    _AddReminderButton(onTap: _addReminder),
-                  ],
+              const SizedBox(height: 20),
+              SectionLabel(context.l10n.category),
+              _CategoryPicker(
+                selected: _category,
+                onSelected: (c) => setState(() => _category = c),
+              ),
+              if (_kind != HabitKind.negative) ...[
+                const SizedBox(height: 20),
+                SectionLabel(context.l10n.frequency),
+                _IntervalSelector(
+                  interval: _interval,
+                  frequency: _frequency,
+                  weekdays: _scheduleWeekdays,
+                  every: _scheduleEvery,
+                  onIntervalChanged: (interval) => setState(() {
+                    _interval = interval;
+                    _frequency = switch (interval) {
+                      HabitInterval.weekly => 3,
+                      HabitInterval.monthly => 10,
+                      _ => 1,
+                    };
+                  }),
+                  onFrequencyChanged: (value) =>
+                      setState(() => _frequency = value),
+                  onWeekdaysChanged: (days) =>
+                      setState(() => _scheduleWeekdays = days),
+                  onEveryChanged: (v) => setState(() => _scheduleEvery = v),
                 ),
-                secondChild: const SizedBox(width: double.infinity),
-              ),
+              ],
+              const SizedBox(height: 20),
+              SectionLabel(context.l10n.reminders),
+              for (final reminder in _reminders)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ReminderTile(
+                    reminder: reminder,
+                    onEdit: () => _editReminder(reminder),
+                    onDelete: () =>
+                        setState(() => _reminders.remove(reminder)),
+                  ),
+                ),
+              _AddReminderButton(onTap: _addReminder),
               const SizedBox(height: 24),
             ],
           ),
@@ -416,7 +452,7 @@ class _Preview extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                name.isEmpty ? context.tr('name_hint') : name,
+                name.isEmpty ? context.l10n.name_hint : name,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
@@ -470,7 +506,7 @@ class _CoverPicker extends StatelessWidget {
                   size: 30, color: context.colors.primary),
               const SizedBox(height: 8),
               Text(
-                context.tr('add_image'),
+                context.l10n.add_image,
                 style: TextStyle(
                   color: context.colors.primary,
                   fontWeight: FontWeight.w700,
@@ -539,43 +575,6 @@ class _CoverAction extends StatelessWidget {
   }
 }
 
-class _AdvancedToggle extends StatelessWidget {
-  const _AdvancedToggle({required this.expanded, required this.onTap});
-
-  final bool expanded;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          children: [
-            Text(
-              context.tr('advanced_options'),
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: context.colors.primary,
-              ),
-            ),
-            const Spacer(),
-            AnimatedRotation(
-              turns: expanded ? 0.5 : 0,
-              duration: const Duration(milliseconds: 200),
-              child: Icon(LucideIcons.chevronDown,
-                  size: 18, color: context.colors.primary),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _IconPicker extends StatefulWidget {
   const _IconPicker({
     required this.selected,
@@ -618,8 +617,8 @@ class _IconPickerState extends State<_IconPicker> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _Segment2(
-              left: context.tr('icons_tab'),
-              right: context.tr('emojis_tab'),
+              left: context.l10n.icons_tab,
+              right: context.l10n.emojis_tab,
               rightActive: _emoji,
               onChanged: (v) => setState(() => _emoji = v),
             ),
@@ -824,13 +823,13 @@ class _CategoryPicker extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(LucideIcons.pencil, color: context.colors.onSurface),
-              title: Text(context.tr('edit')),
+              title: Text(context.l10n.edit),
               onTap: () => Navigator.of(sheetContext).pop('edit'),
             ),
             ListTile(
               leading: Icon(LucideIcons.trash2, color: context.tokens.danger),
               title: Text(
-                context.tr('delete'),
+                context.l10n.delete,
                 style: TextStyle(color: context.tokens.danger),
               ),
               onTap: () => Navigator.of(sheetContext).pop('delete'),
@@ -921,7 +920,7 @@ class _CategoryPicker extends StatelessWidget {
                 Icon(LucideIcons.plus, size: 14, color: context.colors.primary),
                 const SizedBox(width: 6),
                 Text(
-                  context.tr('add_category'),
+                  context.l10n.add_category,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 13,
@@ -941,136 +940,261 @@ class _IntervalSelector extends StatelessWidget {
   const _IntervalSelector({
     required this.interval,
     required this.frequency,
+    required this.weekdays,
+    required this.every,
     required this.onIntervalChanged,
     required this.onFrequencyChanged,
+    required this.onWeekdaysChanged,
+    required this.onEveryChanged,
   });
 
   final HabitInterval interval;
   final int frequency;
+  final List<int> weekdays;
+  final int every;
   final ValueChanged<HabitInterval> onIntervalChanged;
   final ValueChanged<int> onFrequencyChanged;
+  final ValueChanged<List<int>> onWeekdaysChanged;
+  final ValueChanged<int> onEveryChanged;
+
+  static const _everyMax = 30;
 
   int get _max => interval == HabitInterval.weekly ? 6 : 25;
 
   String _label(BuildContext context, HabitInterval option) => switch (option) {
-        HabitInterval.daily => context.tr('daily'),
-        HabitInterval.weekly => context.tr('weekly'),
-        HabitInterval.monthly => context.tr('monthly'),
+        HabitInterval.daily => context.l10n.daily,
+        HabitInterval.weekly => context.l10n.weekly,
+        HabitInterval.monthly => context.l10n.monthly,
+        HabitInterval.weekdays => context.l10n.sched_days,
+        HabitInterval.everyXDays => context.l10n.sched_interval,
       };
 
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final option in HabitInterval.values)
+              GestureDetector(
+                onTap: () => onIntervalChanged(option),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: option == interval
+                        ? scheme.primary
+                        : scheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    _label(context, option),
+                    style: TextStyle(
+                      color: option == interval
+                          ? scheme.onPrimary
+                          : context.tokens.muted,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        if (interval == HabitInterval.weekly ||
+            interval == HabitInterval.monthly) ...[
+          const SizedBox(height: 10),
+          _stepperRow(
+            context,
+            label: interval == HabitInterval.weekly
+                ? context.l10n.times_per_week('$frequency')
+                : context.l10n.times_per_month('$frequency'),
+            value: frequency,
+            min: 1,
+            max: _max,
+            onChanged: onFrequencyChanged,
           ),
-          child: Row(
-            children: [
-              for (final option in HabitInterval.values)
-                Expanded(
+        ] else if (interval == HabitInterval.everyXDays) ...[
+          const SizedBox(height: 10),
+          _stepperRow(
+            context,
+            label: context.l10n.every_n_days(every),
+            value: every,
+            min: 2,
+            max: _everyMax,
+            onChanged: onEveryChanged,
+          ),
+        ] else if (interval == HabitInterval.weekdays) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: List.generate(7, (i) {
+              final day = i + 1;
+              final active = weekdays.contains(day);
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(right: i == 6 ? 0 : 6),
                   child: GestureDetector(
-                    onTap: () => onIntervalChanged(option),
+                    onTap: () {
+                      final next = [...weekdays];
+                      active ? next.remove(day) : next.add(day);
+                      next.sort();
+                      onWeekdaysChanged(next);
+                    },
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
+                      duration: const Duration(milliseconds: 160),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: option == interval
+                        color: active
                             ? scheme.primary
-                            : Colors.transparent,
+                            : scheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        _label(context, option),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: option == interval
-                              ? scheme.onPrimary
-                              : context.tokens.muted,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
+                      child: Center(
+                        child: Text(
+                          WeekdayLabels.shortMonFirst(
+                            Localizations.localeOf(context).languageCode,
+                          )[i],
+                          style: TextStyle(
+                            color: active
+                                ? scheme.onPrimary
+                                : context.tokens.muted,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
-        ),
-        if (interval != HabitInterval.daily) ...[
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
-            decoration: BoxDecoration(
-              color: scheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    interval == HabitInterval.weekly
-                        ? context.tr('times_per_week', {'n': '$frequency'})
-                        : context.tr('times_per_month', {'n': '$frequency'}),
-                    style: TextStyle(
-                      color: scheme.onSurface,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                _StepButton(
-                  icon: LucideIcons.minus,
-                  onTap: frequency > 1
-                      ? () => onFrequencyChanged(frequency - 1)
-                      : null,
-                ),
-                SizedBox(
-                  width: 36,
-                  child: Text(
-                    '$frequency',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: scheme.onSurface,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                _StepButton(
-                  icon: LucideIcons.plus,
-                  onTap: frequency < _max
-                      ? () => onFrequencyChanged(frequency + 1)
-                      : null,
-                ),
-              ],
-            ),
+              );
+            }),
           ),
         ],
       ],
     );
   }
+
+  Widget _stepperRow(
+    BuildContext context, {
+    required String label,
+    required int value,
+    required int min,
+    required int max,
+    required ValueChanged<int> onChanged,
+  }) {
+    final scheme = context.colors;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: scheme.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: LucideIcons.minus,
+            onTap: value > min ? () => onChanged(value - 1) : null,
+          ),
+          SizedBox(
+            width: 36,
+            child: Text(
+              '$value',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: scheme.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          _StepButton(
+            icon: LucideIcons.plus,
+            onTap: value < max ? () => onChanged(value + 1) : null,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-class _StepButton extends StatelessWidget {
+class _StepButton extends StatefulWidget {
   const _StepButton({required this.icon, required this.onTap});
 
   final IconData icon;
   final VoidCallback? onTap;
 
   @override
+  State<_StepButton> createState() => _StepButtonState();
+}
+
+class _StepButtonState extends State<_StepButton> {
+  Timer? _timer;
+  int _count = 0;
+
+  void _tick() {
+    final onTap = widget.onTap;
+    if (onTap == null) {
+      _stop();
+      return;
+    }
+    onTap();
+    _count++;
+    final ms = _count < 5 ? 140 : (_count < 12 ? 80 : 45);
+    _timer = Timer(Duration(milliseconds: ms), _tick);
+  }
+
+  void _startRepeat() {
+    if (widget.onTap == null) return;
+    _count = 0;
+    _tick();
+  }
+
+  void _stop() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    _stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onTap,
-      icon: Icon(
-        icon,
-        size: 20,
-        color: onTap == null
-            ? context.tokens.muted.withValues(alpha: 0.4)
-            : context.colors.onSurface,
+    final enabled = widget.onTap != null;
+    return GestureDetector(
+      onTap: enabled ? widget.onTap : null,
+      onLongPressStart: enabled ? (_) => _startRepeat() : null,
+      onLongPressEnd: (_) => _stop(),
+      onLongPressCancel: _stop,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: Icon(
+            widget.icon,
+            size: 20,
+            color: enabled
+                ? context.colors.onSurface
+                : context.tokens.muted.withValues(alpha: 0.4),
+          ),
+        ),
       ),
     );
   }
@@ -1099,7 +1223,7 @@ class _AddReminderButton extends StatelessWidget {
             Icon(LucideIcons.plus, size: 18, color: scheme.primary),
             const SizedBox(width: 8),
             Text(
-              context.tr('add_reminder'),
+              context.l10n.add_reminder,
               style: TextStyle(
                 color: scheme.primary,
                 fontWeight: FontWeight.w700,
@@ -1127,9 +1251,9 @@ class _KindSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final options = [
-      (HabitKind.positive, context.tr('kind_positive'), LucideIcons.circleCheck),
-      (HabitKind.negative, context.tr('kind_negative'), LucideIcons.ban),
-      (HabitKind.quantitative, context.tr('kind_quantitative'), LucideIcons.gauge),
+      (HabitKind.positive, context.l10n.kind_positive, LucideIcons.circleCheck),
+      (HabitKind.negative, context.l10n.kind_negative, LucideIcons.ban),
+      (HabitKind.quantitative, context.l10n.kind_quantitative, LucideIcons.gauge),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1158,7 +1282,7 @@ class _KindSelector extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  context.tr('kind_locked_hint'),
+                  context.l10n.kind_locked_hint,
                   style: TextStyle(fontSize: 12, color: context.tokens.muted),
                 ),
               ),
@@ -1243,7 +1367,7 @@ class _NegativeHint extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              context.tr('kind_negative_hint'),
+              context.l10n.kind_negative_hint,
               style: TextStyle(
                 fontSize: 13,
                 height: 1.4,
@@ -1252,6 +1376,156 @@ class _NegativeHint extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SubstepsEditor extends StatefulWidget {
+  const _SubstepsEditor({
+    required this.substeps,
+    required this.color,
+    required this.onChanged,
+  });
+
+  final List<Substep> substeps;
+  final Color color;
+  final ValueChanged<List<Substep>> onChanged;
+
+  @override
+  State<_SubstepsEditor> createState() => _SubstepsEditorState();
+}
+
+class _EditableStep {
+  _EditableStep(this.id, this.controller);
+  final String id;
+  final TextEditingController controller;
+}
+
+class _SubstepsEditorState extends State<_SubstepsEditor> {
+  late List<_EditableStep> _steps;
+
+  @override
+  void initState() {
+    super.initState();
+    _steps = widget.substeps
+        .map((s) => _EditableStep(s.id, TextEditingController(text: s.title)))
+        .toList();
+  }
+
+  @override
+  void dispose() {
+    for (final step in _steps) {
+      step.controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _emit() => widget.onChanged(
+        _steps
+            .map((s) => Substep(id: s.id, title: s.controller.text.trim()))
+            .toList(),
+      );
+
+  void _add() {
+    setState(() {
+      _steps.add(
+        _EditableStep(
+          DateTime.now().microsecondsSinceEpoch.toString(),
+          TextEditingController(),
+        ),
+      );
+    });
+    _emit();
+  }
+
+  void _remove(int index) {
+    final removed = _steps[index];
+    setState(() => _steps.removeAt(index));
+    // Let the field leave the tree first; disposing now breaks its rebuild.
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => removed.controller.dispose());
+    _emit();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(LucideIcons.listChecks, size: 17, color: widget.color),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    context.l10n.checklist_hint,
+                    style: TextStyle(
+                      fontSize: 13,
+                      height: 1.4,
+                      color: context.tokens.muted,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (_steps.isNotEmpty) const SizedBox(height: 14),
+            for (var i = 0; i < _steps.length; i++)
+              Padding(
+                key: ValueKey(_steps[i].id),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AppTextField(
+                        hint: context.l10n.step_hint,
+                        controller: _steps[i].controller,
+                        onChanged: (_) => _emit(),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _remove(i),
+                      icon: Icon(
+                        LucideIcons.x,
+                        size: 20,
+                        color: context.tokens.muted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 4),
+            GestureDetector(
+              onTap: _add,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  color: context.colors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(LucideIcons.plus, size: 18, color: widget.color),
+                    const SizedBox(width: 8),
+                    Text(
+                      context.l10n.add_step,
+                      style: TextStyle(
+                        color: widget.color,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1298,7 +1572,7 @@ class _QuantitativeFields extends StatelessWidget {
                 Expanded(
                   child: _PresetChip(
                     icon: LucideIcons.droplet,
-                    label: context.tr('quant_preset_water'),
+                    label: context.l10n.quant_preset_water,
                     selected: quantKind == QuantKind.water,
                     onTap: () => onPresetSelected(QuantKind.water),
                   ),
@@ -1307,7 +1581,7 @@ class _QuantitativeFields extends StatelessWidget {
                 Expanded(
                   child: _PresetChip(
                     icon: LucideIcons.bookOpen,
-                    label: context.tr('quant_preset_reading'),
+                    label: context.l10n.quant_preset_reading,
                     selected: quantKind == QuantKind.reading,
                     onTap: () => onPresetSelected(QuantKind.reading),
                   ),
@@ -1316,7 +1590,7 @@ class _QuantitativeFields extends StatelessWidget {
                 Expanded(
                   child: _PresetChip(
                     icon: LucideIcons.gauge,
-                    label: context.tr('quant_preset_generic'),
+                    label: context.l10n.quant_preset_generic,
                     selected: quantKind == QuantKind.generic,
                     onTap: () => onPresetSelected(QuantKind.generic),
                   ),
@@ -1325,13 +1599,13 @@ class _QuantitativeFields extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AppTextField(
-              hint: context.tr('quant_unit_hint'),
+              hint: context.l10n.quant_unit_hint,
               controller: unitController,
               onChanged: (_) => onUnitChanged(),
             ),
             const SizedBox(height: 12),
             _QuantityStepperRow(
-              label: context.tr('quant_daily_goal'),
+              label: context.l10n.quant_daily_goal,
               value: target,
               unit: unit,
               step: _step,
@@ -1340,7 +1614,7 @@ class _QuantitativeFields extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             _QuantityStepperRow(
-              label: context.tr('quant_tap_amount'),
+              label: context.l10n.quant_tap_amount,
               value: increment,
               unit: unit,
               step: _step,
@@ -1419,6 +1693,17 @@ class _QuantityStepperRow extends StatelessWidget {
   final int min;
   final ValueChanged<int> onChanged;
 
+  Future<void> _promptValue(BuildContext context) async {
+    final result = await showNumberKeypadDialog(
+      context,
+      title: label,
+      value: value,
+      unit: unit,
+      min: min,
+    );
+    if (result != null) onChanged(result);
+  }
+
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
@@ -1433,6 +1718,8 @@ class _QuantityStepperRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w600),
             ),
           ),
@@ -1440,15 +1727,24 @@ class _QuantityStepperRow extends StatelessWidget {
             icon: LucideIcons.minus,
             onTap: value > min ? () => onChanged(value - step) : null,
           ),
-          SizedBox(
-            width: 64,
-            child: Text(
-              unit.isEmpty ? '$value' : '$value $unit',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: scheme.onSurface,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
+          InkWell(
+            onTap: () => _promptValue(context),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 60),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+              alignment: Alignment.center,
+              child: Text(
+                unit.isEmpty ? '$value' : '$value $unit',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: scheme.onSurface,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.dotted,
+                  decorationColor: scheme.primary.withValues(alpha: 0.6),
+                ),
               ),
             ),
           ),

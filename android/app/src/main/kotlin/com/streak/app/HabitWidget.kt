@@ -7,6 +7,8 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.state.GlanceStateDefinition
@@ -49,50 +51,31 @@ class HabitWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>
         get() = HomeWidgetGlanceStateDefinition()
 
+    override val sizeMode = SizeMode.Exact
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+        // Read inside composition: update() recomposes without re-running this.
         provideContent {
-            WidgetContent(context, currentState())
+            currentState<HomeWidgetGlanceState>()
+            WidgetContent(context, WidgetStyle.loadFor(context, appWidgetId))
         }
     }
 
     @Composable
-    private fun WidgetContent(context: Context, currentState: HomeWidgetGlanceState) {
+    private fun WidgetContent(context: Context, style: WidgetStyle) {
         val data = loadWidgetData(context)
-
-        val cover = firstCover(data)
-        val bitmap = loadBitmap(cover)
-
-        Box(modifier = GlanceModifier.fillMaxSize().cornerRadius(20.dp)) {
-            if (bitmap != null) {
-                Image(
-                    provider = ImageProvider(bitmap),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = GlanceModifier.fillMaxSize().cornerRadius(20.dp)
-                )
-                Box(
-                    modifier = GlanceModifier
-                        .fillMaxSize()
-                        .background(ColorProvider(androidx.compose.ui.graphics.Color(0xCC000000)))
-                        .cornerRadius(20.dp)
-                ) {}
-            }
-            WidgetBody(data, opaque = bitmap == null)
+        WidgetSurface(style) {
+            WidgetBody(style, data)
         }
     }
 
     @Composable
-    private fun WidgetBody(data: JSONObject?, opaque: Boolean) {
-        val base = GlanceModifier
-            .fillMaxWidth()
-            .cornerRadius(20.dp)
+    private fun WidgetBody(style: WidgetStyle, data: JSONObject?) {
+        val modifier = GlanceModifier
+            .fillMaxSize()
             .padding(16.dp)
             .clickable(actionStartActivity<MainActivity>())
-        val modifier = if (opaque) {
-            base.background(ColorProvider(androidx.compose.ui.graphics.Color(0xFF101014)))
-        } else {
-            base
-        }
 
         Column(modifier = modifier) {
             if (data != null) {
@@ -124,8 +107,7 @@ class HabitWidget : GlanceAppWidget() {
                                             text = label,
                                             style = TextStyle(
                                                 color = ColorProvider(
-                                                    if (isToday) brandColor
-                                                    else androidx.compose.ui.graphics.Color(0x66808080)
+                                                    if (isToday) brandColor else style.muted
                                                 ),
                                                 fontSize = 14.sp,
                                                 fontWeight = FontWeight.Bold
@@ -141,20 +123,20 @@ class HabitWidget : GlanceAppWidget() {
                         modifier = GlanceModifier.fillMaxWidth().defaultWeight()
                     ) {
                         items(habits.length()) { habitIndex ->
-                            HabitRow(habits.getJSONObject(habitIndex))
+                            HabitRow(style, habits.getJSONObject(habitIndex))
                         }
                     }
                 } else {
-                    EmptyState("No habits yet\nTap to open Streak")
+                    EmptyState(style, "No habits yet\nTap to open Streak")
                 }
             } else {
-                EmptyState("No data yet\nOpen Streak to sync")
+                EmptyState(style, "No data yet\nOpen Streak to sync")
             }
         }
     }
 
     @Composable
-    private fun HabitRow(habit: JSONObject) {
+    private fun HabitRow(style: WidgetStyle, habit: JSONObject) {
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
@@ -183,7 +165,7 @@ class HabitWidget : GlanceAppWidget() {
                 Text(
                     text = name,
                     style = TextStyle(
-                        color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                        color = ColorProvider(style.content),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     ),
@@ -255,7 +237,6 @@ class HabitWidget : GlanceAppWidget() {
         )
     }
 
-    // Dot whose size/alpha scale with today's progress.
     @Composable
     private fun ProgressIndicator(ratio: Float, color: androidx.compose.ui.graphics.Color) {
         val clamped = ratio.coerceIn(0f, 1f)
@@ -271,7 +252,7 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun EmptyState(message: String) {
+    private fun EmptyState(style: WidgetStyle, message: String) {
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -281,29 +262,10 @@ class HabitWidget : GlanceAppWidget() {
             Text(
                 text = message,
                 style = TextStyle(
-                    color = ColorProvider(androidx.compose.ui.graphics.Color(0xFF808080)),
+                    color = ColorProvider(style.muted),
                     fontSize = 13.sp
                 )
             )
-        }
-    }
-
-    private fun firstCover(data: JSONObject?): String {
-        val habits = data?.optJSONArray("habits") ?: return ""
-        for (i in 0 until habits.length()) {
-            val cover = habits.optJSONObject(i)?.optString("cover", "") ?: ""
-            if (cover.isNotEmpty()) return cover
-        }
-        return ""
-    }
-
-    private fun loadBitmap(path: String): Bitmap? {
-        if (path.isEmpty()) return null
-        return try {
-            val file = java.io.File(path)
-            if (file.exists()) BitmapFactory.decodeFile(path) else null
-        } catch (e: Exception) {
-            null
         }
     }
 
@@ -326,7 +288,6 @@ class ToggleHabitAction : ActionCallback {
     ) {
         val habitId = parameters[ActionParameters.Key<String>("habitId")]
         val dayIndex = parameters[ActionParameters.Key<Int>("dayIndex")]
-        // action: "toggle" | "relapse" | "progress" (see HabitKind, Dart side).
         val action = parameters[ActionParameters.Key<String>("action")] ?: "toggle"
         val delta = parameters[ActionParameters.Key<Int>("delta")] ?: 1
         if (habitId != null && dayIndex != null) {

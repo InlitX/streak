@@ -5,6 +5,8 @@ class Reminder {
     required this.minute,
     required this.days,
     this.message = '',
+    this.everyDays = 1,
+    this.anchorEpochDay,
   });
 
   final String id;
@@ -12,9 +14,14 @@ class Reminder {
   final int minute;
   final List<int> days;
 
-  /// Mensaje personalizado opcional. Si está vacío, se usa una frase
-  /// motivacional aleatoria al disparar la notificación.
   final String message;
+
+  // 1 = use the weekday set; >= 2 = every N days from anchorEpochDay.
+  final int everyDays;
+
+  final int? anchorEpochDay;
+
+  bool get isInterval => everyDays >= 2;
 
   String get timeLabel {
     final period = hour >= 12 ? 'PM' : 'AM';
@@ -28,6 +35,8 @@ class Reminder {
         'minute': minute,
         'selectedDays': days,
         'message': message,
+        'everyDays': everyDays,
+        'anchorEpochDay': anchorEpochDay,
       };
 
   factory Reminder.fromMap(Map<String, dynamic> map) => Reminder(
@@ -36,5 +45,7 @@ class Reminder {
         minute: map['minute'] as int,
         days: List<int>.from((map['selectedDays'] ?? map['days']) as List),
         message: (map['message'] ?? '') as String,
+        everyDays: (map['everyDays'] ?? 1) as int,
+        anchorEpochDay: map['anchorEpochDay'] as int?,
       );
 }

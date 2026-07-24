@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 enum HeatmapMode { week, month, year, mini }
 
@@ -21,7 +23,6 @@ class HabitHeatmap extends StatefulWidget {
   final HeatmapMode mode;
   final void Function(DateTime date)? onToggle;
 
-  // Width-filling, read-only variant for home cards.
   final bool compact;
   final bool circle;
 
@@ -45,6 +46,10 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
 
     final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
 
+    if (!beforeCreation && !date.isAfter(_today) && habit.isNeutralOn(date)) {
+      return context.tokens.info.withValues(alpha: 0.5);
+    }
+
     if (habit.kind == HabitKind.negative) {
       if (beforeCreation) {
         final base = scheme.surfaceContainerHighest;
@@ -61,7 +66,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
       final base = scheme.surfaceContainerHighest;
       return date.isAfter(_today) ? base.withValues(alpha: 0.4) : base;
     }
-    final ratio = (count / habit.perDayTarget).clamp(0.25, 1.0);
+    final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
+    final ratio = (count / target).clamp(0.25, 1.0);
     return Color.lerp(
       habit.color.withValues(alpha: 0.4),
       habit.color,
@@ -94,9 +100,11 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   }
 
   Widget _weekRow(BuildContext context, {bool compact = false}) {
-    final start = _mondayOf(_today);
-    final letters = WeekdayLabels.narrowMonFirst(
+    final weekStart = context.watch<SettingsController>().weekStart;
+    final start = _today.startOfWeek(weekStart);
+    final letters = WeekdayLabels.narrowFrom(
       Localizations.localeOf(context).languageCode,
+      weekStart,
     );
     final height = compact ? 30.0 : 44.0;
     return Row(
@@ -204,11 +212,12 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   }
 
   Widget _monthCalendar(BuildContext context) {
+    final weekStart = context.watch<SettingsController>().weekStart;
     final monthStart = DateTime(_today.year, _today.month, 1);
-    final first = _mondayOf(monthStart);
+    final first = monthStart.startOfWeek(weekStart);
     final lastDay = DateTime(_today.year, _today.month + 1, 0);
     final weeks =
-        ((_mondayOf(lastDay).add(const Duration(days: 6)).difference(first).inDays) /
+        ((lastDay.startOfWeek(weekStart).add(const Duration(days: 6)).difference(first).inDays) /
                     7)
                 .round() +
             1;

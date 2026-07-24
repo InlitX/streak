@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -41,7 +41,6 @@ class _ShareSheetState extends State<_ShareSheet> {
   final _cardKey = GlobalKey();
   bool _busy = false;
 
-  // Background overrides for the exported image only; null = use the habit's.
   String? _coverOverride;
   Color? _colorOverride;
 
@@ -103,7 +102,7 @@ class _ShareSheetState extends State<_ShareSheet> {
         subject: widget.habit.name,
       );
     } catch (_) {
-      if (mounted) AppSnackbar.error(context, context.tr('share_failed'));
+      if (mounted) AppSnackbar.error(context, context.l10n.share_failed);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -134,20 +133,20 @@ class _ShareSheetState extends State<_ShareSheet> {
               children: [
                 _EditButton(
                   icon: LucideIcons.image,
-                  label: context.tr(_hasCover ? 'change_photo' : 'add_image'),
+                  label: _hasCover ? context.l10n.change_photo : context.l10n.add_image,
                   onTap: _busy ? null : _pickPhoto,
                 ),
                 const SizedBox(width: 10),
                 _EditButton(
                   icon: LucideIcons.palette,
-                  label: context.tr('color'),
+                  label: context.l10n.color,
                   onTap: _busy ? null : _pickColor,
                 ),
                 if (_hasCover) ...[
                   const SizedBox(width: 10),
                   _EditButton(
                     icon: LucideIcons.trash2,
-                    label: context.tr('remove_photo'),
+                    label: context.l10n.remove_photo,
                     onTap: _busy ? null : _removePhoto,
                   ),
                 ],
@@ -165,7 +164,7 @@ class _ShareSheetState extends State<_ShareSheet> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(LucideIcons.share2, size: 18),
-                label: Text(context.tr('share')),
+                label: Text(context.l10n.share),
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -242,7 +241,6 @@ class ShareCard extends StatelessWidget {
   final Habit habit;
   final double width;
 
-  // Override cover; '' forces no photo. Null falls back to the habit's cover.
   final String? coverPath;
   final Color? accent;
 
@@ -397,7 +395,7 @@ class ShareCard extends StatelessWidget {
                               child: Text(
                                 habit.category.isNotEmpty
                                     ? habit.category
-                                    : context.tr('app_tagline'),
+                                    : context.l10n.app_tagline,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(color: white60, fontSize: 13),
@@ -447,7 +445,7 @@ class ShareCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          context.tr('current_streak').toUpperCase(),
+                          context.l10n.current_streak.toUpperCase(),
                           style: TextStyle(
                             color: white60,
                             fontSize: 12,
@@ -464,21 +462,21 @@ class ShareCard extends StatelessWidget {
                     children: [
                       _StatChip(
                         value: '${habit.longestStreak}',
-                        label: context.tr('best'),
+                        label: context.l10n.best,
                         color: color,
                       ),
                       const SizedBox(width: 10),
                       _StatChip(
                         value: '${habit.totalCompletions}',
-                        label: context.tr(
-                          habit.kind == HabitKind.negative ? 'relapses' : 'total',
-                        ),
+                        label: habit.kind == HabitKind.negative
+                            ? context.l10n.relapses
+                            : context.l10n.total,
                         color: color,
                       ),
                       const SizedBox(width: 10),
                       _StatChip(
                         value: '${(habit.strength * 100).round()}%',
-                        label: context.tr('strength'),
+                        label: context.l10n.strength,
                         color: color,
                       ),
                     ],
@@ -503,7 +501,7 @@ class ShareCard extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        context.tr('app_tagline'),
+                        context.l10n.app_tagline,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.4),
                           fontSize: 12,

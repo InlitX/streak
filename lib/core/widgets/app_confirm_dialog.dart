@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 
-/// App-styled confirmation dialog. Returns `true` when confirmed.
 Future<bool?> showAppConfirmDialog(
   BuildContext context, {
   required String title,
@@ -72,7 +71,7 @@ Future<bool?> showAppConfirmDialog(
                         ),
                       ),
                       child: Text(
-                        cancelLabel ?? dialogContext.tr('cancel'),
+                        cancelLabel ?? dialogContext.l10n.cancel,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: scheme.onSurface,

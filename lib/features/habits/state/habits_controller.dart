@@ -5,8 +5,11 @@ import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/data/substep.dart';
+import 'package:streak/features/habits/data/vacation.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/home_widget_service.dart';
+import 'package:streak/services/import_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,7 +34,14 @@ class HabitsController extends ChangeNotifier {
 
   Habit? byId(String id) => _habits[id];
 
-  // Reopen from disk on resume so widget-toggled completions show up.
+  Future<void> rescheduleIntervalReminders() async {
+    for (final habit in _habits.values) {
+      if (habit.reminders.any((r) => r.isInterval)) {
+        await _notifications.scheduleFor(habit);
+      }
+    }
+  }
+
   Future<void> reload() async {
     await LocalStore.reloadHabits();
     _habits = LocalStore.readHabits();
@@ -46,6 +56,8 @@ class HabitsController extends ChangeNotifier {
     required int color,
     required HabitInterval interval,
     required int targetFrequency,
+    List<int> scheduleWeekdays = const [],
+    int scheduleEvery = 2,
     required List<Reminder> reminders,
     String coverPath = '',
     HabitKind kind = HabitKind.positive,
@@ -54,6 +66,7 @@ class HabitsController extends ChangeNotifier {
     int incrementAmount = 1,
     QuantKind quantKind = QuantKind.generic,
     String bookCoverPath = '',
+    List<Substep> substeps = const [],
   }) async {
     final id = _uuid.v4();
     final habit = Habit(
@@ -66,6 +79,8 @@ class HabitsController extends ChangeNotifier {
       order: _habits.length,
       interval: interval,
       targetFrequency: targetFrequency,
+      scheduleWeekdays: scheduleWeekdays,
+      scheduleEvery: scheduleEvery,
       reminders: reminders,
       coverPath: coverPath,
       kind: kind,
@@ -74,6 +89,7 @@ class HabitsController extends ChangeNotifier {
       incrementAmount: incrementAmount,
       quantKind: quantKind,
       bookCoverPath: bookCoverPath,
+      substeps: substeps,
     );
     _habits[id] = habit;
     await LocalStore.writeHabit(habit);
@@ -93,14 +109,13 @@ class HabitsController extends ChangeNotifier {
   Future<void> toggle(String id, DateTime date) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.toggle(habit, date));
+    await _apply(habit, CompletionOps.toggle(habit, date), day: date);
   }
 
-  // Breaks the clean streak. Home card confirms first; calendar toggles directly.
   Future<void> logRelapse(String id, DateTime date) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.logRelapse(habit, date));
+    await _apply(habit, CompletionOps.logRelapse(habit, date), day: date);
   }
 
   Future<void> clearRelapse(String id, DateTime date) async {
@@ -112,21 +127,68 @@ class HabitsController extends ChangeNotifier {
   Future<void> addProgress(String id, DateTime date, int delta) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.addProgress(habit, date, delta));
+    await _apply(habit, CompletionOps.addProgress(habit, date, delta), day: date);
   }
 
   Future<void> setProgress(String id, DateTime date, int value) async {
     final habit = _habits[id];
     if (habit == null) return;
     final current = habit.completions[date.dayKey]?.count ?? 0;
-    await _apply(habit, CompletionOps.addProgress(habit, date, value - current));
+    await _apply(habit, CompletionOps.addProgress(habit, date, value - current),
+        day: date);
+  }
+
+  Future<void> setStep(
+    String id,
+    DateTime date,
+    String stepId,
+    bool checked,
+  ) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _apply(habit, CompletionOps.setStep(habit, date, stepId, checked),
+        day: date);
+  }
+
+  Future<void> setVacation(String id, bool on) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    final periods = [...habit.vacations];
+    if (on) {
+      if (!periods.any((p) => p.isOngoing)) {
+        periods.add(VacationPeriod(start: DateTime.now()));
+      }
+    } else {
+      final yesterday =
+          DateTime.now().atMidnight.subtract(const Duration(days: 1));
+      final next = <VacationPeriod>[];
+      for (final p in periods) {
+        if (!p.isOngoing) {
+          next.add(p);
+        } else if (!yesterday.isBefore(p.start)) {
+          next.add(p.copyWith(end: yesterday));
+        }
+      }
+      periods
+        ..clear()
+        ..addAll(next);
+    }
+    await update(habit.copyWith(vacations: periods));
   }
 
   Future<void> _apply(
     Habit habit,
-    Map<String, Completion> completions,
-  ) async {
-    final updated = habit.copyWith(completions: completions);
+    Map<String, Completion> completions, {
+    DateTime? day,
+  }) async {
+    var updated = habit.copyWith(completions: completions);
+    if (day != null && completions.containsKey(day.dayKey)) {
+      // Back-dating the start, or the streak walks would skip the filled day.
+      final logged = day.atMidnight;
+      if (logged.isBefore(updated.createdAt.atMidnight)) {
+        updated = updated.copyWith(createdAt: logged);
+      }
+    }
     _habits[habit.id] = updated;
     await LocalStore.writeHabit(updated);
     notifyListeners();
@@ -164,7 +226,23 @@ class HabitsController extends ChangeNotifier {
     }
   }
 
-  // replace = wipe first; otherwise merge by id.
+  Future<ImportOutcome?> importFromApp() async {
+    final outcome = await ImportService.pickAndParse();
+    if (outcome == null) return null;
+    var order = _habits.length;
+    for (final habit in outcome.habits) {
+      final placed = habit.copyWith(order: order++);
+      _habits[placed.id] = placed;
+      await LocalStore.writeHabit(placed);
+      if (placed.reminders.isNotEmpty) {
+        await _notifications.scheduleFor(placed);
+      }
+    }
+    notifyListeners();
+    await HomeWidgetService.sync(_habits);
+    return outcome;
+  }
+
   Future<String?> importBackup({bool replace = false}) async {
     try {
       final imported = await BackupService.import();

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/app_background.dart';
 import 'package:streak/app/home_shell.dart';
 import 'package:streak/app/theme/app_theme.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/onboarding/pages/onboarding_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -26,8 +26,9 @@ class StreakApp extends StatelessWidget {
       builder: (context, child) =>
           AppBackground(child: child ?? const SizedBox.shrink()),
       locale: settings.locale,
-      supportedLocales: AppStrings.supported,
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

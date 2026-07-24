@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 
 class TodayProgress extends StatelessWidget {
   const TodayProgress({
@@ -23,14 +23,13 @@ class TodayProgress extends StatelessWidget {
     return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
   }
 
-  /// Mensaje que cambia según el porcentaje de hábitos completados hoy.
   String _message(BuildContext context) {
-    if (total == 0) return context.tr('motiv_start');
+    if (total == 0) return context.l10n.motiv_start;
     final pct = _ratio;
-    if (pct >= 1) return context.tr('motiv_perfect');
-    if (pct >= 0.5) return context.tr('motiv_almost');
-    if (pct > 0) return context.tr('motiv_progress');
-    return context.tr('motiv_start');
+    if (pct >= 1) return context.l10n.motiv_perfect;
+    if (pct >= 0.5) return context.l10n.motiv_almost;
+    if (pct > 0) return context.l10n.motiv_progress;
+    return context.l10n.motiv_start;
   }
 
   @override
@@ -58,13 +57,10 @@ class TodayProgress extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     total == 0
-                        ? context.tr('no_habits_yet')
+                        ? context.l10n.no_habits_yet
                         : allDone
-                            ? context.tr('all_done_today')
-                            : context.tr('x_of_y_completed', {
-                                'done': '$done',
-                                'total': '$total',
-                              }),
+                            ? context.l10n.all_done_today
+                            : context.l10n.x_of_y_completed('$done', '$total'),
                     style: TextStyle(
                       color: scheme.onSurface,
                       fontSize: 22,

@@ -4,7 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -21,12 +21,12 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   int _year = DateTime.now().year;
-  String? _habitId; // null = todos
+  String? _habitId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('statistics'))),
+      appBar: AppBar(title: Text(context.l10n.statistics)),
       body: SafeArea(
         top: false,
         child: Consumer<HabitsController>(
@@ -35,8 +35,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
             if (all.isEmpty) {
               return AppEmptyState(
                 icon: LucideIcons.chartColumn,
-                title: context.tr('no_data_yet'),
-                message: context.tr('stats_empty'),
+                title: context.l10n.no_data_yet,
+                message: context.l10n.stats_empty,
               );
             }
 
@@ -84,7 +84,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         icon: LucideIcons.hash,
                         color: accent,
                         value: stats.total,
-                        label: context.tr('completions'),
+                        label: context.l10n.completions,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -93,7 +93,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         icon: LucideIcons.trophy,
                         color: context.tokens.success,
                         value: stats.bestStreak,
-                        label: context.tr('best_streak'),
+                        label: context.l10n.best_streak,
                       ),
                     ),
                   ],
@@ -106,7 +106,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         icon: LucideIcons.flame,
                         color: context.tokens.warning,
                         value: stats.currentStreak,
-                        label: context.tr('current_streak'),
+                        label: context.l10n.current_streak,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -116,7 +116,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         color: context.tokens.info,
                         value: stats.monthRate,
                         suffix: '%',
-                        label: context.tr('completion_rate'),
+                        label: context.l10n.completion_rate,
                       ),
                     ),
                   ],
@@ -125,7 +125,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 _PerfectStreakCard(streak: stats.currentStreak, color: accent),
                 const SizedBox(height: 24),
                 _ChartCard(
-                  title: context.tr('completions_per_month'),
+                  title: context.l10n.completions_per_month,
                   icon: LucideIcons.chartArea,
                   color: accent,
                   child: MonthlyAreaChart(values: stats.monthly),
@@ -137,7 +137,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     children: [
                       Expanded(
                         child: _ChartCard(
-                          title: context.tr('completion_time'),
+                          title: context.l10n.completion_time,
                           icon: LucideIcons.clock,
                           color: accent,
                           child: stats.hourSamples >= 5
@@ -147,14 +147,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   height: 120,
                                 )
                               : _ChartPlaceholder(
-                                  text: context.tr('not_enough_data'),
+                                  text: context.l10n.not_enough_data,
                                 ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _ChartCard(
-                          title: context.tr('when_best'),
+                          title: context.l10n.when_best,
                           icon: LucideIcons.chartColumn,
                           color: accent,
                           child: WeekdayBars(
@@ -169,7 +169,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 const SizedBox(height: 16),
                 _ChartCard(
-                  title: context.tr('streak_evolution'),
+                  title: context.l10n.streak_evolution,
                   icon: LucideIcons.trendingUp,
                   color: accent,
                   child: StreakLine(
@@ -207,8 +207,8 @@ class _Stats {
 
   final Map<String, int> dailyCounts;
   final List<int> monthly;
-  final List<int> weekday; // 7
-  final List<int> hours; // 24
+  final List<int> weekday;
+  final List<int> hours;
   final int hourSamples;
   final List<double> streakSeries;
   final int total;
@@ -226,10 +226,9 @@ class _Stats {
     var hourSamples = 0;
 
     for (final habit in habits) {
-      // Negatives store relapses (failures): exclude from completion totals.
       if (habit.kind == HabitKind.negative) continue;
       for (final entry in habit.completions.values) {
-        if (entry.count < habit.perDayTarget) continue;
+        if (entry.count < habit.effectiveTarget) continue;
         final date = parseDayKey(entry.date);
         if (date.year != year) continue;
         daily[entry.date] = (daily[entry.date] ?? 0) + 1;
@@ -243,7 +242,6 @@ class _Stats {
       }
     }
 
-    // Cumulative completions over the last 90 days.
     final today = DateTime.now().atMidnight;
     var running = 0;
     final streakSeries = List<double>.generate(90, (i) {
@@ -306,7 +304,7 @@ class _HabitFilter extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           _FilterChip(
-            label: context.tr('all'),
+            label: context.l10n.all,
             color: context.colors.primary,
             active: selected == null,
             onTap: () => onSelected(null),
@@ -501,8 +499,8 @@ class _PerfectStreakCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = streak > 0
-        ? context.tr('streak_on', {'n': '$streak'})
-        : context.tr('streak_off');
+        ? context.l10n.streak_on('$streak')
+        : context.l10n.streak_off;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -548,8 +546,8 @@ class _ChartCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Fixed 2-line height: a wrapping Text mismeasures inside IntrinsicHeight.
             SizedBox(
+              // Fixed: a wrapping Text mismeasures inside IntrinsicHeight.
               height: 44,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -587,7 +585,6 @@ class _ChartPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // No fixed height so the empty state never clips; minHeight matches the charts.
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 120),
       child: AppEmptyState(

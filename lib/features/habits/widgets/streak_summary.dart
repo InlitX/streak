@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
 class StreakSummary extends StatelessWidget {
@@ -23,7 +23,7 @@ class StreakSummary extends StatelessWidget {
           child: _StatBox(
             icon: LucideIcons.flame,
             iconColor: habit.color,
-            label: context.tr('current'),
+            label: context.l10n.current,
             value: _format(habit.currentStreak),
           ),
         ),
@@ -32,7 +32,7 @@ class StreakSummary extends StatelessWidget {
           child: _StatBox(
             icon: LucideIcons.trophy,
             iconColor: context.tokens.warning,
-            label: context.tr('best'),
+            label: context.l10n.best,
             value: _format(habit.longestStreak),
           ),
         ),
@@ -41,7 +41,7 @@ class StreakSummary extends StatelessWidget {
           child: _StatBox(
             icon: negative ? LucideIcons.triangleAlert : LucideIcons.circleCheck,
             iconColor: negative ? context.tokens.danger : context.tokens.success,
-            label: context.tr(negative ? 'relapses' : 'total'),
+            label: negative ? context.l10n.relapses : context.l10n.total,
             value: '${habit.totalCompletions}',
           ),
         ),

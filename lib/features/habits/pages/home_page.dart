@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             _ActionTile(
               icon: LucideIcons.pencil,
-              label: context.tr('edit_habit'),
+              label: context.l10n.edit_habit,
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 AppNavigator.push(
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
             ),
             _ActionTile(
               icon: LucideIcons.chartColumn,
-              label: context.tr('statistics'),
+              label: context.l10n.statistics,
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 AppNavigator.push(
@@ -84,8 +84,21 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             _ActionTile(
+              icon: habit.isOnVacation
+                  ? LucideIcons.play
+                  : LucideIcons.palmtree,
+              label: habit.isOnVacation
+                  ? context.l10n.end_vacation
+                  : context.l10n.start_vacation,
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                HapticFeedback.mediumImpact();
+                controller.setVacation(habit.id, !habit.isOnVacation);
+              },
+            ),
+            _ActionTile(
               icon: LucideIcons.arrowUpDown,
-              label: context.tr('reorder'),
+              label: context.l10n.reorder,
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 setState(() {
@@ -96,7 +109,7 @@ class _HomePageState extends State<HomePage> {
             ),
             _ActionTile(
               icon: LucideIcons.trash2,
-              label: context.tr('delete_habit'),
+              label: context.l10n.delete_habit,
               danger: true,
               onTap: () {
                 Navigator.of(sheetContext).pop();
@@ -113,9 +126,9 @@ class _HomePageState extends State<HomePage> {
   Future<void> _confirmDelete(HabitsController controller, Habit habit) async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: context.tr('delete_habit'),
-      message: context.tr('delete_habit_body', {'name': habit.name}),
-      confirmLabel: context.tr('delete'),
+      title: context.l10n.delete_habit,
+      message: context.l10n.delete_habit_body(habit.name),
+      confirmLabel: context.l10n.delete,
     );
     if (confirmed == true) {
       HapticFeedback.heavyImpact();
@@ -128,7 +141,7 @@ class _HomePageState extends State<HomePage> {
     final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_reordering ? context.tr('reorder') : context.tr('today')),
+        title: Text(_reordering ? context.l10n.reorder : context.l10n.today),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -136,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 ? FilledButton.icon(
                     onPressed: () => setState(() => _reordering = false),
                     icon: const Icon(LucideIcons.check, size: 18),
-                    label: Text(context.tr('done')),
+                    label: Text(context.l10n.done),
                     style: FilledButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -149,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                       fullscreenDialog: true,
                     ),
                     icon: const Icon(LucideIcons.plus, size: 18),
-                    label: Text(context.tr('new')),
+                    label: Text(context.l10n.new_label),
                     style: FilledButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -169,8 +182,12 @@ class _HomePageState extends State<HomePage> {
 
                 final all = controller.habits;
                 final today = DateTime.now();
-                final done = all.where((h) => h.isCompletedOn(today)).length;
-                final allDone = done == all.length;
+                final active =
+                    all.where((h) => !h.isPausedOn(today)).toList();
+                final done =
+                    active.where((h) => h.isCompletedOn(today)).length;
+                final total = active.length;
+                final allDone = total > 0 && done == total;
 
                 WidgetsBinding.instance.addPostFrameCallback(
                   (_) => _maybeCelebrate(allDone),
@@ -180,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                 final filtered = _category == null
                     ? all
                     : all.where((h) => h.category == _category).toList();
-                // Keep saved order while reordering, or indexes move the wrong habit.
+                // Saved order while reordering, or indexes move the wrong habit.
                 final visible = _reordering || !sortCompletedLast
                     ? filtered
                     : _completedLast(filtered);
@@ -204,13 +221,13 @@ class _HomePageState extends State<HomePage> {
                     child: child,
                   ),
                   header: _reordering
-                      ? _ReorderBanner(text: context.tr('reorder_hint'))
+                      ? _ReorderBanner(text: context.l10n.reorder_hint)
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const DailyQuote(),
                             const SizedBox(height: 8),
-                            TodayProgress(done: done, total: all.length),
+                            TodayProgress(done: done, total: total),
                             const SizedBox(height: 16),
                             _ViewSelector(
                               mode: _mode,
@@ -287,7 +304,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Two lists (not a sort) so manual order survives within each group.
   List<Habit> _completedLast(List<Habit> habits) {
     final pending = <Habit>[];
     final done = <Habit>[];
@@ -383,9 +399,9 @@ class _ViewSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.colors;
     final options = [
-      (HeatmapMode.week, context.tr('week')),
-      (HeatmapMode.month, context.tr('month')),
-      (HeatmapMode.year, context.tr('year')),
+      (HeatmapMode.week, context.l10n.week),
+      (HeatmapMode.month, context.l10n.month),
+      (HeatmapMode.year, context.l10n.year),
     ];
     return Container(
       padding: const EdgeInsets.all(4),
@@ -448,7 +464,7 @@ class _CategoryBar extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           children: [
             _Chip(
-              label: context.tr('all'),
+              label: context.l10n.all,
               active: selected == null,
               onTap: () => onSelected(null),
             ),
@@ -535,7 +551,6 @@ class _EntranceCardState extends State<_EntranceCard>
   @override
   void initState() {
     super.initState();
-    // Cap the stagger so long lists don't trickle in slowly (felt janky).
     Future.delayed(Duration(milliseconds: 35 * widget.index.clamp(0, 6)), () {
       if (mounted) _controller.forward();
     });
@@ -563,15 +578,15 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppEmptyState(
       icon: LucideIcons.sprout,
-      title: context.tr('empty_title'),
-      message: context.tr('empty_body'),
+      title: context.l10n.empty_title,
+      message: context.l10n.empty_body,
       action: FilledButton.icon(
         onPressed: () => AppNavigator.push(
           const HabitFormPage(),
           fullscreenDialog: true,
         ),
         icon: const Icon(LucideIcons.plus, size: 18),
-        label: Text(context.tr('add_habit')),
+        label: Text(context.l10n.add_habit),
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(

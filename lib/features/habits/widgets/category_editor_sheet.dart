@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:uuid/uuid.dart';
 
-/// Hoja para crear o editar una categoría (nombre, color e icono).
-/// Devuelve la [Category] resultante, o null si se cancela.
 class CategoryEditorSheet extends StatefulWidget {
   const CategoryEditorSheet({super.key, this.initial});
 
@@ -33,7 +31,6 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
     final all = CategoryIcons.names;
     if (_showAllIcons || all.length <= _iconPreviewCount) return all;
     final preview = all.take(_iconPreviewCount).toList();
-    // Keep the selected icon on screen even if it sits past the cut-off.
     if (!preview.contains(_icon) && all.contains(_icon)) preview[preview.length - 1] = _icon;
     return preview;
   }
@@ -70,8 +67,9 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                context.tr(
-                    widget.initial == null ? 'new_category' : 'edit_category'),
+                widget.initial == null
+                    ? context.l10n.new_category
+                    : context.l10n.edit_category,
                 style: TextStyle(
                   color: context.colors.onSurface,
                   fontSize: 20,
@@ -81,11 +79,11 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
               const SizedBox(height: 18),
               AppTextField(
                 controller: _name,
-                hint: context.tr('category'),
+                hint: context.l10n.category,
                 onChanged: (_) => setState(() {}),
               ),
               const SizedBox(height: 18),
-              Text(context.tr('icon'),
+              Text(context.l10n.icon,
                   style: TextStyle(color: context.tokens.muted, fontSize: 13)),
               const SizedBox(height: 8),
               Wrap(
@@ -127,7 +125,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          context.tr('see_more'),
+                          context.l10n.see_more,
                           style: TextStyle(
                             color: context.colors.primary,
                             fontWeight: FontWeight.w700,
@@ -139,7 +137,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                 ],
               ),
               const SizedBox(height: 18),
-              Text(context.tr('color'),
+              Text(context.l10n.color,
                   style: TextStyle(color: context.tokens.muted, fontSize: 13)),
               const SizedBox(height: 10),
               ColorPicker(
@@ -158,7 +156,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                     ),
                   ),
                   child: Text(
-                    context.tr('save'),
+                    context.l10n.save,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w700),
                   ),

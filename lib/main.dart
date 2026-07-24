@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/streak_app.dart';
@@ -20,7 +19,6 @@ Future<void> main() async {
 
   await LocalStore.init();
 
-  // Non-critical at startup: don't let a failure black-screen the app.
   NotificationService.onOpenHabit = _openHabit;
   try {
     await NotificationService().initialize();
@@ -29,7 +27,6 @@ Future<void> main() async {
     debugPrint('Startup init (notifications/widget) failed: $e\n$s');
   }
 
-  // A per-habit widget tap opens that habit: warm start pushes 'openHabit'.
   _appChannel.setMethodCallHandler((call) async {
     if (call.method == 'openHabit') {
       final id = call.arguments as String?;
@@ -44,7 +41,6 @@ Future<void> main() async {
       NotificationService().pendingHabitId = null;
       _openHabit(pending);
     }
-    // Cold start: pull the habit the app was launched for, if any.
     final launched = await _appChannel.invokeMethod<String>('consumeLaunchHabit');
     if (launched != null) _openHabit(launched);
   });
@@ -58,6 +54,7 @@ Future<void> main() async {
           create: (_) {
             final controller = HabitsController();
             HomeWidgetService.sync(controller.asMap);
+            controller.rescheduleIntervalReminders();
             return controller;
           },
         ),
@@ -79,7 +76,7 @@ Future<void> _widgetCallback(Uri? uri) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStore.init();
-  // This isolate can be reused across taps; drop any stale cached box.
+  // This isolate is reused across taps: drop any stale cached box.
   await LocalStore.reloadHabits();
 
   final habitId = uri.queryParameters['habitId'];
@@ -93,7 +90,6 @@ Future<void> _widgetCallback(Uri? uri) async {
   final target =
       DateTime.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
 
-  // No dialog from the widget, so a relapse tap toggles straight away.
   final action = uri.queryParameters['action'] ?? 'toggle';
   final delta = int.tryParse(uri.queryParameters['delta'] ?? '') ??
       habit.incrementAmount;

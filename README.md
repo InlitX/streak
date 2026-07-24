@@ -2,6 +2,8 @@
   <sub><b>English</b> · <a href="README.es.md">Español</a> · <a href="README.zh-CN.md">中文</a></sub>
 </div>
 
+<br/>
+
 <div align="center">
 
 <img src="assets/icon.svg" width="120" alt="Streak logo" />

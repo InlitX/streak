@@ -7,6 +7,11 @@ extension DateOnly on DateTime {
 
   DateTime get atMidnight => DateTime(year, month, day);
 
+  // UTC-anchored so it stays DST-safe.
+  int get epochDay =>
+      DateTime.utc(year, month, day).millisecondsSinceEpoch ~/
+      Duration.millisecondsPerDay;
+
   bool isSameDay(DateTime other) =>
       year == other.year && month == other.month && day == other.day;
 

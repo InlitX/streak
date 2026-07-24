@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
-// e.g. "Daily", "5×/week", "3×/month".
 String habitFrequencyLabel(BuildContext context, Habit habit) {
   return switch (habit.interval) {
-    HabitInterval.daily => context.tr('daily'),
+    HabitInterval.daily => context.l10n.daily,
     HabitInterval.weekly =>
-      context.tr('freq_per_week_short', {'n': '${habit.targetFrequency}'}),
+      context.l10n.freq_per_week_short('${habit.targetFrequency}'),
     HabitInterval.monthly =>
-      context.tr('freq_per_month_short', {'n': '${habit.targetFrequency}'}),
+      context.l10n.freq_per_month_short('${habit.targetFrequency}'),
+    HabitInterval.weekdays => _weekdaysLabel(context, habit),
+    HabitInterval.everyXDays => context.l10n.every_n_days(habit.scheduleEvery),
   };
+}
+
+String _weekdaysLabel(BuildContext context, Habit habit) {
+  final days = [...habit.scheduleWeekdays]..sort();
+  if (days.isEmpty) return context.l10n.daily;
+  if (days.length == 7) return context.l10n.every_day;
+  final names = WeekdayLabels.shortMonFirst(
+    Localizations.localeOf(context).languageCode,
+  );
+  return days.map((d) => names[d - 1]).join(', ');
 }
 
 bool habitHasExplicitFrequency(Habit habit) =>

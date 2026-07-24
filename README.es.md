@@ -2,6 +2,8 @@
   <sub><a href="README.md">English</a> · <b>Español</b> · <a href="README.zh-CN.md">中文</a></sub>
 </div>
 
+<br/>
+
 <div align="center">
 
 <img src="assets/icon.svg" width="120" alt="Logo de Streak" />

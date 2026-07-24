@@ -7,6 +7,8 @@
     android:updatePeriodMillis="1800000"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
+    android:configure="com.streak.app.WidgetConfigActivity"
+    android:widgetFeatures="reconfigurable"
     android:description="@string/widget_description"
     android:previewLayout="@layout/widget_preview_today"
     android:previewImage="@drawable/widget_preview_img_today" />

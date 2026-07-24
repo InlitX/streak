@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class _Slide {
@@ -13,12 +13,12 @@ class _Slide {
 }
 
 List<_Slide> _slidesOf(BuildContext context) => [
-      _Slide(LucideIcons.flame, context.tr('onb1_title'),
-          context.tr('onb1_body')),
-      _Slide(LucideIcons.calendarCheck, context.tr('onb2_title'),
-          context.tr('onb2_body')),
-      _Slide(LucideIcons.chartColumn, context.tr('onb3_title'),
-          context.tr('onb3_body')),
+      _Slide(LucideIcons.flame, context.l10n.onb1_title,
+          context.l10n.onb1_body),
+      _Slide(LucideIcons.calendarCheck, context.l10n.onb2_title,
+          context.l10n.onb2_body),
+      _Slide(LucideIcons.chartColumn, context.l10n.onb3_title,
+          context.l10n.onb3_body),
     ];
 
 class OnboardingPage extends StatefulWidget {
@@ -65,7 +65,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 onPressed: () =>
                     context.read<SettingsController>().completeOnboarding(),
                 child: Text(
-                  context.tr('skip'),
+                  context.l10n.skip,
                   style: TextStyle(color: context.tokens.muted),
                 ),
               ),
@@ -149,7 +149,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                   ),
                   child: Text(
-                    _isLast ? context.tr('get_started') : context.tr('next'),
+                    _isLast ? context.l10n.get_started : context.l10n.next,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

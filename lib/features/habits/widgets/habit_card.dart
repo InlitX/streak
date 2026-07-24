@@ -7,7 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -100,6 +100,20 @@ class HabitCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
+                            if (habit.isPausedOn(DateTime.now())) ...[
+                              Icon(LucideIcons.palmtree,
+                                  size: 14, color: context.tokens.info),
+                              const SizedBox(width: 4),
+                              Text(
+                                context.l10n.paused,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: context.tokens.info,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
                             Icon(LucideIcons.flame,
                                 size: 14, color: habit.color),
                             const SizedBox(width: 3),
@@ -245,16 +259,15 @@ class _ActionButton extends StatelessWidget {
     final controller = context.read<HabitsController>();
     final today = DateTime.now();
     if (relapsed) {
-      // Undoing a mistake shouldn't have friction — only logging one does.
       HapticFeedback.mediumImpact();
       await controller.clearRelapse(habit.id, today);
       return;
     }
     final confirmed = await showAppConfirmDialog(
       context,
-      title: context.tr('log_relapse_title'),
-      message: context.tr('log_relapse_body', {'name': habit.name}),
-      confirmLabel: context.tr('log_relapse_confirm'),
+      title: context.l10n.log_relapse_title,
+      message: context.l10n.log_relapse_body(habit.name),
+      confirmLabel: context.l10n.log_relapse_confirm,
       icon: LucideIcons.ban,
     );
     if (confirmed == true) {

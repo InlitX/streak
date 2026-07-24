@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/services/app_icon_service.dart';
+import 'package:streak/services/home_widget_service.dart';
 
 class SettingsController extends ChangeNotifier {
+  static const int defaultWidgetBg = 0xFF101014;
+
   SettingsController() {
     _themeMode = ThemeMode.values[LocalStore.setting('themeMode', 0)];
     _weekStart = LocalStore.setting('weekStart', 1);
@@ -18,6 +21,10 @@ class SettingsController extends ChangeNotifier {
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
+    _widgetBgColor = LocalStore.setting('widgetBgColor', defaultWidgetBg);
+    _widgetOpacity = LocalStore.setting('widgetOpacity', 100);
+    _widgetBorder = LocalStore.setting('widgetBorder', false);
+    _syncWidgetStyle();
   }
 
   late ThemeMode _themeMode;
@@ -33,27 +40,32 @@ class SettingsController extends ChangeNotifier {
   late int _accentColor;
   late int _heatmapMode;
   late bool _sortCompletedLast;
+  late int _widgetBgColor;
+  late int _widgetOpacity;
+  late bool _widgetBorder;
 
   ThemeMode get themeMode => _themeMode;
   int get weekStart => _weekStart;
   bool get onboardingDone => _onboardingDone;
   String get localeCode => _localeCode;
-  Locale? get locale => _localeCode.isEmpty ? null : Locale(_localeCode);
+  Locale? get locale {
+    if (_localeCode.isEmpty) return null;
+    final parts = _localeCode.split('_');
+    return parts.length > 1 ? Locale(parts.first, parts[1]) : Locale(parts.first);
+  }
 
-  /// 0 = solid, 1 = gradient, 2 = dots, 3 = OLED black, 4 = custom image.
+  // 0 solid, 1 gradient, 2 dots, 3 OLED black, 4 custom image.
   int get appBackground => _appBackground;
 
-  /// Background image path, used when [appBackground] == 4.
   String get bgImage => _bgImage;
 
-  /// 0 = square (rounded), 1 = circle.
   int get checkStyle => _checkStyle;
   bool get isCircleCheck => _checkStyle == 1;
 
   String get profileName => _profileName;
   String get profilePhoto => _profilePhoto;
 
-  /// 0 = default, 1 = neutral, 2 = accent.
+  // 0 default, 1 neutral, 2 accent.
   int get appIcon => _appIcon;
 
   Color get accentColor => Color(_accentColor);
@@ -64,7 +76,7 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Heatmap zoom shared by Home and details: 0 = week, 1 = month, 2 = year.
+  // 0 week, 1 month, 2 year.
   int get heatmapMode => _heatmapMode;
 
   Future<void> setHeatmapMode(int value) async {
@@ -73,7 +85,6 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // When on, completed habits sink to the bottom of Today.
   bool get sortCompletedLast => _sortCompletedLast;
 
   Future<void> setSortCompletedLast(bool value) async {
@@ -136,6 +147,40 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
     await AppIconService.apply(index);
   }
+
+
+  Color get widgetBgColor => Color(_widgetBgColor);
+
+  int get widgetOpacity => _widgetOpacity;
+
+  bool get widgetBorder => _widgetBorder;
+
+  Future<void> setWidgetBgColor(Color color) async {
+    _widgetBgColor = color.toARGB32();
+    await LocalStore.writeSetting('widgetBgColor', _widgetBgColor);
+    notifyListeners();
+    await _syncWidgetStyle();
+  }
+
+  Future<void> setWidgetOpacity(int percent) async {
+    _widgetOpacity = percent.clamp(0, 100);
+    await LocalStore.writeSetting('widgetOpacity', _widgetOpacity);
+    notifyListeners();
+    await _syncWidgetStyle();
+  }
+
+  Future<void> setWidgetBorder(bool value) async {
+    _widgetBorder = value;
+    await LocalStore.writeSetting('widgetBorder', value);
+    notifyListeners();
+    await _syncWidgetStyle();
+  }
+
+  Future<void> _syncWidgetStyle() => HomeWidgetService.syncWidgetStyle(
+        bgColor: _widgetBgColor,
+        opacity: _widgetOpacity,
+        border: _widgetBorder,
+      );
 
   Future<void> completeOnboarding() async {
     _onboardingDone = true;

@@ -6,18 +6,17 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/services/import_service.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
-import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// External links. Update the coffee handle to your own page.
 const _kGitHubUrl = 'https://github.com/InlitX/streak';
 const _kIssuesUrl = 'https://github.com/InlitX/streak/issues';
 const _kCoffeeUrl = 'https://ko-fi.com/inlitx';
@@ -35,8 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final ok = await controller.exportBackup();
     if (!mounted) return;
     ok
-        ? AppSnackbar.success(context, context.tr('backup_saved'))
-        : AppSnackbar.warning(context, context.tr('export_cancelled'));
+        ? AppSnackbar.success(context, context.l10n.backup_saved)
+        : AppSnackbar.warning(context, context.l10n.export_cancelled);
   }
 
   Future<void> _import() async {
@@ -46,29 +45,49 @@ class _SettingsPageState extends State<SettingsPage> {
     final error = await controller.importBackup(replace: replace);
     if (!mounted) return;
     error == null
-        ? AppSnackbar.success(context, context.tr('habits_imported'))
+        ? AppSnackbar.success(context, context.l10n.habits_imported)
         : AppSnackbar.error(context, error);
+  }
+
+  Future<void> _importFromApp() async {
+    final controller = context.read<HabitsController>();
+    try {
+      final outcome = await controller.importFromApp();
+      if (!mounted || outcome == null) return;
+      AppSnackbar.success(
+        context,
+        context.l10n.import_from_app_done(
+          outcome.habits.length,
+          outcome.entries,
+          outcome.source,
+        ),
+      );
+    } on ImportException catch (e) {
+      if (mounted) AppSnackbar.error(context, e.message);
+    } catch (_) {
+      if (mounted) AppSnackbar.error(context, context.l10n.import_failed);
+    }
   }
 
   Future<bool?> _askImportMode() {
     return showDialog<bool?>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(context.tr('import_backup')),
-        content: Text(context.tr('import_question_body')),
+        title: Text(context.l10n.import_backup),
+        content: Text(context.l10n.import_question_body),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(context.tr('cancel')),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(context.tr('import_merge')),
+            child: Text(context.l10n.import_merge),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: Text(
-              context.tr('import_replace'),
+              context.l10n.import_replace,
               style: TextStyle(color: context.tokens.danger),
             ),
           ),
@@ -86,7 +105,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (picked == null) return;
     final dir = await getApplicationDocumentsDirectory();
-    // Unique filename per pick to avoid colliding with the cached one.
     final dest = '${dir.path}/profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
     await File(picked.path).copy(dest);
     final old = settings.profilePhoto;
@@ -100,29 +118,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _editName() async {
     final settings = context.read<SettingsController>();
-    final controller = TextEditingController(text: settings.profileName);
     final name = await showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(context.tr('edit_name')),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(hintText: context.tr('your_name')),
-          onSubmitted: (v) => Navigator.of(dialogContext).pop(v),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(context.tr('cancel')),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(controller.text),
-            child: Text(context.tr('save')),
-          ),
-        ],
-      ),
+      builder: (_) => _NameDialog(initial: settings.profileName),
     );
     if (name != null) await settings.setProfileName(name);
   }
@@ -145,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                context.tr('accent_color'),
+                context.l10n.accent_color,
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
@@ -162,12 +160,12 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  static String _bgLabelKey(int index) => switch (index) {
-        1 => 'bg_gradient',
-        2 => 'bg_dots',
-        3 => 'bg_oled',
-        4 => 'custom',
-        _ => 'bg_solid',
+  static String _bgLabel(BuildContext context, int index) => switch (index) {
+        1 => context.l10n.bg_gradient,
+        2 => context.l10n.bg_dots,
+        3 => context.l10n.bg_oled,
+        4 => context.l10n.custom,
+        _ => context.l10n.bg_solid,
       };
 
   void _openBackgroundSheet() {
@@ -188,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                context.tr('app_background'),
+                context.l10n.app_background,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
@@ -203,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: _BackgroundOption(
                           index: i,
                           selected: s.appBackground == i,
-                          label: context.tr(_bgLabelKey(i)),
+                          label: _bgLabel(context, i),
                           onTap: () => s.setAppBackground(i),
                         ),
                       ),
@@ -213,7 +211,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: _CustomBackgroundOption(
                         selected: s.appBackground == 4,
                         imagePath: s.bgImage,
-                        label: context.tr('custom'),
+                        label: context.l10n.custom,
                         onTap: _pickBackgroundImage,
                       ),
                     ),
@@ -249,6 +247,62 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _openLanguageSheet() {
+    final locales = AppLocalizations.supportedLocales;
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      backgroundColor: context.colors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+          child: Consumer<SettingsController>(
+            builder: (_, s, __) => Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.language,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      _LanguageTile(
+                        label: context.l10n.system,
+                        selected: s.localeCode.isEmpty,
+                        onTap: () => _chooseLanguage(''),
+                      ),
+                      for (final l in locales)
+                        _LanguageTile(
+                          label: _languageName(l),
+                          selected: s.localeCode == l.toString(),
+                          onTap: () => _chooseLanguage(l.toString()),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _chooseLanguage(String code) {
+    context.read<SettingsController>().setLanguage(code);
+    Navigator.of(context).pop();
+  }
+
   Future<void> _open(String url) async {
     try {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -260,14 +314,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
-    final langIndex = switch (settings.localeCode) {
-      'en' => 1,
-      'es' => 2,
-      _ => 0,
-    };
 
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('settings'))),
+      appBar: AppBar(title: Text(context.l10n.settings)),
       body: SafeArea(
         top: false,
         child: ListView(
@@ -275,35 +324,35 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             _ProfileHeader(
               name: settings.profileName.isEmpty
-                  ? context.tr('default_user')
+                  ? context.l10n.default_user
                   : settings.profileName,
               photoPath: settings.profilePhoto,
               onTapPhoto: _pickProfilePhoto,
               onTapName: _editName,
             ),
             const SizedBox(height: 24),
-            SectionLabel(context.tr('about')),
+            SectionLabel(context.l10n.about),
             Card(
               child: _NavRow(
                 icon: LucideIcons.info,
-                title: context.tr('about_app'),
-                subtitle: context.tr('about_app_sub'),
+                title: context.l10n.about_app,
+                subtitle: context.l10n.about_app_sub,
                 onTap: () => AppNavigator.push(const AboutPage()),
               ),
             ),
             const SizedBox(height: 24),
-            SectionLabel(context.tr('preferences')),
+            SectionLabel(context.l10n.preferences),
             Card(
               child: Column(
                 children: [
                   _SettingRow(
                     icon: LucideIcons.sunMoon,
-                    title: context.tr('theme'),
+                    title: context.l10n.theme,
                     trailing: _Segmented(
                       options: [
-                        context.tr('system'),
-                        context.tr('light'),
-                        context.tr('dark'),
+                        context.l10n.system,
+                        context.l10n.light,
+                        context.l10n.dark,
                       ],
                       index: settings.themeMode.index,
                       onChanged: (i) =>
@@ -311,33 +360,38 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   _divider(context),
-                  _SettingRow(
+                  _PickerRow(
                     icon: LucideIcons.languages,
-                    title: context.tr('language'),
+                    title: context.l10n.language,
+                    value: _languageLabel(context, settings.localeCode),
+                    onTap: _openLanguageSheet,
+                  ),
+                  _divider(context),
+                  _SettingRow(
+                    icon: LucideIcons.calendarDays,
+                    title: context.l10n.week_starts_on,
                     trailing: _Segmented(
-                      options: const ['Auto', 'EN', 'ES'],
-                      index: langIndex,
-                      onChanged: (i) => settings.setLanguage(
-                        switch (i) { 1 => 'en', 2 => 'es', _ => '' },
+                      options: [
+                        context.l10n.mon,
+                        context.l10n.sat,
+                        context.l10n.sun,
+                      ],
+                      index: switch (settings.weekStart) {
+                        6 => 1,
+                        7 => 2,
+                        _ => 0,
+                      },
+                      onChanged: (i) => settings.setWeekStart(
+                        switch (i) { 1 => 6, 2 => 7, _ => 1 },
                       ),
                     ),
                   ),
                   _divider(context),
                   _SettingRow(
-                    icon: LucideIcons.calendarDays,
-                    title: context.tr('week_starts_on'),
-                    trailing: _Segmented(
-                      options: [context.tr('mon'), context.tr('sun')],
-                      index: settings.weekStart == 7 ? 1 : 0,
-                      onChanged: (i) => settings.setWeekStart(i == 1 ? 7 : 1),
-                    ),
-                  ),
-                  _divider(context),
-                  _SettingRow(
                     icon: LucideIcons.arrowDownWideNarrow,
-                    title: context.tr('sort_completed_last'),
+                    title: context.l10n.sort_completed_last,
                     trailing: _Segmented(
-                      options: [context.tr('off'), context.tr('on')],
+                      options: [context.l10n.off, context.l10n.on],
                       index: settings.sortCompletedLast ? 1 : 0,
                       onChanged: (i) => settings.setSortCompletedLast(i == 1),
                     ),
@@ -345,9 +399,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   _divider(context),
                   _SettingRow(
                     icon: LucideIcons.squareCheck,
-                    title: context.tr('check_style'),
+                    title: context.l10n.check_style,
                     trailing: _Segmented(
-                      options: [context.tr('square'), context.tr('circle')],
+                      options: [context.l10n.square, context.l10n.circle],
                       index: settings.checkStyle,
                       onChanged: settings.setCheckStyle,
                     ),
@@ -355,12 +409,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   _divider(context),
                   _SettingRow(
                     icon: LucideIcons.smartphone,
-                    title: context.tr('app_icon'),
+                    title: context.l10n.app_icon,
                     trailing: _Segmented(
                       options: [
-                        context.tr('icon_default'),
-                        context.tr('icon_neutral'),
-                        context.tr('icon_accent'),
+                        context.l10n.icon_default,
+                        context.l10n.icon_neutral,
+                        context.l10n.icon_accent,
                       ],
                       index: settings.appIcon,
                       onChanged: settings.setAppIcon,
@@ -378,7 +432,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           const SizedBox(width: 14),
                           Expanded(
                             child: Text(
-                              context.tr('app_background'),
+                              context.l10n.app_background,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -386,7 +440,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           Text(
-                            context.tr(_bgLabelKey(settings.appBackground)),
+                            _bgLabel(context, settings.appBackground),
                             style: TextStyle(
                               color: context.tokens.muted,
                               fontSize: 13,
@@ -404,7 +458,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const SizedBox(height: 24),
-            SectionLabel(context.tr('accent_color')),
+            SectionLabel(context.l10n.accent_color),
             Card(
               clipBehavior: Clip.antiAlias,
               child: InkWell(
@@ -418,7 +472,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
-                          context.tr('accent_color'),
+                          context.l10n.accent_color,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -453,62 +507,60 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const SizedBox(height: 24),
-            SectionLabel(context.tr('data')),
+            SectionLabel(context.l10n.data),
             Card(
               child: Column(
                 children: [
                   _NavRow(
+                    icon: LucideIcons.import,
+                    title: context.l10n.import_from_app,
+                    subtitle: context.l10n.import_from_app_sub,
+                    badge: 'Beta',
+                    onTap: _importFromApp,
+                  ),
+                  _divider(context),
+                  _NavRow(
                     icon: LucideIcons.upload,
-                    title: context.tr('import_backup'),
-                    subtitle: context.tr('import_backup_sub'),
+                    title: context.l10n.import_backup,
+                    subtitle: context.l10n.import_backup_sub,
                     onTap: _import,
                   ),
                   _divider(context),
                   _NavRow(
                     icon: LucideIcons.download,
-                    title: context.tr('export_backup'),
-                    subtitle: context.tr('export_backup_sub'),
+                    title: context.l10n.export_backup,
+                    subtitle: context.l10n.export_backup_sub,
                     onTap: _export,
-                  ),
-                  _divider(context),
-                  _NavRow(
-                    icon: LucideIcons.flame,
-                    title: context.tr('my_heatmap'),
-                    subtitle: context.tr('my_heatmap_sub'),
-                    onTap: () => AppNavigator.push(
-                      const StatisticsPage(),
-                      fullscreenDialog: true,
-                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
-            SectionLabel(context.tr('support')),
+            SectionLabel(context.l10n.support),
             Card(
               child: Column(
                 children: [
                   _MinimalRow(
                     icon: LucideIcons.star,
-                    title: context.tr('github_star_row'),
+                    title: context.l10n.github_star_row,
                     onTap: () => _open(_kGitHubUrl),
                   ),
                   _divider(context),
                   _MinimalRow(
                     icon: LucideIcons.coffee,
-                    title: context.tr('buy_coffee'),
+                    title: context.l10n.buy_coffee,
                     onTap: () => _open(_kCoffeeUrl),
                   ),
                   _divider(context),
                   _MinimalRow(
                     icon: LucideIcons.bug,
-                    title: context.tr('report_bug'),
+                    title: context.l10n.report_bug,
                     onTap: () => _open(_kIssuesUrl),
                   ),
                   _divider(context),
                   _MinimalRow(
                     icon: LucideIcons.lightbulb,
-                    title: context.tr('request_feature'),
+                    title: context.l10n.request_feature,
                     onTap: () => _open('$_kIssuesUrl/new'),
                   ),
                 ],
@@ -544,7 +596,6 @@ class _ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    // Strip the cache-busting query suffix to get the real file path.
     final filePath = photoPath.split('?').first;
     final hasPhoto = filePath.isNotEmpty && File(filePath).existsSync();
 
@@ -647,26 +698,65 @@ class _NavRow extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.badge,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final String? badge;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: _IconBadge(icon: icon),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      title: Row(
+        children: [
+          Flexible(
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ),
+          if (badge != null) ...[
+            const SizedBox(width: 8),
+            _TagPill(label: badge!),
+          ],
+        ],
       ),
       subtitle: Text(subtitle, style: TextStyle(color: context.tokens.muted)),
       trailing:
           Icon(LucideIcons.chevronRight, size: 18, color: context.tokens.muted),
       onTap: onTap,
+    );
+  }
+}
+
+class _TagPill extends StatelessWidget {
+  const _TagPill({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.colors.primary;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
+          color: color,
+        ),
+      ),
     );
   }
 }
@@ -714,6 +804,129 @@ class _IconBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(9),
       ),
       child: Icon(icon, color: context.colors.onSurface, size: 16),
+    );
+  }
+}
+
+String _languageLabel(BuildContext context, String code) =>
+    code.isEmpty ? context.l10n.system : _languageName(_localeFromCode(code));
+
+Locale _localeFromCode(String code) {
+  final parts = code.split('_');
+  return parts.length > 1 ? Locale(parts.first, parts[1]) : Locale(parts.first);
+}
+
+String _languageName(Locale locale) {
+  const names = <String, String>{
+    'en': 'English',
+    'es': 'Español',
+    'zh': '中文',
+    'de': 'Deutsch',
+    'fr': 'Français',
+    'pt': 'Português',
+    'it': 'Italiano',
+    'ru': 'Русский',
+    'ja': '日本語',
+    'ko': '한국어',
+    'ar': 'العربية',
+    'tr': 'Türkçe',
+    'nl': 'Nederlands',
+    'pl': 'Polski',
+    'uk': 'Українська',
+    'hi': 'हिन्दी',
+    'id': 'Bahasa Indonesia',
+    'cs': 'Čeština',
+    'sv': 'Svenska',
+    'vi': 'Tiếng Việt',
+  };
+  final base =
+      names[locale.languageCode] ?? locale.languageCode.toUpperCase();
+  return locale.countryCode == null ? base : '$base (${locale.countryCode})';
+}
+
+class _PickerRow extends StatelessWidget {
+  const _PickerRow({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            _IconBadge(icon: icon),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: context.tokens.muted,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(LucideIcons.chevronRight,
+                size: 18, color: context.tokens.muted),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguageTile extends StatelessWidget {
+  const _LanguageTile({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.colors.primary;
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected ? color : null,
+                ),
+              ),
+            ),
+            if (selected) Icon(LucideIcons.check, size: 18, color: color),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -941,4 +1154,48 @@ class _MiniDotsPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_MiniDotsPainter oldDelegate) => oldDelegate.color != color;
+}
+
+class _NameDialog extends StatefulWidget {
+  const _NameDialog({required this.initial});
+
+  final String initial;
+
+  @override
+  State<_NameDialog> createState() => _NameDialogState();
+}
+
+class _NameDialogState extends State<_NameDialog> {
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initial);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(context.l10n.edit_name),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        textCapitalization: TextCapitalization.words,
+        decoration: InputDecoration(hintText: context.l10n.your_name),
+        onSubmitted: (v) => Navigator.of(context).pop(v),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(_controller.text),
+          child: Text(context.l10n.save),
+        ),
+      ],
+    );
+  }
 }

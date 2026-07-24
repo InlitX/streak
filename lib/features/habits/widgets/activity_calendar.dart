@@ -3,8 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class ActivityCalendar extends StatefulWidget {
   const ActivityCalendar({
@@ -24,9 +26,9 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
   final _today = DateTime.now();
   late DateTime _month = DateTime(_today.year, _today.month, 1);
 
-  List<DateTime> get _days {
+  List<DateTime> _daysFor(int weekStart) {
     final first = DateTime(_month.year, _month.month, 1);
-    final start = first.subtract(Duration(days: first.weekday % 7));
+    final start = first.startOfWeek(weekStart);
     return List.generate(42, (i) => start.add(Duration(days: i)));
   }
 
@@ -44,6 +46,8 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
     final scheme = context.colors;
     final habit = widget.habit;
     final atCurrent = _isCurrentMonth(DateTime.now());
+    final weekStart = context.watch<SettingsController>().weekStart;
+    final days = _daysFor(weekStart);
 
     return Card(
       child: Padding(
@@ -82,8 +86,8 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
             ),
             const SizedBox(height: 8),
             Row(
-              children: WeekdayLabels.shortSunFirst(
-                      Localizations.localeOf(context).languageCode)
+              children: WeekdayLabels.shortFrom(
+                      Localizations.localeOf(context).languageCode, weekStart)
                   .map((d) => Expanded(
                         child: Text(
                           d,
@@ -106,11 +110,11 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
                     for (var day = 0; day < 7; day++)
                       Expanded(
                         child: _CalendarCell(
-                          date: _days[week * 7 + day],
+                          date: days[week * 7 + day],
                           habit: habit,
                           isCurrentMonth:
-                              _isCurrentMonth(_days[week * 7 + day]),
-                          isToday: _isToday(_days[week * 7 + day]),
+                              _isCurrentMonth(days[week * 7 + day]),
+                          isToday: _isToday(days[week * 7 + day]),
                           onToggle: widget.onToggle,
                         ),
                       ),
@@ -143,38 +147,42 @@ class _CalendarCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.colors;
     final negative = habit.kind == HabitKind.negative;
-    final quantitative = habit.kind == HabitKind.quantitative;
+    final ratioFill = habit.kind == HabitKind.quantitative || habit.hasSubsteps;
     final future = date.isAfter(DateTime.now());
     final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
     final outOfScope = future || beforeCreation;
-    // For negative habits isCompletedOn means "clean" (no relapse logged).
     final completed = habit.isCompletedOn(date);
     final relapsed = negative && !completed && !outOfScope;
-    final tappable = isCurrentMonth && !outOfScope;
+    final paused = isCurrentMonth && !outOfScope && habit.isNeutralOn(date);
+    final tappable = isCurrentMonth && !future;
     final danger = context.tokens.danger;
     final count = habit.completions[date.dayKey]?.count ?? 0;
 
     final Color? fillColor;
-    if (isCurrentMonth && relapsed) {
+    if (paused) {
+      fillColor = context.tokens.info.withValues(alpha: 0.5);
+    } else if (isCurrentMonth && relapsed) {
       fillColor = danger;
     } else if (isCurrentMonth && negative && !outOfScope) {
       fillColor = habit.color.withValues(alpha: 0.24);
-    } else if (isCurrentMonth && quantitative && count > 0) {
-      final ratio = (count / habit.perDayTarget).clamp(0.25, 1.0);
+    } else if (isCurrentMonth && ratioFill && count > 0) {
+      final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
+      final ratio = (count / target).clamp(0.25, 1.0);
       fillColor = Color.lerp(
         habit.color.withValues(alpha: 0.4),
         habit.color,
         ratio,
       );
-    } else if (isCurrentMonth && !negative && !quantitative && completed) {
+    } else if (isCurrentMonth && !negative && !ratioFill && completed) {
       fillColor = habit.color;
     } else {
       fillColor = null;
     }
     final filledStrong = isCurrentMonth &&
+        !paused &&
         (relapsed ||
-            (!negative && !quantitative && completed) ||
-            (quantitative && count > 0));
+            (!negative && !ratioFill && completed) ||
+            (ratioFill && count > 0));
 
     final Color textColor;
     if (filledStrong) {

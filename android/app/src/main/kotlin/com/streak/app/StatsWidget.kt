@@ -7,6 +7,8 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -28,17 +30,19 @@ class StatsWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>
         get() = HomeWidgetGlanceStateDefinition()
 
+    override val sizeMode = SizeMode.Exact
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+        // Read inside composition: update() recomposes without re-running this.
         provideContent {
-            // Observe state so home_widget updates recompose the widget;
-            // otherwise the stats render once and never refresh.
             currentState<HomeWidgetGlanceState>()
-            Content(context)
+            Content(context, WidgetStyle.loadFor(context, appWidgetId))
         }
     }
 
     @Composable
-    private fun Content(context: Context) {
+    private fun Content(context: Context, style: WidgetStyle) {
         val data = loadData(context)
         val summary = data?.optJSONObject("summary")
         val done = summary?.optInt("doneToday") ?: 0
@@ -46,11 +50,10 @@ class StatsWidget : GlanceAppWidget() {
         val best = summary?.optInt("bestStreak") ?: 0
         val brand = androidx.compose.ui.graphics.Color(0xFF7C5CFC)
 
+        WidgetSurface(style) {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(androidx.compose.ui.graphics.Color(0xFF101014)))
-                .cornerRadius(20.dp)
                 .padding(16.dp)
                 .clickable(actionStartActivity<MainActivity>()),
             verticalAlignment = Alignment.CenterVertically
@@ -66,7 +69,7 @@ class StatsWidget : GlanceAppWidget() {
             Text(
                 text = "done today",
                 style = TextStyle(
-                    color = ColorProvider(androidx.compose.ui.graphics.Color(0xFF9CA3AF)),
+                    color = ColorProvider(style.muted),
                     fontSize = 13.sp
                 )
             )
@@ -74,11 +77,12 @@ class StatsWidget : GlanceAppWidget() {
             Text(
                 text = "🔥 $best best streak",
                 style = TextStyle(
-                    color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                    color = ColorProvider(style.content),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
             )
+        }
         }
     }
 

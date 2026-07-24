@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kGitHubUrl = 'https://github.com/InlitX/streak';
 const _kCoffeeUrl = 'https://ko-fi.com/inlitx';
 
-/// "About" page: app icon, serif wordmark and a short personal note.
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
 
@@ -53,7 +52,6 @@ class _AboutPageState extends State<AboutPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
           children: [
-            // App icon, avatar-style.
             Center(
               child: Container(
                 width: 76,
@@ -80,7 +78,6 @@ class _AboutPageState extends State<AboutPage> {
               ),
             ),
             const SizedBox(height: 24),
-            // Serif wordmark.
             Text(
               'Streak',
               style: TextStyle(
@@ -93,9 +90,8 @@ class _AboutPageState extends State<AboutPage> {
               ),
             ),
             const SizedBox(height: 10),
-            // Evocative italic subtitle.
             Text(
-              context.tr('about_subtitle'),
+              context.l10n.about_subtitle,
               style: TextStyle(
                 fontFamily: 'PlayfairDisplay',
                 fontStyle: FontStyle.italic,
@@ -105,9 +101,8 @@ class _AboutPageState extends State<AboutPage> {
               ),
             ),
             const SizedBox(height: 30),
-            // First-person story.
             Text(
-              context.tr('about_story'),
+              context.l10n.about_story,
               style: TextStyle(
                 fontSize: 15,
                 height: 1.7,
@@ -128,7 +123,7 @@ class _AboutPageState extends State<AboutPage> {
                 Expanded(
                   child: _LinkButton(
                     icon: LucideIcons.coffee,
-                    label: context.tr('buy_coffee'),
+                    label: context.l10n.buy_coffee,
                     onTap: () => _open(_kCoffeeUrl),
                   ),
                 ),
@@ -138,7 +133,7 @@ class _AboutPageState extends State<AboutPage> {
             const SizedBox(height: 40),
             Center(
               child: Text(
-                context.tr('made_by'),
+                context.l10n.made_by,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:streak/core/i18n/app_strings.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
@@ -63,15 +63,15 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         destinations: [
           NavigationDestination(
             icon: const Icon(LucideIcons.house),
-            label: context.tr('today'),
+            label: context.l10n.today,
           ),
           NavigationDestination(
             icon: const Icon(LucideIcons.chartColumn),
-            label: context.tr('stats'),
+            label: context.l10n.stats,
           ),
           NavigationDestination(
             icon: const Icon(LucideIcons.settings),
-            label: context.tr('settings'),
+            label: context.l10n.settings,
           ),
         ],
         ),

@@ -1,0 +1,7 @@
+✅ Hábitos con subpasos — divide un hábito en una lista y marca cada paso
+🌴 Modo vacaciones — pausa un hábito sin perder la racha
+⏰ Recordatorios cada N días, y ya puedes editar los que tengas
+🎨 Widgets personalizables — fondo, opacidad, borde y tu propia foto
+🗓️ Rellena días pasados y corrige cantidades en cualquier fecha
+📥 Importa tu historial desde Loop Habit Tracker o HabitKit (beta)
+🐛 Corregido un fallo al editar una cantidad

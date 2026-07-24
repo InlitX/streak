@@ -5,24 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/data/substep.dart';
+import 'package:streak/features/habits/data/vacation.dart';
 
-enum HabitInterval { daily, weekly, monthly }
+// Append-only: these are persisted by index.
+enum HabitInterval { daily, weekly, monthly, weekdays, everyXDays }
 
 extension HabitIntervalLabel on HabitInterval {
   String get label => switch (this) {
         HabitInterval.daily => 'Daily',
         HabitInterval.weekly => 'Weekly',
         HabitInterval.monthly => 'Monthly',
+        HabitInterval.weekdays => 'Days',
+        HabitInterval.everyXDays => 'Interval',
       };
 
   String get unit => switch (this) {
         HabitInterval.daily => 'day',
         HabitInterval.weekly => 'week',
         HabitInterval.monthly => 'month',
+        HabitInterval.weekdays => 'day',
+        HabitInterval.everyXDays => 'day',
       };
+
+  bool get isDaySpecific =>
+      this == HabitInterval.weekdays || this == HabitInterval.everyXDays;
 }
 
-// negative = relapse-logged (clean by default); quantitative = amount-based.
+// Append-only (persisted by index). Negatives are clean by default.
 enum HabitKind { positive, negative, quantitative }
 
 enum QuantKind { generic, water, reading }
@@ -40,6 +50,8 @@ class Habit {
     this.completions = const {},
     this.interval = HabitInterval.daily,
     this.targetFrequency = 1,
+    this.scheduleWeekdays = const [],
+    this.scheduleEvery = 2,
     this.reminders = const [],
     this.coverPath = '',
     this.kind = HabitKind.positive,
@@ -47,6 +59,8 @@ class Habit {
     this.incrementAmount = 1,
     this.quantKind = QuantKind.generic,
     this.bookCoverPath = '',
+    this.substeps = const [],
+    this.vacations = const [],
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -58,12 +72,31 @@ class Habit {
   final Color color;
   final int order;
 
-  // Daily goal: check count, or target amount for quantitative habits.
   final int perDayTarget;
   final Map<String, Completion> completions;
   final HabitInterval interval;
   final int targetFrequency;
+
+  final List<int> scheduleWeekdays;
+
+  final int scheduleEvery;
+
   final List<Reminder> reminders;
+
+  bool isScheduledOn(DateTime date) {
+    switch (interval) {
+      case HabitInterval.weekdays:
+        return scheduleWeekdays.contains(date.weekday);
+      case HabitInterval.everyXDays:
+        if (scheduleEvery <= 0) return false;
+        final diff = date.atMidnight.difference(createdAt.atMidnight).inDays;
+        return diff >= 0 && diff % scheduleEvery == 0;
+      case HabitInterval.daily:
+      case HabitInterval.weekly:
+      case HabitInterval.monthly:
+        return true;
+    }
+  }
 
   final String coverPath;
   final DateTime createdAt;
@@ -73,26 +106,47 @@ class Habit {
   final int incrementAmount;
   final QuantKind quantKind;
 
-  // Book cover for the reading visual; separate from [coverPath].
   final String bookCoverPath;
 
-  // Bounded to [createdAt, today]; unbounded "clean by default" freezes the walk.
+  final List<Substep> substeps;
+
+  final List<VacationPeriod> vacations;
+
+  bool get hasSubsteps => substeps.isNotEmpty;
+
+  int get effectiveTarget => hasSubsteps ? substeps.length : perDayTarget;
+
+  bool isPausedOn(DateTime date) => vacations.any((v) => v.contains(date));
+
+  bool get isOnVacation => vacations.any((v) => v.isOngoing);
+
+  bool isNeutralOn(DateTime date) =>
+      isPausedOn(date) && !completions.containsKey(date.dayKey);
+
   bool isCompletedOn(DateTime date) {
     final day = date.atMidnight;
-    if (day.isBefore(createdAt.atMidnight) || day.isAfter(DateTime.now().atMidnight)) {
-      return false;
-    }
+    if (day.isAfter(DateTime.now().atMidnight)) return false;
     final entry = completions[date.dayKey];
-    if (kind == HabitKind.negative) return entry == null;
+    if (kind == HabitKind.negative) {
+      // Must stay bounded by createdAt: an unbounded clean walk freezes the app.
+      return day.isBefore(createdAt.atMidnight) ? false : entry == null;
+    }
     if (entry == null) return false;
+    if (hasSubsteps) {
+      return substeps.every((s) => entry.steps.contains(s.id));
+    }
     return entry.count >= perDayTarget;
   }
 
-  int get totalCompletions =>
-      completions.values.where((c) => c.count >= perDayTarget).length;
+  int get totalCompletions {
+    if (hasSubsteps) {
+      final ids = substeps.map((s) => s.id).toSet();
+      return completions.values.where((c) => ids.every(c.steps.contains)).length;
+    }
+    return completions.values.where((c) => c.count >= perDayTarget).length;
+  }
 
   bool get isDoneForNow {
-    // Negatives are clean by default; sinking them would hide them.
     if (kind == HabitKind.negative) return false;
     final now = DateTime.now();
     switch (interval) {
@@ -106,10 +160,12 @@ class Habit {
         final start = DateTime(now.year, now.month, 1);
         final end = DateTime(now.year, now.month + 1, 0);
         return _countInRange(start, end) >= targetFrequency;
+      case HabitInterval.weekdays:
+      case HabitInterval.everyXDays:
+        return !isScheduledOn(now) || isCompletedOn(now);
     }
   }
 
-  // Day's contribution to [strength], 0..1. Fractional for quantitative.
   double _dayValue(DateTime date) {
     final day = date.atMidnight;
     if (day.isBefore(createdAt.atMidnight) ||
@@ -120,11 +176,11 @@ class Habit {
       return completions.containsKey(date.dayKey) ? 0.0 : 1.0;
     }
     final count = completions[date.dayKey]?.count ?? 0;
-    if (perDayTarget <= 0) return count > 0 ? 1 : 0;
-    return (count / perDayTarget).clamp(0.0, 1.0);
+    final target = effectiveTarget;
+    if (target <= 0) return count > 0 ? 1 : 0;
+    return (count / target).clamp(0.0, 1.0);
   }
 
-  // EWMA of recent _dayValues; for negatives an empty map means "never relapsed".
   double get strength {
     if (completions.isEmpty && kind != HabitKind.negative) return 0;
     final now = DateTime.now().atMidnight;
@@ -133,9 +189,11 @@ class Habit {
     var score = 0.0;
     var norm = 0.0;
     for (var i = 0; i < window; i++) {
+      final day = now.subtract(Duration(days: i));
+      if (isNeutralOn(day)) continue;
       final weight = math.pow(0.5, i / halfLife).toDouble();
       norm += weight;
-      score += weight * _dayValue(now.subtract(Duration(days: i)));
+      score += weight * _dayValue(day);
     }
     return norm == 0 ? 0 : (score / norm).clamp(0.0, 1.0);
   }
@@ -149,12 +207,18 @@ class Habit {
   }
 
   int get currentStreak {
-    // Negatives: walk back counting clean days (isCompletedOn bounds the walk).
+    final floor = createdAt.atMidnight;
+
     if (kind == HabitKind.negative) {
-      var cursor = DateTime.now();
+      var cursor = DateTime.now().atMidnight;
       var streak = 0;
-      while (isCompletedOn(cursor)) {
-        streak++;
+      while (!cursor.isBefore(floor)) {
+        if (isNeutralOn(cursor)) {
+        } else if (isCompletedOn(cursor)) {
+          streak++;
+        } else {
+          break;
+        }
         cursor = cursor.subtract(const Duration(days: 1));
       }
       return streak;
@@ -165,14 +229,19 @@ class Habit {
 
     switch (interval) {
       case HabitInterval.daily:
-        var cursor = now;
-        if (!isCompletedOn(cursor)) {
+        var cursor = now.atMidnight;
+        if (!isCompletedOn(cursor) && !isNeutralOn(cursor)) {
           cursor = cursor.subtract(const Duration(days: 1));
-          if (!isCompletedOn(cursor)) return 0;
+          if (!isCompletedOn(cursor) && !isNeutralOn(cursor)) return 0;
         }
         var streak = 0;
-        while (isCompletedOn(cursor)) {
-          streak++;
+        while (!cursor.isBefore(floor)) {
+          if (isNeutralOn(cursor)) {
+          } else if (isCompletedOn(cursor)) {
+            streak++;
+          } else {
+            break;
+          }
           cursor = cursor.subtract(const Duration(days: 1));
         }
         return streak;
@@ -208,18 +277,64 @@ class Habit {
           monthStart = DateTime(monthStart.year, monthStart.month - 1, 1);
         }
         return streak;
+
+      case HabitInterval.weekdays:
+      case HabitInterval.everyXDays:
+        return _daySpecificCurrentStreak();
     }
   }
 
+  int _daySpecificCurrentStreak() {
+    final floor = createdAt.atMidnight;
+    final today = DateTime.now().atMidnight;
+    var cursor = today;
+    var streak = 0;
+    while (!cursor.isBefore(floor)) {
+      if (isNeutralOn(cursor) || !isScheduledOn(cursor)) {
+        cursor = cursor.subtract(const Duration(days: 1));
+        continue;
+      }
+      if (isCompletedOn(cursor)) {
+        streak++;
+      } else if (cursor.isAtSameMomentAs(today)) {
+      } else {
+        break;
+      }
+      cursor = cursor.subtract(const Duration(days: 1));
+    }
+    return streak;
+  }
+
+  int _daySpecificLongestStreak() {
+    var cursor = createdAt.atMidnight;
+    final end = DateTime.now().atMidnight;
+    var best = 0;
+    var run = 0;
+    while (!cursor.isAfter(end)) {
+      if (isNeutralOn(cursor) || !isScheduledOn(cursor)) {
+        cursor = cursor.add(const Duration(days: 1));
+        continue;
+      }
+      if (isCompletedOn(cursor)) {
+        run++;
+        if (run > best) best = run;
+      } else {
+        run = 0;
+      }
+      cursor = cursor.add(const Duration(days: 1));
+    }
+    return best;
+  }
+
   int get longestStreak {
-    // Negatives: longest run of clean days from creation to today.
     if (kind == HabitKind.negative) {
       var cursor = createdAt.atMidnight;
       final end = DateTime.now().atMidnight;
       var best = 0;
       var run = 0;
       while (!cursor.isAfter(end)) {
-        if (isCompletedOn(cursor)) {
+        if (isNeutralOn(cursor)) {
+        } else if (isCompletedOn(cursor)) {
           run++;
           if (run > best) best = run;
         } else {
@@ -236,17 +351,19 @@ class Habit {
 
     switch (interval) {
       case HabitInterval.daily:
+        var cursor = createdAt.atMidnight;
+        final end = DateTime.now().atMidnight;
         var best = 0;
         var run = 0;
-        DateTime? last;
-        for (final date in dates) {
-          if (last != null && date.difference(last).inDays == 1) {
+        while (!cursor.isAfter(end)) {
+          if (isNeutralOn(cursor)) {
+          } else if (isCompletedOn(cursor)) {
             run++;
+            if (run > best) best = run;
           } else {
-            run = 1;
+            run = 0;
           }
-          last = date;
-          if (run > best) best = run;
+          cursor = cursor.add(const Duration(days: 1));
         }
         return best;
 
@@ -286,6 +403,10 @@ class Habit {
           start = DateTime(start.year, start.month + 1, 1);
         }
         return best;
+
+      case HabitInterval.weekdays:
+      case HabitInterval.everyXDays:
+        return _daySpecificLongestStreak();
     }
   }
 
@@ -300,6 +421,8 @@ class Habit {
     Map<String, Completion>? completions,
     HabitInterval? interval,
     int? targetFrequency,
+    List<int>? scheduleWeekdays,
+    int? scheduleEvery,
     List<Reminder>? reminders,
     String? coverPath,
     HabitKind? kind,
@@ -307,6 +430,9 @@ class Habit {
     int? incrementAmount,
     QuantKind? quantKind,
     String? bookCoverPath,
+    List<Substep>? substeps,
+    List<VacationPeriod>? vacations,
+    DateTime? createdAt,
   }) {
     return Habit(
       id: id,
@@ -320,6 +446,8 @@ class Habit {
       completions: completions ?? this.completions,
       interval: interval ?? this.interval,
       targetFrequency: targetFrequency ?? this.targetFrequency,
+      scheduleWeekdays: scheduleWeekdays ?? this.scheduleWeekdays,
+      scheduleEvery: scheduleEvery ?? this.scheduleEvery,
       reminders: reminders ?? this.reminders,
       coverPath: coverPath ?? this.coverPath,
       kind: kind ?? this.kind,
@@ -327,7 +455,9 @@ class Habit {
       incrementAmount: incrementAmount ?? this.incrementAmount,
       quantKind: quantKind ?? this.quantKind,
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
-      createdAt: createdAt,
+      substeps: substeps ?? this.substeps,
+      vacations: vacations ?? this.vacations,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -344,6 +474,8 @@ class Habit {
             completions.map((key, value) => MapEntry(key, value.toMap())),
         'interval': interval.index,
         'targetFrequency': targetFrequency,
+        'scheduleWeekdays': scheduleWeekdays,
+        'scheduleEvery': scheduleEvery,
         'reminders': reminders.map((r) => r.toMap()).toList(),
         'coverPath': coverPath,
         'createdAt': createdAt.toIso8601String(),
@@ -352,6 +484,8 @@ class Habit {
         'incrementAmount': incrementAmount,
         'quantKind': quantKind.index,
         'bookCoverPath': bookCoverPath,
+        'substeps': substeps.map((s) => s.toMap()).toList(),
+        'vacations': vacations.map((v) => v.toMap()).toList(),
       };
 
   factory Habit.fromMap(Map<String, dynamic> map) => Habit(
@@ -372,6 +506,11 @@ class Habit {
             const {},
         interval: HabitInterval.values[(map['interval'] ?? 0) as int],
         targetFrequency: (map['targetFrequency'] ?? 1) as int,
+        scheduleWeekdays: (map['scheduleWeekdays'] as List?)
+                ?.map((e) => e as int)
+                .toList() ??
+            const [],
+        scheduleEvery: (map['scheduleEvery'] ?? 2) as int,
         reminders: map['reminders'] == null
             ? const []
             : (map['reminders'] as List)
@@ -386,6 +525,17 @@ class Habit {
         incrementAmount: (map['incrementAmount'] ?? 1) as int,
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],
         bookCoverPath: (map['bookCoverPath'] ?? '') as String,
+        substeps: map['substeps'] == null
+            ? const []
+            : (map['substeps'] as List)
+                .map((s) => Substep.fromMap(Map<String, dynamic>.from(s as Map)))
+                .toList(),
+        vacations: map['vacations'] == null
+            ? const []
+            : (map['vacations'] as List)
+                .map((v) =>
+                    VacationPeriod.fromMap(Map<String, dynamic>.from(v as Map)))
+                .toList(),
       );
 
   String toJson() => json.encode(toMap());

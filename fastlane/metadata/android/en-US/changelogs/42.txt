@@ -1,0 +1,7 @@
+✅ Habits with substeps — split a habit into a checklist and tick off each step
+🌴 Vacation mode — pause a habit without losing your streak
+⏰ Reminders every N days, and existing reminders can now be edited
+🎨 Customisable widgets — background, opacity, border and your own photo
+🗓️ Fill in past days and fix amounts on any date
+📥 Import your history from Loop Habit Tracker or HabitKit (beta)
+🐛 Fixed a crash when editing an amount
