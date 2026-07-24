@@ -1,1 +1,27 @@
-{}
+{
+  "app_tagline": "Відстежувач звичок",
+  "today": "Сьогодні",
+  "stats": "Статистика",
+  "settings": "Налаштування",
+  "new_label": "Нова",
+  "save": "Зберегти",
+  "cancel": "Скасувати",
+  "delete": "Видалити",
+  "good_morning": "Доброго ранку",
+  "good_afternoon": "Доброго дня",
+  "good_evening": "Доброго вечора",
+  "no_habits_yet": "Звички відсутні",
+  "all_done_today": "На сьогодні все!",
+  "x_of_y_completed": "Виконано {done} з {total}",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Розпочніть першу серію"
+}
