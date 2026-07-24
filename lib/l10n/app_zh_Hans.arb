@@ -62,7 +62,7 @@
   "import_backup": "导入备份",
   "import_backup_sub": "从文件恢复习惯",
   "import_from_app": "从其他应用导入",
-  "import_from_app_sub": "Loop, HabitKit, Habitica, CSV…",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
   "import_from_app_done": "已从 {source} 导入 {habits} 项习惯（共 {days} 天数据）",
   "@import_from_app_done": {
     "placeholders": {
