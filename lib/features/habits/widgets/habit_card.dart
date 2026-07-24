@@ -140,7 +140,7 @@ class HabitCard extends StatelessWidget {
                               const SizedBox(width: 8),
                               Flexible(
                                 child: Text(
-                                  '·  ${habit.category}',
+                                  '·  ${context.categoryLabel(habit.category)}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(

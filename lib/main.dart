@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
@@ -17,6 +18,7 @@ import 'package:streak/services/notification_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await initializeDateFormatting();
   await LocalStore.init();
 
   NotificationService.onOpenHabit = _openHabit;

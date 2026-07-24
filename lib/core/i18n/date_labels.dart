@@ -32,6 +32,5 @@ class WeekdayLabels {
         return sunFirst[weekday % 7];
       });
 
-  static String _resolve(String locale) =>
-      locale.startsWith('es') ? 'es' : 'en';
+  static String _resolve(String locale) => locale.isEmpty ? 'en' : locale;
 }

@@ -59,8 +59,10 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
               children: [
                 Text(
                   _month.year == _today.year
-                      ? DateFormat('MMMM').format(_month)
-                      : DateFormat('MMMM yyyy').format(_month),
+                      ? DateFormat('MMMM', Localizations.localeOf(context).toString())
+                          .format(_month)
+                      : DateFormat('MMMM yyyy', Localizations.localeOf(context).toString())
+                          .format(_month),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,

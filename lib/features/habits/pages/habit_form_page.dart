@@ -889,7 +889,7 @@ class _CategoryPicker extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    category.name,
+                    context.categoryLabel(category.name),
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 13,

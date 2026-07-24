@@ -86,6 +86,24 @@
   "icon": "Icon",
   "color": "Color",
   "category": "Category",
+  "category_health": "Health",
+  "category_fitness": "Fitness",
+  "category_mindfulness": "Mindfulness",
+  "category_productivity": "Productivity",
+  "category_learning": "Learning",
+  "category_finance": "Finance",
+  "count_days": "{count, plural, =1{1 day} other{{count} days}}",
+  "@count_days": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "count_weeks": "{count, plural, =1{1 week} other{{count} weeks}}",
+  "@count_weeks": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "count_months": "{count, plural, =1{1 month} other{{count} months}}",
+  "@count_months": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "habit_kind": "Habit type",
   "kind_positive": "Normal",
   "kind_negative": "Avoid",

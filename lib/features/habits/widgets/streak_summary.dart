@@ -9,10 +9,11 @@ class StreakSummary extends StatelessWidget {
 
   final Habit habit;
 
-  String _format(int value) {
-    final unit = habit.interval.unit + (value == 1 ? '' : 's');
-    return '$value $unit';
-  }
+  String _format(BuildContext context, int value) => switch (habit.interval) {
+        HabitInterval.weekly => context.l10n.count_weeks(value),
+        HabitInterval.monthly => context.l10n.count_months(value),
+        _ => context.l10n.count_days(value),
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class StreakSummary extends StatelessWidget {
             icon: LucideIcons.flame,
             iconColor: habit.color,
             label: context.l10n.current,
-            value: _format(habit.currentStreak),
+            value: _format(context, habit.currentStreak),
           ),
         ),
         const SizedBox(width: 12),
@@ -33,7 +34,7 @@ class StreakSummary extends StatelessWidget {
             icon: LucideIcons.trophy,
             iconColor: context.tokens.warning,
             label: context.l10n.best,
-            value: _format(habit.longestStreak),
+            value: _format(context, habit.longestStreak),
           ),
         ),
         const SizedBox(width: 12),

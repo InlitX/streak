@@ -116,7 +116,8 @@ class _ShareSheetState extends State<_ShareSheet> {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RepaintBoundary(
@@ -174,6 +175,7 @@ class _ShareSheetState extends State<_ShareSheet> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -394,7 +396,7 @@ class ShareCard extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 2),
                               child: Text(
                                 habit.category.isNotEmpty
-                                    ? habit.category
+                                    ? context.categoryLabel(habit.category)
                                     : context.l10n.app_tagline,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

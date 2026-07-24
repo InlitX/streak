@@ -470,7 +470,7 @@ class _CategoryBar extends StatelessWidget {
             ),
             for (final category in categories)
               _Chip(
-                label: category,
+                label: context.categoryLabel(category),
                 active: selected == category,
                 onTap: () => onSelected(category),
               ),
