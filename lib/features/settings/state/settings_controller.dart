@@ -4,6 +4,24 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/home_widget_service.dart';
 
+Locale localeFromCode(String code) {
+  final parts = code.split(RegExp('[_-]'));
+  String? script;
+  String? country;
+  for (final part in parts.skip(1)) {
+    if (part.length == 4) {
+      script = part;
+    } else if (part.isNotEmpty) {
+      country = part;
+    }
+  }
+  return Locale.fromSubtags(
+    languageCode: parts.first,
+    scriptCode: script,
+    countryCode: country,
+  );
+}
+
 class SettingsController extends ChangeNotifier {
   static const int defaultWidgetBg = 0xFF101014;
 
@@ -48,11 +66,7 @@ class SettingsController extends ChangeNotifier {
   int get weekStart => _weekStart;
   bool get onboardingDone => _onboardingDone;
   String get localeCode => _localeCode;
-  Locale? get locale {
-    if (_localeCode.isEmpty) return null;
-    final parts = _localeCode.split('_');
-    return parts.length > 1 ? Locale(parts.first, parts[1]) : Locale(parts.first);
-  }
+  Locale? get locale => _localeCode.isEmpty ? null : localeFromCode(_localeCode);
 
   // 0 solid, 1 gradient, 2 dots, 3 OLED black, 4 custom image.
   int get appBackground => _appBackground;

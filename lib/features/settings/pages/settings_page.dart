@@ -809,18 +809,13 @@ class _IconBadge extends StatelessWidget {
 }
 
 String _languageLabel(BuildContext context, String code) =>
-    code.isEmpty ? context.l10n.system : _languageName(_localeFromCode(code));
-
-Locale _localeFromCode(String code) {
-  final parts = code.split('_');
-  return parts.length > 1 ? Locale(parts.first, parts[1]) : Locale(parts.first);
-}
+    code.isEmpty ? context.l10n.system : _languageName(localeFromCode(code));
 
 String _languageName(Locale locale) {
   const names = <String, String>{
     'en': 'English',
     'es': 'Español',
-    'zh': '中文',
+    'zh': '简体中文',
     'de': 'Deutsch',
     'fr': 'Français',
     'pt': 'Português',

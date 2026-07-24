@@ -1,0 +1,337 @@
+{
+  "app_tagline": "习惯追踪",
+  "today": "今天",
+  "stats": "统计",
+  "settings": "设置",
+  "new_label": "新增",
+  "save": "保存",
+  "cancel": "取消",
+  "delete": "删除",
+  "good_morning": "早上好",
+  "good_afternoon": "中午好",
+  "good_evening": "晚上好",
+  "no_habits_yet": "暂无习惯",
+  "all_done_today": "今日全部完成！",
+  "x_of_y_completed": "已完成 {done}/{total}",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "开启你的首个连续打卡",
+  "empty_body": "创建习惯，轻点日期完成打卡。点滴进步，贵在每日坚持。",
+  "add_habit": "添加习惯",
+  "all": "全部",
+  "onb1_title": "持续保持打卡连胜",
+  "onb1_body": "轻点一下即可完成习惯打卡，见证日复一日积累的前进动力。",
+  "onb2_title": "保持习惯",
+  "onb2_body": "设置日、周、月度目标，搭配提醒，不漏下任何事项。",
+  "onb3_title": "查看进度",
+  "onb3_body": "详尽统计数据与年度网格视图，见证你的每一步成长。",
+  "skip": "跳过",
+  "next": "下一步",
+  "get_started": "开始使用",
+  "statistics": "统计",
+  "done_today": "今日完成",
+  "best_streak": "最高连续纪录",
+  "active_habits": "进行中的习惯",
+  "total_logs": "总打卡次数",
+  "last_7_days": "近 7 天",
+  "last_30_days": "近30天",
+  "your_habits": "你的习惯",
+  "stats_empty": "添加习惯，即可查看数据统计",
+  "completion_rate": "完成率",
+  "appearance": "外观",
+  "theme": "主题",
+  "system": "系统",
+  "light": "浅色模式",
+  "dark": "深色模式",
+  "week_starts_on": "每周起始于",
+  "mon": "周一",
+  "sat": "周六",
+  "sun": "周日",
+  "language": "语言",
+  "data": "数据",
+  "export_backup": "导出备份",
+  "export_backup_sub": "将所有习惯保存至文件",
+  "import_backup": "导入备份",
+  "import_backup_sub": "从文件恢复习惯",
+  "import_from_app": "从其他应用导入",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "已从 {source} 导入 {habits} 项习惯（共 {days} 天数据）",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "无法导入该文件",
+  "about": "关于",
+  "backup_saved": "备份已保存",
+  "export_cancelled": "导出已取消",
+  "habits_imported": "习惯已导入",
+  "new_habit": "新建习惯",
+  "edit_habit": "编辑习惯",
+  "name": "名称",
+  "name_hint": "例如：晨跑",
+  "description": "描述",
+  "description_hint": "选填备注",
+  "icon": "图标",
+  "color": "颜色",
+  "category": "分类",
+  "habit_kind": "习惯类型",
+  "kind_positive": "普通",
+  "kind_negative": "戒除",
+  "kind_quantitative": "数量",
+  "kind_locked_hint": "创建习惯后，类型无法修改。",
+  "kind_negative_hint": "默认每日达标，连续天数自动累积。点击打卡视为破戒，当日会标红，支持撤销操作。",
+  "quant_preset_water": "水",
+  "quant_preset_reading": "阅读",
+  "quant_preset_generic": "自定义",
+  "quant_unit_hint": "单位（例如：毫升、页、次）",
+  "quant_unit_ml": "毫升",
+  "quant_unit_pages": "页",
+  "quant_edit_title": "今日完成量",
+  "quant_daily_goal": "每日目标",
+  "quant_tap_amount": "每次增量",
+  "frequency": "频率",
+  "daily": "每日",
+  "weekly": "每周",
+  "monthly": "每月",
+  "sched_days": "天数",
+  "sched_interval": "间隔",
+  "times_per_week": "每周 {n} 次",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "每月{n}次",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/周",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/月",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "提醒",
+  "add_reminder": "添加提醒",
+  "delete_habit": "删除习惯",
+  "delete_habit_body": "确定删除“{name}”？此操作无法撤销。",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "记录一次破戒？",
+  "log_relapse_body": "这将中断“{name}”今日连续未破戒记录。再次点击可撤销操作。",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "确认记录",
+  "permission_required": "需要通知权限",
+  "streaks": "连续天数",
+  "activity": "打卡记录",
+  "current": "当前",
+  "best": "最高",
+  "total": "总计",
+  "relapses": "破戒次数",
+  "strength": "意志力",
+  "week": "周",
+  "month": "月",
+  "year": "年",
+  "new_reminder": "新建提醒",
+  "edit_reminder": "编辑提醒",
+  "days": "天",
+  "time": "时间",
+  "save_reminder": "保存提醒",
+  "select_one_day": "至少选择一天",
+  "every_day": "每天",
+  "no_days": "未选择日期",
+  "repeat_weekly": "指定日期",
+  "repeat_interval": "每 N 天",
+  "every_n_days": "每 {n} 天",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "未分类",
+  "more_icons": "更多图标",
+  "less_icons": "精简图标",
+  "completions": "完成次数",
+  "completion_time": "完成时间",
+  "current_streak": "当前连续天数",
+  "days_active": "活跃天数",
+  "completions_per_month": "完成次数 / 月",
+  "overview": "总览",
+  "preferences": "偏好设置",
+  "support": "支持",
+  "profile": "主页",
+  "about_app": "关于应用",
+  "about_app_sub": "版本、鸣谢与源代码",
+  "my_heatmap": "我的热力图",
+  "my_heatmap_sub": "打开年度活动网格图",
+  "rate_github": "在 GitHub 标星",
+  "rate_github_sub": "点亮星标支持本项目",
+  "buy_coffee": "请我喝杯咖啡",
+  "buy_coffee_sub": "助力维持应用免费开放",
+  "view_source": "在 GitHub 查看源代码",
+  "about_title": "为你而生，永久免费。",
+  "about_footer": "由☕与大量闲暇时光打磨而成。",
+  "about_body": "Streak 诞生于一个简单的想法：为什么要为记录自己的习惯付费？\n\n这款应用完全开源。任何人都能看清它的运作方式、提出改进建议，甚至打造自己的版本。没有黑箱，没有意外。\n\n你的隐私绝对完整 — 一切数据都保存在你的手机上。无需账号，没有服务器，没有广告。连一个字节都不会离开你的设备。\n\n毫无限制。想创建多少习惯都行。没有订阅，没有 \"专业版\"，没有弹窗催你付费。永远不会。\n\n如果这款应用对你有所帮助，你可以在 GitHub 上点颗星，或是请我喝杯咖啡来支持它。但这完全自愿 —— 无论如何，应用都属于你。",
+  "close": "关闭",
+  "no_data_yet": "暂无数据",
+  "import_question_body": "使用备份覆盖现有所有习惯，还是将两者合并？",
+  "import_replace": "全部覆盖",
+  "import_merge": "合并",
+  "go": "开始",
+  "motiv_start": "全力以赴，开启今日 💪",
+  "motiv_progress": "进度稳步向前，继续坚持",
+  "motiv_almost": "就快达成！再加把劲",
+  "motiv_perfect": "完美的一天！🔥",
+  "app_background": "背景",
+  "widgets": "小组件",
+  "customize_widgets": "自定义小组件",
+  "customize_widgets_sub": "背景，不透明度，边框",
+  "widget_background": "背景颜色",
+  "widget_opacity": "不透明度",
+  "widget_border": "边框",
+  "widget_preview": "预览",
+  "bg_solid": "纯色",
+  "bg_gradient": "渐变",
+  "bg_dots": "圆点",
+  "bg_oled": "OLED",
+  "weekdays": "工作日",
+  "weekends": "周末",
+  "reminder_message": "信息（选填）",
+  "reminder_message_hint": "留空将显示励志语录",
+  "new_category": "新增分类",
+  "edit_category": "编辑分类",
+  "add_category": "新",
+  "delete_category": "删除分类",
+  "edit": "编辑",
+  "cover_image": "封面图片",
+  "book_cover": "书籍封面",
+  "add_image": "添加照片",
+  "when_best": "你在什么时候最能持之以恒？",
+  "streak_evolution": "连续打卡趋势",
+  "streak_on": "🔥 已连续坚持 {n} 天，不要中断！",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 今天你可以开启新一轮连续打卡",
+  "not_enough_data": "暂无足够数据",
+  "about_inline": "Streak 是一款用于追踪习惯的开源应用。无需注册账号、没有功能限制、无需付费。所有数据仅保存在你的手机本地。\n\n任何人都可以查看源代码、进行优化，或是自由使用。",
+  "about_subtitle": "致你全力以赴的每一天。",
+  "about_story": "开发这款应用，源于我对市面上各类习惯追踪软件的不满。大多数应用会限制可创建的习惯数量，把基础功能设为付费内容、收集用户数据，或是充斥大量广告。于是我打造了 Streak：完全免费、无广告、无需付费、不追踪用户信息。所有数据本地运行，你的数据全权归你所有。开源软件，无任何隐藏套路。",
+  "made_by": "由 @inlitx 用❤️制作",
+  "share": "分享",
+  "share_progress": "分享进度",
+  "share_failed": "无法生成图片",
+  "about_developer": "开发者",
+  "about_credits": "致谢",
+  "about_credits_body": "基于 Flutter 开发。图标源自 Lucide。图表组件使用 fl_chart。字体采用 Figtree 与 Playfair Display。",
+  "dev_handle": "@inlitx",
+  "dev_role": "独立开发者・Streak",
+  "check_style": "查看样式",
+  "square": "方形",
+  "circle": "圆形",
+  "github_star_row": "查看源码并点亮 Star",
+  "icons_tab": "图标",
+  "emojis_tab": "Emojis",
+  "report_bug": "反馈 Bug",
+  "request_feature": "功能建议",
+  "advanced_options": "高级选项",
+  "default_user": "Inlitx",
+  "your_name": "你的名称",
+  "edit_name": "编辑名称",
+  "change_photo": "更换照片",
+  "remove_photo": "移除照片",
+  "notif_greeting": "你好 {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "应用图标",
+  "icon_default": "默认",
+  "icon_neutral": "绿色",
+  "icon_accent": "三色",
+  "custom": "自定义",
+  "see_more": "查看更多",
+  "colors_tab": "颜色",
+  "reorder": "重新排序",
+  "reorder_hint": "拖动习惯进行排序",
+  "done": "完成",
+  "accent_color": "强调色",
+  "sort_completed_last": "最后完成",
+  "on": "开启",
+  "off": "关闭",
+  "checklist": "清单",
+  "checklist_hint": "将习惯拆分为多个步骤，只有全部步骤勾选完成后，该习惯才算完成。",
+  "add_step": "添加步骤",
+  "step_hint": "步骤名称",
+  "todays_checklist": "今日的清单",
+  "steps_done": "{done}/{total} 个步骤",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_mode": "休假模式",
+  "vacation_on_desc": "已暂停 — 这些日期既不会算作未完成，也不会记为已完成。",
+  "vacation_off_desc": "暂停该习惯，跳过的日期不会中断你的连续打卡记录。",
+  "paused": "已暂停",
+  "start_vacation": "开始休假",
+  "end_vacation": "结束休假"
+}
