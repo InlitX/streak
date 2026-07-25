@@ -241,9 +241,16 @@ class _TodayChecklist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<HabitsController>();
+    final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
     final today = DateTime.now();
     final checked = habit.completions[today.dayKey]?.steps ?? const <String>{};
     final done = habit.substeps.where((s) => checked.contains(s.id)).length;
+    final steps = sortCompletedLast
+        ? [
+            ...habit.substeps.where((s) => !checked.contains(s.id)),
+            ...habit.substeps.where((s) => checked.contains(s.id)),
+          ]
+        : habit.substeps;
 
     return Card(
       child: Padding(
@@ -267,7 +274,7 @@ class _TodayChecklist extends StatelessWidget {
                 ],
               ),
             ),
-            for (final step in habit.substeps)
+            for (final step in steps)
               _ChecklistRow(
                 title: step.title,
                 checked: checked.contains(step.id),
