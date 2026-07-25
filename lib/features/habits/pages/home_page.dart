@@ -233,14 +233,16 @@ class _HomePageState extends State<HomePage> {
                               mode: _mode,
                               onChanged: _changeMode,
                             ),
-                            if (categories.isNotEmpty)
+                            if (categories.isNotEmpty) ...[
+                              const SizedBox(height: 12),
                               _CategoryBar(
                                 categories: categories,
                                 selected: _category,
                                 onSelected: (c) =>
                                     setState(() => _category = c),
                               ),
-                            const SizedBox(height: 4),
+                            ],
+                            const SizedBox(height: 12),
                           ],
                         ),
                   itemBuilder: (context, index) {
@@ -456,26 +458,23 @@ class _CategoryBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: SizedBox(
-        height: 36,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: [
+    return SizedBox(
+      height: 36,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _Chip(
+            label: context.l10n.all,
+            active: selected == null,
+            onTap: () => onSelected(null),
+          ),
+          for (final category in categories)
             _Chip(
-              label: context.l10n.all,
-              active: selected == null,
-              onTap: () => onSelected(null),
+              label: context.categoryLabel(category),
+              active: selected == category,
+              onTap: () => onSelected(category),
             ),
-            for (final category in categories)
-              _Chip(
-                label: context.categoryLabel(category),
-                active: selected == category,
-                onTap: () => onSelected(category),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }
