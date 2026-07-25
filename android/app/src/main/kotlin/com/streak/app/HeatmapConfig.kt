@@ -20,7 +20,19 @@ object HeatmapConfig {
         }.commit()
     }
 
+    fun colorOf(context: Context, appWidgetId: Int): Int? {
+        val p = prefs(context)
+        return if (p.contains("color_$appWidgetId")) p.getInt("color_$appWidgetId", 0) else null
+    }
+
+    fun setColor(context: Context, appWidgetId: Int, color: Int?) {
+        prefs(context).edit().apply {
+            if (color == null) remove("color_$appWidgetId")
+            else putInt("color_$appWidgetId", color)
+        }.commit()
+    }
+
     fun clear(context: Context, appWidgetId: Int) {
-        prefs(context).edit().remove("habit_$appWidgetId").apply()
+        prefs(context).edit().remove("habit_$appWidgetId").remove("color_$appWidgetId").apply()
     }
 }

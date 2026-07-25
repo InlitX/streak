@@ -64,13 +64,19 @@ class HeatmapWidget : GlanceAppWidget() {
             currentState<HomeWidgetGlanceState>()
             val style = WidgetStyle.loadFor(context, appWidgetId)
             val habitId = HeatmapConfig.habitOf(context, appWidgetId)
-            Content(context, style, habitId)
+            val allColor = HeatmapConfig.colorOf(context, appWidgetId)
+            Content(context, style, habitId, allColor)
         }
     }
 
     @Composable
-    private fun Content(context: Context, style: WidgetStyle, habitId: String?) {
-        val data = load(context, habitId)
+    private fun Content(
+        context: Context,
+        style: WidgetStyle,
+        habitId: String?,
+        allColor: Int?,
+    ) {
+        val data = load(context, habitId, allColor)
         WidgetSurface(style) {
             Body(style, data, habitId = habitId)
         }
@@ -171,7 +177,7 @@ class HeatmapWidget : GlanceAppWidget() {
         else -> style.cell
     }
 
-    private fun load(context: Context, habitId: String?): HeatmapData? {
+    private fun load(context: Context, habitId: String?, allColor: Int?): HeatmapData? {
         return try {
             val prefs = context.getSharedPreferences(
                 "HomeWidgetPreferences",
@@ -194,7 +200,8 @@ class HeatmapWidget : GlanceAppWidget() {
                     }
                 }
             }
-            HeatmapData("Activity", brandColor, "", levelsOf(root.optJSONArray("heatmap")))
+            val color = allColor?.let { androidx.compose.ui.graphics.Color(it) } ?: brandColor
+            HeatmapData("Activity", color, "", levelsOf(root.optJSONArray("heatmap")))
         } catch (e: Exception) {
             null
         }

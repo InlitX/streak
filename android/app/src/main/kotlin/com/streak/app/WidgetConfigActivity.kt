@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -115,6 +116,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialBorder = WidgetConfig.border(this, appWidgetId),
                 initialBorderWidth = WidgetConfig.borderWidth(this, appWidgetId),
                 initialHabit = HeatmapConfig.habitOf(this, appWidgetId),
+                initialAllColor = HeatmapConfig.colorOf(this, appWidgetId),
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
         }
@@ -127,14 +129,20 @@ class WidgetConfigActivity : ComponentActivity() {
         else -> WType.HABIT
     }
 
-    private fun save(bg: Int, opacity: Int, border: Boolean, borderWidth: Int, habitId: String?) {
+    private fun save(
+        bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
+        habitId: String?, allColor: Int,
+    ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
             this, appWidgetId, bg, opacity, border, borderWidth,
             if (image != null) 1 else 0, image,
         )
         if (image != originalImage) WidgetConfig.deleteImage(this, originalImage)
-        if (type == WType.HEATMAP) HeatmapConfig.setHabit(this, appWidgetId, habitId)
+        if (type == WType.HEATMAP) {
+            HeatmapConfig.setHabit(this, appWidgetId, habitId)
+            HeatmapConfig.setColor(this, appWidgetId, if (habitId == null) allColor else null)
+        }
 
         val id = appWidgetId
         val ctx = applicationContext
@@ -210,6 +218,7 @@ class WidgetConfigActivity : ComponentActivity() {
         initialBorder: Boolean,
         initialBorderWidth: Int,
         initialHabit: String?,
+        initialAllColor: Int?,
         isEdit: Boolean,
     ) {
         var bg by remember { mutableStateOf(initialBg) }
@@ -217,9 +226,16 @@ class WidgetConfigActivity : ComponentActivity() {
         var border by remember { mutableStateOf(initialBorder) }
         var borderWidth by remember { mutableStateOf(initialBorderWidth) }
         var habitId by remember { mutableStateOf(initialHabit) }
+        var allColor by remember { mutableStateOf(initialAllColor ?: brand.toArgb()) }
         var custom by remember { mutableStateOf(false) }
         val mode by bgModeState
         val image by imageState
+
+        val dotColor = if (type == WType.HEATMAP && habitId == null) {
+            Color(allColor)
+        } else {
+            brand
+        }
 
         val style = if (mode == 1 && image != null) {
             WidgetStyle.image(image!!, opacity, border, borderWidth)
@@ -236,7 +252,7 @@ class WidgetConfigActivity : ComponentActivity() {
         ) {
             Text("Customize widget", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
-            Preview(style, image.takeIf { mode == 1 })
+            Preview(style, image.takeIf { mode == 1 }, dotColor)
             Spacer(Modifier.height(22.dp))
 
             Row {
@@ -287,11 +303,17 @@ class WidgetConfigActivity : ComponentActivity() {
                     HabitRow(o, o.id == habitId) { habitId = o.id }
                     Spacer(Modifier.height(8.dp))
                 }
+                if (habitId == null) {
+                    Spacer(Modifier.height(16.dp))
+                    Label("Dot color")
+                    Spacer(Modifier.height(10.dp))
+                    Swatches(allColor, custom = false) { allColor = 0xFF000000.toInt() or it }
+                }
             }
 
             Spacer(Modifier.height(24.dp))
             FilledButton(if (isEdit) "Save" else "Add widget", brand, height = 54.dp, bold = true) {
-                save(bg, opacity, border, borderWidth, habitId)
+                save(bg, opacity, border, borderWidth, habitId, allColor)
             }
             Spacer(Modifier.height(6.dp))
             Box(
@@ -302,6 +324,7 @@ class WidgetConfigActivity : ComponentActivity() {
                         border = false
                         borderWidth = 2
                         custom = false
+                        allColor = brand.toArgb()
                         bgModeState.value = 0
                         imageState.value = null
                     }
@@ -315,7 +338,7 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun Preview(style: WidgetStyle, imagePath: String?) {
+    private fun Preview(style: WidgetStyle, imagePath: String?, dotColor: Color) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -351,7 +374,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     WType.HABIT -> HabitPreview(style)
                     WType.TODAY -> TodayPreview(style)
                     WType.STATS -> StatsPreview(style)
-                    WType.HEATMAP -> HeatmapPreview(style)
+                    WType.HEATMAP -> HeatmapPreview(style, dotColor)
                 }
             }
         }
@@ -399,7 +422,7 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun HeatmapPreview(s: WidgetStyle) = Column(Modifier.fillMaxSize()) {
+    private fun HeatmapPreview(s: WidgetStyle, dot: Color) = Column(Modifier.fillMaxSize()) {
         Text("Activity", color = s.content, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
@@ -409,7 +432,7 @@ class WidgetConfigActivity : ComponentActivity() {
                         val on = (col * 7 + row) % 3 == 0
                         Box(
                             Modifier.fillMaxWidth().weight(1f).clip(RoundedCornerShape(2.dp))
-                                .background(if (on) brand.copy(alpha = 0.7f) else s.cell),
+                                .background(if (on) dot.copy(alpha = 0.7f) else s.cell),
                         )
                     }
                 }
