@@ -4,6 +4,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/l10n/app_localizations.dart';
 
 class HomeWidgetService {
   const HomeWidgetService._();
@@ -16,6 +17,54 @@ class HomeWidgetService {
   ];
 
   static const _heatmapWeeks = 26;
+
+  static String? _lastLocale;
+  static String? _locale;
+
+  static Future<void> localize(
+    AppLocalizations l10n,
+    Map<String, Habit> habits,
+  ) async {
+    if (_lastLocale == l10n.localeName) return;
+    _lastLocale = l10n.localeName;
+    _locale = l10n.localeName;
+    try {
+      await HomeWidget.saveWidgetData<String>(
+        'widget_strings',
+        json.encode({
+          'no_habits': l10n.widget_no_habits,
+          'no_data': l10n.widget_no_data,
+          'open_to_sync': l10n.widget_open_to_sync,
+          'activity': l10n.widget_activity,
+          'today_progress': l10n.widget_today_progress('{done}', '{total}'),
+          'done_today': l10n.widget_done_today,
+          'best_streak': l10n.widget_best_streak('{streak}'),
+          'cfg_title': l10n.widget_cfg_title,
+          'cfg_color': l10n.widget_cfg_color,
+          'cfg_image': l10n.widget_cfg_image,
+          'cfg_choose_image': l10n.widget_cfg_choose_image,
+          'cfg_change_image': l10n.widget_cfg_change_image,
+          'cfg_custom_color': l10n.widget_cfg_custom_color,
+          'cfg_opacity': l10n.widget_cfg_opacity('{value}'),
+          'cfg_border': l10n.widget_cfg_border,
+          'cfg_thickness': l10n.widget_cfg_thickness('{value}'),
+          'cfg_show_activity': l10n.widget_cfg_show_activity,
+          'cfg_dot_color': l10n.widget_cfg_dot_color,
+          'cfg_all_habits': l10n.widget_cfg_all_habits,
+          'cfg_save': l10n.widget_cfg_save,
+          'cfg_add': l10n.widget_cfg_add,
+          'cfg_reset': l10n.widget_cfg_reset,
+          'cfg_hue': l10n.widget_cfg_hue,
+          'cfg_saturation': l10n.widget_cfg_saturation,
+          'cfg_brightness': l10n.widget_cfg_brightness,
+          'demo_read': l10n.widget_demo_read,
+          'demo_run': l10n.widget_demo_run,
+          'demo_water': l10n.widget_demo_water,
+        }),
+      );
+    } catch (_) {}
+    await sync(habits);
+  }
 
   static Future<void> sync(Map<String, Habit> habits) async {
     try {
@@ -70,9 +119,10 @@ class HomeWidgetService {
       };
     }).toList();
 
+    final narrow = DateFormat('', _locale ?? 'en').dateSymbols.NARROWWEEKDAYS;
     final days = dates.map((date) {
       return {
-        'label': DateFormat.E().format(date)[0],
+        'label': narrow[date.weekday % 7],
         'isToday': date.day == today.day &&
             date.month == today.month &&
             date.year == today.year,

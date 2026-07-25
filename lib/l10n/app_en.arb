@@ -346,5 +346,54 @@
   "vacation_off_desc": "Pause this habit. Skipped days won't break your streak.",
   "paused": "Paused",
   "start_vacation": "Start vacation",
-  "end_vacation": "End vacation"
+  "end_vacation": "End vacation",
+  "widget_no_habits": "No habits yet\nTap to open Streak",
+  "widget_no_data": "No data yet\nOpen Streak to sync",
+  "widget_open_to_sync": "Open Streak to sync",
+  "widget_activity": "Activity",
+  "widget_today_progress": "Today  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "widget_done_today": "done today",
+  "widget_best_streak": "🔥 {streak} best streak",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": { "type": "String" }
+    }
+  },
+  "widget_cfg_title": "Customize widget",
+  "widget_cfg_color": "Color",
+  "widget_cfg_image": "Image",
+  "widget_cfg_choose_image": "Choose image",
+  "widget_cfg_change_image": "Change image",
+  "widget_cfg_custom_color": "Custom color",
+  "widget_cfg_opacity": "Opacity  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "widget_cfg_border": "Border",
+  "widget_cfg_thickness": "Thickness  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "widget_cfg_show_activity": "Show activity of",
+  "widget_cfg_dot_color": "Dot color",
+  "widget_cfg_all_habits": "All habits",
+  "widget_cfg_save": "Save",
+  "widget_cfg_add": "Add widget",
+  "widget_cfg_reset": "Reset to default",
+  "widget_cfg_hue": "Hue",
+  "widget_cfg_saturation": "Saturation",
+  "widget_cfg_brightness": "Brightness",
+  "widget_demo_read": "Read",
+  "widget_demo_run": "Run",
+  "widget_demo_water": "Water"
 }

@@ -69,7 +69,10 @@ class TodayWidget : GlanceAppWidget() {
             val total = summary?.optInt("total") ?: 0
 
             Text(
-                text = "Today  $done/$total",
+                text = WidgetText.format(
+                    context, "today_progress", "Today  $done/$total",
+                    "{done}" to done.toString(), "{total}" to total.toString(),
+                ),
                 style = TextStyle(
                     color = ColorProvider(style.content),
                     fontSize = 16.sp,
@@ -86,7 +89,7 @@ class TodayWidget : GlanceAppWidget() {
                 }
             } else {
                 Text(
-                    text = "Open Streak to sync",
+                    text = WidgetText.get(context, "open_to_sync", "Open Streak to sync"),
                     style = TextStyle(
                         color = ColorProvider(style.muted),
                         fontSize = 13.sp

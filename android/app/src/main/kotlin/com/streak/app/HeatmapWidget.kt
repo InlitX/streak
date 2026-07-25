@@ -84,6 +84,7 @@ class HeatmapWidget : GlanceAppWidget() {
 
     @Composable
     private fun Body(style: WidgetStyle, data: HeatmapData?, habitId: String?) {
+        val context = androidx.glance.LocalContext.current
         val size = LocalSize.current
 
         val borderPad = if (style.border != null) style.borderWidth * 2 else 0
@@ -114,7 +115,7 @@ class HeatmapWidget : GlanceAppWidget() {
         ) {
             if (shown.isEmpty()) {
                 Text(
-                    text = "Open Streak to sync",
+                    text = WidgetText.get(context, "open_to_sync", "Open Streak to sync"),
                     style = TextStyle(
                         color = ColorProvider(style.muted),
                         fontSize = 13.sp
@@ -201,7 +202,7 @@ class HeatmapWidget : GlanceAppWidget() {
                 }
             }
             val color = allColor?.let { androidx.compose.ui.graphics.Color(it) } ?: brandColor
-            HeatmapData("Activity", color, "", levelsOf(root.optJSONArray("heatmap")))
+            HeatmapData(WidgetText.get(context, "activity", "Activity"), color, "", levelsOf(root.optJSONArray("heatmap")))
         } catch (e: Exception) {
             null
         }

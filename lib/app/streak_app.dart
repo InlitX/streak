@@ -6,8 +6,10 @@ import 'package:streak/app/home_shell.dart';
 import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/onboarding/pages/onboarding_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/services/home_widget_service.dart';
 
 class StreakApp extends StatelessWidget {
   const StreakApp({super.key});
@@ -23,8 +25,13 @@ class StreakApp extends StatelessWidget {
       theme: AppTheme.light(settings.accentColor),
       darkTheme: AppTheme.dark(settings.accentColor),
       themeMode: settings.themeMode,
-      builder: (context, child) =>
-          AppBackground(child: child ?? const SizedBox.shrink()),
+      builder: (context, child) {
+        HomeWidgetService.localize(
+          AppLocalizations.of(context),
+          context.read<HabitsController>().asMap,
+        );
+        return AppBackground(child: child ?? const SizedBox.shrink());
+      },
       locale: settings.locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [

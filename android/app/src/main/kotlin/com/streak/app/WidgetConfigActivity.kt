@@ -129,6 +129,11 @@ class WidgetConfigActivity : ComponentActivity() {
         else -> WType.HABIT
     }
 
+    private fun tr(key: String, fallback: String) = WidgetText.get(this, key, fallback)
+
+    private fun trf(key: String, fallback: String, vararg subs: Pair<String, String>) =
+        WidgetText.format(this, key, fallback, *subs)
+
     private fun save(
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
         habitId: String?, allColor: Int,
@@ -196,7 +201,7 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     private fun loadOptions(): List<HabitOption> {
-        val all = listOf(HabitOption(null, "All habits", brand))
+        val all = listOf(HabitOption(null, tr("cfg_all_habits", "All habits"), brand))
         return try {
             val json = getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
                 .getString("habits_data", null) ?: return all
@@ -250,28 +255,28 @@ class WidgetConfigActivity : ComponentActivity() {
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
         ) {
-            Text("Customize widget", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text(tr("cfg_title", "Customize widget"), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
             Preview(style, image.takeIf { mode == 1 }, dotColor)
             Spacer(Modifier.height(22.dp))
 
             Row {
-                ModeChip("Color", mode == 0) { bgModeState.value = 0 }
+                ModeChip(tr("cfg_color", "Color"), mode == 0) { bgModeState.value = 0 }
                 Spacer(Modifier.width(10.dp))
-                ModeChip("Image", mode == 1) {
+                ModeChip(tr("cfg_image", "Image"), mode == 1) {
                     if (image != null) bgModeState.value = 1 else pickImage.launch("image/*")
                 }
             }
             Spacer(Modifier.height(16.dp))
 
             if (mode == 1) {
-                FilledButton(if (image == null) "Choose image" else "Change image", cardColor) {
+                FilledButton(if (image == null) tr("cfg_choose_image", "Choose image") else tr("cfg_change_image", "Change image"), cardColor) {
                     pickImage.launch("image/*")
                 }
             } else {
                 Swatches(bg, custom) { bg = it; custom = false }
                 Spacer(Modifier.height(12.dp))
-                Chip("Custom color", custom) { custom = !custom }
+                Chip(tr("cfg_custom_color", "Custom color"), custom) { custom = !custom }
                 if (custom) {
                     Spacer(Modifier.height(10.dp))
                     HsvPicker(bg) { bg = it }
@@ -279,25 +284,25 @@ class WidgetConfigActivity : ComponentActivity() {
             }
 
             Spacer(Modifier.height(22.dp))
-            Label("Opacity  $opacity%")
+            Label(trf("cfg_opacity", "Opacity  $opacity%", "{value}" to opacity.toString()))
             ThemedSlider(opacity.toFloat(), 0f..100f) { opacity = it.toInt() }
 
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Border", color = Color.White, fontSize = 16.sp, modifier = Modifier.weight(1f))
+                Text(tr("cfg_border", "Border"), color = Color.White, fontSize = 16.sp, modifier = Modifier.weight(1f))
                 Switch(
                     checked = border, onCheckedChange = { border = it },
                     colors = SwitchDefaults.colors(checkedTrackColor = brand),
                 )
             }
             if (border) {
-                Label("Thickness  ${borderWidth}dp")
+                Label(trf("cfg_thickness", "Thickness  ${borderWidth}dp", "{value}" to borderWidth.toString()))
                 ThemedSlider(borderWidth.toFloat(), 1f..8f) { borderWidth = it.toInt() }
             }
 
             if (habits.isNotEmpty()) {
                 Spacer(Modifier.height(22.dp))
-                Label("Show activity of")
+                Label(tr("cfg_show_activity", "Show activity of"))
                 Spacer(Modifier.height(10.dp))
                 habits.forEach { o ->
                     HabitRow(o, o.id == habitId) { habitId = o.id }
@@ -305,14 +310,14 @@ class WidgetConfigActivity : ComponentActivity() {
                 }
                 if (habitId == null) {
                     Spacer(Modifier.height(16.dp))
-                    Label("Dot color")
+                    Label(tr("cfg_dot_color", "Dot color"))
                     Spacer(Modifier.height(10.dp))
                     Swatches(allColor, custom = false) { allColor = 0xFF000000.toInt() or it }
                 }
             }
 
             Spacer(Modifier.height(24.dp))
-            FilledButton(if (isEdit) "Save" else "Add widget", brand, height = 54.dp, bold = true) {
+            FilledButton(if (isEdit) tr("cfg_save", "Save") else tr("cfg_add", "Add widget"), brand, height = 54.dp, bold = true) {
                 save(bg, opacity, border, borderWidth, habitId, allColor)
             }
             Spacer(Modifier.height(6.dp))
@@ -331,7 +336,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     .padding(vertical = 12.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text("Reset to default", color = mutedColor, fontWeight = FontWeight.Medium)
+                Text(tr("cfg_reset", "Reset to default"), color = mutedColor, fontWeight = FontWeight.Medium)
             }
             Spacer(Modifier.height(12.dp))
         }
@@ -384,7 +389,7 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun HabitPreview(s: WidgetStyle) = Column(
         Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        listOf("Read", "Run", "Water").forEach { name ->
+        listOf(tr("demo_read", "Read"), tr("demo_run", "Run"), tr("demo_water", "Water")).forEach { name ->
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(name, color = s.content, fontSize = 13.sp, fontWeight = FontWeight.Medium,
                     modifier = Modifier.width(60.dp))
@@ -399,9 +404,9 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun TodayPreview(s: WidgetStyle) = Column(
         Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
     ) {
-        Text("Today  2/3", color = s.content, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Text(trf("today_progress", "Today  2/3", "{done}" to "2", "{total}" to "3"), color = s.content, fontSize = 15.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
-        listOf("Read" to true, "Run" to false).forEach { (name, done) ->
+        listOf(tr("demo_read", "Read") to true, tr("demo_run", "Run") to false).forEach { (name, done) ->
             Row(Modifier.fillMaxWidth().padding(vertical = 5.dp),
                 verticalAlignment = Alignment.CenterVertically) {
                 Text(name, color = s.content, fontSize = 13.sp, modifier = Modifier.weight(1f))
@@ -416,14 +421,14 @@ class WidgetConfigActivity : ComponentActivity() {
         verticalArrangement = Arrangement.Center,
     ) {
         Text("2/3", color = brand, fontSize = 34.sp, fontWeight = FontWeight.Bold)
-        Text("done today", color = s.muted, fontSize = 12.sp)
+        Text(tr("done_today", "done today"), color = s.muted, fontSize = 12.sp)
         Spacer(Modifier.height(8.dp))
-        Text("🔥 5 best streak", color = s.content, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+        Text(trf("best_streak", "🔥 5 best streak", "{streak}" to "5"), color = s.content, fontSize = 13.sp, fontWeight = FontWeight.Medium)
     }
 
     @Composable
     private fun HeatmapPreview(s: WidgetStyle, dot: Color) = Column(Modifier.fillMaxSize()) {
-        Text("Activity", color = s.content, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(tr("activity", "Activity"), color = s.content, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
             repeat(16) { col ->
@@ -501,11 +506,11 @@ class WidgetConfigActivity : ComponentActivity() {
         var s by remember { mutableStateOf(hsv[1].coerceAtLeast(0.05f)) }
         var v by remember { mutableStateOf(hsv[2].coerceAtLeast(0.05f)) }
         fun emit() = onChange(android.graphics.Color.HSVToColor(floatArrayOf(h, s, v)) and 0x00FFFFFF)
-        Label("Hue")
+        Label(tr("cfg_hue", "Hue"))
         ThemedSlider(h, 0f..360f) { h = it; emit() }
-        Label("Saturation")
+        Label(tr("cfg_saturation", "Saturation"))
         ThemedSlider(s, 0f..1f) { s = it; emit() }
-        Label("Brightness")
+        Label(tr("cfg_brightness", "Brightness"))
         ThemedSlider(v, 0f..1f) { v = it; emit() }
     }
 

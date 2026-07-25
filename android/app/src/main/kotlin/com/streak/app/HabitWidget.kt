@@ -72,6 +72,7 @@ class HabitWidget : GlanceAppWidget() {
 
     @Composable
     private fun WidgetBody(style: WidgetStyle, data: JSONObject?) {
+        val context = androidx.glance.LocalContext.current
         val modifier = GlanceModifier
             .fillMaxSize()
             .padding(16.dp)
@@ -127,10 +128,10 @@ class HabitWidget : GlanceAppWidget() {
                         }
                     }
                 } else {
-                    EmptyState(style, "No habits yet\nTap to open Streak")
+                    EmptyState(style, WidgetText.get(context, "no_habits", "No habits yet\nTap to open Streak"))
                 }
             } else {
-                EmptyState(style, "No data yet\nOpen Streak to sync")
+                EmptyState(style, WidgetText.get(context, "no_data", "No data yet\nOpen Streak to sync"))
             }
         }
     }

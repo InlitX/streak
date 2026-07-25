@@ -67,7 +67,7 @@ class StatsWidget : GlanceAppWidget() {
                 )
             )
             Text(
-                text = "done today",
+                text = WidgetText.get(context, "done_today", "done today"),
                 style = TextStyle(
                     color = ColorProvider(style.muted),
                     fontSize = 13.sp
@@ -75,7 +75,10 @@ class StatsWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.height(10.dp))
             Text(
-                text = "🔥 $best best streak",
+                text = WidgetText.format(
+                    context, "best_streak", "🔥 $best best streak",
+                    "{streak}" to best.toString(),
+                ),
                 style = TextStyle(
                     color = ColorProvider(style.content),
                     fontSize = 14.sp,
