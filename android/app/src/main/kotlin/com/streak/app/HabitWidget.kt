@@ -24,10 +24,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.action.clickable
 import androidx.glance.action.actionStartActivity
-import androidx.glance.action.ActionParameters
-import androidx.glance.action.actionParametersOf
-import androidx.glance.appwidget.action.ActionCallback
-import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.unit.ColorProvider
 import androidx.glance.Image
 import androidx.glance.ImageProvider
@@ -45,6 +42,9 @@ private val dangerColor = androidx.compose.ui.graphics.Color(0xFFEF4444)
 private const val KIND_POSITIVE = 0
 private const val KIND_NEGATIVE = 1
 private const val KIND_QUANTITATIVE = 2
+
+private const val LABEL_WIDTH_DP = 104
+private const val RATE_BAR_DP = 44
 
 class HabitWidget : GlanceAppWidget() {
 
@@ -89,7 +89,12 @@ class HabitWidget : GlanceAppWidget() {
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
                     ) {
-                        Spacer(modifier = GlanceModifier.width(90.dp))
+                        Box(
+                            modifier = GlanceModifier.width(LABEL_WIDTH_DP.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            CompletionRate(style, data.optJSONObject("summary"))
+                        }
                         Spacer(modifier = GlanceModifier.width(8.dp))
                         Row(
                             modifier = GlanceModifier.defaultWeight(),
@@ -137,7 +142,48 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
+    private fun CompletionRate(style: WidgetStyle, summary: JSONObject?) {
+        val total = summary?.optInt("total", 0) ?: 0
+        if (total <= 0) return
+        val done = summary?.optInt("doneToday", 0) ?: 0
+        val ratio = (done.toFloat() / total).coerceIn(0f, 1f)
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "${(ratio * 100).toInt()}%",
+                style = TextStyle(
+                    color = ColorProvider(style.content),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 1
+            )
+            Spacer(modifier = GlanceModifier.width(6.dp))
+            Box(
+                modifier = GlanceModifier
+                    .width(RATE_BAR_DP.dp)
+                    .height(4.dp)
+                    .cornerRadius(2.dp)
+                    .background(ColorProvider(style.cell)),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                if (ratio > 0f) {
+                    Box(
+                        modifier = GlanceModifier
+                            .width((RATE_BAR_DP * ratio).dp.coerceAtLeast(4.dp))
+                            .height(4.dp)
+                            .cornerRadius(2.dp)
+                            .background(ColorProvider(brandColor)),
+                        content = {}
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
     private fun HabitRow(style: WidgetStyle, habit: JSONObject) {
+        val context = androidx.glance.LocalContext.current
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
@@ -145,13 +191,9 @@ class HabitWidget : GlanceAppWidget() {
         val completions = habit.getJSONArray("completions")
         val kind = habit.optInt("kind", KIND_POSITIVE)
         val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
-        val incrementAmount = habit.optInt("incrementAmount", 1)
         val counts = habit.optJSONArray("counts")
-        val action = when (kind) {
-            KIND_NEGATIVE -> "relapse"
-            KIND_QUANTITATIVE -> "progress"
-            else -> "toggle"
-        }
+        val streak = habit.optInt("streak", 0)
+        val quantified = kind == KIND_QUANTITATIVE || perDayTarget > 1
 
         Row(
             modifier = GlanceModifier
@@ -159,9 +201,9 @@ class HabitWidget : GlanceAppWidget() {
                 .padding(vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = GlanceModifier.width(90.dp),
-                contentAlignment = Alignment.CenterStart
+            Row(
+                modifier = GlanceModifier.width(LABEL_WIDTH_DP.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = name,
@@ -170,8 +212,10 @@ class HabitWidget : GlanceAppWidget() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    maxLines = 1
+                    maxLines = 1,
+                    modifier = GlanceModifier.defaultWeight()
                 )
+                StreakBadge(streak, color, style)
             }
 
             Spacer(modifier = GlanceModifier.width(8.dp))
@@ -195,23 +239,19 @@ class HabitWidget : GlanceAppWidget() {
                                 .size(24.dp)
                                 .cornerRadius(12.dp)
                                 .clickable(
-                                    onClick = actionRunCallback<ToggleHabitAction>(
-                                        parameters = actionParametersOf(
-                                            ActionParameters.Key<String>("habitId") to habitId,
-                                            ActionParameters.Key<Int>("dayIndex") to i,
-                                            ActionParameters.Key<String>("action") to action,
-                                            ActionParameters.Key<Int>("delta") to incrementAmount
-                                        )
+                                    onClick = actionSendBroadcast(
+                                        WidgetActionReceiver.intent(context, habitId, i)
                                     )
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
-                            when (kind) {
-                                KIND_NEGATIVE -> CompletionIndicator(
+                            when {
+                                kind == KIND_NEGATIVE -> CompletionIndicator(
                                     isCompleted = count > 0,
                                     color = if (count > 0) dangerColor else color
                                 )
-                                KIND_QUANTITATIVE -> ProgressIndicator(
+                                quantified -> ValueIndicator(
+                                    count = count,
                                     ratio = count.toFloat() / perDayTarget,
                                     color = color
                                 )
@@ -239,17 +279,36 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun ProgressIndicator(ratio: Float, color: androidx.compose.ui.graphics.Color) {
+    private fun ValueIndicator(
+        count: Int,
+        ratio: Float,
+        color: androidx.compose.ui.graphics.Color
+    ) {
+        if (count <= 0) {
+            CompletionIndicator(isCompleted = false, color = color)
+            return
+        }
         val clamped = ratio.coerceIn(0f, 1f)
-        val size = (8 + 10 * clamped).dp
-        val alpha = if (clamped > 0f) (0.4f + 0.6f * clamped) else 0.35f
+        val label = if (count > 99) "99+" else count.toString()
         Box(
             modifier = GlanceModifier
-                .size(size)
-                .background(ColorProvider(color.copy(alpha = alpha)))
-                .cornerRadius(size / 2),
-            content = {}
-        )
+                .size(20.dp)
+                .background(ColorProvider(color.copy(alpha = 0.35f + 0.65f * clamped)))
+                .cornerRadius(7.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                style = TextStyle(
+                    color = ColorProvider(
+                        if (clamped >= 0.6f) androidx.compose.ui.graphics.Color.White else color
+                    ),
+                    fontSize = if (label.length > 2) 8.sp else 10.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 1
+            )
+        }
     }
 
     @Composable
@@ -277,29 +336,6 @@ class HabitWidget : GlanceAppWidget() {
             if (json != null) JSONObject(json) else null
         } catch (e: Exception) {
             null
-        }
-    }
-}
-
-class ToggleHabitAction : ActionCallback {
-    override suspend fun onAction(
-        context: Context,
-        glanceId: GlanceId,
-        parameters: ActionParameters
-    ) {
-        val habitId = parameters[ActionParameters.Key<String>("habitId")]
-        val dayIndex = parameters[ActionParameters.Key<Int>("dayIndex")]
-        val action = parameters[ActionParameters.Key<String>("action")] ?: "toggle"
-        val delta = parameters[ActionParameters.Key<Int>("delta")] ?: 1
-        if (habitId != null && dayIndex != null) {
-            val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(
-                context,
-                Uri.parse(
-                    "streak://toggleHabit?habitId=$habitId&dayIndex=$dayIndex" +
-                        "&action=$action&delta=$delta"
-                )
-            )
-            backgroundIntent.send()
         }
     }
 }

@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/l10n/app_localizations.dart';
+import 'package:streak/services/widget_icon_service.dart';
 
 class HomeWidgetService {
   const HomeWidgetService._();
@@ -16,7 +18,9 @@ class HomeWidgetService {
     'HeatmapWidgetProvider',
   ];
 
-  static const _heatmapWeeks = 26;
+  static const _heatmapWeeks = 53;
+
+  static const _allHabitsIcon = 'activity';
 
   static String? _lastLocale;
   static String? _locale;
@@ -50,6 +54,9 @@ class HomeWidgetService {
           'cfg_thickness': l10n.widget_cfg_thickness('{value}'),
           'cfg_show_activity': l10n.widget_cfg_show_activity,
           'cfg_dot_color': l10n.widget_cfg_dot_color,
+          'cfg_style': l10n.widget_cfg_style,
+          'cfg_style_classic': l10n.widget_cfg_style_classic,
+          'cfg_style_card': l10n.widget_cfg_style_card,
           'cfg_all_habits': l10n.widget_cfg_all_habits,
           'cfg_save': l10n.widget_cfg_save,
           'cfg_add': l10n.widget_cfg_add,
@@ -66,9 +73,19 @@ class HomeWidgetService {
     await sync(habits);
   }
 
-  static Future<void> sync(Map<String, Habit> habits) async {
+  static Future<void> sync(
+    Map<String, Habit> habits, {
+    bool renderIcons = true,
+  }) async {
     try {
-      await HomeWidget.saveWidgetData<String>('habits_data', _encode(habits));
+      final icons = await WidgetIconService.resolve(
+        [...habits.values.map((h) => h.icon), _allHabitsIcon],
+        render: renderIcons,
+      );
+      await HomeWidget.saveWidgetData<String>(
+        'habits_data',
+        _encode(habits, icons),
+      );
       for (final provider in _providers) {
         await HomeWidget.updateWidget(androidName: provider);
       }
@@ -95,7 +112,7 @@ class HomeWidgetService {
     } catch (_) {}
   }
 
-  static String _encode(Map<String, Habit> habits) {
+  static String _encode(Map<String, Habit> habits, Map<String, String> icons) {
     final today = DateTime.now();
     final dates = List.generate(
       7,
@@ -106,10 +123,14 @@ class HomeWidgetService {
       return {
         'id': habit.id,
         'name': habit.name,
+        'description': habit.description,
+        'iconPath': icons[habit.icon] ?? '',
+        'iconTintable': HabitIcons.isIcon(habit.icon),
         'color': habit.color.toARGB32(),
         'cover': habit.coverPath,
         'completions': dates.map(habit.isCompletedOn).toList(),
         'kind': habit.kind.index,
+        'streak': habit.currentStreak,
         'perDayTarget': habit.effectiveTarget,
         'incrementAmount': habit.incrementAmount,
         'counts': dates
@@ -137,6 +158,7 @@ class HomeWidgetService {
       'habits': widgetHabits,
       'days': days,
       'heatmap': _heatmapLevels(habits.values, today),
+      'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       'summary': {
         'doneToday': habits.values.where((h) => h.isCompletedOn(today)).length,
         'total': habits.length,

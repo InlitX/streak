@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
-import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initializeDateFormatting();
   await LocalStore.init();
+  await WidgetActionService.drain(LocalStore.readHabits());
 
   NotificationService.onOpenHabit = _openHabit;
   try {
     await NotificationService().initialize();
-    HomeWidget.registerInteractivityCallback(_widgetCallback);
   } catch (e, s) {
     debugPrint('Startup init (notifications/widget) failed: $e\n$s');
   }
@@ -73,38 +71,17 @@ void _openHabit(String habitId) {
 }
 
 @pragma('vm:entry-point')
-Future<void> _widgetCallback(Uri? uri) async {
-  if (uri == null) return;
-
+Future<void> widgetActionEntrypoint() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await LocalStore.init();
-  // This isolate is reused across taps: drop any stale cached box.
-  await LocalStore.reloadHabits();
-
-  final habitId = uri.queryParameters['habitId'];
-  final dayIndex = int.tryParse(uri.queryParameters['dayIndex'] ?? '');
-  if (habitId == null || dayIndex == null) return;
-
-  final habits = LocalStore.readHabits();
-  final habit = habits[habitId];
-  if (habit == null) return;
-
-  final target =
-      DateTime.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
-
-  final action = uri.queryParameters['action'] ?? 'toggle';
-  final delta = int.tryParse(uri.queryParameters['delta'] ?? '') ??
-      habit.incrementAmount;
-  final completions = switch (action) {
-    'relapse' => habit.completions.containsKey(target.dayKey)
-        ? CompletionOps.clearRelapse(habit, target)
-        : CompletionOps.logRelapse(habit, target),
-    'progress' => CompletionOps.addProgress(habit, target, delta),
-    _ => CompletionOps.toggle(habit, target),
-  };
-
-  final updated = habit.copyWith(completions: completions);
-  habits[habitId] = updated;
-  await LocalStore.writeHabit(updated);
-  await HomeWidgetService.sync(habits);
+  const channel = MethodChannel('streak/widget_action');
+  try {
+    await LocalStore.init();
+    await LocalStore.reloadHabits();
+    final habits = LocalStore.readHabits();
+    await WidgetActionService.drain(habits);
+    await HomeWidgetService.sync(habits, renderIcons: false);
+  } catch (e) {
+    debugPrint('Widget action entrypoint failed: $e');
+  }
+  await channel.invokeMethod('done');
 }

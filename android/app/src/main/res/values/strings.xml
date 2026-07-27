@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Streak</string>
     <string name="widget_description">Track your habits and build streaks</string>
+    <string name="widget_heatmap_label">Streak heatmap</string>
+    <string name="widget_habit_label">Streak habits</string>
+    <string name="widget_today_label">Streak today</string>
+    <string name="widget_stats_label">Streak summary</string>
 </resources>

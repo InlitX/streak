@@ -4,6 +4,9 @@ import android.content.Context
 
 // Per-widget habit choice; no entry = all habits.
 object HeatmapConfig {
+    const val LAYOUT_CLASSIC = 0
+    const val LAYOUT_CARD = 1
+
     private const val PREFS = "StreakHeatmapConfig"
 
     private fun prefs(context: Context) =
@@ -20,6 +23,16 @@ object HeatmapConfig {
         }.commit()
     }
 
+    fun layoutOf(context: Context, appWidgetId: Int): Int =
+        when (prefs(context).getInt("layout_$appWidgetId", LAYOUT_CLASSIC)) {
+            LAYOUT_CLASSIC -> LAYOUT_CLASSIC
+            else -> LAYOUT_CARD
+        }
+
+    fun setLayout(context: Context, appWidgetId: Int, layout: Int) {
+        prefs(context).edit().putInt("layout_$appWidgetId", layout).commit()
+    }
+
     fun colorOf(context: Context, appWidgetId: Int): Int? {
         val p = prefs(context)
         return if (p.contains("color_$appWidgetId")) p.getInt("color_$appWidgetId", 0) else null
@@ -33,6 +46,10 @@ object HeatmapConfig {
     }
 
     fun clear(context: Context, appWidgetId: Int) {
-        prefs(context).edit().remove("habit_$appWidgetId").remove("color_$appWidgetId").apply()
+        prefs(context).edit()
+            .remove("habit_$appWidgetId")
+            .remove("color_$appWidgetId")
+            .remove("layout_$appWidgetId")
+            .apply()
     }
 }

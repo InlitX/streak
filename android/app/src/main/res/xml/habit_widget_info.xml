@@ -10,5 +10,6 @@
     android:configure="com.streak.app.WidgetConfigActivity"
     android:widgetFeatures="reconfigurable"
     android:description="@string/widget_description"
+    android:initialLayout="@layout/widget_loading"
     android:previewLayout="@layout/widget_preview_habit"
     android:previewImage="@drawable/widget_preview_img_habit" />

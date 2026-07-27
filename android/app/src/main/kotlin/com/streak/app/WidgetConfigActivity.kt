@@ -43,6 +43,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.GlanceAppWidget
@@ -117,6 +120,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialBorderWidth = WidgetConfig.borderWidth(this, appWidgetId),
                 initialHabit = HeatmapConfig.habitOf(this, appWidgetId),
                 initialAllColor = HeatmapConfig.colorOf(this, appWidgetId),
+                initialLayout = HeatmapConfig.layoutOf(this, appWidgetId),
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
         }
@@ -136,7 +140,7 @@ class WidgetConfigActivity : ComponentActivity() {
 
     private fun save(
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
-        habitId: String?, allColor: Int,
+        habitId: String?, allColor: Int, layout: Int,
     ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
@@ -147,11 +151,17 @@ class WidgetConfigActivity : ComponentActivity() {
         if (type == WType.HEATMAP) {
             HeatmapConfig.setHabit(this, appWidgetId, habitId)
             HeatmapConfig.setColor(this, appWidgetId, if (habitId == null) allColor else null)
+            HeatmapConfig.setLayout(this, appWidgetId, layout)
         }
 
         val id = appWidgetId
         val ctx = applicationContext
         setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id))
+        if (type == WType.HEATMAP) {
+            HeatmapRenderer.update(ctx, AppWidgetManager.getInstance(ctx), id)
+            finish()
+            return
+        }
         scheduleRefresh(id, 900L, 1)
         scheduleRefresh(id, 2500L, 2)
 
@@ -171,8 +181,7 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun widgetFor(t: WType): GlanceAppWidget = when (t) {
         WType.TODAY -> TodayWidget()
         WType.STATS -> StatsWidget()
-        WType.HEATMAP -> HeatmapWidget()
-        WType.HABIT -> HabitWidget()
+        WType.HEATMAP, WType.HABIT -> HabitWidget()
     }
 
     private fun copyToStorage(uri: Uri): String? = try {
@@ -224,6 +233,7 @@ class WidgetConfigActivity : ComponentActivity() {
         initialBorderWidth: Int,
         initialHabit: String?,
         initialAllColor: Int?,
+        initialLayout: Int,
         isEdit: Boolean,
     ) {
         var bg by remember { mutableStateOf(initialBg) }
@@ -232,15 +242,10 @@ class WidgetConfigActivity : ComponentActivity() {
         var borderWidth by remember { mutableStateOf(initialBorderWidth) }
         var habitId by remember { mutableStateOf(initialHabit) }
         var allColor by remember { mutableStateOf(initialAllColor ?: brand.toArgb()) }
+        var layout by remember { mutableStateOf(initialLayout) }
         var custom by remember { mutableStateOf(false) }
         val mode by bgModeState
         val image by imageState
-
-        val dotColor = if (type == WType.HEATMAP && habitId == null) {
-            Color(allColor)
-        } else {
-            brand
-        }
 
         val style = if (mode == 1 && image != null) {
             WidgetStyle.image(image!!, opacity, border, borderWidth)
@@ -257,8 +262,23 @@ class WidgetConfigActivity : ComponentActivity() {
         ) {
             Text(tr("cfg_title", "Customize widget"), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
-            Preview(style, image.takeIf { mode == 1 }, dotColor)
+            Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor)
             Spacer(Modifier.height(22.dp))
+
+            if (type == WType.HEATMAP) {
+                Label(tr("cfg_style", "Style"))
+                Spacer(Modifier.height(10.dp))
+                Row {
+                    listOf(
+                        HeatmapConfig.LAYOUT_CLASSIC to tr("cfg_style_classic", "Classic"),
+                        HeatmapConfig.LAYOUT_CARD to tr("cfg_style_card", "Card"),
+                    ).forEach { (value, label) ->
+                        Chip(label, layout == value) { layout = value }
+                        Spacer(Modifier.width(8.dp))
+                    }
+                }
+                Spacer(Modifier.height(22.dp))
+            }
 
             Row {
                 ModeChip(tr("cfg_color", "Color"), mode == 0) { bgModeState.value = 0 }
@@ -318,7 +338,7 @@ class WidgetConfigActivity : ComponentActivity() {
 
             Spacer(Modifier.height(24.dp))
             FilledButton(if (isEdit) tr("cfg_save", "Save") else tr("cfg_add", "Add widget"), brand, height = 54.dp, bold = true) {
-                save(bg, opacity, border, borderWidth, habitId, allColor)
+                save(bg, opacity, border, borderWidth, habitId, allColor, layout)
             }
             Spacer(Modifier.height(6.dp))
             Box(
@@ -330,6 +350,7 @@ class WidgetConfigActivity : ComponentActivity() {
                         borderWidth = 2
                         custom = false
                         allColor = brand.toArgb()
+                        layout = HeatmapConfig.LAYOUT_CLASSIC
                         bgModeState.value = 0
                         imageState.value = null
                     }
@@ -343,11 +364,15 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun Preview(style: WidgetStyle, imagePath: String?, dotColor: Color) {
+    private fun Preview(
+        style: WidgetStyle,
+        imagePath: String?,
+        layout: Int,
+        habitId: String?,
+        allColor: Int,
+    ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
+            modifier = Modifier.fillMaxWidth().height(140.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(style.background)
                 .then(
@@ -379,7 +404,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     WType.HABIT -> HabitPreview(style)
                     WType.TODAY -> TodayPreview(style)
                     WType.STATS -> StatsPreview(style)
-                    WType.HEATMAP -> HeatmapPreview(style, dotColor)
+                    WType.HEATMAP -> LivePreview(style, layout, habitId, allColor)
                 }
             }
         }
@@ -427,22 +452,105 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun HeatmapPreview(s: WidgetStyle, dot: Color) = Column(Modifier.fillMaxSize()) {
-        Text(tr("activity", "Activity"), color = s.content, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-            repeat(16) { col ->
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                    repeat(6) { row ->
-                        val on = (col * 7 + row) % 3 == 0
-                        Box(
-                            Modifier.fillMaxWidth().weight(1f).clip(RoundedCornerShape(2.dp))
-                                .background(if (on) dot.copy(alpha = 0.7f) else s.cell),
+    private fun LivePreview(
+        style: WidgetStyle,
+        layout: Int,
+        habitId: String?,
+        allColor: Int,
+    ) {
+        val data = remember(habitId, allColor) {
+            HabitCardData.load(this, habitId, if (habitId == null) allColor else null)
+        }
+        if (data == null) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(tr("open_to_sync", "Open Streak to sync"), color = style.muted, fontSize = 13.sp)
+            }
+            return
+        }
+
+        val density = resources.displayMetrics.density
+        val tileDp = 36f
+        val tilePx = (tileDp * density).toInt()
+        val classic = layout == HeatmapConfig.LAYOUT_CLASSIC
+
+        Column(Modifier.fillMaxSize()) {
+            if (classic) {
+                Text(
+                    data.name, color = style.content, fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold, maxLines = 1,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    BitmapImage(
+                        remember(data.id, tilePx) {
+                            CardBitmaps.tile(
+                                tilePx,
+                                CardBitmaps.withAlpha(data.color, 0.20f),
+                                data.iconPath,
+                                if (data.iconTintable) style.content.toArgb() else null,
+                            )
+                        },
+                        tileDp.dp,
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(data.name, color = style.content, fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold, maxLines = 1)
+                        if (data.description.isNotEmpty()) {
+                            Text(data.description, color = style.content.copy(alpha = 0.72f),
+                                fontSize = 11.sp, maxLines = 1)
+                        }
+                    }
+                    if (data.id != null) {
+                        Spacer(Modifier.width(8.dp))
+                        BitmapImage(
+                            remember(data.id, data.doneToday, tilePx) {
+                                CardBitmaps.check(
+                                    tilePx,
+                                    if (data.doneToday) data.color
+                                    else CardBitmaps.withAlpha(data.color, 0.20f),
+                                    if (data.doneToday) android.graphics.Color.WHITE else data.color,
+                                )
+                            },
+                            tileDp.dp,
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            var gridSize by remember { mutableStateOf(IntSize.Zero) }
+            Box(
+                Modifier.fillMaxWidth().weight(1f)
+                    .onSizeChanged { gridSize = it },
+            ) {
+                if (gridSize.width > 0 && gridSize.height > 0) {
+                    val grid = remember(gridSize, data.id, classic, data.levels.size) {
+                        CardBitmaps.grid(
+                            gridSize.width, gridSize.height, data.levels, data.color,
+                            if (classic) style.cell.toArgb() else null,
+                        )
+                    }
+                    if (grid != null) {
+                        Image(
+                            grid.asImageBitmap(), null,
+                            Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Fit,
                         )
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    private fun BitmapImage(bitmap: android.graphics.Bitmap?, size: androidx.compose.ui.unit.Dp) {
+        if (bitmap == null) {
+            Spacer(Modifier.size(size))
+            return
+        }
+        Image(bitmap.asImageBitmap(), null, Modifier.size(size))
     }
 
     @Composable

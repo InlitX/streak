@@ -3,7 +3,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:minResizeWidth="110dp"
+    android:minResizeWidth="80dp"
     android:minResizeHeight="80dp"
     android:updatePeriodMillis="1800000"
     android:resizeMode="horizontal|vertical"
@@ -11,5 +11,6 @@
     android:configure="com.streak.app.WidgetConfigActivity"
     android:widgetFeatures="reconfigurable"
     android:description="@string/widget_description"
+    android:initialLayout="@layout/widget_heatmap"
     android:previewLayout="@layout/widget_preview_heatmap"
     android:previewImage="@drawable/widget_preview_img_heatmap" />

@@ -24,9 +24,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.action.clickable
 import androidx.glance.action.actionStartActivity
-import androidx.glance.action.ActionParameters
-import androidx.glance.action.actionParametersOf
-import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
@@ -102,24 +100,19 @@ class TodayWidget : GlanceAppWidget() {
 
     @Composable
     private fun Row(style: WidgetStyle, habit: JSONObject) {
+        val context = androidx.glance.LocalContext.current
         val habitId = habit.getString("id")
         val name = habit.getString("name")
         val colorInt = habit.getInt("color")
         val color = androidx.compose.ui.graphics.Color(colorInt)
         val kind = habit.optInt("kind", KIND_POSITIVE)
         val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
-        val incrementAmount = habit.optInt("incrementAmount", 1)
         val counts = habit.optJSONArray("counts")
         val todayCount = if (counts != null && counts.length() == 7) counts.optInt(6, 0) else 0
         val completions = habit.optJSONArray("completions")
         val doneToday = completions != null && completions.length() == 7 &&
             completions.getBoolean(6)
 
-        val action = when (kind) {
-            KIND_NEGATIVE -> "relapse"
-            KIND_QUANTITATIVE -> "progress"
-            else -> "toggle"
-        }
         val boxColor: androidx.compose.ui.graphics.Color
         val icon: String
         when (kind) {
@@ -145,16 +138,20 @@ class TodayWidget : GlanceAppWidget() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = GlanceModifier.defaultWeight()) {
-                Text(
-                    text = name,
-                    style = TextStyle(
-                        color = ColorProvider(style.content),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    ),
-                    maxLines = 1
-                )
-                if (kind == KIND_QUANTITATIVE) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = name,
+                        style = TextStyle(
+                            color = ColorProvider(style.content),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        maxLines = 1,
+                        modifier = GlanceModifier.defaultWeight()
+                    )
+                    StreakBadge(habit.optInt("streak", 0), color, style)
+                }
+                if (kind == KIND_QUANTITATIVE || perDayTarget > 1) {
                     Text(
                         text = "$todayCount/$perDayTarget",
                         style = TextStyle(
@@ -170,13 +167,8 @@ class TodayWidget : GlanceAppWidget() {
                     .cornerRadius(9.dp)
                     .background(ColorProvider(boxColor))
                     .clickable(
-                        onClick = actionRunCallback<ToggleHabitAction>(
-                            parameters = actionParametersOf(
-                                ActionParameters.Key<String>("habitId") to habitId,
-                                ActionParameters.Key<Int>("dayIndex") to 6,
-                                ActionParameters.Key<String>("action") to action,
-                                ActionParameters.Key<Int>("delta") to incrementAmount
-                            )
+                        onClick = actionSendBroadcast(
+                            WidgetActionReceiver.intent(context, habitId, 6)
                         )
                     ),
                 contentAlignment = Alignment.Center

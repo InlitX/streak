@@ -99,6 +99,7 @@
         <!-- Home Widget -->
         <receiver
             android:name=".HabitWidgetProvider"
+            android:label="@string/widget_habit_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -112,6 +113,7 @@
 
         <receiver
             android:name=".TodayWidgetProvider"
+            android:label="@string/widget_today_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -124,6 +126,7 @@
 
         <receiver
             android:name=".StatsWidgetProvider"
+            android:label="@string/widget_stats_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -146,6 +149,7 @@
 
         <receiver
             android:name=".HeatmapWidgetProvider"
+            android:label="@string/widget_heatmap_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -154,6 +158,27 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/heatmap_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".WidgetRefreshReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.streak.app.WIDGET_MIDNIGHT" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".WidgetActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.streak.app.TOGGLE_HABIT" />
+            </intent-filter>
         </receiver>
 
         <!-- Home Widget Background Receiver for Interactive Widgets -->
