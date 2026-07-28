@@ -116,6 +116,82 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  Future<void> _pickBanner() async {
+    final settings = context.read<SettingsController>();
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+      imageQuality: 85,
+    );
+    if (picked == null) return;
+    final dir = await getApplicationDocumentsDirectory();
+    final dest = '${dir.path}/banner_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    await File(picked.path).copy(dest);
+    final old = settings.profileBanner;
+    await settings.setProfileBanner(dest);
+    if (old.isNotEmpty && old != dest) {
+      try {
+        await File(old.split('?').first).delete();
+      } catch (_) {}
+    }
+  }
+
+  Future<void> _removeBanner() async {
+    final settings = context.read<SettingsController>();
+    final old = settings.profileBanner;
+    await settings.setProfileBanner('');
+    if (old.isNotEmpty) {
+      try {
+        await File(old.split('?').first).delete();
+      } catch (_) {}
+    }
+  }
+
+  void _openBannerSheet(bool hasBanner) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: context.colors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheet) => SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _SheetAction(
+                icon: LucideIcons.image,
+                label: hasBanner
+                    ? context.l10n.change_photo
+                    : context.l10n.add_image,
+                onTap: () {
+                  Navigator.of(sheet).pop();
+                  _pickBanner();
+                },
+              ),
+              if (hasBanner) ...[
+                const SizedBox(height: 8),
+                _SheetAction(
+                  icon: LucideIcons.trash2,
+                  label: context.l10n.remove_photo,
+                  destructive: true,
+                  onTap: () {
+                    Navigator.of(sheet).pop();
+                    _removeBanner();
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _editName() async {
     final settings = context.read<SettingsController>();
     final name = await showDialog<String>(
@@ -315,18 +391,50 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
 
+    final bannerFile = settings.profileBanner.split('?').first;
+    final hasBanner =
+        bannerFile.isNotEmpty && File(bannerFile).existsSync();
+
+    final topInset = MediaQuery.paddingOf(context).top;
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settings)),
-      body: SafeArea(
+      extendBodyBehindAppBar: hasBanner,
+      appBar: AppBar(
+        title: Text(context.l10n.settings),
+        backgroundColor: hasBanner ? Colors.transparent : null,
+        scrolledUnderElevation: hasBanner ? 0 : null,
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.pencil, size: 18),
+            onPressed: () => _openBannerSheet(hasBanner),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          if (hasBanner)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _ProfileBanner(file: File(bannerFile)),
+            ),
+          SafeArea(
         top: false,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: 16,
+            top: hasBanner ? topInset + kToolbarHeight : 16,
+          ),
           children: [
             _ProfileHeader(
               name: settings.profileName.isEmpty
                   ? context.l10n.default_user
                   : settings.profileName,
               photoPath: settings.profilePhoto,
+              hasBanner: hasBanner,
               onTapPhoto: _pickProfilePhoto,
               onTapName: _editName,
             ),
@@ -394,6 +502,29 @@ class _SettingsPageState extends State<SettingsPage> {
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.sortCompletedLast ? 1 : 0,
                       onChanged: (i) => settings.setSortCompletedLast(i == 1),
+                    ),
+                  ),
+                  _divider(context),
+                  _SettingRow(
+                    icon: LucideIcons.calendarCheck,
+                    title: context.l10n.today_only,
+                    trailing: _Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.todayOnly ? 1 : 0,
+                      onChanged: (i) => settings.setTodayOnly(i == 1),
+                    ),
+                  ),
+                  _divider(context),
+                  _SettingRow(
+                    icon: LucideIcons.layoutGrid,
+                    title: context.l10n.home_layout,
+                    trailing: _Segmented(
+                      options: [
+                        context.l10n.layout_classic,
+                        context.l10n.layout_grid,
+                      ],
+                      index: settings.homeLayout,
+                      onChanged: settings.setHomeLayout,
                     ),
                   ),
                   _divider(context),
@@ -569,6 +700,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       ),
+        ],
+      ),
     );
   }
 
@@ -580,16 +713,74 @@ class _SettingsPageState extends State<SettingsPage> {
       );
 }
 
+class _SheetAction extends StatelessWidget {
+  const _SheetAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.destructive = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool destructive;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = destructive ? context.tokens.danger : context.colors.primary;
+    return Material(
+      color: context.colors.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          child: Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Icon(icon, size: 17, color: color),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: destructive
+                        ? context.tokens.danger
+                        : context.colors.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({
     required this.name,
     required this.photoPath,
+    required this.hasBanner,
     required this.onTapPhoto,
     required this.onTapName,
   });
 
   final String name;
   final String photoPath;
+  final bool hasBanner;
   final VoidCallback onTapPhoto;
   final VoidCallback onTapName;
 
@@ -601,6 +792,8 @@ class _ProfileHeader extends StatelessWidget {
 
     return Column(
       children: [
+
+        if (hasBanner) const SizedBox(height: 74),
         GestureDetector(
           onTap: onTapPhoto,
           child: Stack(
@@ -611,6 +804,9 @@ class _ProfileHeader extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: scheme.surfaceContainerHighest,
+                  border: hasBanner
+                      ? Border.all(color: scheme.surface, width: 3)
+                      : null,
                   image: DecorationImage(
                     image: hasPhoto
                         ? FileImage(File(filePath)) as ImageProvider
@@ -660,6 +856,61 @@ class _ProfileHeader extends StatelessWidget {
   }
 }
 
+class _ProfileBanner extends StatelessWidget {
+  const _ProfileBanner({required this.file});
+
+  final File file;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final height = MediaQuery.paddingOf(context).top + kToolbarHeight + 210;
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ShaderMask(
+        blendMode: BlendMode.dstIn,
+        shaderCallback: (rect) => const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+
+          colors: [
+            Colors.white,
+            Colors.white,
+            Color(0xCCFFFFFF),
+            Color(0x66FFFFFF),
+            Color(0x1AFFFFFF),
+            Colors.transparent,
+          ],
+          stops: [0, 0.34, 0.55, 0.74, 0.89, 1],
+        ).createShader(rect),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.file(file, fit: BoxFit.cover),
+
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.38),
+                    Colors.black.withValues(alpha: 0.10),
+                    Colors.transparent,
+                  ],
+                  stops: const [0, 0.28, 0.5],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _SettingRow extends StatelessWidget {
   const _SettingRow({
     required this.icon,
@@ -685,6 +936,8 @@ class _SettingRow extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
+
+          const SizedBox(width: 12),
           trailing,
         ],
       ),
@@ -940,11 +1193,12 @@ class _Segmented extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
+
     return Container(
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.all(2.5),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -954,10 +1208,10 @@ class _Segmented extends StatelessWidget {
               onTap: () => onChanged(i),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 160),
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                 decoration: BoxDecoration(
                   color: i == index ? scheme.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   options[i],
@@ -965,7 +1219,7 @@ class _Segmented extends StatelessWidget {
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: i == index ? scheme.onPrimary : context.tokens.muted,
                   ),

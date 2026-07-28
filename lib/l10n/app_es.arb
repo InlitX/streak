@@ -36,6 +36,7 @@
   "last_30_days": "Últimos 30 días",
   "your_habits": "Tus hábitos",
   "stats_empty": "Añade hábitos para ver tus estadísticas",
+  "completion_rate_short": "Constancia",
   "completion_rate": "Tasa de cumplimiento",
   "appearance": "Apariencia",
   "theme": "Tema",
@@ -206,6 +207,15 @@
   "add_image": "Añadir imagen",
   "when_best": "¿Cuándo rindes más?",
   "streak_evolution": "Evolución de tu racha",
+  "consistency": "Constancia",
+  "consistency_trend": "Evolución de la constancia",
+  "by_habit": "Por hábito",
+  "ranking": "Ranking",
+  "last_30_days": "Últimos 30 días",
+  "active_days": "Días activos",
+  "perfect_days": "Días perfectos",
+  "per_week": "Por semana",
+  "best_month": "Mejor mes",
   "streak_on": "🔥 Llevas {n} días seguidos. ¡No lo rompas!",
   "streak_off": "💪 Hoy puedes empezar una nueva racha",
   "not_enough_data": "Aún no hay suficientes datos",
@@ -221,6 +231,9 @@
   "about_credits_body": "Hecho con Flutter. Iconos de Lucide. Gráficas con fl_chart. Tipografías Figtree y Playfair Display.",
   "dev_handle": "@inlitx",
   "dev_role": "Creador indie · Streak",
+  "home_layout": "Estilo de la app",
+  "layout_classic": "Clásica",
+  "layout_grid": "Rejilla",
   "check_style": "Estilo del check",
   "square": "Cuadrado",
   "circle": "Círculo",
@@ -248,6 +261,7 @@
   "done": "Listo",
   "accent_color": "Color de acento",
   "sort_completed_last": "Completados al final",
+  "today_only": "Solo los hábitos de hoy",
   "on": "Sí",
   "off": "No",
   "checklist": "Lista de tareas",
@@ -302,5 +316,24 @@
   "widget_cfg_brightness": "Brillo",
   "widget_demo_read": "Leer",
   "widget_demo_run": "Correr",
-  "widget_demo_water": "Agua"
+  "widget_demo_water": "Agua",
+  "notif_streak": "🔥 racha de {streak} días",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": { "type": "String" }
+    }
+  },
+  "notif_action_done": "Hecho",
+  "notif_action_snooze": "Posponer",
+  "notif_action_add": "Añadir cantidad",
+  "notif_action_add_hint": "¿Cuánto?",
+  "snooze_duration": "Posponer durante",
+  "snooze_custom": "Personalizado",
+  "snooze_custom_hint": "Minutos",
+  "minutes_short": "{value} min",
+  "@minutes_short": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  }
 }

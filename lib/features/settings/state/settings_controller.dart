@@ -35,10 +35,13 @@ class SettingsController extends ChangeNotifier {
     _checkStyle = LocalStore.setting('checkStyle', 0);
     _profileName = LocalStore.setting('profileName', '');
     _profilePhoto = LocalStore.setting('profilePhoto', '');
+    _profileBanner = LocalStore.setting('profileBanner', '');
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
+    _todayOnly = LocalStore.setting('todayOnly', false);
+    _homeLayout = LocalStore.setting('homeLayout', 0);
     _widgetBgColor = LocalStore.setting('widgetBgColor', defaultWidgetBg);
     _widgetOpacity = LocalStore.setting('widgetOpacity', 100);
     _widgetBorder = LocalStore.setting('widgetBorder', false);
@@ -54,10 +57,13 @@ class SettingsController extends ChangeNotifier {
   late int _checkStyle;
   late String _profileName;
   late String _profilePhoto;
+  late String _profileBanner;
   late int _appIcon;
   late int _accentColor;
   late int _heatmapMode;
+  late int _homeLayout;
   late bool _sortCompletedLast;
+  late bool _todayOnly;
   late int _widgetBgColor;
   late int _widgetOpacity;
   late bool _widgetBorder;
@@ -68,7 +74,6 @@ class SettingsController extends ChangeNotifier {
   String get localeCode => _localeCode;
   Locale? get locale => _localeCode.isEmpty ? null : localeFromCode(_localeCode);
 
-  // 0 solid, 1 gradient, 2 dots, 3 OLED black, 4 custom image.
   int get appBackground => _appBackground;
 
   String get bgImage => _bgImage;
@@ -78,8 +83,8 @@ class SettingsController extends ChangeNotifier {
 
   String get profileName => _profileName;
   String get profilePhoto => _profilePhoto;
+  String get profileBanner => _profileBanner;
 
-  // 0 default, 1 neutral, 2 accent.
   int get appIcon => _appIcon;
 
   Color get accentColor => Color(_accentColor);
@@ -90,7 +95,6 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 0 week, 1 month, 2 year.
   int get heatmapMode => _heatmapMode;
 
   Future<void> setHeatmapMode(int value) async {
@@ -100,10 +104,20 @@ class SettingsController extends ChangeNotifier {
   }
 
   bool get sortCompletedLast => _sortCompletedLast;
+  bool get todayOnly => _todayOnly;
+
+  int get homeLayout => _homeLayout;
+  bool get isGridLayout => _homeLayout == 1;
 
   Future<void> setSortCompletedLast(bool value) async {
     _sortCompletedLast = value;
     await LocalStore.writeSetting('sortCompletedLast', value);
+    notifyListeners();
+  }
+
+  Future<void> setTodayOnly(bool value) async {
+    _todayOnly = value;
+    await LocalStore.writeSetting('todayOnly', value);
     notifyListeners();
   }
 
@@ -137,6 +151,12 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setHomeLayout(int value) async {
+    _homeLayout = value;
+    await LocalStore.writeSetting('homeLayout', value);
+    notifyListeners();
+  }
+
   Future<void> setCheckStyle(int value) async {
     _checkStyle = value;
     await LocalStore.writeSetting('checkStyle', value);
@@ -155,13 +175,18 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setProfileBanner(String path) async {
+    _profileBanner = path;
+    await LocalStore.writeSetting('profileBanner', path);
+    notifyListeners();
+  }
+
   Future<void> setAppIcon(int index) async {
     _appIcon = index;
     await LocalStore.writeSetting('appIcon', index);
     notifyListeners();
     await AppIconService.apply(index);
   }
-
 
   Color get widgetBgColor => Color(_widgetBgColor);
 

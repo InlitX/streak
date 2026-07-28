@@ -154,14 +154,18 @@ class HomeWidgetService {
         .map((h) => h.currentStreak)
         .fold<int>(0, (a, b) => a > b ? a : b);
 
+    final due = habits.values
+        .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
+        .toList();
+
     return json.encode({
       'habits': widgetHabits,
       'days': days,
       'heatmap': _heatmapLevels(habits.values, today),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       'summary': {
-        'doneToday': habits.values.where((h) => h.isCompletedOn(today)).length,
-        'total': habits.length,
+        'doneToday': due.where((h) => h.isCompletedOn(today)).length,
+        'total': due.length,
         'bestStreak': bestStreak,
       },
       'timestamp': DateTime.now().millisecondsSinceEpoch,

@@ -46,6 +46,7 @@
   "last_30_days": "Last 30 days",
   "your_habits": "Your habits",
   "stats_empty": "Add habits to see your statistics",
+  "completion_rate_short": "Consistency",
   "completion_rate": "Completion rate",
   "appearance": "Appearance",
   "theme": "Theme",
@@ -267,6 +268,15 @@
   "add_image": "Add image",
   "when_best": "When are you most consistent?",
   "streak_evolution": "Streak evolution",
+  "consistency": "Consistency",
+  "consistency_trend": "Consistency trend",
+  "by_habit": "By habit",
+  "ranking": "Ranking",
+  "last_30_days": "Last 30 days",
+  "active_days": "Active days",
+  "perfect_days": "Perfect days",
+  "per_week": "Per week",
+  "best_month": "Best month",
   "streak_on": "🔥 {n} days in a row. Don't break it!",
   "@streak_on": {
     "placeholders": {
@@ -289,6 +299,9 @@
   "about_credits_body": "Built with Flutter. Icons by Lucide. Charts by fl_chart. Set in Figtree & Playfair Display.",
   "dev_handle": "@inlitx",
   "dev_role": "Indie maker · Streak",
+  "home_layout": "App style",
+  "layout_classic": "Classic",
+  "layout_grid": "Grid",
   "check_style": "Check style",
   "square": "Square",
   "circle": "Circle",
@@ -323,6 +336,7 @@
   "done": "Done",
   "accent_color": "Accent color",
   "sort_completed_last": "Completed last",
+  "today_only": "Only today's habits",
   "on": "On",
   "off": "Off",
   "checklist": "Checklist",
@@ -398,5 +412,24 @@
   "widget_cfg_brightness": "Brightness",
   "widget_demo_read": "Read",
   "widget_demo_run": "Run",
-  "widget_demo_water": "Water"
+  "widget_demo_water": "Water",
+  "notif_streak": "🔥 {streak} day streak",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": { "type": "String" }
+    }
+  },
+  "notif_action_done": "Done",
+  "notif_action_snooze": "Snooze",
+  "notif_action_add": "Add amount",
+  "notif_action_add_hint": "How much?",
+  "snooze_duration": "Snooze for",
+  "snooze_custom": "Custom",
+  "snooze_custom_hint": "Minutes",
+  "minutes_short": "{value} min",
+  "@minutes_short": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  }
 }

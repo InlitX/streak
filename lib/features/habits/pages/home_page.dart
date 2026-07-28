@@ -13,10 +13,13 @@ import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
+import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/statistics/pages/statistics_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -138,11 +141,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
+    final settings = context.watch<SettingsController>();
+    final sortCompletedLast = settings.sortCompletedLast;
+    final grid = settings.isGridLayout;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_reordering ? context.l10n.reorder : context.l10n.today),
+        title: _reordering
+            ? Text(context.l10n.reorder)
+            : grid
+                ? null
+                : Text(context.l10n.today),
+
+        leading: grid && !_reordering
+            ? IconButton(
+                icon: const Icon(LucideIcons.settings),
+                onPressed: () => AppNavigator.push(const SettingsPage()),
+              )
+            : null,
         actions: [
+          if (grid && !_reordering)
+            IconButton(
+              icon: const Icon(LucideIcons.chartColumn),
+              onPressed: () => AppNavigator.push(const StatisticsPage()),
+            ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: _reordering
@@ -156,19 +177,31 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )
-                : FilledButton.icon(
-                    onPressed: () => AppNavigator.push(
-                      const HabitFormPage(),
-                      fullscreenDialog: true,
-                    ),
-                    icon: const Icon(LucideIcons.plus, size: 18),
-                    label: Text(context.l10n.new_label),
-                    style: FilledButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                : grid
+                    ? IconButton(
+                        onPressed: () => AppNavigator.push(
+                          const HabitFormPage(),
+                          fullscreenDialog: true,
+                        ),
+                        icon: Icon(
+                          LucideIcons.circlePlus,
+                          size: 26,
+                          color: context.colors.onSurface,
+                        ),
+                      )
+                    : FilledButton.icon(
+                        onPressed: () => AppNavigator.push(
+                          const HabitFormPage(),
+                          fullscreenDialog: true,
+                        ),
+                        icon: const Icon(LucideIcons.plus, size: 18),
+                        label: Text(context.l10n.new_label),
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
           ),
         ],
       ),
@@ -182,8 +215,9 @@ class _HomePageState extends State<HomePage> {
 
                 final all = controller.habits;
                 final today = DateTime.now();
-                final active =
-                    all.where((h) => !h.isPausedOn(today)).toList();
+                final active = all
+                    .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
+                    .toList();
                 final done =
                     active.where((h) => h.isCompletedOn(today)).length;
                 final total = active.length;
@@ -194,13 +228,40 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 final categories = _categoriesOf(all);
+                final listed = settings.todayOnly
+                    ? all.where((h) => h.isScheduledOn(today)).toList()
+                    : all;
                 final filtered = _category == null
-                    ? all
-                    : all.where((h) => h.category == _category).toList();
-                // Saved order while reordering, or indexes move the wrong habit.
+                    ? listed
+                    : listed.where((h) => h.category == _category).toList();
+
                 final visible = _reordering || !sortCompletedLast
                     ? filtered
                     : _completedLast(filtered);
+
+                final header = _reordering
+                    ? _ReorderBanner(text: context.l10n.reorder_hint)
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!grid) const DailyQuote(),
+                          if (!grid) const SizedBox(height: 8),
+                          if (!grid) TodayProgress(done: done, total: total),
+                          if (!grid) const SizedBox(height: 16),
+
+                          if (!grid)
+                            _ViewSelector(mode: _mode, onChanged: _changeMode),
+                          if (categories.isNotEmpty) ...[
+                            const SizedBox(height: 12),
+                            _CategoryBar(
+                              categories: categories,
+                              selected: _category,
+                              onSelected: (c) => setState(() => _category = c),
+                            ),
+                          ],
+                          const SizedBox(height: 12),
+                        ],
+                      );
 
                 return RefreshIndicator(
                   onRefresh: () async {
@@ -208,7 +269,9 @@ class _HomePageState extends State<HomePage> {
                         const Duration(milliseconds: 300));
                     controller.reload();
                   },
-                  child: ReorderableListView.builder(
+                  child: grid && !_reordering
+                      ? _gridBody(controller, visible, header, today)
+                      : ReorderableListView.builder(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                   itemCount: visible.length,
                   buildDefaultDragHandles: false,
@@ -220,31 +283,7 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.transparent,
                     child: child,
                   ),
-                  header: _reordering
-                      ? _ReorderBanner(text: context.l10n.reorder_hint)
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const DailyQuote(),
-                            const SizedBox(height: 8),
-                            TodayProgress(done: done, total: total),
-                            const SizedBox(height: 16),
-                            _ViewSelector(
-                              mode: _mode,
-                              onChanged: _changeMode,
-                            ),
-                            if (categories.isNotEmpty) ...[
-                              const SizedBox(height: 12),
-                              _CategoryBar(
-                                categories: categories,
-                                selected: _category,
-                                onSelected: (c) =>
-                                    setState(() => _category = c),
-                              ),
-                            ],
-                            const SizedBox(height: 12),
-                          ],
-                        ),
+                  header: header,
                   itemBuilder: (context, index) {
                     final habit = visible[index];
                     if (_reordering) {
@@ -299,10 +338,106 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            if (grid && !_reordering)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 16,
+                child: Center(
+                  child: GridViewSwitcher(mode: _mode, onChanged: _changeMode),
+                ),
+              ),
             Positioned.fill(child: ConfettiOverlay(trigger: _confetti)),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _gridBody(
+    HabitsController controller,
+    List<Habit> visible,
+    Widget header,
+    DateTime today,
+  ) {
+    const padding = EdgeInsets.fromLTRB(16, 8, 16, 104);
+
+    void open(Habit habit) => AppNavigator.push(
+          HabitDetailsPage(habitId: habit.id),
+          fade: true,
+        );
+    void toggleDay(Habit habit, DateTime date) =>
+        controller.toggle(habit.id, date);
+
+    if (_mode == HeatmapMode.month) {
+      return ListView(
+        padding: padding,
+        children: [
+          header,
+          for (var i = 0; i < visible.length; i += 2)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: GridMonthCard(
+                        habit: visible[i],
+                        onOpen: () => open(visible[i]),
+                        onToggleToday: () =>
+                            controller.toggle(visible[i].id, today),
+                        onToggleDay: (d) => toggleDay(visible[i], d),
+                        onLongPress: () =>
+                            _showHabitActions(controller, visible[i]),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: i + 1 < visible.length
+                          ? GridMonthCard(
+                              habit: visible[i + 1],
+                              onOpen: () => open(visible[i + 1]),
+                              onToggleToday: () =>
+                                  controller.toggle(visible[i + 1].id, today),
+                              onToggleDay: (d) => toggleDay(visible[i + 1], d),
+                              onLongPress: () => _showHabitActions(
+                                  controller, visible[i + 1]),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
+    return ListView(
+      padding: padding,
+      children: [
+        header,
+        for (final habit in visible)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _mode == HeatmapMode.week
+                ? GridWeekCard(
+                    habit: habit,
+                    onOpen: () => open(habit),
+                    onToggleDay: (d) => toggleDay(habit, d),
+                    onLongPress: () => _showHabitActions(controller, habit),
+                  )
+                : GridYearCard(
+                    habit: habit,
+                    onOpen: () => open(habit),
+                    onToggleToday: () => controller.toggle(habit.id, today),
+                    onToggleDay: (d) => toggleDay(habit, d),
+                    onLongPress: () => _showHabitActions(controller, habit),
+                  ),
+          ),
+      ],
     );
   }
 
