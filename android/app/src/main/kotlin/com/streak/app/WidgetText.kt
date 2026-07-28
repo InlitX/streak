@@ -16,6 +16,16 @@ object WidgetText {
         return if (value.isEmpty()) fallback else value
     }
 
+    fun compact(value: Int): String = when {
+        value < 1000 -> value.toString()
+        value < 10000 -> {
+            val tenths = (value + 50) / 100
+            if (tenths % 10 == 0) "${tenths / 10}k" else "${tenths / 10}.${tenths % 10}k"
+        }
+        value < 1000000 -> "${(value + 500) / 1000}k"
+        else -> "${(value + 500000) / 1000000}M"
+    }
+
     fun format(
         context: Context,
         key: String,

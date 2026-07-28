@@ -28,9 +28,7 @@ import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
-private val dangerColor = androidx.compose.ui.graphics.Color(0xFFEF4444)
 
-// Mirrors HabitKind in lib/features/habits/data/habit.dart.
 private const val KIND_POSITIVE = 0
 private const val KIND_NEGATIVE = 1
 private const val KIND_QUANTITATIVE = 2
@@ -44,7 +42,6 @@ class TodayWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
-        // Read inside composition: update() recomposes without re-running this.
         provideContent {
             currentState<HomeWidgetGlanceState>()
             Content(context, WidgetStyle.loadFor(context, appWidgetId))
@@ -115,19 +112,24 @@ class TodayWidget : GlanceAppWidget() {
 
         val boxColor: androidx.compose.ui.graphics.Color
         val icon: String
+        val iconColor: androidx.compose.ui.graphics.Color
         when (kind) {
             KIND_NEGATIVE -> {
-                boxColor = if (todayCount > 0) dangerColor else color.copy(alpha = 0.18f)
-                icon = if (todayCount > 0) "✕" else ""
+                val breached = todayCount > 0
+                boxColor = if (breached) color.copy(alpha = 0.18f) else color
+                icon = if (breached) "✕" else "✓"
+                iconColor = if (breached) style.content else androidx.compose.ui.graphics.Color.White
             }
             KIND_QUANTITATIVE -> {
                 val ratio = (todayCount.toFloat() / perDayTarget).coerceIn(0f, 1f)
                 boxColor = color.copy(alpha = 0.25f + 0.75f * ratio)
                 icon = "+"
+                iconColor = androidx.compose.ui.graphics.Color.White
             }
             else -> {
                 boxColor = if (doneToday) color else color.copy(alpha = 0.18f)
                 icon = if (doneToday) "✓" else ""
+                iconColor = androidx.compose.ui.graphics.Color.White
             }
         }
 
@@ -177,7 +179,7 @@ class TodayWidget : GlanceAppWidget() {
                     Text(
                         text = icon,
                         style = TextStyle(
-                            color = ColorProvider(androidx.compose.ui.graphics.Color.White),
+                            color = ColorProvider(iconColor),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
                         )

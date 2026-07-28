@@ -36,9 +36,7 @@ import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import org.json.JSONObject
 
 private val brandColor = androidx.compose.ui.graphics.Color(0xFF6C5CE7)
-private val dangerColor = androidx.compose.ui.graphics.Color(0xFFEF4444)
 
-// Mirrors HabitKind in lib/features/habits/data/habit.dart.
 private const val KIND_POSITIVE = 0
 private const val KIND_NEGATIVE = 1
 private const val KIND_QUANTITATIVE = 2
@@ -55,7 +53,6 @@ class HabitWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
-        // Read inside composition: update() recomposes without re-running this.
         provideContent {
             currentState<HomeWidgetGlanceState>()
             WidgetContent(context, WidgetStyle.loadFor(context, appWidgetId))
@@ -246,10 +243,11 @@ class HabitWidget : GlanceAppWidget() {
                             contentAlignment = Alignment.Center
                         ) {
                             when {
-                                kind == KIND_NEGATIVE -> CompletionIndicator(
-                                    isCompleted = count > 0,
-                                    color = if (count > 0) dangerColor else color
-                                )
+                                kind == KIND_NEGATIVE -> if (count > 0) {
+                                    BreachMark(style)
+                                } else {
+                                    CompletionIndicator(isCompleted = isCompleted, color = color)
+                                }
                                 quantified -> ValueIndicator(
                                     count = count,
                                     ratio = count.toFloat() / perDayTarget,
@@ -279,6 +277,18 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
+    private fun BreachMark(style: WidgetStyle) {
+        Text(
+            text = "✕",
+            style = TextStyle(
+                color = ColorProvider(style.content),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+
+    @Composable
     private fun ValueIndicator(
         count: Int,
         ratio: Float,
@@ -289,7 +299,7 @@ class HabitWidget : GlanceAppWidget() {
             return
         }
         val clamped = ratio.coerceIn(0f, 1f)
-        val label = if (count > 99) "99+" else count.toString()
+        val label = WidgetText.compact(count)
         Box(
             modifier = GlanceModifier
                 .size(20.dp)
@@ -303,7 +313,11 @@ class HabitWidget : GlanceAppWidget() {
                     color = ColorProvider(
                         if (clamped >= 0.6f) androidx.compose.ui.graphics.Color.White else color
                     ),
-                    fontSize = if (label.length > 2) 8.sp else 10.sp,
+                    fontSize = when {
+                        label.length > 3 -> 7.sp
+                        label.length > 2 -> 8.sp
+                        else -> 10.sp
+                    },
                     fontWeight = FontWeight.Bold
                 ),
                 maxLines = 1
