@@ -31,6 +31,8 @@
 &nbsp;
 <a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="在 IzzyOnDroid 上获取" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
 &nbsp;
+<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="在 OpenAPK 上获取" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="在 GitHub 上获取" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>
@@ -152,7 +154,9 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 ## 下载
 
 最简单的方式是 [**F-Droid**](https://f-droid.org/packages/com.streak.app/)，
-它会安装 Streak 并自动保持更新。
+它会安装 Streak 并自动保持更新。也可以在
+[**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
+和 [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/) 上获取。
 
 想直接下载 APK？前往 [**Releases**](https://github.com/InlitX/streak/releases)
 页面，每种手机类型对应一个文件，以保持下载包小巧：

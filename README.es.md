@@ -31,6 +31,8 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 &nbsp;
 <a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Disponible en IzzyOnDroid" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
 &nbsp;
+<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Disponible en OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>
@@ -160,7 +162,9 @@ Pronto habrá soporte para más apps.
 ## Descarga
 
 [**F-Droid**](https://f-droid.org/packages/com.streak.app/) es lo más cómodo:
-instala Streak y lo mantiene actualizado por ti.
+instala Streak y lo mantiene actualizado por ti. También está en
+[**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
+y [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
 ¿Prefieres el APK directo? Está en la página de
 [**Releases**](https://github.com/InlitX/streak/releases), un archivo por tipo de

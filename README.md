@@ -31,6 +31,8 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 &nbsp;
 <a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Get it on IzzyOnDroid" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
 &nbsp;
+<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Get it on OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
+&nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Get it on GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
 
 <br/>
@@ -155,7 +157,9 @@ for more apps is on the way.
 ## Download
 
 [**F-Droid**](https://f-droid.org/packages/com.streak.app/) is the easiest way —
-it installs Streak and keeps it updated for you.
+it installs Streak and keeps it updated for you. It's also on
+[**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
+and [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
 Prefer the raw APK? It's on the
 [**Releases**](https://github.com/InlitX/streak/releases) page, one file per
