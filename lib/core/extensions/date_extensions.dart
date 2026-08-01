@@ -1,13 +1,22 @@
-import 'package:intl/intl.dart';
+class AppClock {
+  const AppClock._();
 
-final _keyFormat = DateFormat('dd-MM-yyyy');
+  static int cutoffHour = 0;
+
+  static DateTime now() => cutoffHour == 0
+      ? DateTime.now()
+      : DateTime.now().subtract(Duration(hours: cutoffHour));
+
+  static DateTime today() => now().atMidnight;
+
+  static bool isLogicalToday(DateTime date) => date.isSameDay(now());
+}
 
 extension DateOnly on DateTime {
-  String get dayKey => _keyFormat.format(this);
+  String get dayKey => '${_pad(day)}-${_pad(month)}-$year';
 
   DateTime get atMidnight => DateTime(year, month, day);
 
-  // UTC-anchored so it stays DST-safe.
   int get epochDay =>
       DateTime.utc(year, month, day).millisecondsSinceEpoch ~/
       Duration.millisecondsPerDay;
@@ -21,4 +30,10 @@ extension DateOnly on DateTime {
   }
 }
 
-DateTime parseDayKey(String value) => _keyFormat.parse(value);
+DateTime parseDayKey(String value) => DateTime(
+  int.parse(value.substring(6)),
+  int.parse(value.substring(3, 5)),
+  int.parse(value.substring(0, 2)),
+);
+
+String _pad(int value) => value < 10 ? '0$value' : '$value';

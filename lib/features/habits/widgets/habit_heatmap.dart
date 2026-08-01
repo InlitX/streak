@@ -5,6 +5,8 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 enum HeatmapMode { week, month, year, mini }
@@ -15,13 +17,17 @@ class HabitHeatmap extends StatefulWidget {
     required this.habit,
     this.mode = HeatmapMode.mini,
     this.onToggle,
+    this.onLongPress,
     this.compact = false,
     this.circle = false,
+    this.showNotes = false,
   });
 
   final Habit habit;
   final HeatmapMode mode;
   final void Function(DateTime date)? onToggle;
+  final void Function(DateTime date)? onLongPress;
+  final bool showNotes;
 
   final bool compact;
   final bool circle;
@@ -34,7 +40,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   final _scroll = ScrollController();
   bool _scrolled = false;
 
-  DateTime get _today => DateTime.now().atMidnight;
+  DateTime get _today => AppClock.now().atMidnight;
 
   DateTime _mondayOf(DateTime d) =>
       d.atMidnight.subtract(Duration(days: d.weekday - 1));
@@ -129,6 +135,9 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                   onTap: future || widget.onToggle == null
                       ? null
                       : () => widget.onToggle!(date),
+                  onLongPress: widget.onLongPress == null
+                      ? null
+                      : () => widget.onLongPress!(date),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 220),
                     height: height,
@@ -140,6 +149,16 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                     ),
                   ),
                 ),
+                if (widget.showNotes) ...[
+                  const SizedBox(height: 5),
+                  NoteDots(
+                    types: context.watch<NotesController>().typesFor(
+                      widget.habit.id,
+                      date.dayKey,
+                    ),
+                    size: 5,
+                  ),
+                ],
               ],
             ),
           ),
@@ -156,7 +175,31 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     return ((end.difference(start).inDays + 1) / 7).round();
   }
 
-  Widget _grid(BuildContext context, {required int columns, required bool big}) {
+  Widget _tappable({
+    required DateTime date,
+    required bool enabled,
+    required Widget child,
+  }) {
+    final open = enabled && !date.isAfter(_today);
+    final onTap = open && widget.onToggle != null
+        ? () => widget.onToggle!(date)
+        : null;
+    final onLongPress = open && widget.onLongPress != null
+        ? () => widget.onLongPress!(date)
+        : null;
+    if (onTap == null && onLongPress == null) return child;
+    return GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: child,
+    );
+  }
+
+  Widget _grid(
+    BuildContext context, {
+    required int columns,
+    required bool big,
+  }) {
     final bool monthScope = widget.mode == HeatmapMode.month;
     final DateTime start;
     if (monthScope) {
@@ -181,24 +224,26 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                 final inScope = monthScope
                     ? date.month == _today.month && !date.isAfter(_today)
                     : !date.isAfter(_today);
-                final future = monthScope &&
+                final future =
+                    monthScope &&
                     date.month == _today.month &&
                     date.isAfter(_today);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: gap),
-                  child: GestureDetector(
-                    onTap: widget.onToggle == null || !inScope
-                        ? null
-                        : () => widget.onToggle!(date),
-                    child: Container(
+                  child: _tappable(
+                    date: date,
+                    enabled: inScope,
+                    child: SizedBox(
                       width: cell,
                       height: cell,
-                      decoration: BoxDecoration(
-                        color: future
-                            ? context.colors.surfaceContainerHighest
-                                .withValues(alpha: 0.4)
-                            : _cell(context, date, inScope: inScope),
-                        borderRadius: BorderRadius.circular(radius),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: future
+                              ? context.colors.surfaceContainerHighest
+                                    .withValues(alpha: 0.4)
+                              : _cell(context, date, inScope: inScope),
+                          borderRadius: BorderRadius.circular(radius),
+                        ),
                       ),
                     ),
                   ),
@@ -217,55 +262,58 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final first = monthStart.startOfWeek(weekStart);
     final lastDay = DateTime(_today.year, _today.month + 1, 0);
     final weeks =
-        ((lastDay.startOfWeek(weekStart).add(const Duration(days: 6)).difference(first).inDays) /
-                    7)
-                .round() +
-            1;
+        (lastDay.startOfWeek(weekStart).difference(first).inDays / 7).round() +
+        1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 2, bottom: 8),
-          child: Text(
-            _monthLabel(monthStart),
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: context.tokens.muted,
+        if (!widget.compact)
+          Padding(
+            padding: const EdgeInsets.only(left: 2, bottom: 8),
+            child: Text(
+              _monthLabel(monthStart),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: context.tokens.muted,
+              ),
             ),
           ),
-        ),
         for (var w = 0; w < weeks; w++)
           Padding(
-            padding: const EdgeInsets.only(bottom: 3),
+            padding: EdgeInsets.only(bottom: widget.compact ? 2 : 3),
             child: Row(
               children: List.generate(7, (d) {
                 final date = first.add(Duration(days: w * 7 + d));
                 final inMonth = date.month == _today.month;
                 final future = date.isAfter(_today);
-                final tappable =
-                    inMonth && !future && widget.onToggle != null;
+                final decoration = BoxDecoration(
+                  color: !inMonth
+                      ? Colors.transparent
+                      : future
+                      ? context.colors.surfaceContainerHighest.withValues(
+                          alpha: 0.4,
+                        )
+                      : _cell(context, date),
+                  borderRadius: BorderRadius.circular(
+                    widget.circle ? 999 : (widget.compact ? 3 : 9),
+                  ),
+                );
                 return Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(1.5),
+                    padding: EdgeInsets.all(widget.compact ? 1 : 1.5),
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: GestureDetector(
-                        onTap: tappable ? () => widget.onToggle!(date) : null,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          decoration: BoxDecoration(
-                            color: !inMonth
-                                ? Colors.transparent
-                                : future
-                                    ? context.colors.surfaceContainerHighest
-                                        .withValues(alpha: 0.4)
-                                    : _cell(context, date),
-                            borderRadius:
-                                BorderRadius.circular(widget.circle ? 999 : 9),
-                          ),
-                        ),
+                      child: _tappable(
+                        date: date,
+                        enabled: inMonth,
+                        child: widget.compact
+                            ? DecoratedBox(decoration: decoration)
+                            : AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                decoration: decoration,
+                              ),
                       ),
                     ),
                   ),
@@ -283,6 +331,23 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
   }
 
+  Widget _yearCell(BuildContext context, DateTime date, double cell) {
+    return _tappable(
+      date: date,
+      enabled: true,
+      child: SizedBox(
+        width: cell,
+        height: cell,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: _cell(context, date),
+            borderRadius: BorderRadius.circular(widget.circle ? cell / 2 : 3),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _yearGrid(BuildContext context) {
     const columns = 53;
     const gap = 3.0;
@@ -290,7 +355,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final start = _mondayOf(_today).subtract(
       const Duration(days: 7 * (columns - 1)),
     );
-    final locale = Localizations.localeOf(context).languageCode;
+    final months = DateFormat.MMM(Localizations.localeOf(context).languageCode);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrolled && _scroll.hasClients) {
@@ -321,7 +386,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                           maxWidth: 40,
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            DateFormat.MMM(locale).format(colDate),
+                            months.format(colDate),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
@@ -334,24 +399,10 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                 for (var row = 0; row < 7; row++)
                   Padding(
                     padding: const EdgeInsets.only(bottom: gap),
-                    child: GestureDetector(
-                      onTap: widget.onToggle == null ||
-                              start
-                                  .add(Duration(days: col * 7 + row))
-                                  .isAfter(_today)
-                          ? null
-                          : () => widget.onToggle!(
-                              start.add(Duration(days: col * 7 + row))),
-                      child: Container(
-                        width: cell,
-                        height: cell,
-                        decoration: BoxDecoration(
-                          color: _cell(
-                              context, start.add(Duration(days: col * 7 + row))),
-                          borderRadius: BorderRadius.circular(
-                              widget.circle ? cell / 2 : 3),
-                        ),
-                      ),
+                    child: _yearCell(
+                      context,
+                      start.add(Duration(days: col * 7 + row)),
+                      cell,
                     ),
                   ),
               ],

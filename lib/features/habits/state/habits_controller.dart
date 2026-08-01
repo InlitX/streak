@@ -22,15 +22,30 @@ class HabitsController extends ChangeNotifier {
   final _notifications = NotificationService();
 
   late Map<String, Habit> _habits;
+  List<Habit>? _active;
 
-  List<Habit> get habits {
-    final list = _habits.values.toList()
-      ..sort((a, b) => a.order.compareTo(b.order));
+  @override
+  void notifyListeners() {
+    _active = null;
+    super.notifyListeners();
+  }
+
+  List<Habit> get habits => _active ??=
+      _habits.values.where((h) => !h.isArchived).toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
+
+  List<Habit> get archived {
+    final list = _habits.values.where((h) => h.isArchived).toList()
+      ..sort((a, b) => b.archivedAt!.compareTo(a.archivedAt!));
     return list;
   }
 
-  bool get isEmpty => _habits.isEmpty;
-  Map<String, Habit> get asMap => _habits;
+  bool get isEmpty => habits.isEmpty;
+
+  Map<String, Habit> get asMap => {
+        for (final entry in _habits.entries)
+          if (!entry.value.isArchived) entry.key: entry.value,
+      };
 
   Habit? byId(String id) => _habits[id];
 
@@ -76,7 +91,7 @@ class HabitsController extends ChangeNotifier {
       category: category,
       description: description,
       color: _color(color),
-      order: _habits.length,
+      order: habits.length,
       interval: interval,
       targetFrequency: targetFrequency,
       scheduleWeekdays: scheduleWeekdays,
@@ -94,7 +109,7 @@ class HabitsController extends ChangeNotifier {
     _habits[id] = habit;
     await LocalStore.writeHabit(habit);
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    await HomeWidgetService.sync(asMap);
     if (reminders.isNotEmpty) await _notifications.scheduleFor(habit);
   }
 
@@ -102,7 +117,7 @@ class HabitsController extends ChangeNotifier {
     _habits[habit.id] = habit;
     await LocalStore.writeHabit(habit);
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    await HomeWidgetService.sync(asMap);
     await _notifications.scheduleFor(habit);
   }
 
@@ -156,11 +171,11 @@ class HabitsController extends ChangeNotifier {
     final periods = [...habit.vacations];
     if (on) {
       if (!periods.any((p) => p.isOngoing)) {
-        periods.add(VacationPeriod(start: DateTime.now()));
+        periods.add(VacationPeriod(start: AppClock.now()));
       }
     } else {
       final yesterday =
-          DateTime.now().atMidnight.subtract(const Duration(days: 1));
+          AppClock.now().atMidnight.subtract(const Duration(days: 1));
       final next = <VacationPeriod>[];
       for (final p in periods) {
         if (!p.isOngoing) {
@@ -176,6 +191,40 @@ class HabitsController extends ChangeNotifier {
     await update(habit.copyWith(vacations: periods));
   }
 
+  Future<void> toggleVacationDay(String id, DateTime date) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    final day = date.atMidnight;
+    final previous = day.subtract(const Duration(days: 1));
+    final next = day.add(const Duration(days: 1));
+
+    if (!habit.isPausedOn(day)) {
+      await update(
+        habit.copyWith(
+          vacations: [...habit.vacations, VacationPeriod(start: day, end: day)],
+        ),
+      );
+      return;
+    }
+
+    final periods = <VacationPeriod>[];
+    for (final period in habit.vacations) {
+      if (!period.contains(day)) {
+        periods.add(period);
+        continue;
+      }
+      if (period.start.isBefore(day)) {
+        periods.add(VacationPeriod(start: period.start, end: previous));
+      }
+      if (period.end == null) {
+        periods.add(VacationPeriod(start: next));
+      } else if (period.end!.isAfter(day)) {
+        periods.add(VacationPeriod(start: next, end: period.end));
+      }
+    }
+    await update(habit.copyWith(vacations: periods));
+  }
+
   Future<void> _apply(
     Habit habit,
     Map<String, Completion> completions, {
@@ -183,7 +232,6 @@ class HabitsController extends ChangeNotifier {
   }) async {
     var updated = habit.copyWith(completions: completions);
     if (day != null && completions.containsKey(day.dayKey)) {
-      // Back-dating the start, or the streak walks would skip the filled day.
       final logged = day.atMidnight;
       if (logged.isBefore(updated.createdAt.atMidnight)) {
         updated = updated.copyWith(createdAt: logged);
@@ -192,11 +240,11 @@ class HabitsController extends ChangeNotifier {
     _habits[habit.id] = updated;
     await LocalStore.writeHabit(updated);
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    HomeWidgetService.syncSoon(asMap);
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    final ordered = habits;
+    final ordered = [...habits];
     if (newIndex > oldIndex) newIndex -= 1;
     final moved = ordered.removeAt(oldIndex);
     ordered.insert(newIndex, moved);
@@ -207,15 +255,42 @@ class HabitsController extends ChangeNotifier {
       await LocalStore.writeHabit(updated);
     }
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    await HomeWidgetService.sync(asMap);
+  }
+
+  Future<void> archive(String id) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _notifications.cancelFor(id);
+    final archived = habit.copyWith(archivedAt: AppClock.now());
+    _habits[id] = archived;
+    await LocalStore.writeHabit(archived);
+    notifyListeners();
+    await HomeWidgetService.sync(asMap);
+  }
+
+  Future<void> restore(String id) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    final restored =
+        habit.copyWith(clearArchived: true, order: habits.length);
+    _habits[id] = restored;
+    await LocalStore.writeHabit(restored);
+    notifyListeners();
+    await HomeWidgetService.sync(asMap);
+    if (restored.reminders.isNotEmpty) {
+      await _notifications.scheduleFor(restored);
+    }
   }
 
   Future<void> remove(String id) async {
     await _notifications.cancelFor(id);
     _habits.remove(id);
     await LocalStore.removeHabit(id);
+    await LocalStore.removeNotesFor(id);
+    await LocalStore.removeFocusFor(id);
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    await HomeWidgetService.sync(asMap);
   }
 
   Future<bool> exportBackup() async {
@@ -229,7 +304,7 @@ class HabitsController extends ChangeNotifier {
   Future<ImportOutcome?> importFromApp() async {
     final outcome = await ImportService.pickAndParse();
     if (outcome == null) return null;
-    var order = _habits.length;
+    var order = habits.length;
     for (final habit in outcome.habits) {
       final placed = habit.copyWith(order: order++);
       _habits[placed.id] = placed;
@@ -239,7 +314,7 @@ class HabitsController extends ChangeNotifier {
       }
     }
     notifyListeners();
-    await HomeWidgetService.sync(_habits);
+    await HomeWidgetService.sync(asMap);
     return outcome;
   }
 
@@ -261,7 +336,7 @@ class HabitsController extends ChangeNotifier {
         }
       }
       notifyListeners();
-      await HomeWidgetService.sync(_habits);
+      await HomeWidgetService.sync(asMap);
       return null;
     } catch (e) {
       return e.toString().replaceFirst('Exception: ', '');

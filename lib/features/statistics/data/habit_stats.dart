@@ -11,6 +11,8 @@ class HabitStats {
     required this.hours,
     required this.hourSamples,
     required this.streakSeries,
+    required this.perHabit,
+    required this.perfectDays,
     required this.total,
     required this.activeDays,
     required this.currentStreak,
@@ -18,17 +20,74 @@ class HabitStats {
     required this.monthRate,
   });
 
+  static const window = 90;
+
   final Map<String, int> dailyCounts;
   final List<int> monthly;
   final List<int> weekday;
   final List<int> hours;
   final int hourSamples;
   final List<double> streakSeries;
+  final Map<String, int> perHabit;
+  final int perfectDays;
   final int total;
   final int activeDays;
   final int currentStreak;
   final int bestStreak;
   final int monthRate;
+
+  int get bestWeekday => _argMax(weekday);
+  int get bestMonth => _argMax(monthly);
+  int get peakHour => _argMax(hours);
+
+  double get perWeek => activeDays == 0 ? 0 : total / (activeDays / 7);
+
+  static int _countFor(Habit habit, int year) {
+    var count = 0;
+    if (habit.kind == HabitKind.negative) {
+      for (var m = 1; m <= 12; m++) {
+        final daysInMonth = DateTime(year, m + 1, 0).day;
+        for (var d = 1; d <= daysInMonth; d++) {
+          if (habit.isCompletedOn(DateTime(year, m, d))) count++;
+        }
+      }
+      return count;
+    }
+    for (final entry in habit.completions.values) {
+      if (entry.count < habit.effectiveTarget) continue;
+      if (parseDayKey(entry.date).year != year) continue;
+      count++;
+    }
+    return count;
+  }
+
+  static List<double> _streakSeries(List<Habit> habits, DateTime today) {
+    final start = today.subtract(const Duration(days: window - 1));
+    final series = List<double>.filled(window, 0);
+
+    for (final habit in habits) {
+      var run = 0;
+      var cursor = start.subtract(const Duration(days: 1));
+      while (habit.isCompletedOn(cursor)) {
+        run++;
+        cursor = cursor.subtract(const Duration(days: 1));
+      }
+      for (var i = 0; i < window; i++) {
+        final day = start.add(Duration(days: i));
+        run = habit.isCompletedOn(day) ? run + 1 : 0;
+        if (run > series[i]) series[i] = run.toDouble();
+      }
+    }
+    return series;
+  }
+
+  static int _argMax(List<int> values) {
+    var best = 0;
+    for (var i = 1; i < values.length; i++) {
+      if (values[i] > values[best]) best = i;
+    }
+    return best;
+  }
 
   static HabitStats compute(List<Habit> habits, int year) {
     final daily = <String, int>{};
@@ -68,15 +127,23 @@ class HabitStats {
       }
     }
 
-    final today = DateTime.now().atMidnight;
-    var running = 0;
-    final streakSeries = List<double>.generate(90, (i) {
-      final date = today.subtract(Duration(days: 89 - i));
-      for (final habit in habits) {
-        if (habit.isCompletedOn(date)) running++;
+    final today = AppClock.now().atMidnight;
+
+    final streakSeries = _streakSeries(habits, today);
+
+    final perHabit = <String, int>{};
+    for (final habit in habits) {
+      perHabit[habit.id] = _countFor(habit, year);
+    }
+
+    var perfectDays = 0;
+    for (final key in daily.keys) {
+      final date = parseDayKey(key);
+      final due = habits.where((h) => h.isScheduledOn(date));
+      if (due.isNotEmpty && due.every((h) => h.isCompletedOn(date))) {
+        perfectDays++;
       }
-      return running.toDouble();
-    });
+    }
 
     var done = 0;
     for (var i = 0; i < 30; i++) {
@@ -102,6 +169,8 @@ class HabitStats {
       hours: hours,
       hourSamples: hourSamples,
       streakSeries: streakSeries,
+      perHabit: perHabit,
+      perfectDays: perfectDays,
       total: total,
       activeDays: daily.length,
       currentStreak: currentStreak,
