@@ -328,7 +328,7 @@
       cap_today: 'Today', cap_stats: 'Statistics', cap_insights: 'Insights', cap_person: 'Personalize', cap_free: 'Free & private',
       dl_title: 'Start your first streak', dl_sub: 'Install from F-Droid to get automatic updates, or grab the APK directly.',
       dl_note: 'Not on the Play Store. Android may ask you to allow installs the first time.',
-      foot_tag: 'Crafted with care and a lot of free time.', foot_releases: 'Releases', foot_issues: 'Report a bug', foot_feature: 'Request a feature', foot_open: 'Open source · MIT'
+      foot_tag: 'Crafted with care and a lot of free time.', foot_releases: 'Releases', foot_issues: 'Report a bug', foot_feature: 'Request a feature', foot_open: 'Open source · GPLv3'
     },
     es: {
       nav_features: 'Funciones', nav_screens: 'Capturas', nav_download: 'Descargar',
@@ -356,7 +356,7 @@
       cap_today: 'Hoy', cap_stats: 'Estadísticas', cap_insights: 'Análisis', cap_person: 'Personaliza', cap_free: 'Libre y privado',
       dl_title: 'Empieza tu primera racha', dl_sub: 'Instala desde F-Droid para tener actualizaciones automáticas, o descarga el APK directamente.',
       dl_note: 'No está en Play Store. Android puede pedirte permiso para instalar la primera vez.',
-      foot_tag: 'Hecho con cariño y mucho tiempo libre.', foot_releases: 'Versiones', foot_issues: 'Reportar un fallo', foot_feature: 'Solicitar función', foot_open: 'Código abierto · MIT'
+      foot_tag: 'Hecho con cariño y mucho tiempo libre.', foot_releases: 'Versiones', foot_issues: 'Reportar un fallo', foot_feature: 'Solicitar función', foot_open: 'Código abierto · GPLv3'
     }
   };
 
