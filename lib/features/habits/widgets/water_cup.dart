@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class WaterCupPainter extends CustomPainter {
   WaterCupPainter({required this.fill});
 
-  final double fill; // 0..1
+  final double fill;
 
   static const glassColor = Color(0xFFE3EAF8);
   static const _glassHi = Color(0xFFF4F7FD);
@@ -98,7 +98,7 @@ class WaterCupPainter extends CustomPainter {
 class BookPainter extends CustomPainter {
   BookPainter({required this.fill, required this.color});
 
-  final double fill; // 0..1
+  final double fill;
   final Color color;
 
   @override

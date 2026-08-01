@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -10,8 +9,10 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 
@@ -30,13 +31,13 @@ class QuantitativeProgress extends StatelessWidget {
       accent: habit.color,
     );
     if (result != null && result >= 0 && result != current && context.mounted) {
-      context.read<HabitsController>().setProgress(habit.id, DateTime.now(), result);
+      context.read<HabitsController>().setProgress(habit.id, AppClock.now(), result);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
+    final today = AppClock.now();
     final count = habit.completions[today.dayKey]?.count ?? 0;
     final ratio =
         habit.perDayTarget <= 0 ? 0.0 : (count / habit.perDayTarget).clamp(0.0, 1.0);
@@ -56,7 +57,13 @@ class QuantitativeProgress extends StatelessWidget {
               QuantKind.water => _WaterCups(count: count, target: habit.perDayTarget),
               QuantKind.reading =>
                 _ReadingBooks(habit: habit, ratio: ratio, count: count),
-              QuantKind.generic => _GenericRing(ratio: ratio, color: habit.color),
+              QuantKind.generic => _GenericRing(
+                  progress: QuantProgress.of(
+                    count: count,
+                    target: habit.perDayTarget,
+                  ),
+                  color: habit.color,
+                ),
             },
             const SizedBox(height: 18),
             GestureDetector(
@@ -321,8 +328,7 @@ class _Book extends StatelessWidget {
     bottomRight: Radius.circular(10),
   );
 
-  bool get _hasPhoto =>
-      habit.bookCoverPath.isNotEmpty && File(habit.bookCoverPath).existsSync();
+  bool get _hasPhoto => CoverImage.exists(habit.bookCoverPath);
 
   @override
   Widget build(BuildContext context) {
@@ -393,7 +399,7 @@ class _Book extends StatelessWidget {
                 if (isProgress)
                   _ProgressCover(color: habit.color, ratio: ratio, count: count)
                 else if (_hasPhoto)
-                  Image.file(File(habit.bookCoverPath), fit: BoxFit.cover)
+                  CoverImage(path: habit.bookCoverPath)
                 else
                   _JacketCover(color: habit.color, title: habit.name),
                 Positioned(
@@ -710,16 +716,19 @@ class _GroundShadowPainter extends CustomPainter {
 }
 
 class _GenericRing extends StatelessWidget {
-  const _GenericRing({required this.ratio, required this.color});
+  const _GenericRing({required this.progress, required this.color});
 
-  final double ratio;
+  final QuantProgress progress;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
+    final reached = progress.reachedGoal;
+    final reachedColor = progress.reachedColor(color);
+    final activeColor = progress.activeColor(color);
     return Center(
       child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: ratio.clamp(0.0, 1.0)),
+        tween: Tween(begin: 0, end: progress.fraction),
         duration: const Duration(milliseconds: 650),
         curve: Curves.easeOutCubic,
         builder: (context, t, _) => SizedBox(
@@ -730,10 +739,14 @@ class _GenericRing extends StatelessWidget {
             children: [
               CustomPaint(
                 size: const Size(138, 138),
-                painter: _RingPainter(ratio: t, color: color),
+                painter: _RingPainter(
+                  ratio: t,
+                  color: activeColor,
+                  track: reached ? reachedColor : color.withValues(alpha: 0.13),
+                ),
               ),
-              if (t >= 1.0)
-                _CheckSeal(color: color)
+              if (reached)
+                _CheckSeal(color: reachedColor)
               else
                 Text(
                   '${(t * 100).round()}%',
@@ -753,10 +766,11 @@ class _GenericRing extends StatelessWidget {
 }
 
 class _RingPainter extends CustomPainter {
-  _RingPainter({required this.ratio, required this.color});
+  _RingPainter({required this.ratio, required this.color, required this.track});
 
   final double ratio;
   final Color color;
+  final Color track;
 
   static const _stroke = 12.0;
 
@@ -773,7 +787,7 @@ class _RingPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = _stroke
-        ..color = color.withValues(alpha: 0.13),
+        ..color = track,
     );
 
     if (ratio <= 0) return;
@@ -802,5 +816,5 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RingPainter old) =>
-      old.ratio != ratio || old.color != color;
+      old.ratio != ratio || old.color != color || old.track != track;
 }

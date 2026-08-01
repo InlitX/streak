@@ -151,4 +151,39 @@ void main() {
     expect(back.scheduleWeekdays, const [2, 4]);
     expect(back.scheduleEvery, 5);
   });
+
+  group('archive', () {
+    test('a fresh habit is not archived and survives a round trip', () {
+      final habit = _habit(interval: HabitInterval.daily, createdAt: _ago(2));
+      expect(habit.isArchived, isFalse);
+      expect(Habit.fromMap(habit.toMap()).isArchived, isFalse);
+    });
+
+    test('archivedAt round-trips and clearArchived restores', () {
+      final stamp = DateTime(2026, 3, 14, 9, 30);
+      final archived =
+          _habit(interval: HabitInterval.daily, createdAt: _ago(2))
+              .copyWith(archivedAt: stamp);
+      final back = Habit.fromMap(archived.toMap());
+      expect(back.isArchived, isTrue);
+      expect(back.archivedAt, stamp);
+      expect(back.copyWith(clearArchived: true).isArchived, isFalse);
+    });
+  });
+
+  group('day cutoff', () {
+    tearDown(() => AppClock.cutoffHour = 0);
+
+    test('with no cutoff the logical day is the calendar day', () {
+      AppClock.cutoffHour = 0;
+      expect(AppClock.today(), DateTime.now().atMidnight);
+    });
+
+    test('a cutoff shifts the logical day back by that many hours', () {
+      AppClock.cutoffHour = 3;
+      final expected =
+          DateTime.now().subtract(const Duration(hours: 3)).atMidnight;
+      expect(AppClock.today(), expected);
+    });
+  });
 }

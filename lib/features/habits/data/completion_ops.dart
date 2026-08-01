@@ -2,7 +2,6 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
-// Shared by the app and the widget background isolate.
 class CompletionOps {
   const CompletionOps._();
 
@@ -12,8 +11,13 @@ class CompletionOps {
     if (habit.isCompletedOn(date)) {
       completions.remove(date.dayKey);
     } else {
-      completions[date.dayKey] =
-          Completion(date: date.dayKey, hour: DateTime.now().hour);
+      completions[date.dayKey] = Completion(
+        date: date.dayKey,
+        count: habit.kind == HabitKind.quantitative
+            ? (habit.perDayTarget < 1 ? 1 : habit.perDayTarget)
+            : 1,
+        hour: AppClock.now().hour,
+      );
     }
     return completions;
   }
@@ -41,7 +45,7 @@ class CompletionOps {
         date: date.dayKey,
         count: steps.length,
         steps: steps,
-        hour: entry?.hour ?? DateTime.now().hour,
+        hour: entry?.hour ?? AppClock.now().hour,
       );
     }
     return completions;
@@ -57,7 +61,7 @@ class CompletionOps {
         date: date.dayKey,
         count: all.length,
         steps: all,
-        hour: completions[date.dayKey]?.hour ?? DateTime.now().hour,
+        hour: completions[date.dayKey]?.hour ?? AppClock.now().hour,
       );
     }
     return completions;
@@ -66,7 +70,7 @@ class CompletionOps {
   static Map<String, Completion> logRelapse(Habit habit, DateTime date) {
     final completions = {...habit.completions};
     completions[date.dayKey] =
-        Completion(date: date.dayKey, hour: DateTime.now().hour);
+        Completion(date: date.dayKey, hour: AppClock.now().hour);
     return completions;
   }
 
@@ -89,7 +93,7 @@ class CompletionOps {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
         count: next,
-        hour: DateTime.now().hour,
+        hour: AppClock.now().hour,
       );
     }
     return completions;

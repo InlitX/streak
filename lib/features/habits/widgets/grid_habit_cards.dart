@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +6,10 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/quant_progress.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -40,17 +41,22 @@ class _CheckTile extends StatelessWidget {
   const _CheckTile({
     required this.habit,
     required this.done,
+    required this.circle,
     required this.onTap,
     this.size = 52,
   });
 
   final Habit habit;
   final bool done;
+  final bool circle;
   final VoidCallback onTap;
   final double size;
 
   @override
   Widget build(BuildContext context) {
+    if (habit.kind == HabitKind.quantitative) {
+      return _QuantTile(habit: habit, circle: circle, size: size);
+    }
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -64,9 +70,7 @@ class _CheckTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: habit.color.withValues(alpha: done ? 1 : 0.16),
           borderRadius: BorderRadius.circular(
-            context.watch<SettingsController>().isCircleCheck
-                ? size / 2
-                : size * 0.28,
+            circle ? size / 2 : size * 0.28,
           ),
         ),
         child: Icon(
@@ -79,8 +83,79 @@ class _CheckTile extends StatelessWidget {
   }
 }
 
-bool _hasCover(Habit habit) =>
-    habit.coverPath.isNotEmpty && File(habit.coverPath).existsSync();
+class _QuantTile extends StatelessWidget {
+  const _QuantTile({
+    required this.habit,
+    required this.circle,
+    required this.size,
+    this.showCheck = true,
+  });
+
+  final Habit habit;
+  final bool circle;
+  final double size;
+  final bool showCheck;
+
+  @override
+  Widget build(BuildContext context) {
+    final today = AppClock.now();
+    final count = habit.completions[today.dayKey]?.count ?? 0;
+    final progress = QuantProgress.of(count: count, target: habit.perDayTarget);
+    final reached = progress.reachedGoal;
+    final settled = reached ? progress.reachedColor(habit.color) : habit.color;
+
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        context.read<HabitsController>().addProgress(
+          habit.id,
+          today,
+          habit.incrementAmount,
+        );
+      },
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(
+            circle ? size / 2 : size * 0.28,
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ColoredBox(
+                color: settled.withValues(alpha: reached ? 1 : 0.16),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: progress.fraction),
+                  duration: const Duration(milliseconds: 520),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, t, _) => FractionallySizedBox(
+                    heightFactor: t.clamp(0.0, 1.0),
+                    widthFactor: 1,
+                    child: ColoredBox(color: progress.activeColor(habit.color)),
+                  ),
+                ),
+              ),
+              if (showCheck)
+                Icon(
+                  Icons.check_rounded,
+                  size: size * 0.5,
+                  color: reached
+                      ? Colors.white
+                      : habit.color.withValues(alpha: 0.85),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+bool _hasCover(Habit habit) => CoverImage.exists(habit.coverPath);
 
 Widget _shell(
   BuildContext context,
@@ -108,9 +183,7 @@ Widget _shell(
     child: Stack(
       children: [
         if (cover) ...[
-          Positioned.fill(
-            child: Image.file(File(habit.coverPath), fit: BoxFit.cover),
-          ),
+          Positioned.fill(child: CoverImage(path: habit.coverPath)),
           Positioned.fill(
             child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
           ),
@@ -149,7 +222,8 @@ class GridWeekCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now().atMidnight;
+    final today = AppClock.now().atMidnight;
+    final circle = context.watch<SettingsController>().isCircleCheck;
     final labels = WeekdayLabels.shortMonFirst(
       Localizations.localeOf(context).languageCode,
     );
@@ -181,6 +255,7 @@ class GridWeekCard extends StatelessWidget {
                 habit: habit,
                 date: today.subtract(Duration(days: i)),
                 label: labels[today.subtract(Duration(days: i)).weekday - 1],
+                circle: circle,
                 onTap: onToggleDay,
               ),
           ],
@@ -195,17 +270,21 @@ class _DayCell extends StatelessWidget {
     required this.habit,
     required this.date,
     required this.label,
+    required this.circle,
     required this.onTap,
   });
 
   final Habit habit;
   final DateTime date;
   final String label;
+  final bool circle;
   final void Function(DateTime date) onTap;
 
   @override
   Widget build(BuildContext context) {
     final done = habit.isCompletedOn(date);
+    final quant = habit.kind == HabitKind.quantitative;
+    final today = date.atMidnight == AppClock.now().atMidnight;
     return Padding(
       padding: const EdgeInsets.only(left: 6),
       child: Column(
@@ -220,24 +299,50 @@ class _DayCell extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          GestureDetector(
-            onTap: () {
-              HapticFeedback.selectionClick();
-              onTap(date);
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: habit.color.withValues(alpha: done ? 1 : 0.14),
-                borderRadius: BorderRadius.circular(
-                  context.watch<SettingsController>().isCircleCheck ? 15 : 9,
+          quant && today
+              ? _QuantTile(
+                  habit: habit,
+                  circle: circle,
+                  size: 30,
+                  showCheck: false,
+                )
+              : GestureDetector(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    onTap(date);
+                  },
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(circle ? 15 : 9),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          ColoredBox(
+                            color: habit.color.withValues(
+                              alpha: done ? 1 : 0.14,
+                            ),
+                          ),
+                          if (!done && quant)
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FractionallySizedBox(
+                                heightFactor: QuantProgress.of(
+                                  count:
+                                      habit.completions[date.dayKey]?.count ??
+                                      0,
+                                  target: habit.perDayTarget,
+                                ).fraction,
+                                widthFactor: 1,
+                                child: ColoredBox(color: habit.color),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -262,7 +367,9 @@ class GridYearCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now().atMidnight;
+    final today = AppClock.now().atMidnight;
+    final circle = context.watch<SettingsController>().isCircleCheck;
+
     return GestureDetector(
       onTap: onOpen,
       onLongPress: onLongPress,
@@ -292,6 +399,7 @@ class GridYearCard extends StatelessWidget {
                 _CheckTile(
                   habit: habit,
                   done: habit.isCompletedOn(today),
+                  circle: circle,
                   onTap: onToggleToday,
                 ),
               ],
@@ -301,7 +409,7 @@ class GridYearCard extends StatelessWidget {
               habit: habit,
               mode: HeatmapMode.year,
               compact: true,
-              circle: context.watch<SettingsController>().isCircleCheck,
+              circle: circle,
               onToggle: onToggleDay,
             ),
           ],
@@ -329,7 +437,8 @@ class GridMonthCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now().atMidnight;
+    final today = AppClock.now().atMidnight;
+    final circle = context.watch<SettingsController>().isCircleCheck;
     final month = DateFormat.yMMM(
       Localizations.localeOf(context).toString(),
     ).format(today);
@@ -349,6 +458,7 @@ class GridMonthCard extends StatelessWidget {
                 _CheckTile(
                   habit: habit,
                   done: habit.isCompletedOn(today),
+                  circle: circle,
                   onTap: onToggleToday,
                   size: 38,
                 ),
@@ -383,12 +493,12 @@ class GridMonthCard extends StatelessWidget {
             const SizedBox(height: 12),
             Center(
               child: HabitHeatmap(
-              habit: habit,
-              mode: HeatmapMode.month,
-              compact: true,
-              circle: context.watch<SettingsController>().isCircleCheck,
-              onToggle: onToggleDay,
-            ),
+                habit: habit,
+                mode: HeatmapMode.month,
+                compact: true,
+                circle: circle,
+                onToggle: onToggleDay,
+              ),
             ),
           ],
         ),
@@ -442,7 +552,10 @@ class GridViewSwitcher extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 8,
+                ),
                 child: Icon(
                   icon,
                   size: 24,

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,9 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -36,11 +37,10 @@ class HabitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    final doneToday = habit.isCompletedOn(DateTime.now());
+    final doneToday = habit.isCompletedOn(AppClock.now());
     final streak = habit.currentStreak;
     final circleCheck = context.watch<SettingsController>().isCircleCheck;
-    final hasCover =
-        habit.coverPath.isNotEmpty && File(habit.coverPath).existsSync();
+    final hasCover = CoverImage.exists(habit.coverPath);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -56,131 +56,166 @@ class HabitCard extends StatelessWidget {
         child: Stack(
           children: [
             if (hasCover) ...[
-              Positioned.fill(
-                child: Image.file(File(habit.coverPath), fit: BoxFit.cover),
-              ),
+              Positioned.fill(child: CoverImage(path: habit.coverPath)),
               Positioned.fill(
                 child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
               ),
             ],
             Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 children: [
-                  Container(
-                    width: 46,
-                    height: 46,
-                    decoration: BoxDecoration(
-                      color: habit.color.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: HabitGlyph(
-                      glyph: habit.icon,
-                      color: habit.color,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          habit.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: scheme.onSurface,
-                          ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: habit.color.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(14),
                         ),
-                        const SizedBox(height: 2),
-                        Row(
+                        child: HabitGlyph(
+                          glyph: habit.icon,
+                          color: habit.color,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (habit.isPausedOn(DateTime.now())) ...[
-                              Icon(LucideIcons.palmtree,
-                                  size: 14, color: context.tokens.info),
-                              const SizedBox(width: 4),
-                              Text(
-                                context.l10n.paused,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: context.tokens.info,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                            ],
-                            Icon(LucideIcons.flame,
-                                size: 14, color: habit.color),
-                            const SizedBox(width: 3),
                             Text(
-                              '$streak',
+                              habit.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
-                                color: context.tokens.muted,
+                                color: scheme.onSurface,
                               ),
                             ),
-                            if (habitHasExplicitFrequency(habit)) ...[
-                              const SizedBox(width: 8),
-                              Text(
-                                '·  ${habitFrequencyLabel(context, habit)}',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: context.tokens.muted,
+                            const SizedBox(height: 2),
+                            Row(
+                              children: [
+                                if (habit.isPausedOn(AppClock.now())) ...[
+                                  Icon(
+                                    LucideIcons.palmtree,
+                                    size: 14,
+                                    color: context.tokens.info,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    context.l10n.paused,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: context.tokens.info,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                ],
+                                Icon(
+                                  LucideIcons.flame,
+                                  size: 14,
+                                  color: habit.color,
                                 ),
-                              ),
-                            ],
-                            if (habit.category.isNotEmpty) ...[
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  '·  ${context.categoryLabel(habit.category)}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                const SizedBox(width: 3),
+                                Text(
+                                  '$streak',
                                   style: TextStyle(
                                     fontSize: 13,
+                                    fontWeight: FontWeight.w700,
                                     color: context.tokens.muted,
                                   ),
                                 ),
-                              ),
-                            ],
+                                if (habit.kind == HabitKind.quantitative) ...[
+                                  const SizedBox(width: 8),
+                                  _AmountLabel(habit: habit),
+                                ],
+                                if (habitHasExplicitFrequency(habit)) ...[
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    '·  ${habitFrequencyLabel(context, habit)}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: context.tokens.muted,
+                                    ),
+                                  ),
+                                ],
+                                if (habit.category.isNotEmpty) ...[
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      '·  ${context.categoryLabel(habit.category)}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: context.tokens.muted,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            _StrengthBar(
+                              value: habit.strength,
+                              color: habit.color,
+                              track: scheme.surfaceContainerHighest,
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        _StrengthBar(
-                          value: habit.strength,
-                          color: habit.color,
-                          track: scheme.surfaceContainerHighest,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 14),
+                      _ActionButton(
+                        habit: habit,
+                        doneToday: doneToday,
+                        circle: circleCheck,
+                        onToggleToday: onToggleToday,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 14),
-                  _ActionButton(
+                  const SizedBox(height: 16),
+                  HabitHeatmap(
                     habit: habit,
-                    doneToday: doneToday,
+                    mode: mode,
+                    compact: true,
                     circle: circleCheck,
-                    onToggleToday: onToggleToday,
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              HabitHeatmap(
-                habit: habit,
-                mode: mode,
-                compact: true,
-                circle: circleCheck,
-              ),
-            ],
-          ),
-        ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AmountLabel extends StatelessWidget {
+  const _AmountLabel({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    final count = habit.completions[AppClock.now().dayKey]?.count ?? 0;
+    final progress = QuantProgress.of(count: count, target: habit.perDayTarget);
+    final unit = habit.unitLabel.isEmpty ? '' : ' ${habit.unitLabel}';
+    return Flexible(
+      child: Text(
+        '·  $count/${habit.perDayTarget}$unit',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+          color: progress.reachedGoal
+              ? progress.reachedColor(habit.color)
+              : context.tokens.muted,
         ),
       ),
     );
@@ -257,7 +292,7 @@ class _ActionButton extends StatelessWidget {
 
   Future<void> _handleRelapseTap(BuildContext context, bool relapsed) async {
     final controller = context.read<HabitsController>();
-    final today = DateTime.now();
+    final today = AppClock.now();
     if (relapsed) {
       HapticFeedback.mediumImpact();
       await controller.clearRelapse(habit.id, today);
@@ -298,21 +333,26 @@ class _ActionButton extends StatelessWidget {
           onTap: () => _handleRelapseTap(context, relapsed),
         );
       case HabitKind.quantitative:
-        final today = DateTime.now();
+        final today = AppClock.now();
         final count = habit.completions[today.dayKey]?.count ?? 0;
-        final ratio =
-            habit.perDayTarget <= 0 ? 0.0 : count / habit.perDayTarget;
+        final ratio = habit.perDayTarget <= 0
+            ? 0.0
+            : count / habit.perDayTarget;
         void addProgress() {
           HapticFeedback.mediumImpact();
-          context
-              .read<HabitsController>()
-              .addProgress(habit.id, today, habit.incrementAmount);
+          context.read<HabitsController>().addProgress(
+            habit.id,
+            today,
+            habit.incrementAmount,
+          );
         }
 
         switch (habit.quantKind) {
           case QuantKind.water:
             return _WaterButton(
-                ratio: ratio.clamp(0.0, 1.0), onTap: addProgress);
+              ratio: ratio.clamp(0.0, 1.0),
+              onTap: addProgress,
+            );
           case QuantKind.reading:
             return _BookButton(
               color: habit.color,
@@ -323,7 +363,10 @@ class _ActionButton extends StatelessWidget {
           case QuantKind.generic:
             return _QuantityButton(
               color: habit.color,
-              ratio: ratio,
+              progress: QuantProgress.of(
+                count: count,
+                target: habit.perDayTarget,
+              ),
               done: doneToday,
               circle: circle,
               onTap: addProgress,
@@ -399,7 +442,11 @@ class _BookButton extends StatelessWidget {
                     painter: BookPainter(fill: t, color: color),
                   ),
                   if (done)
-                    const Icon(LucideIcons.check, size: 15, color: Colors.white),
+                    const Icon(
+                      LucideIcons.check,
+                      size: 15,
+                      color: Colors.white,
+                    ),
                 ],
               ),
             ),
@@ -473,7 +520,8 @@ class _TodayButtonState extends State<_TodayButton>
                 ? null
                 : Border.all(
                     color: widget.color.withValues(alpha: 0.5),
-                    width: 1.6),
+                    width: 1.6,
+                  ),
           ),
           child: Icon(
             LucideIcons.check,
@@ -540,11 +588,16 @@ class _RelapseButtonState extends State<_RelapseButton>
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: widget.relapsed ? danger : widget.color.withValues(alpha: 0.14),
+            color: widget.relapsed
+                ? danger
+                : widget.color.withValues(alpha: 0.14),
             borderRadius: BorderRadius.circular(widget.circle ? 22 : 14),
             border: widget.relapsed
                 ? null
-                : Border.all(color: widget.color.withValues(alpha: 0.5), width: 1.6),
+                : Border.all(
+                    color: widget.color.withValues(alpha: 0.5),
+                    width: 1.6,
+                  ),
           ),
           child: Icon(
             widget.relapsed ? LucideIcons.x : LucideIcons.shield,
@@ -560,14 +613,14 @@ class _RelapseButtonState extends State<_RelapseButton>
 class _QuantityButton extends StatefulWidget {
   const _QuantityButton({
     required this.color,
-    required this.ratio,
+    required this.progress,
     required this.done,
     required this.onTap,
     this.circle = false,
   });
 
   final Color color;
-  final double ratio;
+  final QuantProgress progress;
   final bool done;
   final VoidCallback onTap;
   final bool circle;
@@ -586,7 +639,10 @@ class _QuantityButtonState extends State<_QuantityButton>
   @override
   void didUpdateWidget(_QuantityButton old) {
     super.didUpdateWidget(old);
-    if (widget.done && !old.done) _pop.forward(from: 0);
+    if (widget.progress.laps != old.progress.laps ||
+        widget.progress.fraction != old.progress.fraction) {
+      _pop.forward(from: 0);
+    }
   }
 
   @override
@@ -597,6 +653,11 @@ class _QuantityButtonState extends State<_QuantityButton>
 
   @override
   Widget build(BuildContext context) {
+    final progress = widget.progress;
+    final reached = progress.reachedGoal;
+    final reachedColor = progress.reachedColor(widget.color);
+    final activeColor = progress.activeColor(widget.color);
+    final track = reached ? reachedColor : widget.color.withValues(alpha: 0.14);
     return GestureDetector(
       onTap: widget.onTap,
       child: AnimatedBuilder(
@@ -613,7 +674,7 @@ class _QuantityButtonState extends State<_QuantityButton>
             alignment: Alignment.center,
             children: [
               TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: widget.ratio.clamp(0.0, 1.0)),
+                tween: Tween(begin: 0, end: progress.fraction),
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOutCubic,
                 builder: (context, t, _) => SizedBox(
@@ -622,8 +683,8 @@ class _QuantityButtonState extends State<_QuantityButton>
                   child: CircularProgressIndicator(
                     value: t,
                     strokeWidth: 3,
-                    backgroundColor: widget.color.withValues(alpha: 0.14),
-                    valueColor: AlwaysStoppedAnimation(widget.color),
+                    backgroundColor: track,
+                    valueColor: AlwaysStoppedAnimation(activeColor),
                   ),
                 ),
               ),
@@ -631,7 +692,9 @@ class _QuantityButtonState extends State<_QuantityButton>
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: widget.done ? widget.color : widget.color.withValues(alpha: 0.14),
+                  color: widget.done
+                      ? reachedColor
+                      : widget.color.withValues(alpha: 0.14),
                   shape: widget.circle ? BoxShape.circle : BoxShape.rectangle,
                   borderRadius: widget.circle ? null : BorderRadius.circular(9),
                 ),
