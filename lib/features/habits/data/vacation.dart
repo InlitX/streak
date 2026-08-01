@@ -13,7 +13,7 @@ class VacationPeriod {
   bool contains(DateTime date) {
     final day = date.atMidnight;
     if (day.isBefore(start)) return false;
-    final upper = end ?? DateTime.now().atMidnight;
+    final upper = end ?? AppClock.now().atMidnight;
     return !day.isAfter(upper);
   }
 

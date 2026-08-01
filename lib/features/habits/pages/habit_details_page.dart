@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,14 +8,22 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/features/focus/pages/focus_setup_page.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
+import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
+import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
+import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
@@ -95,9 +102,23 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           }
         }
 
+        final settings = context.watch<SettingsController>();
+        final minimal = settings.isMinimalStyle;
+        final notesOn = settings.notesEnabled;
+
+        void openDay(DateTime date) => showDayActionsSheet(
+              context,
+              habit: habit,
+              date: date,
+              notesEnabled: notesOn,
+            );
+
         return Scaffold(
           appBar: AppBar(
-            title: Row(
+            toolbarHeight: minimal ? 52 : null,
+            title: minimal
+                ? null
+                : Row(
               children: [
                 HabitGlyph(glyph: habit.icon, color: habit.color, size: 22),
                 const SizedBox(width: 10),
@@ -132,6 +153,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                if (minimal) _MinimalHeader(habit: habit),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: FrequencyChip(habit: habit),
@@ -157,6 +179,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   _TodayChecklist(habit: habit),
                   const SizedBox(height: 20),
                 ],
+                if (settings.focusEnabled) ...[
+                  _FocusTile(habit: habit),
+                  const SizedBox(height: 20),
+                ],
                 SectionLabel(context.l10n.streaks),
                 StreakSummary(habit: habit),
                 const SizedBox(height: 20),
@@ -167,7 +193,15 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                     onChanged: _changeMode,
                   ),
                 ),
-                _ActivityView(habit: habit, mode: _mode, onToggle: toggle),
+                _ActivityView(
+                  habit: habit,
+                  mode: _mode,
+                  onToggle: toggle,
+                  onLongPress: openDay,
+                  showNotes: notesOn,
+                ),
+                if (notesOn && _mode != HeatmapMode.year) const NoteLegend(),
+                if (notesOn) _JourneyStrip(habit: habit),
                 const SizedBox(height: 20),
                 _VacationTile(habit: habit),
               ],
@@ -180,6 +214,77 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
   }
 }
 
+class _JourneyStrip extends StatelessWidget {
+  const _JourneyStrip({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    final shots = journeyShots(context.watch<NotesController>(), habit.id);
+    if (shots.isEmpty) return const SizedBox.shrink();
+
+    final preview = shots.take(8).toList();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionLabel(
+            context.l10n.journey,
+            trailing: GestureDetector(
+              onTap: () => AppNavigator.push(
+                JourneyPage(habitId: habit.id, accent: habit.color),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    context.l10n.journey_sub(shots.length),
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: context.tokens.muted,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    LucideIcons.chevronRight,
+                    size: 16,
+                    color: context.tokens.muted,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 92,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: preview.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (_, index) => GestureDetector(
+                onTap: () => showJourneyViewer(context, shots, index),
+                child: Container(
+                  width: 92,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: CoverImage.exists(preview[index].path)
+                      ? CoverImage(path: preview[index].path)
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _DetailBackground extends StatelessWidget {
   const _DetailBackground({required this.coverPath, required this.child});
 
@@ -188,12 +293,12 @@ class _DetailBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasCover = coverPath.isNotEmpty && File(coverPath).existsSync();
+    final hasCover = CoverImage.exists(coverPath);
     if (!hasCover) return child;
     return Stack(
       children: [
         Positioned.fill(
-          child: Image.file(File(coverPath), fit: BoxFit.cover),
+          child: CoverImage(path: coverPath),
         ),
         Positioned.fill(
           child: ColoredBox(color: Colors.black.withValues(alpha: 0.78)),
@@ -209,16 +314,25 @@ class _ActivityView extends StatelessWidget {
     required this.habit,
     required this.mode,
     required this.onToggle,
+    required this.onLongPress,
+    required this.showNotes,
   });
 
   final Habit habit;
   final HeatmapMode mode;
   final void Function(DateTime date) onToggle;
+  final void Function(DateTime date)? onLongPress;
+  final bool showNotes;
 
   @override
   Widget build(BuildContext context) {
     if (mode == HeatmapMode.month) {
-      return ActivityCalendar(habit: habit, onToggle: onToggle);
+      return ActivityCalendar(
+        habit: habit,
+        onToggle: onToggle,
+        onLongPress: onLongPress,
+        showNotes: showNotes,
+      );
     }
     return Card(
       child: Padding(
@@ -227,7 +341,44 @@ class _ActivityView extends StatelessWidget {
           habit: habit,
           mode: mode,
           onToggle: mode == HeatmapMode.week ? onToggle : null,
+          onLongPress: onLongPress,
+          showNotes: showNotes && mode == HeatmapMode.week,
         ),
+      ),
+    );
+  }
+}
+
+class _MinimalHeader extends StatelessWidget {
+  const _MinimalHeader({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          HabitGlyph(glyph: habit.icon, color: habit.color, size: 30),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              habit.name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'PlayfairDisplay',
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                height: 1.1,
+                letterSpacing: -0.6,
+                color: context.colors.onSurface,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -242,7 +393,7 @@ class _TodayChecklist extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.read<HabitsController>();
     final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
-    final today = DateTime.now();
+    final today = AppClock.now();
     final checked = habit.completions[today.dayKey]?.steps ?? const <String>{};
     final done = habit.substeps.where((s) => checked.contains(s.id)).length;
     final steps = sortCompletedLast
@@ -459,6 +610,63 @@ class _ModeToggle extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _FocusTile extends StatelessWidget {
+  const _FocusTile({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    final focus = context.watch<FocusController>();
+    final seconds = focus.secondsForHabit(habit.id);
+    final today = focus.secondsForHabitOnDay(habit.id, AppClock.now());
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
+        child: Row(
+          children: [
+            Icon(LucideIcons.timer, size: 21, color: habit.color),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.focus_total,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: context.colors.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    today > 0
+                        ? '${formatHoursShort(seconds)}  ·  ${context.l10n.today} ${formatHoursShort(today)}'
+                        : formatHoursShort(seconds),
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: context.tokens.muted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(LucideIcons.circlePlay, color: habit.color),
+              onPressed: () => AppNavigator.push(
+                FocusSetupPage(habitId: habit.id),
+                fullscreenDialog: true,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
