@@ -3,16 +3,15 @@ package com.streak.app
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
 
     private val channelName = "streak/app_icon"
     private var channel: MethodChannel? = null
 
-    // Alias suffixes must match the activity-alias names in AndroidManifest.
     private val aliases = mapOf(
         "default" to ".MainActivityDefault",
         "neutral" to ".MainActivityNeutral",
@@ -21,6 +20,7 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        NotificationStore.repairFor(applicationContext, buildVersion())
         WidgetRefreshReceiver.schedule(applicationContext)
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
             setMethodCallHandler { call, result ->
@@ -29,7 +29,6 @@ class MainActivity : FlutterActivity() {
                         setIcon(call.argument<String>("icon") ?: "default")
                         result.success(true)
                     }
-                    // Cold start: the app pulls the habit it was launched for.
                     "consumeLaunchHabit" -> result.success(takeHabitId(intent))
                     else -> result.notImplemented()
                 }
@@ -37,7 +36,13 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    // Warm start: the app is already running when a widget is tapped.
+    private fun buildVersion(): Long = try {
+        val info = packageManager.getPackageInfo(packageName, 0)
+        info.longVersionCode * 1000 + (info.lastUpdateTime % 1000)
+    } catch (e: Exception) {
+        0L
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)

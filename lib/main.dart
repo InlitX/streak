@@ -60,7 +60,7 @@ Future<void> main() async {
           create: (_) {
             final controller = HabitsController();
             HomeWidgetService.sync(controller.asMap);
-            controller.rescheduleIntervalReminders();
+            controller.rescheduleReminders();
             return controller;
           },
         ),

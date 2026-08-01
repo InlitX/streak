@@ -51,7 +51,7 @@ that's where a quiet regression corrupts someone's real history.
 
 ## Good to know
 
-Three traps that have already bitten this codebase, none of which fail loudly.
+Five traps that have already bitten this codebase, none of which fail loudly.
 
 - **Date walks need a floor.** Avoidance habits are *clean by default*, so a
   loop walking backwards day by day must stop at the habit's `createdAt`.
@@ -59,6 +59,18 @@ Three traps that have already bitten this codebase, none of which fail loudly.
 - **Never dispose a `TextEditingController` right after `await showDialog`.**
   The future completes when the dialog *starts* closing, while the field is
   still mounted and rebuilding. Own it in a `State` instead.
+- **Never let R8 rename the notification plugin.** `flutter_local_notifications`
+  stores its scheduled alarms as JSON written by Gson, which uses the *field
+  names*. Release builds obfuscate, so a build that renames those fields cannot
+  read what the previous one wrote: the whole store fails with
+  `Expected BEGIN_ARRAY but was BOOLEAN`, the boot receiver restores nothing and
+  no reminder ever fires again. `android/app/proguard-rules.pro` keeps
+  `com.dexterous.**`; do not remove it, and check reminders after touching
+  anything under `android/app/build.gradle.kts`.
+- **Schedule reminders before syncing the widgets.** Saving a habit used to sync
+  the home-screen widgets first and reschedule last; closing the app right after
+  saving killed the reminder. Anything that must survive the user leaving goes
+  first, and the form awaits the save before popping.
 - **Glance draws only the first 10 children** of a `Row` or `Column` — no error,
   just half a widget. Chunk anything longer, and run `flutter clean` after
   Kotlin changes or you'll keep testing the old one.

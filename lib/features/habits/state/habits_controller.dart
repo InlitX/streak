@@ -49,11 +49,10 @@ class HabitsController extends ChangeNotifier {
 
   Habit? byId(String id) => _habits[id];
 
-  Future<void> rescheduleIntervalReminders() async {
+  Future<void> rescheduleReminders() async {
     for (final habit in _habits.values) {
-      if (habit.reminders.any((r) => r.isInterval)) {
-        await _notifications.scheduleFor(habit);
-      }
+      if (habit.isArchived || habit.reminders.isEmpty) continue;
+      await _notifications.scheduleFor(habit);
     }
   }
 
@@ -109,16 +108,16 @@ class HabitsController extends ChangeNotifier {
     _habits[id] = habit;
     await LocalStore.writeHabit(habit);
     notifyListeners();
-    await HomeWidgetService.sync(asMap);
     if (reminders.isNotEmpty) await _notifications.scheduleFor(habit);
+    HomeWidgetService.syncSoon(asMap);
   }
 
   Future<void> update(Habit habit) async {
     _habits[habit.id] = habit;
     await LocalStore.writeHabit(habit);
     notifyListeners();
-    await HomeWidgetService.sync(asMap);
     await _notifications.scheduleFor(habit);
+    HomeWidgetService.syncSoon(asMap);
   }
 
   Future<void> toggle(String id, DateTime date) async {
@@ -261,11 +260,11 @@ class HabitsController extends ChangeNotifier {
   Future<void> archive(String id) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _notifications.cancelFor(id);
     final archived = habit.copyWith(archivedAt: AppClock.now());
     _habits[id] = archived;
     await LocalStore.writeHabit(archived);
     notifyListeners();
+    await _notifications.cancelFor(id);
     await HomeWidgetService.sync(asMap);
   }
 
