@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/confetti_overlay.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
@@ -20,6 +22,7 @@ import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -111,8 +114,8 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             _ActionTile(
-              icon: LucideIcons.trash2,
-              label: context.l10n.delete_habit,
+              icon: LucideIcons.archive,
+              label: context.l10n.archive_habit,
               danger: true,
               onTap: () {
                 Navigator.of(sheetContext).pop();
@@ -129,13 +132,21 @@ class _HomePageState extends State<HomePage> {
   Future<void> _confirmDelete(HabitsController controller, Habit habit) async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: context.l10n.delete_habit,
-      message: context.l10n.delete_habit_body(habit.name),
-      confirmLabel: context.l10n.delete,
+      title: context.l10n.archive_habit,
+      message: context.l10n.archive_habit_body(habit.name),
+      confirmLabel: context.l10n.archive,
+      icon: LucideIcons.archive,
     );
     if (confirmed == true) {
       HapticFeedback.heavyImpact();
-      controller.remove(habit.id);
+      await controller.archive(habit.id);
+      if (!mounted) return;
+      AppSnackbar.action(
+        context,
+        context.l10n.habit_archived,
+        label: context.l10n.undo,
+        onPressed: () => controller.restore(habit.id),
+      );
     }
   }
 
@@ -159,6 +170,7 @@ class _HomePageState extends State<HomePage> {
               )
             : null,
         actions: [
+          if (!_reordering) FocusPill(compact: grid),
           if (grid && !_reordering)
             IconButton(
               icon: const Icon(LucideIcons.chartColumn),
@@ -214,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                 if (controller.isEmpty) return const _EmptyState();
 
                 final all = controller.habits;
-                final today = DateTime.now();
+                final today = AppClock.now();
                 final active = all
                     .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
                     .toList();
