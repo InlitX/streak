@@ -4,10 +4,13 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
@@ -18,6 +21,7 @@ Future<void> main() async {
 
   await initializeDateFormatting();
   await LocalStore.init();
+  AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
   await WidgetActionService.drain(LocalStore.readHabits());
 
   NotificationService.onOpenHabit = _openHabit;
@@ -50,6 +54,8 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsController()),
         ChangeNotifierProvider(create: (_) => CategoriesController()),
+        ChangeNotifierProvider(create: (_) => NotesController()),
+        ChangeNotifierProvider(create: (_) => FocusController()),
         ChangeNotifierProvider(
           create: (_) {
             final controller = HabitsController();
