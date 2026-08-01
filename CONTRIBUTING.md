@@ -121,6 +121,6 @@ rename an existing key or its translations are lost everywhere.
 <div align="center">
 
 By contributing you agree that your work ships under the project's
-[MIT License](LICENSE).
+[GNU GPLv3](LICENSE).
 
 </div>

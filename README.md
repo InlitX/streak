@@ -20,7 +20,7 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
   <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
   <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
-  <img alt="License MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="License GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 <a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
@@ -38,7 +38,7 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 <br/>
 
 <sub>
-  <a href="#features">Features</a> ·
+  <a href="#-features">Features</a> ·
   <a href="#coming-from-another-app">Import</a> ·
   <a href="#download">Download</a> ·
   <a href="#privacy">Privacy</a> ·
@@ -77,7 +77,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 
 ---
 
-## Features
+## ✨ Features
 
 <table>
 <tr>
@@ -92,6 +92,8 @@ It is fast, offline, and built to feel calm rather than demanding.
 - **Flexible schedules** — daily, X times a week or month, chosen weekdays,
   or every N days
 - **Fill in the past** — tap any day to add or remove it, streaks catch up
+- **Day notes** — long-press a day to write what happened, plan one ahead,
+  or attach a photo
 - Current and best streak counters
 - **Vacation mode** pauses a habit without breaking anything
 - Finished habits slide to the bottom, so what's left is what's next
@@ -108,15 +110,32 @@ It is fast, offline, and built to feel calm rather than demanding.
 - **"When are you most consistent?"** finds the hours you actually show up
 - Totals, best streak, current streak and completion rate in one row
 - Per-habit **strength** score, weighted towards your recent days
-- A **shareable progress card**, exported as a polished image
+- A **shareable progress card** in several sizes, exported as a polished image
 
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
 
+### 🧘 Focus sessions
+
+- A timer for the habits that need one — free, or tied to a habit and its goal
+- **Pomodoro rounds** with short breaks, or one long stretch
+- Three clock styles — **Circle**, **Flip** and **Dots**
+- Built-in sounds — rain, brown noise, warm pad — or your own tracks, in
+  order or shuffled
+- Calm scenes as a background, or a photo of your own
+- Tick off subtasks without leaving the timer, and keep the screen awake
+- A **daily focus goal**, plus a history of every session you finish
+- The minutes land on the habit itself when you reach the target
+
+</td>
+<td width="50%" valign="top">
+
 ### 🎨 Making it yours
 
+- **Classic or Minimal** — the habit list with a bottom bar, or a grid with
+  everything grouped into four sections
 - Minimalist icon pack, or any emoji
 - Custom accent color with a full picker
 - Light and dark themes, plus five app backgrounds — solid, gradient, dots,
@@ -126,17 +145,29 @@ It is fast, offline, and built to feel calm rather than demanding.
 - A burst of confetti the day you finish everything
 
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 
-### 🔔 Reminders, widgets and backup
+### 🔔 Reminders and widgets
 
 - Reminders per habit, on the days you choose or every N days, each with a
   short encouraging line instead of a blank alert
 - **Four home-screen widgets** — habit, today, stats and activity grid — each
   styled on its own, with color or photo, opacity and border
+- Choose which figures the **stats widget** shows, and how they sit together
 - Tick a day straight from a widget — it saves without opening the app
+- Tap the activity grid to jump into that habit
+
+</td>
+<td width="50%" valign="top">
+
+### 💾 Your data
+
+- **Import** from Loop Habit Tracker and HabitKit, history and streaks included
 - Backup and restore with a single file you keep yourself
-- English and Spanish, fully offline
+- Everything is offline — no account, no server, nothing to sync
+- English, Spanish and Chinese, with more languages open on Weblate
 
 </td>
 </tr>
@@ -191,7 +222,8 @@ Runs on **Android 9 (Pie) and newer**.
 
 ## Translations
 
-Streak speaks English and Spanish today, and more languages are very welcome.
+Streak speaks English, Spanish and Chinese today, and more languages are very
+welcome.
 Translations are managed on [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no coding needed, just short phrases you translate in your browser.
 
@@ -235,6 +267,6 @@ If Streak helps you show up more often, a star or a coffee goes a long way.
 <br/>
 <br/>
 
-Released under the <a href="LICENSE"><b>MIT License</b></a>.
+Released under the <a href="LICENSE"><b>GNU GPLv3</b></a>.
 
 </div>

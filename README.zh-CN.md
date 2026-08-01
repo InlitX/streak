@@ -20,7 +20,7 @@
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
   <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
   <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
-  <img alt="MIT 许可证" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="GPLv3 许可证" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="无广告、无追踪" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 <a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
@@ -38,7 +38,7 @@
 <br/>
 
 <sub>
-  <a href="#功能">功能</a> ·
+  <a href="#-功能">功能</a> ·
   <a href="#从其他应用迁移">导入</a> ·
   <a href="#下载">下载</a> ·
   <a href="#隐私">隐私</a> ·
@@ -76,7 +76,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ---
 
-## 功能
+## ✨ 功能
 
 <table>
 <tr>
@@ -90,6 +90,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 - **清单**把一个习惯拆成若干步骤，全部勾选才算完成
 - **灵活的周期** —— 每天、每周或每月若干次、指定星期几，或每 N 天
 - **补记过去** —— 点按任意一天即可补上或取消，连续记录随之更新
+- **每日笔记** —— 长按某一天即可记下当天的情况、提前做计划或附上照片
 - 当前连续记录与最佳连续记录计数器
 - **假期模式**可暂停习惯而不中断任何记录
 - 已完成的习惯自动沉到底部，剩下的一目了然
@@ -106,15 +107,30 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 - **“你在什么时候最坚持？”** 找出你真正会去做的时段
 - 总计、最佳连续记录、当前连续记录和完成率，一行呈现
 - 每个习惯的**强度**评分，近期表现权重更高
-- 可分享的**进度卡片**，导出为精美图片
+- 可分享的**进度卡片**，多种尺寸，导出为精美图片
 
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
 
+### 🧘 专注时段
+
+- 为需要计时的习惯准备的计时器 —— 自由计时，或绑定某个习惯及其目标
+- **番茄钟轮次**搭配短暂休息，也可以一口气专注到底
+- 三种时钟样式 —— **圆环**、**翻页**和**圆点**
+- 内置音效 —— 雨声、棕噪音、暖音垫 —— 也可加入你自己的音轨，顺序或随机播放
+- 静谧的场景背景，或换成你自己的照片
+- 不离开计时器就能勾选子任务，还可让屏幕常亮
+- **每日专注目标**，以及每次完成时段的历史记录
+- 达成目标后，这些分钟会直接记到习惯上
+
+</td>
+<td width="50%" valign="top">
+
 ### 🎨 个性化
 
+- **经典或极简** —— 带底部栏的习惯列表，或把一切归入四个板块的网格
 - 极简图标包，或任意表情符号
 - 自定义强调色，配有完整取色器
 - 浅色与深色主题，外加五种背景 —— 纯色、渐变、圆点、
@@ -124,17 +140,29 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 - 全部完成的那天会有一阵彩纸雨
 
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 
-### 🔔 提醒、小组件与备份
+### 🔔 提醒与小组件
 
 - 按习惯设置提醒，可选具体星期几或每 N 天，每条都带一句鼓励语，
   而不是干巴巴的通知
 - **四个主屏幕小组件** —— 习惯、今天、统计和活动网格 ——
   每个都可单独设置颜色或照片、透明度和边框
+- 自由选择**统计小组件**展示哪些数据，以及如何排布
 - 直接在小组件上勾选某一天，无需打开应用即可保存
+- 点按活动网格即可直接进入该习惯
+
+</td>
+<td width="50%" valign="top">
+
+### 💾 你的数据
+
+- 从 Loop Habit Tracker 和 HabitKit **导入**，历史记录与连续记录一并带走
 - 备份与恢复只用一个由你自己保管的文件
-- 支持英语和西班牙语，完全离线
+- 一切都在本地 —— 无需账号、没有服务器、不用同步
+- 支持英语、西班牙语和中文，更多语言已在 Weblate 上开放
 
 </td>
 </tr>
@@ -185,7 +213,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ## 翻译
 
-Streak 目前支持英语和西班牙语，非常欢迎更多语言。翻译工作在
+Streak 目前支持英语、西班牙语和中文，非常欢迎更多语言。翻译工作在
 [**Weblate**](https://hosted.weblate.org/engage/streak/) 上进行：无需编程，
 只是一些在浏览器里就能翻译的短句。
 
@@ -229,6 +257,6 @@ Streak 目前支持英语和西班牙语，非常欢迎更多语言。翻译工�
 <br/>
 <br/>
 
-基于 <a href="LICENSE"><b>MIT 许可证</b></a> 发布。
+基于 <a href="LICENSE"><b>GNU GPLv3 许可证</b></a> 发布。
 
 </div>

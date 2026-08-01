@@ -57,7 +57,7 @@ you're unsure about is the fastest way to get an answer.
 
 <div align="center">
 
-Translations ship under the project's [MIT License](LICENSE).<br/>
+Translations ship under the project's [GNU GPLv3](LICENSE).<br/>
 Thank you for making Streak speak your language.
 
 </div>

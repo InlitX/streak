@@ -20,7 +20,7 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white" />
   <img alt="Dart" src="https://img.shields.io/badge/Dart-0175C2?style=flat&logo=dart&logoColor=white" />
   <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
-  <img alt="Licencia MIT" src="https://img.shields.io/badge/License-MIT-7C3AED?style=flat&logo=opensourceinitiative&logoColor=white" />
+  <img alt="Licencia GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="Sin anuncios, sin rastreo" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
 <a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
@@ -38,7 +38,7 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 <br/>
 
 <sub>
-  <a href="#características">Características</a> ·
+  <a href="#-características">Características</a> ·
   <a href="#vienes-de-otra-app">Importar</a> ·
   <a href="#descarga">Descarga</a> ·
   <a href="#privacidad">Privacidad</a> ·
@@ -80,7 +80,7 @@ exigir.
 
 ---
 
-## Características
+## ✨ Características
 
 <table>
 <tr>
@@ -97,6 +97,8 @@ exigir.
   o cada N días
 - **Rellena el pasado** — toca cualquier día para añadirlo o quitarlo, y las
   rachas se recalculan
+- **Notas del día** — mantén pulsado un día para contar qué pasó, dejar algo
+  planeado o añadir una foto
 - Contadores de racha actual y mejor racha
 - El **modo vacaciones** pausa un hábito sin romper nada
 - Los hábitos terminados bajan al final, así ves lo que te queda
@@ -113,15 +115,34 @@ exigir.
 - **"¿Cuándo eres más constante?"** encuentra las horas a las que de verdad cumples
 - Totales, mejor racha, racha actual y tasa de cumplimiento en una fila
 - Puntuación de **fuerza** por hábito, con más peso en tus días recientes
-- Una **tarjeta de progreso** para compartir, exportada como imagen cuidada
+- Una **tarjeta de progreso** para compartir, en varios tamaños y exportada
+  como imagen cuidada
 
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
 
+### 🧘 Sesiones de concentración
+
+- Un temporizador para los hábitos que lo piden — libre, o atado a un hábito
+  y su meta
+- **Rondas pomodoro** con descansos cortos, o una sola sesión larga
+- Tres estilos de reloj — **Círculo**, **Flip** y **Puntos**
+- Sonidos incluidos — lluvia, ruido marrón, pad cálido — o tus propias pistas,
+  en orden o aleatorias
+- Escenas tranquilas de fondo, o una foto tuya
+- Marca subtareas sin salir del temporizador, y deja la pantalla encendida
+- Una **meta diaria de concentración**, más el historial de cada sesión
+- Los minutos van al hábito en cuanto alcanzas la meta
+
+</td>
+<td width="50%" valign="top">
+
 ### 🎨 Hacerla tuya
 
+- **Clásico o Minimal** — la lista de hábitos con barra inferior, o una
+  cuadrícula con todo agrupado en cuatro secciones
 - Pack de iconos minimalista, o cualquier emoji
 - Color de acento personalizado con selector completo
 - Temas claro y oscuro, más cinco fondos — sólido, degradado, puntos,
@@ -131,17 +152,29 @@ exigir.
 - Una lluvia de confeti el día que lo completas todo
 
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 
-### 🔔 Recordatorios, widgets y copias
+### 🔔 Recordatorios y widgets
 
 - Recordatorios por hábito, los días que elijas o cada N días, cada uno con
   una frase de ánimo en vez de un aviso vacío
 - **Cuatro widgets de inicio** — hábito, hoy, estadísticas y cuadrícula de
   actividad — cada uno con su estilo: color o foto, opacidad y borde
+- Elige qué datos muestra el **widget de estadísticas** y cómo se colocan
 - Marca un día desde el widget, se guarda sin abrir la app
+- Toca la cuadrícula de actividad para entrar directo en ese hábito
+
+</td>
+<td width="50%" valign="top">
+
+### 💾 Tus datos
+
+- **Importa** desde Loop Habit Tracker y HabitKit, con historial y rachas
 - Copia de seguridad y restauración en un solo archivo que guardas tú
-- Inglés y español, totalmente sin conexión
+- Todo sin conexión — sin cuenta, sin servidor, nada que sincronizar
+- Inglés, español y chino, con más idiomas abiertos en Weblate
 
 </td>
 </tr>
@@ -196,7 +229,7 @@ Funciona en **Android 9 (Pie) o superior**.
 
 ## Traducciones
 
-Streak habla inglés y español, y cualquier idioma nuevo es bienvenido. Las
+Streak habla inglés, español y chino, y cualquier idioma nuevo es bienvenido. Las
 traducciones se gestionan en [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no hace falta programar, solo son frases cortas que traduces en el navegador.
 
@@ -240,6 +273,6 @@ Si Streak te ayuda a mantener la constancia, una estrella o un café significan 
 <br/>
 <br/>
 
-Publicado bajo la <a href="LICENSE"><b>Licencia MIT</b></a>.
+Publicado bajo la <a href="LICENSE"><b>Licencia GNU GPLv3</b></a>.
 
 </div>
