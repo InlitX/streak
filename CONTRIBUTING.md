@@ -83,7 +83,7 @@ lib/
 ├── app/            App shell, navigation host, theming
 ├── core/           Storage, date helpers, icons, routing, shared widgets
 ├── l10n/           Translation files (source of truth)
-├── features/       habits · statistics · settings · onboarding
+├── features/       habits · statistics · focus · settings · onboarding
 └── services/       Notifications, widgets, backup, import, launcher icon
 
 android/            Android host project and the Glance widgets

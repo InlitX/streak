@@ -1,9 +1,21 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  errors:
+    unused_import: error
+    unused_local_variable: error
+    dead_code: error
+
 linter:
   rules:
     prefer_single_quotes: true
     require_trailing_commas: true
+    always_declare_return_types: true
+    avoid_unnecessary_containers: true
+    prefer_final_locals: true
+    sized_box_for_whitespace: true
+    unnecessary_parenthesis: true
+    use_super_parameters: true
 
 formatter:
   trailing_commas: preserve
