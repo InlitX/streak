@@ -2,7 +2,6 @@ package com.streak.app
 
 import android.content.Context
 
-// Per-widget habit choice; no entry = all habits.
 object HeatmapConfig {
     const val LAYOUT_CLASSIC = 0
     const val LAYOUT_CARD = 1
@@ -16,7 +15,6 @@ object HeatmapConfig {
         prefs(context).getString("habit_$appWidgetId", null)
 
     fun setHabit(context: Context, appWidgetId: Int, habitId: String?) {
-        // commit() (sync): the widget renders right after and apply() would read stale.
         prefs(context).edit().apply {
             if (habitId == null) remove("habit_$appWidgetId")
             else putString("habit_$appWidgetId", habitId)

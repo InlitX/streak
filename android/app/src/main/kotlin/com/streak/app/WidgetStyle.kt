@@ -98,7 +98,6 @@ private fun decode(path: String?): Bitmap? {
         if (!File(path).exists()) return null
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         BitmapFactory.decodeFile(path, bounds)
-        // Widgets have a tight bitmap budget; downscale so big photos never OOM.
         var sample = 1
         while (maxOf(bounds.outWidth, bounds.outHeight) / sample > 720) sample *= 2
         BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = sample })

@@ -253,114 +253,222 @@ class WidgetConfigActivity : ComponentActivity() {
             WidgetStyle.from(bg, opacity, border, borderWidth)
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(screenBg)
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-        ) {
-            Text(tr("cfg_title", "Customize widget"), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(16.dp))
-            Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor)
-            Spacer(Modifier.height(22.dp))
-
-            if (type == WType.HEATMAP) {
-                Label(tr("cfg_style", "Style"))
-                Spacer(Modifier.height(10.dp))
-                Row {
-                    listOf(
-                        HeatmapConfig.LAYOUT_CLASSIC to tr("cfg_style_classic", "Classic"),
-                        HeatmapConfig.LAYOUT_CARD to tr("cfg_style_card", "Card"),
-                    ).forEach { (value, label) ->
-                        Chip(label, layout == value) { layout = value }
-                        Spacer(Modifier.width(8.dp))
-                    }
-                }
+        Column(modifier = Modifier.fillMaxSize().background(screenBg)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp),
+            ) {
                 Spacer(Modifier.height(22.dp))
-            }
-
-            Row {
-                ModeChip(tr("cfg_color", "Color"), mode == 0) { bgModeState.value = 0 }
-                Spacer(Modifier.width(10.dp))
-                ModeChip(tr("cfg_image", "Image"), mode == 1) {
-                    if (image != null) bgModeState.value = 1 else pickImage.launch("image/*")
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-
-            if (mode == 1) {
-                FilledButton(if (image == null) tr("cfg_choose_image", "Choose image") else tr("cfg_change_image", "Change image"), cardColor) {
-                    pickImage.launch("image/*")
-                }
-            } else {
-                Swatches(bg, custom) { bg = it; custom = false }
-                Spacer(Modifier.height(12.dp))
-                Chip(tr("cfg_custom_color", "Custom color"), custom) { custom = !custom }
-                if (custom) {
-                    Spacer(Modifier.height(10.dp))
-                    HsvPicker(bg) { bg = it }
-                }
-            }
-
-            Spacer(Modifier.height(22.dp))
-            Label(trf("cfg_opacity", "Opacity  $opacity%", "{value}" to opacity.toString()))
-            ThemedSlider(opacity.toFloat(), 0f..100f) { opacity = it.toInt() }
-
-            Spacer(Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(tr("cfg_border", "Border"), color = Color.White, fontSize = 16.sp, modifier = Modifier.weight(1f))
-                Switch(
-                    checked = border, onCheckedChange = { border = it },
-                    colors = SwitchDefaults.colors(checkedTrackColor = brand),
+                Text(
+                    tr("cfg_title", "Customize widget"),
+                    color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold,
                 )
-            }
-            if (border) {
-                Label(trf("cfg_thickness", "Thickness  ${borderWidth}dp", "{value}" to borderWidth.toString()))
-                ThemedSlider(borderWidth.toFloat(), 1f..8f) { borderWidth = it.toInt() }
-            }
+                Spacer(Modifier.height(18.dp))
+                Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor)
 
-            if (habits.isNotEmpty()) {
-                Spacer(Modifier.height(22.dp))
-                Label(tr("cfg_show_activity", "Show activity of"))
-                Spacer(Modifier.height(10.dp))
-                habits.forEach { o ->
-                    HabitRow(o, o.id == habitId) { habitId = o.id }
-                    Spacer(Modifier.height(8.dp))
+                if (type == WType.HEATMAP) {
+                    Spacer(Modifier.height(18.dp))
+                    Segmented(
+                        left = tr("cfg_style_classic", "Classic"),
+                        right = tr("cfg_style_card", "Card"),
+                        selected = if (layout == HeatmapConfig.LAYOUT_CARD) 1 else 0,
+                        onLeft = { layout = HeatmapConfig.LAYOUT_CLASSIC },
+                        onRight = { layout = HeatmapConfig.LAYOUT_CARD },
+                    )
                 }
-                if (habitId == null) {
+
+                Spacer(Modifier.height(14.dp))
+                Section(tr("cfg_color", "Color")) {
+                    Segmented(
+                        left = tr("cfg_color", "Color"),
+                        right = tr("cfg_image", "Image"),
+                        selected = mode,
+                        onLeft = { bgModeState.value = 0 },
+                        onRight = {
+                            if (image != null) bgModeState.value = 1 else pickImage.launch("image/*")
+                        },
+                    )
                     Spacer(Modifier.height(16.dp))
-                    Label(tr("cfg_dot_color", "Dot color"))
-                    Spacer(Modifier.height(10.dp))
-                    Swatches(allColor, custom = false) { allColor = 0xFF000000.toInt() or it }
+                    if (mode == 1) {
+                        FilledButton(
+                            if (image == null) tr("cfg_choose_image", "Choose image")
+                            else tr("cfg_change_image", "Change image"),
+                            Color(0xFF26262F),
+                        ) { pickImage.launch("image/*") }
+                    } else {
+                        Swatches(bg, custom) { bg = it; custom = false }
+                        Spacer(Modifier.height(14.dp))
+                        Chip(tr("cfg_custom_color", "Custom color"), custom) { custom = !custom }
+                        if (custom) {
+                            Spacer(Modifier.height(12.dp))
+                            HsvPicker(bg) { bg = it }
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    SliderRow(
+                        label(tr("cfg_opacity", "Opacity")),
+                        "$opacity%",
+                        opacity.toFloat(),
+                        0f..100f,
+                    ) { opacity = it.toInt() }
                 }
+
+                Spacer(Modifier.height(14.dp))
+                Section(tr("cfg_border", "Border")) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            tr("cfg_border", "Border"), color = Color.White, fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f),
+                        )
+                        Switch(
+                            checked = border, onCheckedChange = { border = it },
+                            colors = SwitchDefaults.colors(checkedTrackColor = brand),
+                        )
+                    }
+                    if (border) {
+                        Spacer(Modifier.height(6.dp))
+                        SliderRow(
+                            label(tr("cfg_thickness", "Thickness")),
+                            "${borderWidth}dp",
+                            borderWidth.toFloat(),
+                            1f..8f,
+                        ) { borderWidth = it.toInt() }
+                    }
+                }
+
+                if (habits.isNotEmpty()) {
+                    Spacer(Modifier.height(14.dp))
+                    Section(tr("cfg_show_activity", "Show activity of")) {
+                        habits.forEachIndexed { index, o ->
+                            if (index > 0) Spacer(Modifier.height(8.dp))
+                            HabitRow(o, o.id == habitId) { habitId = o.id }
+                        }
+                        if (habitId == null) {
+                            Spacer(Modifier.height(18.dp))
+                            Label(tr("cfg_dot_color", "Dot color"))
+                            Spacer(Modifier.height(10.dp))
+                            Swatches(allColor, custom = false) {
+                                allColor = 0xFF000000.toInt() or it
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(24.dp))
             }
 
-            Spacer(Modifier.height(24.dp))
-            FilledButton(if (isEdit) tr("cfg_save", "Save") else tr("cfg_add", "Add widget"), brand, height = 54.dp, bold = true) {
-                save(bg, opacity, border, borderWidth, habitId, allColor, layout)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF141419))
+                    .padding(horizontal = 20.dp, vertical = 14.dp),
+            ) {
+                FilledButton(
+                    if (isEdit) tr("cfg_save", "Save") else tr("cfg_add", "Add widget"),
+                    brand, height = 54.dp, bold = true,
+                ) {
+                    save(bg, opacity, border, borderWidth, habitId, allColor, layout)
+                }
+                Box(
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                        .clickable {
+                            bg = WidgetConfig.DEFAULT_BG
+                            opacity = 100
+                            border = false
+                            borderWidth = 2
+                            custom = false
+                            allColor = brand.toArgb()
+                            layout = HeatmapConfig.LAYOUT_CLASSIC
+                            bgModeState.value = 0
+                            imageState.value = null
+                        }
+                        .padding(vertical = 10.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        tr("cfg_reset", "Reset to default"),
+                        color = mutedColor, fontSize = 13.sp, fontWeight = FontWeight.Medium,
+                    )
+                }
             }
-            Spacer(Modifier.height(6.dp))
+        }
+    }
+
+    @Composable
+    private fun Section(title: String, content: @Composable () -> Unit) = Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(22.dp))
+            .background(cardColor)
+            .padding(18.dp),
+    ) {
+        Text(
+            title.uppercase(),
+            color = mutedColor,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        Spacer(Modifier.height(14.dp))
+        content()
+    }
+
+    @Composable
+    private fun Segmented(
+        left: String,
+        right: String,
+        selected: Int,
+        onLeft: () -> Unit,
+        onRight: () -> Unit,
+    ) = Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color(0xFF26262F))
+            .padding(4.dp),
+    ) {
+        listOf(left to onLeft, right to onRight).forEachIndexed { index, (label, action) ->
             Box(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                    .clickable {
-                        bg = WidgetConfig.DEFAULT_BG
-                        opacity = 100
-                        border = false
-                        borderWidth = 2
-                        custom = false
-                        allColor = brand.toArgb()
-                        layout = HeatmapConfig.LAYOUT_CLASSIC
-                        bgModeState.value = 0
-                        imageState.value = null
-                    }
-                    .padding(vertical = 12.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(11.dp))
+                    .background(if (selected == index) brand else Color.Transparent)
+                    .clickable(onClick = action)
+                    .padding(vertical = 11.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(tr("cfg_reset", "Reset to default"), color = mutedColor, fontWeight = FontWeight.Medium)
+                Text(
+                    label,
+                    color = if (selected == index) Color.White else mutedColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                )
             }
-            Spacer(Modifier.height(12.dp))
         }
+    }
+
+    @Composable
+    private fun SliderRow(
+        title: String,
+        value: String,
+        current: Float,
+        range: ClosedFloatingPointRange<Float>,
+        onChange: (Float) -> Unit,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                title, color = Color.White, fontSize = 15.sp,
+                fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f),
+            )
+            Box(
+                Modifier.clip(RoundedCornerShape(8.dp)).background(Color(0xFF26262F))
+                    .padding(horizontal = 10.dp, vertical = 4.dp),
+            ) {
+                Text(value, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        ThemedSlider(current, range, onChange)
     }
 
     @Composable
@@ -370,9 +478,14 @@ class WidgetConfigActivity : ComponentActivity() {
         layout: Int,
         habitId: String?,
         allColor: Int,
-    ) {
+    ) = Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        val frame = if (type == WType.STATS) {
+            Modifier.size(152.dp)
+        } else {
+            Modifier.fillMaxWidth().height(140.dp)
+        }
         Box(
-            modifier = Modifier.fillMaxWidth().height(140.dp)
+            modifier = frame
                 .clip(RoundedCornerShape(20.dp))
                 .background(style.background)
                 .then(
@@ -441,14 +554,42 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun StatsPreview(s: WidgetStyle) = Column(
-        Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text("2/3", color = brand, fontSize = 34.sp, fontWeight = FontWeight.Bold)
-        Text(tr("done_today", "done today"), color = s.muted, fontSize = 12.sp)
-        Spacer(Modifier.height(8.dp))
-        Text(trf("best_streak", "🔥 5 best streak", "{streak}" to "5"), color = s.content, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+    private fun StatsPreview(s: WidgetStyle) = Column(Modifier.fillMaxSize()) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("🔥", fontSize = 11.sp)
+            Spacer(Modifier.width(6.dp))
+            Text(
+                "S T R E A K", color = s.muted, fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Spacer(Modifier.height(6.dp))
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text("2", color = s.content, fontSize = 34.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.width(5.dp))
+            Text("/ 3", color = s.muted, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+        }
+        Text(tr("done_today", "done today"), color = s.muted, fontSize = 11.sp)
+        Spacer(Modifier.weight(1f))
+        Row(Modifier.fillMaxWidth()) {
+            listOf(
+                "12" to tr("label_week", "Week"),
+                "🔥5" to tr("label_best", "Best"),
+            ).forEachIndexed { index, (value, label) ->
+                if (index > 0) Spacer(Modifier.width(8.dp))
+                Column(
+                    Modifier.weight(1f).clip(RoundedCornerShape(12.dp))
+                        .background(s.cell)
+                        .padding(horizontal = 10.dp, vertical = 7.dp),
+                ) {
+                    Text(value, color = s.content, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        label.uppercase(), color = s.muted, fontSize = 9.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
+            }
+        }
     }
 
     @Composable
@@ -557,6 +698,8 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun Dot(color: Color, size: androidx.compose.ui.unit.Dp, radius: androidx.compose.ui.unit.Dp) =
         Box(Modifier.size(size).clip(RoundedCornerShape(radius)).background(color))
 
+    private fun label(value: String) = value.substringBefore("{").trim()
+
     @Composable
     private fun Label(text: String) =
         Text(text, color = mutedColor, fontSize = 13.sp, fontWeight = FontWeight.Medium)
@@ -581,17 +724,6 @@ class WidgetConfigActivity : ComponentActivity() {
         colors = ButtonDefaults.buttonColors(containerColor = color),
     ) {
         Text(text, color = Color.White, fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium)
-    }
-
-    @Composable
-    private fun ModeChip(label: String, selected: Boolean, onClick: () -> Unit) = Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(if (selected) brand else cardColor)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 22.dp, vertical = 10.dp),
-    ) {
-        Text(label, color = Color.White, fontWeight = FontWeight.Bold)
     }
 
     @Composable
@@ -625,13 +757,16 @@ class WidgetConfigActivity : ComponentActivity() {
     @Composable
     private fun Swatches(selected: Int, custom: Boolean, onPick: (Int) -> Unit) {
         val rgbSel = selected and 0x00FFFFFF
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             swatches.chunked(7).forEach { row ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
                     row.forEach { c ->
                         val chosen = !custom && (c and 0x00FFFFFF) == rgbSel
                         Box(
-                            Modifier.size(38.dp).clip(CircleShape)
+                            Modifier.weight(1f).aspectRatio(1f).clip(CircleShape)
                                 .background(Color(0xFF000000.toInt() or c))
                                 .border(
                                     if (chosen) 3.dp else 1.dp,
@@ -640,6 +775,7 @@ class WidgetConfigActivity : ComponentActivity() {
                                 .clickable { onPick(c) },
                         )
                     }
+                    repeat(7 - row.size) { Spacer(Modifier.weight(1f)) }
                 }
             }
         }

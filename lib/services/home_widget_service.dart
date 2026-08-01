@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:home_widget/home_widget.dart';
@@ -43,6 +44,8 @@ class HomeWidgetService {
           'today_progress': l10n.widget_today_progress('{done}', '{total}'),
           'done_today': l10n.widget_done_today,
           'best_streak': l10n.widget_best_streak('{streak}'),
+          'label_week': l10n.week,
+          'label_best': l10n.best,
           'cfg_title': l10n.widget_cfg_title,
           'cfg_color': l10n.widget_cfg_color,
           'cfg_image': l10n.widget_cfg_image,
@@ -73,10 +76,22 @@ class HomeWidgetService {
     await sync(habits);
   }
 
+  static Timer? _pendingSync;
+
+  static void syncSoon(Map<String, Habit> habits) {
+    _pendingSync?.cancel();
+    _pendingSync = Timer(const Duration(milliseconds: 700), () {
+      _pendingSync = null;
+      sync(habits);
+    });
+  }
+
   static Future<void> sync(
     Map<String, Habit> habits, {
     bool renderIcons = true,
   }) async {
+    _pendingSync?.cancel();
+    _pendingSync = null;
     try {
       final icons = await WidgetIconService.resolve(
         [...habits.values.map((h) => h.icon), _allHabitsIcon],
@@ -113,7 +128,7 @@ class HomeWidgetService {
   }
 
   static String _encode(Map<String, Habit> habits, Map<String, String> icons) {
-    final today = DateTime.now();
+    final today = AppClock.now();
     final dates = List.generate(
       7,
       (i) => today.subtract(Duration(days: 6 - i)),
@@ -158,6 +173,13 @@ class HomeWidgetService {
         .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
         .toList();
 
+    var weekDone = 0;
+    for (final habit in habits.values) {
+      for (final date in dates) {
+        if (habit.isCompletedOn(date)) weekDone++;
+      }
+    }
+
     return json.encode({
       'habits': widgetHabits,
       'days': days,
@@ -167,6 +189,7 @@ class HomeWidgetService {
         'doneToday': due.where((h) => h.isCompletedOn(today)).length,
         'total': due.length,
         'bestStreak': bestStreak,
+        'weekDone': weekDone,
       },
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });

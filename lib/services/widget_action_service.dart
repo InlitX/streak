@@ -67,7 +67,7 @@ class WidgetActionService {
     if (habit == null) return null;
 
     final target =
-        DateTime.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
+        AppClock.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
     final delta = int.tryParse(uri.queryParameters['delta'] ?? '') ??
         habit.incrementAmount;
 

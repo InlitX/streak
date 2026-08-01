@@ -9,6 +9,7 @@ class WidgetIconService {
   const WidgetIconService._();
 
   static const _canvas = 96;
+  static const _badgeCanvas = 192;
 
   static Directory? _dir;
   static final _paths = <String, String>{};
@@ -23,6 +24,69 @@ class WidgetIconService {
       if (path != null) out[glyph] = path;
     }
     return out;
+  }
+
+  static Future<String?> badge(String glyph, int color) async {
+    if (glyph.isEmpty) return null;
+    final key = 'badge_${_keyFor(glyph)}_${color.toRadixString(16)}';
+    final cached = _paths[key];
+    if (cached != null && File(cached).existsSync()) return cached;
+
+    try {
+      final dir = await _iconDir();
+      final file = File('${dir.path}/$key.png');
+      if (!file.existsSync()) {
+        final bytes = await _renderBadge(glyph, color);
+        if (bytes == null) return null;
+        await file.writeAsBytes(bytes);
+      }
+      _paths[key] = file.path;
+      return file.path;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<List<int>?> _renderBadge(String glyph, int color) async {
+    try {
+      const size = _badgeCanvas;
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+      canvas.drawCircle(
+        const Offset(size / 2, size / 2),
+        size / 2,
+        Paint()..color = Color(color),
+      );
+
+      final isIcon = HabitIcons.isIcon(glyph);
+      final icon = isIcon ? HabitIcons.resolve(glyph) : null;
+      final painter = TextPainter(
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text: isIcon ? String.fromCharCode(icon!.codePoint) : glyph,
+          style: TextStyle(
+            inherit: false,
+            color: Colors.white,
+            fontSize: size * (isIcon ? 0.52 : 0.48),
+            fontFamily: icon?.fontFamily,
+            package: icon?.fontPackage,
+            height: 1.0,
+          ),
+        ),
+      )..layout();
+      painter.paint(
+        canvas,
+        Offset((size - painter.width) / 2, (size - painter.height) / 2),
+      );
+
+      final image = await recorder.endRecording().toImage(size, size);
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      return data?.buffer.asUint8List();
+    } catch (_) {
+      return null;
+    }
   }
 
   static Future<String?> _pathFor(String glyph, bool render) async {
