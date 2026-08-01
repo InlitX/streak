@@ -4,61 +4,41 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:gal/gal.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
-import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
+import 'package:streak/features/habits/widgets/share_range_pages.dart';
+import 'package:streak/features/habits/widgets/share_stat_card.dart';
 
-Future<void> showShareCard(BuildContext context, Habit habit) {
-  return showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
-    builder: (_) => _ShareSheet(habit: habit),
-  );
+Future<void> showShareCard(BuildContext context, Habit habit) async {
+  AppNavigator.push(SharePage(habit: habit), fullscreenDialog: true);
 }
 
-class _ShareSheet extends StatefulWidget {
-  const _ShareSheet({required this.habit});
+class SharePage extends StatefulWidget {
+  const SharePage({super.key, required this.habit});
 
   final Habit habit;
 
   @override
-  State<_ShareSheet> createState() => _ShareSheetState();
+  State<SharePage> createState() => _SharePageState();
 }
 
-class _ShareSheetState extends State<_ShareSheet> {
+class _SharePageState extends State<SharePage> {
   final _cardKey = GlobalKey();
+
+  ShareRange _range = ShareRange.month;
+  bool _stats = true;
+  double _blur = 8;
   bool _busy = false;
 
-  String? _coverOverride;
-  Color? _colorOverride;
-
-  String get _cover => _coverOverride ?? widget.habit.coverPath;
-  Color get _accent => _colorOverride ?? widget.habit.color;
-  bool get _hasCover => _cover.isNotEmpty && File(_cover).existsSync();
-
-  Future<void> _pickPhoto() async {
-    final picked = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1400,
-      imageQuality: 85,
-    );
-    if (picked == null) return;
-    if (mounted) setState(() => _coverOverride = picked.path);
-  }
-
-  void _removePhoto() => setState(() => _coverOverride = '');
+  late Color _accent = widget.habit.color;
+  String _image = '';
 
   Future<void> _pickColor() async {
     await showModalBottomSheet<void>(
@@ -68,17 +48,40 @@ class _ShareSheetState extends State<_ShareSheet> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (ctx) => SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-          child: ColorPicker(
-            selected: _accent,
-            onSelected: (c) => setState(() => _colorOverride = c),
+      builder: (_) => StatefulBuilder(
+        builder: (_, setSheetState) => SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: ColorPicker(
+              selected: _accent,
+              onSelected: (color) {
+                setSheetState(() {});
+                setState(() => _accent = color);
+              },
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+      imageQuality: 90,
+    );
+    if (picked != null && mounted) setState(() => _image = picked.path);
+  }
+
+  Future<Uint8List?> _render() async {
+    await WidgetsBinding.instance.endOfFrame;
+    final boundary =
+        _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    final image = await boundary.toImage(pixelRatio: 3);
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    return data?.buffer.asUint8List();
   }
 
   Future<void> _share() async {
@@ -86,17 +89,11 @@ class _ShareSheetState extends State<_ShareSheet> {
     setState(() => _busy = true);
     try {
       HapticFeedback.mediumImpact();
-      await WidgetsBinding.instance.endOfFrame;
-      final boundary =
-          _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3);
-      final data = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (data == null) throw Exception('encode failed');
-
+      final bytes = await _render();
+      if (bytes == null) throw Exception('encode failed');
       final dir = await Directory.systemTemp.createTemp('streak_share');
       final file = File('${dir.path}/streak_${widget.habit.id}.png');
-      await file.writeAsBytes(data.buffer.asUint8List());
-
+      await file.writeAsBytes(bytes);
       await Share.shareXFiles(
         [XFile(file.path, mimeType: 'image/png')],
         subject: widget.habit.name,
@@ -108,82 +105,374 @@ class _ShareSheetState extends State<_ShareSheet> {
     }
   }
 
+  Future<void> _save() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      HapticFeedback.mediumImpact();
+      final bytes = await _render();
+      if (bytes == null) throw Exception('encode failed');
+      if (!await Gal.hasAccess(toAlbum: true)) {
+        await Gal.requestAccess(toAlbum: true);
+      }
+      await Gal.putImageBytes(bytes, album: 'Streak');
+      if (mounted) AppSnackbar.success(context, context.l10n.share_saved);
+    } catch (_) {
+      if (mounted) AppSnackbar.error(context, context.l10n.share_save_failed);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final width =
-        (MediaQuery.of(context).size.width - 72).clamp(260.0, 360.0).toDouble();
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-        child: SingleChildScrollView(
-          child: Column(
-          mainAxisSize: MainAxisSize.min,
+    final width = (MediaQuery.sizeOf(context).width - 56)
+        .clamp(240.0, 330.0)
+        .toDouble();
+
+    return Scaffold(
+      backgroundColor: Color.lerp(_accent, Colors.black, 0.92),
+      body: SafeArea(
+        child: Column(
           children: [
-            RepaintBoundary(
-              key: _cardKey,
-              child: ShareCard(
-                habit: widget.habit,
-                width: width,
-                coverPath: _cover,
-                accent: _accent,
-              ),
-            ),
-            const SizedBox(height: 16),
             Row(
               children: [
-                _EditButton(
-                  icon: LucideIcons.image,
-                  label: _hasCover ? context.l10n.change_photo : context.l10n.add_image,
-                  onTap: _busy ? null : _pickPhoto,
+                IconButton(
+                  icon: const Icon(LucideIcons.x, color: Colors.white),
+                  onPressed: () => AppNavigator.pop(),
                 ),
-                const SizedBox(width: 10),
-                _EditButton(
-                  icon: LucideIcons.palette,
-                  label: context.l10n.color,
-                  onTap: _busy ? null : _pickColor,
-                ),
-                if (_hasCover) ...[
-                  const SizedBox(width: 10),
-                  _EditButton(
-                    icon: LucideIcons.trash2,
-                    label: context.l10n.remove_photo,
-                    onTap: _busy ? null : _removePhoto,
+                Expanded(
+                  child: Text(
+                    context.l10n.share,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'PlayfairDisplay',
+                      fontStyle: FontStyle.italic,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
-                ],
+                ),
+                const SizedBox(width: 48),
               ],
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: _busy ? null : _share,
-                icon: _busy
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(LucideIcons.share2, size: 18),
-                label: Text(context.l10n.share),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+            _RangeTabs(
+              range: _range,
+              onChanged: (value) => setState(() => _range = value),
+            ),
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    children: [
+                      RepaintBoundary(
+                        key: _cardKey,
+                        child: ShareStatCard(
+                          habit: widget.habit,
+                          accent: _accent,
+                          imagePath: _image,
+                          blur: _blur,
+                          range: _range,
+                          showStats: _stats,
+                          width: width,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.l10n.share_swipe_hint,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
+            ),
+            _Options(
+              accent: _accent,
+              image: _image,
+              blur: _blur,
+              stats: _stats,
+              onColor: _pickColor,
+              onImage: _pickImage,
+              onClearImage: () => setState(() => _image = ''),
+              onBlur: (value) => setState(() => _blur = value),
+              onStats: (value) => setState(() => _stats = value),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _CircleAction(
+                    icon: LucideIcons.share2,
+                    label: context.l10n.share,
+                    onTap: _busy ? null : _share,
+                  ),
+                  const SizedBox(width: 40),
+                  _CircleAction(
+                    icon: LucideIcons.download,
+                    label: context.l10n.share_save,
+                    onTap: _busy ? null : _save,
+                  ),
+                ],
               ),
             ),
           ],
-        ),
         ),
       ),
     );
   }
 }
 
-class _EditButton extends StatelessWidget {
-  const _EditButton({
+class _RangeTabs extends StatelessWidget {
+  const _RangeTabs({required this.range, required this.onChanged});
+
+  final ShareRange range;
+  final ValueChanged<ShareRange> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final labels = {
+      ShareRange.week: context.l10n.week,
+      ShareRange.month: context.l10n.month,
+      ShareRange.year: context.l10n.year,
+    };
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (final entry in labels.entries)
+          GestureDetector(
+            onTap: () => onChanged(entry.key),
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    entry.value,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white
+                          .withValues(alpha: range == entry.key ? 1 : 0.42),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 18,
+                    height: 2,
+                    decoration: BoxDecoration(
+                      color: range == entry.key
+                          ? Colors.white
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _Options extends StatelessWidget {
+  const _Options({
+    required this.accent,
+    required this.image,
+    required this.blur,
+    required this.stats,
+    required this.onColor,
+    required this.onImage,
+    required this.onClearImage,
+    required this.onBlur,
+    required this.onStats,
+  });
+
+  final Color accent;
+  final String image;
+  final double blur;
+  final bool stats;
+  final VoidCallback onColor;
+  final VoidCallback onImage;
+  final VoidCallback onClearImage;
+  final ValueChanged<double> onBlur;
+  final ValueChanged<bool> onStats;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: [
+              _Toggle(
+                icon: LucideIcons.palette,
+                label: context.l10n.color,
+                selected: image.isEmpty,
+                dot: accent,
+                onTap: onColor,
+              ),
+              const SizedBox(width: 8),
+              _Toggle(
+                icon: LucideIcons.image,
+                label: context.l10n.share_photo,
+                selected: image.isNotEmpty,
+                onTap: image.isEmpty ? onImage : onClearImage,
+                badge: image.isEmpty ? null : LucideIcons.x,
+              ),
+              const SizedBox(width: 8),
+              _Toggle(
+                icon: LucideIcons.flame,
+                label: context.l10n.share_stats_short,
+                selected: stats,
+                onTap: () => onStats(!stats),
+              ),
+            ],
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 180),
+          child: image.isEmpty
+              ? const SizedBox(width: double.infinity)
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        LucideIcons.droplet,
+                        size: 15,
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            trackHeight: 3,
+                            activeTrackColor: Colors.white,
+                            inactiveTrackColor:
+                                Colors.white.withValues(alpha: 0.2),
+                            thumbColor: Colors.white,
+                            overlayShape:
+                                const RoundSliderOverlayShape(overlayRadius: 14),
+                          ),
+                          child: Slider(
+                            value: blur,
+                            max: 24,
+                            onChanged: onBlur,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 26,
+                        child: Text(
+                          blur.round().toString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Toggle extends StatelessWidget {
+  const _Toggle({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.dot,
+    this.badge,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Color? dot;
+  final IconData? badge;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Opacity(
+        opacity: 1,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: selected ? 0.18 : 0.06),
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(
+                color: selected
+                    ? Colors.white.withValues(alpha: 0.5)
+                    : Colors.transparent,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (dot != null)
+                  Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: dot,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  )
+                else
+                  Icon(icon, size: 14, color: Colors.white),
+                const SizedBox(width: 7),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                if (badge != null) ...[
+                  const SizedBox(width: 5),
+                  Icon(badge, size: 13, color: Colors.white),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CircleAction extends StatelessWidget {
+  const _CircleAction({
     required this.icon,
     required this.label,
     required this.onTap,
@@ -195,469 +484,34 @@ class _EditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.colors;
-    final enabled = onTap != null;
-    return Expanded(
+    return Opacity(
+      opacity: onTap == null ? 0.5 : 1,
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 11),
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Opacity(
-            opacity: enabled ? 1 : 0.5,
-            child: Column(
-              children: [
-                Icon(icon, size: 18, color: scheme.onSurface),
-                const SizedBox(height: 5),
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: context.tokens.muted,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ShareCard extends StatelessWidget {
-  const ShareCard({
-    super.key,
-    required this.habit,
-    this.width = 360,
-    this.coverPath,
-    this.accent,
-  });
-
-  final Habit habit;
-  final double width;
-
-  final String? coverPath;
-  final Color? accent;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = accent ?? habit.color;
-    final white60 = Colors.white.withValues(alpha: 0.6);
-
-    final cover = coverPath ?? habit.coverPath;
-    final hasCover = cover.isNotEmpty && File(cover).existsSync();
-
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(34),
-        gradient: hasCover
-            ? const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF111114), Color(0xFF09090B)],
-              )
-            : LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color.lerp(color, const Color(0xFF111114), 0.66)!,
-                  const Color(0xFF09090B),
-                ],
-              ),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.20),
-            blurRadius: 44,
-            spreadRadius: -10,
-            offset: const Offset(0, 20),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(34),
-        child: Stack(
-          children: [
-            if (hasCover) ...[
-              Positioned.fill(
-                child: Image.file(
-                  File(cover),
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                ),
-              ),
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.34),
-                        Colors.black.withValues(alpha: 0.62),
-                        Colors.black.withValues(alpha: 0.86),
-                      ],
-                      stops: const [0.0, 0.55, 1.0],
-                    ),
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      colors: [
-                        color.withValues(alpha: 0.22),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ] else
-              Positioned(top: -90, right: -70, child: _Glow(color: color)),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(26, 24, 26, 22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/icon.png',
-                          width: 28,
-                          height: 28,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(width: 9),
-                      const Text(
-                        'Streak',
-                        style: TextStyle(
-                          fontFamily: 'PlayfairDisplay',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-
-                  Row(
-                    children: [
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: color.withValues(alpha: 0.35),
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                            HabitGlyph(glyph: habit.icon, color: color, size: 24),
-                      ),
-                      const SizedBox(width: 13),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              habit.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 19,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: -0.3,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2),
-                              child: Text(
-                                habit.category.isNotEmpty
-                                    ? context.categoryLabel(habit.category)
-                                    : context.l10n.app_tagline,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: white60, fontSize: 13),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 26),
-
-                  Center(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ShaderMask(
-                              shaderCallback: (rect) => LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.white,
-                                  Color.lerp(color, Colors.white, 0.55)!,
-                                ],
-                              ).createShader(rect),
-                              child: Text(
-                                '${habit.currentStreak}',
-                                style: const TextStyle(
-                                  fontFamily: 'PlayfairDisplay',
-                                  fontSize: 96,
-                                  height: 1.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 14),
-                              child: Icon(LucideIcons.flame,
-                                  size: 34, color: color),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          context.l10n.current_streak.toUpperCase(),
-                          style: TextStyle(
-                            color: white60,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 26),
-
-                  Row(
-                    children: [
-                      _StatChip(
-                        value: '${habit.longestStreak}',
-                        label: context.l10n.best,
-                        color: color,
-                      ),
-                      const SizedBox(width: 10),
-                      _StatChip(
-                        value: '${habit.totalCompletions}',
-                        label: habit.kind == HabitKind.negative
-                            ? context.l10n.relapses
-                            : context.l10n.total,
-                        color: color,
-                      ),
-                      const SizedBox(width: 10),
-                      _StatChip(
-                        value: '${(habit.strength * 100).round()}%',
-                        label: context.l10n.strength,
-                        color: color,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 22),
-
-                  _MiniGrid(habit: habit, color: color),
-                  const SizedBox(height: 20),
-
-                  Divider(color: Colors.white.withValues(alpha: 0.07), height: 1),
-                  const SizedBox(height: 14),
-
-                  Row(
-                    children: [
-                      Text(
-                        _formattedDate(context),
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        context.l10n.app_tagline,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  String _formattedDate(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    return DateFormat.yMMMMd(locale).format(DateTime.now());
-  }
-}
-
-class _Glow extends StatelessWidget {
-  const _Glow({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 240,
-      height: 240,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: [
-            color.withValues(alpha: 0.30),
-            color.withValues(alpha: 0.0),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatChip extends StatelessWidget {
-  const _StatChip({
-    required this.value,
-    required this.label,
-    required this.color,
-  });
-
-  final String value;
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 13),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
-        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.14),
               ),
+              child: Icon(icon, size: 21, color: Colors.white),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 6),
             Text(
-              label.toUpperCase(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              label,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.55),
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.8,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.7),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _MiniGrid extends StatelessWidget {
-  const _MiniGrid({required this.habit, required this.color});
-
-  final Habit habit;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    const cols = 7;
-    const rows = 5;
-    const gap = 5.0;
-    final today = DateTime.now();
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cell = ((constraints.maxWidth - gap * (cols - 1)) / cols)
-            .clamp(0.0, 34.0);
-        return Column(
-          children: [
-            for (var r = 0; r < rows; r++) ...[
-              if (r > 0) const SizedBox(height: gap),
-              Row(
-                children: [
-                  for (var c = 0; c < cols; c++) ...[
-                    if (c > 0) const SizedBox(width: gap),
-                    Builder(builder: (_) {
-                      final index = r * cols + c;
-                      final date = today
-                          .subtract(Duration(days: (rows * cols - 1) - index));
-                      final done = habit.isCompletedOn(date);
-                      return Container(
-                        width: cell,
-                        height: cell,
-                        decoration: BoxDecoration(
-                          color: done
-                              ? color
-                              : Colors.white.withValues(alpha: 0.07),
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: done
-                              ? [
-                                  BoxShadow(
-                                    color: color.withValues(alpha: 0.45),
-                                    blurRadius: 6,
-                                  ),
-                                ]
-                              : null,
-                        ),
-                      );
-                    }),
-                  ],
-                ],
-              ),
-            ],
-          ],
-        );
-      },
     );
   }
 }
