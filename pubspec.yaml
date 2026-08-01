@@ -32,6 +32,11 @@ dependencies:
   timezone: ^0.10.1
   url_launcher: ^6.3.1
   uuid: ^4.5.2
+  audioplayers: ^6.7.1
+  gal: ^2.3.0
+  local_auth: ^2.3.0
+  wakelock_plus: ^1.5.2
+  flip_board: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +61,8 @@ flutter:
   assets:
     - assets/profile_default.jpg
     - assets/icon.png
+    - assets/sounds/
+    - assets/backgrounds/
 
   fonts:
     - family: Figtree
