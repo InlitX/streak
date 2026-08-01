@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/features/focus/pages/focus_history_page.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
-import 'package:streak/features/statistics/widgets/monthly_area_chart.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
+import 'package:streak/features/statistics/widgets/stat_donut.dart';
+import 'package:streak/features/statistics/widgets/stat_gauge.dart';
+import 'package:streak/features/statistics/widgets/stat_kit.dart';
+import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 import 'package:streak/features/statistics/widgets/year_heatmap.dart';
 
 class StatisticsPage extends StatefulWidget {
@@ -21,13 +31,29 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  int _year = DateTime.now().year;
+  int _year = AppClock.now().year;
   String? _habitId;
+
+  ({List<Habit> habits, String? id, int year})? _statsKey;
+  late HabitStats _stats;
+
+  HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
+    final key = (habits: all, id: _habitId, year: _year);
+    if (_statsKey != key) {
+      _statsKey = key;
+      _stats = HabitStats.compute(scoped, _year);
+    }
+    return _stats;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final minimal = context.watch<SettingsController>().isMinimalStyle;
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.statistics)),
+      appBar: minimal
+          ? AppBar(toolbarHeight: 52)
+          : AppBar(title: Text(context.l10n.statistics)),
       body: SafeArea(
         top: false,
         child: Consumer<HabitsController>(
@@ -48,12 +74,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 _habitId == null ? all : [controller.byId(_habitId!)!];
             final accent =
                 _habitId == null ? context.colors.primary : scoped.first.color;
-            final stats = HabitStats.compute(scoped, _year);
-            final currentYear = DateTime.now().year;
+            final stats = _statsFor(scoped, all);
+            final currentYear = AppClock.now().year;
 
             return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              padding: EdgeInsets.fromLTRB(16, minimal ? 0 : 8, 16, 24),
               children: [
+                if (minimal)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: MinimalTitle(title: context.l10n.statistics),
+                  ),
                 _HabitFilter(
                   habits: all,
                   selected: _habitId,
@@ -66,7 +97,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   onChanged: (delta) => setState(() => _year += delta),
                 ),
                 const SizedBox(height: 16),
-                Card(
+                StatReveal(
+                  child: Container(
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceContainerHighest
+                        .withValues(alpha: 0.35),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: YearHeatmap(
@@ -76,60 +113,93 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       color: accent,
                     ),
                   ),
+                  ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _MetricCard(
-                        icon: LucideIcons.hash,
-                        color: accent,
-                        value: stats.total,
-                        label: context.l10n.completions,
-                      ),
+                StatReveal(
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: MiniStat(
+                            icon: LucideIcons.hash,
+                            color: accent,
+                            value: '${stats.total}',
+                            label: context.l10n.completions,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: MiniStat(
+                            icon: LucideIcons.trophy,
+                            color: context.tokens.success,
+                            value: '${stats.bestStreak}',
+                            label: context.l10n.best_streak,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _MetricCard(
-                        icon: LucideIcons.trophy,
-                        color: context.tokens.success,
-                        value: stats.bestStreak,
-                        label: context.l10n.best_streak,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _MetricCard(
-                        icon: LucideIcons.flame,
-                        color: context.tokens.warning,
-                        value: stats.currentStreak,
-                        label: context.l10n.current_streak,
-                      ),
+                StatReveal(
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: MiniStat(
+                            icon: LucideIcons.flame,
+                            color: context.tokens.warning,
+                            value: '${stats.currentStreak}',
+                            label: context.l10n.current_streak,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: MiniStat(
+                            icon: LucideIcons.percent,
+                            color: context.tokens.info,
+                            value: '${stats.monthRate}%',
+                            label: context.l10n.completion_rate,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _MetricCard(
-                        icon: LucideIcons.percent,
-                        color: context.tokens.info,
-                        value: stats.monthRate,
-                        suffix: '%',
-                        label: context.l10n.completion_rate,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
+                if (context.watch<SettingsController>().focusEnabled &&
+                    context.watch<FocusController>().sessionCount > 0) ...[
+                  const SizedBox(height: 12),
+                  StatReveal(
+                    child: _FocusStats(habitId: _habitId, accent: accent),
+                  ),
+                ],
                 const SizedBox(height: 16),
-                _PerfectStreakCard(streak: stats.currentStreak, color: accent),
+                StatReveal(
+                  child: _PerfectStreakCard(
+                    streak: stats.currentStreak,
+                    color: accent,
+                  ),
+                ),
                 const SizedBox(height: 24),
-                _ChartCard(
-                  title: context.l10n.completions_per_month,
-                  icon: LucideIcons.chartArea,
-                  color: accent,
-                  child: MonthlyAreaChart(values: stats.monthly),
+                _TrendCard(stats: stats, color: accent),
+                const SizedBox(height: 16),
+                StatReveal(
+                  child: _ChartCard(
+                    title: context.l10n.completions_per_month,
+                    icon: LucideIcons.chartSpline,
+                    color: accent,
+                    child: stats.total > 0
+                        ? MonthlyLine(
+                            key: ValueKey('monthly-$_year-$_habitId'),
+                            values: stats.monthly,
+                            color: accent,
+                            year: _year,
+                          )
+                        : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 IntrinsicHeight(
@@ -138,30 +208,29 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     children: [
                       Expanded(
                         child: _ChartCard(
-                          title: context.l10n.completion_time,
-                          icon: LucideIcons.clock,
+                          title: context.l10n.completion_rate_short,
+                          icon: LucideIcons.target,
                           color: accent,
-                          child: stats.hourSamples >= 5
-                              ? HourLine(
-                                  values: stats.hours,
-                                  color: accent,
-                                  height: 120,
-                                )
-                              : _ChartPlaceholder(
-                                  text: context.l10n.not_enough_data,
-                                ),
+                          child: Center(
+                            child: ConsistencyGauge(
+                              percent: stats.monthRate,
+                              color: accent,
+                              caption: context.l10n.last_30_days,
+                              size: 130,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _ChartCard(
                           title: context.l10n.when_best,
-                          icon: LucideIcons.chartColumn,
+                          icon: LucideIcons.calendarDays,
                           color: accent,
                           child: WeekdayBars(
                             values: stats.weekday,
                             color: accent,
-                            height: 120,
+                            height: 150,
                           ),
                         ),
                       ),
@@ -170,23 +239,164 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 const SizedBox(height: 16),
                 _ChartCard(
-                  title: context.l10n.streak_evolution,
-                  icon: LucideIcons.trendingUp,
+                  title: context.l10n.completion_time,
+                  icon: LucideIcons.clock,
                   color: accent,
-                  child: StreakLine(
-                    values: stats.streakSeries,
+                  child: stats.hourSamples >= 5
+                      ? HourArea(values: stats.hours, color: accent)
+                      : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                ),
+
+                if (_habitId == null && all.length > 1) ...[
+                  const SizedBox(height: 16),
+                  _ChartCard(
+                    title: context.l10n.by_habit,
+                    icon: LucideIcons.chartPie,
                     color: accent,
-                    startDate: DateTime.now().atMidnight.subtract(
-                      const Duration(days: 89),
-                    ),
-                    height: 210,
+                    child: HabitDonut(entries: _ranking(all, stats)),
                   ),
+                  const SizedBox(height: 16),
+                  _ChartCard(
+                    title: context.l10n.ranking,
+                    icon: LucideIcons.listOrdered,
+                    color: accent,
+                    child: HabitRanking(entries: _ranking(all, stats)),
+                  ),
+                ],
+                const SizedBox(height: 16),
+                StatReveal(
+                  child: _SecondaryStats(stats: stats, accent: accent),
                 ),
               ],
             );
           },
         ),
       ),
+    );
+  }
+}
+
+List<({String name, Color color, int count})> _ranking(
+  List<Habit> habits,
+  HabitStats stats, {
+  int limit = 5,
+}) {
+  final ranked = [
+    for (final habit in habits)
+      (
+        name: habit.name,
+        color: habit.color,
+        count: stats.perHabit[habit.id] ?? 0,
+      ),
+  ]..sort((a, b) => b.count.compareTo(a.count));
+  return ranked.take(limit).where((e) => e.count > 0).toList();
+}
+
+class _TrendCard extends StatelessWidget {
+  const _TrendCard({required this.stats, required this.color});
+
+  final HabitStats stats;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final start = AppClock.now().atMidnight.subtract(
+          const Duration(days: HabitStats.window - 1),
+        );
+    return _ChartCard(
+      title: context.l10n.streak_evolution,
+      icon: LucideIcons.trendingUp,
+      color: color,
+      child: TrendChart(
+        key: const ValueKey('streak'),
+        values: stats.streakSeries,
+        color: color,
+        startDate: start,
+      ),
+    );
+  }
+}
+
+class _SecondaryStats extends StatelessWidget {
+  const _SecondaryStats({required this.stats, required this.accent});
+
+  final HabitStats stats;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final months = DateFormat.MMMM(
+      Localizations.localeOf(context).toString(),
+    );
+    final bestMonth = stats.total == 0
+        ? '—'
+        : months.format(DateTime(2024, stats.bestMonth + 1));
+
+    Widget cell(Widget child) => Expanded(child: child);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.overview.toUpperCase(),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.1,
+            color: context.tokens.muted,
+          ),
+        ),
+        const SizedBox(height: 12),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              cell(
+                MiniStat(
+                  value: '${stats.activeDays}',
+                  label: context.l10n.active_days,
+                  icon: LucideIcons.calendarCheck,
+                  color: accent,
+                ),
+              ),
+              const SizedBox(width: 12),
+              cell(
+                MiniStat(
+                  value: '${stats.perfectDays}',
+                  label: context.l10n.perfect_days,
+                  icon: LucideIcons.sparkles,
+                  color: context.tokens.success,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              cell(
+                MiniStat(
+                  value: stats.perWeek.toStringAsFixed(1),
+                  label: context.l10n.per_week,
+                  icon: LucideIcons.repeat2,
+                  color: context.tokens.info,
+                ),
+              ),
+              const SizedBox(width: 12),
+              cell(
+                MiniStat(
+                  value: bestMonth,
+                  label: context.l10n.best_month,
+                  icon: LucideIcons.calendarRange,
+                  color: context.tokens.warning,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -340,62 +550,6 @@ class _ArrowButton extends StatelessWidget {
   }
 }
 
-class _MetricCard extends StatelessWidget {
-  const _MetricCard({
-    required this.icon,
-    required this.color,
-    required this.value,
-    required this.label,
-    this.suffix = '',
-  });
-
-  final IconData icon;
-  final Color color;
-  final int value;
-  final String label;
-  final String suffix;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Spacer(),
-                _IconSquare(icon: icon, color: color),
-              ],
-            ),
-            const SizedBox(height: 16),
-            AnimatedCounter(
-              value: value,
-              suffix: suffix,
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 36,
-                fontWeight: FontWeight.w700,
-                height: 1,
-                letterSpacing: -0.5,
-                color: context.colors.onSurface,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 13, color: context.tokens.muted),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _PerfectStreakCard extends StatelessWidget {
   const _PerfectStreakCard({required this.streak, required this.color});
 
@@ -453,7 +607,6 @@ class _ChartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              // Fixed: a wrapping Text mismeasures inside IntrinsicHeight.
               height: 44,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,13 +663,77 @@ class _IconSquare extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final tint = minimal ? context.tokens.muted : color;
     return Container(
       padding: const EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.16),
+        color: tint.withValues(alpha: minimal ? 0.10 : 0.16),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(icon, color: color, size: 18),
+      child: Icon(icon, color: tint, size: 18),
+    );
+  }
+}
+
+class _FocusStats extends StatelessWidget {
+  const _FocusStats({required this.habitId, required this.accent});
+
+  final String? habitId;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final focus = context.watch<FocusController>();
+    final seconds = habitId == null
+        ? focus.totalSeconds
+        : focus.secondsForHabit(habitId!);
+    final sessions = habitId == null
+        ? focus.sessionCount
+        : focus.sessions.where((s) => s.habitId == habitId).length;
+
+    return GestureDetector(
+      onTap: () => AppNavigator.push(const FocusHistoryPage()),
+      child: IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: MiniStat(
+              icon: LucideIcons.timer,
+              color: accent,
+              value: formatHoursShort(seconds),
+              label: context.l10n.focus_total,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: MiniStat(
+              icon: LucideIcons.circlePlay,
+              color: context.tokens.info,
+              value: '$sessions',
+              label: context.l10n.focus_sessions,
+            ),
+          ),
+          if (context.watch<SettingsController>().focusDailyGoal > 0) ...[
+            const SizedBox(width: 12),
+            Expanded(
+              child: MiniStat(
+                icon: LucideIcons.target,
+                color: context.tokens.success,
+                value: context.l10n.focus_goal_today(
+                  formatHoursShort(focus.secondsForDay(AppClock.now())),
+                  formatHoursShort(
+                    context.watch<SettingsController>().focusDailyGoal * 60,
+                  ),
+                ),
+                label: context.l10n.focus_daily_goal,
+              ),
+            ),
+          ],
+        ],
+      ),
+      ),
     );
   }
 }

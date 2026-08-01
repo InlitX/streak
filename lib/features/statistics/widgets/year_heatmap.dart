@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 
-/// GitHub-style yearly activity grid, horizontally scrollable.
 class YearHeatmap extends StatelessWidget {
   const YearHeatmap({
     super.key,
@@ -20,7 +19,7 @@ class YearHeatmap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now().atMidnight;
+    final today = AppClock.now().atMidnight;
     final firstOfYear = DateTime(year, 1, 1);
     final start = firstOfYear.subtract(Duration(days: firstOfYear.weekday - 1));
     final lastOfYear = DateTime(year, 12, 31);

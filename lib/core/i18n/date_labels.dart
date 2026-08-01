@@ -34,3 +34,17 @@ class WeekdayLabels {
 
   static String _resolve(String locale) => locale.isEmpty ? 'en' : locale;
 }
+
+class MonthLabels {
+  const MonthLabels._();
+
+  static List<String> short(String locale) => [
+        for (final month
+            in DateFormat('', WeekdayLabels._resolve(locale)).dateSymbols.SHORTMONTHS)
+          month.replaceAll('.', ''),
+      ];
+
+  static List<String> full(String locale) => List<String>.from(
+        DateFormat('', WeekdayLabels._resolve(locale)).dateSymbols.MONTHS,
+      );
+}
