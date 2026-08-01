@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui' show Color;
 
 import 'package:archive/archive.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:file_picker/file_picker.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -48,9 +49,6 @@ class _RawHabit {
   }
 }
 
-// Every foreign habit maps to a positive habit with a daily goal of 1: any
-// activity means done. The source count is kept for fidelity but never drives
-// completion, which keeps the import correct across counters, scores and flags.
 class ImportService {
   const ImportService._();
 
@@ -65,7 +63,7 @@ class ImportService {
     if (result == null || result.files.isEmpty) return null;
 
     final picked = result.files.single;
-    final name = (picked.name).toLowerCase();
+    final name = picked.name.toLowerCase();
 
     List<int>? bytes = picked.bytes;
     if (bytes == null && picked.path != null) {
@@ -97,8 +95,8 @@ class ImportService {
     final trimmed = text.trimLeft();
 
     if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-      try {
-        final decoded = json.decode(text);
+      final decoded = _decodeJson(text);
+      if (decoded != null) {
         if (_isStreakBackup(decoded)) {
           return _buildFromStreak(decoded);
         }
@@ -108,8 +106,6 @@ class ImportService {
         final raw = _parseHabitica(decoded);
         if (raw.isNotEmpty) return _build(raw, 'Habitica');
         throw const ImportException('No habit history found in that file.');
-      } on FormatException {
-        // Not valid JSON after all: fall through to CSV parsing.
       }
     }
 
@@ -140,7 +136,6 @@ class ImportService {
     return _build(_parseMatrix(header, rows.skip(1)), 'CSV');
   }
 
-
   static ImportOutcome _build(List<_RawHabit> raw, String source) {
     final habits = <Habit>[];
     var totalEntries = 0;
@@ -152,7 +147,7 @@ class ImportService {
         completions[key] = Completion(date: key, count: count);
       });
       totalEntries += completions.length;
-      // Start at the earliest logged day, or the history wouldn't count.
+
       final createdAt = r.days.isEmpty
           ? DateTime.now()
           : r.days.keys.reduce((a, b) => a.isBefore(b) ? a : b);
@@ -195,7 +190,9 @@ class ImportService {
       if (e is! Map) continue;
       try {
         habits.add(Habit.fromMap(Map<String, dynamic>.from(e)));
-      } catch (_) {}
+      } catch (error) {
+        debugPrint('Skipped a habit while importing: $error');
+      }
     }
     if (habits.isEmpty) {
       throw const ImportException('No habits found in that backup.');
@@ -209,7 +206,6 @@ class ImportService {
       skipped: 0,
     );
   }
-
 
   static List<_RawHabit> _parseLoopZip(List<int> bytes) {
     final archive = ZipDecoder().decodeBytes(bytes);
@@ -339,7 +335,6 @@ class ImportService {
     return (first == 'date' || first == 'fecha') && lowerHeader.length >= 2;
   }
 
-
   static List<_RawHabit> _parseHabitBull(
       List<String> header, Iterable<List<String>> rows) {
     final lower = header.map((c) => c.toLowerCase()).toList();
@@ -361,7 +356,6 @@ class ImportService {
     }
     return byName.values.toList();
   }
-
 
   static bool _isHabitKit(dynamic decoded) =>
       decoded is Map &&
@@ -419,7 +413,6 @@ class ImportService {
     return ordered;
   }
 
-  // HabitKit stores a UTC instant plus its offset; shift back for the real day.
   static DateTime? _habitKitDate(dynamic dateRaw, dynamic offsetRaw) {
     if (dateRaw is! String) return null;
     final utc = DateTime.tryParse(dateRaw);
@@ -442,7 +435,6 @@ class ImportService {
     };
     return m[name.toLowerCase().replaceAll(' ', '').replaceAll('_', '')];
   }
-
 
   static List<_RawHabit> _parseHabitica(dynamic decoded) {
     final tasks = _findTasks(decoded);
@@ -495,7 +487,6 @@ class ImportService {
     return const [];
   }
 
-
   static List<_RawHabit> _parseMatrix(
       List<String> header, Iterable<List<String>> rows) {
     final habits = <_RawHabit?>[];
@@ -515,7 +506,6 @@ class ImportService {
     }
     return habits.whereType<_RawHabit>().toList();
   }
-
 
   static List<_RawHabit> _parseLong(
       List<String> lowerHeader, Iterable<List<String>> rows) {
@@ -539,7 +529,6 @@ class ImportService {
     }
     return byName.values.toList();
   }
-
 
   static bool _isStreakBackup(dynamic decoded) {
     if (decoded is Map && decoded['app'] == 'streak') return true;
@@ -575,7 +564,7 @@ class ImportService {
   static DateTime? _epochOrDate(dynamic raw) {
     if (raw is num) {
       final n = raw.toInt();
-      // >= 10^11 is milliseconds, below that seconds.
+
       return DateTime.fromMillisecondsSinceEpoch(
           n >= 100000000000 ? n : n * 1000);
     }
@@ -614,24 +603,32 @@ class ImportService {
     if (parts[0].length == 4) {
       y = a;
       m = b;
-      d = c; // yyyy-mm-dd
+      d = c;
     } else if (parts[2].length == 4) {
       y = c;
       if (a > 12 && b <= 12) {
         d = a;
-        m = b; // dd/mm/yyyy
+        m = b;
       } else if (b > 12 && a <= 12) {
         m = a;
-        d = b; // mm/dd/yyyy
+        d = b;
       } else {
         d = a;
-        m = b; // ambiguous → day-first (most of the world)
+        m = b;
       }
     } else {
       return null;
     }
     if (m < 1 || m > 12 || d < 1 || d > 31) return null;
     return DateTime(y, m, d);
+  }
+
+  static dynamic _decodeJson(String text) {
+    try {
+      return json.decode(text);
+    } on FormatException {
+      return null;
+    }
   }
 
   static bool _looksLikeZip(List<int> bytes) =>

@@ -3,28 +3,97 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:streak/core/database/local_store.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/habit_note.dart';
 
-/// Backup format version, written into every export for future migrations.
 const _kBackupVersion = 1;
+const _kAutoBackupKeep = 5;
 
 class BackupService {
   const BackupService._();
 
-  /// Serializa todos los hábitos a JSON y los comparte con la hoja de
-  /// compartir nativa del sistema. Devuelve false si el usuario cancela.
-  static Future<bool> export(List<Habit> habits) async {
+  static String _payloadFor(List<Habit> habits) {
     final payload = {
       'app': 'streak',
       'version': _kBackupVersion,
       'exportedAt': DateTime.now().toIso8601String(),
       'habits': habits.map((h) => h.toMap()).toList(),
+      'notes': LocalStore.readNotes().map((n) => n.toMap()).toList(),
+      'focus':
+          LocalStore.readFocusSessions().map((f) => f.toMap()).toList(),
     };
-    final content = const JsonEncoder.withIndent('  ').convert(payload);
+    return const JsonEncoder.withIndent('  ').convert(payload);
+  }
+
+  static Future<Directory?> defaultBackupDir() async {
+    final root = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    if (root == null) return null;
+    return Directory('${root.path}/backups');
+  }
+
+  static Future<bool> ensureStorageAccess() async {
+    if (!Platform.isAndroid) return true;
+    if (await Permission.manageExternalStorage.isGranted) return true;
+    if (await Permission.storage.isGranted) return true;
+    final manage = await Permission.manageExternalStorage.request();
+    if (manage.isGranted) return true;
+    final legacy = await Permission.storage.request();
+    return legacy.isGranted;
+  }
+
+  static Future<String?> pickBackupFolder() async {
+    final path = await FilePicker.platform.getDirectoryPath();
+    if (path == null) return null;
+    try {
+      final probe = File('$path/.streak_write_test');
+      await probe.writeAsString('ok');
+      await probe.delete();
+    } catch (_) {
+      return '';
+    }
+    return path;
+  }
+
+  static Future<String?> runAuto({String folder = ''}) async {
+    final dir = folder.isEmpty
+        ? await defaultBackupDir()
+        : Directory(folder);
+    if (dir == null) return null;
+    try {
+      if (!dir.existsSync()) await dir.create(recursive: true);
+    } catch (_) {
+      return null;
+    }
+
+    final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+    final file = File('${dir.path}/streak_backup_$stamp.json');
+    await file.writeAsString(_payloadFor(LocalStore.readHabits().values.toList()));
+
+    final old = dir
+        .listSync()
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.json'))
+        .toList()
+      ..sort((a, b) => b.path.compareTo(a.path));
+    for (final stale in old.skip(_kAutoBackupKeep)) {
+      try {
+        stale.deleteSync();
+      } catch (_) {}
+    }
+    return file.path;
+  }
+
+  static Future<bool> export(List<Habit> habits) async {
+    final content = _payloadFor(habits);
     final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
 
-    // Archivo temporal en el cache de la app, listo para compartir.
     final dir = await Directory.systemTemp.createTemp('streak_backup');
     final file = File('${dir.path}/streak_backup_$stamp.json');
     await file.writeAsString(content);
@@ -37,9 +106,6 @@ class BackupService {
         result.status == ShareResultStatus.dismissed;
   }
 
-  /// Abre el selector de archivos, valida el esquema y devuelve los hábitos.
-  /// Acepta tanto el formato nuevo ({version, habits:[...]}) como el antiguo
-  /// (una lista de hábitos directa).
   static Future<List<Habit>> import() async {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Select a Streak backup file',
@@ -69,7 +135,7 @@ class BackupService {
 
     final List<dynamic> entries;
     if (decoded is List) {
-      entries = decoded; // formato antiguo
+      entries = decoded;
     } else if (decoded is Map && decoded['habits'] is List) {
       entries = decoded['habits'] as List;
     } else {
@@ -82,10 +148,33 @@ class BackupService {
       try {
         habits.add(Habit.fromMap(Map<String, dynamic>.from(entry)));
       } catch (_) {
-        // Salta entradas corruptas en lugar de fallar toda la importación.
       }
     }
     if (habits.isEmpty) throw Exception('No habits found in that file');
+
+    if (decoded is Map) {
+      final notes = decoded['notes'];
+      if (notes is List) {
+        for (final raw in notes) {
+          if (raw is Map) {
+            await LocalStore.writeNote(
+              HabitNote.fromMap(Map<String, dynamic>.from(raw)),
+            );
+          }
+        }
+      }
+      final focus = decoded['focus'];
+      if (focus is List) {
+        for (final raw in focus) {
+          if (raw is Map) {
+            await LocalStore.writeFocusSession(
+              FocusSession.fromMap(Map<String, dynamic>.from(raw)),
+            );
+          }
+        }
+      }
+    }
+
     return habits;
   }
 }
