@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-/// Categoría personalizable. Los hábitos referencian la categoría por
-/// [name] (string), mientras este registro guarda su color e icono.
 class Category {
   Category({
     required this.id,
@@ -45,7 +43,6 @@ class Category {
       Category.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-/// Iconos disponibles para categorías (minimalistas, de ejemplo).
 class CategoryIcons {
   const CategoryIcons._();
 

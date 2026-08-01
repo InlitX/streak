@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 
-/// A short motivational line that rotates once per day. Stored locally, no
-/// network — picked deterministically from the day of the year.
 class DailyQuote extends StatelessWidget {
   const DailyQuote({super.key});
 
@@ -42,7 +41,7 @@ class DailyQuote extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = Localizations.localeOf(context).languageCode;
     final list = lang == 'es' ? _es : _en;
-    final now = DateTime.now();
+    final now = AppClock.now();
     final dayOfYear = now.difference(DateTime(now.year)).inDays;
     final quote = list[dayOfYear % list.length];
 

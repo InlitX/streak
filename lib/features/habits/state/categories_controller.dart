@@ -15,6 +15,12 @@ class CategoriesController extends ChangeNotifier {
   List<Category> get categories =>
       [..._categories]..sort((a, b) => a.name.compareTo(b.name));
 
+  void reload() {
+    _categories = LocalStore.readCategories();
+    if (!LocalStore.hasCategories) _seedDefaults();
+    notifyListeners();
+  }
+
   Category? byName(String name) {
     for (final c in _categories) {
       if (c.name == name) return c;

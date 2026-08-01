@@ -59,7 +59,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
           20,
           4,
           20,
-          20 + MediaQuery.of(context).viewInsets.bottom,
+          20 + MediaQuery.viewInsetsOf(context).bottom,
         ),
         child: SingleChildScrollView(
           child: Column(

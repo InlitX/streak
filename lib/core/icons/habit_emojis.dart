@@ -1,5 +1,3 @@
-/// Emojis del sistema organizados por las mismas categorías que los iconos.
-/// El emoji elegido se guarda como string unicode en `habit.icon`.
 class HabitEmojis {
   const HabitEmojis._();
 

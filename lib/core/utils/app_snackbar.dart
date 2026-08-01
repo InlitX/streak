@@ -10,6 +10,14 @@ class AppSnackbar {
   static void success(BuildContext context, String message) =>
       _show(context, message, _Kind.success);
 
+  static void action(
+    BuildContext context,
+    String message, {
+    required String label,
+    required VoidCallback onPressed,
+  }) =>
+      _show(context, message, _Kind.info, label: label, onPressed: onPressed);
+
   static void error(BuildContext context, String message) =>
       _show(context, message, _Kind.error);
 
@@ -19,7 +27,13 @@ class AppSnackbar {
   static void warning(BuildContext context, String message) =>
       _show(context, message, _Kind.warning);
 
-  static void _show(BuildContext context, String message, _Kind kind) {
+  static void _show(
+    BuildContext context,
+    String message,
+    _Kind kind, {
+    String? label,
+    VoidCallback? onPressed,
+  }) {
     final tokens = context.tokens;
     final (color, icon) = switch (kind) {
       _Kind.success => (tokens.success, LucideIcons.circleCheck),
@@ -53,7 +67,14 @@ class AppSnackbar {
             borderRadius: BorderRadius.circular(16),
           ),
           margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: label == null ? 3 : 5),
+          action: label == null
+              ? null
+              : SnackBarAction(
+                  label: label,
+                  textColor: Colors.white,
+                  onPressed: onPressed ?? () {},
+                ),
         ),
       );
   }

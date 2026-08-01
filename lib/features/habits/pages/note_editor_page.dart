@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -55,12 +54,10 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
     if (picked != null) setState(() => _time = picked);
   }
 
-  Future<void> _addPhoto(ImageSource source) async {
+  Future<void> _addPhoto({bool fromCamera = false}) async {
     final path = await CoverStorage.store(
       folder: 'journey',
-      source: source,
-      maxWidth: 1600,
-      quality: 85,
+      fromCamera: fromCamera,
     );
     if (path != null && mounted) setState(() => _photos.add(path));
   }
@@ -178,8 +175,8 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
               _PhotoStrip(
                 photos: _photos,
                 accent: widget.accent,
-                onCamera: () => _addPhoto(ImageSource.camera),
-                onGallery: () => _addPhoto(ImageSource.gallery),
+                onCamera: () => _addPhoto(fromCamera: true),
+                onGallery: () => _addPhoto(),
                 onRemove: (path) => setState(() => _photos.remove(path)),
               ),
               const SizedBox(height: 22),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 
-/// Shared empty / placeholder state. Use [compact] for inline spots like an
-/// empty chart, full size for whole-screen states.
 class AppEmptyState extends StatelessWidget {
   const AppEmptyState({
     super.key,
@@ -28,8 +26,7 @@ class AppEmptyState extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          // Compact lives inside narrow half-width cards, so keep the
-          // horizontal padding small to avoid mid-word wrapping.
+
           horizontal: compact ? 8 : 40,
           vertical: compact ? 28 : 40,
         ),
@@ -37,7 +34,7 @@ class AppEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Soft halo behind the glyph.
+
             Container(
               width: haloSize,
               height: haloSize,

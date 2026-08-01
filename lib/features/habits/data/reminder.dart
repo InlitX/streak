@@ -7,7 +7,12 @@ class Reminder {
     this.message = '',
     this.everyDays = 1,
     this.anchorEpochDay,
+    this.snoozeMinutes = defaultSnoozeMinutes,
   });
+
+  static const defaultSnoozeMinutes = 15;
+  static const snoozeChoices = [5, 10, 15];
+  static const maxSnoozeMinutes = 720;
 
   final String id;
   final int hour;
@@ -16,10 +21,11 @@ class Reminder {
 
   final String message;
 
-  // 1 = use the weekday set; >= 2 = every N days from anchorEpochDay.
   final int everyDays;
 
   final int? anchorEpochDay;
+
+  final int snoozeMinutes;
 
   bool get isInterval => everyDays >= 2;
 
@@ -37,6 +43,7 @@ class Reminder {
         'message': message,
         'everyDays': everyDays,
         'anchorEpochDay': anchorEpochDay,
+        'snoozeMinutes': snoozeMinutes,
       };
 
   factory Reminder.fromMap(Map<String, dynamic> map) => Reminder(
@@ -47,5 +54,7 @@ class Reminder {
         message: (map['message'] ?? '') as String,
         everyDays: (map['everyDays'] ?? 1) as int,
         anchorEpochDay: map['anchorEpochDay'] as int?,
+        snoozeMinutes:
+            (map['snoozeMinutes'] ?? defaultSnoozeMinutes) as int,
       );
 }

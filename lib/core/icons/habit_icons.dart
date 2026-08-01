@@ -1,12 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-/// Catálogo de iconos para hábitos, organizados por categorías.
-/// Cada categoría es una lista de nombres; [all] resuelve nombre -> IconData.
 class HabitIcons {
   const HabitIcons._();
 
-  static const defaultIcon = 'target';
+  static const defaultIcon = 'sparkles';
 
   static const Map<String, List<String>> categories = {
     'Fitness': [
@@ -59,7 +57,6 @@ class HabitIcons {
   };
 
   static const Map<String, IconData> all = {
-    // Fitness
     'dumbbell': LucideIcons.dumbbell,
     'bike': LucideIcons.bike,
     'footprints': LucideIcons.footprints,
@@ -75,7 +72,7 @@ class HabitIcons {
     'zap': LucideIcons.zap,
     'stretch': LucideIcons.stretchHorizontal,
     'flag': LucideIcons.flag,
-    // Study
+
     'book': LucideIcons.book,
     'bookOpen': LucideIcons.bookOpen,
     'graduationCap': LucideIcons.graduationCap,
@@ -92,7 +89,7 @@ class HabitIcons {
     'compass': LucideIcons.compass,
     'telescope': LucideIcons.telescope,
     'atom': LucideIcons.atom,
-    // Home
+
     'house': LucideIcons.house,
     'bed': LucideIcons.bed,
     'bath': LucideIcons.bath,
@@ -106,7 +103,7 @@ class HabitIcons {
     'recycle': LucideIcons.recycle,
     'shirt': LucideIcons.shirt,
     'plug': LucideIcons.plug,
-    // Mind
+
     'heart': LucideIcons.heart,
     'smile': LucideIcons.smile,
     'sun': LucideIcons.sun,
@@ -119,7 +116,7 @@ class HabitIcons {
     'snowflake': LucideIcons.snowflake,
     'music': LucideIcons.music,
     'sunrise': LucideIcons.sunrise,
-    // Food
+
     'apple': LucideIcons.apple,
     'salad': LucideIcons.salad,
     'glassWater': LucideIcons.glassWater,
@@ -131,7 +128,7 @@ class HabitIcons {
     'cookie': LucideIcons.cookie,
     'wine': LucideIcons.wine,
     'banana': LucideIcons.banana,
-    // Work
+
     'briefcase': LucideIcons.briefcase,
     'target': LucideIcons.target,
     'clock': LucideIcons.clock,
@@ -145,7 +142,7 @@ class HabitIcons {
     'code': LucideIcons.code,
     'chartBar': LucideIcons.chartColumn,
     'badge': LucideIcons.badge,
-    // Social
+
     'users': LucideIcons.users,
     'handshake': LucideIcons.handshake,
     'messageCircle': LucideIcons.messageCircle,
@@ -153,7 +150,7 @@ class HabitIcons {
     'heartHandshake': LucideIcons.heartHandshake,
     'partyPopper': LucideIcons.partyPopper,
     'userPlus': LucideIcons.userPlus,
-    // Finance
+
     'dollar': LucideIcons.dollarSign,
     'piggyBank': LucideIcons.piggyBank,
     'trendingUp': LucideIcons.trendingUp,
@@ -164,7 +161,7 @@ class HabitIcons {
     'receipt': LucideIcons.receipt,
     'landmark': LucideIcons.landmark,
     'percent': LucideIcons.percent,
-    // Nature
+
     'trees': LucideIcons.trees,
     'sprout': LucideIcons.sprout,
     'flower': LucideIcons.flower,
@@ -172,7 +169,7 @@ class HabitIcons {
     'cloudRain': LucideIcons.cloudRain,
     'bird': LucideIcons.bird,
     'tent': LucideIcons.tent,
-    // Tech
+
     'laptop': LucideIcons.laptop,
     'smartphone': LucideIcons.smartphone,
     'headphones': LucideIcons.headphones,
@@ -184,7 +181,7 @@ class HabitIcons {
     'keyboard': LucideIcons.keyboard,
     'monitor': LucideIcons.monitor,
     'database': LucideIcons.database,
-    // Art
+
     'palette': LucideIcons.palette,
     'paintbrush': LucideIcons.paintbrush,
     'guitar': LucideIcons.guitar,

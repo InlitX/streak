@@ -6,6 +6,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 
 class HomeShell extends StatefulWidget {
@@ -41,6 +42,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    if (context.watch<SettingsController>().isGridLayout) {
+      return const Scaffold(body: HomePage());
+    }
     return Scaffold(
       body: IndexedStack(index: _index, children: _pages),
       bottomNavigationBar: DecoratedBox(

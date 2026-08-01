@@ -31,7 +31,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: scheme,
-      // Transparent so the global AppBackground shows through every route.
+
       scaffoldBackgroundColor: Colors.transparent,
       fontFamily: _fontFamily,
       visualDensity: VisualDensity.adaptivePlatformDensity,

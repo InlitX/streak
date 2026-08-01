@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 
 class TodayProgress extends StatelessWidget {
   const TodayProgress({
@@ -19,7 +20,7 @@ class TodayProgress extends StatelessWidget {
 
   String _today(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
-    final text = DateFormat('EEEE, d MMM', locale).format(DateTime.now());
+    final text = DateFormat('EEEE, d MMM', locale).format(AppClock.now());
     return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
   }
 

@@ -23,8 +23,6 @@ class AppNavigator {
     bool fullscreenDialog = false,
     bool fade = false,
   }) {
-    // Wrap each page in its own opaque background and slide (never fade) it in,
-    // so the previous screen never ghosts through during the transition.
     return PageRouteBuilder<T>(
       fullscreenDialog: fullscreenDialog,
       transitionDuration: const Duration(milliseconds: 300),
@@ -39,7 +37,6 @@ class AppNavigator {
         );
 
         if (fullscreenDialog) {
-          // Modal pages glide up from the bottom.
           return SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(0, 1),
@@ -49,7 +46,6 @@ class AppNavigator {
           );
         }
 
-        // Regular pushes: horizontal slide with iOS-style parallax behind.
         final outgoing = CurvedAnimation(
           parent: secondaryAnimation,
           curve: Curves.easeOutCubic,

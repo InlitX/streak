@@ -1,7 +1,5 @@
 import 'dart:math';
 
-/// Frases motivacionales para las notificaciones de recordatorio.
-/// Se elige una al azar cuando el recordatorio no tiene mensaje propio.
 class MotivationalQuotes {
   const MotivationalQuotes._();
 
