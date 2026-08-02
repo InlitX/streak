@@ -11,6 +11,41 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 
 enum HeatmapMode { week, month, year, mini }
 
+Color heatmapCellColor(
+  BuildContext context,
+  Habit habit,
+  DateTime date, {
+  bool inScope = true,
+}) {
+  if (!inScope) return Colors.transparent;
+
+  final scheme = context.colors;
+  final today = AppClock.now().atMidnight;
+  final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
+
+  if (!beforeCreation && !date.isAfter(today) && habit.isNeutralOn(date)) {
+    return context.tokens.info.withValues(alpha: 0.5);
+  }
+
+  if (habit.kind == HabitKind.negative) {
+    if (beforeCreation) {
+      return scheme.surfaceContainerHighest.withValues(alpha: 0.4);
+    }
+    if (habit.completions.containsKey(date.dayKey)) return context.tokens.danger;
+    final clean = habit.color.withValues(alpha: 0.4);
+    return date.isAfter(today) ? clean.withValues(alpha: 0.18) : clean;
+  }
+
+  final count = habit.completions[date.dayKey]?.count ?? 0;
+  if (count <= 0) {
+    final base = scheme.surfaceContainerHighest;
+    return date.isAfter(today) ? base.withValues(alpha: 0.4) : base;
+  }
+  final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
+  final ratio = (count / target).clamp(0.25, 1.0);
+  return Color.lerp(habit.color.withValues(alpha: 0.4), habit.color, ratio)!;
+}
+
 class HabitHeatmap extends StatefulWidget {
   const HabitHeatmap({
     super.key,
@@ -45,41 +80,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   DateTime _mondayOf(DateTime d) =>
       d.atMidnight.subtract(Duration(days: d.weekday - 1));
 
-  Color _cell(BuildContext context, DateTime date, {bool inScope = true}) {
-    final scheme = context.colors;
-    if (!inScope) return Colors.transparent;
-    final habit = widget.habit;
-
-    final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
-
-    if (!beforeCreation && !date.isAfter(_today) && habit.isNeutralOn(date)) {
-      return context.tokens.info.withValues(alpha: 0.5);
-    }
-
-    if (habit.kind == HabitKind.negative) {
-      if (beforeCreation) {
-        final base = scheme.surfaceContainerHighest;
-        return base.withValues(alpha: 0.4);
-      }
-      final relapsed = habit.completions.containsKey(date.dayKey);
-      if (relapsed) return context.tokens.danger;
-      final clean = habit.color.withValues(alpha: 0.4);
-      return date.isAfter(_today) ? clean.withValues(alpha: 0.18) : clean;
-    }
-
-    final count = habit.completions[date.dayKey]?.count ?? 0;
-    if (count <= 0) {
-      final base = scheme.surfaceContainerHighest;
-      return date.isAfter(_today) ? base.withValues(alpha: 0.4) : base;
-    }
-    final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
-    final ratio = (count / target).clamp(0.25, 1.0);
-    return Color.lerp(
-      habit.color.withValues(alpha: 0.4),
-      habit.color,
-      ratio,
-    )!;
-  }
+  Color _cell(BuildContext context, DateTime date, {bool inScope = true}) =>
+      heatmapCellColor(context, widget.habit, date, inScope: inScope);
 
   @override
   void dispose() {
@@ -296,9 +298,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                           alpha: 0.4,
                         )
                       : _cell(context, date),
-                  borderRadius: BorderRadius.circular(
-                    widget.circle ? 999 : (widget.compact ? 3 : 9),
-                  ),
+                  borderRadius: BorderRadius.circular(widget.circle ? 999 : 9),
                 );
                 return Expanded(
                   child: Padding(

@@ -140,12 +140,15 @@ class _QuantTile extends StatelessWidget {
                 ),
               ),
               if (showCheck)
-                Icon(
-                  Icons.check_rounded,
-                  size: size * 0.5,
-                  color: reached
-                      ? Colors.white
-                      : habit.color.withValues(alpha: 0.85),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: progress.fraction),
+                  duration: const Duration(milliseconds: 520),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, t, _) => Icon(
+                    Icons.check_rounded,
+                    size: size * 0.5,
+                    color: reached || t >= 0.45 ? Colors.white : habit.color,
+                  ),
                 ),
             ],
           ),
@@ -492,10 +495,8 @@ class GridMonthCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Center(
-              child: HabitHeatmap(
+              child: _GridMonthCalendar(
                 habit: habit,
-                mode: HeatmapMode.month,
-                compact: true,
                 circle: circle,
                 onToggle: onToggleDay,
               ),
@@ -503,6 +504,70 @@ class GridMonthCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _GridMonthCalendar extends StatelessWidget {
+  const _GridMonthCalendar({
+    required this.habit,
+    required this.circle,
+    required this.onToggle,
+  });
+
+  final Habit habit;
+  final bool circle;
+  final void Function(DateTime date) onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    final today = AppClock.now().atMidnight;
+    final weekStart = context.watch<SettingsController>().weekStart;
+    final first = DateTime(today.year, today.month, 1).startOfWeek(weekStart);
+    final lastDay = DateTime(today.year, today.month + 1, 0);
+    final weeks =
+        (lastDay.startOfWeek(weekStart).difference(first).inDays / 7).round() +
+        1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var w = 0; w < weeks; w++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: Row(
+              children: List.generate(7, (d) {
+                final date = first.add(Duration(days: w * 7 + d));
+                final inMonth = date.month == today.month;
+                final future = date.isAfter(today);
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(1),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: GestureDetector(
+                        onTap: inMonth && !future ? () => onToggle(date) : null,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: !inMonth
+                                ? Colors.transparent
+                                : future
+                                ? context.colors.surfaceContainerHighest
+                                      .withValues(alpha: 0.4)
+                                : heatmapCellColor(context, habit, date),
+                            borderRadius: BorderRadius.circular(
+                              circle ? 999 : 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -523,6 +588,11 @@ class GridViewSwitcher extends StatelessWidget {
     (HeatmapMode.year, Icons.view_agenda_outlined),
   ];
 
+  double _slot(HeatmapMode value) {
+    final index = _options.indexWhere((option) => option.$1 == value);
+    return index <= 0 ? -1 : (index == 1 ? 0 : 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -541,30 +611,57 @@ class GridViewSwitcher extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          for (final (value, icon) in _options)
-            GestureDetector(
-              onTap: () {
-                HapticFeedback.selectionClick();
-                onChanged(value);
-              },
-              behavior: HitTestBehavior.opaque,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 8,
-                ),
-                child: Icon(
-                  icon,
-                  size: 24,
-                  color: value == mode
-                      ? context.colors.primary
-                      : context.tokens.muted,
+          Positioned.fill(
+            child: AnimatedAlign(
+              alignment: Alignment(_slot(mode), 0),
+              duration: const Duration(milliseconds: 380),
+              curve: Curves.easeOutBack,
+              child: Container(
+                width: 60,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: context.colors.primary.withValues(alpha: 0.16),
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
             ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final (value, icon) in _options)
+                GestureDetector(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    onChanged(value);
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 8,
+                    ),
+                    child: AnimatedScale(
+                      scale: value == mode ? 1.12 : 1,
+                      duration: const Duration(milliseconds: 380),
+                      curve: Curves.easeOutBack,
+                      child: TweenAnimationBuilder<Color?>(
+                        tween: ColorTween(
+                          end: value == mode
+                              ? context.colors.primary
+                              : context.tokens.muted,
+                        ),
+                        duration: const Duration(milliseconds: 260),
+                        builder: (context, tint, _) =>
+                            Icon(icon, size: 24, color: tint),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
     );
