@@ -427,6 +427,7 @@
   "icon_accent": "Tricolor",
   "custom": "Personalizado",
   "see_more": "Ver más",
+  "see_less": "Ver menos",
   "colors_tab": "Colores",
   "reorder": "Ordenar",
   "reorder_hint": "Arrastra los hábitos para reordenarlos",

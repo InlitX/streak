@@ -78,7 +78,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             final currentYear = AppClock.now().year;
 
             return ListView(
-              padding: EdgeInsets.fromLTRB(16, minimal ? 0 : 8, 16, 24),
+              padding: EdgeInsets.fromLTRB(16, minimal ? 0 : 8, 16, 104),
               children: [
                 if (minimal)
                   Padding(
@@ -238,29 +238,33 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _ChartCard(
-                  title: context.l10n.completion_time,
-                  icon: LucideIcons.clock,
-                  color: accent,
-                  child: stats.hourSamples >= 5
-                      ? HourArea(values: stats.hours, color: accent)
-                      : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                StatReveal(
+                  child: _ChartCard(
+                    title: context.l10n.completion_time,
+                    icon: LucideIcons.clock,
+                    color: accent,
+                    child: stats.hourSamples >= 5
+                        ? HourArea(values: stats.hours, color: accent)
+                        : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                  ),
                 ),
 
                 if (_habitId == null && all.length > 1) ...[
                   const SizedBox(height: 16),
-                  _ChartCard(
-                    title: context.l10n.by_habit,
-                    icon: LucideIcons.chartPie,
-                    color: accent,
-                    child: HabitDonut(entries: _ranking(all, stats)),
+                  StatReveal(
+                    child: _ChartCard(
+                      title: context.l10n.by_habit,
+                      icon: LucideIcons.chartPie,
+                      color: accent,
+                      child: HabitDonut(entries: _ranking(all, stats)),
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  _ChartCard(
-                    title: context.l10n.ranking,
-                    icon: LucideIcons.listOrdered,
-                    color: accent,
-                    child: HabitRanking(entries: _ranking(all, stats)),
+                  StatReveal(
+                    child: _RankingCard(
+                      accent: accent,
+                      entries: _ranking(all, stats, limit: all.length),
+                    ),
                   ),
                 ],
                 const SizedBox(height: 16),
@@ -290,6 +294,67 @@ List<({String name, Color color, int count})> _ranking(
       ),
   ]..sort((a, b) => b.count.compareTo(a.count));
   return ranked.take(limit).where((e) => e.count > 0).toList();
+}
+
+class _RankingCard extends StatefulWidget {
+  const _RankingCard({required this.entries, required this.accent});
+
+  final List<({String name, Color color, int count})> entries;
+  final Color accent;
+
+  @override
+  State<_RankingCard> createState() => _RankingCardState();
+}
+
+class _RankingCardState extends State<_RankingCard> {
+  static const _collapsed = 5;
+
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = widget.entries;
+    final shown = _expanded ? entries : entries.take(_collapsed).toList();
+
+    return _ChartCard(
+      title: context.l10n.ranking,
+      icon: LucideIcons.listOrdered,
+      color: widget.accent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AnimatedSize(
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: HabitRanking(
+              key: ValueKey(shown.length),
+              entries: shown,
+            ),
+          ),
+          if (entries.length > _collapsed)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () => setState(() => _expanded = !_expanded),
+                style: TextButton.styleFrom(
+                  foregroundColor: widget.accent,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  visualDensity: VisualDensity.compact,
+                ),
+                child: Text(
+                  _expanded ? context.l10n.see_less : context.l10n.see_more,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class _TrendCard extends StatelessWidget {

@@ -523,6 +523,7 @@
   "icon_accent": "Tricolor",
   "custom": "Custom",
   "see_more": "See more",
+  "see_less": "See less",
   "colors_tab": "Colors",
   "reorder": "Reorder",
   "reorder_hint": "Drag the habits to reorder them",
