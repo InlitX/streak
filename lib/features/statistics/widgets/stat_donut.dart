@@ -148,9 +148,10 @@ class _HabitDonutState extends State<HabitDonut> with TickerProviderStateMixin {
         AnimatedBuilder(
           animation: _select,
           builder: (context, _) => Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
+            spacing: 6,
+            runSpacing: 6,
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               for (var i = 0; i < entries.length; i++)
                 _LegendChip(
@@ -193,13 +194,15 @@ class _LegendChip extends StatelessWidget {
         opacity: dimmed ? 0.4 : 1,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          height: 30,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             color: entry.color.withValues(alpha: selected ? 0.16 : 0),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 8,
@@ -218,6 +221,7 @@ class _LegendChip extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
+                    height: 1,
                     fontWeight: FontWeight.w600,
                     color: selected
                         ? context.colors.onSurface

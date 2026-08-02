@@ -21,6 +21,22 @@ class _Chrome {
         ),
       );
 
+  static double step(double maxValue, int lines) {
+    if (maxValue <= 0) return 1;
+    final raw = maxValue / lines;
+    final magnitude = math.pow(10, (math.log(raw) / math.ln10).floor())
+        .toDouble();
+    final normalised = raw / magnitude;
+    final rounded = normalised <= 1
+        ? 1.0
+        : normalised <= 2
+        ? 2.0
+        : normalised <= 5
+        ? 5.0
+        : 10.0;
+    return math.max(1, rounded * magnitude);
+  }
+
   static Color tooltip(BuildContext context) =>
       context.colors.inverseSurface.withValues(alpha: 0.92);
 
@@ -319,7 +335,10 @@ class MonthlyLine extends StatelessWidget {
     final last = year >= now.year ? now.month - 1 : 11;
     final shown = values.take(last + 1).toList();
     final maxValue = shown.fold(0, math.max);
-    final maxY = (maxValue <= 0 ? 4 : maxValue * 1.32).toDouble();
+    final step = _Chrome.step(maxValue.toDouble(), 4);
+    final maxY = maxValue <= 0
+        ? 4.0
+        : (maxValue / step).ceil() * step + step * 0.5;
     final average = shown.isEmpty
         ? 0.0
         : shown.reduce((a, b) => a + b) / shown.length;
@@ -338,7 +357,7 @@ class MonthlyLine extends StatelessWidget {
           maxX: 11,
           minY: 0,
           maxY: maxY,
-          gridData: _Chrome.grid(context, maxY / 4),
+          gridData: _Chrome.grid(context, step),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
             leftTitles: const AxisTitles(),

@@ -38,11 +38,20 @@ class AnimatedStatNumber extends StatelessWidget {
     }
     final decimals = value.contains('.') ? 1 : 0;
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: numeric),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
-      builder: (context, v, _) =>
-          Text(v.toStringAsFixed(decimals), style: style),
+      tween: Tween(begin: 0.92, end: 1),
+      duration: const Duration(milliseconds: 620),
+      curve: Curves.easeOutBack,
+      builder: (context, scale, child) => Transform.scale(
+        scale: scale,
+        child: child,
+      ),
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: numeric),
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeOutCubic,
+        builder: (context, v, _) =>
+            Text(v.toStringAsFixed(decimals), style: style),
+      ),
     );
   }
 }
