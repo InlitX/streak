@@ -179,11 +179,50 @@ class HabitCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  HabitHeatmap(
-                    habit: habit,
-                    mode: mode,
-                    compact: true,
-                    circle: circleCheck,
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 420),
+                    curve: Curves.easeOutCubic,
+                    alignment: Alignment.topCenter,
+                    child: ClipRect(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 420),
+                        switchInCurve: const Interval(
+                          0.45,
+                          1,
+                          curve: Curves.easeOutCubic,
+                        ),
+                        switchOutCurve: const Interval(
+                          0.6,
+                          1,
+                          curve: Curves.easeIn,
+                        ),
+                        transitionBuilder: (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: SlideTransition(
+                            position: Tween(
+                              begin: const Offset(0, 0.05),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          ),
+                        ),
+                        layoutBuilder: (current, previous) => Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            for (final child in previous)
+                              Positioned(left: 0, right: 0, child: child),
+                            if (current != null) current,
+                          ],
+                        ),
+                        child: HabitHeatmap(
+                          key: ValueKey(mode),
+                          habit: habit,
+                          mode: mode,
+                          compact: true,
+                          circle: circleCheck,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

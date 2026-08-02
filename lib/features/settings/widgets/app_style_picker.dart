@@ -81,27 +81,43 @@ class _StyleOption extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 0.62,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF141416) : Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: selected ? accent : outline,
-                  width: selected ? 1.8 : 1,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(13),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF1B1B1F)
-                        : const Color(0xFFF3F3F7),
+            child: AnimatedScale(
+              scale: selected ? 1 : 0.94,
+              duration: const Duration(milliseconds: 380),
+              curve: Curves.easeOutBack,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF141416) : Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: selected ? accent : outline,
+                    width: selected ? 1.8 : 1,
                   ),
-                  child: preview,
+                  boxShadow: [
+                    BoxShadow(
+                      color: accent.withValues(alpha: selected ? 0.22 : 0),
+                      blurRadius: 22,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(13),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0xFF1B1B1F)
+                          : const Color(0xFFF3F3F7),
+                    ),
+                    child: AnimatedOpacity(
+                      opacity: selected ? 1 : 0.72,
+                      duration: const Duration(milliseconds: 280),
+                      child: preview,
+                    ),
+                  ),
                 ),
               ),
             ),

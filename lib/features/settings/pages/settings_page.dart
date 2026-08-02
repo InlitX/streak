@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
@@ -41,68 +42,80 @@ class ClassicSettingsPage extends StatelessWidget {
       body: SafeArea(
         top: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 104),
           children: [
-            _ProfileHeader(
-              name: settings.profileName.isEmpty
-                  ? context.l10n.default_user
-                  : settings.profileName,
-              photoPath: settings.profilePhoto,
-            ),
-            const SizedBox(height: 24),
-            Card(
-              child: PickerRow(
-                icon: LucideIcons.smartphone,
-                title: context.l10n.app_style,
-                value: settings.isMinimalStyle
-                    ? context.l10n.style_minimal
-                    : context.l10n.style_classic,
-                onTap: () => AppNavigator.push(const AppStylePage()),
+            Entrance(
+              child: _ProfileHeader(
+                name: settings.profileName.isEmpty
+                    ? context.l10n.default_user
+                    : settings.profileName,
+                photoPath: settings.profilePhoto,
               ),
             ),
             const SizedBox(height: 24),
-            Card(
-              child: Column(
-                children: [
-                  NavRow(
-                    icon: LucideIcons.palette,
-                    title: context.l10n.appearance,
-                    subtitle: context.l10n.appearance_sub,
-                    onTap: () =>
-                        AppNavigator.push(const _ClassicAppearancePage()),
-                  ),
-                  settingsDivider(context),
-                  NavRow(
-                    icon: LucideIcons.slidersHorizontal,
-                    title: context.l10n.preferences,
-                    subtitle: context.l10n.preferences_sub,
-                    onTap: () =>
-                        AppNavigator.push(const _ClassicPreferencesPage()),
-                  ),
-                  settingsDivider(context),
-                  NavRow(
-                    icon: LucideIcons.database,
-                    title: context.l10n.data,
-                    subtitle: context.l10n.data_sub,
-                    onTap: () => AppNavigator.push(const _ClassicDataPage()),
-                  ),
-                  settingsDivider(context),
-                  NavRow(
-                    icon: LucideIcons.heartHandshake,
-                    title: context.l10n.support,
-                    subtitle: context.l10n.support_sub,
-                    onTap: () => AppNavigator.push(const _ClassicSupportPage()),
-                  ),
-                ],
+            Entrance(
+              index: 1,
+              child: Card(
+                child: PickerRow(
+                  icon: LucideIcons.smartphone,
+                  title: context.l10n.app_style,
+                  value: settings.isMinimalStyle
+                      ? context.l10n.style_minimal
+                      : context.l10n.style_classic,
+                  onTap: () => AppNavigator.push(const AppStylePage()),
+                ),
               ),
             ),
             const SizedBox(height: 24),
-            Card(
-              child: NavRow(
-                icon: LucideIcons.info,
-                title: context.l10n.about_app,
-                subtitle: context.l10n.about_app_sub,
-                onTap: () => AppNavigator.push(const AboutPage()),
+            Entrance(
+              index: 2,
+              child: Card(
+                child: Column(
+                  children: [
+                    NavRow(
+                      icon: LucideIcons.palette,
+                      title: context.l10n.appearance,
+                      subtitle: context.l10n.appearance_sub,
+                      onTap: () =>
+                          AppNavigator.push(const _ClassicAppearancePage()),
+                    ),
+                    settingsDivider(context),
+                    NavRow(
+                      icon: LucideIcons.slidersHorizontal,
+                      title: context.l10n.preferences,
+                      subtitle: context.l10n.preferences_sub,
+                      onTap: () =>
+                          AppNavigator.push(const _ClassicPreferencesPage()),
+                    ),
+                    settingsDivider(context),
+                    NavRow(
+                      icon: LucideIcons.database,
+                      title: context.l10n.data,
+                      subtitle: context.l10n.data_sub,
+                      onTap: () => AppNavigator.push(const _ClassicDataPage()),
+                    ),
+                    settingsDivider(context),
+                    NavRow(
+                      icon: LucideIcons.heartHandshake,
+                      title: context.l10n.support,
+                      subtitle: context.l10n.support_sub,
+                      onTap: () =>
+                          AppNavigator.push(const _ClassicSupportPage()),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Entrance(
+              index: 3,
+              child: Card(
+                child: NavRow(
+                  icon: LucideIcons.info,
+                  title: context.l10n.about_app,
+                  subtitle: context.l10n.about_app_sub,
+                  onTap: () => AppNavigator.push(const AboutPage()),
+                ),
               ),
             ),
           ],
@@ -132,8 +145,8 @@ class _ClassicSection extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            SectionLabel(label),
-            Card(child: Column(children: children)),
+            Entrance(child: SectionLabel(label)),
+            Entrance(index: 1, child: Card(child: Column(children: children))),
           ],
         ),
       ),
