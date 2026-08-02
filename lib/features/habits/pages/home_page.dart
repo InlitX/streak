@@ -9,6 +9,7 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/confetti_overlay.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
@@ -259,19 +260,19 @@ class _HomePageState extends State<HomePage> {
                           if (!grid) const DailyQuote(),
                           if (!grid) const SizedBox(height: 8),
                           if (!grid) TodayProgress(done: done, total: total),
-                          if (!grid) const SizedBox(height: 16),
+                          if (!grid) const SizedBox(height: 20),
 
                           if (!grid)
                             _ViewSelector(mode: _mode, onChanged: _changeMode),
                           if (categories.isNotEmpty) ...[
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 14),
                             _CategoryBar(
                               categories: categories,
                               selected: _category,
                               onSelected: (c) => setState(() => _category = c),
                             ),
                           ],
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 14),
                         ],
                       );
 
@@ -284,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                   child: grid && !_reordering
                       ? _gridBody(controller, visible, header, today)
                       : ReorderableListView.builder(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 104),
                   itemCount: visible.length,
                   buildDefaultDragHandles: false,
                   onReorder: (oldIndex, newIndex) {
@@ -387,7 +388,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           header,
           for (var i = 0; i < visible.length; i += 2)
-            Padding(
+            Entrance(
+              key: ValueKey('month-$i-${visible[i].id}'),
+              index: i ~/ 2,
+              child: Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: IntrinsicHeight(
                 child: Row(
@@ -422,6 +426,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              ),
             ),
         ],
       );
@@ -431,23 +436,30 @@ class _HomePageState extends State<HomePage> {
       padding: padding,
       children: [
         header,
-        for (final habit in visible)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _mode == HeatmapMode.week
-                ? GridWeekCard(
-                    habit: habit,
-                    onOpen: () => open(habit),
-                    onToggleDay: (d) => toggleDay(habit, d),
-                    onLongPress: () => _showHabitActions(controller, habit),
-                  )
-                : GridYearCard(
-                    habit: habit,
-                    onOpen: () => open(habit),
-                    onToggleToday: () => controller.toggle(habit.id, today),
-                    onToggleDay: (d) => toggleDay(habit, d),
-                    onLongPress: () => _showHabitActions(controller, habit),
-                  ),
+        for (var i = 0; i < visible.length; i++)
+          Entrance(
+            key: ValueKey('$_mode-${visible[i].id}'),
+            index: i,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _mode == HeatmapMode.week
+                  ? GridWeekCard(
+                      habit: visible[i],
+                      onOpen: () => open(visible[i]),
+                      onToggleDay: (d) => toggleDay(visible[i], d),
+                      onLongPress: () =>
+                          _showHabitActions(controller, visible[i]),
+                    )
+                  : GridYearCard(
+                      habit: visible[i],
+                      onOpen: () => open(visible[i]),
+                      onToggleToday: () =>
+                          controller.toggle(visible[i].id, today),
+                      onToggleDay: (d) => toggleDay(visible[i], d),
+                      onLongPress: () =>
+                          _showHabitActions(controller, visible[i]),
+                    ),
+            ),
           ),
       ],
     );
@@ -563,24 +575,32 @@ class _ViewSelector extends StatelessWidget {
           for (final (value, label) in options)
             Expanded(
               child: GestureDetector(
-                onTap: () => onChanged(value),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 180),
-                  curve: Curves.easeOut,
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  decoration: BoxDecoration(
-                    color: value == mode ? scheme.primary : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: value == mode
-                          ? scheme.onPrimary
-                          : context.tokens.muted,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  onChanged(value);
+                },
+                child: AnimatedScale(
+                  scale: value == mode ? 1 : 0.94,
+                  duration: const Duration(milliseconds: 260),
+                  curve: Curves.easeOutBack,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    decoration: BoxDecoration(
+                      color: value == mode ? scheme.primary : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 220),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: value == mode
+                            ? scheme.onPrimary
+                            : context.tokens.muted,
+                      ),
+                      child: Text(label, textAlign: TextAlign.center),
                     ),
                   ),
                 ),
@@ -644,21 +664,31 @@ class _Chip extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? scheme.primary : scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: active ? scheme.onPrimary : context.tokens.muted,
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: AnimatedScale(
+          scale: active ? 1 : 0.95,
+          duration: const Duration(milliseconds: 260),
+          curve: Curves.easeOutBack,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: active ? scheme.primary : scheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 220),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: active ? scheme.onPrimary : context.tokens.muted,
+              ),
+              child: Text(label),
             ),
           ),
         ),

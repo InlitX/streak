@@ -46,6 +46,16 @@ class AppNavigator {
           );
         }
 
+        if (fade) {
+          return FadeTransition(
+            opacity: incoming,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.94, end: 1).animate(incoming),
+              child: child,
+            ),
+          );
+        }
+
         final outgoing = CurvedAnimation(
           parent: secondaryAnimation,
           curve: Curves.easeOutCubic,
