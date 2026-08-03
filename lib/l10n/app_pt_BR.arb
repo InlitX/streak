@@ -329,5 +329,131 @@
   "profile": "Perfil",
   "start_vacation": "Iniciar férias",
   "done": "Concluído",
-  "reminders": "Lembretes"
+  "reminders": "Lembretes",
+  "widget_cfg_brightness": "Brilho",
+  "completion_rate_short": "Consistência",
+  "widget_today_progress": "Hoje  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "🔥 {streak} dias seguidos",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "consistency_trend": "Tendência de consistência",
+  "widget_cfg_change_image": "Alterar imagem",
+  "widget_activity": "Atividade",
+  "widget_cfg_border": "Borda",
+  "ranking": "Classificação",
+  "count_months": "{count, plural, =1{1 mes} other{{count meses}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notif_action_add_hint": "Quanto?",
+  "today_only": "Apenas os hábitos de hoje",
+  "per_week": "Por semana",
+  "snooze_custom_hint": "Minutos",
+  "category_fitness": "Forma Física",
+  "widget_done_today": "feito hoje",
+  "book_cover": "Capa do livro",
+  "widget_no_habits": "Sem hábitos ainda\nToque para abrir o Streak",
+  "count_days": "{count, plural, =1{1 dia} other{{count} dias}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_cfg_color": "Cor",
+  "widget_demo_read": "Ler",
+  "category_health": "Saúde",
+  "category_mindfulness": "Atenção Plena",
+  "widget_cfg_saturation": "Saturação",
+  "category_learning": "Aprendizado",
+  "count_weeks": "{count, plural, =1{1 semana} other{{count} semanas}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snooze_duration": "Adiar por",
+  "widget_cfg_hue": "Matiz",
+  "widget_cfg_style": "Estilo",
+  "notif_action_snooze": "Adiar",
+  "widget_demo_water": "Água",
+  "snooze_custom": "Personalizado",
+  "perfect_days": "Dias perfeitos",
+  "widget_best_streak": "🔥 {streak} melhor sequência",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_add": "Adicionar quantidade",
+  "minutes_short": "{value} minimo",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "Cor do ponto",
+  "widget_cfg_style_card": "Cartão",
+  "widget_cfg_choose_image": "Escolher imagem",
+  "widget_demo_run": "Correr",
+  "widget_cfg_style_classic": "Clássico",
+  "widget_cfg_all_habits": "Todos os hábitos",
+  "widget_cfg_image": "Imagem",
+  "widget_cfg_opacity": "Opacidade  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "category_finance": "Finanças",
+  "notif_action_done": "Concluído",
+  "widget_no_data": "Sem dados ainda\nAbra Streak para sincronizar",
+  "best_month": "Melhor mês",
+  "consistency": "Consistência",
+  "widget_cfg_title": "Personalizar widget",
+  "widget_open_to_sync": "Abra Streak para sincronizar",
+  "widget_cfg_custom_color": "Cor personalizada",
+  "by_habit": "Por hábito",
+  "category_productivity": "Produtividade",
+  "widget_cfg_reset": "Restaurar padrão",
+  "widget_cfg_thickness": "Grossura  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_add": "Adicionar Widget",
+  "widget_cfg_show_activity": "Mostrar atividade de",
+  "widget_cfg_save": "Salvar",
+  "active_days": "Dias ativos"
 }
