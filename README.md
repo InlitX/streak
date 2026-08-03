@@ -1,5 +1,5 @@
 <div align="right">
-  <sub><b>English</b> · <a href="README.es.md">Español</a> · <a href="README.zh-CN.md">中文</a></sub>
+  <sub><b>English</b> · <a href="README.es.md">Español</a> · <a href="README.zh-CN.md">中文</a> · <a href="README.ru.md">Русский</a></sub>
 </div>
 
 <br/>
