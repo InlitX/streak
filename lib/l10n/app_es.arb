@@ -70,9 +70,15 @@
   "import_from_app_done": "Importados {habits} hábitos ({days} días) desde {source}",
   "@import_from_app_done": {
     "placeholders": {
-      "habits": { "type": "int" },
-      "days": { "type": "int" },
-      "source": { "type": "String" }
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
     }
   },
   "import_failed": "No se pudo importar ese archivo",
@@ -145,13 +151,21 @@
   "journey": "Diario visual",
   "journey_sub": "{count, plural, =1{1 foto} other{{count} fotos}}",
   "@journey_sub": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "journey_empty": "Todavía no hay fotos",
   "journey_empty_sub": "Añade una foto a una nota y aparecerá aquí.",
   "archive_habit_body": "¿Mover \"{name}\" al archivo? Se guarda su historial y puedes restaurarlo desde Ajustes.",
   "@archive_habit_body": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "archived_habits": "Hábitos archivados",
   "archived_habits_sub": "Restáuralos o bórralos del todo",
@@ -162,7 +176,11 @@
   "delete_forever": "Borrar del todo",
   "delete_forever_body": "¿Borrar \"{name}\" y todo su historial? Esto no se puede deshacer.",
   "@delete_forever_body": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "deleted_forever": "Hábito borrado",
   "wipe_data": "Borrar todos los datos",
@@ -177,7 +195,11 @@
   "day_start_midnight": "Medianoche",
   "day_start_hour": "{hour}:00",
   "@day_start_hour": {
-    "placeholders": { "hour": { "type": "String" } }
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
   },
   "share_photo": "Foto",
   "share_stats_short": "Datos",
@@ -281,7 +303,6 @@
   "consistency_trend": "Evolución de la constancia",
   "by_habit": "Por hábito",
   "ranking": "Ranking",
-  "last_30_days": "Últimos 30 días",
   "active_days": "Días activos",
   "perfect_days": "Días perfectos",
   "per_week": "Por semana",
@@ -391,7 +412,11 @@
   "focus_history_empty_sub": "Aquí aparecerá cada sesión de concentración que termines.",
   "focus_history_day": "{count, plural, =1{1 sesión} other{{count} sesiones}}",
   "@focus_history_day": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "yesterday": "Ayer",
   "notes_hint": "Mantén pulsado un día para ver o añadir notas",
@@ -495,7 +520,9 @@
   "notif_streak": "🔥 racha de {streak} días",
   "@notif_streak": {
     "placeholders": {
-      "streak": { "type": "String" }
+      "streak": {
+        "type": "String"
+      }
     }
   },
   "notif_action_done": "Hecho",
@@ -508,7 +535,9 @@
   "minutes_short": "{value} min",
   "@minutes_short": {
     "placeholders": {
-      "value": { "type": "String" }
+      "value": {
+        "type": "String"
+      }
     }
   },
   "a11y_mark_done": "Marcar {name} como hecho",

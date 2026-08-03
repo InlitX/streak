@@ -1,0 +1,716 @@
+{
+  "@@locale": "ru",
+  "app_tagline": "",
+  "today": "",
+  "stats": "",
+  "settings": "",
+  "new_label": "",
+  "save": "",
+  "cancel": "",
+  "delete": "",
+  "good_morning": "",
+  "good_afternoon": "",
+  "good_evening": "",
+  "no_habits_yet": "",
+  "all_done_today": "",
+  "x_of_y_completed": "",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "",
+  "empty_body": "",
+  "add_habit": "",
+  "all": "",
+  "onb1_title": "",
+  "onb1_body": "",
+  "onb2_title": "",
+  "onb2_body": "",
+  "onb3_title": "",
+  "onb3_body": "",
+  "skip": "",
+  "next": "",
+  "get_started": "",
+  "statistics": "",
+  "done_today": "",
+  "best_streak": "",
+  "active_habits": "",
+  "total_logs": "",
+  "last_7_days": "",
+  "last_30_days": "",
+  "your_habits": "",
+  "stats_empty": "",
+  "completion_rate_short": "",
+  "completion_rate": "",
+  "appearance": "",
+  "theme": "",
+  "system": "",
+  "light": "",
+  "dark": "",
+  "week_starts_on": "",
+  "mon": "",
+  "sat": "",
+  "sun": "",
+  "language": "",
+  "data": "",
+  "export_backup": "",
+  "export_backup_sub": "",
+  "auto_backup": "",
+  "auto_backup_sub": "",
+  "auto_backup_off": "",
+  "auto_backup_daily": "",
+  "auto_backup_weekly": "",
+  "auto_backup_where": "",
+  "auto_backup_folder": "",
+  "auto_backup_folder_default": "",
+  "auto_backup_folder_set": "",
+  "auto_backup_folder_failed": "",
+  "auto_backup_no_permission": "",
+  "auto_backup_run_now": "",
+  "import_backup": "",
+  "import_backup_sub": "",
+  "import_from_app": "",
+  "import_from_app_sub": "",
+  "import_from_app_done": "",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "",
+  "about": "",
+  "backup_saved": "",
+  "export_cancelled": "",
+  "habits_imported": "",
+  "new_habit": "",
+  "edit_habit": "",
+  "name": "",
+  "name_hint": "",
+  "description": "",
+  "description_hint": "",
+  "icon": "",
+  "color": "",
+  "category": "",
+  "category_health": "",
+  "category_fitness": "",
+  "category_mindfulness": "",
+  "category_productivity": "",
+  "category_learning": "",
+  "category_finance": "",
+  "count_days": "",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "habit_kind": "",
+  "kind_positive": "",
+  "kind_negative": "",
+  "kind_quantitative": "",
+  "kind_locked_hint": "",
+  "kind_negative_hint": "",
+  "quant_preset_water": "",
+  "quant_preset_reading": "",
+  "quant_preset_generic": "",
+  "quant_unit_hint": "",
+  "quant_unit_ml": "",
+  "quant_unit_pages": "",
+  "quant_edit_title": "",
+  "quant_daily_goal": "",
+  "quant_tap_amount": "",
+  "frequency": "",
+  "daily": "",
+  "weekly": "",
+  "monthly": "",
+  "sched_days": "",
+  "sched_interval": "",
+  "times_per_week": "",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "",
+  "add_reminder": "",
+  "delete_habit": "",
+  "archive_habit": "",
+  "archive": "",
+  "share_friends": "",
+  "share_friends_sub": "",
+  "share_friends_message": "",
+  "copy_message": "",
+  "message_copied": "",
+  "app_lock": "",
+  "app_lock_sub": "",
+  "app_lock_unavailable": "",
+  "app_lock_failed": "",
+  "app_lock_title": "",
+  "app_lock_unlock": "",
+  "note_photos": "",
+  "note_take_photo": "",
+  "note_pick_photo": "",
+  "journey": "",
+  "journey_sub": "",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "",
+  "journey_empty_sub": "",
+  "archive_habit_body": "",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "",
+  "archived_habits_sub": "",
+  "archived_empty": "",
+  "archived_empty_sub": "",
+  "restore": "",
+  "restored": "",
+  "delete_forever": "",
+  "delete_forever_body": "",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "",
+  "wipe_data": "",
+  "wipe_data_sub": "",
+  "wipe_data_warning": "",
+  "wipe_data_sure": "",
+  "wipe_data_sure_body": "",
+  "wipe_data_confirm": "",
+  "wipe_data_done": "",
+  "day_start": "",
+  "day_start_sub": "",
+  "day_start_midnight": "",
+  "day_start_hour": "",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "",
+  "share_stats_short": "",
+  "undo": "",
+  "habit_archived": "",
+  "share_blur": "",
+  "delete_habit_body": "",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "",
+  "log_relapse_body": "",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "",
+  "permission_required": "",
+  "streaks": "",
+  "activity": "",
+  "current": "",
+  "best": "",
+  "total": "",
+  "relapses": "",
+  "strength": "",
+  "week": "",
+  "month": "",
+  "year": "",
+  "new_reminder": "",
+  "edit_reminder": "",
+  "days": "",
+  "time": "",
+  "save_reminder": "",
+  "select_one_day": "",
+  "every_day": "",
+  "no_days": "",
+  "repeat_weekly": "",
+  "repeat_interval": "",
+  "every_n_days": "",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "",
+  "more_icons": "",
+  "less_icons": "",
+  "completions": "",
+  "completion_time": "",
+  "current_streak": "",
+  "days_active": "",
+  "completions_per_month": "",
+  "overview": "",
+  "preferences": "",
+  "support": "",
+  "profile": "",
+  "about_app": "",
+  "about_app_sub": "",
+  "my_heatmap": "",
+  "my_heatmap_sub": "",
+  "rate_github": "",
+  "rate_github_sub": "",
+  "buy_coffee": "",
+  "buy_coffee_sub": "",
+  "view_source": "",
+  "about_title": "",
+  "about_footer": "",
+  "about_body": "",
+  "close": "",
+  "no_data_yet": "",
+  "import_question_body": "",
+  "import_replace": "",
+  "import_merge": "",
+  "go": "",
+  "motiv_start": "",
+  "motiv_progress": "",
+  "motiv_almost": "",
+  "motiv_perfect": "",
+  "app_background": "",
+  "widgets": "",
+  "customize_widgets": "",
+  "customize_widgets_sub": "",
+  "widget_background": "",
+  "widget_opacity": "",
+  "widget_border": "",
+  "widget_preview": "",
+  "bg_solid": "",
+  "bg_gradient": "",
+  "bg_dots": "",
+  "bg_oled": "",
+  "weekdays": "",
+  "weekends": "",
+  "reminder_message": "",
+  "reminder_message_hint": "",
+  "new_category": "",
+  "edit_category": "",
+  "add_category": "",
+  "delete_category": "",
+  "edit": "",
+  "cover_image": "",
+  "book_cover": "",
+  "add_image": "",
+  "when_best": "",
+  "streak_evolution": "",
+  "consistency": "",
+  "consistency_trend": "",
+  "by_habit": "",
+  "ranking": "",
+  "active_days": "",
+  "perfect_days": "",
+  "per_week": "",
+  "best_month": "",
+  "streak_on": "",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "",
+  "not_enough_data": "",
+  "about_inline": "",
+  "about_subtitle": "",
+  "about_story": "",
+  "made_by": "",
+  "share": "",
+  "share_progress": "",
+  "share_failed": "",
+  "share_swipe_hint": "",
+  "share_background": "",
+  "share_size": "",
+  "share_size_large": "",
+  "share_size_small": "",
+  "share_show_stats": "",
+  "share_save": "",
+  "share_saved": "",
+  "share_save_failed": "",
+  "about_developer": "",
+  "about_credits": "",
+  "about_credits_body": "",
+  "dev_handle": "",
+  "dev_role": "",
+  "notes": "",
+  "notes_enable_sub": "",
+  "add_note": "",
+  "edit_note": "",
+  "view_notes": "",
+  "edit_entry": "",
+  "note_type": "",
+  "note_kind_note": "",
+  "note_kind_planned": "",
+  "note_kind_completed": "",
+  "note_hint": "",
+  "note_time_optional": "",
+  "save_note": "",
+  "notes_empty": "",
+  "delete_note": "",
+  "legend_note_added": "",
+  "tomorrow": "",
+  "notes_count": "",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "",
+  "focus_enable_sub": "",
+  "focus_free_session": "",
+  "focus_duration": "",
+  "focus_start": "",
+  "focus_style": "",
+  "focus_style_digital": "",
+  "focus_style_flip": "",
+  "focus_style_dots": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_total": "",
+  "focus_sessions": "",
+  "focus_stop_title": "",
+  "focus_stop_body": "",
+  "focus_end": "",
+  "focus_pick_habit": "",
+  "focus_scene_custom": "",
+  "unit_hours": "",
+  "unit_minutes": "",
+  "unit_seconds": "",
+  "focus_target_reached": "",
+  "focus_pause": "",
+  "focus_resume": "",
+  "focus_sound": "",
+  "focus_pick_audio": "",
+  "focus_no_sound": "",
+  "focus_tasks": "",
+  "focus_custom_duration": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "",
+  "focus_end_keep": "",
+  "focus_end_anyway": "",
+  "focus_end_complete": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "",
+  "focus_track_rain": "",
+  "focus_track_brown": "",
+  "focus_track_pad": "",
+  "focus_add_track": "",
+  "focus_shuffle": "",
+  "focus_loop": "",
+  "focus_track_too_long": "",
+  "focus_track_limit": "",
+  "focus_done_title": "",
+  "focus_your_tracks": "",
+  "focus_built_in": "",
+  "unit_min_short": "",
+  "focus_notif_body": "",
+  "focus_scene_black": "",
+  "focus_pomodoro": "",
+  "focus_pomodoro_sub": "",
+  "focus_break": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_daily_goal": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_keep_awake": "",
+  "focus_images_limit": "",
+  "focus_history": "",
+  "focus_history_empty": "",
+  "focus_history_empty_sub": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "",
+  "notes_hint": "",
+  "app_style": "",
+  "app_style_sub": "",
+  "style_classic": "",
+  "style_minimal": "",
+  "style_classic_desc": "",
+  "style_minimal_desc": "",
+  "appearance_sub": "",
+  "preferences_sub": "",
+  "data_sub": "",
+  "about_sub": "",
+  "support_sub": "",
+  "check_style": "",
+  "square": "",
+  "circle": "",
+  "github_star_row": "",
+  "icons_tab": "",
+  "emojis_tab": "",
+  "report_bug": "",
+  "request_feature": "",
+  "advanced_options": "",
+  "default_user": "",
+  "your_name": "",
+  "edit_name": "",
+  "change_photo": "",
+  "remove_photo": "",
+  "notif_greeting": "",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "",
+  "icon_default": "",
+  "icon_neutral": "",
+  "icon_accent": "",
+  "custom": "",
+  "see_more": "",
+  "see_less": "",
+  "colors_tab": "",
+  "reorder": "",
+  "reorder_hint": "",
+  "done": "",
+  "accent_color": "",
+  "sort_completed_last": "",
+  "today_only": "",
+  "on": "",
+  "off": "",
+  "checklist": "",
+  "checklist_hint": "",
+  "add_step": "",
+  "step_hint": "",
+  "todays_checklist": "",
+  "steps_done": "",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_mode": "",
+  "vacation_on_desc": "",
+  "vacation_off_desc": "",
+  "paused": "",
+  "start_vacation": "",
+  "end_vacation": "",
+  "vacation_day_on": "",
+  "vacation_day_off": "",
+  "widget_no_habits": "",
+  "widget_no_data": "",
+  "widget_open_to_sync": "",
+  "widget_activity": "",
+  "widget_today_progress": "",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_done_today": "",
+  "widget_best_streak": "",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_title": "",
+  "widget_cfg_color": "",
+  "widget_cfg_image": "",
+  "widget_cfg_choose_image": "",
+  "widget_cfg_change_image": "",
+  "widget_cfg_custom_color": "",
+  "widget_cfg_opacity": "",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_border": "",
+  "widget_cfg_thickness": "",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_show_activity": "",
+  "widget_cfg_dot_color": "",
+  "widget_cfg_style": "",
+  "widget_cfg_style_classic": "",
+  "widget_cfg_style_card": "",
+  "widget_cfg_all_habits": "",
+  "widget_cfg_save": "",
+  "widget_cfg_add": "",
+  "widget_cfg_reset": "",
+  "widget_cfg_hue": "",
+  "widget_cfg_saturation": "",
+  "widget_cfg_brightness": "",
+  "widget_demo_read": "",
+  "widget_demo_run": "",
+  "widget_demo_water": "",
+  "notif_streak": "",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_done": "",
+  "notif_action_snooze": "",
+  "notif_action_add": "",
+  "notif_action_add_hint": "",
+  "snooze_duration": "",
+  "snooze_custom": "",
+  "snooze_custom_hint": "",
+  "minutes_short": "",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
+}

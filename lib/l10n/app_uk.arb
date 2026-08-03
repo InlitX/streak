@@ -1,0 +1,715 @@
+{
+  "request_feature": "Запропонувати функцію",
+  "widget_cfg_brightness": "Яскравість",
+  "motiv_almost": "Майже на місці! Ще зовсім трохи",
+  "about_story": "Цей застосунок з’явився через розчарування в наявних відстежувачах звичок. Більшість із них обмежують кількість звичок, які можна створити, ховають базові функції за платним доступом, стежать за вами або закидають рекламою. Тому я вирішив створити Streak: повністю безоплатний, без реклами, без платежів і без відстеження. Усе працює локально — ваші дані належать тільки вам. Відкритий код, без жодних підступів.",
+  "about_app": "Про цей застосунок",
+  "description_hint": "Додаткова примітка",
+  "times_per_month": "{n} разів на місяць",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "app_background": "Тло",
+  "onb2_body": "Щоденні, тижневі або місячні цілі з розумними нагадуваннями, щоби нічого не було згаяно.",
+  "month": "Місяць",
+  "quant_preset_reading": "Читання",
+  "your_habits": "Ваші звички",
+  "about_subtitle": "За кожен день твоїх невтомних зусиль.",
+  "close": "Закрити",
+  "current": "Поточна",
+  "streak_off": "💪 Сьогодні ти можеш розпочати нову серію",
+  "save": "Зберегти",
+  "completion_rate_short": "Послідовність",
+  "widget_today_progress": "Сьогодні  {done} / {total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "my_heatmap": "Моя мапа інтенсивності",
+  "notif_streak": "🔥 {streak}-денна серія",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "new_category": "Нова категорія",
+  "onb1_body": "Фіксуйте звичку одним дотиком і спостерігайте, як ваші успіхи зростають день за днем.",
+  "kind_negative_hint": "Дні автоматично зараховуються як «чисті», тож ваша серія триває без зайвих дій. Відмічайте день лише тоді, коли стався зрив: він зафарбується червоним, але це можна буде виправити.",
+  "monthly": "Щомісяця",
+  "view_source": "Переглянути джерело на GitHub",
+  "add_image": "Додати зображення",
+  "consistency_trend": "Тенденція до послідовності",
+  "widget_cfg_change_image": "Змінити зображення",
+  "freq_per_month_short": "{n} р. / місяць",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "days_active": "Днів активності",
+  "remove_photo": "Видалити фото",
+  "widget_activity": "Активність",
+  "about_inline": "Streak — це застосунок із відкритим кодом для відстеження ваших звичок. Жодних обліковок, жодних обмежень, жодних оплат. Усе залишається у вашому телефоні.\n\nБудь-хто може переглянути код, покращити його або вільно використовувати.",
+  "widget_cfg_border": "Межа",
+  "ranking": "Рейтинг",
+  "count_months": "{count, plural, one{{count} місяць} few{{count} місяці} many{{count} місяців} other{{count} місяця}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accent_color": "Акцентний колір",
+  "notif_action_add_hint": "Як багато?",
+  "today_only": "Лише сьогоднішні звички",
+  "add_step": "Додати крок",
+  "every_day": "Кожен день",
+  "weekends": "Вихідні",
+  "per_week": "На тиждень",
+  "get_started": "Розпочати",
+  "snooze_custom_hint": "Хвилин",
+  "bg_solid": "Суцільне",
+  "steps_done": "{done} / {total} кроків",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "good_evening": "Доброго вечора",
+  "your_name": "Ваше ім’я",
+  "edit_habit": "Редагувати звичку",
+  "onb2_title": "Не збивайтеся з курсу",
+  "good_afternoon": "Доброго дня",
+  "total_logs": "Усього журналів",
+  "add_reminder": "Додати нагадування",
+  "backup_saved": "Резервну копію збережено",
+  "widget_opacity": "Непрозорість",
+  "vacation_mode": "Режим відпочинку",
+  "last_30_days": "Останні 30 днів",
+  "bg_oled": "OLED",
+  "stats_empty": "Додайте звички, щоби побачити свою статистику",
+  "when_best": "Коли ви найбільш послідовні?",
+  "next": "Наступна",
+  "widget_preview": "Передперегляд",
+  "completion_time": "Час завершення",
+  "category_fitness": "Фітнес",
+  "import_question_body": "Замінити всі ваші поточні звички резервною копією чи об’єднати їх?",
+  "widget_done_today": "зроблено сьогодні",
+  "checklist_hint": "Розбийте звичку на кроки. Вона вважається виконаною лише тоді, коли кожен крок відмічено.",
+  "active_habits": "Активні звички",
+  "share_failed": "Не вдалося створити зображення",
+  "new_reminder": "Нове нагадування",
+  "quant_daily_goal": "Денна ціль",
+  "import_merge": "Об’єднати",
+  "relapses": "Зриви",
+  "share_progress": "Поділитися поступом",
+  "total": "Усього",
+  "best": "Найкраща",
+  "all": "Усі",
+  "dev_role": "Інді-розробник · Streak",
+  "icon": "Значок",
+  "vacation_off_desc": "Призупиняє цю звичку. Пропущені дні не перервуть вашу серію.",
+  "import_backup": "Імпортувати резервну копію",
+  "book_cover": "Обкладинка книги",
+  "days": "Днів",
+  "widget_background": "Колір тла",
+  "activity": "Активність",
+  "freq_per_week_short": "{n} р. / тиждень",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "motiv_perfect": "Бомбезний день! 🔥",
+  "on": "Увімк",
+  "add_habit": "Додати звичку",
+  "edit": "Редагувати",
+  "not_enough_data": "Поки замало даних",
+  "widget_no_habits": "Звичок ще немає\nТоркніться, щоб відкрити Streak",
+  "quant_unit_hint": "Міра (наприклад, мл, сторінки, повторення)",
+  "quant_preset_water": "Вода",
+  "theme": "Тема",
+  "year": "Рік",
+  "import_backup_sub": "Відновити звички з файлу",
+  "about_app_sub": "Версія, автори та вихідний код",
+  "appearance": "Вигляд",
+  "empty_title": "Розпочніть першу серію",
+  "strength": "Сила",
+  "default_user": "Inlitx",
+  "description": "Опис",
+  "count_days": "{count, plural, one {{count} день} few {{count} дні} many {{count} днів} other {{count} днів}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_days": "Днів",
+  "circle": "Коло",
+  "buy_coffee": "Придбати мені кави",
+  "sort_completed_last": "Завершено останньою",
+  "name": "Назва",
+  "edit_category": "Редагувати категорію",
+  "save_reminder": "Зберегти нагадування",
+  "app_icon": "Значок застосунку",
+  "export_backup_sub": "Зберегти всі звички у файл",
+  "preferences": "Налаштування",
+  "icon_neutral": "Зелений",
+  "off": "Вимк",
+  "widget_cfg_color": "Колір",
+  "widget_border": "Межа",
+  "light": "Світла",
+  "square": "Квадрат",
+  "kind_negative": "Кинути",
+  "habit_kind": "Тип звички",
+  "icon_default": "Типово",
+  "widget_demo_read": "Читати",
+  "import_failed": "Не вдалося імпортувати цей файл",
+  "about_credits_body": "Створено за допомогою Flutter. Значки від Lucide. Графіки від fl_chart. Використано шрифти Figtree та Playfair Display.",
+  "category_health": "Здоров’я",
+  "category_mindfulness": "Повнота усвідомлення",
+  "permission_required": "Необхідно надати дозвіл на сповіщення",
+  "about_developer": "Розробник",
+  "widget_cfg_saturation": "Насиченість",
+  "customize_widgets_sub": "Тло, непрозорість, межа",
+  "select_one_day": "Оберіть принаймні один день",
+  "add_category": "Нова",
+  "about_credits": "Автори",
+  "category_learning": "Навчання",
+  "count_weeks": "{count, plural, one{{count} тиждень} few{{count} тижні} many {{count} тижнів} other{{count} тижнів}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snooze_duration": "Відкласти на",
+  "delete_habit": "Видалити звичку",
+  "delete": "Видалити",
+  "times_per_week": "{n} разів на тиждень",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "end_vacation": "Закінчити відпочинок",
+  "notif_greeting": "Привіт, {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dev_handle": "@inlitx",
+  "support": "Підтримка",
+  "weekdays": "Будні",
+  "data": "Дані",
+  "best_streak": "Найкраща серія",
+  "log_relapse_body": "Це перериває сьогоднішню серію чистоти для користувача «{name}». Ви можете скасувати це, натиснувши ще раз.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onb1_title": "Створюйте справжні серії",
+  "frequency": "Частота",
+  "import_replace": "Замінити всі",
+  "no_habits_yet": "Звички відсутні",
+  "made_by": "Зроблено з ❤️ @inlitx",
+  "reminder_message_hint": "Залиште порожнім, щоб отримати мотиваційну цитату",
+  "widget_cfg_hue": "Відтінок",
+  "delete_habit_body": "Видалити «{name}»? Цю дію неможливо скасувати.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_reminder": "Редагувати нагадування",
+  "widget_cfg_style": "Стиль",
+  "completions_per_month": "Завершень / місяць",
+  "customize_widgets": "Персоналізувати віджети",
+  "new_label": "Нова",
+  "cover_image": "Обкладинка",
+  "empty_body": "Створіть звичку та натискайте на день, аби зафіксувати її. Маленькі кроки, щодня.",
+  "current_streak": "Поточна серія",
+  "notif_action_snooze": "Відкласти",
+  "paused": "Призупинено",
+  "new_habit": "Нова звичка",
+  "widget_demo_water": "Вода",
+  "step_hint": "Назва кроку",
+  "skip": "Пропустити",
+  "buy_coffee_sub": "Допоможіть застосунку залишатися безоплатним",
+  "bg_dots": "Крапки",
+  "snooze_custom": "Власний",
+  "perfect_days": "Ідеальні дні",
+  "kind_quantitative": "Кількість",
+  "widget_best_streak": "🔥 {streak} найкраща серія",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_evolution": "Еволюція серії",
+  "notif_action_add": "Додати кількість",
+  "week_starts_on": "Тиждень починається з",
+  "minutes_short": "{value} хв",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "Колір крапки",
+  "daily": "Щодня",
+  "widget_cfg_style_card": "Картка",
+  "bg_gradient": "Градієнт",
+  "rate_github_sub": "Підтримайте проєкт зірочкою",
+  "no_data_yet": "Поки що без даних",
+  "about": "Про застосунок",
+  "widget_cfg_choose_image": "Обрати зображення",
+  "see_more": "Докладніше",
+  "app_tagline": "Відстежувач звичок",
+  "last_7_days": "Останні 7 днів",
+  "about_footer": "Зроблено з ☕ та великою кількістю вільного часу.",
+  "habits_imported": "Звички імпортовано",
+  "mon": "Пн",
+  "quant_unit_ml": "мл",
+  "streaks": "Серії",
+  "widget_demo_run": "Запустити",
+  "widget_cfg_style_classic": "Класичний",
+  "quant_edit_title": "Сьогоднішня кількість",
+  "reminder_message": "Повідомлення (необов’язково)",
+  "streak_on": "🔥 {n} днів поспіль. Не переривай серію!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "export_cancelled": "Експорт скасовано",
+  "widget_cfg_all_habits": "Усі звички",
+  "motiv_progress": "Ти на правильному шляху, так тримати",
+  "advanced_options": "Додаткові параметри",
+  "kind_locked_hint": "Тип неможливо змінити після створення звички.",
+  "reorder": "Змінити порядок",
+  "widget_cfg_image": "Зображення",
+  "rate_github": "Поставити зірку на GitHub",
+  "dark": "Темна",
+  "widget_cfg_opacity": "Непрозорість  {value} %",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "import_from_app": "Імпортувати з іншого застосунку",
+  "name_hint": "Наприклад: Ранкова пробіжка",
+  "cancel": "Скасувати",
+  "import_from_app_done": "Імпортовано {habits} звичок ({days} днів) із {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "good_morning": "Доброго ранку",
+  "export_backup": "Експортувати резервну копію",
+  "quant_tap_amount": "Кількість за один дотик",
+  "log_relapse_confirm": "Так, зафіксувати",
+  "icons_tab": "Значки",
+  "uncategorized": "Без категорії",
+  "github_star_row": "Переглянути вихідний код і поставити зірочку",
+  "reorder_hint": "Перетягніть звички, щоб змінити їхній порядок",
+  "edit_name": "Змінити ім’я",
+  "category_finance": "Фінанси",
+  "onb3_title": "Перегляньте свій поступ",
+  "no_days": "Жодного дня",
+  "checklist": "Перелік пунктів",
+  "language": "Мова",
+  "sat": "Сб",
+  "notif_action_done": "Завершено",
+  "widget_no_data": "Даних ще немає\nВідкрийте Streak для синхронізації",
+  "weekly": "Щотижня",
+  "best_month": "Найкращий місяць",
+  "all_done_today": "На сьогодні все!",
+  "overview": "Огляд",
+  "consistency": "Послідовність",
+  "kind_positive": "Проста",
+  "repeat_weekly": "Певні дні",
+  "widget_cfg_title": "Персоналізація віджета",
+  "report_bug": "Повідомити про помилку",
+  "week": "Тиждень",
+  "onb3_body": "Детальна статистика та річна сітка наочно показують, якого поступу ви досягли.",
+  "more_icons": "Більше значків",
+  "delete_category": "Видалити категорію",
+  "widgets": "Віджети",
+  "widget_open_to_sync": "Відкрийте Streak для синхронізації",
+  "settings": "Налаштування",
+  "check_style": "Перевірити стиль",
+  "widget_cfg_custom_color": "Власний колір",
+  "todays_checklist": "Сьогоднішній перелік пунктів",
+  "go": "Уперед",
+  "quant_preset_generic": "Власний",
+  "x_of_y_completed": "Виконано {done} з {total}",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "completion_rate": "Показник завершення",
+  "completions": "Завершені",
+  "colors_tab": "Кольори",
+  "by_habit": "За звичкою",
+  "category": "Категорія",
+  "category_productivity": "Продуктивність",
+  "system": "Як у системі",
+  "less_icons": "Менше значків",
+  "my_heatmap_sub": "Відкрити сітку річної активності",
+  "quant_unit_pages": "сторінки",
+  "share": "Поділитися",
+  "sun": "Нд",
+  "motiv_start": "Почни день бадьоро 💪",
+  "about_body": "Streak народився з простої ідеї: навіщо платити за відстеження власних звичок?\n\nЦей застосунок має повністю відкритий вихідний код. Будь-хто може побачити, як саме він працює, запропонувати покращення або навіть створити власну версію. Жодних «чорних скриньок». Жодних сюрпризів.\n\nВаша приватність абсолютна — все залишається у вашому телефоні. Жодних обліковок, жодних серверів, жодної реклами. Жоден байт не покидає ваш пристрій.\n\nБез обмежень. Створюйте стільки звичок, скільки забажаєте. Жодних підписок, жодних «про-версій», жодних спливних вікон із проханням заплатити. Ніколи.\n\nЯкщо застосунок приносить вам користь, ви можете підтримати його зірочкою на GitHub або пригостити мене кавою. Але це цілком необов’язково — застосунок залишається вашим у будь-якому разі.",
+  "done_today": "Виконано сьогодні",
+  "widget_cfg_reset": "Скинути до типових",
+  "time": "Час",
+  "widget_cfg_thickness": "Товщина  {value} dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "every_n_days": "Кожні {n} днів",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "log_relapse_title": "Зафіксувати зрив?",
+  "custom": "Власний",
+  "about_title": "Створено для вас. Безоплатно, назавжди.",
+  "repeat_interval": "Кожні N днів",
+  "color": "Колір",
+  "widget_cfg_add": "Додати віджет",
+  "emojis_tab": "Емоджі",
+  "sched_interval": "Інтервал",
+  "change_photo": "Змінити фото",
+  "today": "Сьогодні",
+  "widget_cfg_show_activity": "Показати активність",
+  "vacation_on_desc": "Призупинено — ці дні не будуть зараховані як пропущені або виконані.",
+  "profile": "Профіль",
+  "widget_cfg_save": "Зберегти",
+  "start_vacation": "Почати відпочинок",
+  "done": "Готово",
+  "reminders": "Нагадування",
+  "active_days": "Активні дні",
+  "focus_end_keep": "",
+  "share_friends_sub": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "",
+  "auto_backup_run_now": "",
+  "wipe_data_sub": "",
+  "focus_your_tracks": "",
+  "message_copied": "",
+  "share_background": "",
+  "focus_sessions": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "",
+  "archived_empty_sub": "",
+  "wipe_data_sure": "",
+  "day_start_hour": "",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "delete_note": "",
+  "archive_habit_body": "",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_anyway": "",
+  "focus_custom_duration": "",
+  "focus_tasks": "",
+  "style_classic": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "",
+  "share_show_stats": "",
+  "about_sub": "",
+  "focus_track_pad": "",
+  "style_classic_desc": "",
+  "focus_history": "",
+  "save_note": "",
+  "focus_end_complete": "",
+  "archived_empty": "",
+  "focus_scene_black": "",
+  "share_swipe_hint": "",
+  "focus_free_session": "",
+  "day_start_midnight": "",
+  "share_size": "",
+  "focus_track_too_long": "",
+  "focus_style_dots": "",
+  "journey_empty": "",
+  "share_stats_short": "",
+  "share_save": "",
+  "app_style_sub": "",
+  "app_lock_sub": "",
+  "auto_backup_daily": "",
+  "restore": "",
+  "preferences_sub": "",
+  "auto_backup_no_permission": "",
+  "focus_built_in": "",
+  "focus_sound": "",
+  "add_note": "",
+  "share_photo": "",
+  "note_kind_planned": "",
+  "share_saved": "",
+  "wipe_data_confirm": "",
+  "unit_minutes": "",
+  "share_blur": "",
+  "focus_end_reached": "",
+  "focus_personalize": "",
+  "focus_history_empty": "",
+  "unit_seconds": "",
+  "focus_enable_sub": "",
+  "focus_shuffle": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_entry": "",
+  "delete_forever_body": "",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_add_track": "",
+  "notes": "",
+  "focus_no_sound": "",
+  "wipe_data": "",
+  "auto_backup_weekly": "",
+  "app_style": "",
+  "wipe_data_done": "",
+  "focus_pick_habit": "",
+  "unit_min_short": "",
+  "day_start": "",
+  "note_take_photo": "",
+  "delete_forever": "",
+  "auto_backup_folder_failed": "",
+  "note_hint": "",
+  "focus_style_digital": "",
+  "focus_stop_body": "",
+  "app_lock_unlock": "",
+  "auto_backup_folder_default": "",
+  "tomorrow": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "journey": "",
+  "focus_target_reached": "",
+  "share_friends_message": "",
+  "note_kind_completed": "",
+  "focus_break": "",
+  "undo": "",
+  "focus_style": "",
+  "support_sub": "",
+  "note_type": "",
+  "focus_scene_custom": "",
+  "journey_sub": "",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "",
+  "wipe_data_warning": "",
+  "auto_backup_where": "",
+  "archived_habits_sub": "",
+  "note_kind_note": "",
+  "focus_pomodoro_sub": "",
+  "focus_duration": "",
+  "focus_images_limit": "",
+  "edit_note": "",
+  "notes_hint": "",
+  "focus_total": "",
+  "share_size_large": "",
+  "share_size_small": "",
+  "yesterday": "",
+  "focus_resume": "",
+  "app_lock_title": "",
+  "archived_habits": "",
+  "restored": "",
+  "see_less": "",
+  "habit_archived": "",
+  "share_friends": "",
+  "auto_backup_off": "",
+  "journey_empty_sub": "",
+  "auto_backup_folder": "",
+  "focus_end": "",
+  "focus_pick_audio": "",
+  "focus_history_empty_sub": "",
+  "auto_backup_sub": "",
+  "share_save_failed": "",
+  "focus_done_title": "",
+  "note_pick_photo": "",
+  "notes_count": "",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "app_lock_failed": "",
+  "focus_style_flip": "",
+  "legend_note_added": "",
+  "style_minimal": "",
+  "vacation_day_on": "",
+  "auto_backup": "",
+  "day_start_sub": "",
+  "focus_notif_body": "",
+  "app_lock_unavailable": "",
+  "auto_backup_folder_set": "",
+  "archive_habit": "",
+  "focus_track_limit": "",
+  "style_minimal_desc": "",
+  "focus_keep_awake": "",
+  "data_sub": "",
+  "note_time_optional": "",
+  "focus_pause": "",
+  "focus_track_rain": "",
+  "unit_hours": "",
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_enable_sub": "",
+  "wipe_data_sure_body": "",
+  "archive": "",
+  "focus_start": "",
+  "focus_stop_title": "",
+  "vacation_day_off": "",
+  "app_lock": "",
+  "deleted_forever": "",
+  "focus_loop": "",
+  "focus_daily_goal": "",
+  "copy_message": "",
+  "view_notes": "",
+  "focus_track_brown": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "appearance_sub": "",
+  "stats": "Статистика",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "statistics": "Статистика",
+  "icon_accent": "Триколор"
+}

@@ -49,8 +49,8 @@
   "appearance": "外观",
   "theme": "主题",
   "system": "系统",
-  "light": "浅色模式",
-  "dark": "深色模式",
+  "light": "浅色",
+  "dark": "深色",
   "week_starts_on": "每周起始于",
   "mon": "周一",
   "sat": "周六",
@@ -103,7 +103,7 @@
   "habit_kind": "习惯类型",
   "kind_positive": "普通",
   "kind_negative": "戒除",
-  "kind_quantitative": "数量",
+  "kind_quantitative": "可量化",
   "kind_locked_hint": "创建习惯后，类型无法修改。",
   "kind_negative_hint": "默认每日达标，连续天数自动累积。点击打卡视为破戒，当日会标红，支持撤销操作。",
   "quant_preset_water": "水",
@@ -271,7 +271,7 @@
       }
     }
   },
-  "streak_off": "💪 今天你可以开启新一轮连续打卡",
+  "streak_off": "💪 今日你可以开启新的连续打卡",
   "not_enough_data": "暂无足够数据",
   "about_inline": "Streak 是一款用于追踪习惯的开源应用。无需注册账号、没有功能限制、无需付费。所有数据仅保存在你的手机本地。\n\n任何人都可以查看源代码、进行优化，或是自由使用。",
   "about_subtitle": "致你全力以赴的每一天。",
@@ -290,7 +290,7 @@
   "circle": "圆形",
   "github_star_row": "查看源码并点亮 Star",
   "icons_tab": "图标",
-  "emojis_tab": "Emojis",
+  "emojis_tab": "表情符号",
   "report_bug": "反馈 Bug",
   "request_feature": "功能建议",
   "advanced_options": "高级选项",
@@ -318,7 +318,7 @@
   "reorder_hint": "拖动习惯进行排序",
   "done": "完成",
   "accent_color": "强调色",
-  "sort_completed_last": "最后完成",
+  "sort_completed_last": "完成项置底",
   "on": "开启",
   "off": "关闭",
   "checklist": "清单",
@@ -342,5 +342,353 @@
   "vacation_off_desc": "暂停该习惯，跳过的日期不会中断你的连续打卡记录。",
   "paused": "已暂停",
   "start_vacation": "开始休假",
-  "end_vacation": "结束休假"
+  "end_vacation": "结束休假",
+  "widget_cfg_brightness": "亮度",
+  "focus_end_keep": "继续保持",
+  "share_friends_sub": "发送应用",
+  "focus_saved": "已记录 {time}",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "照片",
+  "auto_backup_run_now": "立即备份",
+  "wipe_data_sub": "习惯、笔记、专注记录和设置",
+  "focus_your_tracks": "你的音频",
+  "completion_rate_short": "持续",
+  "widget_today_progress": "今日  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "🔥连续打卡 {streak} 天",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "message_copied": "消息已复制",
+  "share_background": "背景",
+  "focus_sessions": "次数",
+  "focus_amount_added": "{amount} 已添加至 {habit}",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "当日暂无笔记",
+  "consistency_trend": "连续打卡趋势",
+  "archived_empty_sub": "你删除的习惯会存放在这里，历史记录一并保留。",
+  "widget_cfg_change_image": "更换图片",
+  "wipe_data_sure": "确定要清除所有数据吗？",
+  "day_start_hour": "上午{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_activity": "打卡记录",
+  "widget_cfg_border": "边框",
+  "ranking": "排行榜",
+  "delete_note": "删除笔记",
+  "notif_action_add_hint": "多少？",
+  "today_only": "仅显示今日习惯",
+  "archive_habit_body": "确定将\"{name}\"归档吗？该习惯的历史记录会完整保留，你可在设置页恢复它。",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "per_week": "每周",
+  "focus_end_anyway": "仍要结束",
+  "snooze_custom_hint": "分钟",
+  "focus_custom_duration": "自定义",
+  "focus_tasks": "子任务列表",
+  "style_classic": "经典",
+  "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "番茄钟",
+  "share_show_stats": "显示统计",
+  "about_sub": "版本、源代码与支持",
+  "focus_track_pad": "温暖氛围音",
+  "style_classic_desc": "习惯列表、底部栏和所有设置同屏显示。",
+  "focus_history": "历史",
+  "save_note": "保存笔记",
+  "focus_end_complete": "标记已完成",
+  "widget_done_today": "今日已完成",
+  "archived_empty": "暂无已归档习惯",
+  "focus_scene_black": "黑色",
+  "share_swipe_hint": "滑动卡片以切换日期",
+  "focus_free_session": "自由计时",
+  "day_start_midnight": "凌晨",
+  "share_size": "大小",
+  "focus_track_too_long": "音频时长不得超过 20 分钟",
+  "focus_style_dots": "圆点",
+  "journey_empty": "暂无照片",
+  "share_stats_short": "统计",
+  "share_save": "保存",
+  "app_style_sub": "选择应用的整体外观与风格。",
+  "app_lock_sub": "使用指纹或面容解锁 Streak",
+  "auto_backup_daily": "每日",
+  "restore": "恢复",
+  "preferences_sub": "语言、星期与排序",
+  "auto_backup_no_permission": "存储权限被拒绝",
+  "focus_built_in": "已包含",
+  "widget_no_habits": "暂无习惯\n点击打开 Streak",
+  "focus_sound": "声音",
+  "add_note": "添加笔记",
+  "share_photo": "照片",
+  "note_kind_planned": "计划中",
+  "share_saved": "已保存到相册",
+  "wipe_data_confirm": "全部清除",
+  "unit_minutes": "分钟",
+  "share_blur": "模糊",
+  "focus_end_reached": "目标达成，习惯已标记完成。",
+  "focus_personalize": "自定义",
+  "focus_history_empty": "暂无专注记录",
+  "widget_cfg_color": "颜色",
+  "unit_seconds": "秒",
+  "focus_enable_sub": "为需要计时的习惯提供计时器",
+  "focus_shuffle": "随机播放",
+  "focus_goal_today": "今日 {done} / {goal}",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_entry": "编辑记录",
+  "widget_demo_read": "阅读",
+  "widget_cfg_saturation": "饱和度",
+  "delete_forever_body": "确定永久删除\"{name}\"及其全部历史记录吗？此操作无法撤销。",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_add_track": "添加音频",
+  "snooze_duration": "暂缓持续",
+  "notes": "笔记",
+  "focus_no_sound": "尚未选择音频曲目",
+  "wipe_data": "清除全部数据",
+  "auto_backup_weekly": "每周",
+  "app_style": "应用风格",
+  "wipe_data_done": "所有数据已清除",
+  "focus_pick_habit": "你正在专注做什么？",
+  "widget_cfg_hue": "色相",
+  "unit_min_short": "分钟",
+  "widget_cfg_style": "样式",
+  "day_start": "每日起始时间",
+  "notif_action_snooze": "暂缓",
+  "widget_demo_water": "水",
+  "note_take_photo": "相机",
+  "delete_forever": "永久删除",
+  "snooze_custom": "自定义",
+  "auto_backup_folder_failed": "无法对此文件夹执行写入操作",
+  "note_hint": "写笔记...",
+  "focus_style_digital": "圆形",
+  "focus_stop_body": "时间始终会保存，但习惯需达到目标时长才算完成。",
+  "app_lock_unlock": "解锁",
+  "auto_backup_folder_default": "应用文件夹",
+  "tomorrow": "明天",
+  "perfect_days": "完美天数",
+  "focus_round": "第 {n} 轮",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_best_streak": "🔥 {streak} 最高连续",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "journey": "旅程",
+  "notif_action_add": "添加可量化",
+  "minutes_short": "{value} 分",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "圆点颜色",
+  "widget_cfg_style_card": "卡片",
+  "focus_target_reached": "目标已达成",
+  "share_friends_message": "我用 Streak 保持习惯连续打卡——一款小巧、免费、无需账号、无广告的离线习惯追踪器。快来创建你的习惯：https://inlitx.github.io/streak/",
+  "note_kind_completed": "已完成",
+  "focus_break": "休息",
+  "widget_cfg_choose_image": "选择图片",
+  "undo": "撤销",
+  "focus_style": "计时器样式",
+  "support_sub": "报告问题或请求功能",
+  "note_type": "类型",
+  "focus_scene_custom": "你的图片",
+  "journey_sub": "{count, plural, =1{1 照片} other{{count} 照片}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "专注",
+  "wipe_data_warning": "此操作将删除此手机上的所有习惯、笔记、专注记录和设置。该操作无法撤销，除非您有可导入的备份文件。",
+  "auto_backup_where": "打开应用时会自动创建完整备份，仅保留最近 5 个备份。",
+  "widget_demo_run": "跑步",
+  "widget_cfg_style_classic": "经典",
+  "archived_habits_sub": "可恢复或永久删除",
+  "note_kind_note": "笔记",
+  "widget_cfg_all_habits": "全部习惯",
+  "focus_pomodoro_sub": "串联多个专注时段，中间安排短休息",
+  "focus_duration": "时长",
+  "widget_cfg_image": "图片",
+  "focus_images_limit": "最多10张图片",
+  "edit_note": "编辑笔记",
+  "notes_hint": "长按某一天即可查看或添加笔记",
+  "focus_total": "专注时间",
+  "widget_cfg_opacity": "不透明度  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "share_size_large": "高",
+  "share_size_small": "方形",
+  "yesterday": "昨日",
+  "focus_resume": "继续",
+  "app_lock_title": "Streak 已锁定",
+  "archived_habits": "已归档习惯",
+  "restored": "习惯已恢复",
+  "see_less": "收起",
+  "habit_archived": "习惯已归档",
+  "share_friends": "分享给朋友",
+  "auto_backup_off": "关闭",
+  "journey_empty_sub": "将照片添加到笔记中，它会显示在这里。",
+  "auto_backup_folder": "文件夹",
+  "focus_end": "结束",
+  "focus_pick_audio": "从手机选择音频",
+  "notif_action_done": "已完成",
+  "focus_history_empty_sub": "你完成的每次专注记录都会显示在这里。",
+  "widget_no_data": "暂无数据\n打开 Streak 进行同步",
+  "auto_backup_sub": "关闭",
+  "best_month": "最佳月份",
+  "share_save_failed": "无法保存图片",
+  "consistency": "持续",
+  "focus_done_title": "计时完成",
+  "note_pick_photo": "相册",
+  "widget_cfg_title": "自定义小组件",
+  "notes_count": "{count, plural, =1{1 笔记} other{{count} 笔记}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "app_lock_failed": "无法验证您的身份",
+  "focus_style_flip": "翻页",
+  "legend_note_added": "笔记已添加",
+  "style_minimal": "简约",
+  "vacation_day_on": "标记为假期",
+  "auto_backup": "自动备份",
+  "day_start_sub": "深夜完成的习惯仍计入前一天",
+  "focus_notif_body": "你的专注计时已结束，做得好！",
+  "app_lock_unavailable": "此手机未设置生物识别",
+  "auto_backup_folder_set": "文件夹已保存",
+  "widget_open_to_sync": "打开 Streak 进行同步",
+  "archive_habit": "归档习惯",
+  "focus_track_limit": "最多 10 首音频",
+  "style_minimal_desc": "习惯网格和设置被分为四个板块。",
+  "focus_keep_awake": "保持屏幕常亮",
+  "data_sub": "备份与导入",
+  "note_time_optional": "时间（可选）",
+  "widget_cfg_custom_color": "自定义颜色",
+  "focus_pause": "暂停",
+  "focus_track_rain": "雨声",
+  "unit_hours": "小时",
+  "focus_end_tasks": "还有 {count} 项任务未勾选。",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_enable_sub": "给习惯的任意日期附加笔记",
+  "wipe_data_sure_body": "最后警告。若未备份，数据将彻底删除。",
+  "archive": "归档",
+  "focus_start": "开始计时",
+  "focus_stop_title": "结束计时?",
+  "vacation_day_off": "取消假期",
+  "app_lock": "应用锁",
+  "by_habit": "出于习惯",
+  "deleted_forever": "习惯已删除",
+  "focus_loop": "顺序播放",
+  "focus_daily_goal": "每日专注目标",
+  "copy_message": "复制消息",
+  "widget_cfg_reset": "恢复默认设置",
+  "widget_cfg_thickness": "粗细  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "view_notes": "查看笔记",
+  "focus_track_brown": "布朗噪声",
+  "focus_end_short": "距离目标还差{time}。",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_add": "添加小组件",
+  "appearance_sub": "主题、强调色和背景",
+  "widget_cfg_show_activity": "展示对应习惯的打卡记录",
+  "widget_cfg_save": "保存",
+  "active_days": "活跃天数"
 }
