@@ -695,5 +695,21 @@
   "start_vacation": "",
   "done": "",
   "reminders": "",
-  "active_days": ""
+  "active_days": "",
+  "save": "Simpan",
+  "good_evening": "Selamat malam",
+  "good_afternoon": "Selamat sore",
+  "all": "Semua",
+  "theme": "Tema",
+  "light": "Terang",
+  "delete": "Hapus",
+  "new_label": "Baru",
+  "dark": "Gelap",
+  "cancel": "Batal",
+  "good_morning": "Selamat pagi",
+  "statistics": "Statistik",
+  "language": "Bahasa",
+  "settings": "Pengaturan",
+  "system": "Sistem",
+  "today": "Hari ini"
 }
