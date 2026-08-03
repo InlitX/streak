@@ -1,0 +1,715 @@
+{
+  "request_feature": "Solicitar um recurso",
+  "motiv_almost": "Quase lá! Falta só um pouco",
+  "about_story": "Este aplicativo nasceu da frustração com os rastreadores de hábitos disponíveis. A maioria limita quantos hábitos você pode criar, esconde recursos básicos atrás de uma assinatura, rastreia sua atividade ou enche a tela de anúncios. Por isso, decidi criar o Streak: totalmente gratuito, sem anúncios, sem pagamentos e sem rastreamento. Tudo funciona localmente, e seus dados pertencem a você. Código aberto, sem pegadinhas.",
+  "about_app": "Sobre este aplicativo",
+  "description_hint": "Observação opcional",
+  "times_per_month": "{n} vezes por mês",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "app_background": "Plano de fundo",
+  "onb2_body": "Objetivos diários, semanais ou mensais, com lembretes recorrentes para que nada se perca.",
+  "month": "Mês",
+  "quant_preset_reading": "Leitura",
+  "your_habits": "Seus hábitos",
+  "about_subtitle": "Para os dias em que você decide estar presente.",
+  "close": "Fechar",
+  "current": "Atual",
+  "streak_off": "💪 Hoje você pode começar uma nova sequência",
+  "save": "Salvar",
+  "my_heatmap": "Meu mapa de calor",
+  "new_category": "Nova categoria",
+  "onb1_body": "Registre um hábito com um toque e veja sua sequência crescer dia após dia.",
+  "kind_negative_hint": "Todos os dias contam como concluídos por padrão, então sua sequência cresce automaticamente. Toque na marca de verificação apenas se você falhar. Esse dia ficará vermelho, e você poderá desfazer a ação.",
+  "monthly": "Mensal",
+  "view_source": "Ver código-fonte no GitHub",
+  "add_image": "Adicionar imagem",
+  "freq_per_month_short": "{n}×/mês",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "days_active": "Dias ativos",
+  "remove_photo": "Remover foto",
+  "about_inline": "\"O Streak é um aplicativo de código aberto para acompanhar seus hábitos. Sem contas, sem limites e sem pagamentos. Tudo fica no seu celular.\n\nQualquer pessoa pode ver o código, melhorá-lo ou usá-lo livremente.\"",
+  "accent_color": "Cor de destaque",
+  "add_step": "Adicionar etapa",
+  "every_day": "Todos os dias",
+  "weekends": "Fins de semana",
+  "get_started": "Iniciar",
+  "bg_solid": "Sólido",
+  "steps_done": "{done}/{total} etapas",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "good_evening": "Boa noite",
+  "your_name": "Seu nome",
+  "edit_habit": "Editar hábito",
+  "onb2_title": "Mantenha sua rotina",
+  "good_afternoon": "Boa tarde",
+  "total_logs": "Total de registros",
+  "add_reminder": "Adicionar lembrete",
+  "backup_saved": "Backup salvo",
+  "widget_opacity": "Opacidade",
+  "vacation_mode": "Modo férias",
+  "last_30_days": "Últimos 30 dias",
+  "bg_oled": "OLED",
+  "stats_empty": "Adicione hábitos para ver suas estatísticas",
+  "when_best": "Quando você mantém mais constância?",
+  "next": "Próximo",
+  "widget_preview": "Prévia",
+  "completion_time": "Horário de conclusão",
+  "import_question_body": "Deseja substituir todos os hábitos atuais pelo backup ou mesclá-los?",
+  "checklist_hint": "Divida o hábito em etapas. Ele só será concluído quando todas estiverem marcadas.",
+  "active_habits": "Hábitos ativos",
+  "share_failed": "Não foi possível criar a imagem",
+  "new_reminder": "Novo lembrete",
+  "quant_daily_goal": "Meta diária",
+  "import_merge": "Mesclar",
+  "relapses": "Recaídas",
+  "share_progress": "Compartilhar progresso",
+  "total": "Total",
+  "best": "Melhor",
+  "all": "Todos",
+  "dev_role": "Desenvolvedor independente · Streak",
+  "icon": "Ícone",
+  "vacation_off_desc": "Pause este hábito. Os dias ignorados não interromperão sua sequência.",
+  "import_backup": "Importar backup",
+  "days": "Dias",
+  "widget_background": "Cor do plano de fundo",
+  "activity": "Atividade",
+  "freq_per_week_short": "{n}×/semana",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "motiv_perfect": "Dia perfeito! 🤩",
+  "on": "Ativado",
+  "add_habit": "Adicionar hábito",
+  "edit": "Editar",
+  "not_enough_data": "Ainda não há dados suficientes",
+  "quant_unit_hint": "Unidade (ex.: ml, páginas, repetições)",
+  "quant_preset_water": "Água",
+  "theme": "Tema",
+  "year": "Ano",
+  "import_backup_sub": "Restaure os hábitos de um arquivo",
+  "about_app_sub": "Versão, créditos e código-fonte",
+  "appearance": "Aparência",
+  "empty_title": "Comece sua primeira sequência",
+  "strength": "Força",
+  "default_user": "Inlitx",
+  "description": "Descrição",
+  "sched_days": "Dias",
+  "circle": "Círculo",
+  "buy_coffee": "Pague-me um café",
+  "sort_completed_last": "Concluídos por último",
+  "name": "Nome",
+  "edit_category": "Editar categoria",
+  "save_reminder": "Salvar lembrete",
+  "app_icon": "Ícone do aplicativo",
+  "export_backup_sub": "Salve todos os hábitos em um arquivo",
+  "preferences": "Preferências",
+  "icon_neutral": "Verde",
+  "off": "Desativado",
+  "widget_border": "Borda",
+  "light": "Claro",
+  "square": "Quadrado",
+  "kind_negative": "Evitar",
+  "habit_kind": "Tipo de Hábito",
+  "icon_default": "Padrão",
+  "import_failed": "Não foi possível importar o arquivo",
+  "about_credits_body": "Desenvolvido com Flutter. Ícones da Lucide. Gráficos com fl_chart. Tipografia em Figtree e Playfair Display.",
+  "permission_required": "É necessário conceder permissão para notificações",
+  "about_developer": "O desenvolvedor",
+  "customize_widgets_sub": "Plano de fundo, opacidade e borda",
+  "select_one_day": "Selecione pelo menos um dia",
+  "add_category": "Nova",
+  "about_credits": "Créditos",
+  "delete_habit": "Excluir hábito",
+  "delete": "Excluir",
+  "times_per_week": "{n} vezes por semana",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "end_vacation": "Encerrar férias",
+  "notif_greeting": "Olá, {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dev_handle": "@inlitx",
+  "support": "Suporte",
+  "weekdays": "Dias úteis",
+  "data": "Dados",
+  "best_streak": "Melhor sequência",
+  "log_relapse_body": "Isso interromperá a sequência de hoje para \"{name}\". Você pode desfazer a ação tocando novamente.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onb1_title": "Crie sequências consistentes",
+  "frequency": "Frequência",
+  "import_replace": "Substituir tudo",
+  "no_habits_yet": "Nenhum hábito ainda",
+  "made_by": "Feito com ❤️ por @inlitx",
+  "reminder_message_hint": "Deixe em branco para usar uma frase motivacional",
+  "delete_habit_body": "Excluir \"{name}\"? Esta ação não pode ser desfeita.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_reminder": "Editar lembrete",
+  "completions_per_month": "Conclusões por mês",
+  "customize_widgets": "Personalizar widgets",
+  "new_label": "Novo",
+  "cover_image": "Imagem de capa",
+  "empty_body": "Crie um hábito e clique no dia para registrar. Pequenos passos, todos os dias.",
+  "current_streak": "Sequência atual",
+  "paused": "Pausado",
+  "new_habit": "Novo hábito",
+  "step_hint": "Nome da etapa",
+  "skip": "Pular",
+  "buy_coffee_sub": "Ajude a manter o aplicativo gratuito",
+  "bg_dots": "Pontos",
+  "kind_quantitative": "Quantidade",
+  "streak_evolution": "Evolução da sequência",
+  "week_starts_on": "A semana começa em",
+  "daily": "Diária",
+  "bg_gradient": "Gradiente",
+  "rate_github_sub": "Apoie o projeto dando uma estrela",
+  "no_data_yet": "Ainda não há dados",
+  "about": "Sobre",
+  "see_more": "Ver mais",
+  "app_tagline": "Rastreador de hábitos",
+  "last_7_days": "Últimos 7 dias",
+  "about_footer": "Feito com café e muito tempo livre.",
+  "habits_imported": "Hábitos importados",
+  "mon": "Seg",
+  "quant_unit_ml": "ml",
+  "streaks": "Sequências",
+  "quant_edit_title": "Quantidade de hoje",
+  "reminder_message": "Mensagem (opcional)",
+  "streak_on": "🔥 {n} dias seguidos. Não interrompa a sequência!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "export_cancelled": "Exportação cancelada",
+  "motiv_progress": "Você está no caminho certo. Continue",
+  "advanced_options": "Opções avançadas",
+  "kind_locked_hint": "O tipo não pode ser alterado após a criação do hábito.",
+  "reorder": "Reordenar",
+  "rate_github": "Dar uma estrela no GitHub",
+  "dark": "Escuro",
+  "import_from_app": "Importar de outro aplicativo",
+  "name_hint": "Ex.: Corrida matinal",
+  "cancel": "Cancelar",
+  "import_from_app_done": "{habits} hábitos ({days} dias) importados de {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "good_morning": "Bom dia",
+  "export_backup": "Exportar backup",
+  "quant_tap_amount": "Quantidade por toque",
+  "log_relapse_confirm": "Sim, registrar",
+  "icons_tab": "Ícones",
+  "uncategorized": "Sem categoria",
+  "github_star_row": "Ver o código-fonte e dar uma estrela",
+  "reorder_hint": "Arraste os hábitos para reordená-los",
+  "import_from_app_sub": "Loop, HabitKit, Habitica, CSV…",
+  "edit_name": "Editar nome",
+  "onb3_title": "Veja seu progresso",
+  "no_days": "Nenhum dia",
+  "checklist": "Lista de verificação",
+  "language": "Idioma",
+  "sat": "Sáb",
+  "weekly": "Semanal",
+  "all_done_today": "Tudo feito por hoje!",
+  "overview": "Visão geral",
+  "kind_positive": "Normal",
+  "repeat_weekly": "Dias específicos",
+  "report_bug": "Relatar um erro",
+  "week": "Semana",
+  "onb3_body": "Estatísticas detalhadas e uma grade anual mostram exatamente o quanto você evoluiu.",
+  "more_icons": "Mais ícones",
+  "delete_category": "Excluir categoria",
+  "widgets": "Widgets",
+  "settings": "Configurações",
+  "check_style": "Estilo de marcação",
+  "todays_checklist": "Lista de hoje",
+  "go": "Ir",
+  "quant_preset_generic": "Personalizado",
+  "x_of_y_completed": "{done} de {total} concluídos",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "completion_rate": "Taxa de conclusão",
+  "completions": "Conclusões",
+  "colors_tab": "Cores",
+  "category": "Categoria",
+  "system": "Sistema",
+  "less_icons": "Menos ícones",
+  "my_heatmap_sub": "Abrir a grade anual de atividades",
+  "quant_unit_pages": "Páginas",
+  "share": "Compartilhar",
+  "sun": "Dom",
+  "motiv_start": "Comece o dia com força 💪",
+  "about_body": "\"O Streak nasceu de uma ideia simples: por que pagar para acompanhar seus próprios hábitos?\n\nEste aplicativo tem código totalmente aberto. Qualquer pessoa pode ver exatamente como ele funciona, sugerir melhorias ou até criar sua própria versão. Sem caixas-pretas. Sem surpresas.\n\nSua privacidade é total: tudo fica no seu celular. Sem contas, sem servidores, sem anúncios. Nem um único byte sai do seu dispositivo.\n\nSem limites. Crie quantos hábitos quiser. Sem assinaturas, sem versão premium e sem janelas pedindo pagamento. Nunca.\n\nSe o aplicativo for útil para você, é possível apoiar o projeto dando uma estrela no GitHub ou pagando um café para o desenvolvedor. Mas isso é totalmente opcional: o aplicativo é seu de qualquer forma.\"",
+  "done_today": "Concluído hoje",
+  "time": "Horário",
+  "every_n_days": "A cada {n} dias",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "log_relapse_title": "Registrar recaída?",
+  "custom": "Personalizado",
+  "about_title": "Feito para você. Grátis para sempre.",
+  "repeat_interval": "A cada N dias",
+  "color": "Cor",
+  "emojis_tab": "Emojis",
+  "sched_interval": "Intervalo",
+  "change_photo": "Alterar foto",
+  "today": "Hoje",
+  "vacation_on_desc": "Pausado: estes dias não contarão como perdidos nem como concluídos.",
+  "profile": "Perfil",
+  "start_vacation": "Iniciar férias",
+  "done": "Concluído",
+  "reminders": "Lembretes",
+  "widget_cfg_brightness": "Brilho",
+  "completion_rate_short": "Consistência",
+  "widget_today_progress": "Hoje  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "🔥 {streak} dias seguidos",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "consistency_trend": "Tendência de consistência",
+  "widget_cfg_change_image": "Alterar imagem",
+  "widget_activity": "Atividade",
+  "widget_cfg_border": "Borda",
+  "ranking": "Classificação",
+  "count_months": "{count, plural, =1{1 mes} other{{count meses}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notif_action_add_hint": "Quanto?",
+  "today_only": "Apenas os hábitos de hoje",
+  "per_week": "Por semana",
+  "snooze_custom_hint": "Minutos",
+  "category_fitness": "Forma Física",
+  "widget_done_today": "feito hoje",
+  "book_cover": "Capa do livro",
+  "widget_no_habits": "Sem hábitos ainda\nToque para abrir o Streak",
+  "count_days": "{count, plural, =1{1 dia} other{{count} dias}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_cfg_color": "Cor",
+  "widget_demo_read": "Ler",
+  "category_health": "Saúde",
+  "category_mindfulness": "Atenção Plena",
+  "widget_cfg_saturation": "Saturação",
+  "category_learning": "Aprendizado",
+  "count_weeks": "{count, plural, =1{1 semana} other{{count} semanas}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "snooze_duration": "Adiar por",
+  "widget_cfg_hue": "Matiz",
+  "widget_cfg_style": "Estilo",
+  "notif_action_snooze": "Adiar",
+  "widget_demo_water": "Água",
+  "snooze_custom": "Personalizado",
+  "perfect_days": "Dias perfeitos",
+  "widget_best_streak": "🔥 {streak} melhor sequência",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_add": "Adicionar quantidade",
+  "minutes_short": "{value} minimo",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "Cor do ponto",
+  "widget_cfg_style_card": "Cartão",
+  "widget_cfg_choose_image": "Escolher imagem",
+  "widget_demo_run": "Correr",
+  "widget_cfg_style_classic": "Clássico",
+  "widget_cfg_all_habits": "Todos os hábitos",
+  "widget_cfg_image": "Imagem",
+  "widget_cfg_opacity": "Opacidade  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "category_finance": "Finanças",
+  "notif_action_done": "Concluído",
+  "widget_no_data": "Sem dados ainda\nAbra Streak para sincronizar",
+  "best_month": "Melhor mês",
+  "consistency": "Consistência",
+  "widget_cfg_title": "Personalizar widget",
+  "widget_open_to_sync": "Abra Streak para sincronizar",
+  "widget_cfg_custom_color": "Cor personalizada",
+  "by_habit": "Por hábito",
+  "category_productivity": "Produtividade",
+  "widget_cfg_reset": "Restaurar padrão",
+  "widget_cfg_thickness": "Grossura  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_add": "Adicionar Widget",
+  "widget_cfg_show_activity": "Mostrar atividade de",
+  "widget_cfg_save": "Salvar",
+  "active_days": "Dias ativos",
+  "focus_end_keep": "",
+  "share_friends_sub": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "",
+  "auto_backup_run_now": "",
+  "wipe_data_sub": "",
+  "focus_your_tracks": "",
+  "message_copied": "",
+  "share_background": "",
+  "focus_sessions": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "",
+  "archived_empty_sub": "",
+  "wipe_data_sure": "",
+  "day_start_hour": "",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "delete_note": "",
+  "archive_habit_body": "",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_anyway": "",
+  "focus_custom_duration": "",
+  "focus_tasks": "",
+  "style_classic": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "",
+  "share_show_stats": "",
+  "about_sub": "",
+  "focus_track_pad": "",
+  "style_classic_desc": "",
+  "focus_history": "",
+  "save_note": "",
+  "focus_end_complete": "",
+  "archived_empty": "",
+  "focus_scene_black": "",
+  "share_swipe_hint": "",
+  "focus_free_session": "",
+  "day_start_midnight": "",
+  "share_size": "",
+  "focus_track_too_long": "",
+  "focus_style_dots": "",
+  "journey_empty": "",
+  "share_stats_short": "",
+  "share_save": "",
+  "app_style_sub": "",
+  "app_lock_sub": "",
+  "auto_backup_daily": "",
+  "restore": "",
+  "preferences_sub": "",
+  "auto_backup_no_permission": "",
+  "focus_built_in": "",
+  "focus_sound": "",
+  "add_note": "",
+  "share_photo": "",
+  "note_kind_planned": "",
+  "share_saved": "",
+  "wipe_data_confirm": "",
+  "unit_minutes": "",
+  "share_blur": "",
+  "focus_end_reached": "",
+  "focus_personalize": "",
+  "focus_history_empty": "",
+  "unit_seconds": "",
+  "focus_enable_sub": "",
+  "focus_shuffle": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_entry": "",
+  "delete_forever_body": "",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_add_track": "",
+  "notes": "",
+  "focus_no_sound": "",
+  "wipe_data": "",
+  "auto_backup_weekly": "",
+  "app_style": "",
+  "wipe_data_done": "",
+  "focus_pick_habit": "",
+  "unit_min_short": "",
+  "day_start": "",
+  "note_take_photo": "",
+  "delete_forever": "",
+  "auto_backup_folder_failed": "",
+  "note_hint": "",
+  "focus_style_digital": "",
+  "focus_stop_body": "",
+  "app_lock_unlock": "",
+  "auto_backup_folder_default": "",
+  "tomorrow": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "journey": "",
+  "focus_target_reached": "",
+  "share_friends_message": "",
+  "note_kind_completed": "",
+  "focus_break": "",
+  "undo": "",
+  "focus_style": "",
+  "support_sub": "",
+  "note_type": "",
+  "focus_scene_custom": "",
+  "journey_sub": "",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "",
+  "wipe_data_warning": "",
+  "auto_backup_where": "",
+  "archived_habits_sub": "",
+  "note_kind_note": "",
+  "focus_pomodoro_sub": "",
+  "focus_duration": "",
+  "focus_images_limit": "",
+  "edit_note": "",
+  "notes_hint": "",
+  "focus_total": "",
+  "share_size_large": "",
+  "share_size_small": "",
+  "yesterday": "",
+  "focus_resume": "",
+  "app_lock_title": "",
+  "archived_habits": "",
+  "restored": "",
+  "see_less": "",
+  "habit_archived": "",
+  "share_friends": "",
+  "auto_backup_off": "",
+  "journey_empty_sub": "",
+  "auto_backup_folder": "",
+  "focus_end": "",
+  "focus_pick_audio": "",
+  "focus_history_empty_sub": "",
+  "auto_backup_sub": "",
+  "share_save_failed": "",
+  "focus_done_title": "",
+  "note_pick_photo": "",
+  "notes_count": "",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "app_lock_failed": "",
+  "focus_style_flip": "",
+  "legend_note_added": "",
+  "style_minimal": "",
+  "vacation_day_on": "",
+  "auto_backup": "",
+  "day_start_sub": "",
+  "focus_notif_body": "",
+  "app_lock_unavailable": "",
+  "auto_backup_folder_set": "",
+  "archive_habit": "",
+  "focus_track_limit": "",
+  "style_minimal_desc": "",
+  "focus_keep_awake": "",
+  "data_sub": "",
+  "note_time_optional": "",
+  "focus_pause": "",
+  "focus_track_rain": "",
+  "unit_hours": "",
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_enable_sub": "",
+  "wipe_data_sure_body": "",
+  "archive": "",
+  "focus_start": "",
+  "focus_stop_title": "",
+  "vacation_day_off": "",
+  "app_lock": "",
+  "deleted_forever": "",
+  "focus_loop": "",
+  "focus_daily_goal": "",
+  "copy_message": "",
+  "view_notes": "",
+  "focus_track_brown": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "appearance_sub": "",
+  "stats": "Estatísticas",
+  "statistics": "Estatísticas",
+  "icon_accent": "Tricolor"
+}
