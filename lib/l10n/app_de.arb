@@ -1,1 +1,391 @@
-{}
+{
+  "request_feature": "Eine Funktion anfordern",
+  "widget_cfg_brightness": "Helligkeit",
+  "motiv_almost": "Fast da! Nur ein bisschen mehr",
+  "about_app": "Über diese App",
+  "description_hint": "Optionale Notiz",
+  "times_per_month": "{n} Mal pro Monat",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "app_background": "Hintergrund",
+  "onb2_body": "Täglich, Wöchentlich oder Monatliche Ziele mit schlauen Erinnerungen damit nichts durchfällt.",
+  "month": "Monat",
+  "quant_preset_reading": "Lesen",
+  "your_habits": "Deine Gewohnheiten",
+  "close": "Schließen",
+  "current": "Aktuell",
+  "streak_off": "💪 Heute kannst du eine neue Serie starten",
+  "save": "Speichern",
+  "widget_today_progress": "Heute  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "my_heatmap": "Meine Heatmap",
+  "new_category": "Neue Kategorie",
+  "onb1_body": "Trage eine Gewohnheit mit ein klick ein und schau wie dein Momentum jeden Tag wächst.",
+  "kind_negative_hint": "Jeder Tag zählt standardmäßig als clean — deine Serie wächst von alleine. Tippe das Häckchen nur wenn du einen Ausrutscher hast; der Tag wird rot und du kannst es Rückgängig machen.",
+  "monthly": "Monatlich",
+  "view_source": "Quellcode auf GitHub ansehen",
+  "add_image": "Bild hinzufügen",
+  "widget_cfg_change_image": "Bild ändern",
+  "freq_per_month_short": "{n}×/Monat",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "days_active": "Aktive Tage",
+  "remove_photo": "Foto entfernen",
+  "widget_activity": "Aktivität",
+  "widget_cfg_border": "Rand",
+  "accent_color": "Akzent Farbe",
+  "add_step": "Schritt hinzufügen",
+  "every_day": "Jeden Tag",
+  "weekends": "Wochenenden",
+  "get_started": "Los gets",
+  "steps_done": "{done}/{total} Schritten",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "good_evening": "Guten Abend",
+  "your_name": "Dein Name",
+  "edit_habit": "Gewohnheit bearbeiten",
+  "onb2_title": "Bleib in der Spur",
+  "good_afternoon": "Guten Nachmittag",
+  "total_logs": "Gesamtprotokolle",
+  "add_reminder": "Erinnerung hinzufügen",
+  "backup_saved": "Backup gespeichert",
+  "widget_opacity": "Deckkraft",
+  "vacation_mode": "Urlaubsmodus",
+  "last_30_days": "Letzten 30 Tage",
+  "bg_oled": "OLED",
+  "stats_empty": "Füge Gewohnheiten hinzu um deine Statistik zu sehen",
+  "when_best": "Wann bist du am konsequentsten?",
+  "next": "Nächstes",
+  "widget_preview": "Vorschau",
+  "completion_time": "Abschluss Zeit",
+  "category_fitness": "Fitness",
+  "import_question_body": "Ersetze deine aktuellen Gewohnheiten mit dem Backup, oder füge sie zusammen?",
+  "widget_done_today": "Heute erledigt",
+  "checklist_hint": "Teile die Gewohnheit in Schritte. Sie ist erst fertig wenn jeder schritt abgehakt ist.",
+  "active_habits": "Erreiche Gewohnheiten",
+  "share_failed": "Konnte kein Bild erstellen",
+  "new_reminder": "Neue Erinnerung",
+  "quant_daily_goal": "Tägliches Ziel",
+  "import_merge": "Zusammenfügen",
+  "relapses": "Ausrutscher",
+  "share_progress": "Fortschritt teilen",
+  "total": "Insgesamt",
+  "best": "Beste",
+  "all": "Alle",
+  "icon": "Icon",
+  "vacation_off_desc": "Pausiere diese Gewohnheit. Ausgelassen Tage werden deine Serie nicht abbrechen.",
+  "import_backup": "Backup importieren",
+  "book_cover": "Buchcover",
+  "days": "Tage",
+  "widget_background": "Hintergrundfarbe",
+  "activity": "Aktivität",
+  "freq_per_week_short": "{n}×/Woche",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "motiv_perfect": "Perfekter Tag! 🔥",
+  "on": "An",
+  "add_habit": "Gewohnheit hinzufügen",
+  "edit": "Bearbeiten",
+  "not_enough_data": "Noch nicht genug Daten",
+  "widget_no_habits": "Noch keine Gewohnheiten\nTippe um Streak zu öffnen",
+  "quant_unit_hint": "Einheit (z. B. ml, Seiten, Wiederholungen)",
+  "quant_preset_water": "Wasser",
+  "theme": "Theme",
+  "year": "Jahr",
+  "import_backup_sub": "Gewohnheiten von Datei laden",
+  "about_app_sub": "Version, Impressum und Quellcode",
+  "appearance": "Aussehen",
+  "empty_title": "Starte deine erste Serie",
+  "strength": "Stärke",
+  "description": "Beschreibung",
+  "sched_days": "Tage",
+  "circle": "Kreis",
+  "buy_coffee": "Kauf mir einen Kaffee",
+  "sort_completed_last": "Zuletzt abgeschlossen",
+  "name": "Name",
+  "edit_category": "Kategorie bearbeiten",
+  "save_reminder": "Erinnerung gespeichert",
+  "app_icon": "App-Symbol",
+  "export_backup_sub": "Alle Gewohnheiten als Datei speichern",
+  "preferences": "Vorlieben",
+  "icon_neutral": "Grün",
+  "off": "Aus",
+  "widget_cfg_color": "Farbe",
+  "widget_border": "Rand",
+  "light": "Hell",
+  "square": "Quadrat",
+  "kind_negative": "Vermeiden",
+  "habit_kind": "Gewohnheits Typ",
+  "icon_default": "Standard",
+  "widget_demo_read": "Lesen",
+  "import_failed": "Datei konnte nicht importiert werden",
+  "about_credits_body": "Erstellt mit Flutter. Icons von Lucide. Grafiken von fl_chart. In Figtree & Playfair Display gesetzt.",
+  "category_health": "Gesundheit",
+  "category_mindfulness": "Achtsamkeit",
+  "permission_required": "Benachrichtigungs Erlaubnis wird benötigt",
+  "about_developer": "Der Entwickler",
+  "widget_cfg_saturation": "Sättigung",
+  "customize_widgets_sub": "Hintergrund, Deckkraft, Rand",
+  "select_one_day": "Mindestens einen Tag auswählen",
+  "add_category": "Neu",
+  "about_credits": "Abspann",
+  "category_learning": "Lernen",
+  "delete_habit": "Gewohnheit löschen",
+  "delete": "Löschen",
+  "times_per_week": "{n} Mal pro Woche",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "end_vacation": "Urlaub beenden",
+  "notif_greeting": "Hi {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dev_handle": "@inlitx",
+  "support": "Support",
+  "weekdays": "Wochentage",
+  "data": "Daten",
+  "best_streak": "Beste Serie",
+  "log_relapse_body": "Deine Serie für \"{name}\" wird gebrochen. Du kannst es rückgängig machen indem du nochmal tippst.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onb1_title": "Baue echte Serien",
+  "frequency": "Frequenz",
+  "import_replace": "Ersetze alle",
+  "no_habits_yet": "Noch keine Gewohnheiten",
+  "made_by": "Gemacht mit ❤️ von @inlitx",
+  "reminder_message_hint": "Leer lassen für ein motivierendes Zitat",
+  "widget_cfg_hue": "Farbton",
+  "delete_habit_body": "Lösche \"{name}\"? Dies kann nicht rückgängig gemacht werden.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_reminder": "Erinnerung bearbeiten",
+  "completions_per_month": "Abschlüsse / Monat",
+  "customize_widgets": "Widgets anpassen",
+  "new_label": "Neu",
+  "cover_image": "Cover Image",
+  "empty_body": "Erstelle eine Gewohnheit und klicke einen Tag um sie einzutragen. Kleine schritte, jeden Tag.",
+  "current_streak": "Aktuelle Serie",
+  "paused": "Pausiert",
+  "new_habit": "Neue Gewohnheit",
+  "widget_demo_water": "Wasser",
+  "step_hint": "Schritt Name",
+  "skip": "Übersoringen",
+  "buy_coffee_sub": "Hilf die App kostenlos zu halten",
+  "bg_dots": "Ounkte",
+  "kind_quantitative": "Menge",
+  "widget_best_streak": "🔥 {streak} beste Serie",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_evolution": "Serien Entwicklung",
+  "week_starts_on": "Woche beginnt am",
+  "widget_cfg_dot_color": "Punkt Farbe",
+  "daily": "Täglich",
+  "rate_github_sub": "Unterstütz das Projekt mit einem Stern",
+  "no_data_yet": "Noch keine Daten",
+  "about": "Über",
+  "widget_cfg_choose_image": "Bild auswählen",
+  "see_more": "Mehr anzeigen",
+  "app_tagline": "Gewohnheits-Tracker",
+  "last_7_days": "Letzten 7 Tage",
+  "about_footer": "Gemacht mit ☕ und viele freie Zeit.",
+  "habits_imported": "Gewohnheiten importiert",
+  "mon": "Mo",
+  "quant_unit_ml": "ml",
+  "streaks": "Serien",
+  "quant_edit_title": "Heutige Menge",
+  "reminder_message": "Nachricht (optional)",
+  "streak_on": "🔥 {n} Tage in Folge. Nicht brechen!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "export_cancelled": "Export abgebrochen",
+  "widget_cfg_all_habits": "Alle Gewohnheiten",
+  "stats": "Statistik",
+  "motiv_progress": "Du bist auf dem richtigen Weg, weiter so",
+  "advanced_options": "Erweiterte Optionen",
+  "kind_locked_hint": "Typ kann nach erstellen der Gewohnheit nicht mehr verändert werden.",
+  "reorder": "Sortieren",
+  "widget_cfg_image": "Bild",
+  "rate_github": "GitHub Stern geben",
+  "dark": "Dunkel",
+  "widget_cfg_opacity": "Transparenz  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "import_from_app": "Von anderer App importieren",
+  "name_hint": "z. B. Morgendlicher Lauf",
+  "cancel": "Abbrechen",
+  "import_from_app_done": "{habits} Gewohnheiten ({days} Tage) von {source} importiert",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "good_morning": "Guten Morgen",
+  "export_backup": "Backup exportieren",
+  "quant_tap_amount": "Menge pro Klick",
+  "log_relapse_confirm": "Ja, eintragen",
+  "icons_tab": "Icons",
+  "uncategorized": "Unkategorisiert",
+  "github_star_row": "Quelle ansehen & Stern geben",
+  "reorder_hint": "Ziehen Sie die Gewohnheiten, sie zu sortieren",
+  "edit_name": "Name bearbeiten",
+  "category_finance": "Finanzen",
+  "onb3_title": "Sehe deinen Fortschritt",
+  "statistics": "Statistik",
+  "no_days": "Keine Tage",
+  "checklist": "Checkliste",
+  "language": "Sprache",
+  "sat": "Sa",
+  "widget_no_data": "Noch keine Daten\nÖffne Streak zum synchronisieren",
+  "weekly": "Wöchentlich",
+  "all_done_today": "Alles erledigt für Heute!",
+  "overview": "Überblick",
+  "kind_positive": "Normal",
+  "icon_accent": "Tricolor",
+  "repeat_weekly": "Ausgewählte Tage",
+  "widget_cfg_title": "Widget anpassen",
+  "report_bug": "Einen Fehler melden",
+  "week": "Woche",
+  "onb3_body": "Umfangreiche Statistiken und eine Jahresübersicht zeigen dir wie weit du bist.",
+  "more_icons": "Mehr Icons",
+  "delete_category": "Kategorie löschen",
+  "widgets": "Widgets",
+  "widget_open_to_sync": "Öffne Streak um zu synchronisieren",
+  "settings": "Einstellungen",
+  "widget_cfg_custom_color": "Benutzerdefinierte Farbe",
+  "todays_checklist": "Heutige Checkliste",
+  "go": "Los",
+  "quant_preset_generic": "Benutzerdefiniert",
+  "x_of_y_completed": "{done} von {total} geschafft",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "completion_rate": "Abschluss Rate",
+  "colors_tab": "Farben",
+  "category": "Kategorie",
+  "category_productivity": "Produktivität",
+  "system": "System",
+  "less_icons": "Weniger Icons",
+  "my_heatmap_sub": "Jahresübersicht öffnen",
+  "quant_unit_pages": "Seiten",
+  "share": "Teilen",
+  "sun": "So",
+  "motiv_start": "Starte den Tag kräftig 💪",
+  "about_body": "Streak wurde von einer einfachen Idee geboren: warum zum tracken von seinen eigenen Gewohnheiten bezahlen?\n\nDiese App ist komplett open source. Jeder kann genau sehen wie sie funktioniert, Verbesserungen vorschlagen, oder sogar eine eigene Version bauen. Keine Black-Boxen. Keine Überraschungen.\n\nDeine Privatsphäre ist komplett — Alles bleibt auf deinem Gerät. Keine Account, keine Server, keine Werbung. Kein einziger Byte verlässt dein Handy.\n\nKeine EInschränkungen. Erstelle so viele Gewohnheiten wie du willst. Keine Abos, keine \"Pro Version\", keine Pop-Ups die nach Geld frage. Jemals.\n\nWenn die App dir hilft kannst du sie mit einem Stern auf GitHub oder indem du mir einen Kaffee kaufst unterstützen. Doch das ist komplett optional — die App bekommst du so oder so.",
+  "done_today": "Alles erledigt für Heute",
+  "widget_cfg_reset": "Zurücksetzen",
+  "time": "Zeit",
+  "widget_cfg_thickness": "Dicke  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "every_n_days": "Alle {n} Tage",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "log_relapse_title": "Ausrutscher eintragen?",
+  "custom": "Benutzerdefiniert",
+  "about_title": "Für dich gebaut. Frei, für immer.",
+  "repeat_interval": "Alle N Tage",
+  "color": "Farbe",
+  "widget_cfg_add": "Widget hinzufügen",
+  "emojis_tab": "Emojis",
+  "sched_interval": "Intervall",
+  "change_photo": "Foto ändern",
+  "today": "Heute",
+  "widget_cfg_show_activity": "Aktivität anzeigen von",
+  "vacation_on_desc": "Pausiert — diese tage zählen nicht als verfehlt oder abgeschlossen.",
+  "profile": "Profil",
+  "widget_cfg_save": "Speichern",
+  "start_vacation": "Urlaub anfangen",
+  "done": "Fertig",
+  "reminders": "Erinnerungen"
+}
