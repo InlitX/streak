@@ -708,5 +708,8 @@
       }
     }
   },
-  "appearance_sub": ""
+  "appearance_sub": "",
+  "stats": "Estatísticas",
+  "statistics": "Estatísticas",
+  "icon_accent": "Tricolor"
 }
