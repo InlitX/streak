@@ -80,9 +80,15 @@
   "import_from_app_done": "Импортировано привычек: {habits} ({days} дней) из {source}",
   "@import_from_app_done": {
     "placeholders": {
-      "habits": { "type": "int" },
-      "days": { "type": "int" },
-      "source": { "type": "String" }
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
     }
   },
   "import_failed": "Не удалось импортировать файл",
@@ -107,15 +113,27 @@
   "category_finance": "Финансы",
   "count_days": "{count, plural, one{{count} день} few{{count} дня} many{{count} дней} other{{count} дня}}",
   "@count_days": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "count_weeks": "{count, plural, one{{count} неделя} few{{count} недели} many{{count} недель} other{{count} недели}}",
   "@count_weeks": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "count_months": "{count, plural, one{{count} месяц} few{{count} месяца} many{{count} месяцев} other{{count} месяца}}",
   "@count_months": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "habit_kind": "Тип привычки",
   "kind_positive": "Обычная",
@@ -192,13 +210,21 @@
   "journey": "Путь",
   "journey_sub": "{count, plural, one{{count} фото} few{{count} фото} many{{count} фото} other{{count} фото}}",
   "@journey_sub": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "journey_empty": "Пока нет фото",
   "journey_empty_sub": "Добавьте фото к заметке, и оно появится здесь.",
   "archive_habit_body": "Переместить «{name}» в архив? История сохранится, и вы сможете восстановить привычку в настройках.",
   "@archive_habit_body": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "archived_habits": "Архивированные привычки",
   "archived_habits_sub": "Восстановите их или удалите навсегда",
@@ -209,7 +235,11 @@
   "delete_forever": "Удалить навсегда",
   "delete_forever_body": "Удалить «{name}» и всю её историю? Это действие нельзя отменить.",
   "@delete_forever_body": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "deleted_forever": "Привычка удалена",
   "wipe_data": "Удалить все данные",
@@ -224,7 +254,11 @@
   "day_start_midnight": "Полночь",
   "day_start_hour": "{hour}:00",
   "@day_start_hour": {
-    "placeholders": { "hour": { "type": "String" } }
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
   },
   "share_photo": "Фото",
   "share_stats_short": "Статистика",
@@ -396,7 +430,11 @@
   "tomorrow": "Завтра",
   "notes_count": "{count, plural, one{{count} заметка} few{{count} заметки} many{{count} заметок} other{{count} заметки}}",
   "@notes_count": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "focus": "Фокус",
   "focus_enable_sub": "Таймер для привычек, которым он нужен",
@@ -408,6 +446,13 @@
   "focus_style_flip": "Перекидной",
   "focus_style_dots": "Точки",
   "focus_saved": "Записано: {time}",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "focus_total": "Время фокусировки",
   "focus_sessions": "Сессии",
   "focus_stop_title": "Завершить сессию?",
@@ -419,9 +464,6 @@
   "unit_minutes": "минуты",
   "unit_seconds": "секунды",
   "focus_target_reached": "Цель достигнута",
-  "@focus_saved": {
-    "placeholders": { "time": { "type": "String" } }
-  },
   "focus_pause": "Пауза",
   "focus_resume": "Продолжить",
   "focus_sound": "Звук",
@@ -430,20 +472,35 @@
   "focus_tasks": "Список подзадач",
   "focus_custom_duration": "Своя",
   "focus_end_short": "До цели осталось {time}.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "focus_end_tasks": "Ещё не отмечено задач: {count}.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_end_reached": "Цель достигнута. Привычка будет отмечена как выполненная.",
   "focus_end_keep": "Продолжить",
   "focus_end_anyway": "Всё равно завершить",
   "focus_end_complete": "Отметить выполненным",
   "focus_amount_added": "{amount} добавлено к «{habit}»",
-  "@focus_end_short": {
-    "placeholders": { "time": { "type": "String" } }
-  },
-  "@focus_end_tasks": {
-    "placeholders": { "count": { "type": "int" } }
-  },
   "@focus_amount_added": {
-    "placeholders": { "amount": { "type": "String" }, "habit": { "type": "String" } }
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
   },
   "focus_personalize": "Своё",
   "focus_track_rain": "Дождь",
@@ -464,8 +521,25 @@
   "focus_pomodoro_sub": "Чередуйте раунды фокусировки с короткими перерывами",
   "focus_break": "Перерыв",
   "focus_round": "Раунд {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "focus_daily_goal": "Дневная цель фокусировки",
   "focus_goal_today": "{done} из {goal} сегодня",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
   "focus_keep_awake": "Не выключать экран",
   "focus_images_limit": "До 10 изображений",
   "focus_history": "История",
@@ -473,15 +547,13 @@
   "focus_history_empty_sub": "Каждая завершённая сессия фокусировки появится здесь.",
   "focus_history_day": "{count, plural, one{{count} сессия} few{{count} сессии} many{{count} сессий} other{{count} сессии}}",
   "@focus_history_day": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "yesterday": "Вчера",
-  "@focus_round": {
-    "placeholders": { "n": { "type": "int" } }
-  },
-  "@focus_goal_today": {
-    "placeholders": { "done": { "type": "String" }, "goal": { "type": "String" } }
-  },
   "notes_hint": "Долгое нажатие на день покажет заметки или позволит добавить их",
   "app_style": "Стиль приложения",
   "app_style_sub": "Выберите, как приложение выглядит и ощущается.",
@@ -563,15 +635,21 @@
   "widget_today_progress": "Сегодня  {done}/{total}",
   "@widget_today_progress": {
     "placeholders": {
-      "done": { "type": "String" },
-      "total": { "type": "String" }
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
     }
   },
   "widget_done_today": "выполнено сегодня",
   "widget_best_streak": "🔥 Лучшая серия: {streak}",
   "@widget_best_streak": {
     "placeholders": {
-      "streak": { "type": "String" }
+      "streak": {
+        "type": "String"
+      }
     }
   },
   "widget_cfg_title": "Настроить виджет",
@@ -583,14 +661,18 @@
   "widget_cfg_opacity": "Прозрачность  {value}%",
   "@widget_cfg_opacity": {
     "placeholders": {
-      "value": { "type": "String" }
+      "value": {
+        "type": "String"
+      }
     }
   },
   "widget_cfg_border": "Рамка",
   "widget_cfg_thickness": "Толщина  {value}dp",
   "@widget_cfg_thickness": {
     "placeholders": {
-      "value": { "type": "String" }
+      "value": {
+        "type": "String"
+      }
     }
   },
   "widget_cfg_show_activity": "Показывать активность",
@@ -611,7 +693,9 @@
   "notif_streak": "🔥 Серия: {streak} дн.",
   "@notif_streak": {
     "placeholders": {
-      "streak": { "type": "String" }
+      "streak": {
+        "type": "String"
+      }
     }
   },
   "notif_action_done": "Готово",
@@ -624,7 +708,70 @@
   "minutes_short": "{value} мин",
   "@minutes_short": {
     "placeholders": {
-      "value": { "type": "String" }
+      "value": {
+        "type": "String"
+      }
     }
+  },
+  "a11y_add_amount": "Добавить к «{name}»",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_decrease": "Уменьшить",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "a11y_not_done": "не выполнено",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_increase": "Увеличить",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "a11y_clear_relapse": "Убрать сегодняшний срыв для «{name}»",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_log_relapse": "Отметить срыв для «{name}»",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_done": "Отметить «{name}» как выполненное",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_not_done": "Отметить «{name}» как невыполненное",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_pick_color": "Выбрать цвет",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
   }
 }
