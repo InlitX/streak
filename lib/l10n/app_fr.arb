@@ -680,5 +680,36 @@
   "start_vacation": "",
   "done": "",
   "reminders": "",
-  "active_days": ""
+  "active_days": "",
+  "save": "Sauvegarder",
+  "onb1_body": "Coche tes habitudes en un geste et regarde ta série grandir jour après jour.",
+  "good_evening": "Bonsoir",
+  "onb2_title": "Garde le cap",
+  "good_afternoon": "Bon après-midi",
+  "all": "Tous",
+  "add_habit": "Ajouter l'habitude",
+  "empty_title": "Commencez votre premier streak",
+  "delete": "Supprimer",
+  "onb1_title": "Construis de vrais streaks",
+  "no_habits_yet": "Pas encore d'habitudes",
+  "new_label": "Nouveau",
+  "empty_body": "Ajoute une habitude, puis coche tes jours. Un petit pas à la fois.",
+  "app_tagline": "Suivi des habitudes",
+  "stats": "Stats",
+  "cancel": "Annuler",
+  "good_morning": "Bonjour",
+  "all_done_today": "Tout est fait aujourd'hui !",
+  "settings": "Paramètres",
+  "x_of_y_completed": "{done} sur {total} complétées",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "today": "Aujourd'hui"
 }
