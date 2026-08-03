@@ -454,5 +454,258 @@
   "start_vacation": "Почати відпочинок",
   "done": "Готово",
   "reminders": "Нагадування",
-  "active_days": "Активні дні"
+  "active_days": "Активні дні",
+  "focus_end_keep": "",
+  "share_friends_sub": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "",
+  "auto_backup_run_now": "",
+  "wipe_data_sub": "",
+  "focus_your_tracks": "",
+  "message_copied": "",
+  "share_background": "",
+  "focus_sessions": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "",
+  "archived_empty_sub": "",
+  "wipe_data_sure": "",
+  "day_start_hour": "",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "delete_note": "",
+  "archive_habit_body": "",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_anyway": "",
+  "focus_custom_duration": "",
+  "focus_tasks": "",
+  "style_classic": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "",
+  "share_show_stats": "",
+  "about_sub": "",
+  "focus_track_pad": "",
+  "style_classic_desc": "",
+  "focus_history": "",
+  "save_note": "",
+  "focus_end_complete": "",
+  "archived_empty": "",
+  "focus_scene_black": "",
+  "share_swipe_hint": "",
+  "focus_free_session": "",
+  "day_start_midnight": "",
+  "share_size": "",
+  "focus_track_too_long": "",
+  "focus_style_dots": "",
+  "journey_empty": "",
+  "share_stats_short": "",
+  "share_save": "",
+  "app_style_sub": "",
+  "app_lock_sub": "",
+  "auto_backup_daily": "",
+  "restore": "",
+  "preferences_sub": "",
+  "auto_backup_no_permission": "",
+  "focus_built_in": "",
+  "focus_sound": "",
+  "add_note": "",
+  "share_photo": "",
+  "note_kind_planned": "",
+  "share_saved": "",
+  "wipe_data_confirm": "",
+  "unit_minutes": "",
+  "share_blur": "",
+  "focus_end_reached": "",
+  "focus_personalize": "",
+  "focus_history_empty": "",
+  "unit_seconds": "",
+  "focus_enable_sub": "",
+  "focus_shuffle": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_entry": "",
+  "delete_forever_body": "",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_add_track": "",
+  "notes": "",
+  "focus_no_sound": "",
+  "wipe_data": "",
+  "auto_backup_weekly": "",
+  "app_style": "",
+  "wipe_data_done": "",
+  "focus_pick_habit": "",
+  "unit_min_short": "",
+  "day_start": "",
+  "note_take_photo": "",
+  "delete_forever": "",
+  "auto_backup_folder_failed": "",
+  "note_hint": "",
+  "focus_style_digital": "",
+  "focus_stop_body": "",
+  "app_lock_unlock": "",
+  "auto_backup_folder_default": "",
+  "tomorrow": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "journey": "",
+  "focus_target_reached": "",
+  "share_friends_message": "",
+  "note_kind_completed": "",
+  "focus_break": "",
+  "undo": "",
+  "focus_style": "",
+  "support_sub": "",
+  "note_type": "",
+  "focus_scene_custom": "",
+  "journey_sub": "",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "",
+  "wipe_data_warning": "",
+  "auto_backup_where": "",
+  "archived_habits_sub": "",
+  "note_kind_note": "",
+  "focus_pomodoro_sub": "",
+  "focus_duration": "",
+  "focus_images_limit": "",
+  "edit_note": "",
+  "notes_hint": "",
+  "focus_total": "",
+  "share_size_large": "",
+  "share_size_small": "",
+  "yesterday": "",
+  "focus_resume": "",
+  "app_lock_title": "",
+  "archived_habits": "",
+  "restored": "",
+  "see_less": "",
+  "habit_archived": "",
+  "share_friends": "",
+  "auto_backup_off": "",
+  "journey_empty_sub": "",
+  "auto_backup_folder": "",
+  "focus_end": "",
+  "focus_pick_audio": "",
+  "focus_history_empty_sub": "",
+  "auto_backup_sub": "",
+  "share_save_failed": "",
+  "focus_done_title": "",
+  "note_pick_photo": "",
+  "notes_count": "",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "app_lock_failed": "",
+  "focus_style_flip": "",
+  "legend_note_added": "",
+  "style_minimal": "",
+  "vacation_day_on": "",
+  "auto_backup": "",
+  "day_start_sub": "",
+  "focus_notif_body": "",
+  "app_lock_unavailable": "",
+  "auto_backup_folder_set": "",
+  "archive_habit": "",
+  "focus_track_limit": "",
+  "style_minimal_desc": "",
+  "focus_keep_awake": "",
+  "data_sub": "",
+  "note_time_optional": "",
+  "focus_pause": "",
+  "focus_track_rain": "",
+  "unit_hours": "",
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_enable_sub": "",
+  "wipe_data_sure_body": "",
+  "archive": "",
+  "focus_start": "",
+  "focus_stop_title": "",
+  "vacation_day_off": "",
+  "app_lock": "",
+  "deleted_forever": "",
+  "focus_loop": "",
+  "focus_daily_goal": "",
+  "copy_message": "",
+  "view_notes": "",
+  "focus_track_brown": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "appearance_sub": ""
 }
