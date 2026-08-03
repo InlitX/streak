@@ -3,296 +3,345 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Streak — A calm, private habit tracker</title>
-  <meta name="description" content="Streak is a minimal, private, ad-free habit tracker built with Flutter. One-tap logging, activity heatmaps, streaks, checklists and vacation mode. Free and open source." />
-  <meta name="theme-color" content="#0B0B0D" />
-
-  <meta property="og:title" content="Streak — A calm, private habit tracker" />
-  <meta property="og:description" content="One-tap logging, activity heatmaps and streaks. Free, offline and open source." />
+  <title>Streak — A minimal, private, ad-free habit tracker</title>
+  <meta name="description" content="Streak is an open-source habit tracker for Android. Log with one tap, watch a GitHub-style year fill in, and use the built-in focus timer. Offline, no account, no ads, no tracking." />
+  <meta name="theme-color" content="#08080A" />
+  <meta property="og:title" content="Streak — A minimal, private, ad-free habit tracker" />
+  <meta property="og:description" content="Log a habit in one tap, keep your momentum, and watch your streaks grow. Offline and open source." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/screenshots/01-today.png" />
-
+  <meta property="og:image" content="assets/shots/01_hoy_semana.png" />
   <link rel="icon" type="image/png" href="assets/icon.png" />
+  <style>html{background:#08080A}body{margin:0;color:#F4F4F6}img{max-width:100%;display:block}</style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--1" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--2" aria-hidden="true"></div>
-  <div class="bg-grain" aria-hidden="true"></div>
 
-  <header class="nav" id="nav">
-    <a class="nav__brand" href="#top" aria-label="Streak home">
-      <img class="nav__mark" src="assets/icon.svg" width="34" height="34" alt="" />
-      <span class="nav__word">Streak</span>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"></div>
+  <svg class="spot" viewBox="0 0 3787 2842" fill="none" aria-hidden="true">
+    <g filter="url(#spotblur)">
+      <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501"
+        transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+        fill="rgba(214,204,255,.55)" fill-opacity="0.21"></ellipse>
+    </g>
+    <defs>
+      <filter id="spotblur" x="0.86" y="0.84" width="3785.16" height="2840.26"
+        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="bg"></feFlood>
+        <feBlend mode="normal" in="SourceGraphic" in2="bg" result="shape"></feBlend>
+        <feGaussianBlur stdDeviation="151" result="blur"></feGaussianBlur>
+      </filter>
+    </defs>
+  </svg>
+  <div class="dotfield" aria-hidden="true"></div>
+
+  <header class="bar">
+    <a class="bar__brand" href="#top">
+      <img src="assets/icon.svg" width="26" height="26" alt="" />
+      <span>Streak</span>
     </a>
-    <button class="nav__burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
-      <span></span><span></span>
-    </button>
-    <div class="nav__collapse" id="navMenu">
-      <nav class="nav__links" aria-label="Primary">
-        <a href="#features" data-i18n="nav_features">Features</a>
-        <a href="#gallery" data-i18n="nav_screens">Screenshots</a>
-        <a href="#download" data-i18n="nav_download">Download</a>
-      </nav>
-      <div class="nav__actions">
-        <button class="lang" id="langToggle" type="button" aria-label="Switch language">
-          <span class="lang__opt is-on" data-lang="en">EN</span>
-          <span class="lang__sep">/</span>
-          <span class="lang__opt" data-lang="es">ES</span>
-        </button>
-        <a class="nav__stars" id="starPill" href="https://github.com/InlitX/streak" target="_blank" rel="noopener" aria-label="Star on GitHub" title="Star on GitHub">
-          <svg class="nav__stars-gh" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
-          <span class="nav__stars-ic" data-icon="star" aria-hidden="true"></span>
-          <span class="nav__stars-n" id="starCount">0</span>
-        </a>
-        <span class="nav__kofi-wrap">
-          <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'J3J41W702I');kofiwidget2.draw();</script>
-        </span>
-      </div>
+    <nav class="bar__nav">
+      <a href="#features" data-i18n="nv1">Features</a>
+      <a href="#privacy" data-i18n="nv2">Privacy</a>
+      <a href="#download" data-i18n="nv3">Download</a>
+      <a href="#support" data-i18n="nv4">Support</a>
+    </nav>
+    <div class="bar__right">
+      <button class="lang" id="lang" type="button" aria-label="Switch language">
+        <span class="is-on" data-lang="en">EN</span><i>/</i><span data-lang="es">ES</span>
+      </button>
+      <a class="ghost" href="https://github.com/InlitX/streak/stargazers" target="_blank" rel="noopener" aria-label="Star on GitHub">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        <svg class="ghost__star" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2.4l2.95 5.98 6.6.96-4.78 4.65 1.13 6.57L12 17.46l-5.9 3.1 1.13-6.57L2.45 9.34l6.6-.96L12 2.4Z"/></svg>
+        <span data-count="stars">—</span>
+      </a>
     </div>
   </header>
 
   <main id="top">
+
     <section class="hero">
-      <div class="hero__copy">
-        <p class="eyebrow reveal" data-i18n="hero_eyebrow">Open source · No ads · No tracking</p>
-        <h1 class="hero__title reveal">
-          <span data-i18n="hero_title_1">Small steps,</span>
-          <em data-i18n="hero_title_2">every day.</em>
-        </h1>
-        <p class="hero__sub reveal" data-i18n="hero_sub">
-          Streak is a calm, private habit tracker. Log a habit in a single tap,
-          keep your momentum, and watch your streaks grow — no accounts, no
-          subscriptions, nothing leaves your phone.
-        </p>
-        <div class="hero__cta reveal">
-          <a class="badge-link" href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener">
-            <img src="assets/badges/get-it-on-fdroid.png" alt="Get it on F-Droid" height="54" />
-          </a>
-          <a class="badge-link" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
-            <img src="assets/badges/get-it-on-github.png" alt="Get it on GitHub" height="54" />
-          </a>
-        </div>
-        <div class="hero__meta reveal">
-          <span><strong>GPLv3</strong> <span data-i18n="hero_meta_license">licensed</span></span>
-          <span class="hero__meta-sep"></span>
-          <span data-i18n="hero_meta_platform">Android · Flutter</span>
-          <span class="hero__meta-sep"></span>
-          <span data-i18n="hero_meta_langs">English · Español</span>
-        </div>
-        <div class="hero__stats reveal" id="heroStats" hidden>
-          <a class="stat" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
-            <span class="stat__ic" data-icon="download" aria-hidden="true"></span>
-            <span class="stat__txt">
-              <strong id="dlCount">0</strong>
-              <small data-i18n="stat_dl">total downloads</small>
-            </span>
-          </a>
-          <a class="stat stat--star" href="https://github.com/InlitX/streak/stargazers" target="_blank" rel="noopener">
-            <span class="stat__ic" data-icon="star" aria-hidden="true"></span>
-            <span class="stat__txt">
-              <strong id="heroStars">0</strong>
-              <small data-i18n="stat_stars">stars on GitHub</small>
-            </span>
-          </a>
-        </div>
+      <span class="pillwrap reveal">
+        <a class="pill" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
+          <svg class="spark" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2.6l1.7 5.1 5.1 1.7-5.1 1.7L12 16.2l-1.7-5.1-5.1-1.7 5.1-1.7L12 2.6zM19 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8L19 15zM5 14l.6 1.7 1.7.6-1.7.6L5 18.6l-.6-1.7-1.7-.6 1.7-.6L5 14z"/></svg>
+          <span data-i18n="pill">Focus mode is here</span>
+          <b class="pill__tag">v1.4.0 <svg viewBox="0 0 16 10" width="13" height="9" aria-hidden="true"><path d="M1 5h11M8.5 1.5 12 5l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></b>
+        </a>
+      </span>
+
+      <h1 class="reveal">
+        <span data-i18n="h1a">One tap a day.</span><br />
+        <span data-i18n="h1b">Watch the year fill in.</span>
+      </h1>
+
+      <p class="lede reveal" data-i18n="lede">
+        An Android habit tracker that keeps quiet. Log with one tap, see a whole
+        year of it at a glance, and start a focus session when a habit needs one.
+        Nothing leaves your phone.
+      </p>
+
+      <div class="cta reveal">
+        <a class="btn btn--go" href="#download">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4 20h16"/></svg>
+          <span data-i18n="cta1">Download</span>
+        </a>
+        <a class="btn btn--alt" href="https://github.com/InlitX/streak" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+          <span data-i18n="cta2">View source</span>
+        </a>
       </div>
 
-      <div class="hero__stage reveal">
-        <div class="phone">
-          <img class="phone__img" src="assets/phone.png" alt="Streak — Today screen" width="1022" height="2082" />
-        </div>
-        <div class="float-card float-card--streak">
-          <span class="flame" data-icon="flame" aria-hidden="true"></span>
-          <div>
-            <strong>128</strong>
-            <small data-i18n="float_streak">day streak</small>
-          </div>
-        </div>
-        <div class="float-card float-card--grid">
-          <div class="mini-heat" id="miniHeat" aria-hidden="true"></div>
-          <small data-i18n="float_grid">This year</small>
+      <div class="counts reveal">
+        <a class="count" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
+          <span class="count__ic"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+          <span><b class="count__n" data-count="downloads">—</b><small class="count__l" data-i18n="c1">total downloads</small></span>
+        </a>
+        <a class="count" href="https://github.com/InlitX/streak/stargazers" target="_blank" rel="noopener">
+          <span class="count__ic"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span><b class="count__n" data-count="stars">—</b><small class="count__l" data-i18n="c2">stars on GitHub</small></span>
+        </a>
+        <a class="count" href="https://hosted.weblate.org/engage/streak/" target="_blank" rel="noopener">
+          <span class="count__ic"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 3-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg></span>
+          <span><b class="count__n" data-count="langs">10</b><small class="count__l" data-i18n="c3">languages and counting</small></span>
+        </a>
+      </div>
+
+      <div class="stage reveal">
+        <div class="heat" id="heat" aria-hidden="true"></div>
+        <div class="trio">
+          <img class="mk mk--l" src="assets/mock/hero-l.png" width="820" height="1364" alt="Today screen with habits and streaks" />
+          <img class="mk mk--c" src="assets/mock/hero-c.png" width="1395" height="2475" fetchpriority="high" alt="Focus session running with the task list" />
+          <img class="mk mk--r" src="assets/mock/hero-r.png" width="820" height="1364" alt="Statistics with a year of activity" />
         </div>
       </div>
     </section>
 
-    <section class="trust" aria-label="Highlights">
-      <ul class="trust__row">
-        <li><span class="trust__ic" data-icon="lock" aria-hidden="true"></span><span data-i18n="trust_private">Fully private</span></li>
-        <li><span class="trust__ic" data-icon="wifi-off" aria-hidden="true"></span><span data-i18n="trust_offline">Works offline</span></li>
-        <li><span class="trust__ic" data-icon="gift" aria-hidden="true"></span><span data-i18n="trust_free">Free forever</span></li>
-        <li><span class="trust__ic" data-icon="code" aria-hidden="true"></span><span data-i18n="trust_open">Open source</span></li>
-        <li><span class="trust__ic" data-icon="user" aria-hidden="true"></span><span data-i18n="trust_noacc">No accounts</span></li>
-      </ul>
-    </section>
-
-    <section class="section" id="features">
-      <header class="section__head reveal">
-        <p class="kicker" data-i18n="feat_kicker">Everything, nothing more</p>
-        <h2 class="section__title" data-i18n="feat_title">Built to feel calm, not demanding</h2>
-      </header>
+    <section class="sec" id="features">
+      <p class="tag reveal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.8"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.8"/></svg>
+        <span data-i18n="tag1">Features</span>
+      </p>
+      <h2 class="reveal">
+        <span data-i18n="h2a">Built for the days</span><br />
+        <span data-i18n="h2b">you don't feel like it.</span>
+      </h2>
+      <p class="sub reveal" data-i18n="sub1">
+        Three kinds of habit, a focus timer, four home-screen widgets and a year
+        you can read at a glance. All of it offline.
+      </p>
 
       <div class="bento">
-        <article class="tile tile--wide reveal">
-          <div class="tile__icon" data-icon="circle-check" aria-hidden="true"></div>
-          <h3 data-i18n="f_onetap_t">One-tap logging</h3>
-          <p data-i18n="f_onetap_d">Mark today done from the home screen — daily, weekly or monthly goals with a habit “strength” that tracks your consistency.</p>
-          <div class="week" id="weekRound" data-shape="round"></div>
-          <div class="week" id="weekSquare" data-shape="square"></div>
-        </article>
 
-        <article class="tile tile--heat reveal">
-          <div class="tile__icon" data-icon="grid" aria-hidden="true"></div>
-          <h3 data-i18n="f_heat_t">Activity heatmap</h3>
-          <p data-i18n="f_heat_d">A GitHub-style grid for every habit — week, month or year at a glance.</p>
-          <div class="big-heat" id="bigHeat" aria-hidden="true"></div>
-        </article>
-
-        <article class="tile reveal">
-          <div class="tile__icon" data-icon="shapes" aria-hidden="true"></div>
-          <h3 data-i18n="f_types_t">Three habit types</h3>
-          <p data-i18n="f_types_d">Build good ones, quit bad ones, or hit an amount.</p>
-          <div class="type-demo" id="typeDemo">
-            <div class="week week--sm" data-panel="normal"></div>
-            <div class="week week--sm week--neg" data-panel="avoid" hidden></div>
-            <button class="glass" type="button" data-panel="amount" hidden aria-label="Fill the glass">
-              <svg class="glass__svg" viewBox="0 0 40 58" width="40" height="58" aria-hidden="true">
-                <defs>
-                  <clipPath id="cupOuter"><path d="M0.44 6.38 Q0 0 6.4 0 L33.6 0 Q40 0 39.56 6.38 L36.44 51.62 Q36 58 29.6 58 L10.4 58 Q4 58 3.56 51.62 Z"/></clipPath>
-                  <clipPath id="cupInner"><path d="M6.96 12.77 Q6.4 6.4 12.8 6.4 L27.2 6.4 Q33.6 6.4 33.04 12.77 L30.16 45.23 Q29.6 51.6 23.2 51.6 L16.8 51.6 Q10.4 51.6 9.84 45.23 Z"/></clipPath>
-                </defs>
-                <g clip-path="url(#cupOuter)">
-                  <path d="M0.44 6.38 Q0 0 6.4 0 L33.6 0 Q40 0 39.56 6.38 L36.44 51.62 Q36 58 29.6 58 L10.4 58 Q4 58 3.56 51.62 Z" fill="#E3EAF8"/>
-                  <rect x="8" y="8.7" width="4" height="30.2" rx="2.4" fill="#F4F7FD"/>
-                </g>
-                <g clip-path="url(#cupInner)">
-                  <g class="glass__water" id="glassWater" transform="translate(0 45.2)">
-                    <rect x="0" y="6.4" width="40" height="45.2" fill="#2E7BF6"/>
-                    <rect x="10.2" y="9.4" width="3.3" height="39.2" rx="1.6" fill="#63A0FA" opacity="0.7"/>
-                  </g>
-                </g>
-              </svg>
-              <span class="glass__n">0 / 8</span>
-            </button>
+        <article class="b b--wide reveal">
+          <div class="b__txt">
+            <span class="b__ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <h3 data-i18n="f1t">Every day, in one glance</h3>
+            <p data-i18n="f1b">Streaks, a monthly calendar and a full year grid. Long-press any day to write what happened — a note, a plan, or a win — and it shows up as a coloured dot.</p>
+            <ul class="dots">
+              <li><i class="d d--blue"></i><span data-i18n="d1">Note</span></li>
+              <li><i class="d d--amber"></i><span data-i18n="d2">Planned</span></li>
+              <li><i class="d d--green"></i><span data-i18n="d3">Completed</span></li>
+            </ul>
           </div>
-          <ul class="chips" id="typeChips">
-            <li class="chip chip--pos" data-type="normal" data-i18n="type_normal">Normal</li>
-            <li class="chip chip--neg" data-type="avoid" data-i18n="type_avoid">Avoid</li>
-            <li class="chip chip--amt" data-type="amount" data-i18n="type_amount">Amount</li>
-          </ul>
-        </article>
-
-        <article class="tile tile--new reveal">
-          <span class="tag" data-i18n="tag_new">New</span>
-          <div class="tile__icon" data-icon="list-checks" aria-hidden="true"></div>
-          <h3 data-i18n="f_check_t">Checklists</h3>
-          <p data-i18n="f_check_d">Break a habit into steps — the day is done only when every step is ticked. Perfect for a morning routine.</p>
-          <ul class="check-demo">
-            <li class="is-done"><i></i><span data-i18n="check_1">Wash face</span></li>
-            <li class="is-done"><i></i><span data-i18n="check_2">Brush teeth</span></li>
-            <li><i></i><span data-i18n="check_3">Stretch 5 min</span></li>
-          </ul>
-        </article>
-
-        <article class="tile tile--new reveal">
-          <span class="tag" data-i18n="tag_new">New</span>
-          <div class="tile__icon" data-icon="palm" aria-hidden="true"></div>
-          <h3 data-i18n="f_vac_t">Vacation mode</h3>
-          <p data-i18n="f_vac_d">Pause a habit while you’re away. Skipped days don’t count as missed and never break your streak.</p>
-          <div class="vac-strip" aria-hidden="true">
-            <span></span><span></span><span class="v"></span><span class="v"></span><span class="v"></span><span></span><span></span>
+          <div class="b__art b__art--three">
+            <img class="mk" src="assets/mock/b1-c.png" width="1395" height="2475" alt="Writing a note" loading="lazy" />
+            <img class="mk" src="assets/mock/b1-a.png" width="1395" height="2475" alt="Monthly calendar with note markers" loading="lazy" />
+            <img class="mk" src="assets/mock/b1-b.png" width="1395" height="2475" alt="Notes for a day" loading="lazy" />
           </div>
         </article>
 
-        <article class="tile tile--color reveal">
-          <div class="tile__icon" data-icon="palette" aria-hidden="true"></div>
-          <h3 data-i18n="f_person_t">Make it yours</h3>
-          <p data-i18n="f_person_d">Icons, emoji, a full color picker, light/dark themes and home-screen widgets.</p>
-          <div class="swatches" id="swatches" aria-hidden="true"></div>
-        </article>
-
-        <article class="tile reveal">
-          <div class="tile__icon" data-icon="bar-chart" aria-hidden="true"></div>
-          <h3 data-i18n="f_stats_t">Statistics</h3>
-          <p data-i18n="f_stats_d">Trends, totals and the times of day you’re most consistent.</p>
-          <div class="mini-bars" id="miniBars">
-            <span style="height:34%" data-v="12"></span><span style="height:58%" data-v="21"></span><span style="height:44%" data-v="16"></span><span style="height:82%" data-v="29"></span><span style="height:54%" data-v="19"></span><span style="height:96%" data-v="34"></span><span style="height:68%" data-v="24"></span>
+        <article class="b reveal">
+          <div class="b__art b__art--duo">
+            <img class="mk mk--back" src="assets/mock/b2-a.png" width="1395" height="2475" alt="Focus timer with a flip clock" loading="lazy" />
+            <img class="mk mk--front" src="assets/mock/b2-b.png" width="1395" height="2475" alt="Focus timer with a ring clock" loading="lazy" />
+            <span class="tagchip tagchip--1">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9.5V13l2.2 2.2"/><path d="M9.5 2h5"/></svg>
+              <span data-i18n="k4">25 min</span>
+            </span>
+            <span class="tagchip tagchip--2">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 20v-5h5"/></svg>
+              <span data-i18n="k5">4 rounds</span>
+            </span>
+            <span class="tagchip tagchip--3">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.4"/><path d="m3 15.5 4.5-4 4 3.5 3-2.5L21 17"/><circle cx="8.5" cy="9" r="1.4"/></svg>
+              <span data-i18n="k6">6 scenes</span>
+            </span>
+          </div>
+          <div class="b__txt">
+            <span class="b__ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg></span>
+            <h3 data-i18n="f2t">A focus timer built in</h3>
+            <p data-i18n="f2b">Pick a habit and a duration, or just start. Pomodoro rounds, three clock faces, six scenes and sound. Your habit's steps become the session checklist.</p>
           </div>
         </article>
 
-        <article class="tile reveal">
-          <div class="tile__icon" data-icon="bell" aria-hidden="true"></div>
-          <h3 data-i18n="f_remind_t">Smart reminders</h3>
-          <p data-i18n="f_remind_d">Per-habit notifications on exactly the days you choose.</p>
-          <div class="mini-remind">
-            <button class="mini-remind__time" id="remindTime" type="button" aria-label="Change time">08:00</button>
-            <div class="mini-remind__days">
-              <i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
-            </div>
+        <article class="b reveal">
+          <div class="b__art b__art--solo">
+            <img class="mk" src="assets/mock/b3-a.png" width="1395" height="2475" alt="A water habit counting glasses" loading="lazy" />
+            <span class="tagchip tagchip--1">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l-1.3 16.2a2 2 0 0 1-2 1.8H9.3a2 2 0 0 1-2-1.8Z"/><path d="M6.6 10.5h10.8"/></svg>
+              <span data-i18n="k1">8 glasses</span>
+            </span>
+            <span class="tagchip tagchip--2">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.8A2 2 0 0 1 5 3h5v18H5a2 2 0 0 1-2-1.8Z"/><path d="M21 4.8A2 2 0 0 0 19 3h-5v18h5a2 2 0 0 0 2-1.8Z"/></svg>
+              <span data-i18n="k2">20 pages</span>
+            </span>
+            <span class="tagchip tagchip--3">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 6.5 2 2 3-3.4"/><path d="m3 15.5 2 2 3-3.4"/><path d="M11.5 7h9.5"/><path d="M11.5 16.5h9.5"/></svg>
+              <span data-i18n="k3">3 steps</span>
+            </span>
+          </div>
+          <div class="b__txt">
+            <span class="b__ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 6.2 6 10.2a6 6 0 0 1-12 0c0-4 6-10.2 6-10.2z"/></svg></span>
+            <h3 data-i18n="f3t">Not just yes or no</h3>
+            <p data-i18n="f3b">Count glasses of water or pages read, break a habit into steps, or track one you want to avoid — where every clean day counts in your favour.</p>
           </div>
         </article>
 
-        <article class="tile reveal">
-          <div class="tile__icon" data-icon="download" aria-hidden="true"></div>
-          <h3 data-i18n="f_backup_t">Backup &amp; restore</h3>
-          <p data-i18n="f_backup_d">Export everything to a portable JSON file. Your data, in your hands.</p>
-          <div class="mini-file" id="miniFile">
-            <span class="mini-file__ic" data-icon="file"></span>
-            <span class="mini-file__name">streak-backup.json</span>
-            <button class="mini-file__dl" id="fileDl" type="button" data-icon="download" aria-label="Download backup"></button>
+        <article class="b b--wide b--flip reveal">
+          <div class="b__txt">
+            <span class="b__ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="18" rx="2.2"/><rect x="13.5" y="3" width="7.5" height="18" rx="2.2"/><path d="M6 7.5h1.5M6 11h1.5M16.5 7.5H18M16.5 11H18"/></svg></span>
+            <h3 data-i18n="f4t">Two apps in one</h3>
+            <p data-i18n="f4b">Switch between Classic and Minimal in a tap — cards and colour, or thin lines and calm. Same data, dressed the way you like it.</p>
+            <div class="swap"><span class="swap__on" data-i18n="sw1">Classic</span><span data-i18n="sw2">Minimal</span></div>
+          </div>
+          <div class="b__art b__art--face">
+            <img class="mk" src="assets/mock/b4-a.png" width="1395" height="2475" alt="The classic style" loading="lazy" />
+            <img class="mk" src="assets/mock/b4-b.png" width="1395" height="2475" alt="The minimal style" loading="lazy" />
           </div>
         </article>
+
       </div>
     </section>
 
-    <section class="section gallery" id="gallery">
-      <header class="section__head reveal">
-        <p class="kicker" data-i18n="gal_kicker">A look inside</p>
-        <h2 class="section__title" data-i18n="gal_title">Calm by design</h2>
-      </header>
-      <div class="shots" id="shots">
-        <figure class="shot reveal"><img src="assets/screenshots/01-today.png" alt="Today" loading="lazy" /><figcaption data-i18n="cap_today">Today</figcaption></figure>
-        <figure class="shot reveal"><img src="assets/screenshots/02-stats.png" alt="Statistics" loading="lazy" /><figcaption data-i18n="cap_stats">Statistics</figcaption></figure>
-        <figure class="shot reveal"><img src="assets/screenshots/03-insights.png" alt="Insights" loading="lazy" /><figcaption data-i18n="cap_insights">Insights</figcaption></figure>
-        <figure class="shot reveal"><img src="assets/screenshots/04-customize.png" alt="Personalize" loading="lazy" /><figcaption data-i18n="cap_person">Personalize</figcaption></figure>
-        <figure class="shot reveal"><img src="assets/screenshots/05-free.png" alt="Free and private" loading="lazy" /><figcaption data-i18n="cap_free">Free &amp; private</figcaption></figure>
-      </div>
-    </section>
-
-    <section class="section download" id="download">
-      <div class="download__card reveal">
-        <img class="download__mark" src="assets/icon.svg" width="72" height="72" alt="" />
-        <h2 class="download__title" data-i18n="dl_title">Start your first streak</h2>
-        <p class="download__sub" data-i18n="dl_sub">Install from F-Droid to get automatic updates, or grab the APK directly.</p>
-        <div class="download__badges">
-          <a class="badge-link" href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-fdroid.png" alt="Get it on F-Droid" height="56" /></a>
-          <a class="badge-link" href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-izzyondroid.png" alt="Get it on IzzyOnDroid" height="56" /></a>
-          <a class="badge-link" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener"><img src="assets/badges/get-it-on-github.png" alt="Get it on GitHub" height="56" /></a>
+    <section class="sec sec--tight" id="privacy">
+      <p class="tag reveal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M12 1.8 4 5v6.2c0 5 3.4 9.6 8 11 4.6-1.4 8-6 8-11V5l-8-3.2Zm3.9 7.7-4.6 4.9a1 1 0 0 1-1.5 0L8 12.4a1 1 0 0 1 1.4-1.4l1.1 1.1 3.9-4.1a1 1 0 1 1 1.5 1.4Z"/></svg>
+        <span data-i18n="tag2">Your data</span>
+      </p>
+      <h2 class="reveal">
+        <span data-i18n="h3a">Your habits are</span><br />
+        <span data-i18n="h3b">nobody else's business.</span>
+      </h2>
+      <div class="rail">
+        <div class="chip reveal">
+          <span class="chip__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M3 21a7.6 7.6 0 0 1 10.4-6"/><path d="m17 16 5 5M22 16l-5 5"/></svg></span>
+          <b data-i18n="p1t">No account</b><span data-i18n="p1b">Open it and start. There's nothing to sign up for.</span>
         </div>
-        <p class="download__note" data-i18n="dl_note">Not on the Play Store. Android may ask you to allow installs the first time.</p>
+        <div class="chip reveal">
+          <span class="chip__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M8.5 16.4a5 5 0 0 1 7 0"/><path d="M5 12.9a10 10 0 0 1 5.2-2.6"/><path d="M2 9.3a15 15 0 0 1 4.1-2.5"/><path d="M10.7 5.1A15 15 0 0 1 22 9.3"/><path d="M16.8 11.4a10 10 0 0 1 2.2 1.5"/><path d="m2 2 20 20"/></svg></span>
+          <b data-i18n="p2t">No network</b><span data-i18n="p2b">It works on a plane. Nothing is uploaded, ever.</span>
+        </div>
+        <div class="chip reveal">
+          <span class="chip__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.2"/><path d="m5.5 5.5 13 13"/></svg></span>
+          <b data-i18n="p3t">No ads</b><span data-i18n="p3b">No banners, no upsells, no "premium" wall.</span>
+        </div>
+        <div class="chip reveal">
+          <span class="chip__ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v7"/><path d="m8.5 6 3.5 3.5L15.5 6"/><rect x="2.5" y="13" width="19" height="8" rx="2.2"/><path d="M6.5 17h.01M10 17h.01"/></svg></span>
+          <b data-i18n="p4t">Your backups</b><span data-i18n="p4b">Export whenever you want, to a folder you choose.</span>
+        </div>
       </div>
     </section>
+
+    <section class="story sec">
+      <div class="story__box reveal">
+        <div class="story__txt">
+          <h2 data-i18n="st1">I got tired of habit apps<br />asking me to log in.</h2>
+          <p data-i18n="st2">
+            So I built the one I wanted: quiet, fast, offline, and free. No streak
+            held hostage behind a subscription, no notification begging me to come
+            back, no dashboard selling my data back to me.
+          </p>
+          <p class="story__small" data-i18n="st3">
+            It's open source under GPLv3 and translated by people who use it. If
+            it's missing something you need, the issue tracker is right there.
+          </p>
+          <div class="story__cta">
+            <a class="btn btn--go" href="#download">
+              <span data-i18n="cta1b">Get Streak</span>
+            </a>
+          </div>
+        </div>
+        <div class="story__art">
+          <img class="mk mk--a" src="assets/mock/story-a.png" width="1395" height="2475" alt="A shareable progress card" loading="lazy" />
+          <img class="mk mk--b" src="assets/mock/story-b.png" width="1395" height="2475" alt="Statistics in the minimal style" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section class="sec sec--tight" id="download">
+      <p class="tag reveal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7.5 10 4.5 4.5L16.5 10"/><path d="M4 20h16"/></svg>
+        <span data-i18n="tag3">Download</span>
+      </p>
+      <h2 class="reveal"><span data-i18n="h4">Free, open source, and staying that way.</span></h2>
+      <div class="badges reveal">
+        <a class="badge" href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener">
+          <img src="assets/badges/get-it-on-fdroid.png" width="646" height="250" alt="Get it on F-Droid" />
+        </a>
+        <a class="badge" href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app" target="_blank" rel="noopener">
+          <img src="assets/badges/get-it-on-izzyondroid.png" width="606" height="234" alt="Get it on IzzyOnDroid" />
+        </a>
+        <a class="badge" href="https://www.openapk.net/streak/com.streak.app/" target="_blank" rel="noopener">
+          <img src="assets/badges/get-it-on-openapk.png" width="606" height="234" alt="Get it on OpenAPK" />
+        </a>
+        <a class="badge" href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener">
+          <img src="assets/badges/get-it-on-github.png" width="646" height="250" alt="Get it on GitHub" />
+        </a>
+      </div>
+    </section>
+
+    <section class="sec sec--tight" id="support">
+      <p class="tag reveal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M12 20.7 4.3 13a4.7 4.7 0 0 1 6.6-6.6l1.1 1.1 1.1-1.1A4.7 4.7 0 0 1 19.7 13L12 20.7Z"/></svg>
+        <span data-i18n="tag4">Support</span>
+      </p>
+      <h2 class="reveal"><span data-i18n="h5">Free forever. Kept alive by you.</span></h2>
+      <p class="sub reveal" data-i18n="sub2">
+        There is no premium tier and nothing to buy inside the app. If Streak is
+        useful to you, any of these three keeps it moving.
+      </p>
+      <div class="help">
+        <a class="hc reveal" href="https://ko-fi.com/inlitx" target="_blank" rel="noopener">
+          <svg class="hc__ic" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.2 10h1.1a2.9 2.9 0 0 1 0 5.8h-1.1"/><path d="M3.4 9.6h13.4v5a5.6 5.6 0 0 1-5.6 5.6H9a5.6 5.6 0 0 1-5.6-5.6Z"/><path d="M7 3.4c-.8 1-.8 1.9 0 2.9M10.4 3.4c-.8 1-.8 1.9 0 2.9M13.8 3.4c-.8 1-.8 1.9 0 2.9"/></svg>
+          <b data-i18n="s1t">Buy me a coffee</b>
+          <span data-i18n="s1b">A one-off tip, no subscription. It helps me keep building Streak in my free time.</span>
+          <i class="hc__go"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13.5 6.5 6 5.5-6 5.5"/></svg></i>
+        </a>
+        <a class="hc reveal" href="https://github.com/InlitX/streak/stargazers" target="_blank" rel="noopener">
+          <svg class="hc__ic" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.2 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3.2Z"/></svg>
+          <b data-i18n="s2t">Star the repo</b>
+          <span data-i18n="s2b">It costs nothing and it is how most people end up finding the app.</span>
+          <i class="hc__go"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13.5 6.5 6 5.5-6 5.5"/></svg></i>
+        </a>
+        <a class="hc reveal" href="https://github.com/InlitX/streak/issues" target="_blank" rel="noopener">
+          <svg class="hc__ic" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.4" cy="5.6" r="2.4"/><circle cx="6.4" cy="18.4" r="2.4"/><circle cx="17.6" cy="18.4" r="2.4"/><path d="M6.4 8v8"/><path d="M17.6 16V10.4a2.6 2.6 0 0 0-2.6-2.6h-3.6"/><path d="m13.4 5.3-2.2 2.5 2.2 2.5"/></svg>
+          <b data-i18n="s3t">Open an issue or a PR</b>
+          <span data-i18n="s3b">Report a bug, ask for a feature, translate a string or fix a typo.</span>
+          <i class="hc__go"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13.5 6.5 6 5.5-6 5.5"/></svg></i>
+        </a>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="footer">
-    <div class="footer__brand">
-      <img src="assets/icon.svg" width="30" height="30" alt="" />
+  <footer class="foot">
+    <div class="foot__l">
+      <img src="assets/icon.svg" width="22" height="22" alt="" />
       <span>Streak</span>
     </div>
-    <p class="footer__tag" data-i18n="foot_tag">Crafted with care and a lot of free time.</p>
-    <nav class="footer__links" aria-label="Footer">
-      <a href="https://github.com/InlitX/streak" target="_blank" rel="noopener"><span class="footer__ic" data-icon="github" aria-hidden="true"></span>GitHub</a>
-      <a href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener"><span class="footer__ic" data-icon="package" aria-hidden="true"></span>F-Droid</a>
-      <a href="https://github.com/InlitX/streak/releases" target="_blank" rel="noopener"><span class="footer__ic" data-icon="tag" aria-hidden="true"></span><span data-i18n="foot_releases">Releases</span></a>
-      <a href="https://github.com/InlitX/streak/issues" target="_blank" rel="noopener"><span class="footer__ic" data-icon="bug" aria-hidden="true"></span><span data-i18n="foot_issues">Report a bug</span></a>
-      <a href="https://github.com/InlitX/streak/issues/new" target="_blank" rel="noopener"><span class="footer__ic" data-icon="lightbulb" aria-hidden="true"></span><span data-i18n="foot_feature">Request a feature</span></a>
+    <nav class="foot__n">
+      <a href="https://github.com/InlitX/streak" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>GitHub</a>
+      <a href="https://hosted.weblate.org/engage/streak/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 3-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg><span data-i18n="fn2">Translate</span></a>
+      <a href="https://github.com/InlitX/streak/issues" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.9 1.9M16 2l-1.9 1.9"/><rect x="7" y="6" width="10" height="14" rx="5"/><path d="M3 11h4M17 11h4M3.5 17h3.5M17 17h3.5M12 20v2"/></svg><span data-i18n="fn3">Report a bug</span></a>
+      <a href="https://ko-fi.com/inlitx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5Z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg>Ko-fi</a>
     </nav>
-    <p class="footer__copy">
-      <span data-i18n="foot_open">Open source · GPLv3</span> · <a class="footer__handle" href="https://github.com/InlitX" target="_blank" rel="noopener">@inlitx</a>
+    <p class="foot__c">
+      <a href="https://github.com/InlitX/streak/blob/main/LICENSE" target="_blank" rel="noopener">GPLv3</a>
+      · <span data-i18n="fc">Made by</span>
+      <a href="https://github.com/InlitX" target="_blank" rel="noopener">InlitX</a>
     </p>
   </footer>
 
