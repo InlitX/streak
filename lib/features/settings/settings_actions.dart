@@ -360,7 +360,7 @@ class SettingsActions {
         _ => context.l10n.bg_solid,
       };
 
-  static const shippedLanguages = {'en', 'es', 'zh'};
+  static const shippedLanguages = {'en', 'es', 'ru', 'zh'};
 
   static List<Locale> get shippedLocales => AppLocalizations.supportedLocales
       .where((l) => shippedLanguages.contains(l.languageCode))

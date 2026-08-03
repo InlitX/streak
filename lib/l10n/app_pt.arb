@@ -356,7 +356,7 @@
   "widget_activity": "Atividade",
   "widget_cfg_border": "Borda",
   "ranking": "Classificação",
-  "count_months": "{count, plural, =1{1 mes} other{{count meses}}",
+  "count_months": "{count, plural, =1{1 mes} other{{count} meses}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -711,5 +711,6 @@
   "appearance_sub": "",
   "stats": "Estatísticas",
   "statistics": "Estatísticas",
-  "icon_accent": "Tricolor"
+  "icon_accent": "Tricolor",
+  "@@locale": "pt"
 }
