@@ -118,36 +118,40 @@ class _FocusTaskListState extends State<FocusTaskList> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            habits.setStep(
-                              widget.habit.id,
-                              today,
-                              step.id,
-                              !checked.contains(step.id),
-                            );
-                          },
-                          behavior: HitTestBehavior.opaque,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              width: 22,
-                              height: 22,
-                              decoration: BoxDecoration(
-                                color: checked.contains(step.id)
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  width: 1.5,
+                        Semantics(
+                          button: true,
+                          selected: checked.contains(step.id),
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              habits.setStep(
+                                widget.habit.id,
+                                today,
+                                step.id,
+                                !checked.contains(step.id),
+                              );
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: checked.contains(step.id)
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    width: 1.5,
+                                  ),
                                 ),
+                                child: checked.contains(step.id)
+                                    ? const Icon(LucideIcons.check,
+                                        size: 14, color: Colors.black)
+                                    : null,
                               ),
-                              child: checked.contains(step.id)
-                                  ? const Icon(LucideIcons.check,
-                                      size: 14, color: Colors.black)
-                                  : null,
                             ),
                           ),
                         ),
@@ -248,28 +252,32 @@ class _FocusFreeTaskListState extends State<FocusFreeTaskList> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Row(
                       children: [
-                        GestureDetector(
-                          onTap: () => setState(() => focus.toggleTask(task.id)),
-                          behavior: HitTestBehavior.opaque,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              width: 22,
-                              height: 22,
-                              decoration: BoxDecoration(
-                                color: task.done
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  width: 1.5,
+                        Semantics(
+                          button: true,
+                          selected: task.done,
+                          child: GestureDetector(
+                            onTap: () => setState(() => focus.toggleTask(task.id)),
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: task.done
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    width: 1.5,
+                                  ),
                                 ),
+                                child: task.done
+                                    ? const Icon(LucideIcons.check,
+                                        size: 14, color: Colors.black)
+                                    : null,
                               ),
-                              child: task.done
-                                  ? const Icon(LucideIcons.check,
-                                      size: 14, color: Colors.black)
-                                  : null,
                             ),
                           ),
                         ),

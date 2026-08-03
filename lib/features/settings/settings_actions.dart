@@ -360,6 +360,12 @@ class SettingsActions {
         _ => context.l10n.bg_solid,
       };
 
+  static const shippedLanguages = {'en', 'es', 'zh'};
+
+  static List<Locale> get shippedLocales => AppLocalizations.supportedLocales
+      .where((l) => shippedLanguages.contains(l.languageCode))
+      .toList();
+
   static String languageLabel(BuildContext context, String code) =>
       code.isEmpty ? context.l10n.system : languageName(localeFromCode(code));
 

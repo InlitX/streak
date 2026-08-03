@@ -168,48 +168,56 @@ class _ProfileRow extends StatelessWidget {
 
     return Row(
       children: [
-        GestureDetector(
-          onTap: () => SettingsActions.pickProfilePhoto(context),
-          child: Container(
-            width: 62,
-            height: 62,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colors.surfaceContainerHighest,
-              image: DecorationImage(
-                image: hasPhoto
-                    ? FileImage(File(filePath)) as ImageProvider
-                    : const AssetImage('assets/profile_default.jpg'),
-                fit: BoxFit.cover,
+        Semantics(
+          button: true,
+          label: context.l10n.change_photo,
+          child: GestureDetector(
+            onTap: () => SettingsActions.pickProfilePhoto(context),
+            child: Container(
+              width: 62,
+              height: 62,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: context.colors.surfaceContainerHighest,
+                image: DecorationImage(
+                  image: hasPhoto
+                      ? FileImage(File(filePath)) as ImageProvider
+                      : const AssetImage('assets/profile_default.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: GestureDetector(
-            onTap: () => SettingsActions.editName(context),
-            behavior: HitTestBehavior.opaque,
-            child: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: 'PlayfairDisplay',
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      height: 1.1,
-                      letterSpacing: -0.6,
-                      color: context.colors.onSurface,
+          child: Semantics(
+            button: true,
+            label: context.l10n.edit_name,
+            child: GestureDetector(
+              onTap: () => SettingsActions.editName(context),
+              behavior: HitTestBehavior.opaque,
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'PlayfairDisplay',
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                        height: 1.1,
+                        letterSpacing: -0.6,
+                        color: context.colors.onSurface,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 9),
-                Icon(LucideIcons.pencil, size: 14, color: context.tokens.muted),
-              ],
+                  const SizedBox(width: 9),
+                  Icon(LucideIcons.pencil, size: 14, color: context.tokens.muted),
+                ],
+              ),
             ),
           ),
         ),

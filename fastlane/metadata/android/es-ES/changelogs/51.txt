@@ -1,0 +1,7 @@
+🎯 Modo Focus — elige hábito y duración, con pomodoro, escenas y sonido
+📝 Notas diarias — escribe lo aprendido, adjunta fotos y velas en Journey
+🎨 Estilo Minimal — un aspecto más sobrio que activas en Ajustes
+🔒 Bloqueo con PIN o huella, y copias de seguridad automáticas
+🔔 Recordatorios con botones de Hecho, Posponer y Añadir cantidad
+📦 Archiva hábitos sin perder su historial
+🐛 Arreglados los recordatorios perdidos — abre la app tras actualizar

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,7 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
+import 'package:streak/features/statistics/widgets/statistics_filters.dart';
 import 'package:streak/features/statistics/widgets/stat_donut.dart';
 import 'package:streak/features/statistics/widgets/stat_gauge.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
@@ -85,13 +85,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     padding: const EdgeInsets.only(left: 6),
                     child: MinimalTitle(title: context.l10n.statistics),
                   ),
-                _HabitFilter(
+                HabitFilter(
                   habits: all,
                   selected: _habitId,
                   onSelected: (id) => setState(() => _habitId = id),
                 ),
                 const SizedBox(height: 16),
-                _YearNavigator(
+                YearNavigator(
                   year: _year,
                   canGoForward: _year < currentYear,
                   onChanged: (delta) => setState(() => _year += delta),
@@ -466,155 +466,6 @@ class _SecondaryStats extends StatelessWidget {
   }
 }
 
-class _HabitFilter extends StatelessWidget {
-  const _HabitFilter({
-    required this.habits,
-    required this.selected,
-    required this.onSelected,
-  });
-
-  final List<Habit> habits;
-  final String? selected;
-  final ValueChanged<String?> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 36,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _FilterChip(
-            label: context.l10n.all,
-            color: context.colors.primary,
-            active: selected == null,
-            onTap: () => onSelected(null),
-          ),
-          for (final habit in habits)
-            _FilterChip(
-              label: habit.name,
-              color: habit.color,
-              active: selected == habit.id,
-              onTap: () => onSelected(habit.id),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.color,
-    required this.active,
-    required this.onTap,
-  });
-
-  final String label;
-  final Color color;
-  final bool active;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? color : context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: active ? Colors.white : context.tokens.muted,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _YearNavigator extends StatelessWidget {
-  const _YearNavigator({
-    required this.year,
-    required this.canGoForward,
-    required this.onChanged,
-  });
-
-  final int year;
-  final bool canGoForward;
-  final ValueChanged<int> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _ArrowButton(
-          icon: LucideIcons.chevronLeft,
-          onTap: () {
-            HapticFeedback.selectionClick();
-            onChanged(-1);
-          },
-        ),
-        SizedBox(
-          width: 96,
-          child: Text(
-            '$year',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: context.colors.onSurface,
-            ),
-          ),
-        ),
-        _ArrowButton(
-          icon: LucideIcons.chevronRight,
-          onTap: canGoForward
-              ? () {
-                  HapticFeedback.selectionClick();
-                  onChanged(1);
-                }
-              : null,
-        ),
-      ],
-    );
-  }
-}
-
-class _ArrowButton extends StatelessWidget {
-  const _ArrowButton({required this.icon, required this.onTap});
-
-  final IconData icon;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final enabled = onTap != null;
-    return IconButton(
-      onPressed: onTap,
-      icon: Icon(
-        icon,
-        size: 22,
-        color: enabled
-            ? context.colors.onSurface
-            : context.tokens.muted.withValues(alpha: 0.4),
-      ),
-    );
-  }
-}
-
 class _PerfectStreakCard extends StatelessWidget {
   const _PerfectStreakCard({required this.streak, required this.color});
 
@@ -757,47 +608,50 @@ class _FocusStats extends StatelessWidget {
         ? focus.sessionCount
         : focus.sessions.where((s) => s.habitId == habitId).length;
 
-    return GestureDetector(
-      onTap: () => AppNavigator.push(const FocusHistoryPage()),
-      child: IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: MiniStat(
-              icon: LucideIcons.timer,
-              color: accent,
-              value: formatHoursShort(seconds),
-              label: context.l10n.focus_total,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: () => AppNavigator.push(const FocusHistoryPage()),
+        child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: MiniStat(
+                icon: LucideIcons.timer,
+                color: accent,
+                value: formatHoursShort(seconds),
+                label: context.l10n.focus_total,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: MiniStat(
-              icon: LucideIcons.circlePlay,
-              color: context.tokens.info,
-              value: '$sessions',
-              label: context.l10n.focus_sessions,
-            ),
-          ),
-          if (context.watch<SettingsController>().focusDailyGoal > 0) ...[
             const SizedBox(width: 12),
             Expanded(
               child: MiniStat(
-                icon: LucideIcons.target,
-                color: context.tokens.success,
-                value: context.l10n.focus_goal_today(
-                  formatHoursShort(focus.secondsForDay(AppClock.now())),
-                  formatHoursShort(
-                    context.watch<SettingsController>().focusDailyGoal * 60,
-                  ),
-                ),
-                label: context.l10n.focus_daily_goal,
+                icon: LucideIcons.circlePlay,
+                color: context.tokens.info,
+                value: '$sessions',
+                label: context.l10n.focus_sessions,
               ),
             ),
+            if (context.watch<SettingsController>().focusDailyGoal > 0) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: MiniStat(
+                  icon: LucideIcons.target,
+                  color: context.tokens.success,
+                  value: context.l10n.focus_goal_today(
+                    formatHoursShort(focus.secondsForDay(AppClock.now())),
+                    formatHoursShort(
+                      context.watch<SettingsController>().focusDailyGoal * 60,
+                    ),
+                  ),
+                  label: context.l10n.focus_daily_goal,
+                ),
+              ),
+            ],
           ],
-        ],
-      ),
+        ),
+        ),
       ),
     );
   }

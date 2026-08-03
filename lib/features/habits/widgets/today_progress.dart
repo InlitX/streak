@@ -115,31 +115,46 @@ class _RingPainter extends CustomPainter {
   final Color color;
   final Color track;
 
+  static const _stroke = 7.0;
+  static const _waves = 14;
+  static const _amplitude = 1.4;
+
   @override
   void paint(Canvas canvas, Size size) {
-    const stroke = 8.0;
     final center = size.center(Offset.zero);
-    final radius = (size.width - stroke) / 2;
+    final radius = (size.width - _stroke) / 2 - _amplitude;
 
     final base = Paint()
       ..color = track
       ..style = PaintingStyle.stroke
-      ..strokeWidth = stroke;
+      ..strokeWidth = _stroke;
     canvas.drawCircle(center, radius, base);
 
     if (ratio <= 0) return;
     final arc = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = stroke
-      ..strokeCap = StrokeCap.round;
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      2 * math.pi * ratio.clamp(0.0, 1.0),
-      false,
-      arc,
-    );
+      ..strokeWidth = _stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(_wave(center, radius), arc);
+  }
+
+  Path _wave(Offset center, double radius) {
+    final sweep = 2 * math.pi * ratio.clamp(0.0, 1.0);
+    final steps = (sweep * 36).ceil().clamp(8, 240);
+    final path = Path();
+
+    for (var i = 0; i <= steps; i++) {
+      final angle = -math.pi / 2 + sweep * i / steps;
+      final wave = radius + _amplitude * math.sin(angle * _waves);
+      final point = Offset(
+        center.dx + wave * math.cos(angle),
+        center.dy + wave * math.sin(angle),
+      );
+      i == 0 ? path.moveTo(point.dx, point.dy) : path.lineTo(point.dx, point.dy);
+    }
+    return path;
   }
 
   @override

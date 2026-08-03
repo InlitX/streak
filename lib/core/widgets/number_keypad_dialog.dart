@@ -83,11 +83,14 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
         child: Material(
           color: context.colors.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            onTap: onTap,
-            onLongPress: onLongPress,
-            child: SizedBox(height: 50, child: Center(child: child)),
+          child: Semantics(
+            button: true,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: onTap,
+              onLongPress: onLongPress,
+              child: SizedBox(height: 50, child: Center(child: child)),
+            ),
           ),
         ),
       ),

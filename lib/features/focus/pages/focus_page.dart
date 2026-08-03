@@ -441,40 +441,44 @@ class _TopBar extends StatelessWidget {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: GestureDetector(
-                          onTap: () {
-                            s.setFocusImage(path);
-                            s.setFocusScene(kCustomScene);
-                          },
-                          onLongPress: () async {
-                            if (await showDeleteSheet(sheetContext)) {
-                              await s.removeFocusImage(path);
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(
-                              s.focusImage == path ? 2.5 : 0,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: s.focusImage == path
-                                  ? Border.all(
-                                      color: sheetContext.colors.primary,
-                                      width: 2.5,
-                                    )
-                                  : null,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                s.focusImage == path ? 12 : 14,
+                        child: Semantics(
+                          button: true,
+                          label: sheetContext.l10n.app_background,
+                          child: GestureDetector(
+                            onTap: () {
+                              s.setFocusImage(path);
+                              s.setFocusScene(kCustomScene);
+                            },
+                            onLongPress: () async {
+                              if (await showDeleteSheet(sheetContext)) {
+                                await s.removeFocusImage(path);
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(
+                                s.focusImage == path ? 2.5 : 0,
                               ),
-                              child: File(path).existsSync()
-                                  ? Image.file(File(path), fit: BoxFit.cover)
-                                  : ColoredBox(
-                                      color: sheetContext
-                                          .colors.surfaceContainerHighest,
-                                      child: const SizedBox.expand(),
-                                    ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: s.focusImage == path
+                                    ? Border.all(
+                                        color: sheetContext.colors.primary,
+                                        width: 2.5,
+                                      )
+                                    : null,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  s.focusImage == path ? 12 : 14,
+                                ),
+                                child: File(path).existsSync()
+                                    ? Image.file(File(path), fit: BoxFit.cover)
+                                    : ColoredBox(
+                                        color: sheetContext
+                                            .colors.surfaceContainerHighest,
+                                        child: const SizedBox.expand(),
+                                      ),
+                              ),
                             ),
                           ),
                         ),
@@ -487,17 +491,21 @@ class _TopBar extends StatelessWidget {
               width: tile,
               child: AspectRatio(
                 aspectRatio: 0.78,
-                child: GestureDetector(
-                  onTap: pickImage,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: sheetContext.colors.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Icon(
-                      LucideIcons.imagePlus,
-                      size: 20,
-                      color: sheetContext.tokens.muted,
+                child: Semantics(
+                  button: true,
+                  label: sheetContext.l10n.add_image,
+                  child: GestureDetector(
+                    onTap: pickImage,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: sheetContext.colors.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        LucideIcons.imagePlus,
+                        size: 20,
+                        color: sheetContext.tokens.muted,
+                      ),
                     ),
                   ),
                 ),
@@ -656,37 +664,40 @@ class _Controls extends StatelessWidget {
           },
         ),
         const SizedBox(width: 18),
-        GestureDetector(
-          onTap: () {
-            HapticFeedback.mediumImpact();
-            onToggle();
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.16),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  running ? LucideIcons.pause : LucideIcons.play,
-                  size: 18,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  running
-                      ? context.l10n.focus_pause
-                      : context.l10n.focus_resume,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+        Semantics(
+          button: true,
+          child: GestureDetector(
+            onTap: () {
+              HapticFeedback.mediumImpact();
+              onToggle();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    running ? LucideIcons.pause : LucideIcons.play,
+                    size: 18,
                     color: Colors.white,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 10),
+                  Text(
+                    running
+                        ? context.l10n.focus_pause
+                        : context.l10n.focus_resume,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -705,16 +716,20 @@ class _RoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white.withValues(alpha: 0.13),
+    return Semantics(
+      button: true,
+      label: context.l10n.focus_end,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white.withValues(alpha: 0.13),
+          ),
+          child: Icon(icon, size: 19, color: Colors.white),
         ),
-        child: Icon(icon, size: 19, color: Colors.white),
       ),
     );
   }

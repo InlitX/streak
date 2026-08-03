@@ -100,45 +100,49 @@ class CompactPill extends StatelessWidget {
     final accent = color ?? context.colors.primary;
     final muted = context.tokens.muted;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 180),
-        opacity: dimmed ? 0.35 : 1,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-          decoration: BoxDecoration(
-            color: selected
-                ? accent.withValues(alpha: 0.10)
-                : context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(9),
-            border: Border.all(
-              color: selected ? accent.withValues(alpha: 0.75) : Colors.transparent,
-              width: 1.2,
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 180),
+          opacity: dimmed ? 0.35 : 1,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+            decoration: BoxDecoration(
+              color: selected
+                  ? accent.withValues(alpha: 0.10)
+                  : context.colors.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(9),
+              border: Border.all(
+                color: selected ? accent.withValues(alpha: 0.75) : Colors.transparent,
+                width: 1.2,
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 13, color: selected ? accent : muted),
-                const SizedBox(width: 5),
-              ],
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
-                    color: selected ? accent : muted,
+            child: Row(
+              mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 13, color: selected ? accent : muted),
+                  const SizedBox(width: 5),
+                ],
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                      color: selected ? accent : muted,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -164,28 +168,36 @@ class CompactTabs extends StatelessWidget {
     return Row(
       children: [
         for (var i = 0; i < labels.length; i++)
-          GestureDetector(
-            onTap: () => onChanged(i),
-            behavior: HitTestBehavior.opaque,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Column(
-                children: [
-                  Text(
-                    labels[i],
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: i == index ? FontWeight.w700 : FontWeight.w600,
-                      color: i == index ? accent : context.tokens.muted,
-                    ),
+          Flexible(
+            child: Semantics(
+              button: true,
+              child: GestureDetector(
+                onTap: () => onChanged(i),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        labels[i],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight:
+                              i == index ? FontWeight.w700 : FontWeight.w600,
+                          color: i == index ? accent : context.tokens.muted,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 1.6,
+                        width: 18,
+                        color: i == index ? accent : Colors.transparent,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Container(
-                    height: 1.6,
-                    width: 18,
-                    color: i == index ? accent : Colors.transparent,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -254,28 +266,33 @@ class CompactStepperRow extends StatelessWidget {
           ),
           HoldRepeatButton(
             icon: LucideIcons.minus,
+label: context.l10n.a11y_decrease,
             size: 36,
             iconSize: 17,
             onTap: value - step >= min ? () => onChanged(value - step) : null,
           ),
-          GestureDetector(
-            onTap: editable ? () => _promptValue(context) : null,
-            child: Container(
-              constraints: const BoxConstraints(minWidth: 52),
-              alignment: Alignment.center,
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.5,
-                  fontWeight: FontWeight.w700,
-                  color: scheme.onSurface,
+          Semantics(
+            button: true,
+            child: GestureDetector(
+              onTap: editable ? () => _promptValue(context) : null,
+              child: Container(
+                constraints: const BoxConstraints(minWidth: 52),
+                alignment: Alignment.center,
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
+                  ),
                 ),
               ),
             ),
           ),
           HoldRepeatButton(
             icon: LucideIcons.plus,
+label: context.l10n.a11y_increase,
             size: 36,
             iconSize: 17,
             onTap: max != null && value + step > max!
@@ -312,35 +329,39 @@ class CompactWeekdays extends StatelessWidget {
         return Expanded(
           child: Padding(
             padding: EdgeInsets.only(right: i == 6 ? 0 : 5),
-            child: GestureDetector(
-              onTap: () {
-                final next = [...selected];
-                active ? next.remove(day) : next.add(day);
-                next.sort();
-                onChanged(next);
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                padding: const EdgeInsets.symmetric(vertical: 9),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: active
-                      ? accent.withValues(alpha: 0.12)
-                      : context.colors.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(9),
-                  border: Border.all(
+            child: Semantics(
+              button: true,
+              selected: active,
+              child: GestureDetector(
+                onTap: () {
+                  final next = [...selected];
+                  active ? next.remove(day) : next.add(day);
+                  next.sort();
+                  onChanged(next);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  padding: const EdgeInsets.symmetric(vertical: 9),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
                     color: active
-                        ? accent.withValues(alpha: 0.75)
-                        : Colors.transparent,
-                    width: 1.2,
+                        ? accent.withValues(alpha: 0.12)
+                        : context.colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(9),
+                    border: Border.all(
+                      color: active
+                          ? accent.withValues(alpha: 0.75)
+                          : Colors.transparent,
+                      width: 1.2,
+                    ),
                   ),
-                ),
-                child: Text(
-                  labels[i],
-                  style: TextStyle(
-                    color: active ? accent : context.tokens.muted,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 11,
+                  child: Text(
+                    labels[i],
+                    style: TextStyle(
+                      color: active ? accent : context.tokens.muted,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 11,
+                    ),
                   ),
                 ),
               ),
@@ -379,51 +400,58 @@ class CompactReminderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onEdit,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(13),
-        ),
-        child: Row(
-          children: [
-            Icon(LucideIcons.bell, size: 16, color: context.tokens.muted),
-            const SizedBox(width: 11),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    reminder.timeLabel,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: context.colors.onSurface,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onEdit,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: Row(
+            children: [
+              Icon(LucideIcons.bell, size: 16, color: context.tokens.muted),
+              const SizedBox(width: 11),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      reminder.timeLabel,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: context.colors.onSurface,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 1),
-                  Text(
-                    _daysLabel(context),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: context.tokens.muted,
+                    const SizedBox(height: 1),
+                    Text(
+                      _daysLabel(context),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: context.tokens.muted,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              Semantics(
+                button: true,
+                label: context.l10n.delete,
+                child: GestureDetector(
+                  onTap: onDelete,
+                  behavior: HitTestBehavior.opaque,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child:
+                        Icon(LucideIcons.x, size: 16, color: context.tokens.muted),
                   ),
-                ],
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: onDelete,
-              behavior: HitTestBehavior.opaque,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child:
-                    Icon(LucideIcons.x, size: 16, color: context.tokens.muted),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -445,29 +473,32 @@ class CompactAddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tint = color ?? context.colors.primary;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(13),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(LucideIcons.plus, size: 15, color: tint),
-            const SizedBox(width: 7),
-            Text(
-              label,
-              style: TextStyle(
-                color: tint,
-                fontWeight: FontWeight.w700,
-                fontSize: 13.5,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(LucideIcons.plus, size: 15, color: tint),
+              const SizedBox(width: 7),
+              Text(
+                label,
+                style: TextStyle(
+                  color: tint,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13.5,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

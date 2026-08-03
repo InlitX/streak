@@ -38,40 +38,43 @@ class FocusPill extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: GestureDetector(
-        onTap: open,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-          decoration: BoxDecoration(
-            color: active
-                ? accent.withValues(alpha: 0.16)
-                : context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16),
-            border: active
-                ? Border.all(color: accent.withValues(alpha: 0.6))
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                LucideIcons.timer,
-                size: 17,
-                color: active ? accent : context.tokens.muted,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                active
-                    ? formatDuration(focus.remainingSeconds)
-                    : context.l10n.focus,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: open,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+            decoration: BoxDecoration(
+              color: active
+                  ? accent.withValues(alpha: 0.16)
+                  : context.colors.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(16),
+              border: active
+                  ? Border.all(color: accent.withValues(alpha: 0.6))
+                  : null,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  LucideIcons.timer,
+                  size: 17,
                   color: active ? accent : context.tokens.muted,
-                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
-              ),
-            ],
+                const SizedBox(width: 6),
+                Text(
+                  active
+                      ? formatDuration(focus.remainingSeconds)
+                      : context.l10n.focus,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: active ? accent : context.tokens.muted,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

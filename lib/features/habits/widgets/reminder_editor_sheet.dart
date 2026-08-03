@@ -256,30 +256,34 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                     return Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: i == 6 ? 0 : 6),
-                        child: GestureDetector(
-                          onTap: () => setState(() {
-                            active ? _days.remove(day) : _days.add(day);
-                          }),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 160),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: active
-                                  ? scheme.primary
-                                  : scheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                WeekdayLabels.shortMonFirst(
-                                  Localizations.localeOf(context).languageCode,
-                                )[i],
-                                style: TextStyle(
-                                  color: active
-                                      ? scheme.onPrimary
-                                      : context.tokens.muted,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12,
+                        child: Semantics(
+                          button: true,
+                          selected: active,
+                          child: GestureDetector(
+                            onTap: () => setState(() {
+                              active ? _days.remove(day) : _days.add(day);
+                            }),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 160),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: active
+                                    ? scheme.primary
+                                    : scheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  WeekdayLabels.shortMonFirst(
+                                    Localizations.localeOf(context).languageCode,
+                                  )[i],
+                                  style: TextStyle(
+                                    color: active
+                                        ? scheme.onPrimary
+                                        : context.tokens.muted,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                             ),
@@ -294,35 +298,38 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             Text(context.l10n.time,
                 style: TextStyle(color: context.tokens.muted, fontSize: 13)),
             const SizedBox(height: 8),
-            InkWell(
-              onTap: _pickTime,
-              borderRadius: BorderRadius.circular(minimal ? 13 : 16),
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: minimal ? 14 : 16,
-                  vertical: minimal ? 13 : 16,
-                ),
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(minimal ? 13 : 16),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      LucideIcons.clock,
-                      color: minimal ? context.tokens.muted : scheme.primary,
-                      size: minimal ? 17 : 20,
-                    ),
-                    SizedBox(width: minimal ? 11 : 12),
-                    Text(
-                      _time.format(context),
-                      style: TextStyle(
-                        color: scheme.onSurface,
-                        fontSize: minimal ? 15 : 16,
-                        fontWeight: minimal ? FontWeight.w700 : FontWeight.w600,
+            Semantics(
+              button: true,
+              child: InkWell(
+                onTap: _pickTime,
+                borderRadius: BorderRadius.circular(minimal ? 13 : 16),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: minimal ? 14 : 16,
+                    vertical: minimal ? 13 : 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: scheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(minimal ? 13 : 16),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        LucideIcons.clock,
+                        color: minimal ? context.tokens.muted : scheme.primary,
+                        size: minimal ? 17 : 20,
                       ),
-                    ),
-                  ],
+                      SizedBox(width: minimal ? 11 : 12),
+                      Text(
+                        _time.format(context),
+                        style: TextStyle(
+                          color: scheme.onSurface,
+                          fontSize: minimal ? 15 : 16,
+                          fontWeight: minimal ? FontWeight.w700 : FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -412,24 +419,28 @@ class _ModeToggle extends StatelessWidget {
     Widget seg(String label, bool interval) {
       final active = interval == intervalMode;
       return Expanded(
-        child: GestureDetector(
-          onTap: () => onChanged(interval),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              color: active ? scheme.primary : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: active ? scheme.onPrimary : context.tokens.muted,
+        child: Semantics(
+          button: true,
+          selected: active,
+          child: GestureDetector(
+            onTap: () => onChanged(interval),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 160),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: active ? scheme.primary : Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: active ? scheme.onPrimary : context.tokens.muted,
+                  ),
                 ),
               ),
             ),
@@ -513,27 +524,31 @@ class _SnoozeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? scheme.primary.withValues(alpha: 0.18)
-              : scheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: selected
+                ? scheme.primary.withValues(alpha: 0.18)
+                : scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
 
-          border: Border.all(
-            color: selected ? scheme.primary : Colors.transparent,
-            width: 1.5,
+            border: Border.all(
+              color: selected ? scheme.primary : Colors.transparent,
+              width: 1.5,
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? scheme.primary : context.tokens.muted,
-            fontWeight: FontWeight.w700,
-            fontSize: 13,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected ? scheme.primary : context.tokens.muted,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+            ),
           ),
         ),
       ),
@@ -549,20 +564,23 @@ class _PresetChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: context.colors.primary.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: context.colors.primary,
-            fontWeight: FontWeight.w700,
-            fontSize: 12,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: context.colors.primary.withValues(alpha: 0.14),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: context.colors.primary,
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+            ),
           ),
         ),
       ),

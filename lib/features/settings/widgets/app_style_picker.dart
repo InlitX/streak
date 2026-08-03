@@ -75,101 +75,105 @@ class _StyleOption extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final outline = isDark ? const Color(0xFF2E2E32) : const Color(0xFFDCDCE3);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 0.62,
-            child: AnimatedScale(
-              scale: selected ? 1 : 0.94,
-              duration: const Duration(milliseconds: 380),
-              curve: Curves.easeOutBack,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 280),
-                curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF141416) : Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: selected ? accent : outline,
-                    width: selected ? 1.8 : 1,
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 0.62,
+              child: AnimatedScale(
+                scale: selected ? 1 : 0.94,
+                duration: const Duration(milliseconds: 380),
+                curve: Curves.easeOutBack,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 280),
+                  curve: Curves.easeOutCubic,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF141416) : Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: selected ? accent : outline,
+                      width: selected ? 1.8 : 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: accent.withValues(alpha: selected ? 0.22 : 0),
+                        blurRadius: 22,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: accent.withValues(alpha: selected ? 0.22 : 0),
-                      blurRadius: 22,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(13),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF1B1B1F)
-                          : const Color(0xFFF3F3F7),
-                    ),
-                    child: AnimatedOpacity(
-                      opacity: selected ? 1 : 0.72,
-                      duration: const Duration(milliseconds: 280),
-                      child: preview,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(13),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1B1B1F)
+                            : const Color(0xFFF3F3F7),
+                      ),
+                      child: AnimatedOpacity(
+                        opacity: selected ? 1 : 0.72,
+                        duration: const Duration(milliseconds: 280),
+                        child: preview,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 9),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: 13,
-                height: 13,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selected ? accent : Colors.transparent,
-                  border: selected
-                      ? null
-                      : Border.all(color: context.tokens.muted, width: 1.2),
-                ),
-                child: selected
-                    ? Icon(LucideIcons.check,
-                        size: 9, color: context.colors.onPrimary)
-                    : null,
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: selected ? accent : context.tokens.muted,
+            const SizedBox(height: 9),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 13,
+                  height: 13,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: selected ? accent : Colors.transparent,
+                    border: selected
+                        ? null
+                        : Border.all(color: context.tokens.muted, width: 1.2),
                   ),
+                  child: selected
+                      ? Icon(LucideIcons.check,
+                          size: 9, color: context.colors.onPrimary)
+                      : null,
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: selected ? accent : context.tokens.muted,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (description != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                description!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  height: 1.45,
+                  color: context.tokens.muted,
                 ),
               ),
             ],
-          ),
-          if (description != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              description!,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.5,
-                height: 1.45,
-                color: context.tokens.muted,
-              ),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }

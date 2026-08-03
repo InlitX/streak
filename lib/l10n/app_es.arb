@@ -510,5 +510,14 @@
     "placeholders": {
       "value": { "type": "String" }
     }
-  }
+  },
+  "a11y_mark_done": "Marcar {name} como hecho",
+  "a11y_mark_not_done": "Marcar {name} como no hecho",
+  "a11y_add_amount": "Añadir a {name}",
+  "a11y_log_relapse": "Registrar una recaída en {name}",
+  "a11y_clear_relapse": "Quitar la recaída de hoy en {name}",
+  "a11y_not_done": "sin hacer",
+  "a11y_increase": "Aumentar",
+  "a11y_decrease": "Disminuir",
+  "a11y_pick_color": "Elegir color"
 }

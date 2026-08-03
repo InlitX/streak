@@ -494,61 +494,69 @@ class _ProfileHeader extends StatelessWidget {
 
     return Column(
       children: [
-        GestureDetector(
-          onTap: () => SettingsActions.pickProfilePhoto(context),
-          child: Stack(
-            children: [
-              Container(
-                width: 88,
-                height: 88,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: scheme.surfaceContainerHighest,
-                  image: DecorationImage(
-                    image: hasPhoto
-                        ? FileImage(File(filePath)) as ImageProvider
-                        : const AssetImage('assets/profile_default.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
+        Semantics(
+          button: true,
+          label: context.l10n.change_photo,
+          child: GestureDetector(
+            onTap: () => SettingsActions.pickProfilePhoto(context),
+            child: Stack(
+              children: [
+                Container(
+                  width: 88,
+                  height: 88,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: scheme.primary,
-                    border: Border.all(color: scheme.surface, width: 2),
-                  ),
-                  child: Icon(
-                    LucideIcons.pencil,
-                    size: 12,
-                    color: scheme.onPrimary,
+                    color: scheme.surfaceContainerHighest,
+                    image: DecorationImage(
+                      image: hasPhoto
+                          ? FileImage(File(filePath)) as ImageProvider
+                          : const AssetImage('assets/profile_default.jpg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: scheme.primary,
+                      border: Border.all(color: scheme.surface, width: 2),
+                    ),
+                    child: Icon(
+                      LucideIcons.pencil,
+                      size: 12,
+                      color: scheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 12),
-        GestureDetector(
-          onTap: () => SettingsActions.editName(context),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w800,
-                  color: scheme.onSurface,
+        Semantics(
+          button: true,
+          label: context.l10n.edit_name,
+          child: GestureDetector(
+            onTap: () => SettingsActions.editName(context),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800,
+                    color: scheme.onSurface,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 6),
-              Icon(LucideIcons.pencil, size: 15, color: context.tokens.muted),
-            ],
+                const SizedBox(width: 6),
+                Icon(LucideIcons.pencil, size: 15, color: context.tokens.muted),
+              ],
+            ),
           ),
         ),
       ],

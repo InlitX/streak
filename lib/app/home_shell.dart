@@ -25,11 +25,7 @@ class _HomeShellState extends State<HomeShell>
 
   double _direction = 1;
 
-  late final AnimationController _swap = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 380),
-    value: 1,
-  );
+  late final AnimationController _swap;
   late final Animation<double> _fade = CurvedAnimation(
     parent: _swap,
     curve: const Interval(0, 0.55, curve: Curves.easeOut),
@@ -42,6 +38,11 @@ class _HomeShellState extends State<HomeShell>
   @override
   void initState() {
     super.initState();
+    _swap = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 380),
+      value: 1,
+    );
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -71,7 +72,7 @@ class _HomeShellState extends State<HomeShell>
 
   @override
   Widget build(BuildContext context) {
-    if (context.watch<SettingsController>().isGridLayout) {
+    if (context.watch<SettingsController>().isMinimalStyle) {
       return const Scaffold(body: HomePage());
     }
     final scheme = Theme.of(context).colorScheme;
@@ -160,58 +161,65 @@ class _NavItem extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final tint = selected ? scheme.primary : context.tokens.muted;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 320),
-            curve: Curves.easeOutCubic,
-            padding: EdgeInsets.symmetric(
-              horizontal: selected ? 18 : 16,
-              vertical: 10,
-            ),
-            decoration: BoxDecoration(
-              color: scheme.primary.withValues(alpha: selected ? 0.16 : 0),
-              borderRadius: BorderRadius.circular(22),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AnimatedScale(
-                  scale: selected ? 1.08 : 1,
-                  duration: const Duration(milliseconds: 320),
-                  curve: Curves.easeOutBack,
-                  child: Icon(icon, size: 21, color: tint),
-                ),
-                ClipRect(
-                  child: AnimatedSize(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Center(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 320),
+              curve: Curves.easeOutCubic,
+              padding: EdgeInsets.symmetric(
+                horizontal: selected ? 18 : 16,
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: scheme.primary.withValues(alpha: selected ? 0.16 : 0),
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedScale(
+                    scale: selected ? 1.08 : 1,
                     duration: const Duration(milliseconds: 320),
-                    curve: Curves.easeOutCubic,
-                    child: selected
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 88),
-                              child: Text(
-                                label,
-                                maxLines: 1,
-                                softWrap: false,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: tint,
+                    curve: Curves.easeOutBack,
+                    child: Icon(icon, size: 21, color: tint),
+                  ),
+                  ClipRect(
+                    child: AnimatedSize(
+                      duration: const Duration(milliseconds: 320),
+                      curve: Curves.easeOutCubic,
+                      child: selected
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 88),
+                                child: Text(
+                                  label,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: tint,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

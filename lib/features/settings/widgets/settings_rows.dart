@@ -187,35 +187,38 @@ class PickerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            IconBadge(icon: icon),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-            if (value != null)
-              Text(
-                value!,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: context.tokens.muted,
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              IconBadge(icon: icon),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style:
+                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-            if (trailing != null) trailing!,
-            const SizedBox(width: 6),
-            Icon(LucideIcons.chevronRight,
-                size: 18, color: context.tokens.muted),
-          ],
+              if (value != null)
+                Text(
+                  value!,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: context.tokens.muted,
+                  ),
+                ),
+              if (trailing != null) trailing!,
+              const SizedBox(width: 6),
+              Icon(LucideIcons.chevronRight,
+                  size: 18, color: context.tokens.muted),
+            ],
+          ),
         ),
       ),
     );
@@ -248,24 +251,28 @@ class Segmented extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (var i = 0; i < options.length; i++)
-            GestureDetector(
-              onTap: () => onChanged(i),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 160),
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-                decoration: BoxDecoration(
-                  color: i == index ? scheme.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  options[i],
-                  maxLines: 1,
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: i == index ? scheme.onPrimary : context.tokens.muted,
+            Semantics(
+              button: true,
+              selected: i == index,
+              child: GestureDetector(
+                onTap: () => onChanged(i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: i == index ? scheme.primary : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    options[i],
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: i == index ? scheme.onPrimary : context.tokens.muted,
+                    ),
                   ),
                 ),
               ),

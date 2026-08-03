@@ -88,55 +88,58 @@ class _HabitDonutState extends State<HabitDonut> with TickerProviderStateMixin {
                 animation: Listenable.merge([_reveal, _select]),
                 builder: (context, _) {
                   final active = _selected == null ? null : entries[_selected!];
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTapDown: (details) =>
-                        _tap(layout.hit(details.localPosition)),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _DonutPainter(
-                              layout: layout,
-                              reveal: _reveal.value,
-                              expansion: _expansion,
-                              total: total,
-                              name: context.colors.onSurface,
-                              muted: context.tokens.muted,
+                  return Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTapDown: (details) =>
+                          _tap(layout.hit(details.localPosition)),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: _DonutPainter(
+                                layout: layout,
+                                reveal: _reveal.value,
+                                expansion: _expansion,
+                                total: total,
+                                name: context.colors.onSurface,
+                                muted: context.tokens.muted,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: layout.inner * 1.7,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(height: 18),
-                              AnimatedStatNumber(
-                                value: '${active?.count ?? total}',
-                                style: statNumber(context, 30),
-                              ),
-                              const SizedBox(height: 5),
-                              SizedBox(
-                                height: 13,
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 200),
-                                  child: Text(
-                                    active == null
-                                        ? ''
-                                        : '${(active.count * 100 / total).round()}%',
-                                    key: ValueKey(active?.name ?? ''),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: statLabel(context),
+                          SizedBox(
+                            width: layout.inner * 1.7,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 18),
+                                AnimatedStatNumber(
+                                  value: '${active?.count ?? total}',
+                                  style: statNumber(context, 30),
+                                ),
+                                const SizedBox(height: 5),
+                                SizedBox(
+                                  height: 13,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 200),
+                                    child: Text(
+                                      active == null
+                                          ? ''
+                                          : '${(active.count * 100 / total).round()}%',
+                                      key: ValueKey(active?.name ?? ''),
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: statLabel(context),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -186,52 +189,56 @@ class _LegendChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 220),
-        opacity: dimmed ? 0.4 : 1,
-        child: AnimatedContainer(
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedOpacity(
           duration: const Duration(milliseconds: 220),
-          height: 30,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            color: entry.color.withValues(alpha: selected ? 0.16 : 0),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: entry.color,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 7),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 110),
-                child: Text(
-                  entry.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    height: 1,
-                    fontWeight: FontWeight.w600,
-                    color: selected
-                        ? context.colors.onSurface
-                        : context.tokens.muted,
+          opacity: dimmed ? 0.4 : 1,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            height: 30,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: entry.color.withValues(alpha: selected ? 0.16 : 0),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: entry.color,
+                    shape: BoxShape.circle,
                   ),
                 ),
-              ),
-              const SizedBox(width: 5),
-              Text('$percent%', style: statNumber(context, 11)),
-            ],
+                const SizedBox(width: 7),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 110),
+                  child: Text(
+                    entry.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      height: 1,
+                      fontWeight: FontWeight.w600,
+                      color: selected
+                          ? context.colors.onSurface
+                          : context.tokens.muted,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text('$percent%', style: statNumber(context, 11)),
+              ],
+            ),
           ),
         ),
       ),

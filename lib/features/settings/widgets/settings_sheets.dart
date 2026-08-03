@@ -96,7 +96,7 @@ Future<void> showBackgroundSheet(BuildContext context) {
 }
 
 Future<void> showLanguageSheet(BuildContext context) {
-  final locales = AppLocalizations.supportedLocales;
+  final locales = SettingsActions.shippedLocales;
   return showSheet(
     context,
     (sheet) => SafeArea(
@@ -168,25 +168,28 @@ class _LanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = context.colors.primary;
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected ? color : null,
+    return Semantics(
+      button: true,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    color: selected ? color : null,
+                  ),
                 ),
               ),
-            ),
-            if (selected) Icon(LucideIcons.check, size: 18, color: color),
-          ],
+              if (selected) Icon(LucideIcons.check, size: 18, color: color),
+            ],
+          ),
         ),
       ),
     );
@@ -247,35 +250,38 @@ class _BackgroundOption extends StatelessWidget {
     final dotColor = isDark
         ? Colors.white.withValues(alpha: 0.12)
         : Colors.black.withValues(alpha: 0.1);
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: _preview(isDark).copyWith(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: selected ? accent : outline,
-                  width: selected ? 2 : 1,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: _preview(isDark).copyWith(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: selected ? accent : outline,
+                    width: selected ? 2 : 1,
+                  ),
                 ),
+                child: index == 2
+                    ? CustomPaint(painter: _MiniDotsPainter(dotColor))
+                    : null,
               ),
-              child: index == 2
-                  ? CustomPaint(painter: _MiniDotsPainter(dotColor))
-                  : null,
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: selected ? accent : context.tokens.muted,
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: selected ? accent : context.tokens.muted,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -301,46 +307,49 @@ class _CustomBackgroundOption extends StatelessWidget {
     final outline = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFD8D8E0);
     final hasImage = imagePath.isNotEmpty && File(imagePath).existsSync();
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color:
-                    isDark ? const Color(0xFF161616) : const Color(0xFFEDEDF3),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: selected ? accent : outline,
-                  width: selected ? 2 : 1,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      isDark ? const Color(0xFF161616) : const Color(0xFFEDEDF3),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: selected ? accent : outline,
+                    width: selected ? 2 : 1,
+                  ),
+                  image: hasImage
+                      ? DecorationImage(
+                          image: FileImage(File(imagePath)),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
-                image: hasImage
-                    ? DecorationImage(
-                        image: FileImage(File(imagePath)),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
+                child: hasImage
+                    ? null
+                    : Icon(LucideIcons.imagePlus,
+                        size: 20, color: context.tokens.muted),
               ),
-              child: hasImage
-                  ? null
-                  : Icon(LucideIcons.imagePlus,
-                      size: 20, color: context.tokens.muted),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: selected ? accent : context.tokens.muted,
+            const SizedBox(height: 6),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: selected ? accent : context.tokens.muted,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

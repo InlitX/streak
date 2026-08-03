@@ -9,6 +9,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/onboarding/pages/onboarding_page.dart';
+import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/home_widget_service.dart';
 
@@ -36,7 +37,7 @@ class StreakApp extends StatelessWidget {
         );
       },
       locale: settings.locale,
-      supportedLocales: AppLocalizations.supportedLocales,
+      supportedLocales: SettingsActions.shippedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

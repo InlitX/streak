@@ -9,11 +9,14 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
+
+const _entrance = Duration(milliseconds: 340);
 
 class NotesPage extends StatelessWidget {
   const NotesPage({
@@ -69,23 +72,27 @@ class NotesPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    DateFormat.yMMMMd(locale).format(date),
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w800,
-                      color: context.colors.onSurface,
+              child: Entrance(
+                delay: _entrance,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat.yMMMMd(locale).format(date),
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                        color: context.colors.onSurface,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    context.l10n.notes_count(notes.length),
-                    style: TextStyle(fontSize: 13, color: context.tokens.muted),
-                  ),
-                ],
+                    const SizedBox(height: 3),
+                    Text(
+                      context.l10n.notes_count(notes.length),
+                      style:
+                          TextStyle(fontSize: 13, color: context.tokens.muted),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -99,12 +106,17 @@ class NotesPage extends StatelessWidget {
                   : ListView.builder(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       itemCount: notes.length,
-                      itemBuilder: (context, i) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: NoteCard(
-                          note: notes[i],
-                          date: date,
-                          accent: accent,
+                      itemBuilder: (context, i) => Entrance(
+                        key: ValueKey(notes[i].id),
+                        index: i + 1,
+                        delay: _entrance,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: NoteCard(
+                            note: notes[i],
+                            date: date,
+                            accent: accent,
+                          ),
                         ),
                       ),
                     ),
@@ -298,22 +310,26 @@ class NoteCard extends StatelessWidget {
                         if (!File(path).existsSync()) {
                           return const SizedBox.shrink();
                         }
-                        return GestureDetector(
-                          onTap: () => showJourneyViewer(
-                            context,
-                            [
-                              for (final p in note.photos)
-                                JourneyShot(path: p, note: note),
-                            ],
-                            index,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.file(
-                              File(path),
-                              width: 64,
-                              height: 64,
-                              fit: BoxFit.cover,
+                        return Semantics(
+                          button: true,
+                          label: context.l10n.note_photos,
+                          child: GestureDetector(
+                            onTap: () => showJourneyViewer(
+                              context,
+                              [
+                                for (final p in note.photos)
+                                  JourneyShot(path: p, note: note),
+                              ],
+                              index,
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.file(
+                                File(path),
+                                width: 64,
+                                height: 64,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         );

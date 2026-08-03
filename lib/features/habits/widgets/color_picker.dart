@@ -92,22 +92,26 @@ class _Segment2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.colors;
     Widget seg(String label, bool active, VoidCallback onTap) => Expanded(
-          child: GestureDetector(
-            onTap: onTap,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 160),
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: active ? scheme.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: active ? scheme.onPrimary : context.tokens.muted,
+          child: Semantics(
+            button: true,
+            selected: active,
+            child: GestureDetector(
+              onTap: onTap,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: active ? scheme.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: active ? scheme.onPrimary : context.tokens.muted,
+                  ),
                 ),
               ),
             ),
@@ -148,24 +152,29 @@ class _Swatch extends StatelessWidget {
         color.computeLuminance() > 0.6 ? const Color(0xFF1C1C1E) : Colors.white;
     final borderColor =
         color.computeLuminance() > 0.85 ? const Color(0xFF8E8E93) : Colors.white;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-          border: selected ? Border.all(color: borderColor, width: 2.5) : null,
-          boxShadow: selected
-              ? [BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 10)]
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: context.l10n.a11y_pick_color,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          curve: Curves.easeOut,
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(10),
+            border: selected ? Border.all(color: borderColor, width: 2.5) : null,
+            boxShadow: selected
+                ? [BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 10)]
+                : null,
+          ),
+          child: selected
+              ? Icon(LucideIcons.check, color: checkColor, size: 18)
               : null,
         ),
-        child: selected
-            ? Icon(LucideIcons.check, color: checkColor, size: 18)
-            : null,
       ),
     );
   }

@@ -85,33 +85,37 @@ class _KindOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 180),
-        opacity: dimmed ? 0.35 : 1,
-        child: AnimatedContainer(
+    return Semantics(
+      button: true,
+      selected: active,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedOpacity(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: active ? scheme.primary : scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            children: [
-              Icon(icon,
-                  size: 20, color: active ? scheme.onPrimary : context.tokens.muted),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: active ? scheme.onPrimary : context.tokens.muted,
+          opacity: dimmed ? 0.35 : 1,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            decoration: BoxDecoration(
+              color: active ? scheme.primary : scheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                Icon(icon,
+                    size: 20, color: active ? scheme.onPrimary : context.tokens.muted),
+                const SizedBox(height: 6),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: active ? scheme.onPrimary : context.tokens.muted,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -220,6 +224,7 @@ class _SubstepsEditorState extends State<SubstepsEditor> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      semanticContainer: false,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -267,29 +272,32 @@ class _SubstepsEditorState extends State<SubstepsEditor> {
                 ),
               ),
             const SizedBox(height: 4),
-            GestureDetector(
-              onTap: _add,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: context.colors.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(LucideIcons.plus, size: 18, color: widget.color),
-                    const SizedBox(width: 8),
-                    Text(
-                      context.l10n.add_step,
-                      style: TextStyle(
-                        color: widget.color,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
+            Semantics(
+              button: true,
+              child: GestureDetector(
+                onTap: _add,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(LucideIcons.plus, size: 18, color: widget.color),
+                      const SizedBox(width: 8),
+                      Text(
+                        context.l10n.add_step,
+                        style: TextStyle(
+                          color: widget.color,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -414,32 +422,36 @@ class _PresetChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? scheme.primary.withValues(alpha: 0.16)
-              : scheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-          border: selected ? Border.all(color: scheme.primary, width: 1.4) : null,
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 17, color: selected ? scheme.primary : context.tokens.muted),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: selected ? scheme.primary : context.tokens.muted,
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: selected
+                ? scheme.primary.withValues(alpha: 0.16)
+                : scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+            border: selected ? Border.all(color: scheme.primary, width: 1.4) : null,
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 17, color: selected ? scheme.primary : context.tokens.muted),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: selected ? scheme.primary : context.tokens.muted,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -495,31 +507,36 @@ class _QuantityStepperRow extends StatelessWidget {
           ),
           HoldRepeatButton(
             icon: LucideIcons.minus,
+label: context.l10n.a11y_decrease,
             onTap: value > min ? () => onChanged(value - step) : null,
           ),
-          InkWell(
-            onTap: () => _promptValue(context),
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              constraints: const BoxConstraints(minWidth: 60),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-              alignment: Alignment.center,
-              child: Text(
-                unit.isEmpty ? '$value' : '$value $unit',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: scheme.onSurface,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  decoration: TextDecoration.underline,
-                  decorationStyle: TextDecorationStyle.dotted,
-                  decorationColor: scheme.primary.withValues(alpha: 0.6),
+          Semantics(
+            button: true,
+            child: InkWell(
+              onTap: () => _promptValue(context),
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                constraints: const BoxConstraints(minWidth: 60),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                alignment: Alignment.center,
+                child: Text(
+                  unit.isEmpty ? '$value' : '$value $unit',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: scheme.onSurface,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
+                    decorationColor: scheme.primary.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             ),
           ),
           HoldRepeatButton(
             icon: LucideIcons.plus,
+label: context.l10n.a11y_increase,
             onTap: () => onChanged(value + step),
           ),
         ],

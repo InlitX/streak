@@ -8,9 +8,12 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+
+const _entrance = Duration(milliseconds: 340);
 
 class FocusHistoryPage extends StatelessWidget {
   const FocusHistoryPage({super.key});
@@ -42,16 +45,24 @@ class FocusHistoryPage extends StatelessWidget {
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
-                for (final day in days.entries) ...[
-                  _DayHeader(
-                    day: parseDayKey(day.key),
-                    sessions: day.value.length,
-                    seconds: day.value.fold(0, (sum, s) => sum + s.seconds),
+                for (final (index, day) in days.entries.indexed)
+                  Entrance(
+                    index: index,
+                    delay: _entrance,
+                    child: Column(
+                      children: [
+                        _DayHeader(
+                          day: parseDayKey(day.key),
+                          sessions: day.value.length,
+                          seconds:
+                              day.value.fold(0, (sum, s) => sum + s.seconds),
+                        ),
+                        for (final session in day.value)
+                          _SessionTile(session: session),
+                        const SizedBox(height: 14),
+                      ],
+                    ),
                   ),
-                  for (final session in day.value)
-                    _SessionTile(session: session),
-                  const SizedBox(height: 14),
-                ],
               ],
             ),
     );

@@ -258,6 +258,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
     final minimal = context.watch<SettingsController>().isMinimalStyle;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
+      excludeFromSemantics: true,
       child: minimal ? _buildMinimal(context) : _buildClassic(context),
     );
   }

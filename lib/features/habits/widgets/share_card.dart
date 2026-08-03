@@ -11,10 +11,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/habits/widgets/share_range_pages.dart';
 import 'package:streak/features/habits/widgets/share_stat_card.dart';
+
+const _entrance = Duration(milliseconds: 340);
 
 Future<void> showShareCard(BuildContext context, Habit habit) async {
   AppNavigator.push(SharePage(habit: habit), fullscreenDialog: true);
@@ -135,91 +138,110 @@ class _SharePageState extends State<SharePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(LucideIcons.x, color: Colors.white),
-                  onPressed: () => AppNavigator.pop(),
-                ),
-                Expanded(
-                  child: Text(
-                    context.l10n.share,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'PlayfairDisplay',
-                      fontStyle: FontStyle.italic,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+            Entrance(
+              delay: _entrance,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(LucideIcons.x, color: Colors.white),
+                    onPressed: () => AppNavigator.pop(),
+                  ),
+                  Expanded(
+                    child: Text(
+                      context.l10n.share,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'PlayfairDisplay',
+                        fontStyle: FontStyle.italic,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 48),
-              ],
+                  const SizedBox(width: 48),
+                ],
+              ),
             ),
-            _RangeTabs(
-              range: _range,
-              onChanged: (value) => setState(() => _range = value),
+            Entrance(
+              index: 1,
+              delay: _entrance,
+              child: _RangeTabs(
+                range: _range,
+                onChanged: (value) => setState(() => _range = value),
+              ),
             ),
             Expanded(
               child: Center(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    children: [
-                      RepaintBoundary(
-                        key: _cardKey,
-                        child: ShareStatCard(
-                          habit: widget.habit,
-                          accent: _accent,
-                          imagePath: _image,
-                          blur: _blur,
-                          range: _range,
-                          showStats: _stats,
-                          width: width,
+                  child: Entrance(
+                    index: 2,
+                    delay: _entrance,
+                    child: Column(
+                      children: [
+                        RepaintBoundary(
+                          key: _cardKey,
+                          child: ShareStatCard(
+                            habit: widget.habit,
+                            accent: _accent,
+                            imagePath: _image,
+                            blur: _blur,
+                            range: _range,
+                            showStats: _stats,
+                            width: width,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        context.l10n.share_swipe_hint,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.4),
+                        const SizedBox(height: 8),
+                        Text(
+                          context.l10n.share_swipe_hint,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white.withValues(alpha: 0.4),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-            _Options(
-              accent: _accent,
-              image: _image,
-              blur: _blur,
-              stats: _stats,
-              onColor: _pickColor,
-              onImage: _pickImage,
-              onClearImage: () => setState(() => _image = ''),
-              onBlur: (value) => setState(() => _blur = value),
-              onStats: (value) => setState(() => _stats = value),
+            Entrance(
+              index: 3,
+              delay: _entrance,
+              child: _Options(
+                accent: _accent,
+                image: _image,
+                blur: _blur,
+                stats: _stats,
+                onColor: _pickColor,
+                onImage: _pickImage,
+                onClearImage: () => setState(() => _image = ''),
+                onBlur: (value) => setState(() => _blur = value),
+                onStats: (value) => setState(() => _stats = value),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _CircleAction(
-                    icon: LucideIcons.share2,
-                    label: context.l10n.share,
-                    onTap: _busy ? null : _share,
-                  ),
-                  const SizedBox(width: 40),
-                  _CircleAction(
-                    icon: LucideIcons.download,
-                    label: context.l10n.share_save,
-                    onTap: _busy ? null : _save,
-                  ),
-                ],
+            Entrance(
+              index: 4,
+              delay: _entrance,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _CircleAction(
+                      icon: LucideIcons.share2,
+                      label: context.l10n.share,
+                      onTap: _busy ? null : _share,
+                    ),
+                    const SizedBox(width: 40),
+                    _CircleAction(
+                      icon: LucideIcons.download,
+                      label: context.l10n.share_save,
+                      onTap: _busy ? null : _save,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -247,35 +269,43 @@ class _RangeTabs extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (final entry in labels.entries)
-          GestureDetector(
-            onTap: () => onChanged(entry.key),
-            behavior: HitTestBehavior.opaque,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    entry.value,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white
-                          .withValues(alpha: range == entry.key ? 1 : 0.42),
+          Semantics(
+            button: true,
+            selected: range == entry.key,
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onChanged(entry.key);
+              },
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 220),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white
+                            .withValues(alpha: range == entry.key ? 1 : 0.42),
+                      ),
+                      child: Text(entry.value),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    width: 18,
-                    height: 2,
-                    decoration: BoxDecoration(
-                      color: range == entry.key
-                          ? Colors.white
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(2),
+                    const SizedBox(height: 5),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOutCubic,
+                      width: range == entry.key ? 18 : 0,
+                      height: 2,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -413,56 +443,68 @@ class _Toggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Opacity(
-        opacity: 1,
+      child: Semantics(
+        button: true,
+        selected: selected,
         child: GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: selected ? 0.18 : 0.06),
-              borderRadius: BorderRadius.circular(13),
-              border: Border.all(
-                color: selected
-                    ? Colors.white.withValues(alpha: 0.5)
-                    : Colors.transparent,
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onTap();
+          },
+          child: AnimatedScale(
+            scale: selected ? 1 : 0.96,
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutBack,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: selected ? 0.18 : 0.06),
+                borderRadius: BorderRadius.circular(13),
+                border: Border.all(
+                  color: selected
+                      ? Colors.white.withValues(alpha: 0.5)
+                      : Colors.transparent,
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (dot != null)
-                  Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(
-                      color: dot,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (dot != null)
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: dot,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    )
+                  else
+                    Icon(icon, size: 14, color: Colors.white),
+                  const SizedBox(width: 7),
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
-                  )
-                else
-                  Icon(icon, size: 14, color: Colors.white),
-                const SizedBox(width: 7),
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
                   ),
-                ),
-                if (badge != null) ...[
-                  const SizedBox(width: 5),
-                  Icon(badge, size: 13, color: Colors.white),
+                  if (badge != null) ...[
+                    const SizedBox(width: 5),
+                    Icon(badge, size: 13, color: Colors.white),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -471,7 +513,7 @@ class _Toggle extends StatelessWidget {
   }
 }
 
-class _CircleAction extends StatelessWidget {
+class _CircleAction extends StatefulWidget {
   const _CircleAction({
     required this.icon,
     required this.label,
@@ -483,33 +525,57 @@ class _CircleAction extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  State<_CircleAction> createState() => _CircleActionState();
+}
+
+class _CircleActionState extends State<_CircleAction> {
+  bool _pressed = false;
+
+  void _press(bool value) {
+    if (widget.onTap == null) return;
+    setState(() => _pressed = value);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.14),
-              ),
-              child: Icon(icon, size: 21, color: Colors.white),
+    return AnimatedOpacity(
+      opacity: widget.onTap == null ? 0.5 : 1,
+      duration: const Duration(milliseconds: 200),
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: widget.onTap,
+          onTapDown: (_) => _press(true),
+          onTapUp: (_) => _press(false),
+          onTapCancel: () => _press(false),
+          child: AnimatedScale(
+            scale: _pressed ? 0.9 : 1,
+            duration: const Duration(milliseconds: 160),
+            curve: Curves.easeOut,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.14),
+                  ),
+                  child: Icon(widget.icon, size: 21, color: Colors.white),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  widget.label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.7),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

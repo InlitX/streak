@@ -9,8 +9,11 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+
+const _entrance = Duration(milliseconds: 340);
 
 class JourneyShot {
   const JourneyShot({required this.path, required this.note});
@@ -61,9 +64,14 @@ class JourneyPage extends StatelessWidget {
                 crossAxisSpacing: 8,
               ),
               itemCount: shots.length,
-              itemBuilder: (_, index) => _Thumb(
-                shot: shots[index],
-                onTap: () => showJourneyViewer(context, shots, index),
+              itemBuilder: (_, index) => Entrance(
+                index: index,
+                delay: _entrance,
+                offset: 10,
+                child: _Thumb(
+                  shot: shots[index],
+                  onTap: () => showJourneyViewer(context, shots, index),
+                ),
               ),
             ),
     );
@@ -79,17 +87,21 @@ class _Thumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final exists = File(shot.path).existsSync();
-    return GestureDetector(
-      onTap: exists ? onTap : null,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(14),
+    return Semantics(
+      button: true,
+      label: context.l10n.journey,
+      child: GestureDetector(
+        onTap: exists ? onTap : null,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: exists
+              ? Image.file(File(shot.path), fit: BoxFit.cover)
+              : Icon(LucideIcons.imageOff, size: 18, color: context.tokens.muted),
         ),
-        child: exists
-            ? Image.file(File(shot.path), fit: BoxFit.cover)
-            : Icon(LucideIcons.imageOff, size: 18, color: context.tokens.muted),
       ),
     );
   }

@@ -233,27 +233,35 @@ class _JourneyStrip extends StatelessWidget {
         children: [
           SectionLabel(
             context.l10n.journey,
-            trailing: GestureDetector(
-              onTap: () => AppNavigator.push(
-                JourneyPage(habitId: habit.id, accent: habit.color),
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    context.l10n.journey_sub(shots.length),
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w600,
+            trailing: Semantics(
+              button: true,
+              child: GestureDetector(
+                onTap: () => AppNavigator.push(
+                  JourneyPage(habitId: habit.id, accent: habit.color),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        context.l10n.journey_sub(shots.length),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                          color: context.tokens.muted,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Icon(
+                      LucideIcons.chevronRight,
+                      size: 16,
                       color: context.tokens.muted,
                     ),
-                  ),
-                  const SizedBox(width: 2),
-                  Icon(
-                    LucideIcons.chevronRight,
-                    size: 16,
-                    color: context.tokens.muted,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -263,18 +271,22 @@ class _JourneyStrip extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: preview.length,
               separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (_, index) => GestureDetector(
-                onTap: () => showJourneyViewer(context, shots, index),
-                child: Container(
-                  width: 92,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
+              itemBuilder: (_, index) => Semantics(
+                button: true,
+                label: context.l10n.journey,
+                child: GestureDetector(
+                  onTap: () => showJourneyViewer(context, shots, index),
+                  child: Container(
+                    width: 92,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color: context.colors.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: CoverImage.exists(preview[index].path)
+                        ? CoverImage(path: preview[index].path)
+                        : null,
                   ),
-                  child: CoverImage.exists(preview[index].path)
-                      ? CoverImage(path: preview[index].path)
-                      : null,
                 ),
               ),
             ),
@@ -462,46 +474,49 @@ class _ChecklistRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Row(
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: checked ? color : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-                border: checked
-                    ? null
-                    : Border.all(
-                        color: color.withValues(alpha: 0.5), width: 1.6),
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: Row(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: checked ? color : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: checked
+                      ? null
+                      : Border.all(
+                          color: color.withValues(alpha: 0.5), width: 1.6),
+                ),
+                child: checked
+                    ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
+                    : null,
               ),
-              child: checked
-                  ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
-                  : null,
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: checked
-                      ? context.tokens.muted
-                      : context.colors.onSurface,
-                  decoration:
-                      checked ? TextDecoration.lineThrough : TextDecoration.none,
-                  decorationColor: context.tokens.muted,
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: checked
+                        ? context.tokens.muted
+                        : context.colors.onSurface,
+                    decoration:
+                        checked ? TextDecoration.lineThrough : TextDecoration.none,
+                    decorationColor: context.tokens.muted,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -579,37 +594,54 @@ class _ModeToggle extends StatelessWidget {
       (HeatmapMode.month, context.l10n.month),
       (HeatmapMode.year, context.l10n.year),
     ];
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (final (value, label) in options)
-            GestureDetector(
-              onTap: () => onChanged(value),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: value == mode ? scheme.primary : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color:
-                        value == mode ? scheme.onPrimary : context.tokens.muted,
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.3,
+      child: Container(
+        padding: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (value, label) in options)
+              Flexible(
+                child: Semantics(
+                  button: true,
+                  selected: value == mode,
+                  child: GestureDetector(
+                    onTap: () => onChanged(value),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: value == mode
+                            ? scheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: value == mode
+                              ? scheme.onPrimary
+                              : context.tokens.muted,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

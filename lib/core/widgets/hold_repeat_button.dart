@@ -7,12 +7,14 @@ class HoldRepeatButton extends StatefulWidget {
   const HoldRepeatButton({
     super.key,
     required this.icon,
+    required this.label,
     required this.onTap,
     this.size = 44,
     this.iconSize = 20,
   });
 
   final IconData icon;
+  final String label;
   final VoidCallback? onTap;
   final double size;
   final double iconSize;
@@ -57,22 +59,26 @@ class _HoldRepeatButtonState extends State<HoldRepeatButton> {
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null;
-    return GestureDetector(
-      onTap: enabled ? widget.onTap : null,
-      onLongPressStart: enabled ? (_) => _startRepeat() : null,
-      onLongPressEnd: (_) => _stop(),
-      onLongPressCancel: _stop,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: Center(
-          child: Icon(
-            widget.icon,
-            size: widget.iconSize,
-            color: enabled
-                ? context.colors.onSurface
-                : context.tokens.muted.withValues(alpha: 0.4),
+    return Semantics(
+      button: true,
+      label: widget.label,
+      child: GestureDetector(
+        onTap: enabled ? widget.onTap : null,
+        onLongPressStart: enabled ? (_) => _startRepeat() : null,
+        onLongPressEnd: (_) => _stop(),
+        onLongPressCancel: _stop,
+        behavior: HitTestBehavior.opaque,
+        child: SizedBox(
+          width: widget.size,
+          height: widget.size,
+          child: Center(
+            child: Icon(
+              widget.icon,
+              size: widget.iconSize,
+              color: enabled
+                  ? context.colors.onSurface
+                  : context.tokens.muted.withValues(alpha: 0.4),
+            ),
           ),
         ),
       ),

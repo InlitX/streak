@@ -8,6 +8,7 @@ import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -226,35 +227,41 @@ class _CalendarCell extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(2),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: Semantics(
+        button: tappable,
+        label: isCurrentMonth ? heatmapDayLabel(context, habit, date) : null,
+        excludeSemantics: isCurrentMonth,
         onTap: tappable ? () => onToggle(date) : null,
-        onLongPress: isCurrentMonth && onLongPress != null
-            ? () => onLongPress!(date)
-            : null,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 280),
-          height: 38,
-          decoration: BoxDecoration(
-            color: fillColor ??
-                (isToday ? scheme.surfaceContainerHighest : Colors.transparent),
-            borderRadius: BorderRadius.circular(10),
-            border: isToday && !filledStrong
-                ? Border.all(color: habit.color.withValues(alpha: 0.5))
-                : null,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${date.day}',
-                style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
-              ),
-              if (types.isNotEmpty) ...[
-                const SizedBox(height: 2),
-                NoteDots(types: types, size: 4),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: tappable ? () => onToggle(date) : null,
+          onLongPress: isCurrentMonth && onLongPress != null
+              ? () => onLongPress!(date)
+              : null,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 280),
+            height: 38,
+            decoration: BoxDecoration(
+              color: fillColor ??
+                  (isToday ? scheme.surfaceContainerHighest : Colors.transparent),
+              borderRadius: BorderRadius.circular(10),
+              border: isToday && !filledStrong
+                  ? Border.all(color: habit.color.withValues(alpha: 0.5))
+                  : null,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${date.day}',
+                  style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
+                ),
+                if (types.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  NoteDots(types: types, size: 4),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

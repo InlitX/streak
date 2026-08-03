@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/i18n/l10n.dart';
 
 const focusSceneAssets = <String>[
   'assets/backgrounds/night_city.jpg',
@@ -77,25 +78,30 @@ class FocusScenePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: AspectRatio(
-        aspectRatio: 0.78,
-        child: Container(
-          padding: EdgeInsets.all(selected ? 2.5 : 0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: selected
-                ? Border.all(color: Colors.white, width: 2.5)
-                : null,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(selected ? 12 : 14),
-            child: FocusBackground(
-              scene: scene,
-              imagePath: imagePath,
-              child: const SizedBox.expand(),
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: context.l10n.app_background,
+      child: GestureDetector(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: AspectRatio(
+          aspectRatio: 0.78,
+          child: Container(
+            padding: EdgeInsets.all(selected ? 2.5 : 0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: selected
+                  ? Border.all(color: Colors.white, width: 2.5)
+                  : null,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(selected ? 12 : 14),
+              child: FocusBackground(
+                scene: scene,
+                imagePath: imagePath,
+                child: const SizedBox.expand(),
+              ),
             ),
           ),
         ),

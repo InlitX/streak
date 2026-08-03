@@ -44,190 +44,193 @@ class HabitCard extends StatelessWidget {
 
     return Card(
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onOpen,
-        onLongPress: onLongPress == null
-            ? null
-            : () {
-                HapticFeedback.heavyImpact();
-                onLongPress!();
-              },
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            if (hasCover) ...[
-              Positioned.fill(child: CoverImage(path: habit.coverPath)),
-              Positioned.fill(
-                child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
-              ),
-            ],
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: habit.color.withValues(alpha: 0.18),
-                          borderRadius: BorderRadius.circular(14),
+      child: Semantics(
+        button: true,
+        child: InkWell(
+          onTap: onOpen,
+          onLongPress: onLongPress == null
+              ? null
+              : () {
+                  HapticFeedback.heavyImpact();
+                  onLongPress!();
+                },
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            children: [
+              if (hasCover) ...[
+                Positioned.fill(child: CoverImage(path: habit.coverPath)),
+                Positioned.fill(
+                  child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
+                ),
+              ],
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            color: habit.color.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: HabitGlyph(
+                            glyph: habit.icon,
+                            color: habit.color,
+                            size: 24,
+                          ),
                         ),
-                        child: HabitGlyph(
-                          glyph: habit.icon,
-                          color: habit.color,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              habit.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: scheme.onSurface,
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                habit.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: scheme.onSurface,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                if (habit.isPausedOn(AppClock.now())) ...[
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  if (habit.isPausedOn(AppClock.now())) ...[
+                                    Icon(
+                                      LucideIcons.palmtree,
+                                      size: 14,
+                                      color: context.tokens.info,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      context.l10n.paused,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                        color: context.tokens.info,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
                                   Icon(
-                                    LucideIcons.palmtree,
+                                    LucideIcons.flame,
                                     size: 14,
-                                    color: context.tokens.info,
+                                    color: habit.color,
                                   ),
-                                  const SizedBox(width: 4),
+                                  const SizedBox(width: 3),
                                   Text(
-                                    context.l10n.paused,
+                                    '$streak',
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w700,
-                                      color: context.tokens.info,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                ],
-                                Icon(
-                                  LucideIcons.flame,
-                                  size: 14,
-                                  color: habit.color,
-                                ),
-                                const SizedBox(width: 3),
-                                Text(
-                                  '$streak',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
-                                    color: context.tokens.muted,
-                                  ),
-                                ),
-                                if (habit.kind == HabitKind.quantitative) ...[
-                                  const SizedBox(width: 8),
-                                  _AmountLabel(habit: habit),
-                                ],
-                                if (habitHasExplicitFrequency(habit)) ...[
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '·  ${habitFrequencyLabel(context, habit)}',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
                                       color: context.tokens.muted,
                                     ),
                                   ),
-                                ],
-                                if (habit.category.isNotEmpty) ...[
-                                  const SizedBox(width: 8),
-                                  Flexible(
-                                    child: Text(
-                                      '·  ${context.categoryLabel(habit.category)}',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                  if (habit.kind == HabitKind.quantitative) ...[
+                                    const SizedBox(width: 8),
+                                    _AmountLabel(habit: habit),
+                                  ],
+                                  if (habitHasExplicitFrequency(habit)) ...[
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      '·  ${habitFrequencyLabel(context, habit)}',
                                       style: TextStyle(
                                         fontSize: 13,
+                                        fontWeight: FontWeight.w600,
                                         color: context.tokens.muted,
                                       ),
                                     ),
-                                  ),
+                                  ],
+                                  if (habit.category.isNotEmpty) ...[
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        '·  ${context.categoryLabel(habit.category)}',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: context.tokens.muted,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ],
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            _StrengthBar(
-                              value: habit.strength,
-                              color: habit.color,
-                              track: scheme.surfaceContainerHighest,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      _ActionButton(
-                        habit: habit,
-                        doneToday: doneToday,
-                        circle: circleCheck,
-                        onToggleToday: onToggleToday,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  AnimatedSize(
-                    duration: const Duration(milliseconds: 420),
-                    curve: Curves.easeOutCubic,
-                    alignment: Alignment.topCenter,
-                    child: ClipRect(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 420),
-                        switchInCurve: const Interval(
-                          0.45,
-                          1,
-                          curve: Curves.easeOutCubic,
-                        ),
-                        switchOutCurve: const Interval(
-                          0.6,
-                          1,
-                          curve: Curves.easeIn,
-                        ),
-                        transitionBuilder: (child, animation) => FadeTransition(
-                          opacity: animation,
-                          child: SlideTransition(
-                            position: Tween(
-                              begin: const Offset(0, 0.05),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: child,
+                              ),
+                              const SizedBox(height: 8),
+                              _StrengthBar(
+                                value: habit.strength,
+                                color: habit.color,
+                                track: scheme.surfaceContainerHighest,
+                              ),
+                            ],
                           ),
                         ),
-                        layoutBuilder: (current, previous) => Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            for (final child in previous)
-                              Positioned(left: 0, right: 0, child: child),
-                            if (current != null) current,
-                          ],
-                        ),
-                        child: HabitHeatmap(
-                          key: ValueKey(mode),
+                        const SizedBox(width: 14),
+                        _ActionButton(
                           habit: habit,
-                          mode: mode,
-                          compact: true,
+                          doneToday: doneToday,
                           circle: circleCheck,
+                          onToggleToday: onToggleToday,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 420),
+                      curve: Curves.easeOutCubic,
+                      alignment: Alignment.topCenter,
+                      child: ClipRect(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 420),
+                          switchInCurve: const Interval(
+                            0.45,
+                            1,
+                            curve: Curves.easeOutCubic,
+                          ),
+                          switchOutCurve: const Interval(
+                            0.6,
+                            1,
+                            curve: Curves.easeIn,
+                          ),
+                          transitionBuilder: (child, animation) => FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween(
+                                begin: const Offset(0, 0.05),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          ),
+                          layoutBuilder: (current, previous) => Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              for (final child in previous)
+                                Positioned(left: 0, right: 0, child: child),
+                              if (current != null) current,
+                            ],
+                          ),
+                          child: HabitHeatmap(
+                            key: ValueKey(mode),
+                            habit: habit,
+                            mode: mode,
+                            compact: true,
+                            circle: circleCheck,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -350,8 +353,31 @@ class _ActionButton extends StatelessWidget {
     }
   }
 
+  String _label(BuildContext context) {
+    switch (habit.kind) {
+      case HabitKind.positive:
+        return doneToday
+            ? context.l10n.a11y_mark_not_done(habit.name)
+            : context.l10n.a11y_mark_done(habit.name);
+      case HabitKind.negative:
+        return doneToday
+            ? context.l10n.a11y_log_relapse(habit.name)
+            : context.l10n.a11y_clear_relapse(habit.name);
+      case HabitKind.quantitative:
+        return context.l10n.a11y_add_amount(habit.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: _label(context),
+      child: _button(context),
+    );
+  }
+
+  Widget _button(BuildContext context) {
     switch (habit.kind) {
       case HabitKind.positive:
         return _TodayButton(

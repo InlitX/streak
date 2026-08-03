@@ -121,73 +121,76 @@ class SoftRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final muted = context.tokens.muted;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      splashFactory: NoSplash.splashFactory,
-      highlightColor: context.tokens.muted.withValues(alpha: 0.06),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-        child: Row(
-          children: [
-            Icon(icon, size: 19, color: muted),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.2,
-                      color: context.colors.onSurface,
-                    ),
-                  ),
-                  if (subtitle != null) ...[
-                    const SizedBox(height: 3),
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: context.tokens.muted.withValues(alpha: 0.06),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+          child: Row(
+            children: [
+              Icon(icon, size: 19, color: muted),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: TextStyle(fontSize: 12.5, color: muted),
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                        color: context.colors.onSurface,
+                      ),
                     ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle!,
+                        style: TextStyle(fontSize: 12.5, color: muted),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-            if (value != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 130),
-                  child: Text(
-                    value!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: muted,
+              if (value != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 130),
+                    child: Text(
+                      value!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: muted,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            if (trailing != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: trailing!,
-              ),
-            if (onTap != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Icon(
-                  LucideIcons.chevronRight,
-                  size: 16,
-                  color: muted.withValues(alpha: 0.6),
+              if (trailing != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: trailing!,
                 ),
-              ),
-          ],
+              if (onTap != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Icon(
+                    LucideIcons.chevronRight,
+                    size: 16,
+                    color: muted.withValues(alpha: 0.6),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -227,33 +230,36 @@ Future<void> showOptionSheet(
             ),
             const SizedBox(height: 10),
             for (var i = 0; i < options.length; i++)
-              InkWell(
-                borderRadius: BorderRadius.circular(14),
-                onTap: () {
-                  onSelected(i);
-                  Navigator.of(sheet).pop();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          options[i],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight:
-                                i == index ? FontWeight.w700 : FontWeight.w500,
-                            color: i == index
-                                ? context.colors.primary
-                                : context.colors.onSurface,
+              Semantics(
+                button: true,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  onTap: () {
+                    onSelected(i);
+                    Navigator.of(sheet).pop();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            options[i],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight:
+                                  i == index ? FontWeight.w700 : FontWeight.w500,
+                              color: i == index
+                                  ? context.colors.primary
+                                  : context.colors.onSurface,
+                            ),
                           ),
                         ),
-                      ),
-                      if (i == index)
-                        Icon(LucideIcons.check,
-                            size: 18, color: context.colors.primary),
-                    ],
+                        if (i == index)
+                          Icon(LucideIcons.check,
+                              size: 18, color: context.colors.primary),
+                      ],
+                    ),
                   ),
                 ),
               ),

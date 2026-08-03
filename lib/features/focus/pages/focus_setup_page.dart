@@ -5,12 +5,15 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 
 const _presets = [25, 45];
+
+const _entrance = Duration(milliseconds: 340);
 
 class FocusSetupPage extends StatefulWidget {
   const FocusSetupPage({super.key, this.habitId});
@@ -76,71 +79,98 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                 children: [
-                  _Label(context.l10n.focus_pick_habit),
-                  _HabitOption(
-                    label: context.l10n.focus_free_session,
-                    icon: LucideIcons.timer,
-                    color: context.colors.primary,
-                    selected: _habitId.isEmpty,
-                    onTap: () => setState(() => _habitId = ''),
+                  Entrance(
+                    delay: _entrance,
+                    child: _Label(context.l10n.focus_pick_habit),
                   ),
-                  for (final habit in habits)
-                    _HabitOption(
-                      label: habit.name,
-                      glyph: habit.icon,
-                      color: habit.color,
-                      selected: _habitId == habit.id,
-                      onTap: () => setState(() => _habitId = habit.id),
+                  Entrance(
+                    index: 1,
+                    delay: _entrance,
+                    child: _HabitOption(
+                      label: context.l10n.focus_free_session,
+                      icon: LucideIcons.timer,
+                      color: context.colors.primary,
+                      selected: _habitId.isEmpty,
+                      onTap: () => setState(() => _habitId = ''),
+                    ),
+                  ),
+                  for (var i = 0; i < habits.length; i++)
+                    Entrance(
+                      index: i + 2,
+                      delay: _entrance,
+                      child: _HabitOption(
+                        label: habits[i].name,
+                        glyph: habits[i].icon,
+                        color: habits[i].color,
+                        selected: _habitId == habits[i].id,
+                        onTap: () => setState(() => _habitId = habits[i].id),
+                      ),
                     ),
                   const SizedBox(height: 22),
-                  _Label(context.l10n.focus_duration),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final preset in _presets)
-                        _DurationChip(
-                          label: context.l10n.minutes_short('$preset'),
-                          selected: _minutes == preset,
-                          onTap: () => setState(() => _minutes = preset),
+                  Entrance(
+                    index: habits.length + 2,
+                    delay: _entrance,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _Label(context.l10n.focus_duration),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final preset in _presets)
+                              _DurationChip(
+                                label: context.l10n.minutes_short('$preset'),
+                                selected: _minutes == preset,
+                                onTap: () => setState(() => _minutes = preset),
+                              ),
+                            if (!_presets.contains(_minutes))
+                              _DurationChip(
+                                label: context.l10n.minutes_short('$_minutes'),
+                                selected: true,
+                                onTap: _pickCustom,
+                              ),
+                            _PencilButton(onTap: _pickCustom),
+                          ],
                         ),
-                      if (!_presets.contains(_minutes))
-                        _DurationChip(
-                          label: context.l10n.minutes_short('$_minutes'),
-                          selected: true,
-                          onTap: _pickCustom,
-                        ),
-                      _PencilButton(onTap: _pickCustom),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 22),
-                  _PomodoroCard(
-                    enabled: _pomodoro,
-                    breakMinutes: _breakMinutes,
-                    onToggle: (v) => setState(() => _pomodoro = v),
-                    onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                  Entrance(
+                    index: habits.length + 3,
+                    delay: _entrance,
+                    child: _PomodoroCard(
+                      enabled: _pomodoro,
+                      breakMinutes: _breakMinutes,
+                      onToggle: (v) => setState(() => _pomodoro = v),
+                      onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                    ),
                   ),
                 ],
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-              child: SizedBox(
-                height: 54,
-                width: double.infinity,
-                child: FilledButton.icon(
-                  onPressed: _start,
-                  icon: const Icon(LucideIcons.play, size: 18),
-                  label: Text(
-                    context.l10n.focus_start,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
+              child: Entrance(
+                delay: _entrance + const Duration(milliseconds: 120),
+                child: SizedBox(
+                  height: 54,
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: _start,
+                    icon: const Icon(LucideIcons.play, size: 18),
+                    label: Text(
+                      context.l10n.focus_start,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
-                  style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                    style: FilledButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                   ),
                 ),
@@ -194,47 +224,51 @@ class _HabitOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-          decoration: BoxDecoration(
-            color: selected
-                ? color.withValues(alpha: 0.12)
-                : context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: selected ? color : Colors.transparent,
-              width: 1.4,
-            ),
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 26,
-                child: Center(
-                  child: glyph != null
-                      ? HabitGlyph(glyph: glyph!, color: color, size: 20)
-                      : Icon(icon, size: 20, color: color),
-                ),
+      child: Semantics(
+        button: true,
+        selected: selected,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+            decoration: BoxDecoration(
+              color: selected
+                  ? color.withValues(alpha: 0.12)
+                  : context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: selected ? color : Colors.transparent,
+                width: 1.4,
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w600,
-                    color: context.colors.onSurface,
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 26,
+                  child: Center(
+                    child: glyph != null
+                        ? HabitGlyph(glyph: glyph!, color: color, size: 20)
+                        : Icon(icon, size: 20, color: color),
                   ),
                 ),
-              ),
-              if (selected)
-                Icon(LucideIcons.check, size: 18, color: color),
-            ],
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w600,
+                      color: context.colors.onSurface,
+                    ),
+                  ),
+                ),
+                if (selected)
+                  Icon(LucideIcons.check, size: 18, color: color),
+              ],
+            ),
           ),
         ),
       ),
@@ -256,33 +290,37 @@ class _DurationChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = context.colors.primary;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? accent.withValues(alpha: 0.14)
-              : context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected ? accent : Colors.transparent,
-            width: 1.3,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: selected ? accent : context.tokens.muted,
-              ),
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: selected
+                ? accent.withValues(alpha: 0.14)
+                : context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected ? accent : Colors.transparent,
+              width: 1.3,
             ),
-          ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: selected ? accent : context.tokens.muted,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -400,19 +438,23 @@ class _PencilButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 44,
-        height: 42,
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(
-          LucideIcons.pencil,
-          size: 16,
-          color: context.colors.primary,
+    return Semantics(
+      button: true,
+      label: context.l10n.edit,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 44,
+          height: 42,
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            LucideIcons.pencil,
+            size: 16,
+            color: context.colors.primary,
+          ),
         ),
       ),
     );

@@ -51,26 +51,30 @@ class IntervalSelector extends StatelessWidget {
           runSpacing: 8,
           children: [
             for (final option in HabitInterval.values)
-              GestureDetector(
-                onTap: () => onIntervalChanged(option),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 180),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: option == interval
-                        ? scheme.primary
-                        : scheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    _label(context, option),
-                    style: TextStyle(
+              Semantics(
+                button: true,
+                selected: option == interval,
+                child: GestureDetector(
+                  onTap: () => onIntervalChanged(option),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
                       color: option == interval
-                          ? scheme.onPrimary
-                          : context.tokens.muted,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
+                          ? scheme.primary
+                          : scheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      _label(context, option),
+                      style: TextStyle(
+                        color: option == interval
+                            ? scheme.onPrimary
+                            : context.tokens.muted,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ),
@@ -109,33 +113,37 @@ class IntervalSelector extends StatelessWidget {
               return Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(right: i == 6 ? 0 : 6),
-                  child: GestureDetector(
-                    onTap: () {
-                      final next = [...weekdays];
-                      active ? next.remove(day) : next.add(day);
-                      next.sort();
-                      onWeekdaysChanged(next);
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 160),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: active
-                            ? scheme.primary
-                            : scheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: Text(
-                          WeekdayLabels.shortMonFirst(
-                            Localizations.localeOf(context).languageCode,
-                          )[i],
-                          style: TextStyle(
-                            color: active
-                                ? scheme.onPrimary
-                                : context.tokens.muted,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                  child: Semantics(
+                    button: true,
+                    selected: active,
+                    child: GestureDetector(
+                      onTap: () {
+                        final next = [...weekdays];
+                        active ? next.remove(day) : next.add(day);
+                        next.sort();
+                        onWeekdaysChanged(next);
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 160),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: active
+                              ? scheme.primary
+                              : scheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: Text(
+                            WeekdayLabels.shortMonFirst(
+                              Localizations.localeOf(context).languageCode,
+                            )[i],
+                            style: TextStyle(
+                              color: active
+                                  ? scheme.onPrimary
+                                  : context.tokens.muted,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -178,6 +186,7 @@ class IntervalSelector extends StatelessWidget {
           ),
           HoldRepeatButton(
             icon: LucideIcons.minus,
+label: context.l10n.a11y_decrease,
             onTap: value > min ? () => onChanged(value - 1) : null,
           ),
           SizedBox(
@@ -194,6 +203,7 @@ class IntervalSelector extends StatelessWidget {
           ),
           HoldRepeatButton(
             icon: LucideIcons.plus,
+label: context.l10n.a11y_increase,
             onTap: value < max ? () => onChanged(value + 1) : null,
           ),
         ],
@@ -211,29 +221,34 @@ class AddReminderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(LucideIcons.plus, size: 18, color: scheme.primary),
-            const SizedBox(width: 8),
-            Text(
-              context.l10n.add_reminder,
-              style: TextStyle(
-                color: scheme.primary,
-                fontWeight: FontWeight.w700,
-                fontSize: 15,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(LucideIcons.plus, size: 18, color: scheme.primary),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  context.l10n.add_reminder,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

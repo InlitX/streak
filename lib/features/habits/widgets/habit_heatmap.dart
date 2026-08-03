@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -46,6 +47,14 @@ Color heatmapCellColor(
   return Color.lerp(habit.color.withValues(alpha: 0.4), habit.color, ratio)!;
 }
 
+String heatmapDayLabel(BuildContext context, Habit habit, DateTime date) {
+  final locale = Localizations.localeOf(context).languageCode;
+  final state = habit.isCompletedOn(date)
+      ? context.l10n.done
+      : context.l10n.a11y_not_done;
+  return '${DateFormat.yMMMMd(locale).format(date)}, $state';
+}
+
 class HabitHeatmap extends StatefulWidget {
   const HabitHeatmap({
     super.key,
@@ -82,6 +91,12 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
 
   Color _cell(BuildContext context, DateTime date, {bool inScope = true}) =>
       heatmapCellColor(context, widget.habit, date, inScope: inScope);
+
+  bool get _dense =>
+      widget.mode == HeatmapMode.mini || widget.mode == HeatmapMode.year;
+
+  String _dayLabel(DateTime date) =>
+      heatmapDayLabel(context, widget.habit, date);
 
   @override
   void dispose() {
@@ -124,29 +139,35 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
             padding: const EdgeInsets.symmetric(horizontal: 3),
             child: Column(
               children: [
-                Text(
-                  letters[i],
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: context.tokens.muted,
+                ExcludeSemantics(
+                  child: Text(
+                    letters[i],
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: context.tokens.muted,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),
-                GestureDetector(
-                  onTap: future || widget.onToggle == null
-                      ? null
-                      : () => widget.onToggle!(date),
-                  onLongPress: widget.onLongPress == null
-                      ? null
-                      : () => widget.onLongPress!(date),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
-                    height: height,
-                    decoration: BoxDecoration(
-                      color: _cell(context, date),
-                      borderRadius: BorderRadius.circular(
-                        widget.circle ? height / 2 : (compact ? 9 : 12),
+                Semantics(
+                  button: true,
+                  label: _dayLabel(date),
+                  child: GestureDetector(
+                    onTap: future || widget.onToggle == null
+                        ? null
+                        : () => widget.onToggle!(date),
+                    onLongPress: widget.onLongPress == null
+                        ? null
+                        : () => widget.onLongPress!(date),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      height: height,
+                      decoration: BoxDecoration(
+                        color: _cell(context, date),
+                        borderRadius: BorderRadius.circular(
+                          widget.circle ? height / 2 : (compact ? 9 : 12),
+                        ),
                       ),
                     ),
                   ),
@@ -190,10 +211,16 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
         ? () => widget.onLongPress!(date)
         : null;
     if (onTap == null && onLongPress == null) return child;
-    return GestureDetector(
+    final gesture = GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
       child: child,
+    );
+    if (_dense) return ExcludeSemantics(child: gesture);
+    return Semantics(
+      button: true,
+      label: _dayLabel(date),
+      child: gesture,
     );
   }
 

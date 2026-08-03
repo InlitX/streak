@@ -81,13 +81,17 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
                     onChanged: (_) => _emit(),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => _remove(i),
-                  behavior: HitTestBehavior.opaque,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(LucideIcons.x,
-                        size: 17, color: context.tokens.muted),
+                Semantics(
+                  button: true,
+                  label: context.l10n.delete,
+                  child: GestureDetector(
+                    onTap: () => _remove(i),
+                    behavior: HitTestBehavior.opaque,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(LucideIcons.x,
+                          size: 17, color: context.tokens.muted),
+                    ),
                   ),
                 ),
               ],

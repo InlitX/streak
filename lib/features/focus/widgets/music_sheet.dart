@@ -160,32 +160,36 @@ class _ModeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onChanged(!shuffle),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              shuffle ? LucideIcons.shuffle : LucideIcons.repeat,
-              size: 15,
-              color: context.colors.primary,
-            ),
-            const SizedBox(width: 7),
-            Text(
-              shuffle ? context.l10n.focus_shuffle : context.l10n.focus_loop,
-              style: TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w700,
+    return Semantics(
+      button: true,
+      selected: shuffle,
+      child: GestureDetector(
+        onTap: () => onChanged(!shuffle),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                shuffle ? LucideIcons.shuffle : LucideIcons.repeat,
+                size: 15,
                 color: context.colors.primary,
               ),
-            ),
-          ],
+              const SizedBox(width: 7),
+              Text(
+                shuffle ? context.l10n.focus_shuffle : context.l10n.focus_loop,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w700,
+                  color: context.colors.primary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -215,75 +219,78 @@ class _TrackRow extends StatelessWidget {
           valueListenable: FocusAudio.playing,
           builder: (context, playing, __) {
             final isPlaying = active && playing;
-            return InkWell(
-              borderRadius: BorderRadius.circular(14),
-              onLongPress: onDelete == null
-                  ? null
-                  : () async {
-                      if (await showDeleteSheet(context)) onDelete!();
-                    },
-              onTap: () async {
-                if (isPlaying) {
-                  await FocusAudio.pause();
-                } else if (active) {
-                  await FocusAudio.resume();
-                } else {
-                  await FocusAudio.playQueue(
-                    tracks,
-                    shuffle: shuffle,
-                    from: track,
-                  );
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 11),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: active
-                            ? context.colors.primary.withValues(alpha: 0.16)
-                            : context.colors.surfaceContainerHighest,
-                      ),
-                      child: Icon(
-                        isPlaying ? LucideIcons.pause : LucideIcons.play,
-                        size: 15,
-                        color: active
-                            ? context.colors.primary
-                            : context.tokens.muted,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Text(
-                        track.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: active ? FontWeight.w700 : FontWeight.w600,
+            return Semantics(
+              button: true,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onLongPress: onDelete == null
+                    ? null
+                    : () async {
+                        if (await showDeleteSheet(context)) onDelete!();
+                      },
+                onTap: () async {
+                  if (isPlaying) {
+                    await FocusAudio.pause();
+                  } else if (active) {
+                    await FocusAudio.resume();
+                  } else {
+                    await FocusAudio.playQueue(
+                      tracks,
+                      shuffle: shuffle,
+                      from: track,
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: active
+                              ? context.colors.primary.withValues(alpha: 0.16)
+                              : context.colors.surfaceContainerHighest,
+                        ),
+                        child: Icon(
+                          isPlaying ? LucideIcons.pause : LucideIcons.play,
+                          size: 15,
                           color: active
                               ? context.colors.primary
-                              : context.colors.onSurface,
+                              : context.tokens.muted,
                         ),
                       ),
-                    ),
-                    if (track.asset)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
+                      const SizedBox(width: 14),
+                      Expanded(
                         child: Text(
-                          context.l10n.focus_built_in,
+                          track.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: context.tokens.muted,
+                            fontSize: 15,
+                            fontWeight: active ? FontWeight.w700 : FontWeight.w600,
+                            color: active
+                                ? context.colors.primary
+                                : context.colors.onSurface,
                           ),
                         ),
                       ),
-                  ],
+                      if (track.asset)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Text(
+                            context.l10n.focus_built_in,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: context.tokens.muted,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             );

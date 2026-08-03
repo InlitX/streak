@@ -49,6 +49,9 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-infos
 
+      - name: Test
+        run: flutter test
+
       # ABI splits keep each APK small (~15-20 MB) instead of one ~58 MB fat APK.
       - name: Build split APKs
         run: flutter build apk --release --split-per-abi

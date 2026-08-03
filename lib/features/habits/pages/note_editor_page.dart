@@ -95,6 +95,7 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
+      excludeFromSemantics: true,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -181,38 +182,41 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
               ),
               const SizedBox(height: 22),
               _Label(context.l10n.note_time_optional),
-              GestureDetector(
-                onTap: _pickTime,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
-                  decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(LucideIcons.clock, size: 18, color: muted),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          _time == null
-                              ? context.l10n.note_time_optional
-                              : _time!.format(context),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: _time == null
-                                ? muted
-                                : context.colors.onSurface,
+              Semantics(
+                button: true,
+                child: GestureDetector(
+                  onTap: _pickTime,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
+                    decoration: BoxDecoration(
+                      color: context.colors.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(LucideIcons.clock, size: 18, color: muted),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            _time == null
+                                ? context.l10n.note_time_optional
+                                : _time!.format(context),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: _time == null
+                                  ? muted
+                                  : context.colors.onSurface,
+                            ),
                           ),
                         ),
-                      ),
-                      if (_time != null)
-                        IconButton(
-                          icon: Icon(LucideIcons.x, size: 18, color: muted),
-                          onPressed: () => setState(() => _time = null),
-                        ),
-                    ],
+                        if (_time != null)
+                          IconButton(
+                            icon: Icon(LucideIcons.x, size: 18, color: muted),
+                            onPressed: () => setState(() => _time = null),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -299,19 +303,23 @@ class _PhotoStrip extends StatelessWidget {
                 Positioned(
                   top: 4,
                   right: 4,
-                  child: GestureDetector(
-                    onTap: () => onRemove(path),
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black.withValues(alpha: 0.6),
-                      ),
-                      child: const Icon(
-                        LucideIcons.x,
-                        size: 14,
-                        color: Colors.white,
+                  child: Semantics(
+                    button: true,
+                    label: context.l10n.delete,
+                    child: GestureDetector(
+                      onTap: () => onRemove(path),
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withValues(alpha: 0.6),
+                        ),
+                        child: const Icon(
+                          LucideIcons.x,
+                          size: 14,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -338,29 +346,32 @@ class _AddTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 96,
-        height: 96,
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 20, color: context.tokens.muted),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: context.tokens.muted,
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 96,
+          height: 96,
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 20, color: context.tokens.muted),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: context.tokens.muted,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -42,13 +42,19 @@ class ConsistencyGauge extends StatelessWidget {
                     ),
                   ),
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('${(t * 100).round()}%', style: statNumber(context, 30)),
-                    const SizedBox(height: 2),
-                    Text(caption, style: statLabel(context)),
-                  ],
+                MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: 1.3,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${(t * 100).round()}%',
+                        style: statNumber(context, 30),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(caption, style: statLabel(context)),
+                    ],
+                  ),
                 ),
               ],
             ),

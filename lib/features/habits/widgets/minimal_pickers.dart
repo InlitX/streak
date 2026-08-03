@@ -62,21 +62,25 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
               scrollDirection: Axis.horizontal,
               children: [
                 for (final cat in cats)
-                  GestureDetector(
-                    onTap: () => setState(() => _category = cat),
-                    behavior: HitTestBehavior.opaque,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 14),
-                      child: Text(
-                        cat,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: _category == cat
-                              ? FontWeight.w700
-                              : FontWeight.w600,
-                          color: _category == cat
-                              ? widget.color
-                              : context.tokens.muted,
+                  Semantics(
+                    button: true,
+                    selected: _category == cat,
+                    child: GestureDetector(
+                      onTap: () => setState(() => _category = cat),
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Text(
+                          cat,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: _category == cat
+                                ? FontWeight.w700
+                                : FontWeight.w600,
+                            color: _category == cat
+                                ? widget.color
+                                : context.tokens.muted,
+                          ),
                         ),
                       ),
                     ),
@@ -96,31 +100,36 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
                 runSpacing: gap,
                 children: [
                   for (final glyph in glyphs)
-                    GestureDetector(
-                      onTap: () => widget.onSelected(glyph),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 140),
-                        width: cell,
-                        height: cell,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: widget.selected == glyph
-                              ? widget.color.withValues(alpha: 0.12)
-                              : context.colors.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(9),
-                          border: Border.all(
+                    Semantics(
+                      button: true,
+                      selected: widget.selected == glyph,
+                      label: glyph,
+                      child: GestureDetector(
+                        onTap: () => widget.onSelected(glyph),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 140),
+                          width: cell,
+                          height: cell,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
                             color: widget.selected == glyph
-                                ? widget.color.withValues(alpha: 0.75)
-                                : Colors.transparent,
-                            width: 1.2,
+                                ? widget.color.withValues(alpha: 0.12)
+                                : context.colors.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(9),
+                            border: Border.all(
+                              color: widget.selected == glyph
+                                  ? widget.color.withValues(alpha: 0.75)
+                                  : Colors.transparent,
+                              width: 1.2,
+                            ),
                           ),
-                        ),
-                        child: HabitGlyph(
-                          glyph: glyph,
-                          size: cell * 0.48,
-                          color: widget.selected == glyph
-                              ? widget.color
-                              : context.tokens.muted,
+                          child: HabitGlyph(
+                            glyph: glyph,
+                            size: cell * 0.48,
+                            color: widget.selected == glyph
+                                ? widget.color
+                                : context.tokens.muted,
+                          ),
                         ),
                       ),
                     ),
@@ -185,25 +194,30 @@ class _CompactColorPickerState extends State<CompactColorPicker> {
                   runSpacing: gap,
                   children: [
                     for (final color in AppPalette.habitColors)
-                      GestureDetector(
-                        onTap: () => widget.onSelected(color),
-                        child: Container(
-                          width: cell,
-                          height: cell,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.circular(9),
+                      Semantics(
+                        button: true,
+                        selected: widget.selected == color,
+                        label: context.l10n.a11y_pick_color,
+                        child: GestureDetector(
+                          onTap: () => widget.onSelected(color),
+                          child: Container(
+                            width: cell,
+                            height: cell,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: widget.selected.toARGB32() == color.toARGB32()
+                                ? Icon(
+                                    LucideIcons.check,
+                                    size: cell * 0.5,
+                                    color: color.computeLuminance() > 0.6
+                                        ? const Color(0xFF1C1C1E)
+                                        : Colors.white,
+                                  )
+                                : null,
                           ),
-                          child: widget.selected.toARGB32() == color.toARGB32()
-                              ? Icon(
-                                  LucideIcons.check,
-                                  size: cell * 0.5,
-                                  color: color.computeLuminance() > 0.6
-                                      ? const Color(0xFF1C1C1E)
-                                      : Colors.white,
-                                )
-                              : null,
                         ),
                       ),
                   ],
@@ -233,30 +247,33 @@ class CompactCover extends StatelessWidget {
     final hasCover = path.isNotEmpty && File(path).existsSync();
 
     if (!hasCover) {
-      return GestureDetector(
-        onTap: onPick,
-        child: Container(
-          height: 84,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: minimalOutline(context)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(LucideIcons.imagePlus, size: 17, color: context.tokens.muted),
-              const SizedBox(width: 8),
-              Text(
-                context.l10n.add_image,
-                style: TextStyle(
-                  color: context.tokens.muted,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13.5,
+      return Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: onPick,
+          child: Container(
+            height: 84,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: minimalOutline(context)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(LucideIcons.imagePlus, size: 17, color: context.tokens.muted),
+                const SizedBox(width: 8),
+                Text(
+                  context.l10n.add_image,
+                  style: TextStyle(
+                    color: context.tokens.muted,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13.5,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -277,9 +294,13 @@ class CompactCover extends StatelessWidget {
             right: 6,
             child: Row(
               children: [
-                CoverActionButton(size: 28, icon: LucideIcons.pencil, onTap: onPick),
+                CoverActionButton(size: 28, icon: LucideIcons.pencil,
+                  label: context.l10n.edit,
+                  onTap: onPick),
                 const SizedBox(width: 6),
-                CoverActionButton(size: 28, icon: LucideIcons.trash2, onTap: onRemove),
+                CoverActionButton(size: 28, icon: LucideIcons.trash2,
+                  label: context.l10n.delete,
+                  onTap: onRemove),
               ],
             ),
           ),
@@ -368,15 +389,18 @@ class CompactCategoryPicker extends StatelessWidget {
       runSpacing: 7,
       children: [
         for (final category in categories)
-          GestureDetector(
-            onLongPress: () => _editOrDelete(context, category),
-            child: CompactPill(
-              label: context.categoryLabel(category.name),
-              icon: CategoryIcons.resolve(category.icon),
-              color: category.color,
-              selected: selected == category.name,
-              onTap: () =>
-                  onSelected(selected == category.name ? '' : category.name),
+          Semantics(
+            button: true,
+            child: GestureDetector(
+              onLongPress: () => _editOrDelete(context, category),
+              child: CompactPill(
+                label: context.categoryLabel(category.name),
+                icon: CategoryIcons.resolve(category.icon),
+                color: category.color,
+                selected: selected == category.name,
+                onTap: () =>
+                    onSelected(selected == category.name ? '' : category.name),
+              ),
             ),
           ),
         CompactPill(

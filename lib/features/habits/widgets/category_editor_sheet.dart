@@ -91,45 +91,53 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                 runSpacing: 10,
                 children: [
                   for (final name in _visibleIcons)
-                    GestureDetector(
-                      onTap: () => setState(() => _icon = name),
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: _icon == name
-                              ? _color.withValues(alpha: 0.16)
-                              : context.colors.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(12),
-                          border: _icon == name
-                              ? Border.all(color: _color, width: 1.6)
-                              : null,
-                        ),
-                        child: Icon(
-                          CategoryIcons.resolve(name),
-                          size: 20,
-                          color: _icon == name ? _color : context.tokens.muted,
+                    Semantics(
+                      button: true,
+                      selected: _icon == name,
+                      label: name,
+                      child: GestureDetector(
+                        onTap: () => setState(() => _icon = name),
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: _icon == name
+                                ? _color.withValues(alpha: 0.16)
+                                : context.colors.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
+                            border: _icon == name
+                                ? Border.all(color: _color, width: 1.6)
+                                : null,
+                          ),
+                          child: Icon(
+                            CategoryIcons.resolve(name),
+                            size: 20,
+                            color: _icon == name ? _color : context.tokens.muted,
+                          ),
                         ),
                       ),
                     ),
                   if (!_showAllIcons &&
                       CategoryIcons.names.length > _iconPreviewCount)
-                    GestureDetector(
-                      onTap: () => setState(() => _showAllIcons = true),
-                      child: Container(
-                        height: 44,
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: context.colors.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          context.l10n.see_more,
-                          style: TextStyle(
-                            color: context.colors.primary,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
+                    Semantics(
+                      button: true,
+                      child: GestureDetector(
+                        onTap: () => setState(() => _showAllIcons = true),
+                        child: Container(
+                          height: 44,
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: context.colors.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            context.l10n.see_more,
+                            style: TextStyle(
+                              color: context.colors.primary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ),

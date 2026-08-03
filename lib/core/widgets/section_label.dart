@@ -13,17 +13,18 @@ class SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4, bottom: 10),
       child: Row(
         children: [
-          Text(
-            text.toUpperCase(),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.1,
-              color: context.tokens.muted,
+          Expanded(
+            child: Text(
+              text.toUpperCase(),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.1,
+                color: context.tokens.muted,
+              ),
             ),
           ),
-          const Spacer(),
-          if (trailing != null) trailing!,
+          if (trailing != null) Flexible(child: trailing!),
         ],
       ),
     );

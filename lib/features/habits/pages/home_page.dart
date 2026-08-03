@@ -9,16 +9,16 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/confetti_overlay.dart';
-import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/classic_habit_list.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
-import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -155,24 +155,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
     final sortCompletedLast = settings.sortCompletedLast;
-    final grid = settings.isGridLayout;
+    final minimal = settings.isMinimalStyle;
     return Scaffold(
       appBar: AppBar(
         title: _reordering
             ? Text(context.l10n.reorder)
-            : grid
+            : minimal
                 ? null
                 : Text(context.l10n.today),
 
-        leading: grid && !_reordering
+        leading: minimal && !_reordering
             ? IconButton(
                 icon: const Icon(LucideIcons.settings),
                 onPressed: () => AppNavigator.push(const SettingsPage()),
               )
             : null,
         actions: [
-          if (!_reordering) FocusPill(compact: grid),
-          if (grid && !_reordering)
+          if (!_reordering) FocusPill(compact: minimal),
+          if (minimal && !_reordering)
             IconButton(
               icon: const Icon(LucideIcons.chartColumn),
               onPressed: () => AppNavigator.push(const StatisticsPage()),
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )
-                : grid
+                : minimal
                     ? IconButton(
                         onPressed: () => AppNavigator.push(
                           const HabitFormPage(),
@@ -257,12 +257,12 @@ class _HomePageState extends State<HomePage> {
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (!grid) const DailyQuote(),
-                          if (!grid) const SizedBox(height: 8),
-                          if (!grid) TodayProgress(done: done, total: total),
-                          if (!grid) const SizedBox(height: 20),
+                          if (!minimal) const DailyQuote(),
+                          if (!minimal) const SizedBox(height: 8),
+                          if (!minimal) TodayProgress(done: done, total: total),
+                          if (!minimal) const SizedBox(height: 20),
 
-                          if (!grid)
+                          if (!minimal)
                             _ViewSelector(mode: _mode, onChanged: _changeMode),
                           if (categories.isNotEmpty) ...[
                             const SizedBox(height: 14),
@@ -282,76 +282,35 @@ class _HomePageState extends State<HomePage> {
                         const Duration(milliseconds: 300));
                     controller.reload();
                   },
-                  child: grid && !_reordering
-                      ? _gridBody(controller, visible, header, today)
-                      : ReorderableListView.builder(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 104),
-                  itemCount: visible.length,
-                  buildDefaultDragHandles: false,
-                  onReorder: (oldIndex, newIndex) {
-                    HapticFeedback.mediumImpact();
-                    controller.reorder(oldIndex, newIndex);
-                  },
-                  proxyDecorator: (child, index, animation) => Material(
-                    color: Colors.transparent,
-                    child: child,
-                  ),
-                  header: header,
-                  itemBuilder: (context, index) {
-                    final habit = visible[index];
-                    if (_reordering) {
-                      return ReorderableDelayedDragStartListener(
-                        key: ValueKey(habit.id),
-                        index: index,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: HabitCard(
-                                  habit: habit,
-                                  mode: _mode,
-                                  onOpen: () {},
-                                  onToggleToday: () {},
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Icon(
-                                  LucideIcons.gripVertical,
-                                  color: context.tokens.muted,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                    return _EntranceCard(
-                      key: ValueKey(habit.id),
-                      index: index,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: HabitCard(
-                          habit: habit,
+                  child: minimal && !_reordering
+                      ? MinimalHabitList(
+                          habits: visible,
                           mode: _mode,
-                          onOpen: () => AppNavigator.push(
-                            HabitDetailsPage(habitId: habit.id),
-                            fade: true,
-                          ),
-                          onToggleToday: () =>
+                          header: header,
+                          onOpen: _openDetails,
+                          onToggleToday: (habit) =>
                               controller.toggle(habit.id, today),
-                          onLongPress: () =>
+                          onToggleDay: (habit, date) =>
+                              controller.toggle(habit.id, date),
+                          onLongPress: (habit) =>
+                              _showHabitActions(controller, habit),
+                        )
+                      : ClassicHabitList(
+                          habits: visible,
+                          mode: _mode,
+                          reordering: _reordering,
+                          header: header,
+                          onReorder: controller.reorder,
+                          onOpen: _openDetails,
+                          onToggleToday: (habit) =>
+                              controller.toggle(habit.id, today),
+                          onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
                         ),
-                      ),
-                    );
-                  },
-                  ),
                 );
               },
             ),
-            if (grid && !_reordering)
+            if (minimal && !_reordering)
               Positioned(
                 left: 0,
                 right: 0,
@@ -367,103 +326,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _gridBody(
-    HabitsController controller,
-    List<Habit> visible,
-    Widget header,
-    DateTime today,
-  ) {
-    const padding = EdgeInsets.fromLTRB(16, 8, 16, 104);
-
-    void open(Habit habit) => AppNavigator.push(
-          HabitDetailsPage(habitId: habit.id),
-          fade: true,
-        );
-    void toggleDay(Habit habit, DateTime date) =>
-        controller.toggle(habit.id, date);
-
-    if (_mode == HeatmapMode.month) {
-      return ListView(
-        padding: padding,
-        children: [
-          header,
-          for (var i = 0; i < visible.length; i += 2)
-            Entrance(
-              key: ValueKey('month-$i-${visible[i].id}'),
-              index: i ~/ 2,
-              child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: GridMonthCard(
-                        habit: visible[i],
-                        onOpen: () => open(visible[i]),
-                        onToggleToday: () =>
-                            controller.toggle(visible[i].id, today),
-                        onToggleDay: (d) => toggleDay(visible[i], d),
-                        onLongPress: () =>
-                            _showHabitActions(controller, visible[i]),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: i + 1 < visible.length
-                          ? GridMonthCard(
-                              habit: visible[i + 1],
-                              onOpen: () => open(visible[i + 1]),
-                              onToggleToday: () =>
-                                  controller.toggle(visible[i + 1].id, today),
-                              onToggleDay: (d) => toggleDay(visible[i + 1], d),
-                              onLongPress: () => _showHabitActions(
-                                  controller, visible[i + 1]),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
-                ),
-              ),
-              ),
-            ),
-        ],
+  void _openDetails(Habit habit) => AppNavigator.push(
+        HabitDetailsPage(habitId: habit.id),
+        fade: true,
       );
-    }
-
-    return ListView(
-      padding: padding,
-      children: [
-        header,
-        for (var i = 0; i < visible.length; i++)
-          Entrance(
-            key: ValueKey('$_mode-${visible[i].id}'),
-            index: i,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _mode == HeatmapMode.week
-                  ? GridWeekCard(
-                      habit: visible[i],
-                      onOpen: () => open(visible[i]),
-                      onToggleDay: (d) => toggleDay(visible[i], d),
-                      onLongPress: () =>
-                          _showHabitActions(controller, visible[i]),
-                    )
-                  : GridYearCard(
-                      habit: visible[i],
-                      onOpen: () => open(visible[i]),
-                      onToggleToday: () =>
-                          controller.toggle(visible[i].id, today),
-                      onToggleDay: (d) => toggleDay(visible[i], d),
-                      onLongPress: () =>
-                          _showHabitActions(controller, visible[i]),
-                    ),
-            ),
-          ),
-      ],
-    );
-  }
 
   List<Habit> _completedLast(List<Habit> habits) {
     final pending = <Habit>[];
@@ -574,33 +440,39 @@ class _ViewSelector extends StatelessWidget {
         children: [
           for (final (value, label) in options)
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  onChanged(value);
-                },
-                child: AnimatedScale(
-                  scale: value == mode ? 1 : 0.94,
-                  duration: const Duration(milliseconds: 260),
-                  curve: Curves.easeOutBack,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
-                    curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.symmetric(vertical: 9),
-                    decoration: BoxDecoration(
-                      color: value == mode ? scheme.primary : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: AnimatedDefaultTextStyle(
+              child: Semantics(
+                button: true,
+                selected: value == mode,
+                child: GestureDetector(
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    onChanged(value);
+                  },
+                  child: AnimatedScale(
+                    scale: value == mode ? 1 : 0.94,
+                    duration: const Duration(milliseconds: 260),
+                    curve: Curves.easeOutBack,
+                    child: AnimatedContainer(
                       duration: const Duration(milliseconds: 220),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                      curve: Curves.easeOutCubic,
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      decoration: BoxDecoration(
                         color: value == mode
-                            ? scheme.onPrimary
-                            : context.tokens.muted,
+                            ? scheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Text(label, textAlign: TextAlign.center),
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 220),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: value == mode
+                              ? scheme.onPrimary
+                              : context.tokens.muted,
+                        ),
+                        child: Text(label, textAlign: TextAlign.center),
+                      ),
                     ),
                   ),
                 ),
@@ -663,86 +535,41 @@ class _Chip extends StatelessWidget {
     final scheme = context.colors;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
-        child: AnimatedScale(
-          scale: active ? 1 : 0.95,
-          duration: const Duration(milliseconds: 260),
-          curve: Curves.easeOutBack,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeOutCubic,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: active ? scheme.primary : scheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: AnimatedDefaultTextStyle(
+      child: Semantics(
+        button: true,
+        selected: active,
+        child: GestureDetector(
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onTap();
+          },
+          child: AnimatedScale(
+            scale: active ? 1 : 0.95,
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutBack,
+            child: AnimatedContainer(
               duration: const Duration(milliseconds: 220),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: active ? scheme.onPrimary : context.tokens.muted,
+              curve: Curves.easeOutCubic,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color:
+                    active ? scheme.primary : scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(label),
+              child: AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 220),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: active ? scheme.onPrimary : context.tokens.muted,
+                ),
+                child: Text(label),
+              ),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _EntranceCard extends StatefulWidget {
-  const _EntranceCard({
-    super.key,
-    required this.index,
-    required this.child,
-  });
-
-  final int index;
-  final Widget child;
-
-  @override
-  State<_EntranceCard> createState() => _EntranceCardState();
-}
-
-class _EntranceCardState extends State<_EntranceCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 420),
-  );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-  late final Animation<Offset> _slide = Tween(
-    begin: const Offset(0, 0.12),
-    end: Offset.zero,
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(milliseconds: 35 * widget.index.clamp(0, 6)), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }
