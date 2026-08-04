@@ -1,7 +1,8 @@
-🎯 Focus mode — pick a habit and a duration, with pomodoro, scenes and sound
-📝 Daily notes — write what you learned, attach photos, see them in Journey
-🎨 Minimal style — a quieter, grid-based look you switch on in Settings
+🚀 New version 1.4.0
+🎯 Focus mode — pick a habit and a time, with pomodoro, scenes and sound
+📝 Daily notes with photos, all gathered in Journey
+🎨 New Minimal style, and a fresh look for stats and sharing
+🌴 Rest days — pause a habit every weekend, or any day you pick
 🔒 App lock with PIN or fingerprint, plus automatic backups
-🔔 Reminders with Done, Snooze and Add amount buttons
-📦 Archive habits without losing their history
+🔔 Reminders with Done and Snooze, and better widgets
 🐛 Fixed reminders being dropped — open the app once after updating

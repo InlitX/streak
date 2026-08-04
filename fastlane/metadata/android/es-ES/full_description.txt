@@ -2,28 +2,39 @@ Streak es un seguidor de hábitos que te respeta. Crea todos los hábitos que qu
 
 Tuyo, por completo. Sin cuentas, sin suscripciones, sin anuncios, sin rastreo. Cada hábito y ajuste se queda en tu dispositivo, y todo el código fuente es abierto.
 
-Seguimiento
-* Registro con un toque desde la pantalla de inicio
-* Metas diarias, semanales y mensuales
-* Contadores de racha actual y mejor racha
-* "Fuerza" del hábito según tu constancia reciente
+✅ SEGUIMIENTO
+• Registro con un toque desde la pantalla de inicio, un widget o el recordatorio
+• Tres tipos de hábito: normal, evitar con recaídas, y de cantidad con tu unidad y meta diaria
+• Listas que dividen un hábito en pasos
+• Horarios flexibles: diario, X veces por semana o mes, días concretos o cada N días
+• Rellena el pasado tocando cualquier día y las rachas se ponen al día
+• Notas del día con fotos, modo vacaciones y días de descanso semanales
 
-Visualización
-* Cuadrícula de actividad estilo GitHub (semana / mes / año)
-* Panel de estadísticas con tendencias y totales
-* Tarjeta de progreso para compartir como imagen
+🎯 CONCENTRACIÓN
+• Un temporizador, libre o atado a un hábito y su meta
+• Rondas pomodoro, tres estilos de reloj y escenas tranquilas
+• Sonidos incluidos, o tus propias pistas y tu foto
+• Una meta diaria y el historial de cada sesión
 
-Personalización
-* Conjunto de iconos minimalista y soporte de emojis
-* Color de acento personalizado con selector de color completo
-* Temas claro / oscuro y fondos seleccionables
-* Categorías, reordenar, nombre y foto de perfil
+📊 PROGRESO
+• Cuadrícula de actividad por semana, mes o año, y calendario mensual
+• Cumplimientos por mes, evolución de la racha y las horas en las que eres más constante
+• Fuerza del hábito según tu constancia reciente
+• Una tarjeta de progreso para compartir, exportada como imagen cuidada
 
-Datos y plataforma
-* Recordatorios por hábito en los días que elijas
-* Copia de seguridad y restauración en un archivo JSON portable
-* Tres widgets para la pantalla de inicio
-* Totalmente sin conexión
+🎨 HAZLA TUYA
+• Estilo Classic o Minimal
+• Iconos minimalistas o cualquier emoji, y tu color de acento
+• Temas claro y oscuro, cinco fondos incluido el negro puro para OLED
+• Categorías, reordenar, portadas, nombre y foto de perfil
 
-Privacidad
+💾 TUS DATOS
+• Importa desde Loop Habit Tracker, HabitKit, Habitica, HabitBull o un CSV normal
+• Copia de seguridad y restauración en un solo archivo, más copias automáticas
+• Bloqueo de la app con PIN o huella
+• Cuatro widgets de inicio: hábito, hoy, estadísticas y cuadrícula
+• Archiva hábitos sin perder su historial
+• Totalmente sin conexión
+
+🔒 PRIVACIDAD
 Streak no tiene analíticas, ni SDK de publicidad, ni backend de red. La app nunca envía tus datos a ningún sitio; se quedan en tu dispositivo. Las únicas acciones salientes son los enlaces que tú decidas abrir.

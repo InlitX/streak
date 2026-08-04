@@ -2,28 +2,39 @@ Streak is a habit tracker that respects you. Create as many habits as you like, 
 
 Yours, completely. No accounts, no subscriptions, no ads, no tracking. Every habit and setting stays on your device, and the full source is open.
 
-Tracking
-* One-tap logging from the home screen
-* Daily, weekly and monthly goals
-* Current and best streak counters
-* Habit "strength" based on recent consistency
+✅ TRACKING
+• One-tap logging from the home screen, a widget or the reminder
+• Three kinds of habit: normal, avoid with relapses, and amount with your own unit and daily goal
+• Checklists that split a habit into steps
+• Flexible schedules: daily, X times a week or month, chosen weekdays, or every N days
+• Fill in the past by tapping any day, and the streaks catch up
+• Day notes with photos, vacation mode and weekly rest days
 
-Visualization
-* GitHub-style activity grid (week / month / year)
-* Statistics dashboard with trends and totals
-* Shareable progress card as a polished image
+🎯 FOCUS
+• A timer, free or tied to a habit and its goal
+• Pomodoro rounds, three clock styles and calm scenes
+• Built-in sounds, or your own tracks and photo
+• A daily focus goal and a history of every session
 
-Personalization
-* Minimalist icon pack and emoji support
-* Custom accent color with a full color picker
-* Light / dark themes and selectable backgrounds
-* Categories, reordering, profile name and photo
+📊 PROGRESS
+• Activity grid by week, month or year, plus a month calendar
+• Completions per month, streak evolution and the hours you are most consistent
+• Habit strength based on recent consistency
+• A shareable progress card, exported as a polished image
 
-Data & platform
-* Per-habit reminders on the days you choose
-* Backup and restore as a portable JSON file
-* Three home-screen widgets
-* Fully offline
+🎨 MAKE IT YOURS
+• Classic or Minimal style
+• Minimalist icons or any emoji, and your own accent colour
+• Light and dark themes, five backgrounds including true-black OLED
+• Categories, reordering, cover photos, profile name and photo
 
-Privacy
+💾 YOUR DATA
+• Import from Loop Habit Tracker, HabitKit, Habitica, HabitBull or a plain CSV
+• Backup and restore as a single file, plus automatic backups
+• App lock with a PIN or your fingerprint
+• Four home-screen widgets: habit, today, stats and activity grid
+• Archive habits without losing their history
+• Fully offline
+
+🔒 PRIVACY
 Streak has no analytics, no advertising SDK and no network backend. The app never sends your data anywhere; it stays on your device. The only outbound actions are links you choose to open yourself.
