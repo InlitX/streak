@@ -310,14 +310,16 @@ class CompactWeekdays extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onChanged,
+    this.accent,
   });
 
   final List<int> selected;
   final ValueChanged<List<int>> onChanged;
+  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.colors.primary;
+    final accent = this.accent ?? context.colors.primary;
     final labels = WeekdayLabels.shortMonFirst(
       Localizations.localeOf(context).languageCode,
     );

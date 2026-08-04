@@ -486,6 +486,8 @@
   "end_vacation": "Terminar vacaciones",
   "vacation_day_on": "Marcar como día de vacaciones",
   "vacation_day_off": "Quitar día de vacaciones",
+  "rest_days": "Días de descanso",
+  "rest_days_desc": "Pausa el hábito cada semana en estos días. Puedes registrarlos igual y contarán.",
   "widget_no_habits": "Sin hábitos aún\nToca para abrir Streak",
   "widget_no_data": "Sin datos aún\nAbre Streak para sincronizar",
   "widget_open_to_sync": "Abre Streak para sincronizar",

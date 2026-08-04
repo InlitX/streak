@@ -59,6 +59,7 @@ class Habit {
     this.bookCoverPath = '',
     this.substeps = const [],
     this.vacations = const [],
+    this.restDays = const [],
     this.archivedAt,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? AppClock.now();
@@ -111,6 +112,8 @@ class Habit {
 
   final List<VacationPeriod> vacations;
 
+  final List<int> restDays;
+
   final DateTime? archivedAt;
 
   bool get isArchived => archivedAt != null;
@@ -119,7 +122,10 @@ class Habit {
 
   int get effectiveTarget => hasSubsteps ? substeps.length : perDayTarget;
 
-  bool isPausedOn(DateTime date) => vacations.any((v) => v.contains(date));
+  bool isRestDay(DateTime date) => restDays.contains(date.weekday);
+
+  bool isPausedOn(DateTime date) =>
+      isRestDay(date) || vacations.any((v) => v.contains(date));
 
   bool get isOnVacation => vacations.any((v) => v.isOngoing);
 
@@ -442,6 +448,7 @@ class Habit {
     String? bookCoverPath,
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
+    List<int>? restDays,
     DateTime? archivedAt,
     bool clearArchived = false,
     DateTime? createdAt,
@@ -469,6 +476,7 @@ class Habit {
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
+      restDays: restDays ?? this.restDays,
       archivedAt: clearArchived ? null : (archivedAt ?? this.archivedAt),
       createdAt: createdAt ?? this.createdAt,
     );
@@ -499,6 +507,7 @@ class Habit {
         'bookCoverPath': bookCoverPath,
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
+        'restDays': restDays,
         if (archivedAt != null) 'archivedAt': archivedAt!.toIso8601String(),
       };
 
@@ -550,6 +559,8 @@ class Habit {
                 .map((v) =>
                     VacationPeriod.fromMap(Map<String, dynamic>.from(v as Map)))
                 .toList(),
+        restDays:
+            (map['restDays'] as List?)?.map((e) => e as int).toList() ?? const [],
         archivedAt: map['archivedAt'] == null
             ? null
             : DateTime.tryParse(map['archivedAt'] as String),

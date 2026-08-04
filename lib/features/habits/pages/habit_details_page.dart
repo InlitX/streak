@@ -26,6 +26,7 @@ import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
@@ -534,44 +535,86 @@ class _VacationTile extends StatelessWidget {
     final color = context.tokens.info;
     return Card(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
-        child: Row(
+        padding: const EdgeInsets.fromLTRB(16, 8, 12, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(LucideIcons.palmtree, size: 22, color: color),
-            const SizedBox(width: 14),
-            Expanded(
+            Row(
+              children: [
+                Icon(LucideIcons.palmtree, size: 22, color: color),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.l10n.vacation_mode,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: context.colors.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        on
+                            ? context.l10n.vacation_on_desc
+                            : context.l10n.vacation_off_desc,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          height: 1.35,
+                          color: context.tokens.muted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Switch(
+                  value: on,
+                  onChanged: (v) {
+                    HapticFeedback.mediumImpact();
+                    context.read<HabitsController>().setVacation(habit.id, v);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 36, right: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    context.l10n.vacation_mode,
+                    context.l10n.rest_days,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: context.colors.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    on
-                        ? context.l10n.vacation_on_desc
-                        : context.l10n.vacation_off_desc,
+                    context.l10n.rest_days_desc,
                     style: TextStyle(
                       fontSize: 12.5,
                       height: 1.35,
                       color: context.tokens.muted,
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  CompactWeekdays(
+                    selected: habit.restDays,
+                    accent: color,
+                    onChanged: (days) {
+                      HapticFeedback.selectionClick();
+                      context
+                          .read<HabitsController>()
+                          .setRestDays(habit.id, days);
+                    },
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(width: 8),
-            Switch(
-              value: on,
-              onChanged: (v) {
-                HapticFeedback.mediumImpact();
-                context.read<HabitsController>().setVacation(habit.id, v);
-              },
             ),
           ],
         ),

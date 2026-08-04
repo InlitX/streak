@@ -557,6 +557,8 @@
   "end_vacation": "End vacation",
   "vacation_day_on": "Mark as vacation day",
   "vacation_day_off": "Remove vacation day",
+  "rest_days": "Rest days",
+  "rest_days_desc": "Pause it every week on these days. You can still log them, and they'll count.",
   "widget_no_habits": "No habits yet\nTap to open Streak",
   "widget_no_data": "No data yet\nOpen Streak to sync",
   "widget_open_to_sync": "Open Streak to sync",

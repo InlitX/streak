@@ -49,7 +49,8 @@ Future<void> showDayActionsSheet(
                 ),
               ),
             ),
-            if (!date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
+            if (!habit.isRestDay(date) &&
+                !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
               _Action(
                 icon: LucideIcons.palmtree,
                 label: paused

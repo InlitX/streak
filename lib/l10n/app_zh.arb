@@ -661,6 +661,8 @@
   "focus_start": "开始计时",
   "focus_stop_title": "结束计时?",
   "vacation_day_off": "取消假期",
+  "rest_days": "休息日",
+  "rest_days_desc": "每周在这些日子自动暂停。你仍然可以打卡，打了就会计入。",
   "app_lock": "应用锁",
   "by_habit": "出于习惯",
   "deleted_forever": "习惯已删除",

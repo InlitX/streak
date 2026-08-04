@@ -190,6 +190,12 @@ class HabitsController extends ChangeNotifier {
     await update(habit.copyWith(vacations: periods));
   }
 
+  Future<void> setRestDays(String id, List<int> days) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await update(habit.copyWith(restDays: days));
+  }
+
   Future<void> toggleVacationDay(String id, DateTime date) async {
     final habit = _habits[id];
     if (habit == null) return;
