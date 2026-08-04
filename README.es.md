@@ -1,14 +1,20 @@
+<div align="center">
+
+<img src="assets/banner.png" alt="Streak, un rastreador de hábitos minimalista, privado y sin anuncios" width="100%" />
+
+</div>
+
+---
+
 <div align="right">
   <sub><a href="README.md">English</a> · <b>Español</b> · <a href="README.zh-CN.md">中文</a> · <a href="README.ru.md">Русский</a></sub>
 </div>
 
-<br/>
-
 <div align="center">
 
-<img src="assets/icon.svg" width="120" alt="Logo de Streak" />
+### Streak
 
-# Streak
+<img src="assets/icon.svg" width="56" alt="Logo de Streak" />
 
 ### Un rastreador de hábitos minimalista, privado y sin anuncios
 
@@ -39,10 +45,10 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <sub>
   <a href="#-características">Características</a> ·
-  <a href="#vienes-de-otra-app">Importar</a> ·
-  <a href="#descarga">Descarga</a> ·
-  <a href="#privacidad">Privacidad</a> ·
-  <a href="#traducciones">Traducciones</a>
+  <a href="#-vienes-de-otra-app">Importar</a> ·
+  <a href="#-descarga">Descarga</a> ·
+  <a href="#-privacidad">Privacidad</a> ·
+  <a href="#-traducciones">Traducciones</a>
 </sub>
 
 </div>
@@ -51,19 +57,23 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <div align="center">
 
-<img src="screenshots/01-today.png" alt="Hoy" width="150" />
-<img src="screenshots/02-stats.png" alt="Estadísticas" width="150" />
-<img src="screenshots/03-insights.png" alt="Análisis" width="150" />
-<img src="screenshots/04-customize.png" alt="Personaliza" width="150" />
-<img src="screenshots/05-free.png" alt="Libre y privada" width="150" />
+<img src="screenshots/01-today.png" alt="Hoy" width="145" />
+<img src="screenshots/02-focus.png" alt="Concentración" width="145" />
+<img src="screenshots/03-stats.png" alt="Estadísticas" width="145" />
+<img src="screenshots/04-insights.png" alt="Análisis" width="145" />
 
-<sub><b>Hoy</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub>
+<img src="screenshots/05-amount.png" alt="Hábitos de cantidad" width="145" />
+<img src="screenshots/06-notes.png" alt="Notas del día" width="145" />
+<img src="screenshots/07-customize.png" alt="Personaliza" width="145" />
+<img src="screenshots/08-private.png" alt="Libre y privada" width="145" />
+
+<sub><b>Hoy</b> · <b>Concentración</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Cantidades</b> · <b>Notas</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub>
 
 </div>
 
 ---
 
-## Resumen
+## 👋 Resumen
 
 Streak es un rastreador de hábitos de código abierto para Android que te respeta.
 Crea todos los hábitos que quieras, regístralos con un toque y mira tu progreso
@@ -88,33 +98,31 @@ exigir.
 
 ### ✅ Seguimiento
 
-- Registro con un toque desde la pantalla de inicio o desde un widget
-- Tres tipos de hábito — **normal**, **evitar** (con registro de recaídas) y
-  **cantidad** (agua, lectura o tu propia unidad y meta diaria)
-- Las **listas de pasos** dividen un hábito en partes, hecho solo cuando están
-  todas marcadas
-- **Horarios flexibles** — diario, X veces por semana o mes, días concretos
-  o cada N días
-- **Rellena el pasado** — toca cualquier día para añadirlo o quitarlo, y las
-  rachas se recalculan
-- **Notas del día** — mantén pulsado un día para contar qué pasó, dejar algo
-  planeado o añadir una foto
-- Contadores de racha actual y mejor racha
+- Registro con un toque desde la pantalla de inicio, un widget o la
+  notificación
+- Tres tipos de hábito: **normal**, **evitar** (con recaídas) y **cantidad**,
+  con tu unidad y tu meta diaria
+- Las **listas de pasos** dividen un hábito en partes, hecho al marcarlas todas
+- **Horarios flexibles**: diario, X veces por semana o mes, días concretos o
+  cada N días
+- **Rellena el pasado**: toca cualquier día para añadirlo o quitarlo
+- **Notas del día**: mantén pulsado un día para contar qué pasó o añadir una
+  foto
 - El **modo vacaciones** pausa un hábito sin romper nada
-- Los hábitos terminados bajan al final, así ves lo que te queda
 
 </td>
 <td width="50%" valign="top">
 
 ### 📊 Ver tu progreso
 
-- **Cuadrícula de actividad** al estilo de GitHub — semana, mes o año
+- **Cuadrícula de actividad** al estilo de GitHub, por semana, mes o año entero
 - **Calendario mensual**, con la semana empezando en lunes, sábado o domingo
 - **Completados por mes**, para ver la forma de un año entero
 - **Evolución de la racha** en una gráfica, para verla subir
-- **"¿Cuándo eres más constante?"** encuentra las horas a las que de verdad cumples
-- Totales, mejor racha, racha actual y tasa de cumplimiento en una fila
-- Puntuación de **fuerza** por hábito, con más peso en tus días recientes
+- **"¿Cuándo eres más constante?"** encuentra las horas a las que de verdad
+  cumples
+- Totales, mejor racha, racha actual, cumplimiento y una puntuación de
+  **fuerza** por hábito
 - Una **tarjeta de progreso** para compartir, en varios tamaños y exportada
   como imagen cuidada
 
@@ -125,28 +133,27 @@ exigir.
 
 ### 🧘 Sesiones de concentración
 
-- Un temporizador para los hábitos que lo piden — libre, o atado a un hábito
-  y su meta
+- Un temporizador para los hábitos que lo piden, libre o atado a un hábito y
+  su meta
 - **Rondas pomodoro** con descansos cortos, o una sola sesión larga
-- Tres estilos de reloj — **Círculo**, **Flip** y **Puntos**
-- Sonidos incluidos — lluvia, ruido marrón, pad cálido — o tus propias pistas,
+- Tres estilos de reloj: **Círculo**, **Flip** y **Puntos**
+- Sonidos incluidos (lluvia, ruido marrón, pad cálido) o tus propias pistas,
   en orden o aleatorias
 - Escenas tranquilas de fondo, o una foto tuya
 - Marca subtareas sin salir del temporizador, y deja la pantalla encendida
 - Una **meta diaria de concentración**, más el historial de cada sesión
-- Los minutos van al hábito en cuanto alcanzas la meta
 
 </td>
 <td width="50%" valign="top">
 
 ### 🎨 Hacerla tuya
 
-- **Clásico o Minimal** — la lista de hábitos con barra inferior, o una
+- **Clásico o Minimal**: la lista de hábitos con barra inferior, o una
   cuadrícula con todo agrupado en cuatro secciones
-- Pack de iconos minimalista, o cualquier emoji
+- Pack de iconos minimalista, o cualquier emoji que quieras
 - Color de acento personalizado con selector completo
-- Temas claro y oscuro, más cinco fondos — sólido, degradado, puntos,
-  negro puro OLED o una foto tuya
+- Temas claro y oscuro, más cinco fondos: sólido, degradado, puntos, negro
+  puro OLED o una foto tuya
 - Portadas, categorías, reordenar arrastrando, nombre y foto de perfil
 - Tres iconos de aplicación, para que Streak pegue con tu pantalla de inicio
 - Una lluvia de confeti el día que lo completas todo
@@ -159,9 +166,12 @@ exigir.
 ### 🔔 Recordatorios y widgets
 
 - Recordatorios por hábito, los días que elijas o cada N días, cada uno con
-  una frase de ánimo en vez de un aviso vacío
-- **Cuatro widgets de inicio** — hábito, hoy, estadísticas y cuadrícula de
-  actividad — cada uno con su estilo: color o foto, opacidad y borde
+  una frase de ánimo
+- Botones de **Hecho**, **Posponer** y **Añadir cantidad** en la propia
+  notificación
+- **Cuatro widgets de inicio**: hábito, hoy, estadísticas y cuadrícula de
+  actividad
+- Cada widget con su estilo propio: color o foto, opacidad y borde
 - Elige qué datos muestra el **widget de estadísticas** y cómo se colocan
 - Marca un día desde el widget, se guarda sin abrir la app
 - Toca la cuadrícula de actividad para entrar directo en ese hábito
@@ -171,10 +181,14 @@ exigir.
 
 ### 💾 Tus datos
 
-- **Importa** desde Loop Habit Tracker y HabitKit, con historial y rachas
+- **Importa** desde Loop Habit Tracker, HabitKit, Habitica y HabitBull, con
+  historial y rachas, o desde cualquier CSV con un hábito y una fecha
 - Copia de seguridad y restauración en un solo archivo que guardas tú
-- Todo sin conexión — sin cuenta, sin servidor, nada que sincronizar
-- Inglés, español y chino, con más idiomas abiertos en Weblate
+- **Copias automáticas**, diarias o semanales, en la carpeta que elijas
+- **Bloqueo de la app** con PIN o huella, para móviles que no lo traen
+- **Archiva** hábitos sin perder un solo día de su historial
+- Todo sin conexión: sin cuenta, sin servidor, nada que sincronizar
+- Diez idiomas, con más abiertos en Weblate
 
 </td>
 </tr>
@@ -182,17 +196,18 @@ exigir.
 
 ---
 
-## ¿Vienes de otra app?
+## 📦 ¿Vienes de otra app?
 
-Tráete tu historial. Streak lee exportaciones de **Loop Habit Tracker** y
-**HabitKit**, así que tus días pasados y tus rachas sobreviven a la mudanza.
-Pronto habrá soporte para más apps.
+Tráete tu historial. Streak lee exportaciones de **Loop Habit Tracker**,
+**HabitKit**, **Habitica** y **HabitBull**, así que tus días pasados y tus
+rachas sobreviven a la mudanza. Cualquier otro CSV vale también, mientras tenga
+un hábito y una fecha.
 
 <div align="center"><sub><b>Ajustes → Datos → Importar de otra app</b></sub></div>
 
 ---
 
-## Descarga
+## ⬇️ Descarga
 
 [**F-Droid**](https://f-droid.org/packages/com.streak.app/) es lo más cómodo:
 instala Streak y lo mantiene actualizado por ti. También está en
@@ -205,7 +220,7 @@ teléfono para que cada descarga sea pequeña:
 
 | APK | Para |
 |-----|------|
-| `Streak-arm64-v8a.apk` | Teléfonos modernos de 64 bits — **elige este** |
+| `Streak-arm64-v8a.apk` | Teléfonos modernos de 64 bits, **elige este** |
 | `Streak-armeabi-v7a.apk` | Dispositivos antiguos de 32 bits |
 | `Streak-x86_64.apk` | Emuladores y tablets x86 |
 
@@ -218,7 +233,7 @@ Funciona en **Android 9 (Pie) o superior**.
 
 ---
 
-## Privacidad
+## 🔒 Privacidad
 
 > [!IMPORTANT]
 > Streak **no tiene analíticas, ni SDK de publicidad, ni backend de red**. La app
@@ -227,9 +242,11 @@ Funciona en **Android 9 (Pie) o superior**.
 
 ---
 
-## Traducciones
+## 🌍 Traducciones
 
-Streak habla inglés, español y chino, y cualquier idioma nuevo es bienvenido. Las
+Streak habla **inglés, español, ruso y chino** por completo, y **alemán,
+portugués, ucraniano, polaco, francés e indonesio** están en camino; cualquier
+idioma nuevo es bienvenido. Las
 traducciones se gestionan en [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no hace falta programar, solo son frases cortas que traduces en el navegador.
 
@@ -241,15 +258,15 @@ Cómo funciona → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
 
-## Contribuir
+## 🛠️ Contribuir
 
-Los informes de fallos, las ideas y los pull requests son bienvenidos — mira
+Los informes de fallos, las ideas y los pull requests son bienvenidos, mira
 [**CONTRIBUTING.md**](CONTRIBUTING.md). Para algo más grande que un arreglo, abre
 antes una incidencia y acordamos la dirección.
 
 ---
 
-## Apoyo
+## ❤️ Apoyo
 
 <div align="center">
 
