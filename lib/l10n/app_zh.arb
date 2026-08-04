@@ -691,7 +691,7 @@
   "widget_cfg_show_activity": "展示对应习惯的打卡记录",
   "widget_cfg_save": "保存",
   "active_days": "活跃天数",
-  "a11y_add_amount": "",
+  "a11y_add_amount": "添加至{name}",
   "@a11y_add_amount": {
     "description": "Screen reader label for the button that adds progress to a quantitative habit",
     "placeholders": {
@@ -700,19 +700,19 @@
       }
     }
   },
-  "a11y_decrease": "",
+  "a11y_decrease": "数值减少",
   "@a11y_decrease": {
     "description": "Screen reader label for the minus button of a number stepper"
   },
-  "a11y_not_done": "",
+  "a11y_not_done": "未完成",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
-  "a11y_increase": "",
+  "a11y_increase": "数值增加",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
   },
-  "a11y_clear_relapse": "",
+  "a11y_clear_relapse": "清除{name}今日的破戒记录",
   "@a11y_clear_relapse": {
     "description": "Screen reader label for the button that removes today's relapse",
     "placeholders": {
@@ -721,7 +721,7 @@
       }
     }
   },
-  "a11y_log_relapse": "",
+  "a11y_log_relapse": "记录{name}中断打卡",
   "@a11y_log_relapse": {
     "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
     "placeholders": {
@@ -730,7 +730,7 @@
       }
     }
   },
-  "a11y_mark_done": "",
+  "a11y_mark_done": "将{name}标记为已完成",
   "@a11y_mark_done": {
     "description": "Screen reader label for the button that logs a habit",
     "placeholders": {
@@ -739,7 +739,7 @@
       }
     }
   },
-  "a11y_mark_not_done": "",
+  "a11y_mark_not_done": "将{name}标记为未完成",
   "@a11y_mark_not_done": {
     "description": "Screen reader label for the button that undoes a habit",
     "placeholders": {
@@ -748,7 +748,7 @@
       }
     }
   },
-  "a11y_pick_color": "",
+  "a11y_pick_color": "选择颜色",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
   }
