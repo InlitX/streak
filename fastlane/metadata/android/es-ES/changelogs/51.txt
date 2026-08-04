@@ -1,8 +1,8 @@
 🚀 Nueva versión 1.4.0
-🎯 Modo Focus — elige un hábito y un tiempo, con pomodoro, escenas y sonido
+🎯 Modo Focus: elige un hábito y un tiempo, con pomodoro, escenas y sonido
 📝 Notas diarias con fotos, todas reunidas en Journey
 🎨 Nuevo estilo Minimal, y otra cara para estadísticas y compartir
-🌴 Días de descanso — pausa un hábito cada finde, o el día que elijas
+🌴 Días de descanso: pausa un hábito cada finde, o el día que elijas
 🔒 Bloqueo con PIN o huella, y copias de seguridad automáticas
 🔔 Recordatorios con Hecho y Posponer, y widgets mejorados
-🐛 Arreglados los recordatorios perdidos — abre la app tras actualizar
+🐛 Arreglados los recordatorios perdidos, abre la app tras actualizar
