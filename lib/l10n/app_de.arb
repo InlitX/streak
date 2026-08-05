@@ -185,7 +185,7 @@
   "weekdays": "Wochentage",
   "data": "Daten",
   "best_streak": "Beste Serie",
-  "log_relapse_body": "Deine Serie für \"{name}\" wird gebrochen. Du kannst es rückgängig machen indem du nochmal tippst.",
+  "log_relapse_body": "Deine Serie für \"{name}\" wird unterbrochen. Du kannst es rückgängig machen indem du nochmal tippst.",
   "@log_relapse_body": {
     "placeholders": {
       "name": {
@@ -387,8 +387,8 @@
   "done": "Fertig",
   "reminders": "Erinnerungen",
   "focus_end_keep": "",
-  "share_friends_sub": "",
-  "about_story": "",
+  "share_friends_sub": "Schicke ihnen die App",
+  "about_story": "Diese App wurde aus Frustration mit den existenten Gewohnheits-Tracken geboren. Die meisten beschränken wie viele Gewohnheiten du erstellen kannst, haben grundlegend Features hinter einer paywall, sammeln deine Daten oder bombardieren dich mit Werbung. Also erstellte ich Streak: komplett offen, keine Werbung, keine Zahlungen, kein Tracking. Alles läuft lokal — deine Daten sind deins. Open source, ohne Haken.",
   "focus_saved": "",
   "@focus_saved": {
     "placeholders": {
@@ -397,10 +397,10 @@
       }
     }
   },
-  "note_photos": "",
-  "auto_backup_run_now": "",
-  "about_subtitle": "",
-  "wipe_data_sub": "",
+  "note_photos": "Bilder",
+  "auto_backup_run_now": "Jetzt Sicherungskopie erstellen",
+  "about_subtitle": "Für die Tage an denen du da bist.",
+  "wipe_data_sub": "Gewohnheiten, Notizen, Fokus Sessions und Einstellungen",
   "focus_your_tracks": "",
   "completion_rate_short": "Konsequenz",
   "notif_streak": "",
@@ -411,7 +411,7 @@
       }
     }
   },
-  "message_copied": "",
+  "message_copied": "Nachricht kopiert",
   "share_background": "",
   "focus_sessions": "",
   "focus_amount_added": "",
@@ -426,8 +426,8 @@
     }
   },
   "notes_empty": "",
-  "consistency_trend": "",
-  "archived_empty_sub": "",
+  "consistency_trend": "Konsequenz Trend",
+  "archived_empty_sub": "Gewohnheiten die du löschst landen hier, mit ihrer Geschichte.",
   "wipe_data_sure": "",
   "day_start_hour": "",
   "@day_start_hour": {
@@ -437,9 +437,9 @@
       }
     }
   },
-  "about_inline": "",
-  "ranking": "",
-  "count_months": "",
+  "about_inline": "Streak ist eine open source App um Gewohnheiten zu tracken. Keine Accounts, keine Limits, keine Zahlungen. Alles bleibt auf deinem Gerät.\n\nJeder kann den Code sehen, verbessern, oder selber verwenden.",
+  "ranking": "Rangliste",
+  "count_months": "{count, plural, =1{1 Monat} other{{count} Monate}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -450,7 +450,7 @@
   "delete_note": "",
   "notif_action_add_hint": "",
   "today_only": "",
-  "archive_habit_body": "",
+  "archive_habit_body": "\"{name}\" zum Archiv bewegen? Die Geschichte wird behalten und du kannst es in den Einstellungen wiederherstellen.",
   "@archive_habit_body": {
     "placeholders": {
       "name": {
@@ -458,7 +458,7 @@
       }
     }
   },
-  "per_week": "",
+  "per_week": "Pro Woche",
   "focus_end_anyway": "",
   "snooze_custom_hint": "",
   "bg_solid": "",
@@ -481,7 +481,7 @@
   "focus_history": "",
   "save_note": "",
   "focus_end_complete": "",
-  "archived_empty": "",
+  "archived_empty": "Nichts archiviert",
   "focus_scene_black": "",
   "share_swipe_hint": "",
   "focus_free_session": "",
@@ -490,15 +490,15 @@
   "focus_track_too_long": "",
   "dev_role": "",
   "focus_style_dots": "",
-  "journey_empty": "",
+  "journey_empty": "Noch keine Bilder",
   "share_stats_short": "",
   "share_save": "",
   "app_style_sub": "",
-  "app_lock_sub": "",
-  "auto_backup_daily": "",
-  "restore": "",
+  "app_lock_sub": "Nutze deinen Fingerabdruck oder Gesicht um Streak zu öffnen",
+  "auto_backup_daily": "Täglich",
+  "restore": "Wiederherstellen",
   "preferences_sub": "",
-  "auto_backup_no_permission": "",
+  "auto_backup_no_permission": "Keine Speicher Berechtigung",
   "focus_built_in": "",
   "focus_sound": "",
   "add_note": "",
@@ -506,7 +506,7 @@
   "note_kind_planned": "",
   "default_user": "",
   "share_saved": "",
-  "count_days": "",
+  "count_days": "{count, plural, =1{1 Tag} other{{count} Tage}}",
   "@count_days": {
     "placeholders": {
       "count": {
@@ -516,7 +516,7 @@
   },
   "wipe_data_confirm": "",
   "unit_minutes": "",
-  "share_blur": "",
+  "share_blur": "Unschärfe",
   "focus_end_reached": "",
   "focus_personalize": "",
   "focus_history_empty": "",
@@ -544,7 +544,7 @@
     }
   },
   "focus_add_track": "",
-  "count_weeks": "",
+  "count_weeks": "{count, plural, =1{1 Woche} other{{count} Wochen}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
@@ -555,8 +555,8 @@
   "snooze_duration": "",
   "notes": "",
   "focus_no_sound": "",
-  "wipe_data": "",
-  "auto_backup_weekly": "",
+  "wipe_data": "Alle Daten löschen",
+  "auto_backup_weekly": "Wöchentlich",
   "app_style": "",
   "wipe_data_done": "",
   "focus_pick_habit": "",
@@ -564,17 +564,17 @@
   "widget_cfg_style": "",
   "day_start": "",
   "notif_action_snooze": "",
-  "note_take_photo": "",
-  "delete_forever": "",
+  "note_take_photo": "Kamera",
+  "delete_forever": "Endgültig löschen",
   "snooze_custom": "",
-  "auto_backup_folder_failed": "",
+  "auto_backup_folder_failed": "In den Ordner kann nicht geschrieben werden",
   "note_hint": "",
   "focus_style_digital": "",
   "focus_stop_body": "",
-  "app_lock_unlock": "",
-  "auto_backup_folder_default": "",
+  "app_lock_unlock": "Entsperren",
+  "auto_backup_folder_default": "App Ordner",
   "tomorrow": "",
-  "perfect_days": "",
+  "perfect_days": "Perfekte Tage",
   "focus_round": "",
   "@focus_round": {
     "placeholders": {
@@ -583,7 +583,7 @@
       }
     }
   },
-  "journey": "",
+  "journey": "Reise",
   "notif_action_add": "",
   "minutes_short": "",
   "@minutes_short": {
@@ -594,9 +594,9 @@
     }
   },
   "widget_cfg_style_card": "",
-  "bg_gradient": "",
+  "bg_gradient": "Übergang",
   "focus_target_reached": "",
-  "share_friends_message": "",
+  "share_friends_message": "Ich verfolge meine Serien mit Streak — ein kleiner, offener, offline Gewohnheits-Tracker ohne Werbung. Bau auch du deine Serien mit Streak: https://inlitx.github.io/streak/",
   "note_kind_completed": "",
   "focus_break": "",
   "undo": "",
@@ -604,7 +604,7 @@
   "support_sub": "",
   "note_type": "",
   "focus_scene_custom": "",
-  "journey_sub": "",
+  "journey_sub": "{count, plural, =1{1 Bild} other{{count} Bilder}}",
   "@journey_sub": {
     "placeholders": {
       "count": {
@@ -614,10 +614,10 @@
   },
   "focus": "",
   "wipe_data_warning": "",
-  "auto_backup_where": "",
+  "auto_backup_where": "Eine Sicherungskopie ist erstellt wenn du die App öffnest. Die letzten 5 werden behalten.",
   "widget_demo_run": "",
   "widget_cfg_style_classic": "",
-  "archived_habits_sub": "",
+  "archived_habits_sub": "Stelle sie wieder her oder lösche sie endgültig",
   "note_kind_note": "",
   "focus_pomodoro_sub": "",
   "focus_duration": "",
@@ -629,26 +629,26 @@
   "share_size_small": "",
   "yesterday": "",
   "focus_resume": "",
-  "app_lock_title": "",
-  "archived_habits": "",
-  "restored": "",
+  "app_lock_title": "Streak ist gesperrt",
+  "archived_habits": "Archivierte Gewohnheiten",
+  "restored": "Gewohnheit wiederhergestellt",
   "see_less": "",
-  "habit_archived": "",
-  "import_from_app_sub": "",
-  "share_friends": "",
-  "auto_backup_off": "",
-  "journey_empty_sub": "",
-  "auto_backup_folder": "",
+  "habit_archived": "Gewohnheit archiviert",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "share_friends": "Mit Freunden teilen",
+  "auto_backup_off": "Aus",
+  "journey_empty_sub": "Füge ein Bild zu einer Notiz hinzu und es erscheint hier.",
+  "auto_backup_folder": "Ordner",
   "focus_end": "",
   "focus_pick_audio": "",
   "notif_action_done": "",
   "focus_history_empty_sub": "",
-  "auto_backup_sub": "",
-  "best_month": "",
+  "auto_backup_sub": "Aus",
+  "best_month": "Bester Monat",
   "share_save_failed": "",
-  "consistency": "",
+  "consistency": "Konsistenz",
   "focus_done_title": "",
-  "note_pick_photo": "",
+  "note_pick_photo": "Gallerie",
   "notes_count": "",
   "@notes_count": {
     "placeholders": {
@@ -662,12 +662,12 @@
   "legend_note_added": "",
   "style_minimal": "",
   "vacation_day_on": "",
-  "auto_backup": "",
+  "auto_backup": "Automatische Sicherheitskopie",
   "day_start_sub": "",
   "focus_notif_body": "",
-  "app_lock_unavailable": "",
-  "auto_backup_folder_set": "",
-  "archive_habit": "",
+  "app_lock_unavailable": "Biometrie nicht eingerichtet",
+  "auto_backup_folder_set": "Ordner gespeichert",
+  "archive_habit": "Aktive Gewohnheit",
   "focus_track_limit": "",
   "check_style": "",
   "style_minimal_desc": "",
@@ -687,17 +687,17 @@
   },
   "notes_enable_sub": "",
   "wipe_data_sure_body": "",
-  "archive": "",
-  "completions": "",
+  "archive": "Archiv",
+  "completions": "Abschluss",
   "focus_start": "",
   "focus_stop_title": "",
   "vacation_day_off": "",
-  "app_lock": "",
-  "by_habit": "",
-  "deleted_forever": "",
+  "app_lock": "App Sperre",
+  "by_habit": "Pro Gewohnheit",
+  "deleted_forever": "Gewohnheit gelöscht",
   "focus_loop": "",
   "focus_daily_goal": "",
-  "copy_message": "",
+  "copy_message": "Nachricht kopieren",
   "view_notes": "",
   "focus_track_brown": "",
   "focus_end_short": "",
@@ -709,7 +709,7 @@
     }
   },
   "appearance_sub": "",
-  "active_days": "",
+  "active_days": "Aktive Tage",
   "a11y_add_amount": "",
   "@a11y_add_amount": {
     "description": "Screen reader label for the button that adds progress to a quantitative habit",
