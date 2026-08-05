@@ -338,7 +338,7 @@
       }
     }
   },
-  "completion_rate": "Abschluss Rate",
+  "completion_rate": "Abschlussrate",
   "colors_tab": "Farben",
   "category": "Kategorie",
   "category_productivity": "Produktivität",
@@ -402,7 +402,7 @@
   "about_subtitle": "",
   "wipe_data_sub": "",
   "focus_your_tracks": "",
-  "completion_rate_short": "",
+  "completion_rate_short": "Konsequenz",
   "notif_streak": "",
   "@notif_streak": {
     "placeholders": {
