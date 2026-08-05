@@ -23,7 +23,7 @@
       }
     }
   },
-  "empty_title": "开启你的首个连续打卡",
+  "empty_title": "开启你的首个连胜打卡",
   "empty_body": "创建习惯，轻点日期完成打卡。点滴进步，贵在每日坚持。",
   "add_habit": "添加习惯",
   "all": "全部",
@@ -38,7 +38,7 @@
   "get_started": "开始使用",
   "statistics": "统计",
   "done_today": "今日完成",
-  "best_streak": "最高连续纪录",
+  "best_streak": "最高连胜纪录",
   "active_habits": "进行中的习惯",
   "total_logs": "总打卡次数",
   "last_7_days": "近 7 天",
@@ -105,7 +105,7 @@
   "kind_negative": "戒除",
   "kind_quantitative": "可量化",
   "kind_locked_hint": "创建习惯后，类型无法修改。",
-  "kind_negative_hint": "默认每日达标，连续天数自动累积。点击打卡视为破戒，当日会标红，支持撤销操作。",
+  "kind_negative_hint": "默认每日达标，连胜天数自动累积。点击打卡视为破戒，当日会标红，支持撤销操作。",
   "quant_preset_water": "水",
   "quant_preset_reading": "阅读",
   "quant_preset_generic": "自定义",
@@ -175,7 +175,7 @@
   },
   "log_relapse_confirm": "确认记录",
   "permission_required": "需要通知权限",
-  "streaks": "连续天数",
+  "streaks": "连胜",
   "activity": "打卡记录",
   "current": "当前",
   "best": "最高",
@@ -207,10 +207,10 @@
   "more_icons": "更多图标",
   "less_icons": "精简图标",
   "completions": "完成次数",
-  "completion_time": "完成时间",
-  "current_streak": "当前连续天数",
+  "completion_time": "打卡时间",
+  "current_streak": "当前连胜",
   "days_active": "活跃天数",
-  "completions_per_month": "完成次数 / 月",
+  "completions_per_month": "月度完成频率",
   "overview": "总览",
   "preferences": "偏好设置",
   "support": "支持",
@@ -262,8 +262,8 @@
   "book_cover": "书籍封面",
   "add_image": "添加照片",
   "when_best": "你在什么时候最能持之以恒？",
-  "streak_evolution": "连续打卡趋势",
-  "streak_on": "🔥 已连续坚持 {n} 天，不要中断！",
+  "streak_evolution": "连胜打卡趋势",
+  "streak_on": "🔥 已连胜 {n} 天，不要中断！",
   "@streak_on": {
     "placeholders": {
       "n": {
@@ -271,7 +271,7 @@
       }
     }
   },
-  "streak_off": "💪 今日你可以开启新的连续打卡",
+  "streak_off": "💪 今天，开启你的新连胜吧",
   "not_enough_data": "暂无足够数据",
   "about_inline": "Streak 是一款用于追踪习惯的开源应用。无需注册账号、没有功能限制、无需付费。所有数据仅保存在你的手机本地。\n\n任何人都可以查看源代码、进行优化，或是自由使用。",
   "about_subtitle": "致你全力以赴的每一天。",
@@ -337,7 +337,7 @@
   },
   "vacation_mode": "休假模式",
   "vacation_on_desc": "已暂停 — 这些日期既不会算作未完成，也不会记为已完成。",
-  "vacation_off_desc": "暂停该习惯，跳过的日期不会中断你的连续打卡记录。",
+  "vacation_off_desc": "暂停此习惯。跳过的天数不会中断你的连胜。",
   "paused": "已暂停",
   "start_vacation": "开始休假",
   "end_vacation": "结束休假",
@@ -368,7 +368,7 @@
       }
     }
   },
-  "notif_streak": "🔥连续打卡 {streak} 天",
+  "notif_streak": "🔥连续 {streak} 天",
   "@notif_streak": {
     "placeholders": {
       "streak": {
@@ -391,7 +391,7 @@
     }
   },
   "notes_empty": "当日暂无笔记",
-  "consistency_trend": "连续打卡趋势",
+  "consistency_trend": "稳定趋势",
   "archived_empty_sub": "你删除的习惯会存放在这里，历史记录一并保留。",
   "widget_cfg_change_image": "更换图片",
   "wipe_data_sure": "确定要清除所有数据吗？",
@@ -530,7 +530,7 @@
       }
     }
   },
-  "widget_best_streak": "🔥 {streak} 最高连续",
+  "widget_best_streak": "🔥 {streak} 最长连胜",
   "@widget_best_streak": {
     "placeholders": {
       "streak": {
@@ -662,7 +662,7 @@
   "rest_days": "休息日",
   "rest_days_desc": "每周在这些日子自动暂停。你仍然可以打卡，打了就会计入。",
   "app_lock": "应用锁",
-  "by_habit": "出于习惯",
+  "by_habit": "习惯维度",
   "deleted_forever": "习惯已删除",
   "focus_loop": "顺序播放",
   "focus_daily_goal": "每日专注目标",
