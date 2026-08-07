@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
@@ -249,7 +250,7 @@ class _AmountLabel extends StatelessWidget {
     final unit = habit.unitLabel.isEmpty ? '' : ' ${habit.unitLabel}';
     return Flexible(
       child: Text(
-        '·  $count/${habit.perDayTarget}$unit',
+        '·  ${formatAmount(count)}/${formatAmount(habit.perDayTarget)}$unit',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

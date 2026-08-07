@@ -14,7 +14,7 @@ class WidgetActionReceiver : BroadcastReceiver() {
         val habitId = intent.getStringExtra(EXTRA_HABIT_ID) ?: return
         val dayIndex = intent.getIntExtra(EXTRA_DAY_INDEX, TODAY_INDEX).coerceIn(0, 6)
         val data = HabitCardData.load(context, habitId, null) ?: return
-        val delta = if (data.kind == KIND_QUANTITATIVE) data.incrementAmount else 1
+        val delta = if (data.kind == KIND_QUANTITATIVE) data.incrementAmount else 1.0
 
         if (WidgetOptimistic.apply(context, habitId, dayIndex, delta)) {
             HeatmapRenderer.refreshContent(context)
@@ -29,7 +29,7 @@ class WidgetActionReceiver : BroadcastReceiver() {
         WidgetActionWorker.enqueue(
             context,
             "streak://toggleHabit?habitId=$habitId&dayIndex=$dayIndex" +
-                "&action=$action&delta=$delta",
+                "&action=$action&delta=${WidgetText.amount(delta)}",
         )
     }
 

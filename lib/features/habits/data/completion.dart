@@ -7,13 +7,14 @@ class Completion {
   });
 
   final String date;
-  final int count;
+  final double count;
 
   final int? hour;
 
   final Set<String> steps;
 
-  Completion copyWith({int? count, int? hour, Set<String>? steps}) => Completion(
+  Completion copyWith({double? count, int? hour, Set<String>? steps}) =>
+      Completion(
         date: date,
         count: count ?? this.count,
         hour: hour ?? this.hour,
@@ -29,7 +30,8 @@ class Completion {
 
   factory Completion.fromMap(Map<String, dynamic> map) => Completion(
         date: map['date'] as String,
-        count: (map['numberOfCompletions'] ?? map['count'] ?? 1) as int,
+        count: ((map['numberOfCompletions'] ?? map['count'] ?? 1) as num)
+            .toDouble(),
         hour: map['hour'] as int?,
         steps: map['steps'] == null
             ? const {}

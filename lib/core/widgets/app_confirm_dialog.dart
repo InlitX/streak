@@ -72,6 +72,7 @@ Future<bool?> showAppConfirmDialog(
                       ),
                       child: Text(
                         cancelLabel ?? dialogContext.l10n.cancel,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: scheme.onSurface,
@@ -92,6 +93,7 @@ Future<bool?> showAppConfirmDialog(
                       ),
                       child: Text(
                         confirmLabel,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.w800),
                       ),
                     ),

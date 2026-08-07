@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
@@ -323,14 +324,14 @@ class QuantitativeFields extends StatelessWidget {
 
   final QuantKind quantKind;
   final TextEditingController unitController;
-  final int target;
-  final int increment;
+  final double target;
+  final double increment;
   final ValueChanged<QuantKind> onPresetSelected;
   final VoidCallback onUnitChanged;
-  final ValueChanged<int> onTargetChanged;
-  final ValueChanged<int> onIncrementChanged;
+  final ValueChanged<double> onTargetChanged;
+  final ValueChanged<double> onIncrementChanged;
 
-  int get _step => switch (quantKind) {
+  double get _step => switch (quantKind) {
         QuantKind.water => 50,
         QuantKind.reading => 1,
         QuantKind.generic => 1,
@@ -469,11 +470,11 @@ class _QuantityStepperRow extends StatelessWidget {
   });
 
   final String label;
-  final int value;
+  final double value;
   final String unit;
-  final int step;
-  final int min;
-  final ValueChanged<int> onChanged;
+  final double step;
+  final double min;
+  final ValueChanged<double> onChanged;
 
   Future<void> _promptValue(BuildContext context) async {
     final result = await showNumberKeypadDialog(
@@ -482,6 +483,7 @@ class _QuantityStepperRow extends StatelessWidget {
       value: value,
       unit: unit,
       min: min,
+      decimals: true,
     );
     if (result != null) onChanged(result);
   }
@@ -520,7 +522,9 @@ label: context.l10n.a11y_decrease,
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                 alignment: Alignment.center,
                 child: Text(
-                  unit.isEmpty ? '$value' : '$value $unit',
+                  unit.isEmpty
+                      ? formatAmount(value)
+                      : '${formatAmount(value)} $unit',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: scheme.onSurface,

@@ -144,7 +144,7 @@ class ImportService {
       final completions = <String, Completion>{};
       r.days.forEach((day, count) {
         final key = day.dayKey;
-        completions[key] = Completion(date: key, count: count);
+        completions[key] = Completion(date: key, count: count.toDouble());
       });
       totalEntries += completions.length;
 
@@ -161,7 +161,7 @@ class ImportService {
               : AppPalette.habitColors[i % AppPalette.habitColors.length],
           order: i,
           kind: r.kind,
-          perDayTarget: measurable ? (r.target < 1 ? 1 : r.target) : 1,
+          perDayTarget: measurable ? (r.target < 1 ? 1 : r.target).toDouble() : 1,
           unitLabel: measurable ? r.unit : '',
           completions: completions,
           createdAt: createdAt,

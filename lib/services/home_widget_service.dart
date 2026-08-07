@@ -149,7 +149,7 @@ class HomeWidgetService {
         'perDayTarget': habit.effectiveTarget,
         'incrementAmount': habit.incrementAmount,
         'counts': dates
-            .map((d) => habit.completions[d.dayKey]?.count ?? 0)
+            .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
             .toList(),
         'heatmap': _levelsOf(habit, today),
       };

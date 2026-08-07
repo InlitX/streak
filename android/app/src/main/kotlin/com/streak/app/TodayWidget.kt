@@ -103,9 +103,10 @@ class TodayWidget : GlanceAppWidget() {
         val colorInt = habit.getInt("color")
         val color = androidx.compose.ui.graphics.Color(colorInt)
         val kind = habit.optInt("kind", KIND_POSITIVE)
-        val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
+        val perDayTarget = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val counts = habit.optJSONArray("counts")
-        val todayCount = if (counts != null && counts.length() == 7) counts.optInt(6, 0) else 0
+        val todayCount =
+            if (counts != null && counts.length() == 7) counts.optDouble(6, 0.0) else 0.0
         val completions = habit.optJSONArray("completions")
         val doneToday = completions != null && completions.length() == 7 &&
             completions.getBoolean(6)
@@ -121,7 +122,7 @@ class TodayWidget : GlanceAppWidget() {
                 iconColor = if (breached) style.content else androidx.compose.ui.graphics.Color.White
             }
             KIND_QUANTITATIVE -> {
-                val ratio = (todayCount.toFloat() / perDayTarget).coerceIn(0f, 1f)
+                val ratio = (todayCount / perDayTarget).toFloat().coerceIn(0f, 1f)
                 boxColor = color.copy(alpha = 0.25f + 0.75f * ratio)
                 icon = "+"
                 iconColor = androidx.compose.ui.graphics.Color.White
@@ -155,7 +156,8 @@ class TodayWidget : GlanceAppWidget() {
                 }
                 if (kind == KIND_QUANTITATIVE || perDayTarget > 1) {
                     Text(
-                        text = "$todayCount/$perDayTarget",
+                        text = "${WidgetText.amount(todayCount)}/" +
+                            WidgetText.amount(perDayTarget),
                         style = TextStyle(
                             color = ColorProvider(style.muted),
                             fontSize = 11.sp

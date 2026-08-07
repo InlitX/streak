@@ -325,11 +325,11 @@ class _ClassicPreferencesPage extends StatelessWidget {
             final value = await showNumberKeypadDialog(
               context,
               title: context.l10n.focus_daily_goal,
-              value: settings.focusDailyGoal,
+              value: settings.focusDailyGoal.toDouble(),
               unit: context.l10n.unit_min_short,
               min: 0,
             );
-            if (value != null) settings.setFocusDailyGoal(value);
+            if (value != null) settings.setFocusDailyGoal(value.round());
           },
         ),
         settingsDivider(context),

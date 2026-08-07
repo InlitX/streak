@@ -34,11 +34,11 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
     final value = await showNumberKeypadDialog(
       context,
       title: context.l10n.focus_duration,
-      value: _minutes,
+      value: _minutes.toDouble(),
       unit: context.l10n.unit_min_short,
       min: 1,
     );
-    if (value != null) setState(() => _minutes = value.clamp(1, 600));
+    if (value != null) setState(() => _minutes = value.round().clamp(1, 600));
   }
 
   void _start() {
@@ -415,11 +415,13 @@ class _PomodoroCard extends StatelessWidget {
                       final value = await showNumberKeypadDialog(
                         context,
                         title: context.l10n.focus_break,
-                        value: breakMinutes,
+                        value: breakMinutes.toDouble(),
                         unit: context.l10n.unit_min_short,
                         min: 1,
                       );
-                      if (value != null) onBreakChanged(value.clamp(1, 120));
+                      if (value != null) {
+                        onBreakChanged(value.round().clamp(1, 120));
+                      }
                     },
                   ),
                 ],

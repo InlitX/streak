@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:streak/core/constants/motivational_quotes.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -407,7 +408,7 @@ class NotificationActions {
       }
 
       final today = DateTime.now().atMidnight;
-      final amount = int.tryParse(input?.trim() ?? '');
+      final amount = double.tryParse(input?.trim() ?? '');
 
       final Map<String, Completion> completions;
       if (actionId == NotificationService.actionAdd) {
@@ -427,7 +428,7 @@ class NotificationActions {
         final done = completions[today.dayKey]?.count ?? 0;
         await NotificationService().confirm(
           updated,
-          '$done / ${updated.effectiveTarget}',
+          '${formatAmount(done)} / ${formatAmount(updated.effectiveTarget)}',
           notificationId,
         );
       }

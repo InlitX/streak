@@ -3,17 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/amount_format.dart';
 
-Future<int?> showNumberKeypadDialog(
+Future<double?> showNumberKeypadDialog(
   BuildContext context, {
   required String title,
-  required int value,
+  required double value,
   String unit = '',
-  int? target,
-  int min = 0,
+  double? target,
+  double min = 0,
+  bool decimals = false,
   Color? accent,
 }) {
-  return showDialog<int>(
+  return showDialog<double>(
     context: context,
     builder: (_) => _NumberKeypadDialog(
       title: title,
@@ -21,6 +23,7 @@ Future<int?> showNumberKeypadDialog(
       unit: unit,
       target: target,
       min: min,
+      decimals: decimals,
       accent: accent,
     ),
   );
@@ -33,14 +36,16 @@ class _NumberKeypadDialog extends StatefulWidget {
     required this.unit,
     required this.target,
     required this.min,
+    required this.decimals,
     required this.accent,
   });
 
   final String title;
-  final int value;
+  final double value;
   final String unit;
-  final int? target;
-  final int min;
+  final double? target;
+  final double min;
+  final bool decimals;
   final Color? accent;
 
   @override
@@ -48,20 +53,27 @@ class _NumberKeypadDialog extends StatefulWidget {
 }
 
 class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
-  late String _text = widget.value == 0 ? '' : '${widget.value}';
+  late String _text =
+      widget.value == 0 ? '' : formatAmount(widget.value);
 
-  int get _value {
-    final parsed = int.tryParse(_text) ?? 0;
-    return parsed < widget.min ? widget.min : parsed;
+  double get _value {
+    final parsed = double.tryParse(_text) ?? 0;
+    return parsed < widget.min ? widget.min : roundAmount(parsed);
   }
 
   void _type(String digit) {
-    if (_text.length >= 6) return;
+    if (_text.length >= 8) return;
     HapticFeedback.selectionClick();
     setState(() {
       final next = _text + digit;
       _text = next.replaceFirst(RegExp(r'^0+(?=\d)'), '');
     });
+  }
+
+  void _dot() {
+    if (_text.contains('.')) return;
+    HapticFeedback.selectionClick();
+    setState(() => _text = _text.isEmpty ? '0.' : '$_text.');
   }
 
   void _backspace() {
@@ -115,7 +127,7 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
     final accent = widget.accent ?? scheme.primary;
     final target = widget.target;
     final suffix = target != null
-        ? '/ $target ${widget.unit}'.trimRight()
+        ? '/ ${formatAmount(target)} ${widget.unit}'.trimRight()
         : widget.unit;
     return Dialog(
       backgroundColor: scheme.surface,
@@ -174,10 +186,26 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
               Row(children: [for (final d in row) _digit(d)]),
             Row(
               children: [
-                _key(
-                  Icon(LucideIcons.eraser, size: 19, color: context.tokens.muted),
-                  onTap: _clear,
-                ),
+                widget.decimals
+                    ? _key(
+                        Text(
+                          '.',
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w700,
+                            color: context.colors.onSurface,
+                          ),
+                        ),
+                        onTap: _dot,
+                      )
+                    : _key(
+                        Icon(
+                          LucideIcons.eraser,
+                          size: 19,
+                          color: context.tokens.muted,
+                        ),
+                        onTap: _clear,
+                      ),
                 _digit('0'),
                 _key(
                   Icon(LucideIcons.delete, size: 19, color: context.tokens.muted),

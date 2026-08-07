@@ -68,7 +68,7 @@ class WidgetActionService {
 
     final target =
         AppClock.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
-    final delta = int.tryParse(uri.queryParameters['delta'] ?? '') ??
+    final delta = double.tryParse(uri.queryParameters['delta'] ?? '') ??
         habit.incrementAmount;
 
     final completions = switch (uri.queryParameters['action'] ?? 'toggle') {

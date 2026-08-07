@@ -56,8 +56,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   HabitKind _kind = HabitKind.positive;
   QuantKind _quantKind = QuantKind.generic;
-  int _quantTarget = 8;
-  int _quantIncrement = 1;
+  double _quantTarget = 8;
+  double _quantIncrement = 1;
   String _bookCover = '';
   late List<Substep> _substeps;
 
@@ -380,6 +380,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 step: _quantStep,
                 min: _quantStep,
                 editable: true,
+                decimals: true,
                 onChanged: (v) => setState(() => _quantTarget = v),
               ),
               const SizedBox(height: 8),
@@ -390,6 +391,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 step: _quantStep,
                 min: _quantStep,
                 editable: true,
+                decimals: true,
                 onChanged: (v) => setState(() => _quantIncrement = v),
               ),
             ],
@@ -473,19 +475,19 @@ class _HabitFormPageState extends State<HabitFormPage> {
             label: _interval == HabitInterval.weekly
                 ? context.l10n.times_per_week('$_frequency')
                 : context.l10n.times_per_month('$_frequency'),
-            value: _frequency,
+            value: _frequency.toDouble(),
             min: 1,
             max: _interval == HabitInterval.weekly ? 6 : 25,
-            onChanged: (v) => setState(() => _frequency = v),
+            onChanged: (v) => setState(() => _frequency = v.round()),
           ),
         ] else if (_interval == HabitInterval.everyXDays) ...[
           const SizedBox(height: 10),
           CompactStepperRow(
             label: context.l10n.every_n_days(_scheduleEvery),
-            value: _scheduleEvery,
+            value: _scheduleEvery.toDouble(),
             min: 2,
             max: 30,
-            onChanged: (v) => setState(() => _scheduleEvery = v),
+            onChanged: (v) => setState(() => _scheduleEvery = v.round()),
           ),
         ] else if (_interval == HabitInterval.weekdays) ...[
           const SizedBox(height: 12),
@@ -510,7 +512,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
     ];
   }
 
-  int get _quantStep => _quantKind == QuantKind.water ? 50 : 1;
+  double get _quantStep => _quantKind == QuantKind.water ? 50 : 1;
 
   String _intervalLabel(BuildContext context, HabitInterval option) =>
       switch (option) {

@@ -201,10 +201,11 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 minimal
                     ? CompactStepperRow(
                         label: context.l10n.every_n_days(_everyDays),
-                        value: _everyDays,
+                        value: _everyDays.toDouble(),
                         min: 2,
-                        max: _maxEvery,
-                        onChanged: (v) => setState(() => _everyDays = v),
+                        max: _maxEvery.toDouble(),
+                        onChanged: (v) =>
+                            setState(() => _everyDays = v.round()),
                       )
                     : _IntervalStepper(
                         value: _everyDays,

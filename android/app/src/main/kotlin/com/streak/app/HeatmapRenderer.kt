@@ -344,7 +344,7 @@ class HabitCardData(
     val iconPath: String,
     val iconTintable: Boolean,
     val kind: Int,
-    val incrementAmount: Int,
+    val incrementAmount: Double,
     val doneToday: Boolean,
     val levels: List<Int>,
 ) {
@@ -386,7 +386,7 @@ class HabitCardData(
             iconPath = root.optString("fallbackIconPath", ""),
             iconTintable = true,
             kind = 0,
-            incrementAmount = 1,
+            incrementAmount = 1.0,
             doneToday = false,
             levels = levelsOf(root.optJSONArray("heatmap")),
         )
@@ -401,7 +401,8 @@ class HabitCardData(
                 iconPath = habit.optString("iconPath", ""),
                 iconTintable = habit.optBoolean("iconTintable", true),
                 kind = habit.optInt("kind", 0),
-                incrementAmount = habit.optInt("incrementAmount", 1).coerceAtLeast(1),
+                incrementAmount =
+                    habit.optDouble("incrementAmount", 1.0).coerceAtLeast(0.01),
                 doneToday = completions != null &&
                     completions.length() >= 7 &&
                     completions.optBoolean(6, false),

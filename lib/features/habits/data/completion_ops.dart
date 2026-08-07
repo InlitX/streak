@@ -1,4 +1,5 @@
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
@@ -14,7 +15,7 @@ class CompletionOps {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
         count: habit.kind == HabitKind.quantitative
-            ? (habit.perDayTarget < 1 ? 1 : habit.perDayTarget)
+            ? (habit.perDayTarget <= 0 ? 1 : habit.perDayTarget)
             : 1,
         hour: AppClock.now().hour,
       );
@@ -43,7 +44,7 @@ class CompletionOps {
     } else {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
-        count: steps.length,
+        count: steps.length.toDouble(),
         steps: steps,
         hour: entry?.hour ?? AppClock.now().hour,
       );
@@ -59,7 +60,7 @@ class CompletionOps {
     } else {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
-        count: all.length,
+        count: all.length.toDouble(),
         steps: all,
         hour: completions[date.dayKey]?.hour ?? AppClock.now().hour,
       );
@@ -83,10 +84,10 @@ class CompletionOps {
   static Map<String, Completion> addProgress(
     Habit habit,
     DateTime date,
-    int delta,
+    double delta,
   ) {
     final completions = {...habit.completions};
-    final next = (completions[date.dayKey]?.count ?? 0) + delta;
+    final next = roundAmount((completions[date.dayKey]?.count ?? 0) + delta);
     if (next <= 0) {
       completions.remove(date.dayKey);
     } else {

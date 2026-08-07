@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
@@ -217,16 +218,18 @@ class CompactStepperRow extends StatelessWidget {
     this.step = 1,
     this.unit = '',
     this.editable = false,
+    this.decimals = false,
   });
 
   final String label;
-  final int value;
-  final int min;
-  final int? max;
-  final int step;
+  final double value;
+  final double min;
+  final double? max;
+  final double step;
   final String unit;
   final bool editable;
-  final ValueChanged<int> onChanged;
+  final bool decimals;
+  final ValueChanged<double> onChanged;
 
   Future<void> _promptValue(BuildContext context) async {
     final result = await showNumberKeypadDialog(
@@ -235,6 +238,7 @@ class CompactStepperRow extends StatelessWidget {
       value: value,
       unit: unit,
       min: min,
+      decimals: decimals,
     );
     if (result != null) onChanged(result);
   }
@@ -242,7 +246,9 @@ class CompactStepperRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    final text = unit.isEmpty ? '$value' : '$value $unit';
+    final text = unit.isEmpty
+        ? formatAmount(value)
+        : '${formatAmount(value)} $unit';
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 4, 4, 4),

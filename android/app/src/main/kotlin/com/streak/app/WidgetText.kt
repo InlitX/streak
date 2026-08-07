@@ -16,6 +16,15 @@ object WidgetText {
         return if (value.isEmpty()) fallback else value
     }
 
+    fun amount(value: Double): String {
+        val rounded = Math.round(value * 100.0) / 100.0
+        if (rounded == Math.floor(rounded)) return rounded.toLong().toString()
+        return rounded.toString().trimEnd('0').trimEnd('.')
+    }
+
+    fun compact(value: Double): String =
+        if (value < 1000) amount(value) else compact(Math.round(value).toInt())
+
     fun compact(value: Int): String = when {
         value < 1000 -> value.toString()
         value < 10000 -> {

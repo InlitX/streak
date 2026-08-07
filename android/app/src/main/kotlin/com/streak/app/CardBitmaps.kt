@@ -207,10 +207,10 @@ object CardBitmaps {
         }
     }
 
-    fun levelFor(kind: Int, count: Int, target: Int): Int = when {
+    fun levelFor(kind: Int, count: Double, target: Double): Int = when {
         kind == 1 -> if (count > 0) 0 else 4
         count <= 0 -> 0
-        else -> ceil(count.toDouble() / max(1, target) * 4).toInt().coerceIn(1, 4)
+        else -> ceil(count / max(1.0, target) * 4).toInt().coerceIn(1, 4)
     }
 
     private fun levelColor(accent: Int, level: Int, emptyColor: Int?): Int {

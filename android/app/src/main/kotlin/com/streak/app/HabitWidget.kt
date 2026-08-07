@@ -187,7 +187,7 @@ class HabitWidget : GlanceAppWidget() {
         val color = androidx.compose.ui.graphics.Color(colorInt)
         val completions = habit.getJSONArray("completions")
         val kind = habit.optInt("kind", KIND_POSITIVE)
-        val perDayTarget = habit.optInt("perDayTarget", 1).coerceAtLeast(1)
+        val perDayTarget = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val counts = habit.optJSONArray("counts")
         val streak = habit.optInt("streak", 0)
         val quantified = kind == KIND_QUANTITATIVE || perDayTarget > 1
@@ -224,7 +224,8 @@ class HabitWidget : GlanceAppWidget() {
             ) {
                 for (i in 0 until 7) {
                     val isCompleted = if (i < completions.length()) completions.getBoolean(i) else false
-                    val count = if (counts != null && i < counts.length()) counts.optInt(i, 0) else 0
+                    val count =
+                        if (counts != null && i < counts.length()) counts.optDouble(i, 0.0) else 0.0
                     Box(
                         modifier = GlanceModifier
                             .defaultWeight()
@@ -250,7 +251,7 @@ class HabitWidget : GlanceAppWidget() {
                                 }
                                 quantified -> ValueIndicator(
                                     count = count,
-                                    ratio = count.toFloat() / perDayTarget,
+                                    ratio = (count / perDayTarget).toFloat(),
                                     color = color
                                 )
                                 else -> CompletionIndicator(isCompleted = isCompleted, color = color)
@@ -290,7 +291,7 @@ class HabitWidget : GlanceAppWidget() {
 
     @Composable
     private fun ValueIndicator(
-        count: Int,
+        count: Double,
         ratio: Float,
         color: androidx.compose.ui.graphics.Color
     ) {

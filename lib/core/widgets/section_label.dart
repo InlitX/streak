@@ -16,6 +16,8 @@ class SectionLabel extends StatelessWidget {
           Expanded(
             child: Text(
               text.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -24,7 +26,7 @@ class SectionLabel extends StatelessWidget {
               ),
             ),
           ),
-          if (trailing != null) Flexible(child: trailing!),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
         ],
       ),
     );

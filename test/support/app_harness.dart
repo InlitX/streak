@@ -53,7 +53,7 @@ Habit testHabit({
   Color color = const Color(0xFF7C5CFF),
   int order = 0,
   HabitKind kind = HabitKind.positive,
-  int perDayTarget = 1,
+  double perDayTarget = 1,
   String unitLabel = '',
   String category = '',
   List<DateTime> done = const [],

@@ -78,6 +78,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
             value: current,
             unit: habit.unitLabel,
             target: habit.perDayTarget,
+            decimals: true,
             accent: habit.color,
           );
           if (value != null && value != current) {

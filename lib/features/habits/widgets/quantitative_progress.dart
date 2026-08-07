@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
@@ -21,13 +22,14 @@ class QuantitativeProgress extends StatelessWidget {
 
   final Habit habit;
 
-  Future<void> _editAmount(BuildContext context, int current) async {
+  Future<void> _editAmount(BuildContext context, double current) async {
     final result = await showNumberKeypadDialog(
       context,
       title: context.l10n.quant_edit_title,
       value: current,
       unit: habit.unitLabel,
       target: habit.perDayTarget,
+      decimals: true,
       accent: habit.color,
     );
     if (result != null && result >= 0 && result != current && context.mounted) {
@@ -43,7 +45,7 @@ class QuantitativeProgress extends StatelessWidget {
         habit.perDayTarget <= 0 ? 0.0 : (count / habit.perDayTarget).clamp(0.0, 1.0);
     final controller = context.read<HabitsController>();
 
-    void add(int delta) {
+    void add(double delta) {
       HapticFeedback.selectionClick();
       controller.addProgress(habit.id, today, delta);
     }
@@ -54,7 +56,8 @@ class QuantitativeProgress extends StatelessWidget {
         child: Column(
           children: [
             switch (habit.quantKind) {
-              QuantKind.water => _WaterCups(count: count, target: habit.perDayTarget),
+              QuantKind.water =>
+                _WaterCups(count: count, target: habit.perDayTarget),
               QuantKind.reading =>
                 ReadingBooks(habit: habit, ratio: ratio, count: count),
               QuantKind.generic => _GenericRing(
@@ -76,7 +79,8 @@ class QuantitativeProgress extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '$count / ${habit.perDayTarget} ${habit.unitLabel}',
+                        '${formatAmount(count)} / '
+                        '${formatAmount(habit.perDayTarget)} ${habit.unitLabel}',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
@@ -217,8 +221,8 @@ class _RoundActionButtonState extends State<_RoundActionButton> {
 class _WaterCups extends StatelessWidget {
   const _WaterCups({required this.count, required this.target});
 
-  final int count;
-  final int target;
+  final double count;
+  final double target;
 
   static const cupCount = 10;
   static const _firstRow = 6;

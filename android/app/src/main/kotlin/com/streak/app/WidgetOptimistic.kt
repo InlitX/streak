@@ -12,7 +12,7 @@ object WidgetOptimistic {
     private const val KIND_NEGATIVE = 1
     private const val KIND_QUANTITATIVE = 2
 
-    fun apply(context: Context, habitId: String, dayIndex: Int, delta: Int): Boolean {
+    fun apply(context: Context, habitId: String, dayIndex: Int, delta: Double): Boolean {
         if (dayIndex !in 0..6) return false
         return synchronized(this) {
             try {
@@ -44,29 +44,29 @@ object WidgetOptimistic {
         summary.put("doneToday", done)
     }
 
-    private fun mutate(habit: JSONObject, dayIndex: Int, delta: Int): Boolean {
+    private fun mutate(habit: JSONObject, dayIndex: Int, delta: Double): Boolean {
         val completions = habit.optJSONArray("completions") ?: return false
         val counts = habit.optJSONArray("counts") ?: return false
         if (completions.length() <= dayIndex || counts.length() <= dayIndex) return false
 
         val kind = habit.optInt("kind", 0)
-        val target = max(1, habit.optInt("perDayTarget", 1))
-        val count = counts.optInt(dayIndex, 0)
+        val target = max(1.0, habit.optDouble("perDayTarget", 1.0))
+        val count = counts.optDouble(dayIndex, 0.0)
 
-        val newCount: Int
+        val newCount: Double
         val done: Boolean
         when (kind) {
             KIND_NEGATIVE -> {
-                newCount = if (count > 0) 0 else 1
-                done = newCount == 0
+                newCount = if (count > 0) 0.0 else 1.0
+                done = newCount == 0.0
             }
             KIND_QUANTITATIVE -> {
-                newCount = max(0, count + delta)
+                newCount = max(0.0, count + delta)
                 done = newCount >= target
             }
             else -> {
                 done = count < target
-                newCount = if (done) target else 0
+                newCount = if (done) target else 0.0
             }
         }
 

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/cover_image.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_seal.dart';
@@ -18,7 +19,7 @@ class ReadingBooks extends StatelessWidget {
 
   final Habit habit;
   final double ratio;
-  final int count;
+  final double count;
 
   Future<void> _editCover(BuildContext context) async {
     final controller = context.read<HabitsController>();
@@ -73,7 +74,7 @@ class _Book extends StatelessWidget {
 
   final Habit habit;
   final double ratio;
-  final int count;
+  final double count;
   final bool isProgress;
   final VoidCallback? onEditCover;
 
@@ -280,7 +281,7 @@ class _ProgressCover extends StatelessWidget {
 
   final Color color;
   final double ratio;
-  final int count;
+  final double count;
 
   Widget _count(Color c) => Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 14, 12),
@@ -289,7 +290,7 @@ class _ProgressCover extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              '$count',
+              formatAmount(count),
               style: TextStyle(
                 fontFamily: 'PlayfairDisplay',
                 fontSize: 46,

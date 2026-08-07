@@ -72,7 +72,7 @@ class Habit {
   final Color color;
   final int order;
 
-  final int perDayTarget;
+  final double perDayTarget;
   final Map<String, Completion> completions;
   final HabitInterval interval;
   final int targetFrequency;
@@ -103,7 +103,7 @@ class Habit {
 
   final HabitKind kind;
   final String unitLabel;
-  final int incrementAmount;
+  final double incrementAmount;
   final QuantKind quantKind;
 
   final String bookCoverPath;
@@ -120,7 +120,8 @@ class Habit {
 
   bool get hasSubsteps => substeps.isNotEmpty;
 
-  int get effectiveTarget => hasSubsteps ? substeps.length : perDayTarget;
+  double get effectiveTarget =>
+      hasSubsteps ? substeps.length.toDouble() : perDayTarget;
 
   bool isRestDay(DateTime date) => restDays.contains(date.weekday);
 
@@ -433,7 +434,7 @@ class Habit {
     String? description,
     Color? color,
     int? order,
-    int? perDayTarget,
+    double? perDayTarget,
     Map<String, Completion>? completions,
     HabitInterval? interval,
     int? targetFrequency,
@@ -443,7 +444,7 @@ class Habit {
     String? coverPath,
     HabitKind? kind,
     String? unitLabel,
-    int? incrementAmount,
+    double? incrementAmount,
     QuantKind? quantKind,
     String? bookCoverPath,
     List<Substep>? substeps,
@@ -519,7 +520,8 @@ class Habit {
         description: (map['description'] ?? '') as String,
         color: Color(map['color'] as int),
         order: (map['order'] ?? 0) as int,
-        perDayTarget: (map['numberOfCompletionsPerDay'] ?? 1) as int,
+        perDayTarget:
+            ((map['numberOfCompletionsPerDay'] ?? 1) as num).toDouble(),
         completions: (map['completions'] as Map?)?.map(
               (key, value) => MapEntry(
                 key as String,
@@ -545,7 +547,7 @@ class Habit {
             : null,
         kind: HabitKind.values[(map['kind'] ?? 0) as int],
         unitLabel: (map['unitLabel'] ?? '') as String,
-        incrementAmount: (map['incrementAmount'] ?? 1) as int,
+        incrementAmount: ((map['incrementAmount'] ?? 1) as num).toDouble(),
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],
         bookCoverPath: (map['bookCoverPath'] ?? '') as String,
         substeps: map['substeps'] == null
