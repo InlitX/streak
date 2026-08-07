@@ -261,12 +261,18 @@ class HabitsController extends ChangeNotifier {
     final moved = ordered.removeAt(oldIndex);
     ordered.insert(newIndex, moved);
 
-    for (var i = 0; i < ordered.length; i++) {
-      final updated = ordered[i].copyWith(order: i);
-      _habits[updated.id] = updated;
-      await LocalStore.writeHabit(updated);
+    final reordered = [
+      for (var i = 0; i < ordered.length; i++)
+        if (ordered[i].order != i) ordered[i].copyWith(order: i),
+    ];
+    for (final habit in reordered) {
+      _habits[habit.id] = habit;
     }
     notifyListeners();
+
+    for (final habit in reordered) {
+      await LocalStore.writeHabit(habit);
+    }
     await HomeWidgetService.sync(asMap);
   }
 
