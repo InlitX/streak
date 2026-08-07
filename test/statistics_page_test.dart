@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/statistics/widgets/stat_donut.dart';
@@ -60,6 +62,31 @@ void main() {
     expect(find.text('Statistics'), findsOneWidget);
     await scrollToEnd(tester);
     expect(find.byType(HabitDonut), findsOneWidget);
+  });
+
+  testWidgets('the year heatmap opens on the current month', (tester) async {
+    await _seedTwo(tester);
+    await pumpScreen(tester, const StatisticsPage());
+
+    final scroll = tester.widget<SingleChildScrollView>(
+      find.descendant(
+        of: find.byType(YearHeatmap),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+    final position = scroll.controller!.position;
+
+    final today = AppClock.now().atMidnight;
+    final firstOfYear = DateTime(today.year, 1, 1);
+    final start = firstOfYear.subtract(Duration(days: firstOfYear.weekday - 1));
+    final left = (today.difference(start).inDays ~/ 7) * 15.0;
+
+    expect(position.maxScrollExtent, greaterThan(0));
+    expect(left, greaterThanOrEqualTo(position.pixels));
+    expect(
+      left + 12,
+      lessThanOrEqualTo(position.pixels + position.viewportDimension),
+    );
   });
 
   testWidgets('filtering by habit keeps the page together', (tester) async {
