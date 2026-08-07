@@ -6,7 +6,22 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 
-class TodayProgress extends StatelessWidget {
+class TodayIntro {
+  const TodayIntro._();
+
+  static final ValueNotifier<int> tick = ValueNotifier(0);
+  static int _played = -1;
+
+  static void replay() => tick.value++;
+
+  static bool claim() {
+    if (_played == tick.value) return false;
+    _played = tick.value;
+    return true;
+  }
+}
+
+class TodayProgress extends StatefulWidget {
   const TodayProgress({
     super.key,
     required this.done,
@@ -18,6 +33,64 @@ class TodayProgress extends StatelessWidget {
 
   double get _ratio => total == 0 ? 0 : done / total;
 
+  @override
+  State<TodayProgress> createState() => _TodayProgressState();
+}
+
+class _TodayProgressState extends State<TodayProgress>
+    with SingleTickerProviderStateMixin {
+  static const _introMs = 1900;
+  static const _updateMs = 1100;
+
+  late final AnimationController _controller = AnimationController(vsync: this);
+  late final CurvedAnimation _curve = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOutCubic,
+  );
+
+  Tween<double> _tween = Tween(begin: 0, end: 0);
+
+  double get _shown => _tween.transform(_curve.value);
+
+  @override
+  void initState() {
+    super.initState();
+    TodayIntro.tick.addListener(_replay);
+    if (TodayIntro.claim()) {
+      _animateTo(widget._ratio, from: 0, ms: _introMs);
+    } else {
+      _tween = Tween(begin: widget._ratio, end: widget._ratio);
+      _controller.value = 1;
+    }
+  }
+
+  @override
+  void didUpdateWidget(TodayProgress oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget._ratio != oldWidget._ratio) {
+      _animateTo(widget._ratio, from: _shown, ms: _updateMs);
+    }
+  }
+
+  @override
+  void dispose() {
+    TodayIntro.tick.removeListener(_replay);
+    _curve.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _replay() {
+    if (!mounted || !TodayIntro.claim()) return;
+    _animateTo(widget._ratio, from: 0, ms: _introMs);
+  }
+
+  void _animateTo(double value, {required double from, required int ms}) {
+    _tween = Tween(begin: from, end: value);
+    _controller.duration = Duration(milliseconds: ms);
+    _controller.forward(from: 0);
+  }
+
   String _today(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
     final text = DateFormat('EEEE, d MMM', locale).format(AppClock.now());
@@ -25,8 +98,8 @@ class TodayProgress extends StatelessWidget {
   }
 
   String _message(BuildContext context) {
-    if (total == 0) return context.l10n.motiv_start;
-    final pct = _ratio;
+    if (widget.total == 0) return context.l10n.motiv_start;
+    final pct = widget._ratio;
     if (pct >= 1) return context.l10n.motiv_perfect;
     if (pct >= 0.5) return context.l10n.motiv_almost;
     if (pct > 0) return context.l10n.motiv_progress;
@@ -36,6 +109,8 @@ class TodayProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
+    final done = widget.done;
+    final total = widget.total;
     final allDone = total > 0 && done == total;
 
     return Card(
@@ -83,22 +158,28 @@ class TodayProgress extends StatelessWidget {
             SizedBox(
               width: 72,
               height: 72,
-              child: CustomPaint(
-                painter: _RingPainter(
-                  ratio: _ratio,
-                  color: scheme.primary,
-                  track: scheme.surfaceContainerHighest,
-                ),
-                child: Center(
-                  child: Text(
-                    '${(_ratio * 100).round()}%',
-                    style: TextStyle(
-                      color: scheme.onSurface,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
+              child: AnimatedBuilder(
+                animation: _curve,
+                builder: (context, _) {
+                  final ratio = _shown;
+                  return CustomPaint(
+                    painter: _RingPainter(
+                      ratio: ratio,
+                      color: scheme.primary,
+                      track: scheme.surfaceContainerHighest,
                     ),
-                  ),
-                ),
+                    child: Center(
+                      child: Text(
+                        '${(ratio * 100).round()}%',
+                        style: TextStyle(
+                          color: scheme.onSurface,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

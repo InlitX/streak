@@ -6,6 +6,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
@@ -56,6 +57,7 @@ class _HomeShellState extends State<HomeShell>
   void _select(int index) {
     if (index == _index) return;
     HapticFeedback.selectionClick();
+    if (index == 0) TodayIntro.replay();
     setState(() {
       _direction = index > _index ? 1 : -1;
       _index = index;
@@ -67,6 +69,7 @@ class _HomeShellState extends State<HomeShell>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       context.read<HabitsController>().reload();
+      TodayIntro.replay();
     }
   }
 
