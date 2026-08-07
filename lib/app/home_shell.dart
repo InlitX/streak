@@ -6,7 +6,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
-import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/habits/widgets/today_intro.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';

@@ -5,21 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
-
-class TodayIntro {
-  const TodayIntro._();
-
-  static final ValueNotifier<int> tick = ValueNotifier(0);
-  static int _played = -1;
-
-  static void replay() => tick.value++;
-
-  static bool claim() {
-    if (_played == tick.value) return false;
-    _played = tick.value;
-    return true;
-  }
-}
+import 'package:streak/features/habits/widgets/today_intro.dart';
 
 class TodayProgress extends StatefulWidget {
   const TodayProgress({
@@ -56,7 +42,7 @@ class _TodayProgressState extends State<TodayProgress>
   void initState() {
     super.initState();
     TodayIntro.tick.addListener(_replay);
-    if (TodayIntro.claim()) {
+    if (TodayIntro.claim(TodayProgress)) {
       _animateTo(widget._ratio, from: 0, ms: _introMs);
     } else {
       _tween = Tween(begin: widget._ratio, end: widget._ratio);
@@ -81,7 +67,7 @@ class _TodayProgressState extends State<TodayProgress>
   }
 
   void _replay() {
-    if (!mounted || !TodayIntro.claim()) return;
+    if (!mounted || !TodayIntro.claim(TodayProgress)) return;
     _animateTo(widget._ratio, from: 0, ms: _introMs);
   }
 
