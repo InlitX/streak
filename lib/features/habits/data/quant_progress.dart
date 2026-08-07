@@ -21,9 +21,13 @@ class QuantProgress {
 
   bool get reachedGoal => laps > 0;
 
+  bool get exceededGoal => laps > 0 && fraction > 0.005;
+
   Color reachedColor(Color base) => shade(base, laps - 1);
 
   Color activeColor(Color base) => shade(base, laps);
+
+  Color solidColor(Color base) => shade(base, exceededGoal ? laps : laps - 1);
 
   static Color shade(Color base, int level) {
     if (level <= 0) return base;
