@@ -9,6 +9,7 @@ import 'package:streak/core/widgets/typewriter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kGitHubUrl = 'https://github.com/InlitX/streak';
+const _kProfileUrl = 'https://github.com/InlitX';
 const _kCoffeeUrl = 'https://ko-fi.com/inlitx';
 const _base = Duration(milliseconds: 340);
 
@@ -170,15 +171,7 @@ class _AboutPageState extends State<AboutPage> {
               index: 5,
               delay: _base,
               child: Center(
-                child: Text(
-                  context.l10n.made_by,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: scheme.onSurface.withValues(alpha: 0.85),
-                  ),
-                ),
+                child: _MadeBy(onTap: () => _open(_kProfileUrl)),
               ),
             ),
             const SizedBox(height: 10),
@@ -198,6 +191,58 @@ class _AboutPageState extends State<AboutPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MadeBy extends StatelessWidget {
+  const _MadeBy({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    final text = context.l10n.made_by;
+    final handle = context.l10n.dev_handle;
+    final start = handle.isEmpty ? -1 : text.indexOf(handle);
+    final style = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: scheme.onSurface.withValues(alpha: 0.85),
+    );
+
+    if (start < 0) {
+      return Text(text, textAlign: TextAlign.center, style: style);
+    }
+
+    return Semantics(
+      link: true,
+      label: handle,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: text.substring(0, start)),
+                TextSpan(
+                  text: handle,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextSpan(text: text.substring(start + handle.length)),
+              ],
+            ),
+            textAlign: TextAlign.center,
+            style: style,
+          ),
         ),
       ),
     );

@@ -163,7 +163,7 @@
       }
     }
   },
-  "dev_handle": "@inlitx",
+  "dev_handle": "@InlitX",
   "support": "Suporte",
   "weekdays": "Dias úteis",
   "data": "Dados",
@@ -180,7 +180,7 @@
   "frequency": "Frequência",
   "import_replace": "Substituir tudo",
   "no_habits_yet": "Nenhum hábito ainda",
-  "made_by": "Feito com ❤️ por @inlitx",
+  "made_by": "Feito com ❤️ por @InlitX",
   "reminder_message_hint": "Deixe em branco para usar uma frase motivacional",
   "delete_habit_body": "Excluir \"{name}\"? Esta ação não pode ser desfeita.",
   "@delete_habit_body": {

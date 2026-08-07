@@ -181,7 +181,7 @@
       }
     }
   },
-  "dev_handle": "@inlitx",
+  "dev_handle": "@InlitX",
   "support": "Support",
   "weekdays": "Wochentage",
   "data": "Daten",
@@ -198,7 +198,7 @@
   "frequency": "Frequenz",
   "import_replace": "Ersetze alle",
   "no_habits_yet": "Noch keine Gewohnheiten",
-  "made_by": "Gemacht mit ❤️ von @inlitx",
+  "made_by": "Gemacht mit ❤️ von @InlitX",
   "reminder_message_hint": "Leer lassen für ein motivierendes Zitat",
   "widget_cfg_hue": "Farbton",
   "delete_habit_body": "Lösche \"{name}\"? Dies kann nicht rückgängig gemacht werden.",

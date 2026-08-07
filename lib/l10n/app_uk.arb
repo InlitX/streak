@@ -227,7 +227,7 @@
       }
     }
   },
-  "dev_handle": "@inlitx",
+  "dev_handle": "@InlitX",
   "support": "Підтримка",
   "weekdays": "Будні",
   "data": "Дані",
@@ -244,7 +244,7 @@
   "frequency": "Частота",
   "import_replace": "Замінити всі",
   "no_habits_yet": "Звички відсутні",
-  "made_by": "Зроблено з ❤️ @inlitx",
+  "made_by": "Зроблено з ❤️ @InlitX",
   "reminder_message_hint": "Залиште порожнім, щоб отримати мотиваційну цитату",
   "widget_cfg_hue": "Відтінок",
   "delete_habit_body": "Видалити «{name}»? Цю дію неможливо скасувати.",
