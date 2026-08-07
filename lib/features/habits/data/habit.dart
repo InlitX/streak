@@ -167,21 +167,7 @@ class Habit {
   bool get isDoneForNow {
     if (kind == HabitKind.negative) return false;
     final now = AppClock.now();
-    switch (interval) {
-      case HabitInterval.daily:
-        return isCompletedOn(now);
-      case HabitInterval.weekly:
-        final start = now.subtract(Duration(days: now.weekday - 1));
-        return _countInRange(start, start.add(const Duration(days: 6))) >=
-            targetFrequency;
-      case HabitInterval.monthly:
-        final start = DateTime(now.year, now.month, 1);
-        final end = DateTime(now.year, now.month + 1, 0);
-        return _countInRange(start, end) >= targetFrequency;
-      case HabitInterval.weekdays:
-      case HabitInterval.everyXDays:
-        return !isScheduledOn(now) || isCompletedOn(now);
-    }
+    return isOffDay(now) || isCompletedOn(now);
   }
 
   double _dayValue(DateTime date) {

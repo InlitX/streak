@@ -90,6 +90,36 @@ void main() {
     });
   });
 
+  group('done for now', () {
+    test('a weekly habit is settled once it is ticked today', () {
+      final pending = _habit(
+        interval: HabitInterval.weekly,
+        createdAt: _ago(30),
+      );
+      final ticked = _habit(
+        interval: HabitInterval.weekly,
+        createdAt: _ago(30),
+        completions: _done([_ago(0)]),
+      );
+
+      expect(pending.isDoneForNow, isFalse);
+      expect(ticked.isDoneForNow, isTrue);
+    });
+
+    test('a rest day is settled without ticking it', () {
+      final h = Habit(
+        id: 'h',
+        name: 'Test',
+        color: const Color(0xFF00FF00),
+        order: 0,
+        createdAt: _ago(30),
+        restDays: [_today().weekday],
+      );
+
+      expect(h.isDoneForNow, isTrue);
+    });
+  });
+
   group('weekdays scheduling', () {
     test('isScheduledOn only on the selected weekdays', () {
       final h = _habit(
