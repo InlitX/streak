@@ -20,6 +20,7 @@ import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
@@ -288,10 +289,8 @@ class _HomePageState extends State<HomePage> {
                           mode: _mode,
                           header: header,
                           onOpen: _openDetails,
-                          onToggleToday: (habit) =>
-                              controller.toggle(habit.id, today),
-                          onToggleDay: (habit, date) =>
-                              controller.toggle(habit.id, date),
+                          onToggleToday: (habit) => _toggle(habit, today),
+                          onToggleDay: _toggle,
                           onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
                         )
@@ -302,8 +301,7 @@ class _HomePageState extends State<HomePage> {
                           header: header,
                           onReorder: controller.reorder,
                           onOpen: _openDetails,
-                          onToggleToday: (habit) =>
-                              controller.toggle(habit.id, today),
+                          onToggleToday: (habit) => _toggle(habit, today),
                           onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
                         ),
@@ -330,6 +328,12 @@ class _HomePageState extends State<HomePage> {
         HabitDetailsPage(habitId: habit.id),
         fade: true,
       );
+
+  Future<void> _toggle(Habit habit, DateTime date) async {
+    final controller = context.read<HabitsController>();
+    if (!await confirmUnscheduledDay(context, habit: habit, date: date)) return;
+    await controller.toggle(habit.id, date);
+  }
 
   List<Habit> _completedLast(List<Habit> habits) {
     final pending = <Habit>[];

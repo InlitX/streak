@@ -15,6 +15,7 @@ import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_seal.dart';
 import 'package:streak/features/habits/widgets/reading_books.dart';
+import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 
 class QuantitativeProgress extends StatelessWidget {
@@ -23,6 +24,13 @@ class QuantitativeProgress extends StatelessWidget {
   final Habit habit;
 
   Future<void> _editAmount(BuildContext context, double current) async {
+    final allowed = await confirmUnscheduledDay(
+      context,
+      habit: habit,
+      date: AppClock.now(),
+    );
+    if (!allowed || !context.mounted) return;
+
     final result = await showNumberKeypadDialog(
       context,
       title: context.l10n.quant_edit_title,
@@ -45,9 +53,14 @@ class QuantitativeProgress extends StatelessWidget {
         habit.perDayTarget <= 0 ? 0.0 : (count / habit.perDayTarget).clamp(0.0, 1.0);
     final controller = context.read<HabitsController>();
 
-    void add(double delta) {
+    Future<void> add(double delta) async {
+      if (delta > 0) {
+        final allowed =
+            await confirmUnscheduledDay(context, habit: habit, date: today);
+        if (!allowed) return;
+      }
       HapticFeedback.selectionClick();
-      controller.addProgress(habit.id, today, delta);
+      await controller.addProgress(habit.id, today, delta);
     }
 
     return Card(

@@ -16,6 +16,7 @@ import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -404,13 +405,13 @@ class _ActionButton extends StatelessWidget {
         final ratio = habit.perDayTarget <= 0
             ? 0.0
             : count / habit.perDayTarget;
-        void addProgress() {
+        Future<void> addProgress() async {
+          final controller = context.read<HabitsController>();
+          final allowed =
+              await confirmUnscheduledDay(context, habit: habit, date: today);
+          if (!allowed) return;
           HapticFeedback.mediumImpact();
-          context.read<HabitsController>().addProgress(
-            habit.id,
-            today,
-            habit.incrementAmount,
-          );
+          await controller.addProgress(habit.id, today, habit.incrementAmount);
         }
 
         switch (habit.quantKind) {

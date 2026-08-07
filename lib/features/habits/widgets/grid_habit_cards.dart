@@ -12,6 +12,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class _GlyphTile extends StatelessWidget {
@@ -103,6 +104,15 @@ class _QuantTile extends StatelessWidget {
   final double size;
   final bool showCheck;
 
+  Future<void> _add(BuildContext context, DateTime today) async {
+    final controller = context.read<HabitsController>();
+    final allowed =
+        await confirmUnscheduledDay(context, habit: habit, date: today);
+    if (!allowed) return;
+    HapticFeedback.lightImpact();
+    await controller.addProgress(habit.id, today, habit.incrementAmount);
+  }
+
   @override
   Widget build(BuildContext context) {
     final today = AppClock.now();
@@ -115,14 +125,7 @@ class _QuantTile extends StatelessWidget {
       button: true,
       label: context.l10n.a11y_add_amount(habit.name),
       child: GestureDetector(
-        onTap: () {
-          HapticFeedback.lightImpact();
-          context.read<HabitsController>().addProgress(
-            habit.id,
-            today,
-            habit.incrementAmount,
-          );
-        },
+        onTap: () => _add(context, today),
         child: SizedBox(
           width: size,
           height: size,

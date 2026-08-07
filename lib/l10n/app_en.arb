@@ -500,6 +500,15 @@
   "@focus_sessions_deleted": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "unscheduled_title": "Day not scheduled",
+  "unscheduled_body": "This habit is not scheduled on {day}. Log it anyway as an extra?",
+  "@unscheduled_body": {
+    "placeholders": { "day": { "type": "String" } }
+  },
+  "unscheduled_confirm": "Log anyway",
+  "rest_days_none": "None",
+  "focus_clear_today": "Clear today's sessions",
+  "focus_defaults": "Session defaults",
   "focus_history": "History",
   "focus_history_empty": "No sessions yet",
   "focus_history_empty_sub": "Every focus session you finish shows up here.",
