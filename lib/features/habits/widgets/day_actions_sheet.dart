@@ -6,6 +6,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/sheet_action.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/pages/notes_page.dart';
@@ -51,7 +52,7 @@ Future<void> showDayActionsSheet(
             ),
             if (!habit.isRestDay(date) &&
                 !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
-              _Action(
+              SheetAction(
                 icon: LucideIcons.palmtree,
                 label: paused
                     ? context.l10n.vacation_day_off
@@ -66,7 +67,7 @@ Future<void> showDayActionsSheet(
               const SizedBox(height: 6),
             ],
             if (notesEnabled) ...[
-              _Action(
+              SheetAction(
                 icon: LucideIcons.notebookPen,
                 label: context.l10n.view_notes,
                 badge: count > 0 ? '$count' : null,
@@ -85,7 +86,7 @@ Future<void> showDayActionsSheet(
                 },
               ),
               const SizedBox(height: 6),
-              _Action(
+              SheetAction(
                 icon: LucideIcons.circlePlus,
                 label: context.l10n.add_note,
                 onTap: () {
@@ -126,90 +127,4 @@ Future<void> showDayActionsSheet(
       ),
     ),
   );
-}
-
-class _Action extends StatelessWidget {
-  const _Action({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.badge,
-    this.accent,
-    this.trailing,
-    this.highlighted = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final String? badge;
-  final Color? accent;
-  final IconData? trailing;
-  final bool highlighted;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = accent ?? context.colors.primary;
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.antiAlias,
-      child: Semantics(
-        button: true,
-        child: InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: highlighted
-                  ? Border.all(color: color.withValues(alpha: 0.7), width: 1.4)
-                  : null,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: highlighted ? color : context.colors.onSurface,
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: context.colors.onSurface,
-                    ),
-                  ),
-                ),
-                if (badge != null)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.16),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      badge!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: color,
-                      ),
-                    ),
-                  ),
-                if (trailing != null) ...[
-                  const SizedBox(width: 8),
-                  Icon(trailing, size: 18, color: context.tokens.muted),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
