@@ -3,6 +3,7 @@ import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/slot_transition.dart';
 
 class MinimalHabitList extends StatelessWidget {
   const MinimalHabitList({
@@ -14,6 +15,7 @@ class MinimalHabitList extends StatelessWidget {
     required this.onToggleToday,
     required this.onToggleDay,
     required this.onLongPress,
+    this.leaving = const {},
   });
 
   static const _padding = EdgeInsets.fromLTRB(16, 8, 16, 104);
@@ -25,6 +27,7 @@ class MinimalHabitList extends StatelessWidget {
   final ValueChanged<Habit> onToggleToday;
   final void Function(Habit habit, DateTime date) onToggleDay;
   final ValueChanged<Habit> onLongPress;
+  final Set<String> leaving;
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +40,25 @@ class MinimalHabitList extends StatelessWidget {
           Entrance(
             key: ValueKey('$mode-${habits[i].id}'),
             index: i,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: mode == HeatmapMode.week
-                  ? GridWeekCard(
-                      habit: habits[i],
-                      onOpen: () => onOpen(habits[i]),
-                      onToggleDay: (d) => onToggleDay(habits[i], d),
-                      onLongPress: () => onLongPress(habits[i]),
-                    )
-                  : GridYearCard(
-                      habit: habits[i],
-                      onOpen: () => onOpen(habits[i]),
-                      onToggleToday: () => onToggleToday(habits[i]),
-                      onToggleDay: (d) => onToggleDay(habits[i], d),
-                      onLongPress: () => onLongPress(habits[i]),
-                    ),
+            child: SlotTransition(
+              leaving: leaving.contains(habits[i].id),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: mode == HeatmapMode.week
+                    ? GridWeekCard(
+                        habit: habits[i],
+                        onOpen: () => onOpen(habits[i]),
+                        onToggleDay: (d) => onToggleDay(habits[i], d),
+                        onLongPress: () => onLongPress(habits[i]),
+                      )
+                    : GridYearCard(
+                        habit: habits[i],
+                        onOpen: () => onOpen(habits[i]),
+                        onToggleToday: () => onToggleToday(habits[i]),
+                        onToggleDay: (d) => onToggleDay(habits[i], d),
+                        onLongPress: () => onLongPress(habits[i]),
+                      ),
+              ),
             ),
           ),
       ],

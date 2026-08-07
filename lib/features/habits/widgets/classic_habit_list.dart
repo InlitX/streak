@@ -5,6 +5,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/slot_transition.dart';
 
 class ClassicHabitList extends StatelessWidget {
   const ClassicHabitList({
@@ -17,11 +18,13 @@ class ClassicHabitList extends StatelessWidget {
     required this.onOpen,
     required this.onToggleToday,
     required this.onLongPress,
+    this.leaving = const {},
   });
 
   final List<Habit> habits;
   final HeatmapMode mode;
   final bool reordering;
+  final Set<String> leaving;
   final Widget header;
   final void Function(int oldIndex, int newIndex) onReorder;
   final ValueChanged<Habit> onOpen;
@@ -76,14 +79,17 @@ class ClassicHabitList extends StatelessWidget {
         return _EntranceCard(
           key: ValueKey(habit.id),
           index: index,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: HabitCard(
-              habit: habit,
-              mode: mode,
-              onOpen: () => onOpen(habit),
-              onToggleToday: () => onToggleToday(habit),
-              onLongPress: () => onLongPress(habit),
+          child: SlotTransition(
+            leaving: leaving.contains(habit.id),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: HabitCard(
+                habit: habit,
+                mode: mode,
+                onOpen: () => onOpen(habit),
+                onToggleToday: () => onToggleToday(habit),
+                onLongPress: () => onLongPress(habit),
+              ),
             ),
           ),
         );
