@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -19,6 +21,7 @@ import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
+import 'package:streak/features/habits/widgets/slot_transition.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
@@ -33,6 +36,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+const _sinkDelay = Duration(milliseconds: 2500);
+
 class _HomePageState extends State<HomePage> {
   bool _wasAllDone = false;
   int _confetti = 0;
@@ -40,11 +45,23 @@ class _HomePageState extends State<HomePage> {
   late HeatmapMode _mode;
   bool _reordering = false;
 
+  final Map<String, bool> _frozen = {};
+  final Set<String> _leaving = {};
+  final Map<String, Timer> _timers = {};
+
   @override
   void initState() {
     super.initState();
     final saved = context.read<SettingsController>().heatmapMode;
     _mode = HeatmapMode.values[saved.clamp(0, 2)];
+  }
+
+  @override
+  void dispose() {
+    for (final timer in _timers.values) {
+      timer.cancel();
+    }
+    super.dispose();
   }
 
   void _changeMode(HeatmapMode mode) {
@@ -293,6 +310,7 @@ class _HomePageState extends State<HomePage> {
                           onToggleDay: _toggle,
                           onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
+                          leaving: _leaving,
                         )
                       : ClassicHabitList(
                           habits: visible,
@@ -304,6 +322,7 @@ class _HomePageState extends State<HomePage> {
                           onToggleToday: (habit) => _toggle(habit, today),
                           onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
+                          leaving: _leaving,
                         ),
                 );
               },
@@ -332,14 +351,49 @@ class _HomePageState extends State<HomePage> {
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();
     if (!await confirmUnscheduledDay(context, habit: habit, date: date)) return;
-    await controller.toggle(habit.id, date);
+
+    final id = habit.id;
+    final wasSettled = habit.isDoneForNow;
+    final animate = date.dayKey == AppClock.now().dayKey && !_moving(id);
+    animate ? _frozen[id] = wasSettled : _stopMoving(id);
+
+    await controller.toggle(id, date);
+    if (!mounted || !animate) return;
+
+    final settled = controller.byId(id)?.isDoneForNow ?? wasSettled;
+    if (settled == wasSettled) {
+      setState(() => _frozen.remove(id));
+      return;
+    }
+    _timers[id] = Timer(
+      settled ? _sinkDelay : Duration.zero,
+      () => _leave(id),
+    );
+  }
+
+  bool _moving(String id) => _timers.containsKey(id);
+
+  void _stopMoving(String id) {
+    _timers.remove(id)?.cancel();
+    _leaving.remove(id);
+    _frozen.remove(id);
+  }
+
+  void _leave(String id) {
+    if (!mounted) return;
+    setState(() => _leaving.add(id));
+    _timers[id] = Timer(slotTransitionDuration, () {
+      if (!mounted) return;
+      setState(() => _stopMoving(id));
+    });
   }
 
   List<Habit> _completedLast(List<Habit> habits) {
     final pending = <Habit>[];
     final done = <Habit>[];
     for (final habit in habits) {
-      (habit.isDoneForNow ? done : pending).add(habit);
+      final settled = _frozen[habit.id] ?? habit.isDoneForNow;
+      (settled ? done : pending).add(habit);
     }
     return [...pending, ...done];
   }
