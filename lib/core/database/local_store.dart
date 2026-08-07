@@ -123,6 +123,14 @@ class LocalStore {
   static Future<void> writeSetting(String key, Object value) =>
       _settings.put(key, value);
 
+  static Future<void> clearProgress() async {
+    for (final habit in readHabits().values) {
+      await writeHabit(habit.copyWith(completions: const {}));
+    }
+    await _notes.clear();
+    await _focus.clear();
+  }
+
   static Future<void> wipeEverything() async {
     await _habits.clear();
     await _notes.clear();

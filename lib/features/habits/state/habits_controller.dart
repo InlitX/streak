@@ -62,6 +62,13 @@ class HabitsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearProgress() async {
+    await LocalStore.clearProgress();
+    _habits = LocalStore.readHabits();
+    notifyListeners();
+    await HomeWidgetService.sync(asMap);
+  }
+
   Future<void> create({
     required String name,
     required String icon,

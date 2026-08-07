@@ -487,6 +487,12 @@ class _DataPage extends StatelessWidget {
               onTap: () => AppNavigator.push(const ArchivedHabitsPage()),
             ),
             SoftRow(
+              icon: LucideIcons.eraser,
+              title: context.l10n.clear_progress,
+              subtitle: context.l10n.clear_progress_sub,
+              onTap: () => SettingsActions.clearProgress(context),
+            ),
+            SoftRow(
               icon: LucideIcons.triangleAlert,
               title: context.l10n.wipe_data,
               subtitle: context.l10n.wipe_data_sub,

@@ -212,6 +212,11 @@
     "placeholders": { "name": { "type": "String" } }
   },
   "deleted_forever": "Habit deleted",
+  "clear_progress": "Clear progress",
+  "clear_progress_sub": "History, notes and focus sessions",
+  "clear_progress_warning": "This erases every logged day, note and focus session, but keeps your habits, their schedules and your settings. It cannot be undone unless you have a backup file to import afterwards.",
+  "clear_progress_confirm": "Clear progress",
+  "clear_progress_done": "Progress cleared",
   "wipe_data": "Erase all data",
   "wipe_data_sub": "Habits, notes, focus sessions and settings",
   "wipe_data_warning": "This erases every habit, note, focus session and setting on this phone. It cannot be undone unless you have a backup file to import afterwards.",

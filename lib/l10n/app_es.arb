@@ -183,6 +183,11 @@
     }
   },
   "deleted_forever": "Hábito borrado",
+  "clear_progress": "Borrar progreso",
+  "clear_progress_sub": "Historial, notas y sesiones de foco",
+  "clear_progress_warning": "Esto borra todos los días registrados, las notas y las sesiones de foco, pero mantiene tus hábitos, sus programaciones y tus ajustes. No se puede deshacer salvo que tengas una copia de seguridad para importar después.",
+  "clear_progress_confirm": "Borrar progreso",
+  "clear_progress_done": "Progreso borrado",
   "wipe_data": "Borrar todos los datos",
   "wipe_data_sub": "Hábitos, notas, sesiones de foco y ajustes",
   "wipe_data_warning": "Esto borra todos los hábitos, notas, sesiones de foco y ajustes de este móvil. No se puede deshacer salvo que tengas una copia de seguridad para importar después.",

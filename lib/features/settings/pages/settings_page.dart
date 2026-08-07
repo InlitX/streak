@@ -403,6 +403,13 @@ class _ClassicDataPage extends StatelessWidget {
         ),
         settingsDivider(context),
         NavRow(
+          icon: LucideIcons.eraser,
+          title: context.l10n.clear_progress,
+          subtitle: context.l10n.clear_progress_sub,
+          onTap: () => SettingsActions.clearProgress(context),
+        ),
+        settingsDivider(context),
+        NavRow(
           icon: LucideIcons.triangleAlert,
           tint: context.tokens.danger,
           title: context.l10n.wipe_data,

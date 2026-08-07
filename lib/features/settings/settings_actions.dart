@@ -209,6 +209,24 @@ class SettingsActions {
     );
   }
 
+  static Future<void> clearProgress(BuildContext context) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.clear_progress,
+      message: context.l10n.clear_progress_warning,
+      confirmLabel: context.l10n.clear_progress_confirm,
+      icon: LucideIcons.eraser,
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    await context.read<HabitsController>().clearProgress();
+    if (!context.mounted) return;
+    context.read<NotesController>().reload();
+    context.read<FocusController>().reload();
+    if (!context.mounted) return;
+    AppSnackbar.success(context, context.l10n.clear_progress_done);
+  }
+
   static Future<void> wipeEverything(BuildContext context) async {
     final confirmed = await showAppConfirmDialog(
       context,
