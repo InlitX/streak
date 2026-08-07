@@ -57,6 +57,8 @@ class Habit {
     this.incrementAmount = 1,
     this.quantKind = QuantKind.generic,
     this.bookCoverPath = '',
+    this.focusMinutes = 25,
+    this.focusBreakMinutes = 0,
     this.substeps = const [],
     this.vacations = const [],
     this.restDays = const [],
@@ -108,6 +110,9 @@ class Habit {
 
   final String bookCoverPath;
 
+  final int focusMinutes;
+  final int focusBreakMinutes;
+
   final List<Substep> substeps;
 
   final List<VacationPeriod> vacations;
@@ -127,6 +132,8 @@ class Habit {
 
   bool isPausedOn(DateTime date) =>
       isRestDay(date) || vacations.any((v) => v.contains(date));
+
+  bool isOffDay(DateTime date) => !isScheduledOn(date) || isPausedOn(date);
 
   bool get isOnVacation => vacations.any((v) => v.isOngoing);
 
@@ -447,6 +454,8 @@ class Habit {
     double? incrementAmount,
     QuantKind? quantKind,
     String? bookCoverPath,
+    int? focusMinutes,
+    int? focusBreakMinutes,
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
     List<int>? restDays,
@@ -475,6 +484,8 @@ class Habit {
       incrementAmount: incrementAmount ?? this.incrementAmount,
       quantKind: quantKind ?? this.quantKind,
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
+      focusMinutes: focusMinutes ?? this.focusMinutes,
+      focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
       restDays: restDays ?? this.restDays,
@@ -506,6 +517,8 @@ class Habit {
         'incrementAmount': incrementAmount,
         'quantKind': quantKind.index,
         'bookCoverPath': bookCoverPath,
+        'focusMinutes': focusMinutes,
+        'focusBreakMinutes': focusBreakMinutes,
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
@@ -550,6 +563,9 @@ class Habit {
         incrementAmount: ((map['incrementAmount'] ?? 1) as num).toDouble(),
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],
         bookCoverPath: (map['bookCoverPath'] ?? '') as String,
+        focusMinutes: ((map['focusMinutes'] ?? 25) as num).toInt(),
+        focusBreakMinutes:
+            ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
         substeps: map['substeps'] == null
             ? const []
             : (map['substeps'] as List)
