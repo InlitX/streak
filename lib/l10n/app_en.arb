@@ -486,6 +486,20 @@
   "focus_goal_today": "{done} of {goal} today",
   "focus_keep_awake": "Keep screen on",
   "focus_images_limit": "Up to 10 images",
+  "select_all": "Select all",
+  "selected_count": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "@selected_count": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "focus_delete_sessions": "Delete sessions?",
+  "focus_delete_sessions_body": "{count, plural, =1{1 focus session will be removed. This cannot be undone.} other{{count} focus sessions will be removed. This cannot be undone.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "focus_sessions_deleted": "{count, plural, =1{1 session deleted} other{{count} sessions deleted}}",
+  "@focus_sessions_deleted": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "focus_history": "History",
   "focus_history_empty": "No sessions yet",
   "focus_history_empty_sub": "Every focus session you finish shows up here.",

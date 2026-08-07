@@ -66,6 +66,13 @@ class FocusController extends ChangeNotifier {
     _sessions = LocalStore.readFocusSessions();
     notifyListeners();
   }
+
+  Future<void> removeSessions(Set<String> ids) async {
+    if (ids.isEmpty) return;
+    await LocalStore.removeFocusSessions(ids);
+    _sessions = _sessions.where((s) => !ids.contains(s.id)).toList();
+    notifyListeners();
+  }
   List<FocusTask> get tasks => List.unmodifiable(_tasks);
   int get pendingTasks => _tasks.where((t) => !t.done).length;
 

@@ -40,6 +40,12 @@ class LocalStore {
   static Future<void> writeFocusSession(FocusSession session) =>
       _focus.put(session.id, session.toMap());
 
+  static Future<void> removeFocusSessions(Iterable<String> ids) async {
+    for (final id in ids) {
+      await _focus.delete(id);
+    }
+  }
+
   static Future<void> removeFocusFor(String habitId) async {
     final ids = readFocusSessions()
         .where((s) => s.habitId == habitId)

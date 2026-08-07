@@ -7,6 +7,8 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
@@ -15,8 +17,81 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
 
-class FocusHistoryPage extends StatelessWidget {
+class FocusHistoryPage extends StatefulWidget {
   const FocusHistoryPage({super.key});
+
+  @override
+  State<FocusHistoryPage> createState() => _FocusHistoryPageState();
+}
+
+class _FocusHistoryPageState extends State<FocusHistoryPage> {
+  final Set<String> _selected = {};
+
+  bool get _selecting => _selected.isNotEmpty;
+
+  void _toggle(String id) {
+    setState(() {
+      if (!_selected.remove(id)) _selected.add(id);
+    });
+  }
+
+  void _selectAll(List<FocusSession> sessions) {
+    setState(() {
+      if (_selected.length == sessions.length) {
+        _selected.clear();
+      } else {
+        _selected.addAll(sessions.map((s) => s.id));
+      }
+    });
+  }
+
+  Future<void> _deleteSelected() async {
+    final count = _selected.length;
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.focus_delete_sessions,
+      message: context.l10n.focus_delete_sessions_body(count),
+      confirmLabel: context.l10n.delete,
+    );
+    if (confirmed != true || !mounted) return;
+
+    await context.read<FocusController>().removeSessions({..._selected});
+    if (!mounted) return;
+    setState(_selected.clear);
+    AppSnackbar.success(context, context.l10n.focus_sessions_deleted(count));
+  }
+
+  PreferredSizeWidget _appBar(BuildContext context, List<FocusSession> all) {
+    if (!_selecting) {
+      return AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.chevronLeft),
+          onPressed: () => AppNavigator.pop(),
+        ),
+        title: Text(context.l10n.focus_history),
+      );
+    }
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(LucideIcons.x),
+        tooltip: context.l10n.cancel,
+        onPressed: () => setState(_selected.clear),
+      ),
+      title: Text(context.l10n.selected_count(_selected.length)),
+      actions: [
+        IconButton(
+          icon: const Icon(LucideIcons.listChecks),
+          tooltip: context.l10n.select_all,
+          onPressed: () => _selectAll(all),
+        ),
+        IconButton(
+          icon: Icon(LucideIcons.trash2, color: context.tokens.danger),
+          tooltip: context.l10n.delete,
+          onPressed: _deleteSelected,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,43 +103,48 @@ class FocusHistoryPage extends StatelessWidget {
       days.putIfAbsent(session.startedAt.dayKey, () => []).add(session);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(context.l10n.focus_history),
-      ),
-      body: sessions.isEmpty
-          ? AppEmptyState(
-              icon: LucideIcons.history,
-              title: context.l10n.focus_history_empty,
-              message: context.l10n.focus_history_empty_sub,
-            )
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-              children: [
-                for (final (index, day) in days.entries.indexed)
-                  Entrance(
-                    index: index,
-                    delay: _entrance,
-                    child: Column(
-                      children: [
-                        _DayHeader(
-                          day: parseDayKey(day.key),
-                          sessions: day.value.length,
-                          seconds:
-                              day.value.fold(0, (sum, s) => sum + s.seconds),
-                        ),
-                        for (final session in day.value)
-                          _SessionTile(session: session),
-                        const SizedBox(height: 14),
-                      ],
+    return PopScope(
+      canPop: !_selecting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) setState(_selected.clear);
+      },
+      child: Scaffold(
+        appBar: _appBar(context, sessions),
+        body: sessions.isEmpty
+            ? AppEmptyState(
+                icon: LucideIcons.history,
+                title: context.l10n.focus_history_empty,
+                message: context.l10n.focus_history_empty_sub,
+              )
+            : ListView(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                children: [
+                  for (final (index, day) in days.entries.indexed)
+                    Entrance(
+                      index: index,
+                      delay: _entrance,
+                      child: Column(
+                        children: [
+                          _DayHeader(
+                            day: parseDayKey(day.key),
+                            sessions: day.value.length,
+                            seconds:
+                                day.value.fold(0, (sum, s) => sum + s.seconds),
+                          ),
+                          for (final session in day.value)
+                            _SessionTile(
+                              session: session,
+                              selected: _selected.contains(session.id),
+                              selecting: _selecting,
+                              onToggle: () => _toggle(session.id),
+                            ),
+                          const SizedBox(height: 14),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -123,9 +203,17 @@ class _DayHeader extends StatelessWidget {
 }
 
 class _SessionTile extends StatelessWidget {
-  const _SessionTile({required this.session});
+  const _SessionTile({
+    required this.session,
+    required this.selected,
+    required this.selecting,
+    required this.onToggle,
+  });
 
   final FocusSession session;
+  final bool selected;
+  final bool selecting;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -134,81 +222,106 @@ class _SessionTile extends StatelessWidget {
         : context.watch<HabitsController>().byId(session.habitId);
     final color = habit?.color ?? context.colors.primary;
     final locale = Localizations.localeOf(context).toString();
+    final scheme = context.colors;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: color.withValues(alpha: 0.14),
-              ),
-              child: Center(
-                child: habit == null
-                    ? Icon(LucideIcons.timer, size: 18, color: color)
-                    : HabitGlyph(glyph: habit.icon, color: color, size: 18),
+      child: Semantics(
+        button: true,
+        selected: selected,
+        child: GestureDetector(
+          onTap: selecting ? onToggle : null,
+          onLongPress: onToggle,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: selected
+                  ? scheme.primary.withValues(alpha: 0.16)
+                  : scheme.surfaceContainerHighest.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: selected ? scheme.primary : Colors.transparent,
+                width: 1.5,
               ),
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    habit == null ? context.l10n.focus_free_session : habit.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: context.colors.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${DateFormat.Hm(locale).format(session.startedAt)}'
-                    '  ·  ${context.l10n.minutes_short('${session.targetMinutes}')}',
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      color: context.tokens.muted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Row(
               children: [
-                Text(
-                  formatHoursShort(session.seconds),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: color,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color.withValues(alpha: 0.14),
+                  ),
+                  child: Center(
+                    child: selected
+                        ? Icon(LucideIcons.check, size: 20, color: color)
+                        : habit == null
+                            ? Icon(LucideIcons.timer, size: 18, color: color)
+                            : HabitGlyph(
+                                glyph: habit.icon,
+                                color: color,
+                                size: 18,
+                              ),
                   ),
                 ),
-                if (session.completed) ...[
-                  const SizedBox(height: 3),
-                  Icon(
-                    LucideIcons.circleCheck,
-                    size: 14,
-                    color: context.tokens.success,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        habit == null
+                            ? context.l10n.focus_free_session
+                            : habit.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${DateFormat.Hm(locale).format(session.startedAt)}'
+                        '  ·  '
+                        '${context.l10n.minutes_short('${session.targetMinutes}')}',
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          color: context.tokens.muted,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      formatHoursShort(session.seconds),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: color,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    if (session.completed) ...[
+                      const SizedBox(height: 3),
+                      Icon(
+                        LucideIcons.circleCheck,
+                        size: 14,
+                        color: context.tokens.success,
+                      ),
+                    ],
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
