@@ -7,15 +7,21 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
-import 'package:streak/features/focus/pages/focus_setup_page.dart';
+import 'package:streak/features/focus/pages/focus_history_page.dart';
+import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_defaults_sheet.dart';
+import 'package:streak/features/focus/widgets/focus_habit_sheet.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/habits/pages/journey_page.dart';
@@ -30,6 +36,7 @@ import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
+import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class HabitDetailsPage extends StatefulWidget {
@@ -69,6 +76,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
         }
 
         Future<void> editAmount(DateTime date) async {
+          final allowed =
+              await confirmUnscheduledDay(context, habit: habit, date: date);
+          if (!allowed || !context.mounted) return;
+
           final current = habit.completions[date.dayKey]?.count ?? 0;
           final value = await showNumberKeypadDialog(
             context,
@@ -86,11 +97,18 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           }
         }
 
+        Future<void> toggleDay(DateTime date) async {
+          final allowed =
+              await confirmUnscheduledDay(context, habit: habit, date: date);
+          if (!allowed) return;
+          await controller.toggle(habit.id, date);
+        }
+
         void toggle(DateTime date) {
           HapticFeedback.selectionClick();
           switch (habit.kind) {
             case HabitKind.positive:
-              controller.toggle(habit.id, date);
+              unawaited(toggleDay(date));
               break;
             case HabitKind.negative:
               final relapsed = habit.completions.containsKey(date.dayKey);
@@ -403,9 +421,20 @@ class _TodayChecklist extends StatelessWidget {
 
   final Habit habit;
 
+  Future<void> _setStep(BuildContext context, String stepId, bool value) async {
+    final controller = context.read<HabitsController>();
+    final today = AppClock.now();
+    if (value) {
+      final allowed =
+          await confirmUnscheduledDay(context, habit: habit, date: today);
+      if (!allowed) return;
+    }
+    HapticFeedback.selectionClick();
+    await controller.setStep(habit.id, today, stepId, value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<HabitsController>();
     final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
     final today = AppClock.now();
     final checked = habit.completions[today.dayKey]?.steps ?? const <String>{};
@@ -444,15 +473,9 @@ class _TodayChecklist extends StatelessWidget {
                 title: step.title,
                 checked: checked.contains(step.id),
                 color: habit.color,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  controller.setStep(
-                    habit.id,
-                    today,
-                    step.id,
-                    !checked.contains(step.id),
-                  );
-                },
+                onTap: () => unawaited(
+                  _setStep(context, step.id, !checked.contains(step.id)),
+                ),
               ),
           ],
         ),
@@ -580,46 +603,123 @@ class _VacationTile extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.only(left: 36, right: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.rest_days,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: context.colors.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    context.l10n.rest_days_desc,
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      height: 1.35,
-                      color: context.tokens.muted,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  CompactWeekdays(
-                    selected: habit.restDays,
-                    accent: color,
-                    onChanged: (days) {
-                      HapticFeedback.selectionClick();
-                      context
-                          .read<HabitsController>()
-                          .setRestDays(habit.id, days);
-                    },
-                  ),
-                ],
-              ),
+              child: _RestDays(habit: habit, accent: color),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RestDays extends StatefulWidget {
+  const _RestDays({required this.habit, required this.accent});
+
+  final Habit habit;
+  final Color accent;
+
+  @override
+  State<_RestDays> createState() => _RestDaysState();
+}
+
+class _RestDaysState extends State<_RestDays> {
+  bool _open = false;
+
+  String _summary(BuildContext context) {
+    final days = [...widget.habit.restDays]..sort();
+    if (days.isEmpty) return context.l10n.rest_days_none;
+    final labels = WeekdayLabels.shortMonFirst(
+      Localizations.localeOf(context).languageCode,
+    );
+    return days.map((day) => labels[day - 1]).join(', ');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          button: true,
+          expanded: _open,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => setState(() => _open = !_open),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      context.l10n.rest_days,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: context.colors.onSurface,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    _summary(context),
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: widget.habit.restDays.isEmpty
+                          ? context.tokens.muted
+                          : widget.accent,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  AnimatedRotation(
+                    turns: _open ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Icon(
+                      LucideIcons.chevronDown,
+                      size: 18,
+                      color: context.tokens.muted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: _open
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.rest_days_desc,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.35,
+                        color: context.tokens.muted,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CompactWeekdays(
+                      selected: widget.habit.restDays,
+                      accent: widget.accent,
+                      onChanged: (days) {
+                        HapticFeedback.selectionClick();
+                        context
+                            .read<HabitsController>()
+                            .setRestDays(widget.habit.id, days);
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                )
+              : const SizedBox(width: double.infinity),
+        ),
+      ],
     );
   }
 }
@@ -696,6 +796,38 @@ class _FocusTile extends StatelessWidget {
 
   final Habit habit;
 
+  Future<void> _openActions(BuildContext context) async {
+    final action = await showFocusHabitSheet(context, habit: habit);
+    if (action == null || !context.mounted) return;
+    switch (action) {
+      case FocusHabitAction.defaults:
+        await showFocusDefaultsSheet(context, habit: habit);
+      case FocusHabitAction.clearToday:
+        await _clearToday(context);
+    }
+  }
+
+  Future<void> _clearToday(BuildContext context) async {
+    final focus = context.read<FocusController>();
+    final ids = focus
+        .sessionsForHabitOnDay(habit.id, AppClock.now())
+        .map((s) => s.id)
+        .toSet();
+    if (ids.isEmpty) return;
+
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.focus_delete_sessions,
+      message: context.l10n.focus_delete_sessions_body(ids.length),
+      confirmLabel: context.l10n.delete,
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    await focus.removeSessions(ids);
+    if (!context.mounted) return;
+    AppSnackbar.success(context, context.l10n.focus_sessions_deleted(ids.length));
+  }
+
   @override
   Widget build(BuildContext context) {
     final focus = context.watch<FocusController>();
@@ -703,45 +835,60 @@ class _FocusTile extends StatelessWidget {
     final today = focus.secondsForHabitOnDay(habit.id, AppClock.now());
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
-        child: Row(
-          children: [
-            Icon(LucideIcons.timer, size: 21, color: habit.color),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.focus_total,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: context.colors.onSurface,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () => AppNavigator.push(FocusHistoryPage(habitId: habit.id)),
+        onLongPress: () {
+          HapticFeedback.mediumImpact();
+          unawaited(_openActions(context));
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
+          child: Row(
+            children: [
+              Icon(LucideIcons.timer, size: 21, color: habit.color),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.focus_total,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: context.colors.onSurface,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    today > 0
-                        ? '${formatHoursShort(seconds)}  ·  ${context.l10n.today} ${formatHoursShort(today)}'
-                        : formatHoursShort(seconds),
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      color: context.tokens.muted,
+                    const SizedBox(height: 2),
+                    Text(
+                      today > 0
+                          ? '${formatHoursShort(seconds)}  ·  ${context.l10n.today} ${formatHoursShort(today)}'
+                          : formatHoursShort(seconds),
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        color: context.tokens.muted,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            IconButton(
-              icon: Icon(LucideIcons.circlePlay, color: habit.color),
-              onPressed: () => AppNavigator.push(
-                FocusSetupPage(habitId: habit.id),
-                fullscreenDialog: true,
+              IconButton(
+                tooltip: context.l10n.focus_start,
+                icon: Icon(LucideIcons.circlePlay, color: habit.color),
+                onPressed: () => AppNavigator.push(
+                  focus.isActive
+                      ? const FocusPage()
+                      : FocusPage(
+                          startHabitId: habit.id,
+                          startMinutes: habit.focusMinutes,
+                          breakMinutes: habit.focusBreakMinutes,
+                        ),
+                  fade: true,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

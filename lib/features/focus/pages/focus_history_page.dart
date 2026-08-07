@@ -18,7 +18,9 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 const _entrance = Duration(milliseconds: 340);
 
 class FocusHistoryPage extends StatefulWidget {
-  const FocusHistoryPage({super.key});
+  const FocusHistoryPage({super.key, this.habitId});
+
+  final String? habitId;
 
   @override
   State<FocusHistoryPage> createState() => _FocusHistoryPageState();
@@ -61,6 +63,13 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
     AppSnackbar.success(context, context.l10n.focus_sessions_deleted(count));
   }
 
+  String _title(BuildContext context) {
+    final id = widget.habitId;
+    if (id == null) return context.l10n.focus_history;
+    return context.read<HabitsController>().byId(id)?.name ??
+        context.l10n.focus_history;
+  }
+
   PreferredSizeWidget _appBar(BuildContext context, List<FocusSession> all) {
     if (!_selecting) {
       return AppBar(
@@ -68,7 +77,7 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
           icon: const Icon(LucideIcons.chevronLeft),
           onPressed: () => AppNavigator.pop(),
         ),
-        title: Text(context.l10n.focus_history),
+        title: Text(_title(context)),
       );
     }
     return AppBar(
@@ -95,7 +104,12 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final sessions = [...context.watch<FocusController>().sessions]
+    final habitId = widget.habitId;
+    final sessions = context
+        .watch<FocusController>()
+        .sessions
+        .where((s) => habitId == null || s.habitId == habitId)
+        .toList()
       ..sort((a, b) => b.startedAt.compareTo(a.startedAt));
 
     final days = <String, List<FocusSession>>{};

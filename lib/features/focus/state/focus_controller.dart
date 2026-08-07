@@ -261,9 +261,14 @@ class FocusController extends ChangeNotifier {
       .where((s) => s.startedAt.dayKey == day.dayKey)
       .fold(0, (sum, session) => sum + session.seconds);
 
-  int secondsForHabitOnDay(String habitId, DateTime day) => _sessions
-      .where((s) => s.habitId == habitId && s.startedAt.dayKey == day.dayKey)
-      .fold(0, (sum, session) => sum + session.seconds);
+  List<FocusSession> sessionsForHabitOnDay(String habitId, DateTime day) =>
+      _sessions
+          .where((s) => s.habitId == habitId && s.startedAt.dayKey == day.dayKey)
+          .toList();
+
+  int secondsForHabitOnDay(String habitId, DateTime day) =>
+      sessionsForHabitOnDay(habitId, day)
+          .fold(0, (sum, session) => sum + session.seconds);
 
   Future<void> removeForHabit(String habitId) async {
     _sessions.removeWhere((s) => s.habitId == habitId);
