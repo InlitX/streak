@@ -527,13 +527,8 @@ class _SupportPage extends StatelessWidget {
               onTap: () => SettingsActions.openUrl(context, kCoffeeUrl),
             ),
             SoftRow(
-              icon: LucideIcons.bug,
-              title: context.l10n.report_bug,
-              onTap: () => SettingsActions.openUrl(context, kIssuesUrl),
-            ),
-            SoftRow(
-              icon: LucideIcons.lightbulb,
-              title: context.l10n.request_feature,
+              icon: LucideIcons.messageSquare,
+              title: context.l10n.report_issue,
               onTap: () => SettingsActions.openUrl(context, '$kIssuesUrl/new'),
             ),
           ],

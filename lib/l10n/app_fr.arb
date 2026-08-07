@@ -1,5 +1,4 @@
 {
-  "request_feature": "",
   "widget_cfg_brightness": "",
   "focus_end_keep": "",
   "motiv_almost": "",
@@ -570,7 +569,6 @@
       }
     }
   },
-  "report_bug": "",
   "app_lock_failed": "",
   "week": "",
   "onb3_body": "",

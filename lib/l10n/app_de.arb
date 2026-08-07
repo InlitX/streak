@@ -1,5 +1,4 @@
 {
-  "request_feature": "Eine Funktion anfordern",
   "widget_cfg_brightness": "Helligkeit",
   "motiv_almost": "Fast da! Nur ein bisschen mehr",
   "about_app": "Über diese App",
@@ -317,7 +316,6 @@
   "icon_accent": "Tricolor",
   "repeat_weekly": "Ausgewählte Tage",
   "widget_cfg_title": "Widget anpassen",
-  "report_bug": "Einen Fehler melden",
   "week": "Woche",
   "onb3_body": "Umfangreiche Statistiken und eine Jahresübersicht zeigen dir wie weit du bist.",
   "more_icons": "Mehr Icons",

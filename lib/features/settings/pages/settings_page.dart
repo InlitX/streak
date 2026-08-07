@@ -443,14 +443,8 @@ class _ClassicSupportPage extends StatelessWidget {
         ),
         settingsDivider(context),
         LinkRow(
-          icon: LucideIcons.bug,
-          title: context.l10n.report_bug,
-          onTap: () => SettingsActions.openUrl(context, kIssuesUrl),
-        ),
-        settingsDivider(context),
-        LinkRow(
-          icon: LucideIcons.lightbulb,
-          title: context.l10n.request_feature,
+          icon: LucideIcons.messageSquare,
+          title: context.l10n.report_issue,
           onTap: () => SettingsActions.openUrl(context, '$kIssuesUrl/new'),
         ),
       ],

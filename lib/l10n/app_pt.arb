@@ -1,6 +1,5 @@
 {
   "@@locale": "pt",
-  "request_feature": "Solicitar um recurso",
   "motiv_almost": "Quase lá! Falta só um pouco",
   "about_story": "Este aplicativo nasceu da frustração com os rastreadores de hábitos disponíveis. A maioria limita quantos hábitos você pode criar, esconde recursos básicos atrás de uma assinatura, rastreia sua atividade ou enche a tela de anúncios. Por isso, decidi criar o Streak: totalmente gratuito, sem anúncios, sem pagamentos e sem rastreamento. Tudo funciona localmente, e seus dados pertencem a você. Código aberto, sem pegadinhas.",
   "about_app": "Sobre este aplicativo",
@@ -273,7 +272,6 @@
   "overview": "Visão geral",
   "kind_positive": "Normal",
   "repeat_weekly": "Dias específicos",
-  "report_bug": "Relatar um erro",
   "week": "Semana",
   "onb3_body": "Estatísticas detalhadas e uma grade anual mostram exatamente o quanto você evoluiu.",
   "more_icons": "Mais ícones",
