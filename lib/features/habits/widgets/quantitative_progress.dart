@@ -313,7 +313,7 @@ class _GenericRing extends StatelessWidget {
                 ),
               ),
               if (reached)
-                CheckSeal(color: reachedColor)
+                CheckSeal(color: progress.solidColor(color))
               else
                 Text(
                   '${(t * 100).round()}%',

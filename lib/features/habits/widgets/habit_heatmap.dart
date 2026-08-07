@@ -6,6 +6,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -42,9 +43,11 @@ Color heatmapCellColor(
     final base = scheme.surfaceContainerHighest;
     return date.isAfter(today) ? base.withValues(alpha: 0.4) : base;
   }
-  final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
+  final target = habit.effectiveTarget <= 0 ? 1.0 : habit.effectiveTarget;
   final ratio = (count / target).clamp(0.25, 1.0);
-  return Color.lerp(habit.color.withValues(alpha: 0.4), habit.color, ratio)!;
+  final full = QuantProgress.of(count: count, target: target)
+      .solidColor(habit.color);
+  return Color.lerp(habit.color.withValues(alpha: 0.4), full, ratio)!;
 }
 
 String heatmapDayLabel(BuildContext context, Habit habit, DateTime date) {

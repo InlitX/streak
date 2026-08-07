@@ -277,7 +277,7 @@ class _AmountLabel extends StatelessWidget {
           fontSize: 13,
           fontWeight: FontWeight.w700,
           color: progress.reachedGoal
-              ? progress.reachedColor(habit.color)
+              ? progress.solidColor(habit.color)
               : context.tokens.muted,
         ),
       ),
@@ -378,6 +378,11 @@ class _ActionButton extends StatelessWidget {
           await controller.addProgress(habit.id, today, habit.incrementAmount);
         }
 
+        final progress = QuantProgress.of(
+          count: count,
+          target: habit.perDayTarget,
+        );
+
         switch (habit.quantKind) {
           case QuantKind.water:
             return _WaterButton(
@@ -386,7 +391,7 @@ class _ActionButton extends StatelessWidget {
             );
           case QuantKind.reading:
             return _BookButton(
-              color: habit.color,
+              color: progress.solidColor(habit.color),
               ratio: ratio.clamp(0.0, 1.0),
               done: doneToday,
               onTap: addProgress,
@@ -394,10 +399,7 @@ class _ActionButton extends StatelessWidget {
           case QuantKind.generic:
             return _QuantityButton(
               color: habit.color,
-              progress: QuantProgress.of(
-                count: count,
-                target: habit.perDayTarget,
-              ),
+              progress: progress,
               done: doneToday,
               circle: circle,
               onTap: addProgress,

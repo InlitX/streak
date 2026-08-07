@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
+import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -190,11 +191,11 @@ class _CalendarCell extends StatelessWidget {
     } else if (isCurrentMonth && negative && !outOfScope) {
       fillColor = habit.color.withValues(alpha: 0.24);
     } else if (isCurrentMonth && ratioFill && count > 0) {
-      final target = habit.effectiveTarget <= 0 ? 1 : habit.effectiveTarget;
+      final target = habit.effectiveTarget <= 0 ? 1.0 : habit.effectiveTarget;
       final ratio = (count / target).clamp(0.25, 1.0);
       fillColor = Color.lerp(
         habit.color.withValues(alpha: 0.4),
-        habit.color,
+        QuantProgress.of(count: count, target: target).solidColor(habit.color),
         ratio,
       );
     } else if (isCurrentMonth && !negative && !ratioFill && completed) {
