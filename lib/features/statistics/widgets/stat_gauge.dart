@@ -52,7 +52,16 @@ class ConsistencyGauge extends StatelessWidget {
                         style: statNumber(context, 30),
                       ),
                       const SizedBox(height: 2),
-                      Text(caption, style: statLabel(context)),
+                      SizedBox(
+                        width: size * 0.62,
+                        child: Text(
+                          caption,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: statLabel(context),
+                        ),
+                      ),
                     ],
                   ),
                 ),
