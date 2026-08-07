@@ -28,6 +28,7 @@ import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
+import 'package:streak/features/habits/widgets/consistency_card.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
@@ -205,6 +206,8 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 ],
                 SectionLabel(context.l10n.streaks),
                 StreakSummary(habit: habit),
+                const SizedBox(height: 12),
+                ConsistencyCard(habit: habit),
                 const SizedBox(height: 20),
                 SectionLabel(
                   context.l10n.activity,

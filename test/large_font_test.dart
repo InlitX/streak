@@ -60,6 +60,11 @@ void main() {
     );
     tester.view.devicePixelRatio = 3;
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Week'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
 
     for (final label in ['Week', 'Month', 'Year']) {
       final paragraph = tester.renderObject<RenderParagraph>(find.text(label));

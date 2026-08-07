@@ -16,6 +16,7 @@ import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/strength_bar.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -165,10 +166,28 @@ class HabitCard extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 8),
-                              _StrengthBar(
-                                value: habit.strength,
-                                color: habit.color,
-                                track: scheme.surfaceContainerHighest,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: StrengthBar(
+                                      value: habit.strength,
+                                      color: habit.color,
+                                      track: scheme.surfaceContainerHighest,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    '${habit.consistency}%',
+                                    style: TextStyle(
+                                      fontSize: 11.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: context.tokens.muted,
+                                      fontFeatures: const [
+                                        FontFeature.tabularFigures(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -262,61 +281,6 @@ class _AmountLabel extends StatelessWidget {
               : context.tokens.muted,
         ),
       ),
-    );
-  }
-}
-
-class _StrengthBar extends StatelessWidget {
-  const _StrengthBar({
-    required this.value,
-    required this.color,
-    required this.track,
-  });
-
-  final double value;
-  final Color color;
-  final Color track;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: Stack(
-            children: [
-              Container(height: 6, color: track),
-              TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: value.clamp(0.0, 1.0)),
-                duration: const Duration(milliseconds: 700),
-                curve: Curves.easeOutCubic,
-                builder: (context, t, _) => Container(
-                  height: 6,
-                  width: constraints.maxWidth * t,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.lerp(color, Colors.white, 0.28)!,
-                        color,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(4),
-                    boxShadow: t > 0.02
-                        ? [
-                            BoxShadow(
-                              color: color.withValues(alpha: 0.4),
-                              blurRadius: 5,
-                              offset: const Offset(0, 1),
-                            ),
-                          ]
-                        : null,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

@@ -213,9 +213,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           color: accent,
                           child: Center(
                             child: ConsistencyGauge(
-                              percent: stats.monthRate,
+                              percent: stats.consistency,
                               color: accent,
-                              caption: context.l10n.last_30_days,
+                              caption: context.l10n.consistency_caption,
                               size: 130,
                             ),
                           ),
