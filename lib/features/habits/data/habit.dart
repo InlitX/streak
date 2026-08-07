@@ -204,19 +204,24 @@ class Habit {
   double _strength() {
     if (completions.isEmpty && kind != HabitKind.negative) return 0;
     final now = AppClock.now().atMidnight;
+    final floor = createdAt.atMidnight;
     const halfLife = 12.0;
     const window = 90;
     var score = 0.0;
     var norm = 0.0;
     for (var i = 0; i < window; i++) {
       final day = now.subtract(Duration(days: i));
-      if (isNeutralOn(day)) continue;
+      if (day.isBefore(floor) || !isScheduledOn(day) || isNeutralOn(day)) {
+        continue;
+      }
       final weight = math.pow(0.5, i / halfLife).toDouble();
       norm += weight;
       score += weight * _dayValue(day);
     }
     return norm == 0 ? 0 : (score / norm).clamp(0.0, 1.0);
   }
+
+  late final int consistency = (strength * 100).round();
 
   int _countInRange(DateTime start, DateTime end) {
     var count = 0;

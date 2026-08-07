@@ -18,6 +18,7 @@ class HabitStats {
     required this.currentStreak,
     required this.bestStreak,
     required this.monthRate,
+    required this.consistency,
   });
 
   static const window = 90;
@@ -35,6 +36,7 @@ class HabitStats {
   final int currentStreak;
   final int bestStreak;
   final int monthRate;
+  final int consistency;
 
   int get bestWeekday => _argMax(weekday);
   int get bestMonth => _argMax(monthly);
@@ -146,14 +148,24 @@ class HabitStats {
     }
 
     var done = 0;
+    var possible = 0;
     for (var i = 0; i < 30; i++) {
       final date = today.subtract(Duration(days: i));
       for (final habit in habits) {
+        if (date.isBefore(habit.createdAt.atMidnight)) continue;
+        if (!habit.isScheduledOn(date) || habit.isNeutralOn(date)) continue;
+        possible++;
         if (habit.isCompletedOn(date)) done++;
       }
     }
-    final possible = habits.length * 30;
     final monthRate = possible == 0 ? 0 : (done / possible * 100).round();
+
+    final consistency = habits.isEmpty
+        ? 0
+        : (habits.map((h) => h.strength).reduce((a, b) => a + b) /
+                habits.length *
+                100)
+            .round();
 
     final currentStreak = habits
         .map((h) => h.currentStreak)
@@ -176,6 +188,7 @@ class HabitStats {
       currentStreak: currentStreak,
       bestStreak: bestStreak,
       monthRate: monthRate,
+      consistency: consistency,
     );
   }
 }
