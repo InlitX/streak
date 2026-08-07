@@ -14,9 +14,8 @@ class ConsistencyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -25,39 +24,32 @@ class ConsistencyCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.l10n.consistency,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: context.colors.onSurface,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: context.tokens.muted,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Text(
                   '${habit.consistency}%',
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
-                    color: habit.color,
+                    color: context.colors.onSurface,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             StrengthBar(
               value: habit.strength,
               color: habit.color,
               track: context.colors.surfaceContainerHighest,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              context.l10n.consistency_sub,
-              style: TextStyle(
-                fontSize: 12.5,
-                height: 1.35,
-                color: context.tokens.muted,
-              ),
             ),
           ],
         ),

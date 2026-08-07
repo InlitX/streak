@@ -215,7 +215,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             child: ConsistencyGauge(
                               percent: stats.consistency,
                               color: accent,
-                              caption: context.l10n.consistency_caption,
+                              caption: context.l10n.last_90_days,
                               size: 130,
                             ),
                           ),
