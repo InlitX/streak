@@ -346,8 +346,14 @@ class HabitCardData(
     val kind: Int,
     val incrementAmount: Double,
     val doneToday: Boolean,
+    val focusOnly: Boolean,
+    val completions: List<Boolean>,
     val levels: List<Int>,
 ) {
+
+    fun isDoneOn(dayIndex: Int): Boolean =
+        dayIndex >= 0 && dayIndex < completions.size && completions[dayIndex]
+
     companion object {
         private const val BRAND = 0xFF7C5CFC.toInt()
 
@@ -388,6 +394,8 @@ class HabitCardData(
             kind = 0,
             incrementAmount = 1.0,
             doneToday = false,
+            focusOnly = false,
+            completions = emptyList(),
             levels = levelsOf(root.optJSONArray("heatmap")),
         )
 
@@ -406,8 +414,15 @@ class HabitCardData(
                 doneToday = completions != null &&
                     completions.length() >= 7 &&
                     completions.optBoolean(6, false),
+                focusOnly = habit.optBoolean("focusOnly", false),
+                completions = completionsOf(completions),
                 levels = levelsOf(habit.optJSONArray("heatmap")),
             )
+        }
+
+        private fun completionsOf(array: JSONArray?): List<Boolean> {
+            if (array == null) return emptyList()
+            return List(array.length()) { array.optBoolean(it, false) }
         }
 
         private fun levelsOf(array: JSONArray?): List<Int> {

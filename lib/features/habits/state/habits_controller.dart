@@ -87,6 +87,9 @@ class HabitsController extends ChangeNotifier {
     double incrementAmount = 1,
     QuantKind quantKind = QuantKind.generic,
     String bookCoverPath = '',
+    bool focusOnly = false,
+    int focusMinutes = 25,
+    int focusBreakMinutes = 0,
     List<Substep> substeps = const [],
   }) async {
     final id = _uuid.v4();
@@ -110,6 +113,9 @@ class HabitsController extends ChangeNotifier {
       incrementAmount: incrementAmount,
       quantKind: quantKind,
       bookCoverPath: bookCoverPath,
+      focusOnly: focusOnly,
+      focusMinutes: focusMinutes,
+      focusBreakMinutes: focusBreakMinutes,
       substeps: substeps,
     );
     _habits[id] = habit;
@@ -127,9 +133,10 @@ class HabitsController extends ChangeNotifier {
     HomeWidgetService.syncSoon(asMap);
   }
 
-  Future<void> toggle(String id, DateTime date) async {
+  Future<void> toggle(String id, DateTime date, {bool fromFocus = false}) async {
     final habit = _habits[id];
     if (habit == null) return;
+    if (habit.blocksManualCheck(date, fromFocus: fromFocus)) return;
     await _apply(habit, CompletionOps.toggle(habit, date), day: date);
   }
 

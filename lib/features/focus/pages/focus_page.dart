@@ -84,6 +84,7 @@ class _FocusPageState extends State<FocusPage> {
   }
 
   void _scheduleEndAlarm() {
+    if (_focus.isFlow) return;
     NotificationService().scheduleFocusEnd(
       title: context.l10n.focus_done_title,
       body: context.l10n.focus_notif_body,
@@ -119,7 +120,7 @@ class _FocusPageState extends State<FocusPage> {
     final focus = context.read<FocusController>();
     final habits = context.read<HabitsController>();
     final habit = focus.habitId.isEmpty ? null : habits.byId(focus.habitId);
-    final reached = focus.reachedTarget;
+    final reached = focus.reachedTarget || focus.isFlow;
     final checked =
         habit?.completions[DateTime.now().dayKey]?.steps ?? const <String>{};
     final pending = habit == null
@@ -127,8 +128,11 @@ class _FocusPageState extends State<FocusPage> {
         : habit.substeps.where((step) => !checked.contains(step.id)).length;
 
     final lines = <String>[
-      if (reached) context.l10n.focus_end_reached,
-      if (!reached)
+      if (focus.isFlow)
+        context.l10n.focus_end_flow(formatHoursShort(focus.elapsedSeconds))
+      else if (reached)
+        context.l10n.focus_end_reached
+      else
         context.l10n.focus_end_short(formatHoursShort(focus.remainingSeconds)),
       if (pending > 0) context.l10n.focus_end_tasks(pending),
     ];
@@ -157,7 +161,7 @@ class _FocusPageState extends State<FocusPage> {
           target != null &&
           target.kind == HabitKind.positive &&
           !target.isCompletedOn(DateTime.now())) {
-        habits.toggle(target.id, DateTime.now());
+        habits.toggle(target.id, DateTime.now(), fromFocus: true);
       }
       AppSnackbar.success(
         context,
@@ -172,7 +176,12 @@ class _FocusPageState extends State<FocusPage> {
     final settings = context.watch<SettingsController>();
     final focus = _focus;
     final habits = context.watch<HabitsController>();
-    final habit = focus.habitId.isEmpty ? null : habits.byId(focus.habitId);
+    final leading = _leadValue > 0;
+    final starting = leading && !focus.isActive;
+    final habitId = starting ? (widget.startHabitId ?? '') : focus.habitId;
+    final habit = habitId.isEmpty ? null : habits.byId(habitId);
+    final leadMinutes =
+        starting ? (widget.startMinutes ?? focus.targetMinutes) : focus.targetMinutes;
     final inset = MediaQuery.viewInsetsOf(context).bottom;
 
     if (!focus.isActive && !_leaving && _leadValue == 0) {
@@ -215,9 +224,11 @@ class _FocusPageState extends State<FocusPage> {
                   immersive: _immersive,
                   onImmersive: _toggleImmersive,
                   title: label,
-                  target: focus.isPomodoro
-                      ? '${context.l10n.minutes_short('${focus.targetMinutes}')}  ·  ${context.l10n.focus_round(focus.round)}'
-                      : context.l10n.minutes_short('${focus.targetMinutes}'),
+                  target: leadMinutes <= 0
+                      ? context.l10n.focus_flowtime
+                      : focus.isPomodoro && !leading
+                          ? '${context.l10n.minutes_short('${focus.targetMinutes}')}  ·  ${context.l10n.focus_round(focus.round)}'
+                          : context.l10n.minutes_short('$leadMinutes'),
                 ),
               );
 
@@ -225,8 +236,10 @@ class _FocusPageState extends State<FocusPage> {
                 animation: focus,
                 builder: (context, _) => FocusClock(
                   style: style,
-                  seconds: focus.remainingSeconds,
-                  progress: focus.progress,
+                  seconds: leading
+                      ? (leadMinutes <= 0 ? 0 : leadMinutes * 60)
+                      : focus.displaySeconds,
+                  progress: leading ? 0 : focus.progress,
                   color: habit?.color ?? context.colors.primary,
                   label: label,
                   size: landscape

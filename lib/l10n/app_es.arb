@@ -490,6 +490,24 @@
   "sort_completed_last": "Completados al final",
   "today_only": "Solo los hábitos de hoy",
   "card_activity": "Actividad en las tarjetas",
+  "focus_only": "Solo con una sesión de foco",
+  "focus_only_hint": "El hábito se marca al terminar una sesión, no al tocarlo.",
+  "focus_only_title": "Necesita una sesión de foco",
+  "focus_only_body": "\"{name}\" se completa al terminar una sesión de foco.",
+  "@focus_only_body": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "focus_only_past": "\"{name}\" solo se completa con una sesión de foco, así que no se pueden marcar días pasados.",
+  "@focus_only_past": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "focus_only_start": "Empezar sesión",
+  "focus_flowtime": "Flowtime",
+  "focus_flowtime_hint": "Sin meta y sin alarma. El reloj cuenta hacia arriba y paras cuando lo veas.",
+  "focus_end_flow": "Te has concentrado {time}.",
+  "@focus_end_flow": {
+    "placeholders": { "time": { "type": "String" } }
+  },
   "on": "Sí",
   "off": "No",
   "checklist": "Lista de tareas",

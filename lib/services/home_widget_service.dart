@@ -145,6 +145,7 @@ class HomeWidgetService {
         'cover': habit.coverPath,
         'completions': dates.map(habit.isCompletedOn).toList(),
         'kind': habit.kind.index,
+        'focusOnly': habit.needsFocusSession,
         'streak': habit.currentStreak,
         'perDayTarget': habit.effectiveTarget,
         'incrementAmount': habit.incrementAmount,

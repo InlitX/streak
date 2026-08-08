@@ -37,6 +37,7 @@ import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -99,6 +100,8 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
         }
 
         Future<void> toggleDay(DateTime date) async {
+          if (!await allowManualCheck(context, habit: habit, date: date)) return;
+          if (!context.mounted) return;
           final allowed =
               await confirmUnscheduledDay(context, habit: habit, date: date);
           if (!allowed) return;

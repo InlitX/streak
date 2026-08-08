@@ -227,4 +227,36 @@ void main() {
       expect(habit.isCompletedOn(today), isTrue);
     });
   });
+
+  group('focus only', () {
+    test('a manual check is blocked, a focus one is not', () {
+      final habit = _base().copyWith(focusOnly: true);
+      expect(habit.blocksManualCheck(today), isTrue);
+      expect(habit.blocksManualCheck(today, fromFocus: true), isFalse);
+    });
+
+    test('an already completed day can still be undone', () {
+      var habit = _base().copyWith(focusOnly: true);
+      habit = habit.copyWith(completions: CompletionOps.toggle(habit, today));
+      expect(habit.isCompletedOn(today), isTrue);
+      expect(habit.blocksManualCheck(today), isFalse);
+    });
+
+    test('past days are blocked too', () {
+      final habit = _base().copyWith(focusOnly: true);
+      expect(
+        habit.blocksManualCheck(today.subtract(const Duration(days: 3))),
+        isTrue,
+      );
+    });
+
+    test('it does not apply to checklists or to other kinds', () {
+      final checklist = _base(substeps: steps).copyWith(focusOnly: true);
+      expect(checklist.blocksManualCheck(today), isFalse);
+
+      final quantitative =
+          _base(kind: HabitKind.quantitative).copyWith(focusOnly: true);
+      expect(quantitative.blocksManualCheck(today), isFalse);
+    });
+  });
 }

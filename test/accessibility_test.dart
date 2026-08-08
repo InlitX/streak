@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak/app/home_shell.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -89,6 +90,14 @@ void main() {
       ),
     );
     expect(find.bySemanticsLabel('Add step'), findsOneWidget);
+
+    await tester.drag(
+      find.byType(Scrollable).first,
+      const Offset(0, -300),
+      warnIfMissed: false,
+    );
+    await tester.pumpAndSettle();
+
     expect(find.bySemanticsLabel('dumbbell'), findsOneWidget);
     handle.dispose();
   });

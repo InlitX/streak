@@ -116,17 +116,27 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 22),
-                  Entrance(
-                    index: habits.length + 3,
-                    delay: _entrance,
-                    child: FocusPomodoroCard(
-                      enabled: _pomodoro,
-                      breakMinutes: _breakMinutes,
-                      onToggle: (v) => setState(() => _pomodoro = v),
-                      onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                  if (_minutes > 0) ...[
+                    const SizedBox(height: 22),
+                    Entrance(
+                      index: habits.length + 3,
+                      delay: _entrance,
+                      child: FocusPomodoroCard(
+                        enabled: _pomodoro,
+                        breakMinutes: _breakMinutes,
+                        onToggle: (v) => setState(() => _pomodoro = v),
+                        onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                      ),
                     ),
-                  ),
+                  ],
+                  if (_minutes <= 0) ...[
+                    const SizedBox(height: 14),
+                    Entrance(
+                      index: habits.length + 3,
+                      delay: _entrance,
+                      child: _FlowHint(),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -158,6 +168,38 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FlowHint extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final accent = context.colors.primary;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: accent.withValues(alpha: 0.25)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(LucideIcons.infinity, size: 18, color: accent),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              context.l10n.focus_flowtime_hint,
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.4,
+                color: context.tokens.muted,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

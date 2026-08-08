@@ -18,6 +18,7 @@ import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/habits/widgets/habit_form_basics.dart';
+import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
@@ -59,6 +60,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
   double _quantTarget = 8;
   double _quantIncrement = 1;
   String _bookCover = '';
+  bool _focusOnly = false;
+  int _focusMinutes = 25;
+  bool _pomodoro = false;
+  int _breakMinutes = 5;
   late List<Substep> _substeps;
 
   bool get _kindLocked => widget.isEditing;
@@ -100,6 +105,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _quantTarget = habit.kind == HabitKind.quantitative ? habit.perDayTarget : 8;
       _quantIncrement = habit.incrementAmount;
       _bookCover = habit.bookCoverPath;
+      _focusOnly = habit.focusOnly;
+      _focusMinutes = habit.focusMinutes;
+      _pomodoro = habit.focusBreakMinutes > 0;
+      if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
       _substeps = List.of(habit.substeps);
     } else {
       _reminders = [];
@@ -143,7 +152,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
     final negative = _kind == HabitKind.negative;
     final interval = negative ? HabitInterval.daily : _interval;
     final frequency = negative ? 1 : _frequency;
-    final substeps = _kind == HabitKind.positive
+    final focusOnly = _kind == HabitKind.positive && _focusOnly;
+    final substeps = _kind == HabitKind.positive && !focusOnly
         ? _substeps.where((s) => s.title.trim().isNotEmpty).toList()
         : <Substep>[];
 
@@ -167,6 +177,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
               quantitative ? _quantIncrement : widget.habit!.incrementAmount,
           quantKind: quantitative ? _quantKind : widget.habit!.quantKind,
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
+          focusOnly: focusOnly,
+          focusMinutes: _focusMinutes,
+          focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
           substeps: substeps,
         ),
       );
@@ -189,6 +202,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
         incrementAmount: quantitative ? _quantIncrement : 1,
         quantKind: quantitative ? _quantKind : QuantKind.generic,
         bookCoverPath: quantitative ? _bookCover : '',
+        focusOnly: focusOnly,
+        focusMinutes: _focusMinutes,
+        focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
         substeps: substeps,
       );
     }
@@ -413,12 +429,38 @@ class _HabitFormPageState extends State<HabitFormPage> {
       ],
       if (_kind == HabitKind.positive) ...[
         const SizedBox(height: 16),
-        SectionLabel(context.l10n.checklist),
-        CompactSubstepsEditor(
-          substeps: _substeps,
+        FocusOnlyToggle(
+          value: _focusOnly,
           color: _color,
-          onChanged: (list) => _substeps = list,
+          compact: true,
+          onChanged: (v) => setState(() => _focusOnly = v),
         ),
+        if (_focusOnly) ...[
+          const SizedBox(height: 16),
+          SectionLabel(context.l10n.focus_duration),
+          FocusDurationChips(
+            minutes: _focusMinutes,
+            onChanged: (v) => setState(() => _focusMinutes = v),
+          ),
+          if (_focusMinutes > 0) ...[
+            const SizedBox(height: 12),
+            FocusPomodoroCard(
+              enabled: _pomodoro,
+              breakMinutes: _breakMinutes,
+              onToggle: (v) => setState(() => _pomodoro = v),
+              onBreakChanged: (v) => setState(() => _breakMinutes = v),
+            ),
+          ],
+        ],
+        if (!_focusOnly) ...[
+          const SizedBox(height: 16),
+          SectionLabel(context.l10n.checklist),
+          CompactSubstepsEditor(
+            substeps: _substeps,
+            color: _color,
+            onChanged: (list) => _substeps = list,
+          ),
+        ],
       ],
       const SizedBox(height: 16),
       SectionLabel(context.l10n.icon),
@@ -607,12 +649,37 @@ class _HabitFormPageState extends State<HabitFormPage> {
               ],
               if (_kind == HabitKind.positive) ...[
                 const SizedBox(height: 20),
-                SectionLabel(context.l10n.checklist),
-                SubstepsEditor(
-                  substeps: _substeps,
+                FocusOnlyToggle(
+                  value: _focusOnly,
                   color: _color,
-                  onChanged: (list) => _substeps = list,
+                  onChanged: (v) => setState(() => _focusOnly = v),
                 ),
+                if (_focusOnly) ...[
+                  const SizedBox(height: 20),
+                  SectionLabel(context.l10n.focus_duration),
+                  FocusDurationChips(
+                    minutes: _focusMinutes,
+                    onChanged: (v) => setState(() => _focusMinutes = v),
+                  ),
+                  if (_focusMinutes > 0) ...[
+                    const SizedBox(height: 12),
+                    FocusPomodoroCard(
+                      enabled: _pomodoro,
+                      breakMinutes: _breakMinutes,
+                      onToggle: (v) => setState(() => _pomodoro = v),
+                      onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                    ),
+                  ],
+                ],
+                if (!_focusOnly) ...[
+                  const SizedBox(height: 20),
+                  SectionLabel(context.l10n.checklist),
+                  SubstepsEditor(
+                    substeps: _substeps,
+                    color: _color,
+                    onChanged: (list) => _substeps = list,
+                  ),
+                ],
               ],
               const SizedBox(height: 20),
               SectionLabel(context.l10n.icon),

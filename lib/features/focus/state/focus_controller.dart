@@ -29,6 +29,10 @@ class FocusController extends ChangeNotifier {
     final map = Map<String, dynamic>.from(raw as Map);
     _habitId = (map['habitId'] ?? '') as String;
     _targetMinutes = ((map['target'] ?? 25) as num).toInt();
+    _focusMinutes = ((map['focus'] ?? _targetMinutes) as num).toInt();
+    _breakMinutes = ((map['break'] ?? 0) as num).toInt();
+    _isBreak = (map['isBreak'] ?? false) as bool;
+    _round = ((map['round'] ?? 1) as num).toInt();
     _accumulated = ((map['acc'] ?? 0) as num).toInt();
     final since = (map['since'] ?? '') as String;
     _since = since.isEmpty ? null : DateTime.tryParse(since);
@@ -40,6 +44,10 @@ class FocusController extends ChangeNotifier {
     LocalStore.writeSetting('focusActive', {
       'habitId': _habitId,
       'target': _targetMinutes,
+      'focus': _focusMinutes,
+      'break': _breakMinutes,
+      'isBreak': _isBreak,
+      'round': _round,
       'acc': _accumulated,
       'since': _since?.toIso8601String() ?? '',
       'open': _open,
@@ -92,13 +100,18 @@ class FocusController extends ChangeNotifier {
     return _accumulated + live;
   }
 
+  bool get isFlow => _targetMinutes <= 0;
+
   int get remainingSeconds =>
-      (targetSeconds - elapsedSeconds).clamp(0, targetSeconds);
+      isFlow ? 0 : (targetSeconds - elapsedSeconds).clamp(0, targetSeconds);
 
-  double get progress =>
-      targetSeconds == 0 ? 0 : (elapsedSeconds / targetSeconds).clamp(0.0, 1.0);
+  int get displaySeconds => isFlow ? elapsedSeconds : remainingSeconds;
 
-  bool get reachedTarget => elapsedSeconds >= targetSeconds;
+  double get progress => isFlow
+      ? (elapsedSeconds % 60) / 60
+      : (elapsedSeconds / targetSeconds).clamp(0.0, 1.0);
+
+  bool get reachedTarget => !isFlow && elapsedSeconds >= targetSeconds;
 
   void start({
     required String habitId,
@@ -108,7 +121,7 @@ class FocusController extends ChangeNotifier {
     _habitId = habitId;
     _targetMinutes = targetMinutes;
     _focusMinutes = targetMinutes;
-    _breakMinutes = breakMinutes;
+    _breakMinutes = targetMinutes <= 0 ? 0 : breakMinutes;
     _isBreak = false;
     _round = 1;
     _open = true;

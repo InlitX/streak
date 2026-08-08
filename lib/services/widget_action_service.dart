@@ -71,7 +71,10 @@ class WidgetActionService {
     final delta = double.tryParse(uri.queryParameters['delta'] ?? '') ??
         habit.incrementAmount;
 
-    final completions = switch (uri.queryParameters['action'] ?? 'toggle') {
+    final action = uri.queryParameters['action'] ?? 'toggle';
+    if (action == 'toggle' && habit.blocksManualCheck(target)) return null;
+
+    final completions = switch (action) {
       'relapse' => habit.completions.containsKey(target.dayKey)
           ? CompletionOps.clearRelapse(habit, target)
           : CompletionOps.logRelapse(habit, target),

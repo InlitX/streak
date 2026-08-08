@@ -12,16 +12,18 @@ class FocusDurationChips extends StatelessWidget {
     super.key,
     required this.minutes,
     required this.onChanged,
+    this.allowFlow = true,
   });
 
   final int minutes;
   final ValueChanged<int> onChanged;
+  final bool allowFlow;
 
   Future<void> _pickCustom(BuildContext context) async {
     final value = await showNumberKeypadDialog(
       context,
       title: context.l10n.focus_duration,
-      value: minutes.toDouble(),
+      value: minutes < 1 ? 25 : minutes.toDouble(),
       unit: context.l10n.unit_min_short,
       min: 1,
     );
@@ -30,6 +32,7 @@ class FocusDurationChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final flow = minutes <= 0;
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -40,13 +43,20 @@ class FocusDurationChips extends StatelessWidget {
             selected: minutes == preset,
             onTap: () => onChanged(preset),
           ),
-        if (!focusPresets.contains(minutes))
+        if (!flow && !focusPresets.contains(minutes))
           _DurationChip(
             label: context.l10n.minutes_short('$minutes'),
             selected: true,
             onTap: () => _pickCustom(context),
           ),
         _PencilButton(onTap: () => _pickCustom(context)),
+        if (allowFlow)
+          _DurationChip(
+            label: context.l10n.focus_flowtime,
+            selected: flow,
+            icon: LucideIcons.infinity,
+            onTap: () => onChanged(0),
+          ),
       ],
     );
   }
@@ -164,11 +174,13 @@ class _DurationChip extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.icon,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +206,14 @@ class _DurationChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 15,
+                  color: selected ? accent : context.tokens.muted,
+                ),
+                const SizedBox(width: 6),
+              ],
               Text(
                 label,
                 style: TextStyle(

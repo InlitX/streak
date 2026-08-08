@@ -23,6 +23,7 @@ import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -353,6 +354,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();
+    if (!await allowManualCheck(context, habit: habit, date: date)) return;
+    if (!mounted) return;
     if (!await confirmUnscheduledDay(context, habit: habit, date: date)) return;
 
     final id = habit.id;

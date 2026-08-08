@@ -301,7 +301,7 @@ class _SessionTile extends StatelessWidget {
                       Text(
                         '${DateFormat.Hm(locale).format(session.startedAt)}'
                         '  ·  '
-                        '${context.l10n.minutes_short('${session.targetMinutes}')}',
+                        '${session.targetMinutes <= 0 ? context.l10n.focus_flowtime : context.l10n.minutes_short('${session.targetMinutes}')}',
                         style: TextStyle(
                           fontSize: 12.5,
                           color: context.tokens.muted,

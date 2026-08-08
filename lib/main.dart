@@ -6,6 +6,7 @@ import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
@@ -36,6 +37,10 @@ Future<void> main() async {
       final id = call.arguments as String?;
       if (id != null) _openHabit(id);
     }
+    if (call.method == 'startFocus') {
+      final id = call.arguments as String?;
+      if (id != null) _startFocus(id);
+    }
     return null;
   });
 
@@ -47,6 +52,8 @@ Future<void> main() async {
     }
     final launched = await _appChannel.invokeMethod<String>('consumeLaunchHabit');
     if (launched != null) _openHabit(launched);
+    final focusOn = await _appChannel.invokeMethod<String>('consumeLaunchFocus');
+    if (focusOn != null) _startFocus(focusOn);
   });
 
   runApp(
@@ -74,6 +81,25 @@ const _appChannel = MethodChannel('streak/app_icon');
 
 void _openHabit(String habitId) {
   AppNavigator.push(HabitDetailsPage(habitId: habitId), fade: true);
+}
+
+void _startFocus(String habitId) {
+  final context = AppNavigator.key.currentContext;
+  if (context == null) return;
+  if (context.read<FocusController>().isActive) {
+    AppNavigator.push(const FocusPage(), fade: true);
+    return;
+  }
+  final habit = context.read<HabitsController>().byId(habitId);
+  if (habit == null) return;
+  AppNavigator.push(
+    FocusPage(
+      startHabitId: habit.id,
+      startMinutes: habit.focusMinutes,
+      breakMinutes: habit.focusBreakMinutes,
+    ),
+    fade: true,
+  );
 }
 
 @pragma('vm:entry-point')

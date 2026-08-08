@@ -59,6 +59,7 @@ class Habit {
     this.bookCoverPath = '',
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
+    this.focusOnly = false,
     this.substeps = const [],
     this.vacations = const [],
     this.restDays = const [],
@@ -112,6 +113,13 @@ class Habit {
 
   final int focusMinutes;
   final int focusBreakMinutes;
+  final bool focusOnly;
+
+  bool get needsFocusSession =>
+      focusOnly && kind == HabitKind.positive && substeps.isEmpty;
+
+  bool blocksManualCheck(DateTime date, {bool fromFocus = false}) =>
+      needsFocusSession && !fromFocus && !isCompletedOn(date);
 
   final List<Substep> substeps;
 
@@ -447,6 +455,7 @@ class Habit {
     String? bookCoverPath,
     int? focusMinutes,
     int? focusBreakMinutes,
+    bool? focusOnly,
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
     List<int>? restDays,
@@ -476,6 +485,7 @@ class Habit {
       quantKind: quantKind ?? this.quantKind,
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
       focusMinutes: focusMinutes ?? this.focusMinutes,
+      focusOnly: focusOnly ?? this.focusOnly,
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
@@ -510,6 +520,7 @@ class Habit {
         'bookCoverPath': bookCoverPath,
         'focusMinutes': focusMinutes,
         'focusBreakMinutes': focusBreakMinutes,
+        'focusOnly': focusOnly,
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
@@ -557,6 +568,7 @@ class Habit {
         focusMinutes: ((map['focusMinutes'] ?? 25) as num).toInt(),
         focusBreakMinutes:
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
+        focusOnly: (map['focusOnly'] ?? false) as bool,
         substeps: map['substeps'] == null
             ? const []
             : (map['substeps'] as List)

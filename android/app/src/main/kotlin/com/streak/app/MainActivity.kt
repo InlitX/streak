@@ -30,6 +30,7 @@ class MainActivity : FlutterFragmentActivity() {
                         result.success(true)
                     }
                     "consumeLaunchHabit" -> result.success(takeHabitId(intent))
+                    "consumeLaunchFocus" -> result.success(takeFocusId(intent))
                     else -> result.notImplemented()
                 }
             }
@@ -47,11 +48,19 @@ class MainActivity : FlutterFragmentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         takeHabitId(intent)?.let { channel?.invokeMethod("openHabit", it) }
+        takeFocusId(intent)?.let { channel?.invokeMethod("startFocus", it) }
     }
 
     private fun takeHabitId(intent: Intent?): String? {
         val habitId = intent?.getStringExtra("openHabitId") ?: return null
         intent.removeExtra("openHabitId")
+        return habitId
+    }
+
+    private fun takeFocusId(intent: Intent?): String? {
+        val key = WidgetActionReceiver.EXTRA_START_FOCUS
+        val habitId = intent?.getStringExtra(key) ?: return null
+        intent.removeExtra(key)
         return habitId
     }
 

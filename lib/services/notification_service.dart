@@ -416,6 +416,8 @@ class NotificationActions {
         completions = CompletionOps.addProgress(habit, today, amount);
       } else if (habit.isCompletedOn(today)) {
         return;
+      } else if (habit.blocksManualCheck(today)) {
+        return;
       } else if (NotificationService.takesAmount(habit)) {
         completions =
             CompletionOps.addProgress(habit, today, habit.incrementAmount);
