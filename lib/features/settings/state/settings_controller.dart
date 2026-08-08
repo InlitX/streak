@@ -50,6 +50,7 @@ class SettingsController extends ChangeNotifier {
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
+    _cardActivity = LocalStore.setting('cardActivity', true);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
@@ -96,6 +97,7 @@ class SettingsController extends ChangeNotifier {
   late int _appIcon;
   late int _accentColor;
   late int _heatmapMode;
+  late bool _cardActivity;
   late int _appStyle;
   late bool _sortCompletedLast;
   late bool _todayOnly;
@@ -151,6 +153,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setHeatmapMode(int value) async {
     _heatmapMode = value;
     await LocalStore.writeSetting('heatmapMode', value);
+    notifyListeners();
+  }
+
+  bool get cardActivity => _cardActivity;
+
+  Future<void> setCardActivity(bool value) async {
+    _cardActivity = value;
+    await LocalStore.writeSetting('cardActivity', value);
     notifyListeners();
   }
 

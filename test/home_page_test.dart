@@ -69,6 +69,24 @@ void main() {
       expect(find.byType(HabitCard), findsNothing);
       expect(find.text('Add habit'), findsOneWidget);
     });
+
+    testWidgets('hiding the activity drops the grids and the view selector',
+        (tester) async {
+      await _seedThree(tester);
+      await pumpScreen(
+        tester,
+        const HomePage(),
+        settings: {
+          'heatmapMode': HeatmapMode.week.index,
+          'cardActivity': false,
+        },
+      );
+
+      expect(find.byType(HabitCard), findsNWidgets(3));
+      expect(find.byType(HabitHeatmap), findsNothing);
+      expect(find.text('Week'), findsNothing);
+    });
+
   });
 
   group('minimal', () {

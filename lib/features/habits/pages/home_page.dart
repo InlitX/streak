@@ -259,6 +259,9 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 final categories = _categoriesOf(all);
+                if (_category != null && !categories.contains(_category)) {
+                  _category = null;
+                }
                 final listed = settings.todayOnly
                     ? all.where((h) => h.isScheduledOn(today)).toList()
                     : all;
@@ -278,10 +281,10 @@ class _HomePageState extends State<HomePage> {
                           if (!minimal) const DailyQuote(),
                           if (!minimal) const SizedBox(height: 8),
                           if (!minimal) TodayProgress(done: done, total: total),
-                          if (!minimal) const SizedBox(height: 20),
-
-                          if (!minimal)
+                          if (!minimal && settings.cardActivity) ...[
+                            const SizedBox(height: 20),
                             _ViewSelector(mode: _mode, onChanged: _changeMode),
+                          ],
                           if (categories.isNotEmpty) ...[
                             const SizedBox(height: 14),
                             _CategoryBar(

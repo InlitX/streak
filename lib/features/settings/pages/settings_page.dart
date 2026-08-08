@@ -334,6 +334,16 @@ class _ClassicPreferencesPage extends StatelessWidget {
         ),
         settingsDivider(context),
         SettingRow(
+          icon: LucideIcons.layoutGrid,
+          title: context.l10n.card_activity,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.cardActivity ? 1 : 0,
+            onChanged: (i) => settings.setCardActivity(i == 1),
+          ),
+        ),
+        settingsDivider(context),
+        SettingRow(
           icon: LucideIcons.notebookPen,
           title: context.l10n.notes,
           trailing: Segmented(

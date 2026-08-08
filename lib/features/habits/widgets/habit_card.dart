@@ -42,7 +42,8 @@ class HabitCard extends StatelessWidget {
     final scheme = context.colors;
     final doneToday = habit.isCompletedOn(AppClock.now());
     final streak = habit.currentStreak;
-    final circleCheck = context.watch<SettingsController>().isCircleCheck;
+    final settings = context.watch<SettingsController>();
+    final circleCheck = settings.isCircleCheck;
     final hasCover = CoverImage.exists(habit.coverPath);
 
     return Card(
@@ -201,52 +202,55 @@ class HabitCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    AnimatedSize(
-                      duration: const Duration(milliseconds: 420),
-                      curve: Curves.easeOutCubic,
-                      alignment: Alignment.topCenter,
-                      child: ClipRect(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 420),
-                          switchInCurve: const Interval(
-                            0.45,
-                            1,
-                            curve: Curves.easeOutCubic,
-                          ),
-                          switchOutCurve: const Interval(
-                            0.6,
-                            1,
-                            curve: Curves.easeIn,
-                          ),
-                          transitionBuilder: (child, animation) => FadeTransition(
-                            opacity: animation,
-                            child: SlideTransition(
-                              position: Tween(
-                                begin: const Offset(0, 0.05),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: child,
+                    if (settings.cardActivity) ...[
+                      const SizedBox(height: 16),
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 420),
+                        curve: Curves.easeOutCubic,
+                        alignment: Alignment.topCenter,
+                        child: ClipRect(
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 420),
+                            switchInCurve: const Interval(
+                              0.45,
+                              1,
+                              curve: Curves.easeOutCubic,
                             ),
-                          ),
-                          layoutBuilder: (current, previous) => Stack(
-                            alignment: Alignment.topCenter,
-                            children: [
-                              for (final child in previous)
-                                Positioned(left: 0, right: 0, child: child),
-                              if (current != null) current,
-                            ],
-                          ),
-                          child: HabitHeatmap(
-                            key: ValueKey(mode),
-                            habit: habit,
-                            mode: mode,
-                            compact: true,
-                            circle: circleCheck,
+                            switchOutCurve: const Interval(
+                              0.6,
+                              1,
+                              curve: Curves.easeIn,
+                            ),
+                            transitionBuilder: (child, animation) =>
+                                FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween(
+                                  begin: const Offset(0, 0.05),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            ),
+                            layoutBuilder: (current, previous) => Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                for (final child in previous)
+                                  Positioned(left: 0, right: 0, child: child),
+                                if (current != null) current,
+                              ],
+                            ),
+                            child: HabitHeatmap(
+                              key: ValueKey(mode),
+                              habit: habit,
+                              mode: mode,
+                              compact: true,
+                              circle: circleCheck,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
