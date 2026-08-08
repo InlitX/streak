@@ -40,6 +40,8 @@
 <a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Доступно на OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
 &nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Доступно на GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+&nbsp;
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.streak.app%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FInlitX%2Fstreak%22%2C%22author%22%3A%22InlitX%22%2C%22name%22%3A%22Streak%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Afalse%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22filterReleaseNotesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22verifyLatestTag%5C%22%3Afalse%2C%5C%22dontSortReleasesList%5C%22%3Afalse%2C%5C%22useLatestAssetDateAsReleaseDate%5C%22%3Afalse%2C%5C%22trackOnly%5C%22%3Afalse%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22matchGroupToUse%5C%22%3A%5C%22%5C%22%2C%5C%22versionDetection%5C%22%3Atrue%2C%5C%22releaseDateAsVersion%5C%22%3Afalse%2C%5C%22useVersionCodeAsOSVersion%5C%22%3Afalse%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22invertAPKFilter%5C%22%3Afalse%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22%5C%22%2C%5C%22shizukuPretendToBeGooglePlay%5C%22%3Afalse%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22exemptFromBackgroundUpdates%5C%22%3Afalse%2C%5C%22skipUpdateNotifications%5C%22%3Afalse%2C%5C%22about%5C%22%3A%5C%22Streak%20is%20an%20open%20source%20habit%20tracker%20for%20Android.%20Build%20habits%20with%20one%20tap%2C%20watch%20your%20progress%20grow%2C%20and%20keep%20everything%20on%20your%20device.%20No%20accounts%2C%20no%20ads%2C%20no%20tracking.%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img alt="Доступно в Obtainium" src="assets/badges/get-it-on-obtainium.png" height="60" /></a>
 
 <br/>
 
@@ -224,6 +226,11 @@ Streak: трекер привычек с открытым исходным ко�
 | `Streak-x86_64.apk` | Эмуляторы и планшеты x86 |
 
 Работает на **Android 9 (Pie) и новее**.
+
+Если вы устанавливаете APK вручную, [**Obtainium**](https://github.com/ImranR98/Obtainium)
+будет держать его в актуальном состоянии: добавьте
+`https://github.com/InlitX/streak`, и он будет следить за страницей Releases,
+сообщит о новой версии и выберет подходящий APK для вашего телефона.
 
 > [!NOTE]
 > Streak отсутствует в Play Store. Поскольку APK не из магазина, при первой
