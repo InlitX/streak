@@ -121,7 +121,7 @@
   "monthly": "每月",
   "sched_days": "天数",
   "sched_interval": "间隔",
-  "times_per_week": "每周 {n} 次",
+  "times_per_week": "周均 {n} 次",
   "@times_per_week": {
     "placeholders": {
       "n": {
@@ -417,7 +417,7 @@
       }
     }
   },
-  "per_week": "每周",
+  "per_week": "周均打卡次数",
   "focus_end_anyway": "仍要结束",
   "snooze_custom_hint": "分钟",
   "focus_custom_duration": "自定义",
@@ -751,5 +751,6 @@
   "a11y_pick_color": "选择颜色",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "report_issue": "报告问题"
 }
