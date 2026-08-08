@@ -38,6 +38,8 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 <a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Get it on OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
 &nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Get it on GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+&nbsp;
+<a href="obtainium://add?url=https://github.com/InlitX/streak"><img alt="Get it on Obtainium" src="assets/badges/get-it-on-obtainium.png" height="60" /></a>
 
 <br/>
 
@@ -212,6 +214,11 @@ phone type so each download stays small:
 | `Streak-x86_64.apk` | Emulators and x86 tablets |
 
 Runs on **Android 9 (Pie) and newer**.
+
+If you install the APK yourself, [**Obtainium**](https://github.com/ImranR98/Obtainium)
+keeps it updated: add `https://github.com/InlitX/streak` and it will follow the
+Releases page, tell you when a new version is out and pick the right APK for
+your phone.
 
 > [!NOTE]
 > Streak isn't on the Play Store. Since the APK doesn't come from a store,

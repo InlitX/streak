@@ -40,6 +40,8 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 <a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Disponible en OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
 &nbsp;
 <a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+&nbsp;
+<a href="obtainium://add?url=https://github.com/InlitX/streak"><img alt="Disponible en Obtainium" src="assets/badges/get-it-on-obtainium.png" height="60" /></a>
 
 <br/>
 
@@ -225,6 +227,11 @@ teléfono para que cada descarga sea pequeña:
 | `Streak-x86_64.apk` | Emuladores y tablets x86 |
 
 Funciona en **Android 9 (Pie) o superior**.
+
+Si instalas el APK por tu cuenta, [**Obtainium**](https://github.com/ImranR98/Obtainium)
+te lo mantiene al día: añade `https://github.com/InlitX/streak` y seguirá la
+página de Releases, te avisará cuando salga una versión nueva y elegirá el APK
+que le toca a tu teléfono.
 
 > [!NOTE]
 > Streak no está en la Play Store. Como el APK no viene de una tienda, puede que
