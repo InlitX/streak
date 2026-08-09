@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,15 @@ class AppLockService {
   const AppLockService._();
 
   static final _auth = LocalAuthentication();
+  static const _channel = MethodChannel('streak/app_icon');
+
+  static Future<void> setSecure(bool secure) async {
+    try {
+      await _channel.invokeMethod('setSecure', {'secure': secure});
+    } catch (e) {
+      debugPrint('App lock secure flag failed: $e');
+    }
+  }
 
   static Future<bool> isAvailable() async {
     try {
@@ -36,6 +46,15 @@ class AppLockService {
   }
 }
 
+bool appLockNeedsAuth({
+  required DateTime? leftAt,
+  required int graceSeconds,
+  required DateTime now,
+}) {
+  if (graceSeconds <= 0 || leftAt == null) return true;
+  return now.difference(leftAt).inSeconds >= graceSeconds;
+}
+
 class AppLockGate extends StatefulWidget {
   const AppLockGate({super.key, required this.child});
 
@@ -48,13 +67,17 @@ class AppLockGate extends StatefulWidget {
 class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
   bool _locked = false;
   bool _asking = false;
+  DateTime? _leftAt;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.read<SettingsController>().appLock) _lock();
+      if (!context.read<SettingsController>().appLock) return;
+      AppLockService.setSecure(true);
+      _cover();
+      _unlock();
     });
   }
 
@@ -67,16 +90,31 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (!mounted) return;
-    if (state == AppLifecycleState.paused &&
-        context.read<SettingsController>().appLock) {
-      _lock();
+    final settings = context.read<SettingsController>();
+    if (!settings.appLock) return;
+
+    if (state == AppLifecycleState.paused) {
+      _leftAt = DateTime.now();
+      _cover();
+      return;
+    }
+    if (state != AppLifecycleState.resumed || !_locked || _asking) return;
+
+    final ask = appLockNeedsAuth(
+      leftAt: _leftAt,
+      graceSeconds: settings.appLockDelay,
+      now: DateTime.now(),
+    );
+    if (ask) {
+      _unlock();
+    } else {
+      setState(() => _locked = false);
     }
   }
 
-  void _lock() {
+  void _cover() {
     if (_locked) return;
     setState(() => _locked = true);
-    _unlock();
   }
 
   Future<void> _unlock() async {
@@ -84,7 +122,9 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
     _asking = true;
     final ok = await AppLockService.authenticate(context.l10n.app_lock_sub);
     _asking = false;
-    if (ok && mounted) setState(() => _locked = false);
+    if (!ok || !mounted) return;
+    _leftAt = null;
+    setState(() => _locked = false);
   }
 
   @override

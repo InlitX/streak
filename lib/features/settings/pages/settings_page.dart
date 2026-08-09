@@ -279,6 +279,23 @@ class _ClassicPreferencesPage extends StatelessWidget {
             onChanged: (i) => SettingsActions.toggleAppLock(context, i == 1),
           ),
         ),
+        if (settings.appLock) ...[
+          settingsDivider(context),
+          NavRow(
+            icon: LucideIcons.timer,
+            title: context.l10n.app_lock_delay,
+            subtitle: SettingsActions.appLockDelayLabels(context)[
+                SettingsActions.appLockDelayIndex(settings.appLockDelay)],
+            onTap: () => showOptionSheet(
+              context,
+              title: context.l10n.app_lock_delay,
+              options: SettingsActions.appLockDelayLabels(context),
+              index: SettingsActions.appLockDelayIndex(settings.appLockDelay),
+              onSelected: (i) =>
+                  settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
+            ),
+          ),
+        ],
         settingsDivider(context),
         NavRow(
           icon: LucideIcons.moon,

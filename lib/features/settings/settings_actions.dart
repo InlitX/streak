@@ -263,6 +263,7 @@ class SettingsActions {
   static Future<void> toggleAppLock(BuildContext context, bool value) async {
     final settings = context.read<SettingsController>();
     if (!value) {
+      await AppLockService.setSecure(false);
       await settings.setAppLock(false);
       return;
     }
@@ -279,6 +280,7 @@ class SettingsActions {
       AppSnackbar.error(context, context.l10n.app_lock_failed);
       return;
     }
+    await AppLockService.setSecure(true);
     await settings.setAppLock(true);
   }
 
@@ -363,6 +365,20 @@ class SettingsActions {
     );
     if (name != null) await settings.setProfileName(name);
   }
+
+  static const appLockDelays = [0, 30, 60, 300];
+
+  static int appLockDelayIndex(int seconds) {
+    final index = appLockDelays.indexOf(seconds);
+    return index < 0 ? 0 : index;
+  }
+
+  static List<String> appLockDelayLabels(BuildContext context) => [
+        context.l10n.app_lock_delay_instant,
+        context.l10n.app_lock_delay_seconds('30'),
+        context.l10n.minutes_short('1'),
+        context.l10n.minutes_short('5'),
+      ];
 
   static List<String> celebrationLabels(BuildContext context) => [
         context.l10n.celebration_confetti,

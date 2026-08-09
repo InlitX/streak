@@ -186,6 +186,12 @@
   "app_lock_failed": "Couldn't verify it was you",
   "app_lock_title": "Streak is locked",
   "app_lock_unlock": "Unlock",
+  "app_lock_delay": "Lock after",
+  "app_lock_delay_instant": "Immediately",
+  "app_lock_delay_seconds": "{value} seconds",
+  "@app_lock_delay_seconds": {
+    "placeholders": { "value": { "type": "String" } }
+  },
   "note_photos": "Photos",
   "note_take_photo": "Camera",
   "note_pick_photo": "Gallery",

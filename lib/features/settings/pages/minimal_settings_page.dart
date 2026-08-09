@@ -351,6 +351,21 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: (v) => SettingsActions.toggleAppLock(context, v),
               ),
             ),
+            if (settings.appLock)
+              SoftRow(
+                icon: LucideIcons.timer,
+                title: context.l10n.app_lock_delay,
+                value: SettingsActions.appLockDelayLabels(context)[
+                    SettingsActions.appLockDelayIndex(settings.appLockDelay)],
+                onTap: () => showOptionSheet(
+                  context,
+                  title: context.l10n.app_lock_delay,
+                  options: SettingsActions.appLockDelayLabels(context),
+                  index: SettingsActions.appLockDelayIndex(settings.appLockDelay),
+                  onSelected: (i) =>
+                      settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
+                ),
+              ),
             SoftRow(
               icon: LucideIcons.moon,
               title: context.l10n.day_start,

@@ -77,6 +77,7 @@ class SettingsController extends ChangeNotifier {
     _celebration = CelebrationStyle.values[LocalStore.setting('celebration', 0)
         .clamp(0, CelebrationStyle.values.length - 1)];
     _appLock = LocalStore.setting('appLock', false);
+    _appLockDelay = LocalStore.setting('appLockDelay', 0);
     _dayCutoff = LocalStore.setting('dayCutoff', 0);
     AppClock.cutoffHour = _dayCutoff;
     _autoBackup = LocalStore.setting('autoBackup', 0);
@@ -118,6 +119,7 @@ class SettingsController extends ChangeNotifier {
   late List<String> _hiddenTracks;
   late CelebrationStyle _celebration;
   late bool _appLock;
+  late int _appLockDelay;
   late int _dayCutoff;
   late int _autoBackup;
   late String _autoBackupAt;
@@ -247,6 +249,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setFocusDailyGoal(int minutes) async {
     _focusDailyGoal = minutes;
     await LocalStore.writeSetting('focusDailyGoal', minutes);
+    notifyListeners();
+  }
+
+  int get appLockDelay => _appLockDelay;
+
+  Future<void> setAppLockDelay(int seconds) async {
+    _appLockDelay = seconds;
+    await LocalStore.writeSetting('appLockDelay', seconds);
     notifyListeners();
   }
 
