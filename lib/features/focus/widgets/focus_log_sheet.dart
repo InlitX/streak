@@ -1,0 +1,257 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
+
+Future<bool?> showFocusLogSheet(BuildContext context, {String? habitId}) {
+  return showModalBottomSheet<bool>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    backgroundColor: context.colors.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+    ),
+    builder: (_) => _FocusLog(habitId: habitId ?? ''),
+  );
+}
+
+class _FocusLog extends StatefulWidget {
+  const _FocusLog({required this.habitId});
+
+  final String habitId;
+
+  @override
+  State<_FocusLog> createState() => _FocusLogState();
+}
+
+class _FocusLogState extends State<_FocusLog> {
+  late String _habitId = widget.habitId;
+  late DateTime _day = AppClock.now().atMidnight;
+  late TimeOfDay _time = TimeOfDay.fromDateTime(AppClock.now());
+  int _minutes = 25;
+
+  Future<void> _pickDay() async {
+    final today = AppClock.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _day,
+      firstDate: today.subtract(const Duration(days: 730)),
+      lastDate: today,
+    );
+    if (picked != null) setState(() => _day = picked.atMidnight);
+  }
+
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(context: context, initialTime: _time);
+    if (picked != null) setState(() => _time = picked);
+  }
+
+  Future<void> _save() async {
+    await context.read<FocusController>().addSession(
+          habitId: _habitId,
+          startedAt: DateTime(
+            _day.year,
+            _day.month,
+            _day.day,
+            _time.hour,
+            _time.minute,
+          ),
+          minutes: _minutes,
+        );
+    if (mounted) Navigator.of(context).pop(true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final habits = context.watch<HabitsController>().habits;
+    final locale = Localizations.localeOf(context).toString();
+
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 2, bottom: 16),
+              child: Text(
+                context.l10n.focus_log,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: context.colors.onSurface,
+                ),
+              ),
+            ),
+            _Label(context.l10n.focus_pick_habit),
+            SizedBox(
+              height: 42,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  FocusChip(
+                    label: context.l10n.focus_free_session,
+                    icon: LucideIcons.timer,
+                    selected: _habitId.isEmpty,
+                    onTap: () => setState(() => _habitId = ''),
+                  ),
+                  for (final habit in habits) ...[
+                    const SizedBox(width: 8),
+                    FocusChip(
+                      label: habit.name,
+                      selected: _habitId == habit.id,
+                      onTap: () => setState(() => _habitId = habit.id),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 18),
+            Row(
+              children: [
+                Expanded(
+                  child: _PickField(
+                    icon: LucideIcons.calendar,
+                    label: context.l10n.focus_log_date,
+                    value: DateFormat.yMMMd(locale).format(_day),
+                    onTap: _pickDay,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _PickField(
+                    icon: LucideIcons.clock,
+                    label: context.l10n.time,
+                    value: _time.format(context),
+                    onTap: _pickTime,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            _Label(context.l10n.focus_duration),
+            FocusDurationChips(
+              minutes: _minutes,
+              allowFlow: false,
+              onChanged: (value) => setState(() => _minutes = value),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 50,
+              child: FilledButton(
+                onPressed: _save,
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  context.l10n.save,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Label extends StatelessWidget {
+  const _Label(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 2, bottom: 10),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.3,
+          color: context.tokens.muted,
+        ),
+      ),
+    );
+  }
+}
+
+class _PickField extends StatelessWidget {
+  const _PickField({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '$label $value',
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 16, color: context.colors.primary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: context.tokens.muted,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: context.colors.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -84,6 +84,26 @@ class FocusController extends ChangeNotifier {
     _sessions = _sessions.where((s) => !ids.contains(s.id)).toList();
     notifyListeners();
   }
+
+  Future<FocusSession> addSession({
+    required String habitId,
+    required DateTime startedAt,
+    required int minutes,
+  }) async {
+    final session = FocusSession(
+      id: const Uuid().v4(),
+      habitId: habitId,
+      targetMinutes: minutes,
+      seconds: minutes * 60,
+      completed: true,
+      startedAt: startedAt,
+    );
+    _sessions.add(session);
+    await LocalStore.writeFocusSession(session);
+    notifyListeners();
+    return session;
+  }
+
   List<FocusTask> get tasks => List.unmodifiable(_tasks);
   int get pendingTasks => _tasks.where((t) => !t.done).length;
 

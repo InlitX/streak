@@ -38,20 +38,20 @@ class FocusDurationChips extends StatelessWidget {
       runSpacing: 8,
       children: [
         for (final preset in focusPresets)
-          _DurationChip(
+          FocusChip(
             label: context.l10n.minutes_short('$preset'),
             selected: minutes == preset,
             onTap: () => onChanged(preset),
           ),
         if (!flow && !focusPresets.contains(minutes))
-          _DurationChip(
+          FocusChip(
             label: context.l10n.minutes_short('$minutes'),
             selected: true,
             onTap: () => _pickCustom(context),
           ),
         _PencilButton(onTap: () => _pickCustom(context)),
         if (allowFlow)
-          _DurationChip(
+          FocusChip(
             label: context.l10n.focus_flowtime,
             selected: flow,
             icon: LucideIcons.infinity,
@@ -131,7 +131,7 @@ class FocusPomodoroCard extends StatelessWidget {
                   ),
                   for (final value in focusBreakPresets) ...[
                     const SizedBox(width: 8),
-                    _DurationChip(
+                    FocusChip(
                       label: context.l10n.minutes_short('$value'),
                       selected: breakMinutes == value,
                       onTap: () => onBreakChanged(value),
@@ -139,7 +139,7 @@ class FocusPomodoroCard extends StatelessWidget {
                   ],
                   if (!focusBreakPresets.contains(breakMinutes)) ...[
                     const SizedBox(width: 8),
-                    _DurationChip(
+                    FocusChip(
                       label: context.l10n.minutes_short('$breakMinutes'),
                       selected: true,
                       onTap: () {},
@@ -169,8 +169,9 @@ class FocusPomodoroCard extends StatelessWidget {
   }
 }
 
-class _DurationChip extends StatelessWidget {
-  const _DurationChip({
+class FocusChip extends StatelessWidget {
+  const FocusChip({
+    super.key,
     required this.label,
     required this.selected,
     required this.onTap,

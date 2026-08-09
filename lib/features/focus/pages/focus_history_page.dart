@@ -13,6 +13,7 @@ import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_log_sheet.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
@@ -70,6 +71,12 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
         context.l10n.focus_history;
   }
 
+  Future<void> _log() async {
+    final added = await showFocusLogSheet(context, habitId: widget.habitId);
+    if (added != true || !mounted) return;
+    AppSnackbar.success(context, context.l10n.focus_log_saved);
+  }
+
   PreferredSizeWidget _appBar(BuildContext context, List<FocusSession> all) {
     if (!_selecting) {
       return AppBar(
@@ -78,6 +85,13 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
           onPressed: () => AppNavigator.pop(),
         ),
         title: Text(_title(context)),
+        actions: [
+          IconButton(
+            tooltip: context.l10n.focus_log,
+            icon: const Icon(LucideIcons.plus),
+            onPressed: _log,
+          ),
+        ],
       );
     }
     return AppBar(
