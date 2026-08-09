@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 TextStyle statNumber(BuildContext context, double size, {Color? color}) =>
     TextStyle(
@@ -165,6 +167,80 @@ class _DotFieldPainter extends CustomPainter {
   @override
   bool shouldRepaint(_DotFieldPainter old) =>
       old.color != color || old.spacing != spacing;
+}
+
+class StatCard extends StatelessWidget {
+  const StatCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.child,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 44,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.25,
+                        fontWeight: FontWeight.w800,
+                        color: context.colors.onSurface,
+                      ),
+                    ),
+                  ),
+                  StatIconSquare(icon: icon, color: color),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StatIconSquare extends StatelessWidget {
+  const StatIconSquare({super.key, required this.icon, required this.color});
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final tint = minimal ? context.tokens.muted : color;
+    return Container(
+      padding: const EdgeInsets.all(9),
+      decoration: BoxDecoration(
+        color: tint.withValues(alpha: minimal ? 0.10 : 0.16),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(icon, color: tint, size: 18),
+    );
+  }
 }
 
 class MiniStat extends StatelessWidget {

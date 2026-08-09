@@ -8,6 +8,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 
@@ -53,6 +54,11 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
         ),
         title: Text(context.l10n.focus),
         actions: [
+          IconButton(
+            tooltip: context.l10n.focus_stats,
+            icon: const Icon(LucideIcons.chartColumn),
+            onPressed: () => AppNavigator.push(const FocusStatsPage()),
+          ),
           IconButton(
             tooltip: context.l10n.focus_history,
             icon: const Icon(LucideIcons.history),

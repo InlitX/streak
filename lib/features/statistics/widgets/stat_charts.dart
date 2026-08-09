@@ -21,8 +21,37 @@ class WeekdayBars extends StatelessWidget {
     final labels = WeekdayLabels.narrowMonFirst(
       Localizations.localeOf(context).languageCode,
     );
-    final maxV = (values.isEmpty ? 0 : values.reduce((a, b) => a > b ? a : b))
-        .toDouble();
+    return ValueBars(
+      values: [for (final value in values) value.toDouble()],
+      color: color,
+      height: height,
+      label: (index) => labels[index % 7],
+      tooltip: (value) => '${value.round()}',
+    );
+  }
+}
+
+class ValueBars extends StatelessWidget {
+  const ValueBars({
+    super.key,
+    required this.values,
+    required this.color,
+    required this.label,
+    required this.tooltip,
+    this.height = 150,
+    this.barWidth = 12,
+  });
+
+  final List<double> values;
+  final Color color;
+  final String Function(int index) label;
+  final String Function(double value) tooltip;
+  final double height;
+  final double barWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxV = values.isEmpty ? 0.0 : values.reduce((a, b) => a > b ? a : b);
     final maxY = (maxV <= 0 ? 1.0 : maxV) * 1.2;
 
     return SizedBox(
@@ -37,7 +66,7 @@ class WeekdayBars extends StatelessWidget {
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => context.colors.surfaceContainerHighest,
               getTooltipItem: (group, _, rod, __) => BarTooltipItem(
-                '${rod.toY.round()}',
+                tooltip(rod.toY),
                 TextStyle(
                   color: context.colors.onSurface,
                   fontWeight: FontWeight.w700,
@@ -59,7 +88,7 @@ class WeekdayBars extends StatelessWidget {
                 getTitlesWidget: (value, _) => Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
-                    labels[value.toInt() % 7],
+                    label(value.toInt()),
                     style: TextStyle(
                       color: context.tokens.muted,
                       fontSize: 12,
@@ -71,21 +100,20 @@ class WeekdayBars extends StatelessWidget {
             ),
           ),
           barGroups: [
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < values.length; i++)
               BarChartGroupData(
                 x: i,
                 barRods: [
                   BarChartRodData(
-                    toY: values[i].toDouble(),
+                    toY: values[i],
                     color: color,
-                    width: 12,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(6),
+                    width: barWidth,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(barWidth / 2),
                     ),
                     backDrawRodData: BackgroundBarChartRodData(
                       show: true,
                       toY: maxY,
-
                       color: context.colors.surfaceContainerHighest
                           .withValues(alpha: 0.22),
                     ),
@@ -100,9 +128,10 @@ class WeekdayBars extends StatelessWidget {
 }
 
 class HabitRanking extends StatefulWidget {
-  const HabitRanking({super.key, required this.entries});
+  const HabitRanking({super.key, required this.entries, this.format});
 
   final List<({String name, Color color, int count})> entries;
+  final String Function(int value)? format;
 
   @override
   State<HabitRanking> createState() => _HabitRankingState();
@@ -131,6 +160,7 @@ class _HabitRankingState extends State<HabitRanking>
   @override
   Widget build(BuildContext context) {
     final entries = widget.entries;
+    final format = widget.format;
     if (entries.isEmpty) return const SizedBox.shrink();
     final max = entries.map((e) => e.count).reduce((a, b) => a > b ? a : b);
 
@@ -179,13 +209,18 @@ class _HabitRankingState extends State<HabitRanking>
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
-                  width: 34,
+                  width: format == null ? 34 : 58,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: AnimatedStatNumber(
-                      value: '${entries[i].count}',
-                      style: statNumber(context, 14),
-                    ),
+                    child: format == null
+                        ? AnimatedStatNumber(
+                            value: '${entries[i].count}',
+                            style: statNumber(context, 14),
+                          )
+                        : Text(
+                            format(entries[i].count),
+                            style: statNumber(context, 13),
+                          ),
                   ),
                 ),
               ],
