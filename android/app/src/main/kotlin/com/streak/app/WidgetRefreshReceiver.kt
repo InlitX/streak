@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import java.util.Calendar
 
 class WidgetRefreshReceiver : BroadcastReceiver() {
@@ -48,11 +49,16 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
                     set(Calendar.SECOND, 5)
                     set(Calendar.MILLISECOND, 0)
                 }
-                context.getSystemService(AlarmManager::class.java).set(
-                    AlarmManager.RTC,
-                    next.timeInMillis,
-                    pending(context),
-                )
+                val alarms = context.getSystemService(AlarmManager::class.java)
+                val at = next.timeInMillis
+                val intent = pending(context)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+                    alarms.canScheduleExactAlarms()
+                ) {
+                    alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, intent)
+                } else {
+                    alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, intent)
+                }
             } catch (e: Exception) {
                 return
             }
