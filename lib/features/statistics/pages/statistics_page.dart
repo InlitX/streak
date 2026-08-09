@@ -8,7 +8,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
-import 'package:streak/features/focus/pages/focus_history_page.dart';
+import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -78,7 +78,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
             final currentYear = AppClock.now().year;
 
             return ListView(
-              padding: EdgeInsets.fromLTRB(16, minimal ? 0 : 8, 16, 104),
+              padding: EdgeInsets.fromLTRB(
+                16,
+                minimal ? 0 : 8,
+                16,
+                minimal ? 28 : 104,
+              ),
               children: [
                 if (minimal)
                   Padding(
@@ -179,7 +184,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 const SizedBox(height: 16),
                 StatReveal(
                   child: _PerfectStreakCard(
-                    streak: stats.currentStreak,
+                    streak: stats.perfectStreak,
+                    best: stats.bestPerfectStreak,
                     color: accent,
                   ),
                 ),
@@ -187,7 +193,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 _TrendCard(stats: stats, color: accent),
                 const SizedBox(height: 16),
                 StatReveal(
-                  child: _ChartCard(
+                  child: StatCard(
                     title: context.l10n.completions_per_month,
                     icon: LucideIcons.chartSpline,
                     color: accent,
@@ -207,7 +213,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: _ChartCard(
+                        child: StatCard(
                           title: context.l10n.completion_rate_short,
                           icon: LucideIcons.target,
                           color: accent,
@@ -223,7 +229,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _ChartCard(
+                        child: StatCard(
                           title: context.l10n.when_best,
                           icon: LucideIcons.calendarDays,
                           color: accent,
@@ -239,7 +245,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 const SizedBox(height: 16),
                 StatReveal(
-                  child: _ChartCard(
+                  child: StatCard(
                     title: context.l10n.completion_time,
                     icon: LucideIcons.clock,
                     color: accent,
@@ -252,7 +258,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 if (_habitId == null && all.length > 1) ...[
                   const SizedBox(height: 16),
                   StatReveal(
-                    child: _ChartCard(
+                    child: StatCard(
                       title: context.l10n.by_habit,
                       icon: LucideIcons.chartPie,
                       color: accent,
@@ -316,7 +322,7 @@ class _RankingCardState extends State<_RankingCard> {
     final entries = widget.entries;
     final shown = _expanded ? entries : entries.take(_collapsed).toList();
 
-    return _ChartCard(
+    return StatCard(
       title: context.l10n.ranking,
       icon: LucideIcons.listOrdered,
       color: widget.accent,
@@ -368,7 +374,7 @@ class _TrendCard extends StatelessWidget {
     final start = AppClock.now().atMidnight.subtract(
           const Duration(days: HabitStats.window - 1),
         );
-    return _ChartCard(
+    return StatCard(
       title: context.l10n.streak_evolution,
       icon: LucideIcons.trendingUp,
       color: color,
@@ -467,9 +473,14 @@ class _SecondaryStats extends StatelessWidget {
 }
 
 class _PerfectStreakCard extends StatelessWidget {
-  const _PerfectStreakCard({required this.streak, required this.color});
+  const _PerfectStreakCard({
+    required this.streak,
+    required this.best,
+    required this.color,
+  });
 
   final int streak;
+  final int best;
   final Color color;
 
   @override
@@ -489,65 +500,51 @@ class _PerfectStreakCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          color: context.colors.onSurface,
-        ),
-      ),
-    );
-  }
-}
-
-class _ChartCard extends StatelessWidget {
-  const _ChartCard({
-    required this.title,
-    required this.icon,
-    required this.color,
-    required this.child,
-  });
-
-  final String title;
-  final IconData icon;
-  final Color color;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 44,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.25,
-                        fontWeight: FontWeight.w800,
-                        color: context.colors.onSurface,
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  context.l10n.perfect_streak.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.1,
+                    color: context.tokens.muted,
+                  ),
+                ),
+              ),
+              if (best > 0) ...[
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Text(
+                    '${context.l10n.best_streak}  $best',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: context.tokens.muted,
                     ),
                   ),
-                  _IconSquare(icon: icon, color: color),
-                ],
-              ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: context.colors.onSurface,
             ),
-            const SizedBox(height: 12),
-            child,
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -571,27 +568,6 @@ class _ChartPlaceholder extends StatelessWidget {
   }
 }
 
-class _IconSquare extends StatelessWidget {
-  const _IconSquare({required this.icon, required this.color});
-
-  final IconData icon;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final minimal = context.watch<SettingsController>().isMinimalStyle;
-    final tint = minimal ? context.tokens.muted : color;
-    return Container(
-      padding: const EdgeInsets.all(9),
-      decoration: BoxDecoration(
-        color: tint.withValues(alpha: minimal ? 0.10 : 0.16),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(icon, color: tint, size: 18),
-    );
-  }
-}
-
 class _FocusStats extends StatelessWidget {
   const _FocusStats({required this.habitId, required this.accent});
 
@@ -611,7 +587,7 @@ class _FocusStats extends StatelessWidget {
     return Semantics(
       button: true,
       child: GestureDetector(
-        onTap: () => AppNavigator.push(const FocusHistoryPage()),
+        onTap: () => AppNavigator.push(FocusStatsPage(habitId: habitId)),
         child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,

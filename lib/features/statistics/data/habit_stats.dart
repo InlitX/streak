@@ -13,6 +13,8 @@ class HabitStats {
     required this.streakSeries,
     required this.perHabit,
     required this.perfectDays,
+    required this.perfectStreak,
+    required this.bestPerfectStreak,
     required this.total,
     required this.activeDays,
     required this.currentStreak,
@@ -22,6 +24,7 @@ class HabitStats {
   });
 
   static const window = 90;
+  static const perfectWindow = 1825;
 
   final Map<String, int> dailyCounts;
   final List<int> monthly;
@@ -31,6 +34,8 @@ class HabitStats {
   final List<double> streakSeries;
   final Map<String, int> perHabit;
   final int perfectDays;
+  final int perfectStreak;
+  final int bestPerfectStreak;
   final int total;
   final int activeDays;
   final int currentStreak;
@@ -81,6 +86,43 @@ class HabitStats {
       }
     }
     return series;
+  }
+
+  static bool _isDue(Habit habit, DateTime day) =>
+      !day.isBefore(habit.createdAt.atMidnight) &&
+      habit.isScheduledOn(day) &&
+      !habit.isNeutralOn(day);
+
+  static ({int current, int best}) perfectStreakOf(
+    List<Habit> habits,
+    DateTime today,
+  ) {
+    if (habits.isEmpty) return (current: 0, best: 0);
+
+    var floor = habits
+        .map((h) => h.createdAt.atMidnight)
+        .reduce((a, b) => a.isBefore(b) ? a : b);
+    final limit =
+        today.subtract(const Duration(days: perfectWindow)).atMidnight;
+    if (floor.isBefore(limit)) floor = limit;
+
+    final days = today.epochDay - floor.epochDay;
+    if (days < 0) return (current: 0, best: 0);
+
+    var run = 0;
+    var best = 0;
+    for (var i = 0; i <= days; i++) {
+      final day = DateTime(floor.year, floor.month, floor.day + i);
+      final due = habits.where((h) => _isDue(h, day));
+      if (due.isEmpty) continue;
+      if (due.every((h) => h.isCompletedOn(day))) {
+        run++;
+        if (run > best) best = run;
+      } else if (i < days) {
+        run = 0;
+      }
+    }
+    return (current: run, best: best);
   }
 
   static int _argMax(List<int> values) {
@@ -167,6 +209,8 @@ class HabitStats {
                 100)
             .round();
 
+    final perfect = perfectStreakOf(habits, today);
+
     final currentStreak = habits
         .map((h) => h.currentStreak)
         .fold<int>(0, (a, b) => a > b ? a : b);
@@ -183,6 +227,8 @@ class HabitStats {
       streakSeries: streakSeries,
       perHabit: perHabit,
       perfectDays: perfectDays,
+      perfectStreak: perfect.current,
+      bestPerfectStreak: perfect.best,
       total: total,
       activeDays: daily.length,
       currentStreak: currentStreak,
