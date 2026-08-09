@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="focus_running">#4ADE80</color>
+    <color name="focus_break">#FBBF24</color>
+    <color name="focus_paused">#FB7185</color>
+    <color name="focus_done">#A78BFA</color>
+</resources>

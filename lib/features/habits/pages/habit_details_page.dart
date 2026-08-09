@@ -891,6 +891,7 @@ class _FocusTile extends StatelessWidget {
                           breakMinutes: habit.focusBreakMinutes,
                         ),
                   fade: true,
+                  name: FocusPage.routeName,
                 ),
               ),
             ],

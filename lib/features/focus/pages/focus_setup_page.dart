@@ -37,6 +37,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
         breakMinutes: _pomodoro ? _breakMinutes : 0,
       ),
       fade: true,
+      name: FocusPage.routeName,
     );
   }
 

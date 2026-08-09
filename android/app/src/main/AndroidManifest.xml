@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!-- Keeps a running focus session alive and visible while the app is in the
+         background. Started only while a session is running, stopped with it. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
     <!-- Optional: only requested when the user picks a folder for automatic
          backups outside the app's own storage. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -103,6 +108,16 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".FocusService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="A user-started focus timer that must keep counting and stay
+                    controllable from its notification while the app is in the background." />
+        </service>
 
         <!-- Home Widget -->
         <receiver

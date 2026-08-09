@@ -101,11 +101,18 @@ class NotificationService {
     }
   }
 
-  Future<bool> requestPermissions() async {
-    if (!await Permission.notification.isGranted) {
-      final status = await Permission.notification.request();
-      if (!status.isGranted) return false;
+  Future<bool> requestNotifications() async {
+    try {
+      if (await Permission.notification.isGranted) return true;
+      return (await Permission.notification.request()).isGranted;
+    } catch (e) {
+      debugPrint('Notification permission request failed: $e');
+      return false;
     }
+  }
+
+  Future<bool> requestPermissions() async {
+    if (!await requestNotifications()) return false;
     if (Platform.isAndroid) {
       final exact = await Permission.scheduleExactAlarm.status;
       if (!exact.isGranted) {
@@ -132,14 +139,14 @@ class NotificationService {
   static const _intervalWindow = 24;
 
   Future<Set<int>> _schedule(Habit habit, Reminder reminder) async {
-    final strings = await _strings();
+    final strings = await localizations();
     final body = _bodyFor(habit, reminder, strings);
     return reminder.isInterval
         ? _scheduleInterval(habit, reminder, body, strings)
         : _scheduleWeekly(habit, reminder, body, strings);
   }
 
-  Future<AppLocalizations> _strings() async {
+  Future<AppLocalizations> localizations() async {
     final tag = LocalStore.setting('locale', '').trim();
     for (final candidate in [if (tag.isNotEmpty) tag, 'en']) {
       try {
@@ -288,7 +295,7 @@ class NotificationService {
   Future<void> snooze(Habit habit) async {
     if (!_ready) await initialize();
     final reminder = habit.reminders.isEmpty ? null : habit.reminders.first;
-    final strings = await _strings();
+    final strings = await localizations();
     final body = _bodyFor(habit, reminder, strings);
     final minutes = reminder?.snoozeMinutes ?? Reminder.defaultSnoozeMinutes;
     await _plugin.zonedSchedule(

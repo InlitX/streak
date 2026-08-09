@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/services/focus_service.dart';
 
 import 'support/app_harness.dart';
 
@@ -66,6 +68,113 @@ void main() {
 
       expect(await focus.stop(completed: true), isNull);
       expect(focus.isActive, isFalse);
+    });
+  });
+
+  group('outliving the process', () {
+    Future<void> seedRunning({
+      required int targetMinutes,
+      required Duration ago,
+      int breakMinutes = 0,
+    }) async {
+      await LocalStore.writeSetting('focusActive', {
+        'habitId': 'read',
+        'target': targetMinutes,
+        'focus': targetMinutes,
+        'break': breakMinutes,
+        'isBreak': false,
+        'round': 1,
+        'acc': 0,
+        'since': DateTime.now().subtract(ago).toIso8601String(),
+        'open': true,
+      });
+      await coldStart();
+    }
+
+    test('a running session is still there after a cold start', () async {
+      final before = _controller();
+      before.start(habitId: 'read', targetMinutes: 25);
+      await coldStart();
+
+      final after = _controller();
+      expect(after.isActive, isTrue);
+      expect(after.isRunning, isTrue);
+      expect(after.habitId, 'read');
+      expect(after.targetMinutes, 25);
+    });
+
+    test('a countdown that ran out while away banks its target, not the gap',
+        () async {
+      await seedRunning(targetMinutes: 25, ago: const Duration(hours: 3));
+
+      final focus = _controller();
+      expect(focus.elapsedSeconds, 1500);
+      expect(focus.remainingSeconds, 0);
+      expect(focus.reachedTarget, isTrue);
+
+      final session = await focus.stop(completed: true);
+      expect(session!.seconds, 1500);
+    });
+
+    test('a session paused before the process died comes back paused',
+        () async {
+      await LocalStore.writeSetting('focusActive', {
+        'habitId': 'read',
+        'target': 25,
+        'focus': 25,
+        'break': 0,
+        'isBreak': false,
+        'round': 1,
+        'acc': 300,
+        'since': '',
+        'open': true,
+      });
+      await coldStart();
+
+      final focus = _controller();
+      expect(focus.isActive, isTrue);
+      expect(focus.isRunning, isFalse);
+      expect(focus.elapsedSeconds, 300);
+    });
+
+    test('flowtime keeps every minute it was away', () async {
+      await seedRunning(targetMinutes: 0, ago: const Duration(hours: 3));
+
+      final focus = _controller();
+      expect(focus.isFlow, isTrue);
+      expect(focus.elapsedSeconds, closeTo(10800, 5));
+    });
+
+    test('stopping from the notification banks up to the moment it was pressed',
+        () async {
+      await seedRunning(targetMinutes: 60, ago: const Duration(minutes: 30));
+
+      final focus = _controller();
+      final session = await focus.apply(
+        FocusAction(
+          kind: FocusAction.stop,
+          at: DateTime.now().subtract(const Duration(minutes: 20)),
+        ),
+      );
+
+      expect(session!.seconds, closeTo(600, 5));
+      expect(focus.isActive, isFalse);
+    });
+
+    test('pausing from the notification drops the time it was left alone',
+        () async {
+      await seedRunning(targetMinutes: 60, ago: const Duration(minutes: 30));
+
+      final focus = _controller();
+      await focus.apply(
+        FocusAction(
+          kind: FocusAction.pause,
+          at: DateTime.now().subtract(const Duration(minutes: 25)),
+        ),
+      );
+
+      expect(focus.isRunning, isFalse);
+      expect(focus.elapsedSeconds, closeTo(300, 5));
     });
   });
 }

@@ -7,12 +7,14 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/widget_action_service.dart';
@@ -26,6 +28,8 @@ Future<void> main() async {
   await WidgetActionService.drain(LocalStore.readHabits());
 
   NotificationService.onOpenHabit = _openHabit;
+  FocusService.onPending = drainFocusActions;
+  FocusService.listen();
   try {
     await NotificationService().initialize();
   } catch (e, s) {
@@ -54,6 +58,7 @@ Future<void> main() async {
     if (launched != null) _openHabit(launched);
     final focusOn = await _appChannel.invokeMethod<String>('consumeLaunchFocus');
     if (focusOn != null) _startFocus(focusOn);
+    await drainFocusActions();
   });
 
   runApp(
@@ -86,8 +91,9 @@ void _openHabit(String habitId) {
 void _startFocus(String habitId) {
   final context = AppNavigator.key.currentContext;
   if (context == null) return;
+  if (AppNavigator.isShowing(FocusPage.routeName)) return;
   if (context.read<FocusController>().isActive) {
-    AppNavigator.push(const FocusPage(), fade: true);
+    AppNavigator.push(const FocusPage(), fade: true, name: FocusPage.routeName);
     return;
   }
   final habit = context.read<HabitsController>().byId(habitId);
@@ -99,6 +105,7 @@ void _startFocus(String habitId) {
       breakMinutes: habit.focusBreakMinutes,
     ),
     fade: true,
+    name: FocusPage.routeName,
   );
 }
 

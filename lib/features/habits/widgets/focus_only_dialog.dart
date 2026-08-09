@@ -40,6 +40,7 @@ Future<bool> allowManualCheck(
             startMinutes: habit.focusMinutes,
             breakMinutes: habit.focusBreakMinutes,
           ),
+    name: FocusPage.routeName,
   );
   return false;
 }

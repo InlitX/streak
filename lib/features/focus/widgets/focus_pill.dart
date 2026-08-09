@@ -26,7 +26,11 @@ class FocusPill extends StatelessWidget {
     final accent = context.colors.primary;
 
     void open() => active
-        ? AppNavigator.push(const FocusPage(), fade: true)
+        ? AppNavigator.push(
+            const FocusPage(),
+            fade: true,
+            name: FocusPage.routeName,
+          )
         : AppNavigator.push(const FocusSetupPage(), fullscreenDialog: true);
 
     if (compact && !active) {

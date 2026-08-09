@@ -47,6 +47,11 @@ void useEmptyStore() {
   });
 }
 
+Future<void> coldStart() async {
+  await Hive.close();
+  await LocalStore.init();
+}
+
 Habit testHabit({
   required String id,
   required String name,

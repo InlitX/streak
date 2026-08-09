@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/services/focus_service.dart';
+import 'package:streak/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
 
 class FocusTask {
@@ -24,9 +26,8 @@ class FocusController extends ChangeNotifier {
   bool _celebrated = false;
 
   void _restore() {
-    final raw = LocalStore.setting('focusActive', const <String, dynamic>{});
-    if (raw.isEmpty) return;
-    final map = Map<String, dynamic>.from(raw as Map);
+    final map = LocalStore.settingMap('focusActive');
+    if (map.isEmpty) return;
     _habitId = (map['habitId'] ?? '') as String;
     _targetMinutes = ((map['target'] ?? 25) as num).toInt();
     _focusMinutes = ((map['focus'] ?? _targetMinutes) as num).toInt();
@@ -37,7 +38,9 @@ class FocusController extends ChangeNotifier {
     final since = (map['since'] ?? '') as String;
     _since = since.isEmpty ? null : DateTime.tryParse(since);
     _open = (map['open'] ?? false) as bool;
-    if (_open && _since != null) _startTicker();
+    if (!_open) return;
+    if (isRunning) _startTicker();
+    _sync();
   }
 
   void _persist() {
@@ -94,11 +97,13 @@ class FocusController extends ChangeNotifier {
   bool get isActive => _open;
   bool get isRunning => _since != null;
 
-  int get elapsedSeconds {
-    final live =
-        _since == null ? 0 : DateTime.now().difference(_since!).inSeconds;
-    return _accumulated + live;
+  int elapsedAt(DateTime at) {
+    final live = _since == null ? 0 : at.difference(_since!).inSeconds;
+    final total = _accumulated + live;
+    return isFlow ? total : total.clamp(0, targetSeconds);
   }
+
+  int get elapsedSeconds => elapsedAt(DateTime.now());
 
   bool get isFlow => _targetMinutes <= 0;
 
@@ -112,6 +117,10 @@ class FocusController extends ChangeNotifier {
       : (elapsedSeconds / targetSeconds).clamp(0.0, 1.0);
 
   bool get reachedTarget => !isFlow && elapsedSeconds >= targetSeconds;
+
+  DateTime get _phaseEnd => _since == null
+      ? DateTime.now()
+      : _since!.add(Duration(seconds: targetSeconds - _accumulated));
 
   void start({
     required String habitId,
@@ -131,23 +140,26 @@ class FocusController extends ChangeNotifier {
     _celebrated = false;
     _startTicker();
     _persist();
+    _sync();
     notifyListeners();
   }
 
-  void pause() {
+  void pause({DateTime? at}) {
     if (_since == null) return;
-    _accumulated += DateTime.now().difference(_since!).inSeconds;
+    _accumulated = elapsedAt(at ?? DateTime.now());
     _since = null;
     _stopTicker();
     _persist();
+    _sync();
     notifyListeners();
   }
 
-  void resume() {
+  void resume({DateTime? at}) {
     if (_since != null) return;
-    _since = DateTime.now();
+    _since = at ?? DateTime.now();
     _startTicker();
     _persist();
+    _sync();
     notifyListeners();
   }
 
@@ -155,7 +167,9 @@ class FocusController extends ChangeNotifier {
     _accumulated = 0;
     _since = isRunning ? DateTime.now() : null;
     _celebrated = false;
+    if (isRunning) _startTicker();
     _persist();
+    _sync();
     notifyListeners();
   }
 
@@ -182,8 +196,22 @@ class FocusController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<FocusSession?> stop({required bool completed}) async {
-    final seconds = _isBreak ? 0 : elapsedSeconds;
+  Future<FocusSession?> apply(FocusAction action) async {
+    if (!_open) return null;
+    switch (action.kind) {
+      case FocusAction.pause:
+        pause(at: action.at);
+      case FocusAction.resume:
+        resume(at: action.at);
+      case FocusAction.stop:
+        return stop(completed: reachedTarget || isFlow, at: action.at);
+    }
+    return null;
+  }
+
+  Future<FocusSession?> stop({required bool completed, DateTime? at}) async {
+    final endedAt = at ?? DateTime.now();
+    final seconds = _isBreak ? 0 : elapsedAt(endedAt);
     final habitId = _habitId;
     final target = _focusMinutes;
     _stopTicker();
@@ -197,6 +225,7 @@ class FocusController extends ChangeNotifier {
     _round = 1;
     _open = false;
     _persist();
+    _sync();
 
     if (seconds < 30) {
       notifyListeners();
@@ -209,7 +238,7 @@ class FocusController extends ChangeNotifier {
       targetMinutes: target,
       seconds: seconds,
       completed: completed,
-      startedAt: DateTime.now().subtract(Duration(seconds: seconds)),
+      startedAt: endedAt.subtract(Duration(seconds: seconds)),
     );
     _sessions.add(session);
     await LocalStore.writeFocusSession(session);
@@ -218,8 +247,9 @@ class FocusController extends ChangeNotifier {
   }
 
   Future<void> _advancePhase() async {
+    final endedAt = _phaseEnd;
     if (!_isBreak) {
-      final seconds = elapsedSeconds;
+      final seconds = elapsedAt(endedAt);
       if (seconds >= 30) {
         final session = FocusSession(
           id: const Uuid().v4(),
@@ -227,7 +257,7 @@ class FocusController extends ChangeNotifier {
           targetMinutes: _focusMinutes,
           seconds: seconds,
           completed: true,
-          startedAt: DateTime.now().subtract(Duration(seconds: seconds)),
+          startedAt: endedAt.subtract(Duration(seconds: seconds)),
         );
         _sessions.add(session);
         await LocalStore.writeFocusSession(session);
@@ -241,6 +271,7 @@ class FocusController extends ChangeNotifier {
     _since = DateTime.now();
     _celebrated = false;
     _persist();
+    _sync();
     notifyListeners();
   }
 
@@ -250,7 +281,12 @@ class FocusController extends ChangeNotifier {
       if (!_celebrated && reachedTarget) {
         _celebrated = true;
         completedTick.value++;
-        if (isPomodoro) _advancePhase();
+        if (isPomodoro) {
+          _advancePhase();
+        } else {
+          _stopTicker();
+          _sync();
+        }
       }
       notifyListeners();
     });
@@ -259,6 +295,52 @@ class FocusController extends ChangeNotifier {
   void _stopTicker() {
     _ticker?.cancel();
     _ticker = null;
+  }
+
+  Future<void> _sync() async {
+    try {
+      if (!_open) {
+        await FocusService.hide();
+        return;
+      }
+      final strings = await NotificationService().localizations();
+      final habit = _habitId.isEmpty ? null : LocalStore.readHabits()[_habitId];
+      final done = reachedTarget && !isPomodoro;
+      final label = done
+          ? strings.focus_target_reached
+          : _isBreak
+              ? strings.focus_break
+              : !isRunning
+                  ? strings.focus_paused
+                  : isFlow
+                      ? strings.focus_flowtime
+                      : strings.focus_notif_running;
+      final phase = done
+          ? 'done'
+          : _isBreak
+              ? 'break'
+              : isRunning
+                  ? 'running'
+                  : 'paused';
+      await FocusService.show(
+        habitId: _habitId,
+        title: habit?.name ?? strings.focus,
+        state: isPomodoro
+            ? '$label  ·  ${strings.focus_round(_round)}'
+            : label,
+        phase: phase,
+        running: isRunning && !done,
+        done: done,
+        countDown: !isFlow,
+        seconds: displaySeconds,
+        channelName: strings.focus_notif_channel,
+        pauseLabel: strings.focus_pause,
+        resumeLabel: strings.focus_resume,
+        stopLabel: strings.focus_end,
+      );
+    } catch (e) {
+      debugPrint('Focus notification sync failed: $e');
+    }
   }
 
   int get totalSeconds =>

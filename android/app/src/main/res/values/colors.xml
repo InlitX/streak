@@ -3,4 +3,9 @@
     <color name="ic_launcher_background">#0D0D0D</color>
     <color name="ic_launcher_background_neutral">#3A3A3C</color>
     <color name="ic_launcher_background_accent">#00B894</color>
+
+    <color name="focus_running">#15803D</color>
+    <color name="focus_break">#B45309</color>
+    <color name="focus_paused">#BE123C</color>
+    <color name="focus_done">#6D28D9</color>
 </resources>

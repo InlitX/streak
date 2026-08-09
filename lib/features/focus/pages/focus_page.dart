@@ -15,7 +15,7 @@ import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
-import 'package:streak/core/widgets/confetti_overlay.dart';
+import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/features/focus/widgets/focus_end_dialog.dart';
 import 'package:streak/features/focus/widgets/focus_task_lists.dart';
@@ -39,13 +39,15 @@ class FocusPage extends StatefulWidget {
   final int? startMinutes;
   final int? breakMinutes;
 
+  static const routeName = 'focus';
+
   @override
   State<FocusPage> createState() => _FocusPageState();
 }
 
 class _FocusPageState extends State<FocusPage> {
   bool _leaving = false;
-  int _confetti = 0;
+  final _confetti = ValueNotifier(0);
   late final FocusController _focus = context.read<FocusController>();
 
   Timer? _lead;
@@ -60,15 +62,22 @@ class _FocusPageState extends State<FocusPage> {
       WakelockPlus.enable();
     }
     if (widget.startMinutes != null) {
-      _runLead(() {
-        _focus.start(
-          habitId: widget.startHabitId ?? '',
-          targetMinutes: widget.startMinutes!,
-          breakMinutes: widget.breakMinutes ?? 0,
-        );
-        _scheduleEndAlarm();
-      });
+      _leadValue = 3;
+      _begin();
     }
+  }
+
+  Future<void> _begin() async {
+    await NotificationService().requestNotifications();
+    if (!mounted) return;
+    _runLead(() {
+      _focus.start(
+        habitId: widget.startHabitId ?? '',
+        targetMinutes: widget.startMinutes!,
+        breakMinutes: widget.breakMinutes ?? 0,
+      );
+      _scheduleEndAlarm();
+    });
   }
 
   void _runLead(VoidCallback then) {
@@ -97,6 +106,7 @@ class _FocusPageState extends State<FocusPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     WakelockPlus.disable();
     _lead?.cancel();
+    _confetti.dispose();
     _focus.completedTick.removeListener(_celebrate);
     super.dispose();
   }
@@ -112,7 +122,7 @@ class _FocusPageState extends State<FocusPage> {
     if (!mounted) return;
     FocusAudio.chime();
     HapticFeedback.heavyImpact();
-    setState(() => _confetti++);
+    _confetti.value++;
     if (_focus.isPomodoro && _focus.isActive) _scheduleEndAlarm();
   }
 
@@ -341,7 +351,13 @@ class _FocusPageState extends State<FocusPage> {
         ),
       ),
           Positioned.fill(
-            child: IgnorePointer(child: ConfettiOverlay(trigger: _confetti)),
+            child: RepaintBoundary(
+              child: ValueListenableBuilder<int>(
+                valueListenable: _confetti,
+                builder: (context, trigger, _) =>
+                    IgnorePointer(child: CelebrationOverlay(trigger: trigger)),
+              ),
+            ),
           ),
           if (_leadValue > 0)
             Positioned.fill(

@@ -126,6 +126,11 @@ class LocalStore {
     return value is T ? value : fallback;
   }
 
+  static Map<String, dynamic> settingMap(String key) {
+    final value = _settings.get(key);
+    return value is Map ? Map<String, dynamic>.from(value) : <String, dynamic>{};
+  }
+
   static Future<void> writeSetting(String key, Object value) =>
       _settings.put(key, value);
 

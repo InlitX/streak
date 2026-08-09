@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/today_intro.dart';
@@ -70,6 +71,7 @@ class _HomeShellState extends State<HomeShell>
     if (state == AppLifecycleState.resumed) {
       context.read<HabitsController>().reload();
       TodayIntro.replay();
+      drainFocusActions();
     }
   }
 

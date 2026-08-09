@@ -11,6 +11,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     private val channelName = "streak/app_icon"
     private var channel: MethodChannel? = null
+    private var focusChannel: MethodChannel? = null
 
     private val aliases = mapOf(
         "default" to ".MainActivityDefault",
@@ -22,6 +23,9 @@ class MainActivity : FlutterFragmentActivity() {
         super.configureFlutterEngine(flutterEngine)
         NotificationStore.repairFor(applicationContext, buildVersion())
         WidgetRefreshReceiver.schedule(applicationContext)
+        focusChannel =
+            MethodChannel(flutterEngine.dartExecutor.binaryMessenger, FocusBridge.CHANNEL)
+                .also { FocusBridge.attach(applicationContext, it) }
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -35,6 +39,11 @@ class MainActivity : FlutterFragmentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        FocusBridge.detach(focusChannel)
+        super.onDestroy()
     }
 
     private fun buildVersion(): Long = try {

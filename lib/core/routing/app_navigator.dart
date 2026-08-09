@@ -10,20 +10,34 @@ class AppNavigator {
     Widget page, {
     bool fullscreenDialog = false,
     bool fade = false,
+    String? name,
   }) {
     return key.currentState!.push<T>(
-      route(page, fullscreenDialog: fullscreenDialog, fade: fade),
+      route(page, fullscreenDialog: fullscreenDialog, fade: fade, name: name),
     );
   }
 
   static void pop<T>([T? result]) => key.currentState?.pop<T>(result);
 
+  static bool isShowing(String name) {
+    final navigator = key.currentState;
+    if (navigator == null) return false;
+    var found = false;
+    navigator.popUntil((route) {
+      found = found || route.settings.name == name;
+      return true;
+    });
+    return found;
+  }
+
   static Route<T> route<T>(
     Widget page, {
     bool fullscreenDialog = false,
     bool fade = false,
+    String? name,
   }) {
     return PageRouteBuilder<T>(
+      settings: RouteSettings(name: name),
       fullscreenDialog: fullscreenDialog,
       transitionDuration: const Duration(milliseconds: 300),
       reverseTransitionDuration: const Duration(milliseconds: 260),
