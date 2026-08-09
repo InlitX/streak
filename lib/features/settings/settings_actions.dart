@@ -380,6 +380,13 @@ class SettingsActions {
         context.l10n.minutes_short('5'),
       ];
 
+  static List<String> startViewLabels(BuildContext context) => [
+        context.l10n.start_view_last,
+        context.l10n.week,
+        context.l10n.month,
+        context.l10n.year,
+      ];
+
   static List<String> celebrationLabels(BuildContext context) => [
         context.l10n.celebration_confetti,
         context.l10n.celebration_fireworks,

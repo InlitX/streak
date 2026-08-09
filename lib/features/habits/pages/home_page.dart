@@ -12,6 +12,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/focus/widgets/focus_pill.dart';
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final saved = context.read<SettingsController>().heatmapMode;
+    final saved = context.read<SettingsController>().openingMode;
     _mode = HeatmapMode.values[saved.clamp(0, 2)];
   }
 
@@ -183,6 +184,12 @@ class _HomePageState extends State<HomePage> {
               )
             : null,
         actions: [
+          if (!_reordering && settings.planningEnabled)
+            IconButton(
+              tooltip: context.l10n.day_timeline,
+              icon: Icon(LucideIcons.calendarClock, size: minimal ? 22 : 24),
+              onPressed: () => AppNavigator.push(const DayTimelinePage()),
+            ),
           if (!_reordering) FocusPill(compact: minimal),
           if (minimal && !_reordering)
             IconButton(

@@ -90,6 +90,8 @@ class HabitsController extends ChangeNotifier {
     bool focusOnly = false,
     int focusMinutes = 25,
     int focusBreakMinutes = 0,
+    int startMinute = -1,
+    int durationMinutes = 0,
     List<Substep> substeps = const [],
   }) async {
     final id = _uuid.v4();
@@ -116,6 +118,8 @@ class HabitsController extends ChangeNotifier {
       focusOnly: focusOnly,
       focusMinutes: focusMinutes,
       focusBreakMinutes: focusBreakMinutes,
+      startMinute: startMinute,
+      durationMinutes: durationMinutes,
       substeps: substeps,
     );
     _habits[id] = habit;

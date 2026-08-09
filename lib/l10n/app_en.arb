@@ -481,6 +481,7 @@
   "focus_done_title": "Session complete",
   "focus_your_tracks": "Your tracks",
   "focus_built_in": "Included",
+  "unit_hour_short": "h",
   "unit_min_short": "min",
   "focus_notif_body": "Your focus session is over. Well done!",
   "celebration": "Completion effect",
@@ -524,6 +525,23 @@
   "last_90_days": "Last 90 days",
   "focus_clear_today": "Clear today's sessions",
   "focus_defaults": "Session defaults",
+  "plan_day": "Plan the day",
+  "plan_day_sub": "Give habits a time of day and see them on a timeline.",
+  "habit_time": "Time of day",
+  "habit_time_none": "Anytime",
+  "habit_duration": "Duration",
+  "habit_duration_none": "No duration",
+  "day_timeline": "Day",
+  "day_timeline_free": "{span} free",
+  "@day_timeline_free": {
+    "placeholders": { "span": { "type": "String" } }
+  },
+  "day_timeline_anytime": "Anytime",
+  "day_timeline_empty": "Nothing planned for this day",
+  "day_timeline_empty_sub": "Give a habit a time of day and it will show up here.",
+  "clear": "Clear",
+  "start_view": "Today opens on",
+  "start_view_last": "Last used",
   "focus_stats": "Focus stats",
   "focus_average": "Average session",
   "focus_log": "Log a session",
@@ -748,6 +766,8 @@
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
+  "a11y_previous_week": "Previous week",
+  "a11y_next_week": "Next week",
   "a11y_increase": "Increase",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"

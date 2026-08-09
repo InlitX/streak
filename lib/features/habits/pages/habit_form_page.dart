@@ -21,6 +21,7 @@ import 'package:streak/features/habits/widgets/habit_form_basics.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
+import 'package:streak/features/habits/widgets/habit_time_fields.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/minimal_pickers.dart';
 import 'package:streak/features/habits/widgets/minimal_substeps.dart';
@@ -64,9 +65,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
   int _focusMinutes = 25;
   bool _pomodoro = false;
   int _breakMinutes = 5;
+  int _startMinute = -1;
+  int _durationMinutes = 0;
   late List<Substep> _substeps;
 
   bool get _kindLocked => widget.isEditing;
+
+  bool get _planning => context.watch<SettingsController>().planningEnabled;
 
   bool get _canSave {
     if (_name.text.trim().isEmpty) return false;
@@ -109,6 +114,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _focusMinutes = habit.focusMinutes;
       _pomodoro = habit.focusBreakMinutes > 0;
       if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
+      _startMinute = habit.startMinute;
+      _durationMinutes = habit.durationMinutes;
       _substeps = List.of(habit.substeps);
     } else {
       _reminders = [];
@@ -180,6 +187,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
           focusOnly: focusOnly,
           focusMinutes: _focusMinutes,
           focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
+          startMinute: negative ? -1 : _startMinute,
+          durationMinutes: negative ? 0 : _durationMinutes,
           substeps: substeps,
         ),
       );
@@ -205,6 +214,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
         focusOnly: focusOnly,
         focusMinutes: _focusMinutes,
         focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
+        startMinute: negative ? -1 : _startMinute,
+        durationMinutes: negative ? 0 : _durationMinutes,
         substeps: substeps,
       );
     }
@@ -539,6 +550,20 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ),
         ],
       ],
+      if (_kind != HabitKind.negative && _planning) ...[
+        const SizedBox(height: 16),
+        SectionLabel(context.l10n.habit_time),
+        HabitTimeFields(
+          startMinute: _startMinute,
+          durationMinutes: _durationMinutes,
+          color: _color,
+          compact: true,
+          onChanged: (start, duration) => setState(() {
+            _startMinute = start;
+            _durationMinutes = duration;
+          }),
+        ),
+      ],
       const SizedBox(height: 16),
       SectionLabel(context.l10n.reminders),
       for (final reminder in _reminders)
@@ -734,6 +759,19 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   onWeekdaysChanged: (days) =>
                       setState(() => _scheduleWeekdays = days),
                   onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+                ),
+              ],
+              if (_kind != HabitKind.negative && _planning) ...[
+                const SizedBox(height: 20),
+                SectionLabel(context.l10n.habit_time),
+                HabitTimeFields(
+                  startMinute: _startMinute,
+                  durationMinutes: _durationMinutes,
+                  color: _color,
+                  onChanged: (start, duration) => setState(() {
+                    _startMinute = start;
+                    _durationMinutes = duration;
+                  }),
                 ),
               ],
               const SizedBox(height: 20),

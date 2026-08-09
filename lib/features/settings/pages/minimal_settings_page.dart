@@ -414,6 +414,28 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.calendarClock,
+              title: context.l10n.plan_day,
+              subtitle: context.l10n.plan_day_sub,
+              trailing: _SoftSwitch(
+                value: settings.planningEnabled,
+                onChanged: settings.setPlanningEnabled,
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.house,
+              title: context.l10n.start_view,
+              value:
+                  SettingsActions.startViewLabels(context)[settings.startView],
+              onTap: () => showOptionSheet(
+                context,
+                title: context.l10n.start_view,
+                options: SettingsActions.startViewLabels(context),
+                index: settings.startView,
+                onSelected: settings.setStartView,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.arrowDownWideNarrow,
               title: context.l10n.sort_completed_last,
               trailing: _SoftSwitch(

@@ -34,6 +34,16 @@ Future<void> _seedSessions(
       }
     });
 
+Future<void> _waitFor(WidgetTester tester, Finder target) async {
+  for (var i = 0; i < 80; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pumpAndSettle();
+    if (target.evaluate().isNotEmpty) return;
+  }
+}
+
 void main() {
   useEmptyStore();
 
@@ -105,11 +115,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Log a session'), findsOneWidget);
 
-    await tester.runAsync(() async {
-      await tester.tap(find.text('Save'));
-      await Future<void>.delayed(const Duration(milliseconds: 120));
-    });
-    await tester.pumpAndSettle();
+    await tester.runAsync(() => tester.tap(find.text('Save')));
+    await _waitFor(tester, find.text('Free session'));
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('Free session'), findsOneWidget);

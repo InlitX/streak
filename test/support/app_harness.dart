@@ -66,6 +66,9 @@ Habit testHabit({
   HabitInterval interval = HabitInterval.daily,
   List<int> scheduleWeekdays = const [],
   List<int> restDays = const [],
+  int startMinute = -1,
+  int durationMinutes = 0,
+  bool focusOnly = false,
 }) =>
     Habit(
       id: id,
@@ -79,6 +82,9 @@ Habit testHabit({
       interval: interval,
       scheduleWeekdays: scheduleWeekdays,
       restDays: restDays,
+      startMinute: startMinute,
+      durationMinutes: durationMinutes,
+      focusOnly: focusOnly,
       createdAt: AppClock.now().subtract(Duration(days: daysOld)),
       completions: {
         for (final day in done)

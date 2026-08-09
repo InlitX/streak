@@ -36,6 +36,11 @@ Future<void> _pumpHome(
 
 const _views = [HeatmapMode.week, HeatmapMode.month, HeatmapMode.year];
 
+HeatmapMode _openingMode(WidgetTester tester) => tester
+    .widgetList<HabitHeatmap>(find.byType(HabitHeatmap))
+    .firstWhere((h) => h.mode != HeatmapMode.mini)
+    .mode;
+
 void main() {
   useEmptyStore();
 
@@ -62,6 +67,27 @@ void main() {
         expect(find.text('No sugar'), findsOneWidget);
       });
     }
+
+    testWidgets('by default it opens on the view you left', (tester) async {
+      await _seedThree(tester);
+      await _pumpHome(tester, HeatmapMode.month);
+
+      expect(_openingMode(tester), HeatmapMode.month);
+    });
+
+    testWidgets('a fixed start view beats the one you left', (tester) async {
+      await _seedThree(tester);
+      await pumpScreen(
+        tester,
+        const HomePage(),
+        settings: {
+          'heatmapMode': HeatmapMode.year.index,
+          'startView': HeatmapMode.week.index + 1,
+        },
+      );
+
+      expect(_openingMode(tester), HeatmapMode.week);
+    });
 
     testWidgets('with no habits it offers to add one', (tester) async {
       await pumpScreen(tester, const HomePage());

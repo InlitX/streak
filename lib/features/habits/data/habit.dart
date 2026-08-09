@@ -60,6 +60,8 @@ class Habit {
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
+    this.startMinute = -1,
+    this.durationMinutes = 0,
     this.substeps = const [],
     this.vacations = const [],
     this.restDays = const [],
@@ -114,6 +116,16 @@ class Habit {
   final int focusMinutes;
   final int focusBreakMinutes;
   final bool focusOnly;
+
+  final int startMinute;
+  final int durationMinutes;
+
+  static const dayMinutes = 24 * 60;
+
+  bool get isPlanned => startMinute >= 0;
+
+  int get endMinute =>
+      (startMinute + durationMinutes).clamp(startMinute, dayMinutes);
 
   bool get needsFocusSession =>
       focusOnly && kind == HabitKind.positive && substeps.isEmpty;
@@ -456,6 +468,8 @@ class Habit {
     int? focusMinutes,
     int? focusBreakMinutes,
     bool? focusOnly,
+    int? startMinute,
+    int? durationMinutes,
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
     List<int>? restDays,
@@ -487,6 +501,8 @@ class Habit {
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
+      startMinute: startMinute ?? this.startMinute,
+      durationMinutes: durationMinutes ?? this.durationMinutes,
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
       restDays: restDays ?? this.restDays,
@@ -521,6 +537,8 @@ class Habit {
         'focusMinutes': focusMinutes,
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
+        'startMinute': startMinute,
+        'durationMinutes': durationMinutes,
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
@@ -569,6 +587,8 @@ class Habit {
         focusBreakMinutes:
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
         focusOnly: (map['focusOnly'] ?? false) as bool,
+        startMinute: ((map['startMinute'] ?? -1) as num).toInt(),
+        durationMinutes: ((map['durationMinutes'] ?? 0) as num).toInt(),
         substeps: map['substeps'] == null
             ? const []
             : (map['substeps'] as List)

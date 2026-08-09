@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak/features/focus/pages/focus_setup_page.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
@@ -16,7 +17,14 @@ void main() {
   useEmptyStore();
 
   Future<void> seed(WidgetTester tester) => seedHabits(tester, [
-        testHabit(id: 'a', name: 'Read a chapter', order: 0, done: lastDays(4)),
+        testHabit(
+          id: 'a',
+          name: 'Read a chapter',
+          order: 0,
+          done: lastDays(4),
+          startMinute: 9 * 60,
+          durationMinutes: 60,
+        ),
         testHabit(
           id: 'b',
           name: 'Drink water',
@@ -37,6 +45,7 @@ void main() {
     'form': const HabitFormPage(),
     'focus': const FocusSetupPage(),
     'details': const HabitDetailsPage(habitId: 'a'),
+    'timeline': const DayTimelinePage(),
   };
 
   for (final entry in screens.entries) {

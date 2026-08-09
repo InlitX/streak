@@ -11,6 +11,7 @@ import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
+import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -135,6 +136,24 @@ class HabitCard extends StatelessWidget {
                                       color: context.tokens.muted,
                                     ),
                                   ),
+                                  if (habit.isPlanned &&
+                                      settings.planningEnabled) ...[
+                                    const SizedBox(width: 8),
+                                    Icon(
+                                      LucideIcons.clock,
+                                      size: 13,
+                                      color: context.tokens.muted,
+                                    ),
+                                    const SizedBox(width: 3),
+                                    Text(
+                                      minuteLabel(habit.startMinute),
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: context.tokens.muted,
+                                      ),
+                                    ),
+                                  ],
                                   if (habit.kind == HabitKind.quantitative) ...[
                                     const SizedBox(width: 8),
                                     _AmountLabel(habit: habit),

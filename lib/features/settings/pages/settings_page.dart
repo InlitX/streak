@@ -364,6 +364,29 @@ class _ClassicPreferencesPage extends StatelessWidget {
           },
         ),
         settingsDivider(context),
+        NavRow(
+          icon: LucideIcons.house,
+          title: context.l10n.start_view,
+          subtitle: SettingsActions.startViewLabels(context)[settings.startView],
+          onTap: () => showOptionSheet(
+            context,
+            title: context.l10n.start_view,
+            options: SettingsActions.startViewLabels(context),
+            index: settings.startView,
+            onSelected: settings.setStartView,
+          ),
+        ),
+        settingsDivider(context),
+        SettingRow(
+          icon: LucideIcons.calendarClock,
+          title: context.l10n.plan_day,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.planningEnabled ? 1 : 0,
+            onChanged: (i) => settings.setPlanningEnabled(i == 1),
+          ),
+        ),
+        settingsDivider(context),
         SettingRow(
           icon: LucideIcons.layoutGrid,
           title: context.l10n.card_activity,
