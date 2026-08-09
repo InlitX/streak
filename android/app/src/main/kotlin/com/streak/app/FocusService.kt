@@ -107,7 +107,9 @@ class FocusService : Service() {
         }
 
         val open = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra(WidgetActionReceiver.EXTRA_START_FOCUS, state.optString("habitId"))
         }
 

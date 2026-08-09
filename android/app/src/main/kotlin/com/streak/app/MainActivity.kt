@@ -3,6 +3,7 @@ package com.streak.app
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.view.WindowManager
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -33,6 +34,10 @@ class MainActivity : FlutterFragmentActivity() {
                         setIcon(call.argument<String>("icon") ?: "default")
                         result.success(true)
                     }
+                    "setSecure" -> {
+                        setSecure(call.argument<Boolean>("secure") ?: false)
+                        result.success(true)
+                    }
                     "consumeLaunchHabit" -> result.success(takeHabitId(intent))
                     "consumeLaunchFocus" -> result.success(takeFocusId(intent))
                     else -> result.notImplemented()
@@ -44,6 +49,14 @@ class MainActivity : FlutterFragmentActivity() {
     override fun onDestroy() {
         FocusBridge.detach(focusChannel)
         super.onDestroy()
+    }
+
+    private fun setSecure(secure: Boolean) = runOnUiThread {
+        if (secure) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 
     private fun buildVersion(): Long = try {
