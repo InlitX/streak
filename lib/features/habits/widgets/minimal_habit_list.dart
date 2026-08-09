@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
+import 'package:streak/features/habits/widgets/habit_entrance.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
 
@@ -32,67 +32,70 @@ class MinimalHabitList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (mode == HeatmapMode.month) return _monthGrid();
-    return ListView(
+    return ListView.builder(
       padding: _padding,
-      children: [
-        header,
-        for (var i = 0; i < habits.length; i++)
-          Entrance(
-            key: ValueKey('$mode-${habits[i].id}'),
-            index: i,
-            child: SlotTransition(
-              leaving: leaving.contains(habits[i].id),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: mode == HeatmapMode.week
-                    ? GridWeekCard(
-                        habit: habits[i],
-                        onOpen: () => onOpen(habits[i]),
-                        onToggleDay: (d) => onToggleDay(habits[i], d),
-                        onLongPress: () => onLongPress(habits[i]),
-                      )
-                    : GridYearCard(
-                        habit: habits[i],
-                        onOpen: () => onOpen(habits[i]),
-                        onToggleToday: () => onToggleToday(habits[i]),
-                        onToggleDay: (d) => onToggleDay(habits[i], d),
-                        onLongPress: () => onLongPress(habits[i]),
-                      ),
-              ),
+      itemCount: habits.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) return header;
+        final i = index - 1;
+        final habit = habits[i];
+        return HabitEntrance(
+          key: ValueKey('$mode-${habit.id}'),
+          index: i,
+          child: SlotTransition(
+            leaving: leaving.contains(habit.id),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: mode == HeatmapMode.week
+                  ? GridWeekCard(
+                      habit: habit,
+                      onOpen: () => onOpen(habit),
+                      onToggleDay: (d) => onToggleDay(habit, d),
+                      onLongPress: () => onLongPress(habit),
+                    )
+                  : GridYearCard(
+                      habit: habit,
+                      onOpen: () => onOpen(habit),
+                      onToggleToday: () => onToggleToday(habit),
+                      onToggleDay: (d) => onToggleDay(habit, d),
+                      onLongPress: () => onLongPress(habit),
+                    ),
             ),
           ),
-      ],
+        );
+      },
     );
   }
 
   Widget _monthGrid() {
-    return ListView(
+    return ListView.builder(
       padding: _padding,
-      children: [
-        header,
-        for (var i = 0; i < habits.length; i += 2)
-          Entrance(
-            key: ValueKey('month-$i-${habits[i].id}'),
-            index: i ~/ 2,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(child: _monthCard(habits[i])),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: i + 1 < habits.length
-                          ? _monthCard(habits[i + 1])
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
-                ),
+      itemCount: (habits.length + 1) ~/ 2 + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) return header;
+        final i = (index - 1) * 2;
+        return HabitEntrance(
+          key: ValueKey('month-${habits[i].id}'),
+          index: index - 1,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: _monthCard(habits[i])),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: i + 1 < habits.length
+                        ? _monthCard(habits[i + 1])
+                        : const SizedBox.shrink(),
+                  ),
+                ],
               ),
             ),
           ),
-      ],
+        );
+      },
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/habit_entrance.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
 
 class ClassicHabitList extends StatelessWidget {
@@ -76,7 +77,7 @@ class ClassicHabitList extends StatelessWidget {
             ),
           );
         }
-        return _EntranceCard(
+        return HabitEntrance(
           key: ValueKey(habit.id),
           index: index,
           child: SlotTransition(
@@ -94,56 +95,6 @@ class ClassicHabitList extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _EntranceCard extends StatefulWidget {
-  const _EntranceCard({
-    super.key,
-    required this.index,
-    required this.child,
-  });
-
-  final int index;
-  final Widget child;
-
-  @override
-  State<_EntranceCard> createState() => _EntranceCardState();
-}
-
-class _EntranceCardState extends State<_EntranceCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 420),
-  );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-  late final Animation<Offset> _slide = Tween(
-    begin: const Offset(0, 0.12),
-    end: Offset.zero,
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(milliseconds: 35 * widget.index.clamp(0, 6)), () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }
