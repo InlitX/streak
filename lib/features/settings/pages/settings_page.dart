@@ -293,6 +293,20 @@ class _ClassicPreferencesPage extends StatelessWidget {
           ),
         ),
         settingsDivider(context),
+        NavRow(
+          icon: LucideIcons.sparkles,
+          title: context.l10n.celebration,
+          subtitle: SettingsActions.celebrationLabels(context)[
+              settings.celebration.index],
+          onTap: () => showOptionSheet(
+            context,
+            title: context.l10n.celebration,
+            options: SettingsActions.celebrationLabels(context),
+            index: settings.celebration.index,
+            onSelected: settings.setCelebration,
+          ),
+        ),
+        settingsDivider(context),
         SettingRow(
           icon: LucideIcons.arrowDownWideNarrow,
           title: context.l10n.sort_completed_last,

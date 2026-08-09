@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:streak/app/theme/app_palette.dart';
+import 'package:streak/core/widgets/celebration_palette.dart';
 
 class ConfettiOverlay extends StatefulWidget {
   const ConfettiOverlay({super.key, required this.trigger});
@@ -22,16 +22,28 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
   final _random = math.Random();
   final List<_Particle> _particles = [];
 
+  bool _fired = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_fired || widget.trigger <= 0) return;
+    _fired = true;
+    _fire();
+  }
+
   @override
   void didUpdateWidget(ConfettiOverlay oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.trigger != oldWidget.trigger && widget.trigger > 0) {
-      _spawn();
-      _controller.forward(from: 0);
-    }
+    if (widget.trigger != oldWidget.trigger && widget.trigger > 0) _fire();
   }
 
-  void _spawn() {
+  void _fire() {
+    _spawn(Theme.of(context).brightness);
+    _controller.forward(from: 0);
+  }
+
+  void _spawn(Brightness brightness) {
     _particles
       ..clear()
       ..addAll(List.generate(90, (_) {
@@ -39,8 +51,7 @@ class _ConfettiOverlayState extends State<ConfettiOverlay>
         return _Particle(
           angle: angle,
           speed: 160 + _random.nextDouble() * 320,
-          color: AppPalette.habitColors[
-              _random.nextInt(AppPalette.habitColors.length)],
+          color: celebrationColor(_random, brightness),
           size: 6 + _random.nextDouble() * 8,
           rotation: _random.nextDouble() * 2 * math.pi,
           spin: (_random.nextDouble() - 0.5) * 12,
@@ -101,14 +112,17 @@ class _ConfettiPainter extends CustomPainter {
     const gravity = 520.0;
     final opacity = progress < 0.7 ? 1.0 : (1 - (progress - 0.7) / 0.3);
 
+    final alpha = opacity.clamp(0.0, 1.0);
+    if (alpha < 0.04) return;
+    final paint = Paint();
+
     for (final p in particles) {
       final dx = origin.dx + math.cos(p.angle) * p.speed * progress;
       final dy = origin.dy +
           math.sin(p.angle) * p.speed * progress +
           gravity * progress * progress;
 
-      final paint = Paint()
-        ..color = p.color.withValues(alpha: opacity.clamp(0.0, 1.0));
+      paint.color = p.color.withValues(alpha: alpha);
 
       canvas.save();
       canvas.translate(dx, dy);

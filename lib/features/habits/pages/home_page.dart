@@ -10,7 +10,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
-import 'package:streak/core/widgets/confetti_overlay.dart';
+import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
@@ -40,8 +40,7 @@ class HomePage extends StatefulWidget {
 const _sinkDelay = Duration(milliseconds: 2500);
 
 class _HomePageState extends State<HomePage> {
-  bool _wasAllDone = false;
-  int _confetti = 0;
+  final _confetti = ValueNotifier(0);
   String? _category;
   late HeatmapMode _mode;
   bool _reordering = false;
@@ -62,6 +61,7 @@ class _HomePageState extends State<HomePage> {
     for (final timer in _timers.values) {
       timer.cancel();
     }
+    _confetti.dispose();
     super.dispose();
   }
 
@@ -70,14 +70,7 @@ class _HomePageState extends State<HomePage> {
     context.read<SettingsController>().setHeatmapMode(mode.index);
   }
 
-  void _maybeCelebrate(bool allDone) {
-    if (allDone == _wasAllDone) return;
-    _wasAllDone = allDone;
-    if (allDone) {
-      HapticFeedback.heavyImpact();
-      setState(() => _confetti++);
-    }
-  }
+  void _celebrate() => _confetti.value++;
 
   void _showHabitActions(HabitsController controller, Habit habit) {
     showModalBottomSheet(
@@ -253,11 +246,6 @@ class _HomePageState extends State<HomePage> {
                 final done =
                     active.where((h) => h.isCompletedOn(today)).length;
                 final total = active.length;
-                final allDone = total > 0 && done == total;
-
-                WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => _maybeCelebrate(allDone),
-                );
 
                 final categories = _categoriesOf(all);
                 if (_category != null && !categories.contains(_category)) {
@@ -340,7 +328,15 @@ class _HomePageState extends State<HomePage> {
                   child: GridViewSwitcher(mode: _mode, onChanged: _changeMode),
                 ),
               ),
-            Positioned.fill(child: ConfettiOverlay(trigger: _confetti)),
+            Positioned.fill(
+              child: RepaintBoundary(
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _confetti,
+                  builder: (context, trigger, _) =>
+                      CelebrationOverlay(trigger: trigger),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -360,13 +356,21 @@ class _HomePageState extends State<HomePage> {
 
     final id = habit.id;
     final wasSettled = habit.isDoneForNow;
-    final animate = date.dayKey == AppClock.now().dayKey && !_moving(id);
+    final wasDone = habit.isCompletedOn(date);
+    final today = date.dayKey == AppClock.now().dayKey;
+    final animate = today && !_moving(id);
     animate ? _frozen[id] = wasSettled : _stopMoving(id);
 
     await controller.toggle(id, date);
-    if (!mounted || !animate) return;
+    if (!mounted) return;
 
-    final settled = controller.byId(id)?.isDoneForNow ?? wasSettled;
+    final updated = controller.byId(id);
+    if (today && !wasDone && (updated?.isCompletedOn(date) ?? false)) {
+      _celebrate();
+    }
+    if (!animate) return;
+
+    final settled = updated?.isDoneForNow ?? wasSettled;
     if (settled == wasSettled) {
       setState(() => _frozen.remove(id));
       return;

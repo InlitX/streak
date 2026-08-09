@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/home_widget_service.dart';
@@ -73,6 +74,8 @@ class SettingsController extends ChangeNotifier {
       'appStyle',
       LocalStore.setting('homeLayout', 0),
     );
+    _celebration = CelebrationStyle.values[LocalStore.setting('celebration', 0)
+        .clamp(0, CelebrationStyle.values.length - 1)];
     _appLock = LocalStore.setting('appLock', false);
     _dayCutoff = LocalStore.setting('dayCutoff', 0);
     AppClock.cutoffHour = _dayCutoff;
@@ -113,6 +116,7 @@ class SettingsController extends ChangeNotifier {
   late List<String> _focusImages;
   late List<int> _hiddenScenes;
   late List<String> _hiddenTracks;
+  late CelebrationStyle _celebration;
   late bool _appLock;
   late int _dayCutoff;
   late int _autoBackup;
@@ -243,6 +247,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setFocusDailyGoal(int minutes) async {
     _focusDailyGoal = minutes;
     await LocalStore.writeSetting('focusDailyGoal', minutes);
+    notifyListeners();
+  }
+
+  CelebrationStyle get celebration => _celebration;
+
+  Future<void> setCelebration(int index) async {
+    _celebration = CelebrationStyle.values[index];
+    await LocalStore.writeSetting('celebration', index);
     notifyListeners();
   }
 

@@ -364,6 +364,19 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.sparkles,
+              title: context.l10n.celebration,
+              value: SettingsActions.celebrationLabels(context)[
+                  settings.celebration.index],
+              onTap: () => showOptionSheet(
+                context,
+                title: context.l10n.celebration,
+                options: SettingsActions.celebrationLabels(context),
+                index: settings.celebration.index,
+                onSelected: settings.setCelebration,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.calendarDays,
               title: context.l10n.week_starts_on,
               value: [

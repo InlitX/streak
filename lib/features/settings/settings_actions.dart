@@ -364,6 +364,12 @@ class SettingsActions {
     if (name != null) await settings.setProfileName(name);
   }
 
+  static List<String> celebrationLabels(BuildContext context) => [
+        context.l10n.celebration_confetti,
+        context.l10n.celebration_fireworks,
+        context.l10n.celebration_surprise,
+      ];
+
   static List<String> dayStartLabels(BuildContext context) => [
         context.l10n.day_start_midnight,
         for (var h = 1; h <= 6; h++) context.l10n.day_start_hour('$h'),
