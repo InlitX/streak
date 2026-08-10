@@ -25,9 +25,11 @@ class FocusDurationChips extends StatelessWidget {
       title: context.l10n.focus_duration,
       value: minutes < 1 ? 25 : minutes.toDouble(),
       unit: context.l10n.unit_min_short,
-      min: 1,
+      min: allowFlow ? 0 : 1,
     );
-    if (value != null) onChanged(value.round().clamp(1, 600));
+    if (value == null) return;
+    final picked = value.round();
+    onChanged(allowFlow && picked <= 0 ? 0 : picked.clamp(1, 600));
   }
 
   @override
