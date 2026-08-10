@@ -183,7 +183,7 @@
   "import_backup_sub": "שחזור הרגלים מקובץ",
   "import_failed": "לא היה ניתן לייבא קובץ זה",
   "description_hint": "הערה לבחירתך",
-  "count_days": "{count, plural, =1{יום}, two{יומיים}, other{{count} ימים}}",
+  "count_days": "{count, plural, =1{יום} two{יומיים} other{{count} ימים}}",
   "@count_days": {
     "placeholders": {
       "count": {
@@ -191,7 +191,7 @@
       }
     }
   },
-  "count_weeks": "{count, plural, =1{שבוע}, two{שבועיים}, other{{count} שבועות}}",
+  "count_weeks": "{count, plural, =1{שבוע} two{שבועיים} other{{count} שבועות}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
@@ -199,7 +199,7 @@
       }
     }
   },
-  "count_months": "{count, plural, =1{חודש}, two{חודשיים}, other{{count} חודשים}}",
+  "count_months": "{count, plural, =1{חודש} two{חודשיים} other{{count} חודשים}}",
   "@count_months": {
     "placeholders": {
       "count": {
