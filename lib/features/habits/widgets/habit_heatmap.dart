@@ -39,10 +39,15 @@ Color heatmapCellColor(
     return date.isAfter(today) ? clean.withValues(alpha: 0.18) : clean;
   }
 
+  if (!beforeCreation && habit.isCoveredOn(date)) {
+    return habit.color.withValues(alpha: 0.22);
+  }
+
   final count = habit.completions[date.dayKey]?.count ?? 0;
   if (count <= 0) {
     final base = scheme.surfaceContainerHighest;
-    return date.isAfter(today) ? base.withValues(alpha: 0.4) : base;
+    final untouched = date.isAfter(today) || habit.isOffDay(date);
+    return untouched ? base.withValues(alpha: 0.4) : base;
   }
   final target = habit.effectiveTarget <= 0 ? 1.0 : habit.effectiveTarget;
   final ratio = (count / target).clamp(0.25, 1.0);

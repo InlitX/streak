@@ -160,6 +160,37 @@ class Habit {
   bool isNeutralOn(DateTime date) =>
       isPausedOn(date) && !completions.containsKey(date.dayKey);
 
+  bool isSatisfiedOn(DateTime date) =>
+      isCompletedOn(date) || _doneAheadOf(date);
+
+  bool _doneAheadOf(DateTime date) {
+    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
+    final floor = createdAt.atMidnight;
+    var cursor = date.atMidnight;
+    for (var step = 1; step < scheduleEvery; step++) {
+      cursor = cursor.subtract(const Duration(days: 1));
+      if (cursor.isBefore(floor)) return false;
+      if (isCompletedOn(cursor)) return true;
+    }
+    return false;
+  }
+
+  bool isCoveredOn(DateTime date) {
+    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
+    var cursor = date.atMidnight;
+    if (isScheduledOn(cursor) || cursor.isAfter(AppClock.now().atMidnight)) {
+      return false;
+    }
+    final floor = createdAt.atMidnight;
+    for (var step = 1; step < scheduleEvery; step++) {
+      cursor = cursor.subtract(const Duration(days: 1));
+      if (cursor.isBefore(floor)) return false;
+      if (isCompletedOn(cursor)) return true;
+      if (isScheduledOn(cursor)) return false;
+    }
+    return false;
+  }
+
   bool isCompletedOn(DateTime date) {
     final day = date.atMidnight;
     if (day.isAfter(AppClock.now().atMidnight)) return false;
@@ -327,7 +358,7 @@ class Habit {
         cursor = cursor.subtract(const Duration(days: 1));
         continue;
       }
-      if (isCompletedOn(cursor)) {
+      if (isSatisfiedOn(cursor)) {
         streak++;
       } else if (cursor.isAtSameMomentAs(today)) {
       } else {
@@ -348,7 +379,7 @@ class Habit {
         cursor = cursor.add(const Duration(days: 1));
         continue;
       }
-      if (isCompletedOn(cursor)) {
+      if (isSatisfiedOn(cursor)) {
         run++;
         if (run > best) best = run;
       } else {

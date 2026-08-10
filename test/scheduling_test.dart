@@ -78,6 +78,53 @@ void main() {
       expect(h.currentStreak, 1);
     });
 
+    test('doing it a day early keeps the due day standing', () {
+      // due on -6,-3,0. Done on -6 and on -4, a day ahead of the -3 due day.
+      final h = _habit(
+        interval: HabitInterval.everyXDays,
+        every: 3,
+        createdAt: _ago(6),
+        completions: _done([_ago(6), _ago(4)]),
+      );
+      expect(h.isSatisfiedOn(_ago(3)), isTrue);
+      expect(h.currentStreak, 2);
+    });
+
+    test('an early day only covers the due day it belongs to', () {
+      // -5 sits in the window of the -3 due day, not of the -6 one.
+      final h = _habit(
+        interval: HabitInterval.everyXDays,
+        every: 3,
+        createdAt: _ago(9),
+        completions: _done([_ago(5)]),
+      );
+      expect(h.isSatisfiedOn(_ago(3)), isTrue);
+      expect(h.isSatisfiedOn(_ago(6)), isFalse);
+    });
+
+    test('the days after a completion are covered until the next due day', () {
+      final h = _habit(
+        interval: HabitInterval.everyXDays,
+        every: 3,
+        createdAt: _ago(6),
+        completions: _done([_ago(6)]),
+      );
+      expect(h.isCoveredOn(_ago(5)), isTrue);
+      expect(h.isCoveredOn(_ago(4)), isTrue);
+      expect(h.isCoveredOn(_ago(3)), isFalse);
+      expect(h.isCoveredOn(_ago(2)), isFalse);
+    });
+
+    test('nothing is covered on a habit tied to weekdays', () {
+      final h = _habit(
+        interval: HabitInterval.weekdays,
+        weekdays: [_today().weekday],
+        createdAt: _ago(6),
+        completions: _done([_ago(7)]),
+      );
+      expect(h.isCoveredOn(_ago(1)), isFalse);
+    });
+
     test('isDoneForNow is true when today is not a scheduled day', () {
       // due on even offsets; yesterday-anchored so today (diff 1) is off.
       final h = _habit(

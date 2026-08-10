@@ -28,12 +28,12 @@ import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
-import 'package:streak/features/habits/widgets/consistency_card.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
+import 'package:streak/features/habits/widgets/quant_daily_bars.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
@@ -197,6 +197,9 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 if (habit.kind == HabitKind.quantitative) ...[
                   QuantitativeProgress(habit: habit),
                   const SizedBox(height: 20),
+                  SectionLabel(context.l10n.quant_per_day),
+                  QuantDailyBars(habit: habit),
+                  const SizedBox(height: 20),
                 ],
                 if (habit.hasSubsteps) ...[
                   SectionLabel(context.l10n.todays_checklist),
@@ -209,8 +212,6 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 ],
                 SectionLabel(context.l10n.streaks),
                 StreakSummary(habit: habit),
-                const SizedBox(height: 12),
-                ConsistencyCard(habit: habit),
                 const SizedBox(height: 20),
                 SectionLabel(
                   context.l10n.activity,
