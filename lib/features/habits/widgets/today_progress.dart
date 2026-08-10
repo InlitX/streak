@@ -83,15 +83,6 @@ class _TodayProgressState extends State<TodayProgress>
     return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
   }
 
-  String _message(BuildContext context) {
-    if (widget.total == 0) return context.l10n.motiv_start;
-    final pct = widget._ratio;
-    if (pct >= 1) return context.l10n.motiv_perfect;
-    if (pct >= 0.5) return context.l10n.motiv_almost;
-    if (pct > 0) return context.l10n.motiv_progress;
-    return context.l10n.motiv_start;
-  }
-
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
@@ -101,7 +92,7 @@ class _TodayProgressState extends State<TodayProgress>
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
         child: Row(
           children: [
             Expanded(
@@ -112,11 +103,11 @@ class _TodayProgressState extends State<TodayProgress>
                     _today(context),
                     style: TextStyle(
                       color: context.tokens.muted,
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     total == 0
                         ? context.l10n.no_habits_yet
@@ -125,25 +116,16 @@ class _TodayProgressState extends State<TodayProgress>
                             : context.l10n.x_of_y_completed('$done', '$total'),
                     style: TextStyle(
                       color: scheme.onSurface,
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _message(context),
-                    style: TextStyle(
-                      color: scheme.primary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(
-              width: 72,
-              height: 72,
+              width: 58,
+              height: 58,
               child: AnimatedBuilder(
                 animation: _curve,
                 builder: (context, _) {

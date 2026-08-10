@@ -7,6 +7,7 @@ import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
+import 'package:streak/features/habits/widgets/day_stamp.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -128,33 +129,27 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   Widget _weekRow(BuildContext context, {bool compact = false}) {
     final weekStart = context.watch<SettingsController>().weekStart;
     final start = _today.startOfWeek(weekStart);
-    final letters = WeekdayLabels.narrowFrom(
+    final labels = WeekdayLabels.shortFrom(
       Localizations.localeOf(context).languageCode,
       weekStart,
     );
-    final height = compact ? 30.0 : 44.0;
+    final height = compact ? 40.0 : 46.0;
     return Row(
       children: List.generate(7, (i) {
         final date = start.add(Duration(days: i));
         final future = date.isAfter(_today);
+        final fill = _cell(context, date);
+        final ink = fill.a < 0.55
+            ? context.tokens.muted
+            : (fill.computeLuminance() > 0.55 ? Colors.black : Colors.white);
+
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             child: Column(
               children: [
-                ExcludeSemantics(
-                  child: Text(
-                    letters[i],
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: context.tokens.muted,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
                 Semantics(
-                  button: true,
+                  button: !future,
                   label: _dayLabel(date),
                   child: GestureDetector(
                     onTap: future || widget.onToggle == null
@@ -164,12 +159,25 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                         ? null
                         : () => widget.onLongPress!(date),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 220),
+                      duration: const Duration(milliseconds: 260),
+                      curve: Curves.easeOutCubic,
+                      width: double.infinity,
                       height: height,
                       decoration: BoxDecoration(
                         color: _cell(context, date),
                         borderRadius: BorderRadius.circular(
-                          widget.circle ? height / 2 : (compact ? 9 : 12),
+                          widget.circle ? 16 : 11,
+                        ),
+                      ),
+                      child: ExcludeSemantics(
+                        child: MediaQuery.withClampedTextScaling(
+                          maxScaleFactor: 1.15,
+                          child: DayStamp(
+                            date: date,
+                            label: labels[i].replaceAll('.', '').toUpperCase(),
+                            compact: compact,
+                            color: future ? ink.withValues(alpha: 0.45) : ink,
+                          ),
                         ),
                       ),
                     ),

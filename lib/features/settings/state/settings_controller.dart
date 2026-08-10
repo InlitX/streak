@@ -55,6 +55,7 @@ class SettingsController extends ChangeNotifier {
     _planningEnabled = LocalStore.setting('planningEnabled', false);
     _cardActivity = LocalStore.setting('cardActivity', true);
     _viewSwitcher = LocalStore.setting('viewSwitcher', true);
+    _compactCards = LocalStore.setting('compactCards', false);
     _todosEnabled = LocalStore.setting('todosEnabled', false);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
@@ -109,6 +110,7 @@ class SettingsController extends ChangeNotifier {
   late bool _planningEnabled;
   late bool _cardActivity;
   late bool _viewSwitcher;
+  late bool _compactCards;
   late bool _todosEnabled;
   late int _appStyle;
   late bool _sortCompletedLast;
@@ -201,6 +203,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setViewSwitcher(bool value) async {
     _viewSwitcher = value;
     await LocalStore.writeSetting('viewSwitcher', value);
+    notifyListeners();
+  }
+
+  bool get compactCards => _compactCards;
+
+  Future<void> setCompactCards(bool value) async {
+    _compactCards = value;
+    await LocalStore.writeSetting('compactCards', value);
     notifyListeners();
   }
 

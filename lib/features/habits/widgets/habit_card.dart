@@ -11,6 +11,7 @@ import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
+import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
@@ -28,15 +29,19 @@ class HabitCard extends StatelessWidget {
     required this.habit,
     required this.onOpen,
     required this.onToggleToday,
+    this.onToggleDay,
     this.onLongPress,
     this.mode = HeatmapMode.month,
+    this.corners,
   });
 
   final Habit habit;
   final VoidCallback onOpen;
   final VoidCallback onToggleToday;
+  final void Function(DateTime date)? onToggleDay;
   final VoidCallback? onLongPress;
   final HeatmapMode mode;
+  final BorderRadius? corners;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +51,12 @@ class HabitCard extends StatelessWidget {
     final settings = context.watch<SettingsController>();
     final circleCheck = settings.isCircleCheck;
     final hasCover = CoverImage.exists(habit.coverPath);
+    final compact = settings.compactCards;
+    final corners = this.corners ?? BorderRadius.circular(24);
 
     return Card(
       clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: corners),
       child: Semantics(
         button: true,
         child: InkWell(
@@ -59,7 +67,7 @@ class HabitCard extends StatelessWidget {
                   HapticFeedback.heavyImpact();
                   onLongPress!();
                 },
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: corners,
           child: Stack(
             children: [
               if (hasCover) ...[
@@ -68,34 +76,36 @@ class HabitCard extends StatelessWidget {
                   child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
                 ),
               ],
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+              AnimatedSize(
+                duration: const Duration(milliseconds: 340),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.all(compact ? 11 : 16),
+                  child: Column(
                   children: [
                     Row(
                       children: [
                         Container(
-                          width: 46,
-                          height: 46,
+                          width: compact ? 34 : 46,
+                          height: compact ? 34 : 46,
                           decoration: BoxDecoration(
                             color: habit.color.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(compact ? 11 : 14),
                           ),
                           child: HabitGlyph(
                             glyph: habit.icon,
                             color: habit.color,
-                            size: 24,
+                            size: compact ? 18 : 24,
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: compact ? 11 : 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              ScrollingText(
                                 habit.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -185,43 +195,59 @@ class HabitCard extends StatelessWidget {
                                   ],
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: StrengthBar(
-                                      value: habit.strength,
-                                      color: habit.color,
-                                      track: scheme.surfaceContainerHighest,
+                              if (!compact) ...[
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: StrengthBar(
+                                        value: habit.strength,
+                                        color: habit.color,
+                                        track: scheme.surfaceContainerHighest,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '${habit.consistency}%',
-                                    style: TextStyle(
-                                      fontSize: 11.5,
-                                      fontWeight: FontWeight.w700,
-                                      color: context.tokens.muted,
-                                      fontFeatures: const [
-                                        FontFeature.tabularFigures(),
-                                      ],
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      '${habit.consistency}%',
+                                      style: TextStyle(
+                                        fontSize: 11.5,
+                                        fontWeight: FontWeight.w700,
+                                        color: context.tokens.muted,
+                                        fontFeatures: const [
+                                          FontFeature.tabularFigures(),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                         ),
-                        const SizedBox(width: 14),
-                        _ActionButton(
-                          habit: habit,
-                          doneToday: doneToday,
-                          circle: circleCheck,
-                          onToggleToday: onToggleToday,
-                        ),
+                        SizedBox(width: compact ? 10 : 14),
+                        if (compact)
+                          SizedBox(
+                            width: 34,
+                            height: 34,
+                            child: FittedBox(
+                              child: _ActionButton(
+                                habit: habit,
+                                doneToday: doneToday,
+                                circle: circleCheck,
+                                onToggleToday: onToggleToday,
+                              ),
+                            ),
+                          )
+                        else
+                          _ActionButton(
+                            habit: habit,
+                            doneToday: doneToday,
+                            circle: circleCheck,
+                            onToggleToday: onToggleToday,
+                          ),
                       ],
                     ),
-                    if (settings.cardActivity) ...[
+                    if (settings.cardActivity && !compact) ...[
                       const SizedBox(height: 16),
                       AnimatedSize(
                         duration: const Duration(milliseconds: 420),
@@ -265,12 +291,14 @@ class HabitCard extends StatelessWidget {
                               mode: mode,
                               compact: true,
                               circle: circleCheck,
+                              onToggle: onToggleDay,
                             ),
                           ),
                         ),
                       ),
                     ],
                   ],
+                  ),
                 ),
               ),
             ],

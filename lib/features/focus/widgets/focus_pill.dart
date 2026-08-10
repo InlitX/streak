@@ -47,12 +47,12 @@ class FocusPill extends StatelessWidget {
         child: GestureDetector(
           onTap: open,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: active
                   ? accent.withValues(alpha: 0.16)
                   : context.colors.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
               border: active
                   ? Border.all(color: accent.withValues(alpha: 0.6))
                   : null,
@@ -62,7 +62,7 @@ class FocusPill extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.timer,
-                  size: 17,
+                  size: 16,
                   color: active ? accent : context.tokens.muted,
                 ),
                 const SizedBox(width: 6),
@@ -71,7 +71,7 @@ class FocusPill extends StatelessWidget {
                       ? formatDuration(focus.remainingSeconds)
                       : context.l10n.focus,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13.5,
                     fontWeight: FontWeight.w700,
                     color: active ? accent : context.tokens.muted,
                     fontFeatures: const [FontFeature.tabularFigures()],

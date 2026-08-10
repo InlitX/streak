@@ -8,6 +8,7 @@ import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/cover_image.dart';
+import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -230,14 +231,14 @@ class GridWeekCard extends StatelessWidget {
     required this.onOpen,
     required this.onToggleDay,
     this.onLongPress,
-    this.days = 5,
   });
 
   final Habit habit;
   final VoidCallback onOpen;
   final void Function(DateTime date) onToggleDay;
   final VoidCallback? onLongPress;
-  final int days;
+
+  static const _cell = 28.0;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +248,7 @@ class GridWeekCard extends StatelessWidget {
       Localizations.localeOf(context).languageCode,
     );
     final scale = MediaQuery.textScalerOf(context).scale(11) / 11;
-    final columns = scale > 1.6 ? 3 : (scale > 1.3 ? 4 : days);
+    final columns = scale > 1.6 ? 3 : (scale > 1.3 ? 4 : 5);
 
     return Semantics(
       button: true,
@@ -257,17 +258,16 @@ class GridWeekCard extends StatelessWidget {
         child: _shell(
           context,
           habit,
+          padding: const EdgeInsets.all(12),
           Row(
             children: [
-              _GlyphTile(habit: habit, size: 48),
+              _GlyphTile(habit: habit, size: 44),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
+                child: ScrollingText(
                   habit.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 16.5,
                     fontWeight: FontWeight.w700,
                     color: _titleColor(context, habit),
                   ),
@@ -279,6 +279,7 @@ class GridWeekCard extends StatelessWidget {
                   date: today.subtract(Duration(days: i)),
                   label: labels[today.subtract(Duration(days: i)).weekday - 1],
                   circle: circle,
+                  size: _cell,
                   onTap: onToggleDay,
                 ),
             ],
@@ -295,6 +296,7 @@ class _DayCell extends StatelessWidget {
     required this.date,
     required this.label,
     required this.circle,
+    required this.size,
     required this.onTap,
   });
 
@@ -302,6 +304,7 @@ class _DayCell extends StatelessWidget {
   final DateTime date;
   final String label;
   final bool circle;
+  final double size;
   final void Function(DateTime date) onTap;
 
   @override
@@ -309,6 +312,7 @@ class _DayCell extends StatelessWidget {
     final done = habit.isCompletedOn(date);
     final quant = habit.kind == HabitKind.quantitative;
     final today = date.atMidnight == AppClock.now().atMidnight;
+
     return Padding(
       padding: const EdgeInsets.only(left: 6),
       child: Column(
@@ -332,7 +336,7 @@ class _DayCell extends StatelessWidget {
               ? _QuantTile(
                   habit: habit,
                   circle: circle,
-                  size: 30,
+                  size: size,
                   showCheck: false,
                 )
               : Semantics(
@@ -344,10 +348,12 @@ class _DayCell extends StatelessWidget {
                       onTap(date);
                     },
                     child: SizedBox(
-                      width: 30,
-                      height: 30,
+                      width: size,
+                      height: size,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(circle ? 15 : 9),
+                        borderRadius: BorderRadius.circular(
+                          circle ? size / 2 : 9,
+                        ),
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
@@ -419,10 +425,8 @@ class GridYearCard extends StatelessWidget {
                   _GlyphTile(habit: habit),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: Text(
+                    child: ScrollingText(
                       habit.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -504,10 +508,8 @@ class GridMonthCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
+                        ScrollingText(
                           habit.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
@@ -735,8 +737,8 @@ class GridViewSwitcher extends StatelessWidget {
   final ValueChanged<HeatmapMode> onChanged;
 
   static const _options = [
-    (HeatmapMode.month, Icons.grid_view_rounded),
     (HeatmapMode.week, Icons.checklist_rounded),
+    (HeatmapMode.month, Icons.grid_view_rounded),
     (HeatmapMode.year, Icons.view_agenda_outlined),
   ];
 

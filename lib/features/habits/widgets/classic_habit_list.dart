@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/widgets/stacked_corners.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -18,6 +21,7 @@ class ClassicHabitList extends StatelessWidget {
     required this.onReorder,
     required this.onOpen,
     required this.onToggleToday,
+    required this.onToggleDay,
     required this.onLongPress,
     this.leaving = const {},
   });
@@ -30,6 +34,7 @@ class ClassicHabitList extends StatelessWidget {
   final void Function(int oldIndex, int newIndex) onReorder;
   final ValueChanged<Habit> onOpen;
   final ValueChanged<Habit> onToggleToday;
+  final void Function(Habit habit, DateTime date) onToggleDay;
   final ValueChanged<Habit> onLongPress;
 
   @override
@@ -77,18 +82,23 @@ class ClassicHabitList extends StatelessWidget {
             ),
           );
         }
+        final compact = context.watch<SettingsController>().compactCards;
         return HabitEntrance(
           key: ValueKey(habit.id),
           index: index,
           child: SlotTransition(
             leaving: leaving.contains(habit.id),
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: EdgeInsets.only(bottom: compact ? 3 : 12),
               child: HabitCard(
                 habit: habit,
                 mode: mode,
+                corners: compact
+                    ? stackedCorners(index, habits.length)
+                    : null,
                 onOpen: () => onOpen(habit),
                 onToggleToday: () => onToggleToday(habit),
+                onToggleDay: (date) => onToggleDay(habit, date),
                 onLongPress: () => onLongPress(habit),
               ),
             ),

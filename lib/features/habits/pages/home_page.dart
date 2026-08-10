@@ -191,6 +191,20 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(LucideIcons.calendarClock, size: minimal ? 22 : 24),
               onPressed: () => AppNavigator.push(const DayTimelinePage()),
             ),
+          if (!minimal && !_reordering)
+            IconButton(
+              tooltip: settings.compactCards
+                  ? context.l10n.expand_cards
+                  : context.l10n.collapse_cards,
+              onPressed: () =>
+                  settings.setCompactCards(!settings.compactCards),
+              icon: Icon(
+                settings.compactCards
+                    ? LucideIcons.chevronsUpDown
+                    : LucideIcons.chevronsDownUp,
+                size: 20,
+              ),
+            ),
           if (!_reordering) FocusPill(compact: minimal),
           if (minimal && !_reordering && settings.todosEnabled)
             IconButton(
@@ -233,9 +247,21 @@ class _HomePageState extends State<HomePage> {
                           const HabitFormPage(),
                           fullscreenDialog: true,
                         ),
-                        icon: const Icon(LucideIcons.plus, size: 18),
-                        label: Text(context.l10n.new_label),
+                        icon: const Icon(LucideIcons.plus, size: 16),
+                        label: Text(
+                          context.l10n.new_label,
+                          style: const TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                         style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
@@ -328,6 +354,7 @@ class _HomePageState extends State<HomePage> {
                           onReorder: controller.reorder,
                           onOpen: _openDetails,
                           onToggleToday: (habit) => _toggle(habit, today),
+                          onToggleDay: _toggle,
                           onLongPress: (habit) =>
                               _showHabitActions(controller, habit),
                           leaving: _leaving,

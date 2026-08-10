@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
@@ -335,6 +336,7 @@ class _PreferencesPage extends StatelessWidget {
       title: context.l10n.preferences,
       subtitle: context.l10n.preferences_sub,
       children: [
+        SectionLabel(context.l10n.prefs_general),
         SoftCard(
           children: [
             SoftRow(
@@ -344,28 +346,27 @@ class _PreferencesPage extends StatelessWidget {
               onTap: () => showLanguageSheet(context),
             ),
             SoftRow(
-              icon: LucideIcons.fingerprint,
-              title: context.l10n.app_lock,
-              trailing: _SoftSwitch(
-                value: settings.appLock,
-                onChanged: (v) => SettingsActions.toggleAppLock(context, v),
-              ),
-            ),
-            if (settings.appLock)
-              SoftRow(
-                icon: LucideIcons.timer,
-                title: context.l10n.app_lock_delay,
-                value: SettingsActions.appLockDelayLabels(context)[
-                    SettingsActions.appLockDelayIndex(settings.appLockDelay)],
-                onTap: () => showOptionSheet(
-                  context,
-                  title: context.l10n.app_lock_delay,
-                  options: SettingsActions.appLockDelayLabels(context),
-                  index: SettingsActions.appLockDelayIndex(settings.appLockDelay),
-                  onSelected: (i) =>
-                      settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
+              icon: LucideIcons.calendarDays,
+              title: context.l10n.week_starts_on,
+              value: [
+                context.l10n.mon,
+                context.l10n.sat,
+                context.l10n.sun,
+              ][weekIndex],
+              onTap: () => showOptionSheet(
+                context,
+                title: context.l10n.week_starts_on,
+                options: [
+                  context.l10n.mon,
+                  context.l10n.sat,
+                  context.l10n.sun,
+                ],
+                index: weekIndex,
+                onSelected: (i) => settings.setWeekStart(
+                  switch (i) { 1 => 6, 2 => 7, _ => 1 },
                 ),
               ),
+            ),
             SoftRow(
               icon: LucideIcons.moon,
               title: context.l10n.day_start,
@@ -391,37 +392,12 @@ class _PreferencesPage extends StatelessWidget {
                 onSelected: settings.setCelebration,
               ),
             ),
-            SoftRow(
-              icon: LucideIcons.calendarDays,
-              title: context.l10n.week_starts_on,
-              value: [
-                context.l10n.mon,
-                context.l10n.sat,
-                context.l10n.sun,
-              ][weekIndex],
-              onTap: () => showOptionSheet(
-                context,
-                title: context.l10n.week_starts_on,
-                options: [
-                  context.l10n.mon,
-                  context.l10n.sat,
-                  context.l10n.sun,
-                ],
-                index: weekIndex,
-                onSelected: (i) => settings.setWeekStart(
-                  switch (i) { 1 => 6, 2 => 7, _ => 1 },
-                ),
-              ),
-            ),
-            SoftRow(
-              icon: LucideIcons.calendarClock,
-              title: context.l10n.plan_day,
-              subtitle: context.l10n.plan_day_sub,
-              trailing: _SoftSwitch(
-                value: settings.planningEnabled,
-                onChanged: settings.setPlanningEnabled,
-              ),
-            ),
+          ],
+        ),
+        const SizedBox(height: 22),
+        SectionLabel(context.l10n.today),
+        SoftCard(
+          children: [
             SoftRow(
               icon: LucideIcons.house,
               title: context.l10n.start_view,
@@ -436,6 +412,15 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.layoutList,
+              title: context.l10n.view_switcher,
+              subtitle: context.l10n.view_switcher_sub,
+              trailing: _SoftSwitch(
+                value: settings.viewSwitcher,
+                onChanged: settings.setViewSwitcher,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.arrowDownWideNarrow,
               title: context.l10n.sort_completed_last,
               trailing: _SoftSwitch(
@@ -443,6 +428,20 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: settings.setSortCompletedLast,
               ),
             ),
+            SoftRow(
+              icon: LucideIcons.calendarCheck,
+              title: context.l10n.today_only,
+              trailing: _SoftSwitch(
+                value: settings.todayOnly,
+                onChanged: settings.setTodayOnly,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 22),
+        SectionLabel(context.l10n.prefs_features),
+        SoftCard(
+          children: [
             SoftRow(
               icon: LucideIcons.timer,
               title: context.l10n.focus,
@@ -471,22 +470,43 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
-              icon: LucideIcons.layoutList,
-              title: context.l10n.view_switcher,
-              subtitle: context.l10n.view_switcher_sub,
+              icon: LucideIcons.calendarClock,
+              title: context.l10n.plan_day,
+              subtitle: context.l10n.plan_day_sub,
               trailing: _SoftSwitch(
-                value: settings.viewSwitcher,
-                onChanged: settings.setViewSwitcher,
+                value: settings.planningEnabled,
+                onChanged: settings.setPlanningEnabled,
               ),
             ),
+          ],
+        ),
+        const SizedBox(height: 22),
+        SectionLabel(context.l10n.prefs_privacy),
+        SoftCard(
+          children: [
             SoftRow(
-              icon: LucideIcons.calendarCheck,
-              title: context.l10n.today_only,
+              icon: LucideIcons.fingerprint,
+              title: context.l10n.app_lock,
               trailing: _SoftSwitch(
-                value: settings.todayOnly,
-                onChanged: settings.setTodayOnly,
+                value: settings.appLock,
+                onChanged: (v) => SettingsActions.toggleAppLock(context, v),
               ),
             ),
+            if (settings.appLock)
+              SoftRow(
+                icon: LucideIcons.timer,
+                title: context.l10n.app_lock_delay,
+                value: SettingsActions.appLockDelayLabels(context)[
+                    SettingsActions.appLockDelayIndex(settings.appLockDelay)],
+                onTap: () => showOptionSheet(
+                  context,
+                  title: context.l10n.app_lock_delay,
+                  options: SettingsActions.appLockDelayLabels(context),
+                  index: SettingsActions.appLockDelayIndex(settings.appLockDelay),
+                  onSelected: (i) =>
+                      settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
+                ),
+              ),
           ],
         ),
       ],

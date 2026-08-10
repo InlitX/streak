@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/widgets/scrolling_text.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
@@ -113,6 +116,69 @@ void main() {
       expect(find.text('Week'), findsNothing);
     });
 
+    testWidgets('the week strip stamps every day with its date', (tester) async {
+      await _seedThree(tester);
+      await _pumpHome(tester, HeatmapMode.week);
+
+      final start = AppClock.now().startOfWeek(1);
+      for (var i = 0; i < 7; i++) {
+        expect(
+          find.text('${start.add(Duration(days: i)).day}'),
+          findsWidgets,
+          reason: 'day ${i + 1}',
+        );
+      }
+    });
+
+    testWidgets('every day in the strip can be logged on its own',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
+      await _pumpHome(tester, HeatmapMode.week);
+
+      expect(
+        tester.widget<HabitHeatmap>(find.byType(HabitHeatmap).first).onToggle,
+        isNotNull,
+      );
+      final today = AppClock.now();
+      expect(
+        find.bySemanticsLabel(RegExp('${today.day}.*not done')),
+        findsWidgets,
+      );
+      handle.dispose();
+    });
+
+    testWidgets('the collapse button is there to shrink the cards',
+        (tester) async {
+      await _seedThree(tester);
+      await _pumpHome(tester, HeatmapMode.week);
+
+      expect(find.byIcon(LucideIcons.chevronsDownUp), findsOneWidget);
+      expect(find.byType(HabitHeatmap), findsWidgets);
+    });
+
+    testWidgets('collapsed cards shrink and join into one block',
+        (tester) async {
+      await _seedThree(tester);
+      await pumpScreen(
+        tester,
+        const HomePage(),
+        settings: {
+          'heatmapMode': HeatmapMode.week.index,
+          'compactCards': true,
+        },
+      );
+
+      expect(find.byType(HabitHeatmap), findsNothing);
+      expect(find.byIcon(LucideIcons.chevronsUpDown), findsOneWidget);
+
+      final cards = tester.widgetList<HabitCard>(find.byType(HabitCard));
+      expect(tester.getSize(find.byType(HabitCard).first).height, lessThan(80));
+      expect(cards.first.corners!.topLeft.x, greaterThan(15));
+      expect(cards.first.corners!.bottomLeft.x, lessThan(15));
+      expect(cards.last.corners!.bottomLeft.x, greaterThan(15));
+    });
+
   });
 
   group('minimal', () {
@@ -122,6 +188,24 @@ void main() {
 
       expect(find.byType(GridWeekCard), findsNWidgets(3));
       expect(find.text('Read'), findsOneWidget);
+    });
+
+    testWidgets('the week card keeps the name on one line with the days',
+        (tester) async {
+      await _seedThree(tester);
+      await _pumpHome(tester, HeatmapMode.week, minimal: true);
+
+      final card = find.ancestor(
+        of: find.text('Read'),
+        matching: find.byType(GridWeekCard),
+      );
+      final name = tester.getRect(
+        find.descendant(of: card, matching: find.byType(ScrollingText)),
+      );
+
+      expect(tester.getSize(card).height, lessThan(90));
+      expect(find.text('${AppClock.now().day}'), findsNothing);
+      expect(name.width, greaterThan(60));
     });
 
     testWidgets('the year view lists every habit', (tester) async {
