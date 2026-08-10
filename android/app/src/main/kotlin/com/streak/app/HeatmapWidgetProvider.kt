@@ -27,11 +27,15 @@ class HeatmapWidgetProvider : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle,
     ) {
+        val size = sizeOf(newOptions)
+        if (sizes[appWidgetId] == size) return
+        sizes[appWidgetId] = size
         HeatmapRenderer.update(context, appWidgetManager, appWidgetId)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         for (id in appWidgetIds) {
+            sizes.remove(id)
             HeatmapConfig.clear(context, id)
             WidgetConfig.forget(context, id)
         }
@@ -40,5 +44,13 @@ class HeatmapWidgetProvider : AppWidgetProvider() {
     private companion object {
         const val ACTION_HOME_WIDGET_UPDATE =
             "es.antonborri.home_widget.action.UPDATE_WIDGET"
+
+        val sizes = mutableMapOf<Int, Long>()
+
+        fun sizeOf(options: Bundle): Long {
+            val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
+            val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0)
+            return width.toLong() shl 32 or (height.toLong() and 0xFFFFFFFFL)
+        }
     }
 }
