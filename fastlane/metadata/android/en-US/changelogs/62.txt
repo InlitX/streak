@@ -1,0 +1,8 @@
+🚀 New version 1.5.0
+⏱️ Focus survives leaving the app, and belongs to each habit
+📊 Focus stats: time per habit, charts and logging past sessions
+✅ A to-do list beside your habits, and a timeline to plan the day
+🔁 Every X days: the days in between are no longer misses
+💬 Write your own quotes and choose which ones show up
+🎨 Widgets can follow your system light or dark theme
+🐛 Fixed consistency, reordering with filters and stale widgets

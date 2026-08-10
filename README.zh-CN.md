@@ -14,7 +14,7 @@
 
 ### Streak
 
-<img src="assets/icon.svg" width="56" alt="Streak 标志" />
+<img src="assets/icon.svg" width="72" alt="Streak 标志" />
 
 ### 极简、私密、无广告的习惯追踪应用
 
@@ -245,6 +245,22 @@ Streak 已完整支持**英语、西班牙语、俄语和中文**，**德语、�
 欢迎问题反馈、想法和 pull request，请看
 [**CONTRIBUTING.md**](CONTRIBUTING.md)。如果不只是小修小补，请先开一个 issue，
 我们先就方向达成一致。
+
+---
+
+## 🙏 灵感来源
+
+Streak 并非凭空而来。以下这些应用塑造了它：
+
+- **[Loop Habit Tracker](https://github.com/iSoron/uhabits)**，它证明了习惯记录
+  应用可以自由、离线，而且安静地出色。
+- **[Grit](https://github.com/shub39/Grit)**，它的精致：细微的动效，以及让列表
+  活起来的感觉。
+- **[HabitKit](https://www.habitkit.app/)**，它让人看到一整年的记录做成彩色格子
+  有多好看。
+- **[Habitica](https://github.com/habitRPG/habitica)**，它把每天坚持下来当成值得庆祝的事。
+
+这里没有任何东西是照搬它们的。它们的想法只是起点，之后 Streak 走了自己的路。
 
 ---
 

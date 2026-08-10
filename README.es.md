@@ -14,7 +14,7 @@
 
 ### Streak
 
-<img src="assets/icon.svg" width="56" alt="Logo de Streak" />
+<img src="assets/icon.svg" width="72" alt="Logo de Streak" />
 
 ### Un rastreador de hábitos minimalista, privado y sin anuncios
 
@@ -270,6 +270,24 @@ Cómo funciona → [**TRANSLATING.md**](TRANSLATING.md)
 Los informes de fallos, las ideas y los pull requests son bienvenidos, mira
 [**CONTRIBUTING.md**](CONTRIBUTING.md). Para algo más grande que un arreglo, abre
 antes una incidencia y acordamos la dirección.
+
+---
+
+## 🙏 Inspiración
+
+Streak no salió de la nada. Estas son las apps que la moldearon:
+
+- **[Loop Habit Tracker](https://github.com/iSoron/uhabits)**, por demostrar que
+  un rastreador de hábitos puede ser libre, sin conexión y excelente sin ruido.
+- **[Grit](https://github.com/shub39/Grit)**, por el acabado: los movimientos
+  pequeños y esa sensación de que la lista está viva.
+- **[HabitKit](https://www.habitkit.app/)**, por enseñar lo bien que se ve un año
+  de historial en una rejilla de colores.
+- **[Habitica](https://github.com/habitRPG/habitica)**, por tratar el aparecer cada día como
+  algo que merece celebrarse.
+
+Aquí no hay nada copiado de ellas. Sus ideas fueron el punto de partida y Streak
+siguió su propio camino.
 
 ---
 

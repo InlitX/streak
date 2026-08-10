@@ -1,0 +1,8 @@
+🚀 Nueva versión 1.5.0
+⏱️ Focus sobrevive al salir de la app, y es de cada hábito
+📊 Estadísticas de Focus: tiempo por hábito, gráficas y sesiones a mano
+✅ Lista de tareas junto a tus hábitos, y una línea de tiempo del día
+🔁 Cada X días: los días intermedios ya no cuentan como fallo
+💬 Escribe tus propias frases y elige cuáles salen
+🎨 Los widgets pueden seguir el tema claro u oscuro del sistema
+🐛 Arreglados la constancia, reordenar con filtros y widgets desfasados

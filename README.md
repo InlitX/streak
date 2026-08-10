@@ -14,7 +14,7 @@
 
 ### Streak
 
-<img src="assets/icon.svg" width="56" alt="Streak logo" />
+<img src="assets/icon.svg" width="72" alt="Streak logo" />
 
 Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 
@@ -257,6 +257,24 @@ How it works → [**TRANSLATING.md**](TRANSLATING.md)
 Bug reports, ideas and pull requests are all welcome, see
 [**CONTRIBUTING.md**](CONTRIBUTING.md). For anything larger than a fix, open an
 issue first so we can agree on the direction.
+
+---
+
+## 🙏 Inspiration
+
+Streak did not appear out of nowhere. These are the apps that shaped it:
+
+- **[Loop Habit Tracker](https://github.com/iSoron/uhabits)**, for proving a
+  habit tracker can be free, offline and quietly excellent.
+- **[Grit](https://github.com/shub39/Grit)**, for the polish: the small motions
+  and the way a list can feel alive.
+- **[HabitKit](https://www.habitkit.app/)**, for showing how good a year of
+  history looks as a coloured grid.
+- **[Habitica](https://github.com/habitRPG/habitica)**, for treating showing up as something
+  worth celebrating.
+
+Nothing here is copied from them. Their ideas were the starting point, and
+Streak went its own way from there.
 
 ---
 
