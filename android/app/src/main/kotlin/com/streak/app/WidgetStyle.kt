@@ -49,7 +49,7 @@ data class WidgetStyle(
             ) {
                 return image(image, opacity, border, bw)
             }
-            return from(WidgetConfig.bg(context, id), opacity, border, bw)
+            return from(WidgetConfig.bgFor(context, id), opacity, border, bw)
         }
 
         fun loadFor(context: Context, glanceId: GlanceId): WidgetStyle =

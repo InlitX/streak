@@ -121,6 +121,8 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialHabit = HeatmapConfig.habitOf(this, appWidgetId),
                 initialAllColor = HeatmapConfig.colorOf(this, appWidgetId),
                 initialLayout = HeatmapConfig.layoutOf(this, appWidgetId),
+                initialFollowSystem = WidgetConfig.followSystem(this, appWidgetId),
+                initialBgLight = WidgetConfig.bgLight(this, appWidgetId),
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
         }
@@ -141,11 +143,12 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun save(
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
         habitId: String?, allColor: Int, layout: Int,
+        followSystem: Boolean, bgLight: Int,
     ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
             this, appWidgetId, bg, opacity, border, borderWidth,
-            if (image != null) 1 else 0, image,
+            if (image != null) 1 else 0, image, followSystem, bgLight,
         )
         if (image != originalImage) WidgetConfig.deleteImage(this, originalImage)
         if (type == WType.HEATMAP) {
@@ -234,6 +237,8 @@ class WidgetConfigActivity : ComponentActivity() {
         initialHabit: String?,
         initialAllColor: Int?,
         initialLayout: Int,
+        initialFollowSystem: Boolean,
+        initialBgLight: Int,
         isEdit: Boolean,
     ) {
         var bg by remember { mutableStateOf(initialBg) }
@@ -244,13 +249,18 @@ class WidgetConfigActivity : ComponentActivity() {
         var allColor by remember { mutableStateOf(initialAllColor ?: brand.toArgb()) }
         var layout by remember { mutableStateOf(initialLayout) }
         var custom by remember { mutableStateOf(false) }
+        var followSystem by remember { mutableStateOf(initialFollowSystem) }
+        var bgLight by remember { mutableStateOf(initialBgLight) }
+        var lightCustom by remember { mutableStateOf(false) }
         val mode by bgModeState
         val image by imageState
 
+        val night = WidgetConfig.isNight(this)
+        val shown = if (followSystem && !night) bgLight else bg
         val style = if (mode == 1 && image != null) {
             WidgetStyle.image(image!!, opacity, border, borderWidth)
         } else {
-            WidgetStyle.from(bg, opacity, border, borderWidth)
+            WidgetStyle.from(shown, opacity, border, borderWidth)
         }
 
         Column(modifier = Modifier.fillMaxSize().background(screenBg)) {
@@ -298,12 +308,43 @@ class WidgetConfigActivity : ComponentActivity() {
                             Color(0xFF26262F),
                         ) { pickImage.launch("image/*") }
                     } else {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                tr("cfg_follow_system", "Follow system theme"),
+                                color = Color.White, fontSize = 15.sp,
+                                fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f),
+                            )
+                            Switch(
+                                checked = followSystem,
+                                onCheckedChange = { followSystem = it },
+                                colors = SwitchDefaults.colors(checkedTrackColor = brand),
+                            )
+                        }
+                        Spacer(Modifier.height(14.dp))
+                        if (followSystem) {
+                            Label(tr("cfg_dark_color", "Dark theme"))
+                            Spacer(Modifier.height(10.dp))
+                        }
                         Swatches(bg, custom) { bg = it; custom = false }
                         Spacer(Modifier.height(14.dp))
                         Chip(tr("cfg_custom_color", "Custom color"), custom) { custom = !custom }
                         if (custom) {
                             Spacer(Modifier.height(12.dp))
                             HsvPicker(bg) { bg = it }
+                        }
+                        if (followSystem) {
+                            Spacer(Modifier.height(20.dp))
+                            Label(tr("cfg_light_color", "Light theme"))
+                            Spacer(Modifier.height(10.dp))
+                            Swatches(bgLight, lightCustom) { bgLight = it; lightCustom = false }
+                            Spacer(Modifier.height(14.dp))
+                            Chip(tr("cfg_custom_color", "Custom color"), lightCustom) {
+                                lightCustom = !lightCustom
+                            }
+                            if (lightCustom) {
+                                Spacer(Modifier.height(12.dp))
+                                HsvPicker(bgLight) { bgLight = it }
+                            }
                         }
                     }
                     Spacer(Modifier.height(16.dp))
@@ -369,16 +410,22 @@ class WidgetConfigActivity : ComponentActivity() {
                     if (isEdit) tr("cfg_save", "Save") else tr("cfg_add", "Add widget"),
                     brand, height = 54.dp, bold = true,
                 ) {
-                    save(bg, opacity, border, borderWidth, habitId, allColor, layout)
+                    save(
+                        bg, opacity, border, borderWidth, habitId, allColor, layout,
+                        followSystem, bgLight,
+                    )
                 }
                 Box(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
                         .clickable {
                             bg = WidgetConfig.DEFAULT_BG
+                            bgLight = WidgetConfig.DEFAULT_BG_LIGHT
+                            followSystem = false
                             opacity = 100
                             border = false
                             borderWidth = 2
                             custom = false
+                            lightCustom = false
                             allColor = brand.toArgb()
                             layout = HeatmapConfig.LAYOUT_CLASSIC
                             bgModeState.value = 0

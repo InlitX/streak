@@ -729,6 +729,9 @@
   "widget_cfg_choose_image": "Choose image",
   "widget_cfg_change_image": "Change image",
   "widget_cfg_custom_color": "Custom color",
+  "widget_cfg_follow_system": "Follow system theme",
+  "widget_cfg_dark_color": "Dark theme",
+  "widget_cfg_light_color": "Light theme",
   "widget_cfg_opacity": "Opacity  {value}%",
   "@widget_cfg_opacity": {
     "placeholders": {

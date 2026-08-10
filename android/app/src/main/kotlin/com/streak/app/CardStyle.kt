@@ -33,7 +33,7 @@ data class CardStyle(
                     scrim = Color.argb(scrim, 0, 0, 0),
                 )
             }
-            return from(WidgetConfig.bg(context, id), opacity, border, width)
+            return from(WidgetConfig.bgFor(context, id), opacity, border, width)
         }
 
         fun from(rgb: Int, opacity: Int, border: Boolean, borderWidth: Int): CardStyle {

@@ -14,9 +14,7 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         schedule(context)
-        if (!hasWidgets(context)) return
-        HeatmapRenderer.updateAll(context)
-        WidgetActionWorker.refresh(context)
+        refreshAll(context)
     }
 
     companion object {
@@ -30,6 +28,12 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
             StatsWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
         )
+
+        fun refreshAll(context: Context) {
+            if (!hasWidgets(context)) return
+            HeatmapRenderer.updateAll(context)
+            WidgetActionWorker.refresh(context)
+        }
 
         fun hasWidgets(context: Context): Boolean = try {
             val manager = AppWidgetManager.getInstance(context)
