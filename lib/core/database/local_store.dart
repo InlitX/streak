@@ -4,6 +4,7 @@ import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
+import 'package:streak/features/todos/data/todo.dart';
 
 class LocalStore {
   const LocalStore._();
@@ -13,12 +14,14 @@ class LocalStore {
   static const _categoriesBox = 'categories';
   static const _notesBox = 'notes';
   static const _focusBox = 'focus';
+  static const _todosBox = 'todos';
 
   static late Box _habits;
   static late Box _settings;
   static late Box _categories;
   static late Box _notes;
   static late Box _focus;
+  static late Box _todos;
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -27,6 +30,29 @@ class LocalStore {
     _categories = await Hive.openBox(_categoriesBox);
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
+    _todos = await Hive.openBox(_todosBox);
+  }
+
+  static List<Todo> readTodos() {
+    final result = <Todo>[];
+    for (final raw in _todos.values) {
+      try {
+        result.add(Todo.fromMap(Map<String, dynamic>.from(raw as Map)));
+      } catch (e) {
+        debugPrint('Skipped an unreadable to-do: $e');
+      }
+    }
+    return result;
+  }
+
+  static Future<void> writeTodo(Todo todo) => _todos.put(todo.id, todo.toMap());
+
+  static Future<void> removeTodo(String id) => _todos.delete(id);
+
+  static Future<void> removeTodos(Iterable<String> ids) async {
+    for (final id in ids) {
+      await _todos.delete(id);
+    }
   }
 
   static List<FocusSession> readFocusSessions() {
@@ -146,6 +172,7 @@ class LocalStore {
     await _habits.clear();
     await _notes.clear();
     await _focus.clear();
+    await _todos.clear();
     await _categories.clear();
     await _settings.clear();
   }

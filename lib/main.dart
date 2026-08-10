@@ -14,6 +14,7 @@ import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
@@ -67,6 +68,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => SettingsController()),
         ChangeNotifierProvider(create: (_) => CategoriesController()),
         ChangeNotifierProvider(create: (_) => NotesController()),
+        ChangeNotifierProvider(create: (_) => TodosController()),
         ChangeNotifierProvider(create: (_) => FocusController()),
         ChangeNotifierProvider(
           create: (_) {

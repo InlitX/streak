@@ -408,6 +408,26 @@ class _ClassicPreferencesPage extends StatelessWidget {
         ),
         settingsDivider(context),
         SettingRow(
+          icon: LucideIcons.listChecks,
+          title: context.l10n.todos,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.todosEnabled ? 1 : 0,
+            onChanged: (i) => settings.setTodosEnabled(i == 1),
+          ),
+        ),
+        settingsDivider(context),
+        SettingRow(
+          icon: LucideIcons.layoutList,
+          title: context.l10n.view_switcher,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.viewSwitcher ? 1 : 0,
+            onChanged: (i) => settings.setViewSwitcher(i == 1),
+          ),
+        ),
+        settingsDivider(context),
+        SettingRow(
           icon: LucideIcons.calendarCheck,
           title: context.l10n.today_only,
           trailing: Segmented(

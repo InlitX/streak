@@ -17,6 +17,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/backup_service.dart';
@@ -57,6 +58,7 @@ class SettingsActions {
     if (error == null) {
       context.read<NotesController>().reload();
       context.read<FocusController>().reload();
+      context.read<TodosController>().reload();
       AppSnackbar.success(context, context.l10n.habits_imported);
     } else {
       AppSnackbar.error(context, error);
@@ -253,6 +255,7 @@ class SettingsActions {
     if (!context.mounted) return;
     context.read<NotesController>().reload();
     context.read<FocusController>().reload();
+    context.read<TodosController>().reload();
     context.read<CategoriesController>().reload();
     await context.read<SettingsController>().reloadFromStore();
     if (!context.mounted) return;

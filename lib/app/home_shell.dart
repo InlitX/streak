@@ -11,6 +11,7 @@ import 'package:streak/features/habits/widgets/today_intro.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
+import 'package:streak/features/todos/pages/todos_page.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -19,11 +20,11 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
+enum _Tab { today, todos, stats, settings }
+
 class _HomeShellState extends State<HomeShell>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  int _index = 0;
-
-  static const _pages = [HomePage(), StatisticsPage(), SettingsPage()];
+  _Tab _tab = _Tab.today;
 
   double _direction = 1;
 
@@ -55,15 +56,21 @@ class _HomeShellState extends State<HomeShell>
     super.dispose();
   }
 
-  void _select(int index) {
-    if (index == _index) return;
+  void _select(List<_Tab> tabs, _Tab tab) {
+    if (tab == _tab) return;
     HapticFeedback.selectionClick();
-    if (index == 0) TodayIntro.replay();
+    if (tab == _Tab.today) TodayIntro.replay();
     setState(() {
-      _direction = index > _index ? 1 : -1;
-      _index = index;
+      _direction = tabs.indexOf(tab) > tabs.indexOf(_tab) ? 1 : -1;
+      _tab = tab;
     });
     _swap.forward(from: 0);
+  }
+
+  void _swipe(List<_Tab> tabs, double velocity) {
+    final next = tabs.indexOf(_tab) + (velocity < 0 ? 1 : -1);
+    if (next < 0 || next >= tabs.length) return;
+    _select(tabs, tabs[next]);
   }
 
   @override
@@ -77,22 +84,37 @@ class _HomeShellState extends State<HomeShell>
 
   @override
   Widget build(BuildContext context) {
-    if (context.watch<SettingsController>().isMinimalStyle) {
+    final settings = context.watch<SettingsController>();
+    if (settings.isMinimalStyle) {
       return const Scaffold(body: HomePage());
     }
     final scheme = Theme.of(context).colorScheme;
+    final tabs = [
+      _Tab.today,
+      if (settings.todosEnabled) _Tab.todos,
+      _Tab.stats,
+      _Tab.settings,
+    ];
+    final current = tabs.contains(_tab) ? _tab : _Tab.today;
 
     return Scaffold(
       body: Stack(
         children: [
-          FadeTransition(
-            opacity: _fade,
-            child: SlideTransition(
-              position: Tween(
-                begin: Offset(0.07 * _direction, 0),
-                end: Offset.zero,
-              ).animate(_ease),
-              child: IndexedStack(index: _index, children: _pages),
+          GestureDetector(
+            onHorizontalDragEnd: (details) =>
+                _swipe(tabs, details.primaryVelocity ?? 0),
+            child: FadeTransition(
+              opacity: _fade,
+              child: SlideTransition(
+                position: Tween(
+                  begin: Offset(0.07 * _direction, 0),
+                  end: Offset.zero,
+                ).animate(_ease),
+                child: IndexedStack(
+                  index: tabs.indexOf(current),
+                  children: [for (final tab in tabs) _pageOf(tab)],
+                ),
+              ),
             ),
           ),
           Positioned(
@@ -119,24 +141,13 @@ class _HomeShellState extends State<HomeShell>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _NavItem(
-                      icon: LucideIcons.house,
-                      label: context.l10n.today,
-                      selected: _index == 0,
-                      onTap: () => _select(0),
-                    ),
-                    _NavItem(
-                      icon: LucideIcons.chartColumn,
-                      label: context.l10n.stats,
-                      selected: _index == 1,
-                      onTap: () => _select(1),
-                    ),
-                    _NavItem(
-                      icon: LucideIcons.settings,
-                      label: context.l10n.settings,
-                      selected: _index == 2,
-                      onTap: () => _select(2),
-                    ),
+                    for (final tab in tabs)
+                      _NavItem(
+                        icon: _iconOf(tab),
+                        label: _labelOf(context, tab),
+                        selected: tab == current,
+                        onTap: () => _select(tabs, tab),
+                      ),
                   ],
                 ),
               ),
@@ -147,6 +158,27 @@ class _HomeShellState extends State<HomeShell>
     );
   }
 }
+
+Widget _pageOf(_Tab tab) => switch (tab) {
+      _Tab.today => const HomePage(),
+      _Tab.todos => const TodosPage(),
+      _Tab.stats => const StatisticsPage(),
+      _Tab.settings => const SettingsPage(),
+    };
+
+IconData _iconOf(_Tab tab) => switch (tab) {
+      _Tab.today => LucideIcons.house,
+      _Tab.todos => LucideIcons.listChecks,
+      _Tab.stats => LucideIcons.chartColumn,
+      _Tab.settings => LucideIcons.settings,
+    };
+
+String _labelOf(BuildContext context, _Tab tab) => switch (tab) {
+      _Tab.today => context.l10n.today,
+      _Tab.todos => context.l10n.todos,
+      _Tab.stats => context.l10n.stats,
+      _Tab.settings => context.l10n.settings,
+    };
 
 class _NavItem extends StatelessWidget {
   const _NavItem({

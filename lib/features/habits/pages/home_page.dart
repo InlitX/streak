@@ -29,6 +29,7 @@ import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
+import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 
 class HomePage extends StatefulWidget {
@@ -191,6 +192,12 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => AppNavigator.push(const DayTimelinePage()),
             ),
           if (!_reordering) FocusPill(compact: minimal),
+          if (minimal && !_reordering && settings.todosEnabled)
+            IconButton(
+              tooltip: context.l10n.todos,
+              icon: const Icon(LucideIcons.listChecks, size: 22),
+              onPressed: () => AppNavigator.push(const TodosPage()),
+            ),
           if (minimal && !_reordering)
             IconButton(
               icon: const Icon(LucideIcons.chartColumn),
@@ -277,7 +284,9 @@ class _HomePageState extends State<HomePage> {
                           if (!minimal) const DailyQuote(),
                           if (!minimal) const SizedBox(height: 8),
                           if (!minimal) TodayProgress(done: done, total: total),
-                          if (!minimal && settings.cardActivity) ...[
+                          if (!minimal &&
+                              settings.cardActivity &&
+                              settings.viewSwitcher) ...[
                             const SizedBox(height: 20),
                             _ViewSelector(mode: _mode, onChanged: _changeMode),
                           ],
@@ -326,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            if (minimal && !_reordering)
+            if (minimal && !_reordering && settings.viewSwitcher)
               Positioned(
                 left: 0,
                 right: 0,

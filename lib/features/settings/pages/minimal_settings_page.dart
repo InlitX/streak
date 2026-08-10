@@ -462,6 +462,24 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.listChecks,
+              title: context.l10n.todos,
+              subtitle: context.l10n.todos_enable_sub,
+              trailing: _SoftSwitch(
+                value: settings.todosEnabled,
+                onChanged: settings.setTodosEnabled,
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.layoutList,
+              title: context.l10n.view_switcher,
+              subtitle: context.l10n.view_switcher_sub,
+              trailing: _SoftSwitch(
+                value: settings.viewSwitcher,
+                onChanged: settings.setViewSwitcher,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.calendarCheck,
               title: context.l10n.today_only,
               trailing: _SoftSwitch(

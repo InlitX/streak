@@ -10,6 +10,7 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
+import 'package:streak/features/todos/data/todo.dart';
 
 const _kBackupVersion = 1;
 const _kAutoBackupKeep = 5;
@@ -26,6 +27,7 @@ class BackupService {
       'notes': LocalStore.readNotes().map((n) => n.toMap()).toList(),
       'focus':
           LocalStore.readFocusSessions().map((f) => f.toMap()).toList(),
+      'todos': LocalStore.readTodos().map((t) => t.toMap()).toList(),
     };
     return const JsonEncoder.withIndent('  ').convert(payload);
   }
@@ -169,6 +171,16 @@ class BackupService {
           if (raw is Map) {
             await LocalStore.writeFocusSession(
               FocusSession.fromMap(Map<String, dynamic>.from(raw)),
+            );
+          }
+        }
+      }
+      final todos = decoded['todos'];
+      if (todos is List) {
+        for (final raw in todos) {
+          if (raw is Map) {
+            await LocalStore.writeTodo(
+              Todo.fromMap(Map<String, dynamic>.from(raw)),
             );
           }
         }

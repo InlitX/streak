@@ -1,0 +1,332 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/delete_sheet.dart';
+import 'package:streak/core/widgets/entrance.dart';
+import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/data/todo_groups.dart';
+import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/features/todos/widgets/todo_composer.dart';
+import 'package:streak/features/todos/widgets/todo_labels.dart';
+import 'package:streak/features/todos/widgets/todo_tile.dart';
+
+class TodosPage extends StatefulWidget {
+  const TodosPage({super.key});
+
+  @override
+  State<TodosPage> createState() => _TodosPageState();
+}
+
+class _TodosPageState extends State<TodosPage> {
+  bool _showCompleted = false;
+
+  Future<void> _delete(Todo todo) async {
+    final confirmed = await showDeleteSheet(context);
+    if (confirmed && mounted) {
+      await context.read<TodosController>().remove(todo.id);
+    }
+  }
+
+  Future<void> _clearCompleted(int count) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.todo_clear_completed,
+      message: context.l10n.todo_clear_completed_body(count),
+      confirmLabel: context.l10n.delete,
+      icon: LucideIcons.eraser,
+    );
+    if (confirmed == true && mounted) {
+      HapticFeedback.mediumImpact();
+      await context.read<TodosController>().clearCompleted();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final todos = context.watch<TodosController>();
+    final sections = todos.sections;
+    final completed = todos.completed;
+
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: minimal ? 52 : null,
+        title: minimal ? null : Text(context.l10n.todos),
+        leading: minimal
+            ? IconButton(
+                icon: const Icon(LucideIcons.arrowLeft),
+                onPressed: () => AppNavigator.pop(),
+              )
+            : null,
+        actions: [
+          if (completed.isNotEmpty)
+            IconButton(
+              tooltip: context.l10n.todo_clear_completed,
+              icon: const Icon(LucideIcons.eraser, size: 20),
+              onPressed: () => _clearCompleted(completed.length),
+            ),
+          const SizedBox(width: 4),
+        ],
+      ),
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            if (sections.isEmpty && completed.isEmpty)
+              _EmptyState(onAdd: () => showTodoComposer(context))
+            else
+              ListView(
+                padding: EdgeInsets.fromLTRB(
+                  minimal ? 22 : 16,
+                  minimal ? 0 : 8,
+                  minimal ? 22 : 16,
+                  minimal ? 96 : 148,
+                ),
+                children: [
+                  if (minimal)
+                    MinimalTitle(
+                      title: context.l10n.todos,
+                      subtitle: context.l10n.todo_left(todos.pendingCount),
+                    ),
+                  for (final section in sections) ...[
+                    _SectionHeader(
+                      label: todoGroupLabel(context, section.group),
+                      count: section.todos.length,
+                      danger: section.group == TodoGroup.overdue,
+                    ),
+                    for (final (index, todo) in section.todos.indexed)
+                      Entrance(
+                        key: ValueKey(todo.id),
+                        index: index,
+                        child: _Swipeable(
+                          todo: todo,
+                          onDelete: () => _delete(todo),
+                          child: TodoTile(
+                            todo: todo,
+                            overdue: section.group == TodoGroup.overdue,
+                            onToggle: () => todos.toggle(todo.id),
+                            onEdit: () => showTodoComposer(context, todo: todo),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 10),
+                  ],
+                  if (completed.isNotEmpty) ...[
+                    _CompletedHeader(
+                      count: completed.length,
+                      expanded: _showCompleted,
+                      onTap: () =>
+                          setState(() => _showCompleted = !_showCompleted),
+                    ),
+                    if (_showCompleted)
+                      for (final todo in completed)
+                        _Swipeable(
+                          todo: todo,
+                          onDelete: () => _delete(todo),
+                          child: TodoTile(
+                            todo: todo,
+                            overdue: false,
+                            onToggle: () => todos.toggle(todo.id),
+                            onEdit: () => showTodoComposer(context, todo: todo),
+                          ),
+                        ),
+                  ],
+                ],
+              ),
+            Positioned(
+              right: minimal ? 20 : 16,
+              bottom: minimal ? 20 : 78,
+              child: _AddButton(onTap: () => showTodoComposer(context)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Swipeable extends StatelessWidget {
+  const _Swipeable({
+    required this.todo,
+    required this.onDelete,
+    required this.child,
+  });
+
+  final Todo todo;
+  final Future<void> Function() onDelete;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Dismissible(
+        key: ValueKey('swipe-${todo.id}'),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.only(right: 20),
+          decoration: BoxDecoration(
+            color: context.tokens.danger.withValues(alpha: 0.16),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Icon(LucideIcons.trash2, size: 20, color: context.tokens.danger),
+        ),
+        confirmDismiss: (_) async {
+          await onDelete();
+          return false;
+        },
+        child: child,
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.label,
+    required this.count,
+    required this.danger,
+  });
+
+  final String label;
+  final int count;
+  final bool danger;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, bottom: 2),
+      child: SectionLabel(
+        label,
+        trailing: Text(
+          '$count',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: danger ? context.tokens.danger : context.tokens.muted,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompletedHeader extends StatelessWidget {
+  const _CompletedHeader({
+    required this.count,
+    required this.expanded,
+    required this.onTap,
+  });
+
+  final int count;
+  final bool expanded;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final muted = context.tokens.muted;
+    return Semantics(
+      button: true,
+      expanded: expanded,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            children: [
+              AnimatedRotation(
+                turns: expanded ? 0.25 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: Icon(LucideIcons.chevronRight, size: 16, color: muted),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                context.l10n.todo_completed_count(count),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.1,
+                  color: muted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  const _AddButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    return Semantics(
+      button: true,
+      label: context.l10n.todo_new,
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: scheme.primary,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: scheme.primary.withValues(alpha: 0.34),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Icon(LucideIcons.plus, size: 24, color: scheme.onPrimary),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.onAdd});
+
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppEmptyState(
+      icon: LucideIcons.listChecks,
+      title: context.l10n.todo_empty_title,
+      message: context.l10n.todo_empty_body,
+      action: FilledButton.icon(
+        onPressed: onAdd,
+        icon: const Icon(LucideIcons.plus, size: 18),
+        label: Text(context.l10n.todo_new),
+        style: FilledButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
+    );
+  }
+}

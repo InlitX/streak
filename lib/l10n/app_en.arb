@@ -422,6 +422,38 @@
   "@notes_count": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "todos": "To-Do",
+  "todos_enable_sub": "A quick list beside your habits",
+  "todo_new": "New to-do",
+  "todo_hint": "What needs doing?",
+  "todo_empty_title": "Nothing on the list",
+  "todo_empty_body": "Jot down what you want to get done over the next few days.",
+  "todo_date": "Date",
+  "todo_no_date": "No date",
+  "todo_priority": "Priority",
+  "priority_none": "No priority",
+  "priority_low": "Low",
+  "priority_medium": "Medium",
+  "priority_high": "High",
+  "todo_overdue": "Overdue",
+  "todo_upcoming": "Upcoming",
+  "todo_someday": "Someday",
+  "pick_a_date": "Pick a date",
+  "todo_left": "{count, plural, =0{All done} =1{1 to do} other{{count} to do}}",
+  "@todo_left": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_completed_count": "{count, plural, =1{Completed (1)} other{Completed ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_clear_completed": "Clear completed",
+  "todo_clear_completed_body": "{count, plural, =1{This deletes the completed to-do.} other{This deletes the {count} completed to-dos.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "view_switcher": "View switcher",
+  "view_switcher_sub": "Show the Week / Month / Year buttons on Today",
   "focus": "Focus",
   "focus_enable_sub": "A timer for habits that need one",
   "focus_free_session": "Free session",
