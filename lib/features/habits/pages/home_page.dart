@@ -351,7 +351,8 @@ class _HomePageState extends State<HomePage> {
                           mode: _mode,
                           reordering: _reordering,
                           header: header,
-                          onReorder: controller.reorder,
+                          onReorder: (oldIndex, newIndex) =>
+                              controller.reorder(visible, oldIndex, newIndex),
                           onOpen: _openDetails,
                           onToggleToday: (habit) => _toggle(habit, today),
                           onToggleDay: _toggle,

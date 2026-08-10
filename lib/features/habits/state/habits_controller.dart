@@ -266,11 +266,17 @@ class HabitsController extends ChangeNotifier {
     HomeWidgetService.syncSoon(asMap);
   }
 
-  Future<void> reorder(int oldIndex, int newIndex) async {
-    final ordered = [...habits];
+  Future<void> reorder(List<Habit> visible, int oldIndex, int newIndex) async {
     if (newIndex > oldIndex) newIndex -= 1;
-    final moved = ordered.removeAt(oldIndex);
-    ordered.insert(newIndex, moved);
+    final moved = [...visible];
+    moved.insert(newIndex, moved.removeAt(oldIndex));
+
+    final shown = {for (final habit in visible) habit.id};
+    final ordered = [...habits];
+    var next = 0;
+    for (var i = 0; i < ordered.length; i++) {
+      if (shown.contains(ordered[i].id)) ordered[i] = moved[next++];
+    }
 
     final reordered = [
       for (var i = 0; i < ordered.length; i++)
