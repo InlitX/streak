@@ -1,0 +1,402 @@
+{
+  "app_tagline": "מעקב הרגלים",
+  "today": "היום",
+  "stats": "סטטיסטיקה",
+  "settings": "הגדרות",
+  "new_label": "חדש",
+  "save": "שמירה",
+  "cancel": "ביטול",
+  "delete": "מחיקה",
+  "good_morning": "בוקר טוב",
+  "good_afternoon": "צהריים טובים",
+  "good_evening": "ערב טוב",
+  "no_habits_yet": "עדיין אין הרגלים",
+  "all_done_today": "סיימנו הכול להיום!",
+  "x_of_y_completed": "הושלמו {done} מתוך {total}",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "add_habit": "הוספת הרגל",
+  "all": "הכול",
+  "skip": "דילוג",
+  "next": "הבא",
+  "statistics": "סטטיסטיקה",
+  "your_habits": "ההרגלים שלך",
+  "last_30_days": "30 הימים האחרונים",
+  "last_7_days": "7 הימים האחרונים",
+  "completion_rate_short": "התמדה",
+  "stats_empty": "יש להוסיף הרגלים כדי לראות את הסטטיסטיקה שלך",
+  "appearance": "מראה",
+  "theme": "עיצוב",
+  "system": "מערכת",
+  "light": "בהיר",
+  "dark": "כהה",
+  "week_starts_on": "השבוע מתחיל ביום",
+  "mon": "שני",
+  "sat": "ש׳",
+  "sun": "ראשון",
+  "language": "שפה",
+  "data": "נתונים",
+  "export_backup": "ייצוא גיבוי",
+  "export_backup_sub": "שמירת כל ההרגלים בקובץ",
+  "auto_backup": "גיבוי אוטומטי",
+  "auto_backup_sub": "כבוי",
+  "auto_backup_off": "כבוי",
+  "auto_backup_daily": "כל יום",
+  "auto_backup_weekly": "כל שבוע",
+  "auto_backup_folder": "תיקייה",
+  "auto_backup_folder_set": "התיקייה נשמרה",
+  "auto_backup_run_now": "גיבוי כעת",
+  "import_backup": "ייבוא מגיבוי",
+  "import_from_app": "ייבוא מיישום אחר",
+  "import_from_app_sub": "‏„Loop” לניהול הרגלים, HabitKit…",
+  "import_from_app_done": "יובאו {habits} הרגלים ({days} ימים) מתוך {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "about": "על אודות",
+  "backup_saved": "הגיבוי נשמר",
+  "export_cancelled": "הייצוא בוטל",
+  "habits_imported": "ההרגלים יובאו",
+  "new_habit": "הרגל חדש",
+  "edit_habit": "עריכת הרגל",
+  "name": "שם",
+  "name_hint": "למשל: אימון ריצה בבוקר",
+  "description": "תיאור",
+  "icon": "סמל",
+  "color": "צבע",
+  "category": "קטגוריה",
+  "category_health": "בריאות",
+  "category_fitness": "כושר",
+  "category_mindfulness": "קשיבות (מיינדפולנס)",
+  "category_productivity": "יעילות",
+  "category_learning": "למידה",
+  "category_finance": "התנהלות כלכלית",
+  "habit_kind": "סוג הרגל",
+  "kind_positive": "רגיל",
+  "kind_negative": "להימנעות",
+  "kind_quantitative": "כמות",
+  "quant_preset_water": "שתייה",
+  "quant_preset_reading": "קריאה",
+  "quant_preset_generic": "התאמה אישית",
+  "quant_unit_hint": "יחידת מידה (למשל: מ״ל, עמודים, חזרות)",
+  "quant_unit_ml": "מ״ל",
+  "quant_unit_pages": "עמודים",
+  "quant_daily_goal": "מטרה יומית",
+  "frequency": "תדירות",
+  "daily": "יומית",
+  "weekly": "שבועית",
+  "monthly": "חודשית",
+  "sched_days": "ימים",
+  "sched_interval": "מרווח זמן",
+  "times_per_week": "{n} פעמים בשבוע",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} פעמים בחודש",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "תזכורות",
+  "add_reminder": "הוספת תזכורת",
+  "delete_habit": "מחיקת הרגל",
+  "archive_habit": "העברת הרגל לארכיון",
+  "archive": "ארכיון",
+  "share_friends": "שיתוף עם חברים",
+  "copy_message": "העתקת הודעה",
+  "message_copied": "ההודעה הועתקה",
+  "app_lock": "נעילת היישום",
+  "app_lock_unlock": "שחרור",
+  "note_photos": "תמונות",
+  "note_take_photo": "מצלמה",
+  "note_pick_photo": "גלריה",
+  "journey_empty": "עדיין אין תמונות",
+  "archived_habits": "הרגלים בארכיון",
+  "archived_empty": "אין כלום בארכיון",
+  "restore": "שחזור",
+  "restored": "ההרגל שוחזר",
+  "delete_forever": "מחיקה לצמיתות",
+  "deleted_forever": "ההרגל נמחק",
+  "wipe_data": "מחיקת כל הנתונים",
+  "wipe_data_sub": "ההרגלים, ההערות, סבבי המיקוד וההגדרות",
+  "day_start": "היום מתחיל בשעה",
+  "day_start_midnight": "חצות הלילה",
+  "day_start_hour": "{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_stats_short": "ססטיסטיקה",
+  "share_photo": "תמונה",
+  "share_blur": "טשטוש",
+  "activity": "פעילות",
+  "week": "שבוע",
+  "month": "חודש",
+  "year": "שנה",
+  "new_reminder": "תזכורת חדשה",
+  "edit_reminder": "עריכת תזכורת",
+  "days": "ימים",
+  "every_day": "כל יום",
+  "current_streak": "שיא נוכחי",
+  "preferences": "העדפות",
+  "support": "תמיכה",
+  "profile": "פרופיל",
+  "about_app": "על יישום זה",
+  "onb1_title": "בניית הרגלים אמיתיים",
+  "onb3_title": "רואים את ההתקדמות",
+  "get_started": "התחלה",
+  "done_today": "השלמתי היום",
+  "best_streak": "הרצף הארוך ביותר",
+  "active_habits": "הרגלים פעילים",
+  "total_logs": "סה״כ תיעודים",
+  "completion_rate": "מדד השלמה",
+  "auto_backup_folder_failed": "אי אפשר לערוך קבצים בתיקייה זו",
+  "auto_backup_no_permission": "נדחתה הרשאת הגישה לאחסון",
+  "import_backup_sub": "שחזור הרגלים מקובץ",
+  "import_failed": "לא היה ניתן לייבא קובץ זה",
+  "description_hint": "הערה לבחירתך",
+  "count_days": "{count, plural, =1{יום}, two{יומיים}, other{{count} ימים}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{שבוע}, two{שבועיים}, other{{count} שבועות}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{חודש}, two{חודשיים}, other{{count} חודשים}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kind_locked_hint": "לא ניתן לשנות את סוג ההרגל לאחר יצירתו.",
+  "freq_per_week_short": "{n}×/שבוע",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/חודש",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "share_friends_message": "היישום Streak עוזר לי לבנות הרגלים חדשים – זהו יישום לניהול הרגלים, הוא קליל וחופשי ולא דורש חיבור לאינטרנט או יצירת חשבון, והוא נטול פרסומות. אני רוצה להזמין אותך לבנות הרגלים משלך: https://inlitx.github.io/streak/",
+  "app_lock_sub": "דרישת טביעת אצבע או זיהוי פנים לפתיחת Streak",
+  "app_lock_unavailable": "לא הוגדרו פרטי אימות ביומטריים בטלפון זה",
+  "app_lock_failed": "לא היה ניתן לאמת את זהותך",
+  "app_lock_title": "היישום Streak נעול",
+  "journey_sub": "{count, plural, =1{תמונה אחת} other{{count} תמונות}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty_sub": "אפשר להוסיף תמונה להערה ואז היא תופיע כאן.",
+  "archive_habit_body": "להעביר את ההרגל „{name}” לארכיון? ההיסטוריה שלו תישמר וניתן לשחזר אותו אחר כך דרך ההגדרות.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits_sub": "שחזור או מחיקה לצמיתות",
+  "archived_empty_sub": "ההרגלים שמוחקים מופיעים כאן, עם כל ההיסטוריה שלהם.",
+  "delete_forever_body": "למחוק את ההרגל „{name}” עם כל ההיסטוריה שלו? לא ניתן לבטל פעולה זו.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wipe_data_confirm": "למחוק הכול",
+  "wipe_data_done": "כל הנתונים נמחקו",
+  "undo": "ביטול פעולה",
+  "habit_archived": "ההרגל הועבר לארכיון",
+  "delete_habit_body": "למחוק את ההרגל „{name}”? לא ניתן לבטל פעולה זו.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "כן, לתעד",
+  "log_relapse_title": "לתעד החמצה?",
+  "permission_required": "נדרשת הרשאת גישה להתראות",
+  "streaks": "הרגלים",
+  "current": "נוכחי",
+  "best": "שיא",
+  "total": "סה״כ",
+  "relapses": "החמצות",
+  "strength": "עוצמה",
+  "time": "זמן",
+  "save_reminder": "שמירת תזכורת",
+  "repeat_interval": "כל N ימים",
+  "every_n_days": "כל {n} ימים",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "more_icons": "עוד סמלים",
+  "less_icons": "פחות סמלים",
+  "completions": "השלמות",
+  "completion_time": "זמן השלמה",
+  "completions_per_month": "השלמות / חודש",
+  "about_app_sub": "גרסה, תודות, וקוד מקור",
+  "my_heatmap": "מפת ההתפלגות שלי",
+  "rate_github": "מתן כוכב ב־GitHub",
+  "view_source": "הצגת קוד המקור ב־GitHub",
+  "close": "סגירה",
+  "import_replace": "להחליף הכול",
+  "import_merge": "מיזוג",
+  "motiv_almost": "כמעט סיימנו! נותר רק עוד קצת",
+  "motiv_perfect": "יום מושלם! 🔥",
+  "app_background": "רקע",
+  "widgets": "יישומונים",
+  "customize_widgets": "התאמה אישית של היישומונים",
+  "customize_widgets_sub": "רגע, אטימות וגבול",
+  "widget_background": "צבע רקע",
+  "widget_opacity": "אטימות",
+  "widget_border": "גבול",
+  "widget_preview": "תצוגה מקדימה",
+  "bg_solid": "אחיד",
+  "bg_gradient": "מדרג צבעים",
+  "bg_dots": "נקודות",
+  "weekdays": "אמצע השבוע",
+  "weekends": "סוף השבוע",
+  "new_category": "קטגוריה חדשה",
+  "edit_category": "עריכת קטגוריה",
+  "add_category": "יצירת חדשה",
+  "delete_category": "מחיקת קטגוריה",
+  "edit": "עריכה",
+  "add_image": "הוספת תמונה",
+  "consistency": "התמדה",
+  "consistency_trend": "מגמת התמדה",
+  "by_habit": "לפי הרגל",
+  "ranking": "דירוג",
+  "active_days": "ימים פעילים",
+  "perfect_days": "ימים מושלמים",
+  "per_week": "לפי שבוע",
+  "best_month": "החודש הטוב ביותר",
+  "share": "שיתוף",
+  "share_progress": "שיתוף ההתקדמות",
+  "share_background": "רקע",
+  "share_size": "גודל",
+  "share_save": "שמירה",
+  "about_developer": "המפתח",
+  "about_credits": "תודות",
+  "notes": "הערות",
+  "add_note": "הוספת הערה",
+  "edit_note": "עריכת הערה",
+  "view_notes": "הצגת הערות",
+  "edit_entry": "עריכת רשומה",
+  "note_type": "סוג",
+  "note_kind_note": "הערה",
+  "note_kind_planned": "מתוכנן",
+  "note_kind_completed": "הושלם",
+  "note_time_optional": "זמן (רשות)",
+  "save_note": "שמירת הערה",
+  "delete_note": "מחיקת הערה",
+  "legend_note_added": "ההערה נוספה",
+  "tomorrow": "מחר",
+  "notes_count": "{count, plural, =1{הערה אחת} other{{count} הערות}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus": "מיקוד",
+  "focus_duration": "משך זמן",
+  "focus_start": "התחלת סבב",
+  "focus_style_dots": "נקודות",
+  "focus_sessions": "סבבים",
+  "focus_pick_habit": "במה להתמקד?",
+  "focus_scene_custom": "התמונה שלך",
+  "unit_hours": "שעות",
+  "unit_minutes": "דקות",
+  "unit_seconds": "שניות",
+  "focus_target_reached": "המטרה הושגה",
+  "focus_pause": "השהיה",
+  "focus_resume": "המשך",
+  "focus_sound": "צליל",
+  "focus_custom_duration": "התאמה אישית",
+  "custom": "התאמה אישית",
+  "see_more": "הרחבה",
+  "see_less": "צמצום",
+  "colors_tab": "צבעים",
+  "done": "סיום",
+  "accent_color": "צבע נושא",
+  "on": "מופעל",
+  "off": "כבוי",
+  "checklist": "רשימת סימון",
+  "steps_done": "{done}/{total} צעדים",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_mode": "מצב חופשה",
+  "rest_days": "ימי מנוחה",
+  "widget_activity": "פעילות",
+  "widget_cfg_color": "צבע",
+  "widget_cfg_image": "תמונה",
+  "widget_cfg_border": "גבול"
+}
