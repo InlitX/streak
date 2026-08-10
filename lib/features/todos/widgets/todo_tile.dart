@@ -17,12 +17,14 @@ class TodoTile extends StatelessWidget {
     required this.onToggle,
     required this.onEdit,
     required this.overdue,
+    this.corners,
   });
 
   final Todo todo;
   final VoidCallback onToggle;
   final VoidCallback onEdit;
   final bool overdue;
+  final BorderRadius? corners;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class TodoTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: scheme.surfaceContainerHighest
               .withValues(alpha: todo.done ? 0.3 : 0.55),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: corners ?? BorderRadius.circular(18),
           border: todo.priority == TodoPriority.none || todo.done
               ? null
               : Border(left: BorderSide(color: accent, width: 3)),

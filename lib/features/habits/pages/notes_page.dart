@@ -10,6 +10,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/entrance.dart';
+import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
@@ -111,11 +112,12 @@ class NotesPage extends StatelessWidget {
                         index: i + 1,
                         delay: _entrance,
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 3),
                           child: NoteCard(
                             note: notes[i],
                             date: date,
                             accent: accent,
+                            corners: stackedCorners(i, notes.length),
                           ),
                         ),
                       ),
@@ -161,11 +163,13 @@ class NoteCard extends StatelessWidget {
     required this.note,
     required this.date,
     required this.accent,
+    this.corners,
   });
 
   final HabitNote note;
   final DateTime date;
   final Color accent;
+  final BorderRadius? corners;
 
   Future<void> _menu(BuildContext context) async {
     final action = await showModalBottomSheet<String>(
@@ -231,7 +235,7 @@ class NoteCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainerHighest.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: corners ?? BorderRadius.circular(16),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -10,6 +10,7 @@ import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/todos/data/todo.dart';
@@ -109,10 +110,12 @@ class _TodosPageState extends State<TodosPage> {
                         index: index,
                         child: _Swipeable(
                           todo: todo,
+                          corners: stackedCorners(index, section.todos.length),
                           onDelete: () => _delete(todo),
                           child: TodoTile(
                             todo: todo,
                             overdue: section.group == TodoGroup.overdue,
+                            corners: stackedCorners(index, section.todos.length),
                             onToggle: () => todos.toggle(todo.id),
                             onEdit: () => showTodoComposer(context, todo: todo),
                           ),
@@ -128,13 +131,15 @@ class _TodosPageState extends State<TodosPage> {
                           setState(() => _showCompleted = !_showCompleted),
                     ),
                     if (_showCompleted)
-                      for (final todo in completed)
+                      for (final (index, todo) in completed.indexed)
                         _Swipeable(
                           todo: todo,
+                          corners: stackedCorners(index, completed.length),
                           onDelete: () => _delete(todo),
                           child: TodoTile(
                             todo: todo,
                             overdue: false,
+                            corners: stackedCorners(index, completed.length),
                             onToggle: () => todos.toggle(todo.id),
                             onEdit: () => showTodoComposer(context, todo: todo),
                           ),
@@ -157,18 +162,20 @@ class _TodosPageState extends State<TodosPage> {
 class _Swipeable extends StatelessWidget {
   const _Swipeable({
     required this.todo,
+    required this.corners,
     required this.onDelete,
     required this.child,
   });
 
   final Todo todo;
+  final BorderRadius corners;
   final Future<void> Function() onDelete;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 3),
       child: Dismissible(
         key: ValueKey('swipe-${todo.id}'),
         direction: DismissDirection.endToStart,
@@ -177,7 +184,7 @@ class _Swipeable extends StatelessWidget {
           padding: const EdgeInsets.only(right: 20),
           decoration: BoxDecoration(
             color: context.tokens.danger.withValues(alpha: 0.16),
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: corners,
           ),
           child: Icon(LucideIcons.trash2, size: 20, color: context.tokens.danger),
         ),
