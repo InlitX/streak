@@ -115,6 +115,7 @@
   "quant_edit_title": "今日完成量",
   "quant_daily_goal": "每日目标",
   "quant_tap_amount": "每次增量",
+  "quant_per_day": "每日数量",
   "frequency": "频率",
   "daily": "每日",
   "weekly": "每周",
@@ -233,6 +234,29 @@
   "import_replace": "全部覆盖",
   "import_merge": "合并",
   "go": "开始",
+  "quote_1": "每天一小步。",
+  "quote_2": "坚持胜过猛干。",
+  "quote_3": "为自己坚持。",
+  "quote_4": "一天一天来。",
+  "quote_5": "追求进步，不求完美。",
+  "quote_6": "做完胜过完美。",
+  "quote_7": "别让连胜断掉。",
+  "quote_8": "微小习惯，巨大改变。",
+  "quote_9": "相信过程。",
+  "quote_10": "赢下早晨。",
+  "quote_11": "自律即自由。",
+  "quote_12": "今天很重要。",
+  "quotes": "语录",
+  "quotes_which": "显示哪些语录",
+  "quotes_app": "应用自带",
+  "quotes_mine": "我的",
+  "quotes_both": "全部",
+  "quotes_my_list": "我的语录",
+  "quotes_add": "添加语录",
+  "quotes_edit": "编辑语录",
+  "quotes_hint": "写下你的语录",
+  "quotes_empty": "还没有自己的语录",
+  "quotes_empty_sub": "写下你自己的语录，它们会显示在「今天」页面。",
   "motiv_start": "全力以赴，开启今日 💪",
   "motiv_progress": "进度稳步向前，继续坚持",
   "motiv_almost": "就快达成！再加把劲",
@@ -409,6 +433,37 @@
   "delete_note": "删除笔记",
   "notif_action_add_hint": "多少？",
   "today_only": "仅显示今日习惯",
+  "card_activity": "卡片上的打卡记录",
+  "focus_only": "仅通过专注计时完成",
+  "focus_only_hint": "这个习惯在你完成一次计时后才算完成，而不是点一下。",
+  "focus_only_title": "需要一次专注计时",
+  "focus_only_body": "「{name}」需要完成一次专注计时才算完成。",
+  "focus_only_past": "「{name}」只能通过专注计时完成，因此无法补打过去的日子。",
+  "focus_only_start": "开始计时",
+  "focus_flowtime": "心流计时",
+  "focus_flowtime_hint": "没有目标，也没有提醒。时间往上走，你觉得够了就停。",
+  "focus_end_flow": "你专注了 {time}。",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "archive_habit_body": "确定将\"{name}\"归档吗？该习惯的历史记录会完整保留，你可在设置页恢复它。",
   "@archive_habit_body": {
     "placeholders": {
@@ -423,7 +478,7 @@
   "focus_custom_duration": "自定义",
   "focus_tasks": "子任务列表",
   "style_classic": "经典",
-  "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
+  "focus_history_day": "{count, plural, other{{count} 次专注}}",
   "@focus_history_day": {
     "placeholders": {
       "count": {
@@ -458,6 +513,7 @@
   "preferences_sub": "语言、星期与排序",
   "auto_backup_no_permission": "存储权限被拒绝",
   "focus_built_in": "已包含",
+  "unit_hour_short": "小时",
   "widget_no_habits": "暂无习惯\n点击打开 Streak",
   "focus_sound": "声音",
   "add_note": "添加笔记",
@@ -519,6 +575,16 @@
   "focus_style_digital": "圆形",
   "focus_stop_body": "时间始终会保存，但习惯需达到目标时长才算完成。",
   "app_lock_unlock": "解锁",
+  "app_lock_delay": "多久后锁定",
+  "app_lock_delay_instant": "立即",
+  "app_lock_delay_seconds": "{value} 秒",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "auto_backup_folder_default": "应用文件夹",
   "tomorrow": "明天",
   "perfect_days": "完美天数",
@@ -580,6 +646,73 @@
   "focus_duration": "时长",
   "widget_cfg_image": "图片",
   "focus_images_limit": "最多10张图片",
+  "select_all": "全选",
+  "selected_count": "{count, plural, other{已选择 {count} 项}}",
+  "focus_delete_sessions": "删除这些记录？",
+  "focus_delete_sessions_body": "{count, plural, other{将删除 {count} 条专注记录，此操作无法撤销。}}",
+  "focus_sessions_deleted": "{count, plural, other{已删除 {count} 条记录}}",
+  "unscheduled_title": "这天没有安排",
+  "unscheduled_body": "这个习惯在 {day} 没有安排。仍然作为额外记录打卡吗？",
+  "unscheduled_confirm": "仍然打卡",
+  "rest_days_none": "无",
+  "last_90_days": "最近 90 天",
+  "focus_clear_today": "清除今天的记录",
+  "focus_defaults": "计时默认设置",
+  "plan_day": "规划一天",
+  "plan_day_sub": "给习惯设定时间，并在时间轴上查看。",
+  "habit_time": "时间",
+  "habit_time_none": "任意时间",
+  "habit_duration": "时长",
+  "habit_duration_none": "不设时长",
+  "day_timeline": "日程",
+  "day_timeline_free": "空闲 {span}",
+  "day_timeline_anytime": "任意时间",
+  "day_timeline_empty": "这天没有安排任何计划",
+  "day_timeline_empty_sub": "给习惯设定一个时间，它就会出现在这里。",
+  "clear": "清除",
+  "start_view": "「今天」默认打开",
+  "start_view_last": "上次使用的",
+  "focus_stats": "专注统计",
+  "focus_average": "平均时长",
+  "focus_log": "补记一次专注",
+  "focus_log_date": "日期",
+  "focus_log_saved": "已添加记录",
+  "perfect_streak": "完美天数连胜",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "edit_note": "编辑笔记",
   "notes_hint": "长按某一天即可查看或添加笔记",
   "focus_total": "专注时间",
@@ -617,6 +750,55 @@
   "note_pick_photo": "相册",
   "widget_cfg_title": "自定义小组件",
   "notes_count": "{count, plural, =1{1 笔记} other{{count} 笔记}}",
+  "todos": "待办",
+  "todos_enable_sub": "习惯旁边的快捷清单",
+  "todo_new": "新建待办",
+  "todo_hint": "需要做什么？",
+  "todo_empty_title": "清单是空的",
+  "todo_empty_body": "记下你想在接下来几天完成的事。",
+  "todo_date": "日期",
+  "todo_no_date": "无日期",
+  "todo_priority": "优先级",
+  "priority_none": "无优先级",
+  "priority_low": "低",
+  "priority_medium": "中",
+  "priority_high": "高",
+  "todo_overdue": "已逾期",
+  "todo_upcoming": "即将到来",
+  "todo_someday": "有空再说",
+  "pick_a_date": "选择日期",
+  "todo_left": "{count, plural, =0{全部完成} other{{count} 项待办}}",
+  "todo_completed_count": "{count, plural, other{已完成 ({count})}}",
+  "todo_clear_completed": "清除已完成",
+  "todo_clear_completed_body": "{count, plural, other{这将删除 {count} 项已完成的待办。}}",
+  "prefs_general": "通用",
+  "prefs_features": "功能",
+  "prefs_privacy": "隐私",
+  "collapse_cards": "折叠卡片",
+  "expand_cards": "展开卡片",
+  "view_switcher": "视图切换器",
+  "view_switcher_sub": "在「今天」页面显示周 / 月 / 年按钮",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@notes_count": {
     "placeholders": {
       "count": {
@@ -632,6 +814,13 @@
   "auto_backup": "自动备份",
   "day_start_sub": "深夜完成的习惯仍计入前一天",
   "focus_notif_body": "你的专注计时已结束，做得好！",
+  "celebration": "完成特效",
+  "celebration_confetti": "彩纸",
+  "celebration_fireworks": "烟花",
+  "celebration_surprise": "随机惊喜",
+  "focus_notif_channel": "专注计时",
+  "focus_notif_running": "专注中",
+  "focus_paused": "已暂停",
   "app_lock_unavailable": "此手机未设置生物识别",
   "auto_backup_folder_set": "文件夹已保存",
   "widget_open_to_sync": "打开 Streak 进行同步",
@@ -642,6 +831,9 @@
   "data_sub": "备份与导入",
   "note_time_optional": "时间（可选）",
   "widget_cfg_custom_color": "自定义颜色",
+  "widget_cfg_follow_system": "跟随系统主题",
+  "widget_cfg_dark_color": "深色主题",
+  "widget_cfg_light_color": "浅色主题",
   "focus_pause": "暂停",
   "focus_track_rain": "雨声",
   "unit_hours": "小时",
@@ -664,6 +856,11 @@
   "app_lock": "应用锁",
   "by_habit": "习惯维度",
   "deleted_forever": "习惯已删除",
+  "clear_progress": "清除进度",
+  "clear_progress_sub": "历史记录、笔记和专注记录",
+  "clear_progress_warning": "此操作将删除所有已打卡的日期、笔记和专注记录，但会保留你的习惯、它们的计划和设置。该操作无法撤销，除非你有可导入的备份文件。",
+  "clear_progress_confirm": "清除进度",
+  "clear_progress_done": "进度已清除",
   "focus_loop": "顺序播放",
   "focus_daily_goal": "每日专注目标",
   "copy_message": "复制消息",
@@ -705,6 +902,8 @@
     "description": "Screen reader label for the minus button of a number stepper"
   },
   "a11y_not_done": "未完成",
+  "a11y_previous_week": "上一周",
+  "a11y_next_week": "下一周",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },

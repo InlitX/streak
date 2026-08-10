@@ -150,6 +150,7 @@
   "quant_edit_title": "Количество за сегодня",
   "quant_daily_goal": "Дневная цель",
   "quant_tap_amount": "Количество за нажатие",
+  "quant_per_day": "Количество по дням",
   "frequency": "Периодичность",
   "daily": "Ежедневно",
   "weekly": "Еженедельно",
@@ -204,6 +205,16 @@
   "app_lock_failed": "Не удалось подтвердить личность",
   "app_lock_title": "Streak заблокирован",
   "app_lock_unlock": "Разблокировать",
+  "app_lock_delay": "Блокировать через",
+  "app_lock_delay_instant": "Сразу",
+  "app_lock_delay_seconds": "{value} сек",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "note_photos": "Фото",
   "note_take_photo": "Камера",
   "note_pick_photo": "Галерея",
@@ -242,6 +253,11 @@
     }
   },
   "deleted_forever": "Привычка удалена",
+  "clear_progress": "Очистить прогресс",
+  "clear_progress_sub": "История, заметки и сессии фокусировки",
+  "clear_progress_warning": "Это удалит все отмеченные дни, заметки и сессии фокусировки, но сохранит ваши привычки, их расписания и настройки. Действие нельзя отменить, если только у вас нет файла резервной копии для последующего импорта.",
+  "clear_progress_confirm": "Очистить прогресс",
+  "clear_progress_done": "Прогресс очищен",
   "wipe_data": "Удалить все данные",
   "wipe_data_sub": "Привычки, заметки, сессии фокусировки и настройки",
   "wipe_data_warning": "Это удалит все привычки, заметки, сессии фокусировки и настройки на этом телефоне. Действие нельзя отменить, если только у вас нет файла резервной копии для последующего импорта.",
@@ -342,6 +358,29 @@
   "import_replace": "Заменить всё",
   "import_merge": "Объединить",
   "go": "Вперёд",
+  "quote_1": "Маленькие шаги, каждый день.",
+  "quote_2": "Постоянство важнее интенсивности.",
+  "quote_3": "Делай это ради себя.",
+  "quote_4": "День за днём.",
+  "quote_5": "Прогресс, а не совершенство.",
+  "quote_6": "Сделано лучше, чем идеально.",
+  "quote_7": "Не прерывай серию.",
+  "quote_8": "Маленькие привычки, большие перемены.",
+  "quote_9": "Доверься процессу.",
+  "quote_10": "Выиграй утро.",
+  "quote_11": "Дисциплина равна свободе.",
+  "quote_12": "Сегодня тоже считается.",
+  "quotes": "Цитаты",
+  "quotes_which": "Какие цитаты",
+  "quotes_app": "Из приложения",
+  "quotes_mine": "Мои",
+  "quotes_both": "Все",
+  "quotes_my_list": "Мои цитаты",
+  "quotes_add": "Добавить цитату",
+  "quotes_edit": "Изменить цитату",
+  "quotes_hint": "Напишите свою цитату",
+  "quotes_empty": "У вас нет своих цитат",
+  "quotes_empty_sub": "Напишите свои, и они появятся на экране «Сегодня».",
   "motiv_start": "Начните день с силой 💪",
   "motiv_progress": "Вы на верном пути, продолжайте",
   "motiv_almost": "Почти готово! Ещё чуть-чуть",
@@ -429,6 +468,55 @@
   "legend_note_added": "Заметка добавлена",
   "tomorrow": "Завтра",
   "notes_count": "{count, plural, one{{count} заметка} few{{count} заметки} many{{count} заметок} other{{count} заметки}}",
+  "todos": "Задачи",
+  "todos_enable_sub": "Быстрый список рядом с привычками",
+  "todo_new": "Новая задача",
+  "todo_hint": "Что нужно сделать?",
+  "todo_empty_title": "В списке пусто",
+  "todo_empty_body": "Запишите, что хотите сделать в ближайшие дни.",
+  "todo_date": "Дата",
+  "todo_no_date": "Без даты",
+  "todo_priority": "Приоритет",
+  "priority_none": "Без приоритета",
+  "priority_low": "Низкий",
+  "priority_medium": "Средний",
+  "priority_high": "Высокий",
+  "todo_overdue": "Просроченные",
+  "todo_upcoming": "Предстоящие",
+  "todo_someday": "Когда-нибудь",
+  "pick_a_date": "Выберите дату",
+  "todo_left": "{count, plural, =0{Всё сделано} one{{count} задача} few{{count} задачи} many{{count} задач} other{{count} задачи}}",
+  "todo_completed_count": "{count, plural, other{Выполнено ({count})}}",
+  "todo_clear_completed": "Удалить выполненные",
+  "todo_clear_completed_body": "{count, plural, one{Это удалит {count} выполненную задачу.} few{Это удалит {count} выполненные задачи.} many{Это удалит {count} выполненных задач.} other{Это удалит {count} выполненные задачи.}}",
+  "prefs_general": "Основное",
+  "prefs_features": "Функции",
+  "prefs_privacy": "Конфиденциальность",
+  "collapse_cards": "Свернуть карточки",
+  "expand_cards": "Развернуть карточки",
+  "view_switcher": "Переключатель вида",
+  "view_switcher_sub": "Показывать кнопки «Неделя / Месяц / Год» на экране «Сегодня»",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@notes_count": {
     "placeholders": {
       "count": {
@@ -514,8 +602,16 @@
   "focus_done_title": "Сессия завершена",
   "focus_your_tracks": "Ваши треки",
   "focus_built_in": "Встроенные",
+  "unit_hour_short": "ч",
   "unit_min_short": "мин",
   "focus_notif_body": "Ваша сессия фокусировки завершена. Отлично!",
+  "celebration": "Эффект завершения",
+  "celebration_confetti": "Конфетти",
+  "celebration_fireworks": "Фейерверк",
+  "celebration_surprise": "Удиви меня",
+  "focus_notif_channel": "Сессии фокусировки",
+  "focus_notif_running": "Фокусировка",
+  "focus_paused": "Пауза",
   "focus_scene_black": "Чёрный",
   "focus_pomodoro": "Помодоро",
   "focus_pomodoro_sub": "Чередуйте раунды фокусировки с короткими перерывами",
@@ -542,6 +638,73 @@
   },
   "focus_keep_awake": "Не выключать экран",
   "focus_images_limit": "До 10 изображений",
+  "select_all": "Выбрать все",
+  "selected_count": "{count, plural, other{Выбрано: {count}}}",
+  "focus_delete_sessions": "Удалить сессии?",
+  "focus_delete_sessions_body": "{count, plural, one{Будет удалена {count} сессия фокусировки. Это нельзя отменить.} few{Будут удалены {count} сессии фокусировки. Это нельзя отменить.} many{Будет удалено {count} сессий фокусировки. Это нельзя отменить.} other{Будут удалены {count} сессии фокусировки. Это нельзя отменить.}}",
+  "focus_sessions_deleted": "{count, plural, one{Удалена {count} сессия} few{Удалено {count} сессии} many{Удалено {count} сессий} other{Удалено {count} сессии}}",
+  "unscheduled_title": "День не по расписанию",
+  "unscheduled_body": "Эта привычка не запланирована на {day}. Всё равно отметить её как дополнительную?",
+  "unscheduled_confirm": "Всё равно отметить",
+  "rest_days_none": "Нет",
+  "last_90_days": "Последние 90 дней",
+  "focus_clear_today": "Очистить сегодняшние сессии",
+  "focus_defaults": "Параметры сессии по умолчанию",
+  "plan_day": "Планировать день",
+  "plan_day_sub": "Задайте привычкам время дня и смотрите их на шкале времени.",
+  "habit_time": "Время дня",
+  "habit_time_none": "В любое время",
+  "habit_duration": "Длительность",
+  "habit_duration_none": "Без длительности",
+  "day_timeline": "День",
+  "day_timeline_free": "{span} свободно",
+  "day_timeline_anytime": "В любое время",
+  "day_timeline_empty": "На этот день ничего не запланировано",
+  "day_timeline_empty_sub": "Задайте привычке время дня, и она появится здесь.",
+  "clear": "Очистить",
+  "start_view": "«Сегодня» открывается на",
+  "start_view_last": "Последний использованный",
+  "focus_stats": "Статистика фокусировки",
+  "focus_average": "Средняя сессия",
+  "focus_log": "Записать сессию",
+  "focus_log_date": "Дата",
+  "focus_log_saved": "Сессия добавлена",
+  "perfect_streak": "Серия идеальных дней",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_history": "История",
   "focus_history_empty": "Пока нет сессий",
   "focus_history_empty_sub": "Каждая завершённая сессия фокусировки появится здесь.",
@@ -572,6 +735,7 @@
   "github_star_row": "Посмотреть код и поставить звезду",
   "icons_tab": "Значки",
   "emojis_tab": "Эмодзи",
+  "report_issue": "Сообщить о проблеме",
   "advanced_options": "Дополнительные настройки",
   "default_user": "Inlitx",
   "your_name": "Ваше имя",
@@ -600,6 +764,37 @@
   "accent_color": "Акцентный цвет",
   "sort_completed_last": "Выполненные — в конец",
   "today_only": "Только сегодняшние привычки",
+  "card_activity": "Активность на карточках",
+  "focus_only": "Только через сессию фокусировки",
+  "focus_only_hint": "Привычка отмечается по завершении сессии, а не нажатием.",
+  "focus_only_title": "Нужна сессия фокусировки",
+  "focus_only_body": "«{name}» отмечается завершением сессии фокусировки.",
+  "focus_only_past": "«{name}» отмечается только сессией фокусировки, поэтому прошедшие дни отметить нельзя.",
+  "focus_only_start": "Начать сессию",
+  "focus_flowtime": "Флоутайм",
+  "focus_flowtime_hint": "Без цели и без будильника. Время идёт вперёд, а вы останавливаетесь, когда чувствуете, что готовы.",
+  "focus_end_flow": "Вы фокусировались {time}.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "on": "Вкл",
   "off": "Выкл",
   "checklist": "Чек-лист",
@@ -658,6 +853,9 @@
   "widget_cfg_choose_image": "Выбрать изображение",
   "widget_cfg_change_image": "Изменить изображение",
   "widget_cfg_custom_color": "Свой цвет",
+  "widget_cfg_follow_system": "Следовать теме системы",
+  "widget_cfg_dark_color": "Тёмная тема",
+  "widget_cfg_light_color": "Светлая тема",
   "widget_cfg_opacity": "Прозрачность  {value}%",
   "@widget_cfg_opacity": {
     "placeholders": {
@@ -727,6 +925,8 @@
     "description": "Screen reader label for the minus button of a number stepper"
   },
   "a11y_not_done": "не выполнено",
+  "a11y_previous_week": "Предыдущая неделя",
+  "a11y_next_week": "Следующая неделя",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
