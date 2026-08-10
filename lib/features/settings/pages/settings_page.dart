@@ -13,6 +13,7 @@ import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
 import 'package:streak/features/settings/pages/minimal_settings_page.dart';
+import 'package:streak/features/settings/pages/quotes_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
@@ -446,6 +447,12 @@ class _ClassicPreferencesPage extends StatelessWidget {
                         index: settings.planningEnabled ? 1 : 0,
                         onChanged: (i) => settings.setPlanningEnabled(i == 1),
                       ),
+                    ),
+                    settingsDivider(context),
+                    NavRow(
+                      icon: LucideIcons.quote,
+                      title: context.l10n.quotes,
+                      onTap: () => AppNavigator.push(const QuotesPage()),
                     ),
                   ],
                 ),

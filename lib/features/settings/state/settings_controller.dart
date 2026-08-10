@@ -60,6 +60,9 @@ class SettingsController extends ChangeNotifier {
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
+    _quoteSource = LocalStore.setting('quoteSource', 0);
+    _customQuotes =
+        List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
     _focusEnabled = LocalStore.setting('focusEnabled', true);
     _focusClockStyle = LocalStore.setting('focusClockStyle', 0);
     _focusScene = LocalStore.setting('focusScene', 0);
@@ -116,6 +119,8 @@ class SettingsController extends ChangeNotifier {
   late bool _sortCompletedLast;
   late bool _todayOnly;
   late bool _notesEnabled;
+  late int _quoteSource;
+  late List<String> _customQuotes;
   late bool _focusEnabled;
   late int _focusClockStyle;
   late int _focusScene;
@@ -420,6 +425,39 @@ class SettingsController extends ChangeNotifier {
   Future<void> setNotesEnabled(bool value) async {
     _notesEnabled = value;
     await LocalStore.writeSetting('notesEnabled', value);
+    notifyListeners();
+  }
+
+  int get quoteSource => _quoteSource;
+
+  List<String> get customQuotes => List.unmodifiable(_customQuotes);
+
+  Future<void> setQuoteSource(int value) async {
+    _quoteSource = value;
+    await LocalStore.writeSetting('quoteSource', value);
+    notifyListeners();
+  }
+
+  Future<void> addCustomQuote(String text) async {
+    final quote = text.trim();
+    if (quote.isEmpty || _customQuotes.contains(quote)) return;
+    _customQuotes = [..._customQuotes, quote];
+    await LocalStore.writeSetting('customQuotes', _customQuotes);
+    notifyListeners();
+  }
+
+  Future<void> editCustomQuote(int index, String text) async {
+    final quote = text.trim();
+    if (index < 0 || index >= _customQuotes.length || quote.isEmpty) return;
+    _customQuotes = [..._customQuotes]..[index] = quote;
+    await LocalStore.writeSetting('customQuotes', _customQuotes);
+    notifyListeners();
+  }
+
+  Future<void> removeCustomQuote(int index) async {
+    if (index < 0 || index >= _customQuotes.length) return;
+    _customQuotes = [..._customQuotes]..removeAt(index);
+    await LocalStore.writeSetting('customQuotes', _customQuotes);
     notifyListeners();
   }
 
