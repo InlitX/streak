@@ -468,6 +468,13 @@
   "legend_note_added": "Заметка добавлена",
   "tomorrow": "Завтра",
   "notes_count": "{count, plural, one{{count} заметка} few{{count} заметки} many{{count} заметок} other{{count} заметки}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "todos": "Задачи",
   "todos_enable_sub": "Быстрый список рядом с привычками",
   "todo_new": "Новая задача",
@@ -486,30 +493,6 @@
   "todo_someday": "Когда-нибудь",
   "pick_a_date": "Выберите дату",
   "todo_left": "{count, plural, =0{Всё сделано} one{{count} задача} few{{count} задачи} many{{count} задач} other{{count} задачи}}",
-  "todo_completed_count": "{count, plural, other{Выполнено ({count})}}",
-  "todo_clear_completed": "Удалить выполненные",
-  "todo_clear_completed_body": "{count, plural, one{Это удалит {count} выполненную задачу.} few{Это удалит {count} выполненные задачи.} many{Это удалит {count} выполненных задач.} other{Это удалит {count} выполненные задачи.}}",
-  "prefs_general": "Основное",
-  "prefs_features": "Функции",
-  "prefs_privacy": "Конфиденциальность",
-  "collapse_cards": "Свернуть карточки",
-  "expand_cards": "Развернуть карточки",
-  "view_switcher": "Переключатель вида",
-  "view_switcher_sub": "Показывать кнопки «Неделя / Месяц / Год» на экране «Сегодня»",
-  "@todo_clear_completed_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@todo_completed_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@todo_left": {
     "placeholders": {
       "count": {
@@ -517,13 +500,30 @@
       }
     }
   },
-  "@notes_count": {
+  "todo_completed_count": "{count, plural, other{Выполнено ({count})}}",
+  "@todo_completed_count": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "todo_clear_completed": "Удалить выполненные",
+  "todo_clear_completed_body": "{count, plural, one{Это удалит {count} выполненную задачу.} few{Это удалит {count} выполненные задачи.} many{Это удалит {count} выполненных задач.} other{Это удалит {count} выполненные задачи.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "Основное",
+  "prefs_features": "Функции",
+  "prefs_privacy": "Конфиденциальность",
+  "collapse_cards": "Свернуть карточки",
+  "expand_cards": "Развернуть карточки",
+  "view_switcher": "Переключатель вида",
+  "view_switcher_sub": "Показывать кнопки «Неделя / Месяц / Год» на экране «Сегодня»",
   "focus": "Фокус",
   "focus_enable_sub": "Таймер для привычек, которым он нужен",
   "focus_free_session": "Свободная сессия",
@@ -640,11 +640,39 @@
   "focus_images_limit": "До 10 изображений",
   "select_all": "Выбрать все",
   "selected_count": "{count, plural, other{Выбрано: {count}}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_delete_sessions": "Удалить сессии?",
   "focus_delete_sessions_body": "{count, plural, one{Будет удалена {count} сессия фокусировки. Это нельзя отменить.} few{Будут удалены {count} сессии фокусировки. Это нельзя отменить.} many{Будет удалено {count} сессий фокусировки. Это нельзя отменить.} other{Будут удалены {count} сессии фокусировки. Это нельзя отменить.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_sessions_deleted": "{count, plural, one{Удалена {count} сессия} few{Удалено {count} сессии} many{Удалено {count} сессий} other{Удалено {count} сессии}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "unscheduled_title": "День не по расписанию",
   "unscheduled_body": "Эта привычка не запланирована на {day}. Всё равно отметить её как дополнительную?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "unscheduled_confirm": "Всё равно отметить",
   "rest_days_none": "Нет",
   "last_90_days": "Последние 90 дней",
@@ -658,6 +686,13 @@
   "habit_duration_none": "Без длительности",
   "day_timeline": "День",
   "day_timeline_free": "{span} свободно",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
   "day_timeline_anytime": "В любое время",
   "day_timeline_empty": "На этот день ничего не запланировано",
   "day_timeline_empty_sub": "Задайте привычке время дня, и она появится здесь.",
@@ -670,41 +705,6 @@
   "focus_log_date": "Дата",
   "focus_log_saved": "Сессия добавлена",
   "perfect_streak": "Серия идеальных дней",
-  "@day_timeline_free": {
-    "placeholders": {
-      "span": {
-        "type": "String"
-      }
-    }
-  },
-  "@unscheduled_body": {
-    "placeholders": {
-      "day": {
-        "type": "String"
-      }
-    }
-  },
-  "@focus_sessions_deleted": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@focus_delete_sessions_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@selected_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "focus_history": "История",
   "focus_history_empty": "Пока нет сессий",
   "focus_history_empty_sub": "Каждая завершённая сессия фокусировки появится здесь.",
@@ -769,18 +769,14 @@
   "focus_only_hint": "Привычка отмечается по завершении сессии, а не нажатием.",
   "focus_only_title": "Нужна сессия фокусировки",
   "focus_only_body": "«{name}» отмечается завершением сессии фокусировки.",
-  "focus_only_past": "«{name}» отмечается только сессией фокусировки, поэтому прошедшие дни отметить нельзя.",
-  "focus_only_start": "Начать сессию",
-  "focus_flowtime": "Флоутайм",
-  "focus_flowtime_hint": "Без цели и без будильника. Время идёт вперёд, а вы останавливаетесь, когда чувствуете, что готовы.",
-  "focus_end_flow": "Вы фокусировались {time}.",
-  "@focus_end_flow": {
+  "@focus_only_body": {
     "placeholders": {
-      "time": {
+      "name": {
         "type": "String"
       }
     }
   },
+  "focus_only_past": "«{name}» отмечается только сессией фокусировки, поэтому прошедшие дни отметить нельзя.",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -788,9 +784,13 @@
       }
     }
   },
-  "@focus_only_body": {
+  "focus_only_start": "Начать сессию",
+  "focus_flowtime": "Флоутайм",
+  "focus_flowtime_hint": "Без цели и без будильника. Время идёт вперёд, а вы останавливаетесь, когда чувствуете, что готовы.",
+  "focus_end_flow": "Вы фокусировались {time}.",
+  "@focus_end_flow": {
     "placeholders": {
-      "name": {
+      "time": {
         "type": "String"
       }
     }
@@ -925,11 +925,11 @@
     "description": "Screen reader label for the minus button of a number stepper"
   },
   "a11y_not_done": "не выполнено",
-  "a11y_previous_week": "Предыдущая неделя",
-  "a11y_next_week": "Следующая неделя",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
+  "a11y_previous_week": "Предыдущая неделя",
+  "a11y_next_week": "Следующая неделя",
   "a11y_increase": "Увеличить",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
