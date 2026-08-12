@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 enum ClockStyle { ring, flip, dots }
 
+const _flipDepth = 0.22;
+
 class FocusClock extends StatelessWidget {
   const FocusClock({
     super.key,
@@ -362,6 +364,7 @@ class _FlipGroupState extends State<_FlipGroup> {
           flipDirection: AxisDirection.down,
           flipDuration: const Duration(milliseconds: 450),
           flipCurve: Curves.easeInOut,
+          perspectiveEffect: _flipDepth / widget.height,
           itemBuilder: (_, value) => _FlipFace(
             value: value ?? widget.value,
             width: widget.width,
