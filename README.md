@@ -16,6 +16,8 @@
 
 <img src="assets/icon.svg" width="72" alt="Streak logo" />
 
+### A minimal, private, ad-free habit tracker
+
 Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 
 <br/>
