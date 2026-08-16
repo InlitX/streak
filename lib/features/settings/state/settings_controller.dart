@@ -44,7 +44,7 @@ class SettingsController extends ChangeNotifier {
     _weekStart = LocalStore.setting('weekStart', 1);
     _onboardingDone = LocalStore.setting('onboardingDone', false);
     _localeCode = LocalStore.setting('locale', '');
-    _appBackground = LocalStore.setting('appBackground', 0);
+    _appBackground = LocalStore.setting('appBackground', 2);
     _bgImage = LocalStore.setting('bgImage', '');
     _checkStyle = LocalStore.setting('checkStyle', 0);
     _profileName = LocalStore.setting('profileName', '');
