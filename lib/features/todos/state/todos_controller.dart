@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
 import 'package:uuid/uuid.dart';
@@ -58,9 +59,12 @@ class TodosController extends ChangeNotifier {
   Future<void> update(Todo todo) async {
     final index = _todos.indexWhere((t) => t.id == todo.id);
     if (index == -1) return;
+    final dropped =
+        _todos[index].photos.where((p) => !todo.photos.contains(p)).toList();
     _todos[index] = todo;
     notifyListeners();
     await LocalStore.writeTodo(todo);
+    await CoverStorage.forgetAll(dropped);
   }
 
   Future<void> toggle(String id) async {
@@ -78,16 +82,22 @@ class TodosController extends ChangeNotifier {
   }
 
   Future<void> remove(String id) async {
+    final photos = [
+      for (final todo in _todos.where((t) => t.id == id)) ...todo.photos,
+    ];
     _todos.removeWhere((t) => t.id == id);
     notifyListeners();
     await LocalStore.removeTodo(id);
+    await CoverStorage.forgetAll(photos);
   }
 
   Future<void> clearCompleted() async {
-    final ids = _todos.where((t) => t.done).map((t) => t.id).toList();
-    if (ids.isEmpty) return;
+    final done = _todos.where((t) => t.done).toList();
+    if (done.isEmpty) return;
+    final photos = [for (final todo in done) ...todo.photos];
     _todos.removeWhere((t) => t.done);
     notifyListeners();
-    await LocalStore.removeTodos(ids);
+    await LocalStore.removeTodos(done.map((t) => t.id));
+    await CoverStorage.forgetAll(photos);
   }
 }

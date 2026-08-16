@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/backup_service.dart';
@@ -348,6 +349,7 @@ class SettingsController extends ChangeNotifier {
       await LocalStore.writeSetting('focusScene', 0);
     }
     notifyListeners();
+    await CoverStorage.forget(path);
   }
 
   bool get appLock => _appLock;

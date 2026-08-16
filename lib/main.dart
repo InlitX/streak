@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -17,6 +19,7 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
+import 'package:streak/services/image_cleanup_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/widget_action_service.dart';
 
@@ -27,6 +30,7 @@ Future<void> main() async {
   await LocalStore.init();
   AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
   await WidgetActionService.drain(LocalStore.readHabits());
+  unawaited(ImageCleanupService.run());
 
   NotificationService.onOpenHabit = _openHabit;
   FocusService.onPending = drainFocusActions;

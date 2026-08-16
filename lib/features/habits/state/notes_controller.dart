@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:uuid/uuid.dart';
 
@@ -78,20 +79,32 @@ class NotesController extends ChangeNotifier {
   Future<void> update(HabitNote note) async {
     final index = _notes.indexWhere((n) => n.id == note.id);
     if (index == -1) return;
+    final dropped =
+        _notes[index].photos.where((p) => !note.photos.contains(p)).toList();
     _notes[index] = note;
     await LocalStore.writeNote(note);
     notifyListeners();
+    await CoverStorage.forgetAll(dropped);
   }
 
   Future<void> remove(String id) async {
+    final photos = [
+      for (final note in _notes.where((n) => n.id == id)) ...note.photos,
+    ];
     _notes.removeWhere((n) => n.id == id);
     await LocalStore.removeNote(id);
     notifyListeners();
+    await CoverStorage.forgetAll(photos);
   }
 
   Future<void> removeForHabit(String habitId) async {
+    final photos = [
+      for (final note in _notes.where((n) => n.habitId == habitId))
+        ...note.photos,
+    ];
     _notes.removeWhere((n) => n.habitId == habitId);
     await LocalStore.removeNotesFor(habitId);
     notifyListeners();
+    await CoverStorage.forgetAll(photos);
   }
 }

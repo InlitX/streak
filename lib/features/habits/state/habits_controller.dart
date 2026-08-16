@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -71,9 +72,13 @@ class HabitsController extends ChangeNotifier {
   }
 
   Future<void> clearProgress() async {
+    final photos = [
+      for (final note in LocalStore.readNotes()) ...note.photos,
+    ];
     await LocalStore.clearProgress();
     _habits = LocalStore.readHabits();
     notifyListeners();
+    await CoverStorage.forgetAll(photos);
     await HomeWidgetService.sync(asMap);
   }
 
@@ -327,12 +332,23 @@ class HabitsController extends ChangeNotifier {
   }
 
   Future<void> remove(String id) async {
-    await _notifications.cancelFor(id);
+    try {
+      await _notifications.cancelFor(id);
+    } catch (e) {
+      debugPrint('Could not cancel the reminders of $id: $e');
+    }
+    final habit = _habits[id];
+    final images = [
+      if (habit != null) ...[habit.coverPath, habit.bookCoverPath],
+      for (final note in LocalStore.readNotes())
+        if (note.habitId == id) ...note.photos,
+    ];
     _habits.remove(id);
     await LocalStore.removeHabit(id);
     await LocalStore.removeNotesFor(id);
     await LocalStore.removeFocusFor(id);
     notifyListeners();
+    await CoverStorage.forgetAll(images);
     await HomeWidgetService.sync(asMap);
   }
 
