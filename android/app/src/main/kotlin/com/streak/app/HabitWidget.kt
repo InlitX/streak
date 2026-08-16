@@ -122,11 +122,15 @@ class HabitWidget : GlanceAppWidget() {
                         }
                     }
 
+                    val keys = List(days.length()) {
+                        days.optJSONObject(it)?.optString("key") ?: WidgetPayload.todayKey()
+                    }
+
                     LazyColumn(
                         modifier = GlanceModifier.fillMaxWidth().defaultWeight()
                     ) {
                         items(habits.length()) { habitIndex ->
-                            HabitRow(style, habits.getJSONObject(habitIndex))
+                            HabitRow(style, habits.getJSONObject(habitIndex), keys)
                         }
                     }
                 } else {
@@ -179,7 +183,7 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun HabitRow(style: WidgetStyle, habit: JSONObject) {
+    private fun HabitRow(style: WidgetStyle, habit: JSONObject, dayKeys: List<String>) {
         val context = androidx.glance.LocalContext.current
         val habitId = habit.getString("id")
         val name = habit.getString("name")
@@ -238,7 +242,11 @@ class HabitWidget : GlanceAppWidget() {
                                 .cornerRadius(12.dp)
                                 .clickable(
                                     onClick = actionSendBroadcast(
-                                        WidgetActionReceiver.intent(context, habitId, i)
+                                        WidgetActionReceiver.intent(
+                                            context,
+                                            habitId,
+                                            dayKeys.getOrElse(i) { WidgetPayload.todayKey() },
+                                        )
                                     )
                                 ),
                             contentAlignment = Alignment.Center
@@ -344,13 +352,5 @@ class HabitWidget : GlanceAppWidget() {
         }
     }
 
-    private fun loadWidgetData(context: Context): JSONObject? {
-        return try {
-            val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-            val json = prefs.getString("habits_data", null)
-            if (json != null) JSONObject(json) else null
-        } catch (e: Exception) {
-            null
-        }
-    }
+    private fun loadWidgetData(context: Context): JSONObject? = WidgetPayload.aligned(context)
 }

@@ -18,6 +18,7 @@ class HeatmapWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
+        WidgetRefreshReceiver.keepFresh(context)
         for (id in appWidgetIds) HeatmapRenderer.update(context, appWidgetManager, id)
     }
 

@@ -116,6 +116,7 @@ Future<void> widgetActionEntrypoint() async {
   WidgetsFlutterBinding.ensureInitialized();
   const channel = MethodChannel('streak/widget_action');
   try {
+    await initializeDateFormatting();
     await LocalStore.init();
     await LocalStore.reloadHabits();
     final habits = LocalStore.readHabits();

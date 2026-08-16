@@ -163,13 +163,5 @@ class StatsWidget : GlanceAppWidget() {
 
     private fun spaced(value: String) = value.uppercase().toCharArray().joinToString(" ")
 
-    private fun loadData(context: Context): JSONObject? {
-        return try {
-            val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-            val json = prefs.getString("habits_data", null)
-            if (json != null) JSONObject(json) else null
-        } catch (e: Exception) {
-            null
-        }
-    }
+    private fun loadData(context: Context): JSONObject? = WidgetPayload.aligned(context)
 }

@@ -12,6 +12,7 @@ import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
+import 'package:streak/services/home_widget_service.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -76,7 +77,8 @@ class _HomeShellState extends State<HomeShell>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      context.read<HabitsController>().reload();
+      final habits = context.read<HabitsController>();
+      habits.reload().then((_) => HomeWidgetService.sync(habits.asMap));
       TodayIntro.replay();
       drainFocusActions();
     }

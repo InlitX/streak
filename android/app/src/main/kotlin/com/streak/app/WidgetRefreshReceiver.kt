@@ -9,12 +9,25 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import java.util.Calendar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WidgetRefreshReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         schedule(context)
-        refreshAll(context)
+        if (!hasWidgets(context)) return
+        val pending = goAsync()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                repaint(context)
+            } catch (e: Exception) {
+            } finally {
+                pending.finish()
+            }
+        }
+        WidgetActionWorker.refresh(context)
     }
 
     companion object {
@@ -28,6 +41,16 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
             StatsWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
         )
+
+        fun keepFresh(context: Context) {
+            schedule(context)
+            if (WidgetPayload.isStale(context)) WidgetActionWorker.refresh(context)
+        }
+
+        suspend fun repaint(context: Context) {
+            HeatmapRenderer.updateAll(context)
+            GlanceWidgets.updateAll(context)
+        }
 
         fun refreshAll(context: Context) {
             if (!hasWidgets(context)) return

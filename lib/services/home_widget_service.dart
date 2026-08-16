@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -20,6 +21,10 @@ class HomeWidgetService {
   ];
 
   static const _heatmapWeeks = 53;
+
+  static const _weekDays = 7;
+
+  static const _windowDays = 14;
 
   static const _allHabitsIcon = 'activity';
 
@@ -107,7 +112,9 @@ class HomeWidgetService {
       for (final provider in _providers) {
         await HomeWidget.updateWidget(androidName: provider);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Widget sync failed: $e');
+    }
   }
 
   static Future<void> syncWidgetStyle({
@@ -130,16 +137,26 @@ class HomeWidgetService {
     } catch (_) {}
   }
 
+  static List<String> _narrowWeekdays() {
+    try {
+      return DateFormat('', _locale ?? 'en').dateSymbols.NARROWWEEKDAYS;
+    } catch (e) {
+      debugPrint('Widget weekday labels fell back to English: $e');
+      return const ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    }
+  }
+
   static List<Habit> _ordered(Map<String, Habit> habits) =>
       habits.values.where((habit) => !habit.isArchived).toList()
         ..sort((a, b) => a.order.compareTo(b.order));
 
   static String _encode(Map<String, Habit> habits, Map<String, String> icons) {
     final today = AppClock.now();
-    final dates = List.generate(
-      7,
-      (i) => today.subtract(Duration(days: 6 - i)),
+    final window = List.generate(
+      _windowDays,
+      (i) => today.subtract(Duration(days: _weekDays - 1 - i)),
     );
+    final dates = window.take(_weekDays).toList();
     final listed = _ordered(habits);
 
     final widgetHabits = listed.map((habit) {
@@ -151,26 +168,28 @@ class HomeWidgetService {
         'iconTintable': HabitIcons.isIcon(habit.icon),
         'color': habit.color.toARGB32(),
         'cover': habit.coverPath,
-        'completions': dates.map(habit.isCompletedOn).toList(),
+        'completions': window.map(habit.isCompletedOn).toList(),
         'kind': habit.kind.index,
         'focusOnly': habit.needsFocusSession,
         'streak': habit.currentStreak,
         'perDayTarget': habit.effectiveTarget,
         'incrementAmount': habit.incrementAmount,
-        'counts': dates
+        'counts': window
             .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
+            .toList(),
+        'scheduled': window
+            .map((d) => !habit.isPausedOn(d) && habit.isScheduledOn(d))
             .toList(),
         'heatmap': _levelsOf(habit, today),
       };
     }).toList();
 
-    final narrow = DateFormat('', _locale ?? 'en').dateSymbols.NARROWWEEKDAYS;
-    final days = dates.map((date) {
+    final narrow = _narrowWeekdays();
+    final days = window.map((date) {
       return {
+        'key': date.dayKey,
         'label': narrow[date.weekday % 7],
-        'isToday': date.day == today.day &&
-            date.month == today.month &&
-            date.year == today.year,
+        'isToday': date.dayKey == today.dayKey,
       };
     }).toList();
 
@@ -192,6 +211,7 @@ class HomeWidgetService {
     return json.encode({
       'habits': widgetHabits,
       'days': days,
+      'todayKey': today.dayKey,
       'heatmap': _heatmapLevels(listed, today),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       'summary': {

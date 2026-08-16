@@ -358,10 +358,7 @@ class HabitCardData(
         private const val BRAND = 0xFF7C5CFC.toInt()
 
         fun load(context: Context, habitId: String?, allColor: Int?): HabitCardData? = try {
-            val raw = context
-                .getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-                .getString("habits_data", null)
-            val root = raw?.let { JSONObject(it) }
+            val root = WidgetPayload.aligned(context)
             when {
                 root == null -> null
                 habitId != null -> habitOf(root, habitId)

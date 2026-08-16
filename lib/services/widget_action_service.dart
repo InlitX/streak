@@ -58,16 +58,29 @@ class WidgetActionService {
     }
   }
 
+  static DateTime? _dayOf(Uri uri) {
+    final day = uri.queryParameters['day'];
+    if (day != null && day.length == 10) {
+      try {
+        return parseDayKey(day);
+      } catch (e) {
+        return null;
+      }
+    }
+    final index = int.tryParse(uri.queryParameters['dayIndex'] ?? '');
+    if (index == null) return null;
+    return AppClock.now().subtract(Duration(days: 6 - index)).atMidnight;
+  }
+
   static String? _apply(Map<String, Habit> habits, Uri uri) {
     final habitId = uri.queryParameters['habitId'];
-    final dayIndex = int.tryParse(uri.queryParameters['dayIndex'] ?? '');
-    if (habitId == null || dayIndex == null) return null;
+    if (habitId == null) return null;
 
     final habit = habits[habitId];
     if (habit == null) return null;
 
-    final target =
-        AppClock.now().subtract(Duration(days: 6 - dayIndex)).atMidnight;
+    final target = _dayOf(uri);
+    if (target == null) return null;
     final delta = double.tryParse(uri.queryParameters['delta'] ?? '') ??
         habit.incrementAmount;
 

@@ -105,11 +105,12 @@ class TodayWidget : GlanceAppWidget() {
         val kind = habit.optInt("kind", KIND_POSITIVE)
         val perDayTarget = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val counts = habit.optJSONArray("counts")
+        val today = WidgetPayload.TODAY
         val todayCount =
-            if (counts != null && counts.length() == 7) counts.optDouble(6, 0.0) else 0.0
+            if (counts != null && counts.length() > today) counts.optDouble(today, 0.0) else 0.0
         val completions = habit.optJSONArray("completions")
-        val doneToday = completions != null && completions.length() == 7 &&
-            completions.getBoolean(6)
+        val doneToday = completions != null && completions.length() > today &&
+            completions.optBoolean(today, false)
 
         val boxColor: androidx.compose.ui.graphics.Color
         val icon: String
@@ -172,7 +173,11 @@ class TodayWidget : GlanceAppWidget() {
                     .background(ColorProvider(boxColor))
                     .clickable(
                         onClick = actionSendBroadcast(
-                            WidgetActionReceiver.intent(context, habitId, 6)
+                            WidgetActionReceiver.intent(
+                                context,
+                                habitId,
+                                WidgetPayload.todayKey(),
+                            )
                         )
                     ),
                 contentAlignment = Alignment.Center
@@ -191,13 +196,5 @@ class TodayWidget : GlanceAppWidget() {
         }
     }
 
-    private fun loadData(context: Context): JSONObject? {
-        return try {
-            val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-            val json = prefs.getString("habits_data", null)
-            if (json != null) JSONObject(json) else null
-        } catch (e: Exception) {
-            null
-        }
-    }
+    private fun loadData(context: Context): JSONObject? = WidgetPayload.aligned(context)
 }

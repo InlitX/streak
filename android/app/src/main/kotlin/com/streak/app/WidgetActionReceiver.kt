@@ -12,17 +12,18 @@ class WidgetActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_TOGGLE) return
         val habitId = intent.getStringExtra(EXTRA_HABIT_ID) ?: return
-        val dayIndex = intent.getIntExtra(EXTRA_DAY_INDEX, TODAY_INDEX).coerceIn(0, 6)
+        val dayKey = intent.getStringExtra(EXTRA_DAY_KEY) ?: WidgetPayload.todayKey()
         val data = HabitCardData.load(context, habitId, null) ?: return
+        val column = columnOf(context, dayKey)
 
-        if (data.focusOnly && !data.isDoneOn(dayIndex)) {
-            if (dayIndex == TODAY_INDEX) startFocus(context, habitId)
+        if (data.focusOnly && !data.isDoneOn(column)) {
+            if (dayKey == WidgetPayload.todayKey()) startFocus(context, habitId)
             return
         }
 
         val delta = if (data.kind == KIND_QUANTITATIVE) data.incrementAmount else 1.0
 
-        if (WidgetOptimistic.apply(context, habitId, dayIndex, delta)) {
+        if (WidgetOptimistic.apply(context, habitId, dayKey, delta)) {
             HeatmapRenderer.refreshContent(context)
             repaintGlance(context)
         }
@@ -34,9 +35,17 @@ class WidgetActionReceiver : BroadcastReceiver() {
         }
         WidgetActionWorker.enqueue(
             context,
-            "streak://toggleHabit?habitId=$habitId&dayIndex=$dayIndex" +
+            "streak://toggleHabit?habitId=$habitId&day=$dayKey" +
                 "&action=$action&delta=${WidgetText.amount(delta)}",
         )
+    }
+
+    private fun columnOf(context: Context, dayKey: String): Int {
+        val days = WidgetPayload.aligned(context)?.optJSONArray("days") ?: return WidgetPayload.TODAY
+        for (i in 0 until days.length()) {
+            if (days.optJSONObject(i)?.optString("key") == dayKey) return i
+        }
+        return WidgetPayload.TODAY
     }
 
     private fun startFocus(context: Context, habitId: String) {
@@ -63,18 +72,17 @@ class WidgetActionReceiver : BroadcastReceiver() {
         const val ACTION_TOGGLE = "com.streak.app.TOGGLE_HABIT"
         const val EXTRA_HABIT_ID = "habitId"
         const val EXTRA_WIDGET_ID = "appWidgetId"
-        const val EXTRA_DAY_INDEX = "dayIndex"
+        const val EXTRA_DAY_KEY = "dayKey"
         const val EXTRA_START_FOCUS = "startFocusHabitId"
 
-        private const val TODAY_INDEX = 6
         private const val KIND_NEGATIVE = 1
         private const val KIND_QUANTITATIVE = 2
 
-        fun intent(context: Context, habitId: String, dayIndex: Int): Intent =
+        fun intent(context: Context, habitId: String, dayKey: String): Intent =
             Intent(context, WidgetActionReceiver::class.java).apply {
                 action = ACTION_TOGGLE
                 putExtra(EXTRA_HABIT_ID, habitId)
-                putExtra(EXTRA_DAY_INDEX, dayIndex)
+                putExtra(EXTRA_DAY_KEY, dayKey)
             }
     }
 }
