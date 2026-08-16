@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +5,8 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/widgets/photo_deck.dart';
+import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -268,67 +268,27 @@ class _PhotoStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 96,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _AddTile(
-            icon: LucideIcons.camera,
-            label: context.l10n.note_take_photo,
-            onTap: onCamera,
+    return Row(
+      children: [
+        _AddTile(
+          icon: LucideIcons.camera,
+          label: context.l10n.note_take_photo,
+          onTap: onCamera,
+        ),
+        const SizedBox(width: 10),
+        _AddTile(
+          icon: LucideIcons.image,
+          label: context.l10n.note_pick_photo,
+          onTap: onGallery,
+        ),
+        if (photos.isNotEmpty) ...[
+          const Spacer(),
+          PhotoDeck(
+            shots: [for (final path in photos) PhotoShot(path: path)],
+            onRemove: (index) => onRemove(photos[index]),
           ),
-          const SizedBox(width: 10),
-          _AddTile(
-            icon: LucideIcons.image,
-            label: context.l10n.note_pick_photo,
-            onTap: onGallery,
-          ),
-          for (final path in photos) ...[
-            const SizedBox(width: 10),
-            Stack(
-              children: [
-                Container(
-                  width: 96,
-                  height: 96,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: context.colors.surfaceContainerHighest,
-                  ),
-                  child: File(path).existsSync()
-                      ? Image.file(File(path), fit: BoxFit.cover)
-                      : null,
-                ),
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Semantics(
-                    button: true,
-                    label: context.l10n.delete,
-                    child: GestureDetector(
-                      onTap: () => onRemove(path),
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black.withValues(alpha: 0.6),
-                        ),
-                        child: const Icon(
-                          LucideIcons.x,
-                          size: 14,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 }
@@ -351,8 +311,8 @@ class _AddTile extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 96,
-          height: 96,
+          width: 88,
+          height: 88,
           decoration: BoxDecoration(
             color: context.colors.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(16),

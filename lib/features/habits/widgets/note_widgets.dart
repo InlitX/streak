@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
+
+PhotoShot noteShot(BuildContext context, HabitNote note, String path) {
+  final locale = Localizations.localeOf(context).toString();
+  return PhotoShot(
+    path: path,
+    day: DateFormat.yMMMMd(locale).format(parseDayKey(note.date)),
+    text: note.text.trim(),
+  );
+}
+
+List<PhotoShot> notePhotoShots(BuildContext context, HabitNote note) =>
+    [for (final path in note.photos) noteShot(context, note, path)];
 
 String noteTypeLabel(BuildContext context, NoteType type) => switch (type) {
       NoteType.note => context.l10n.note_kind_note,

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -10,9 +8,9 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/entrance.dart';
+import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
-import 'package:streak/features/habits/pages/journey_page.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -302,44 +300,8 @@ class NoteCard extends StatelessWidget {
                   ),
                 ],
                 if (note.photos.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 64,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: note.photos.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 6),
-                      itemBuilder: (_, index) {
-                        final path = note.photos[index];
-                        if (!File(path).existsSync()) {
-                          return const SizedBox.shrink();
-                        }
-                        return Semantics(
-                          button: true,
-                          label: context.l10n.note_photos,
-                          child: GestureDetector(
-                            onTap: () => showJourneyViewer(
-                              context,
-                              [
-                                for (final p in note.photos)
-                                  JourneyShot(path: p, note: note),
-                              ],
-                              index,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                File(path),
-                                width: 64,
-                                height: 64,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  const SizedBox(height: 12),
+                  PhotoDeck(shots: notePhotoShots(context, note), size: 64),
                 ],
               ],
             ),
