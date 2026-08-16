@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -207,163 +208,166 @@ class _FocusPageState extends State<FocusPage> {
         ? context.l10n.focus_break
         : (habit?.name ?? context.l10n.focus);
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-      FocusBackground(
-        scene: settings.focusScene,
-        imagePath: settings.focusImage,
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final landscape = constraints.maxWidth > constraints.maxHeight;
-              final typing = inset > 0;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemBars(Brightness.dark),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+        FocusBackground(
+          scene: settings.focusScene,
+          imagePath: settings.focusImage,
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final landscape = constraints.maxWidth > constraints.maxHeight;
+                final typing = inset > 0;
 
-              final listHeight = typing
-                  ? (constraints.maxHeight * 0.32).clamp(110.0, 240.0)
-                  : 156.0;
-              final tasks = habit == null
-                  ? FocusFreeTaskList(focus: focus, maxHeight: listHeight)
-                  : FocusTaskList(habit: habit, maxHeight: listHeight);
+                final listHeight = typing
+                    ? (constraints.maxHeight * 0.32).clamp(110.0, 240.0)
+                    : 156.0;
+                final tasks = habit == null
+                    ? FocusFreeTaskList(focus: focus, maxHeight: listHeight)
+                    : FocusTaskList(habit: habit, maxHeight: listHeight);
 
-              final header = AnimatedBuilder(
-                animation: focus,
-                builder: (context, _) => _TopBar(
-                  immersive: _immersive,
-                  onImmersive: _toggleImmersive,
-                  title: label,
-                  target: leadMinutes <= 0
-                      ? context.l10n.focus_flowtime
-                      : focus.isPomodoro && !leading
-                          ? '${context.l10n.minutes_short('${focus.targetMinutes}')}  ·  ${context.l10n.focus_round(focus.round)}'
-                          : context.l10n.minutes_short('$leadMinutes'),
-                ),
-              );
+                final header = AnimatedBuilder(
+                  animation: focus,
+                  builder: (context, _) => _TopBar(
+                    immersive: _immersive,
+                    onImmersive: _toggleImmersive,
+                    title: label,
+                    target: leadMinutes <= 0
+                        ? context.l10n.focus_flowtime
+                        : focus.isPomodoro && !leading
+                            ? '${context.l10n.minutes_short('${focus.targetMinutes}')}  ·  ${context.l10n.focus_round(focus.round)}'
+                            : context.l10n.minutes_short('$leadMinutes'),
+                  ),
+                );
 
-              final clock = AnimatedBuilder(
-                animation: focus,
-                builder: (context, _) => FocusClock(
-                  style: style,
-                  seconds: leading
-                      ? (leadMinutes <= 0 ? 0 : leadMinutes * 60)
-                      : focus.displaySeconds,
-                  progress: leading ? 0 : focus.progress,
-                  color: habit?.color ?? context.colors.primary,
-                  label: label,
-                  size: landscape
-                      ? (constraints.maxHeight * 0.62).clamp(140.0, 300.0)
-                      : (constraints.maxWidth * 0.66).clamp(160.0, 320.0),
-                ),
-              );
+                final clock = AnimatedBuilder(
+                  animation: focus,
+                  builder: (context, _) => FocusClock(
+                    style: style,
+                    seconds: leading
+                        ? (leadMinutes <= 0 ? 0 : leadMinutes * 60)
+                        : focus.displaySeconds,
+                    progress: leading ? 0 : focus.progress,
+                    color: habit?.color ?? context.colors.primary,
+                    label: label,
+                    size: landscape
+                        ? (constraints.maxHeight * 0.62).clamp(140.0, 300.0)
+                        : (constraints.maxWidth * 0.66).clamp(160.0, 320.0),
+                  ),
+                );
 
-              final controls = AnimatedBuilder(
-                animation: focus,
-                builder: (context, _) => _Controls(
-                  running: focus.isRunning,
-                  onReset: () => _runLead(() {
-                    focus.reset();
-                    _scheduleEndAlarm();
-                  }),
-                  onToggle: () {
-                    if (focus.isRunning) {
-                      focus.pause();
-                      NotificationService().cancelFocusEnd();
-                    } else {
-                      focus.resume();
+                final controls = AnimatedBuilder(
+                  animation: focus,
+                  builder: (context, _) => _Controls(
+                    running: focus.isRunning,
+                    onReset: () => _runLead(() {
+                      focus.reset();
                       _scheduleEndAlarm();
-                    }
-                  },
-                  onStop: _confirmStop,
-                ),
-              );
+                    }),
+                    onToggle: () {
+                      if (focus.isRunning) {
+                        focus.pause();
+                        NotificationService().cancelFocusEnd();
+                      } else {
+                        focus.resume();
+                        _scheduleEndAlarm();
+                      }
+                    },
+                    onStop: _confirmStop,
+                  ),
+                );
 
-              if (landscape) {
+                if (landscape) {
+                  return Column(
+                    children: [
+                      header,
+                      Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 8, 12, 18),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: clock,
+                                      ),
+                                    ),
+                                    if (!typing) ...[
+                                      const SizedBox(height: 24),
+                                      controls,
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              key: const ValueKey('focus-tasks'),
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.fromLTRB(8, 8, 20, 20),
+                                child: tasks,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: inset),
+                    ],
+                  );
+                }
+
                 return Column(
                   children: [
                     header,
                     Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 8, 12, 18),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: clock,
-                                    ),
-                                  ),
-                                  if (!typing) ...[
-                                    const SizedBox(height: 24),
-                                    controls,
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            key: const ValueKey('focus-tasks'),
-                            child: SingleChildScrollView(
-                              padding: const EdgeInsets.fromLTRB(8, 8, 20, 20),
-                              child: tasks,
-                            ),
-                          ),
-                        ],
+                      child: Center(
+                        child: FittedBox(fit: BoxFit.scaleDown, child: clock),
                       ),
+                    ),
+                    if (!typing) ...[
+                      KeyedSubtree(
+                        key: const ValueKey('focus-controls'),
+                        child: controls,
+                      ),
+                      const SizedBox(height: 22),
+                    ],
+                    Padding(
+                      key: const ValueKey('focus-tasks'),
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                      child: tasks,
                     ),
                     SizedBox(height: inset),
                   ],
                 );
-              }
-
-              return Column(
-                children: [
-                  header,
-                  Expanded(
-                    child: Center(
-                      child: FittedBox(fit: BoxFit.scaleDown, child: clock),
-                    ),
-                  ),
-                  if (!typing) ...[
-                    KeyedSubtree(
-                      key: const ValueKey('focus-controls'),
-                      child: controls,
-                    ),
-                    const SizedBox(height: 22),
-                  ],
-                  Padding(
-                    key: const ValueKey('focus-tasks'),
-                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                    child: tasks,
-                  ),
-                  SizedBox(height: inset),
-                ],
-              );
-            },
+              },
+            ),
           ),
         ),
-      ),
-          Positioned.fill(
-            child: RepaintBoundary(
-              child: ValueListenableBuilder<int>(
-                valueListenable: _confetti,
-                builder: (context, trigger, _) =>
-                    IgnorePointer(child: CelebrationOverlay(trigger: trigger)),
+            Positioned.fill(
+              child: RepaintBoundary(
+                child: ValueListenableBuilder<int>(
+                  valueListenable: _confetti,
+                  builder: (context, trigger, _) =>
+                      IgnorePointer(child: CelebrationOverlay(trigger: trigger)),
+                ),
               ),
             ),
-          ),
-          if (_leadValue > 0)
-            Positioned.fill(
-              child: _LeadIn(value: _leadValue),
-            ),
-        ],
+            if (_leadValue > 0)
+              Positioned.fill(
+                child: _LeadIn(value: _leadValue),
+              ),
+          ],
+        ),
       ),
     );
   }

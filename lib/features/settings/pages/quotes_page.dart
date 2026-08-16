@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
@@ -64,7 +65,7 @@ class QuotesPage extends StatelessWidget {
         label: Text(context.l10n.quotes_add),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
+        padding: context.pagePadding(16, 12, 16, 96),
         children: [
           Card(
             child: NavRow(

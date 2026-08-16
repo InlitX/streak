@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -316,11 +317,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-          children: _minimalFields(context),
-        ),
+      body: ListView(
+        padding: context.pagePadding(16, 16, 16, 32),
+        children: _minimalFields(context),
       ),
     );
   }
@@ -616,180 +615,178 @@ class _HabitFormPageState extends State<HabitFormPage> {
             const SizedBox(width: 8),
           ],
         ),
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              HabitPreview(
-                icon: _icon,
-                color: _color,
-                name: _name.text.trim(),
+        body: ListView(
+          padding: context.pagePadding(16, 16, 16, 16),
+          children: [
+            HabitPreview(
+              icon: _icon,
+              color: _color,
+              name: _name.text.trim(),
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.name),
+            AppTextField(
+              hint: context.l10n.name_hint,
+              controller: _name,
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.description),
+            AppTextField(
+              hint: context.l10n.description_hint,
+              controller: _description,
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.habit_kind),
+            KindSelector(
+              kind: _kind,
+              locked: _kindLocked,
+              onChanged: (kind) => setState(() => _kind = kind),
+            ),
+            if (_kind == HabitKind.quantitative) ...[
+              const SizedBox(height: 12),
+              QuantitativeFields(
+                quantKind: _quantKind,
+                unitController: _unitLabel,
+                target: _quantTarget,
+                increment: _quantIncrement,
+                onPresetSelected: _applyQuantPreset,
+                onUnitChanged: () => setState(() {}),
+                onTargetChanged: (v) => setState(() => _quantTarget = v),
+                onIncrementChanged: (v) => setState(() => _quantIncrement = v),
               ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.name),
-              AppTextField(
-                hint: context.l10n.name_hint,
-                controller: _name,
-                onChanged: (_) => setState(() {}),
-              ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.description),
-              AppTextField(
-                hint: context.l10n.description_hint,
-                controller: _description,
-              ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.habit_kind),
-              KindSelector(
-                kind: _kind,
-                locked: _kindLocked,
-                onChanged: (kind) => setState(() => _kind = kind),
-              ),
-              if (_kind == HabitKind.quantitative) ...[
-                const SizedBox(height: 12),
-                QuantitativeFields(
-                  quantKind: _quantKind,
-                  unitController: _unitLabel,
-                  target: _quantTarget,
-                  increment: _quantIncrement,
-                  onPresetSelected: _applyQuantPreset,
-                  onUnitChanged: () => setState(() {}),
-                  onTargetChanged: (v) => setState(() => _quantTarget = v),
-                  onIncrementChanged: (v) => setState(() => _quantIncrement = v),
-                ),
-                if (_quantKind == QuantKind.reading) ...[
-                  const SizedBox(height: 20),
-                  SectionLabel(context.l10n.book_cover),
-                  CoverPicker(
-                    path: _bookCover,
-                    color: _color,
-                    onPick: _pickBookCover,
-                    onRemove: () => setState(() => _bookCover = ''),
-                  ),
-                ],
-              ],
-              if (_kind == HabitKind.negative) ...[
-                const SizedBox(height: 12),
-                NegativeHint(color: _color),
-              ],
-              if (_kind == HabitKind.positive) ...[
+              if (_quantKind == QuantKind.reading) ...[
                 const SizedBox(height: 20),
-                FocusOnlyToggle(
-                  value: _focusOnly,
+                SectionLabel(context.l10n.book_cover),
+                CoverPicker(
+                  path: _bookCover,
                   color: _color,
-                  onChanged: (v) => setState(() => _focusOnly = v),
-                ),
-                if (_focusOnly) ...[
-                  const SizedBox(height: 20),
-                  SectionLabel(context.l10n.focus_duration),
-                  FocusDurationChips(
-                    minutes: _focusMinutes,
-                    onChanged: (v) => setState(() => _focusMinutes = v),
-                  ),
-                  if (_focusMinutes > 0) ...[
-                    const SizedBox(height: 12),
-                    FocusPomodoroCard(
-                      enabled: _pomodoro,
-                      breakMinutes: _breakMinutes,
-                      onToggle: (v) => setState(() => _pomodoro = v),
-                      onBreakChanged: (v) => setState(() => _breakMinutes = v),
-                    ),
-                  ],
-                ],
-                if (!_focusOnly) ...[
-                  const SizedBox(height: 20),
-                  SectionLabel(context.l10n.checklist),
-                  SubstepsEditor(
-                    substeps: _substeps,
-                    color: _color,
-                    onChanged: (list) => _substeps = list,
-                  ),
-                ],
-              ],
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.icon),
-              IconPicker(
-                selected: _icon,
-                color: _color,
-                onSelected: (icon) => setState(() => _icon = icon),
-              ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.color),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ColorPicker(
-                    selected: _color,
-                    onSelected: (c) => setState(() => _color = c),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.cover_image),
-              CoverPicker(
-                path: _cover,
-                color: _color,
-                onPick: _pickCover,
-                onRemove: () => setState(() => _cover = ''),
-              ),
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.category),
-              CategoryPicker(
-                selected: _category,
-                onSelected: (c) => setState(() => _category = c),
-              ),
-              if (_kind != HabitKind.negative) ...[
-                const SizedBox(height: 20),
-                SectionLabel(context.l10n.frequency),
-                IntervalSelector(
-                  interval: _interval,
-                  frequency: _frequency,
-                  weekdays: _scheduleWeekdays,
-                  every: _scheduleEvery,
-                  onIntervalChanged: (interval) => setState(() {
-                    _interval = interval;
-                    _frequency = switch (interval) {
-                      HabitInterval.weekly => 3,
-                      HabitInterval.monthly => 10,
-                      _ => 1,
-                    };
-                  }),
-                  onFrequencyChanged: (value) =>
-                      setState(() => _frequency = value),
-                  onWeekdaysChanged: (days) =>
-                      setState(() => _scheduleWeekdays = days),
-                  onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+                  onPick: _pickBookCover,
+                  onRemove: () => setState(() => _bookCover = ''),
                 ),
               ],
-              if (_kind != HabitKind.negative && _planning) ...[
-                const SizedBox(height: 20),
-                SectionLabel(context.l10n.habit_time),
-                HabitTimeFields(
-                  startMinute: _startMinute,
-                  durationMinutes: _durationMinutes,
-                  color: _color,
-                  onChanged: (start, duration) => setState(() {
-                    _startMinute = start;
-                    _durationMinutes = duration;
-                  }),
-                ),
-              ],
-              const SizedBox(height: 20),
-              SectionLabel(context.l10n.reminders),
-              for (final reminder in _reminders)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: ReminderTile(
-                    reminder: reminder,
-                    onEdit: () => _editReminder(reminder),
-                    onDelete: () =>
-                        setState(() => _reminders.remove(reminder)),
-                  ),
-                ),
-              AddReminderButton(onTap: _addReminder),
-              const SizedBox(height: 24),
             ],
-          ),
+            if (_kind == HabitKind.negative) ...[
+              const SizedBox(height: 12),
+              NegativeHint(color: _color),
+            ],
+            if (_kind == HabitKind.positive) ...[
+              const SizedBox(height: 20),
+              FocusOnlyToggle(
+                value: _focusOnly,
+                color: _color,
+                onChanged: (v) => setState(() => _focusOnly = v),
+              ),
+              if (_focusOnly) ...[
+                const SizedBox(height: 20),
+                SectionLabel(context.l10n.focus_duration),
+                FocusDurationChips(
+                  minutes: _focusMinutes,
+                  onChanged: (v) => setState(() => _focusMinutes = v),
+                ),
+                if (_focusMinutes > 0) ...[
+                  const SizedBox(height: 12),
+                  FocusPomodoroCard(
+                    enabled: _pomodoro,
+                    breakMinutes: _breakMinutes,
+                    onToggle: (v) => setState(() => _pomodoro = v),
+                    onBreakChanged: (v) => setState(() => _breakMinutes = v),
+                  ),
+                ],
+              ],
+              if (!_focusOnly) ...[
+                const SizedBox(height: 20),
+                SectionLabel(context.l10n.checklist),
+                SubstepsEditor(
+                  substeps: _substeps,
+                  color: _color,
+                  onChanged: (list) => _substeps = list,
+                ),
+              ],
+            ],
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.icon),
+            IconPicker(
+              selected: _icon,
+              color: _color,
+              onSelected: (icon) => setState(() => _icon = icon),
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.color),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ColorPicker(
+                  selected: _color,
+                  onSelected: (c) => setState(() => _color = c),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.cover_image),
+            CoverPicker(
+              path: _cover,
+              color: _color,
+              onPick: _pickCover,
+              onRemove: () => setState(() => _cover = ''),
+            ),
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.category),
+            CategoryPicker(
+              selected: _category,
+              onSelected: (c) => setState(() => _category = c),
+            ),
+            if (_kind != HabitKind.negative) ...[
+              const SizedBox(height: 20),
+              SectionLabel(context.l10n.frequency),
+              IntervalSelector(
+                interval: _interval,
+                frequency: _frequency,
+                weekdays: _scheduleWeekdays,
+                every: _scheduleEvery,
+                onIntervalChanged: (interval) => setState(() {
+                  _interval = interval;
+                  _frequency = switch (interval) {
+                    HabitInterval.weekly => 3,
+                    HabitInterval.monthly => 10,
+                    _ => 1,
+                  };
+                }),
+                onFrequencyChanged: (value) =>
+                    setState(() => _frequency = value),
+                onWeekdaysChanged: (days) =>
+                    setState(() => _scheduleWeekdays = days),
+                onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+              ),
+            ],
+            if (_kind != HabitKind.negative && _planning) ...[
+              const SizedBox(height: 20),
+              SectionLabel(context.l10n.habit_time),
+              HabitTimeFields(
+                startMinute: _startMinute,
+                durationMinutes: _durationMinutes,
+                color: _color,
+                onChanged: (start, duration) => setState(() {
+                  _startMinute = start;
+                  _durationMinutes = duration;
+                }),
+              ),
+            ],
+            const SizedBox(height: 20),
+            SectionLabel(context.l10n.reminders),
+            for (final reminder in _reminders)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: ReminderTile(
+                  reminder: reminder,
+                  onEdit: () => _editReminder(reminder),
+                  onDelete: () =>
+                      setState(() => _reminders.remove(reminder)),
+                ),
+              ),
+            AddReminderButton(onTap: _addReminder),
+            const SizedBox(height: 24),
+          ],
         ),
     );
   }

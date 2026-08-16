@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -55,7 +56,7 @@ class ArchivedHabitsPage extends StatelessWidget {
               message: context.l10n.archived_empty_sub,
             )
           : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+              padding: context.pagePadding(16, 12, 16, 28),
               itemCount: archived.length,
               separatorBuilder: (_, __) => const SizedBox(height: 10),
               itemBuilder: (_, index) {

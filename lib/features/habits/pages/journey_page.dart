@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
@@ -56,7 +57,7 @@ class JourneyPage extends StatelessWidget {
               message: context.l10n.journey_empty_sub,
             )
           : GridView.builder(
-              padding: const EdgeInsets.fromLTRB(14, 14, 14, 28),
+              padding: context.pagePadding(14, 14, 14, 28),
               gridDelegate:
                   const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,

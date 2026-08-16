@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
@@ -78,82 +79,79 @@ class _TodosPageState extends State<TodosPage> {
           const SizedBox(width: 4),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          children: [
-            if (sections.isEmpty && completed.isEmpty)
-              _EmptyState(onAdd: () => showTodoComposer(context))
-            else
-              ListView(
-                padding: EdgeInsets.fromLTRB(
-                  minimal ? 22 : 16,
-                  minimal ? 0 : 8,
-                  minimal ? 22 : 16,
-                  minimal ? 96 : 148,
-                ),
-                children: [
-                  if (minimal)
-                    MinimalTitle(
-                      title: context.l10n.todos,
-                      subtitle: context.l10n.todo_left(todos.pendingCount),
-                    ),
-                  for (final section in sections) ...[
-                    _SectionHeader(
-                      label: todoGroupLabel(context, section.group),
-                      count: section.todos.length,
-                      danger: section.group == TodoGroup.overdue,
-                    ),
-                    for (final (index, todo) in section.todos.indexed)
-                      Entrance(
-                        key: ValueKey(todo.id),
-                        index: index,
-                        child: _Swipeable(
+      body: Stack(
+        children: [
+          if (sections.isEmpty && completed.isEmpty)
+            _EmptyState(onAdd: () => showTodoComposer(context))
+          else
+            ListView(
+              padding: context.pagePadding(
+                minimal ? 22 : 16,
+                minimal ? 0 : 8,
+                minimal ? 22 : 16,
+                minimal ? 96 : 148,
+              ),
+              children: [
+                if (minimal)
+                  MinimalTitle(
+                    title: context.l10n.todos,
+                    subtitle: context.l10n.todo_left(todos.pendingCount),
+                  ),
+                for (final section in sections) ...[
+                  _SectionHeader(
+                    label: todoGroupLabel(context, section.group),
+                    count: section.todos.length,
+                    danger: section.group == TodoGroup.overdue,
+                  ),
+                  for (final (index, todo) in section.todos.indexed)
+                    Entrance(
+                      key: ValueKey(todo.id),
+                      index: index,
+                      child: _Swipeable(
+                        todo: todo,
+                        corners: stackedCorners(index, section.todos.length),
+                        onDelete: () => _delete(todo),
+                        child: TodoTile(
                           todo: todo,
+                          overdue: section.group == TodoGroup.overdue,
                           corners: stackedCorners(index, section.todos.length),
-                          onDelete: () => _delete(todo),
-                          child: TodoTile(
-                            todo: todo,
-                            overdue: section.group == TodoGroup.overdue,
-                            corners: stackedCorners(index, section.todos.length),
-                            onToggle: () => todos.toggle(todo.id),
-                            onEdit: () => showTodoComposer(context, todo: todo),
-                          ),
+                          onToggle: () => todos.toggle(todo.id),
+                          onEdit: () => showTodoComposer(context, todo: todo),
                         ),
                       ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (completed.isNotEmpty) ...[
-                    _CompletedHeader(
-                      count: completed.length,
-                      expanded: _showCompleted,
-                      onTap: () =>
-                          setState(() => _showCompleted = !_showCompleted),
                     ),
-                    if (_showCompleted)
-                      for (final (index, todo) in completed.indexed)
-                        _Swipeable(
-                          todo: todo,
-                          corners: stackedCorners(index, completed.length),
-                          onDelete: () => _delete(todo),
-                          child: TodoTile(
-                            todo: todo,
-                            overdue: false,
-                            corners: stackedCorners(index, completed.length),
-                            onToggle: () => todos.toggle(todo.id),
-                            onEdit: () => showTodoComposer(context, todo: todo),
-                          ),
-                        ),
-                  ],
+                  const SizedBox(height: 10),
                 ],
-              ),
-            Positioned(
-              right: minimal ? 20 : 16,
-              bottom: minimal ? 20 : 78,
-              child: _AddButton(onTap: () => showTodoComposer(context)),
+                if (completed.isNotEmpty) ...[
+                  _CompletedHeader(
+                    count: completed.length,
+                    expanded: _showCompleted,
+                    onTap: () =>
+                        setState(() => _showCompleted = !_showCompleted),
+                  ),
+                  if (_showCompleted)
+                    for (final (index, todo) in completed.indexed)
+                      _Swipeable(
+                        todo: todo,
+                        corners: stackedCorners(index, completed.length),
+                        onDelete: () => _delete(todo),
+                        child: TodoTile(
+                          todo: todo,
+                          overdue: false,
+                          corners: stackedCorners(index, completed.length),
+                          onToggle: () => todos.toggle(todo.id),
+                          onEdit: () => showTodoComposer(context, todo: todo),
+                        ),
+                      ),
+                ],
+              ],
             ),
-          ],
-        ),
+          Positioned(
+            right: (minimal ? 20 : 16) + context.safeInsets.right,
+            bottom: (minimal ? 20 : 78) + context.bottomInset,
+            child: _AddButton(onTap: () => showTodoComposer(context)),
+          ),
+        ],
       ),
     );
   }

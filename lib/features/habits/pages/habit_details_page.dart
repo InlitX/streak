@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/cover_image.dart';
@@ -173,9 +174,8 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           ),
           body: _DetailBackground(
             coverPath: habit.coverPath,
-            child: SafeArea(
             child: ListView(
-              padding: const EdgeInsets.all(16),
+              padding: context.pagePadding(16, 16, 16, 16),
               children: [
                 if (minimal) _MinimalHeader(habit: habit),
                 Align(
@@ -233,7 +233,6 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 _VacationTile(habit: habit),
               ],
             ),
-          ),
           ),
         );
       },

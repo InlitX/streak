@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class MinimalPage extends StatelessWidget {
@@ -22,15 +23,12 @@ class MinimalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 52, leading: leading),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(22, 0, 22, 40),
-          children: [
-            MinimalTitle(title: title, subtitle: subtitle),
-            ...children,
-          ],
-        ),
+      body: ListView(
+        padding: context.pagePadding(22, 0, 22, 40),
+        children: [
+          MinimalTitle(title: title, subtitle: subtitle),
+          ...children,
+        ],
       ),
     );
   }

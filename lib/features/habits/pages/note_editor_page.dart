@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
@@ -120,131 +121,129 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
             const SizedBox(width: 8),
           ],
         ),
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            children: [
-              _Label(context.l10n.note_type),
-              NoteTypeChips(
-                selected: _type,
-                onChanged: (t) => setState(() => _type = t),
+        body: ListView(
+          padding: context.pagePadding(16, 8, 16, 24),
+          children: [
+            _Label(context.l10n.note_type),
+            NoteTypeChips(
+              selected: _type,
+              onChanged: (t) => setState(() => _type = t),
+            ),
+            const SizedBox(height: 22),
+            _Label(context.l10n.notes),
+            Container(
+              decoration: BoxDecoration(
+                color: context.colors.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(16),
               ),
-              const SizedBox(height: 22),
-              _Label(context.l10n.notes),
-              Container(
-                decoration: BoxDecoration(
-                  color: context.colors.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextField(
-                      controller: _text,
-                      autofocus: widget.note == null,
-                      maxLines: 5,
-                      maxLength: _kMaxLength,
-                      textCapitalization: TextCapitalization.sentences,
-                      onChanged: (_) => setState(() {}),
-                      buildCounter: (_,
-                              {required currentLength,
-                              required isFocused,
-                              maxLength}) =>
-                          null,
-                      style: TextStyle(
-                        fontSize: 15.5,
-                        height: 1.4,
-                        color: context.colors.onSurface,
-                      ),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
-                        hintText: context.l10n.note_hint,
-                        hintStyle: TextStyle(color: muted, fontSize: 15.5),
-                      ),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextField(
+                    controller: _text,
+                    autofocus: widget.note == null,
+                    maxLines: 5,
+                    maxLength: _kMaxLength,
+                    textCapitalization: TextCapitalization.sentences,
+                    onChanged: (_) => setState(() {}),
+                    buildCounter: (_,
+                            {required currentLength,
+                            required isFocused,
+                            maxLength}) =>
+                        null,
+                    style: TextStyle(
+                      fontSize: 15.5,
+                      height: 1.4,
+                      color: context.colors.onSurface,
                     ),
-                    Text(
-                      '${_text.text.characters.length}/$_kMaxLength',
-                      style: TextStyle(fontSize: 11.5, color: muted),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: context.l10n.note_hint,
+                      hintStyle: TextStyle(color: muted, fontSize: 15.5),
                     ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    '${_text.text.characters.length}/$_kMaxLength',
+                    style: TextStyle(fontSize: 11.5, color: muted),
+                  ),
+                ],
               ),
-              const SizedBox(height: 22),
-              _Label(context.l10n.note_photos),
-              _PhotoStrip(
-                photos: _photos,
-                accent: widget.accent,
-                onCamera: () => _addPhoto(fromCamera: true),
-                onGallery: () => _addPhoto(),
-                onRemove: (path) => setState(() => _photos.remove(path)),
-              ),
-              const SizedBox(height: 22),
-              _Label(context.l10n.note_time_optional),
-              Semantics(
-                button: true,
-                child: GestureDetector(
-                  onTap: _pickTime,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
-                    decoration: BoxDecoration(
-                      color: context.colors.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(LucideIcons.clock, size: 18, color: muted),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            _time == null
-                                ? context.l10n.note_time_optional
-                                : _time!.format(context),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: _time == null
-                                  ? muted
-                                  : context.colors.onSurface,
-                            ),
+            ),
+            const SizedBox(height: 22),
+            _Label(context.l10n.note_photos),
+            _PhotoStrip(
+              photos: _photos,
+              accent: widget.accent,
+              onCamera: () => _addPhoto(fromCamera: true),
+              onGallery: () => _addPhoto(),
+              onRemove: (path) => setState(() => _photos.remove(path)),
+            ),
+            const SizedBox(height: 22),
+            _Label(context.l10n.note_time_optional),
+            Semantics(
+              button: true,
+              child: GestureDetector(
+                onTap: _pickTime,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(LucideIcons.clock, size: 18, color: muted),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          _time == null
+                              ? context.l10n.note_time_optional
+                              : _time!.format(context),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: _time == null
+                                ? muted
+                                : context.colors.onSurface,
                           ),
                         ),
-                        if (_time != null)
-                          IconButton(
-                            icon: Icon(LucideIcons.x, size: 18, color: muted),
-                            onPressed: () => setState(() => _time = null),
-                          ),
-                      ],
-                    ),
+                      ),
+                      if (_time != null)
+                        IconButton(
+                          icon: Icon(LucideIcons.x, size: 18, color: muted),
+                          onPressed: () => setState(() => _time = null),
+                        ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 28),
-              SizedBox(
-                height: 52,
-                child: FilledButton(
-                  onPressed: _canSave ? _save : null,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: widget.accent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+            ),
+            const SizedBox(height: 28),
+            SizedBox(
+              height: 52,
+              child: FilledButton(
+                onPressed: _canSave ? _save : null,
+                style: FilledButton.styleFrom(
+                  backgroundColor: widget.accent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Text(
-                    context.l10n.save_note,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: widget.accent.computeLuminance() > 0.6
-                          ? Colors.black
-                          : Colors.white,
-                    ),
+                ),
+                child: Text(
+                  context.l10n.save_note,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: widget.accent.computeLuminance() > 0.6
+                        ? Colors.black
+                        : Colors.white,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

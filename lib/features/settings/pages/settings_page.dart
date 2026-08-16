@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/entrance.dart';
@@ -40,87 +41,84 @@ class ClassicSettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings)),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 104),
-          children: [
-            Entrance(
-              child: _ProfileHeader(
-                name: settings.profileName.isEmpty
-                    ? context.l10n.default_user
-                    : settings.profileName,
-                photoPath: settings.profilePhoto,
+      body: ListView(
+        padding: context.pagePadding(16, 16, 16, 104),
+        children: [
+          Entrance(
+            child: _ProfileHeader(
+              name: settings.profileName.isEmpty
+                  ? context.l10n.default_user
+                  : settings.profileName,
+              photoPath: settings.profilePhoto,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Entrance(
+            index: 1,
+            child: Card(
+              child: PickerRow(
+                icon: LucideIcons.smartphone,
+                title: context.l10n.app_style,
+                value: settings.isMinimalStyle
+                    ? context.l10n.style_minimal
+                    : context.l10n.style_classic,
+                onTap: () => AppNavigator.push(const AppStylePage()),
               ),
             ),
-            const SizedBox(height: 24),
-            Entrance(
-              index: 1,
-              child: Card(
-                child: PickerRow(
-                  icon: LucideIcons.smartphone,
-                  title: context.l10n.app_style,
-                  value: settings.isMinimalStyle
-                      ? context.l10n.style_minimal
-                      : context.l10n.style_classic,
-                  onTap: () => AppNavigator.push(const AppStylePage()),
-                ),
+          ),
+          const SizedBox(height: 24),
+          Entrance(
+            index: 2,
+            child: Card(
+              child: Column(
+                children: [
+                  NavRow(
+                    icon: LucideIcons.palette,
+                    title: context.l10n.appearance,
+                    subtitle: context.l10n.appearance_sub,
+                    onTap: () =>
+                        AppNavigator.push(const _ClassicAppearancePage()),
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.slidersHorizontal,
+                    title: context.l10n.preferences,
+                    subtitle: context.l10n.preferences_sub,
+                    onTap: () =>
+                        AppNavigator.push(const _ClassicPreferencesPage()),
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.database,
+                    title: context.l10n.data,
+                    subtitle: context.l10n.data_sub,
+                    onTap: () => AppNavigator.push(const _ClassicDataPage()),
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.heartHandshake,
+                    title: context.l10n.support,
+                    subtitle: context.l10n.support_sub,
+                    onTap: () =>
+                        AppNavigator.push(const _ClassicSupportPage()),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-            Entrance(
-              index: 2,
-              child: Card(
-                child: Column(
-                  children: [
-                    NavRow(
-                      icon: LucideIcons.palette,
-                      title: context.l10n.appearance,
-                      subtitle: context.l10n.appearance_sub,
-                      onTap: () =>
-                          AppNavigator.push(const _ClassicAppearancePage()),
-                    ),
-                    settingsDivider(context),
-                    NavRow(
-                      icon: LucideIcons.slidersHorizontal,
-                      title: context.l10n.preferences,
-                      subtitle: context.l10n.preferences_sub,
-                      onTap: () =>
-                          AppNavigator.push(const _ClassicPreferencesPage()),
-                    ),
-                    settingsDivider(context),
-                    NavRow(
-                      icon: LucideIcons.database,
-                      title: context.l10n.data,
-                      subtitle: context.l10n.data_sub,
-                      onTap: () => AppNavigator.push(const _ClassicDataPage()),
-                    ),
-                    settingsDivider(context),
-                    NavRow(
-                      icon: LucideIcons.heartHandshake,
-                      title: context.l10n.support,
-                      subtitle: context.l10n.support_sub,
-                      onTap: () =>
-                          AppNavigator.push(const _ClassicSupportPage()),
-                    ),
-                  ],
-                ),
+          ),
+          const SizedBox(height: 24),
+          Entrance(
+            index: 3,
+            child: Card(
+              child: NavRow(
+                icon: LucideIcons.info,
+                title: context.l10n.about_app,
+                subtitle: context.l10n.about_app_sub,
+                onTap: () => AppNavigator.push(const AboutPage()),
               ),
             ),
-            const SizedBox(height: 24),
-            Entrance(
-              index: 3,
-              child: Card(
-                child: NavRow(
-                  icon: LucideIcons.info,
-                  title: context.l10n.about_app,
-                  subtitle: context.l10n.about_app_sub,
-                  onTap: () => AppNavigator.push(const AboutPage()),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -141,15 +139,12 @@ class _ClassicSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          children: [
-            Entrance(child: SectionLabel(label)),
-            Entrance(index: 1, child: Card(child: Column(children: children))),
-          ],
-        ),
+      body: ListView(
+        padding: context.pagePadding(16, 8, 16, 24),
+        children: [
+          Entrance(child: SectionLabel(label)),
+          Entrance(index: 1, child: Card(child: Column(children: children))),
+        ],
       ),
     );
   }
@@ -235,273 +230,270 @@ class _ClassicPreferencesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.preferences)),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-          children: [
-            Entrance(child: SectionLabel(context.l10n.prefs_general)),
-            Entrance(
-              index: 1,
-              child: Card(
-                child: Column(
-                  children: [
-                    PickerRow(
-                      icon: LucideIcons.languages,
-                      title: context.l10n.language,
-                      value: SettingsActions.languageLabel(
-                        context,
-                        settings.localeCode,
-                      ),
-                      onTap: () => showLanguageSheet(context),
+      body: ListView(
+        padding: context.pagePadding(16, 8, 16, 24),
+        children: [
+          Entrance(child: SectionLabel(context.l10n.prefs_general)),
+          Entrance(
+            index: 1,
+            child: Card(
+              child: Column(
+                children: [
+                  PickerRow(
+                    icon: LucideIcons.languages,
+                    title: context.l10n.language,
+                    value: SettingsActions.languageLabel(
+                      context,
+                      settings.localeCode,
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.calendarDays,
-                      title: context.l10n.week_starts_on,
-                      trailing: Segmented(
-                        options: [
-                          context.l10n.mon,
-                          context.l10n.sat,
-                          context.l10n.sun,
-                        ],
-                        index: switch (settings.weekStart) {
-                          6 => 1,
-                          7 => 2,
-                          _ => 0,
+                    onTap: () => showLanguageSheet(context),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.calendarDays,
+                    title: context.l10n.week_starts_on,
+                    trailing: Segmented(
+                      options: [
+                        context.l10n.mon,
+                        context.l10n.sat,
+                        context.l10n.sun,
+                      ],
+                      index: switch (settings.weekStart) {
+                        6 => 1,
+                        7 => 2,
+                        _ => 0,
+                      },
+                      onChanged: (i) => settings.setWeekStart(
+                        switch (i) {
+                          1 => 6,
+                          2 => 7,
+                          _ => 1,
                         },
-                        onChanged: (i) => settings.setWeekStart(
-                          switch (i) {
-                            1 => 6,
-                            2 => 7,
-                            _ => 1,
-                          },
-                        ),
                       ),
                     ),
-                    settingsDivider(context),
-                    NavRow(
-                      icon: LucideIcons.moon,
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.moon,
+                    title: context.l10n.day_start,
+                    subtitle: SettingsActions.dayStartLabels(
+                      context,
+                    )[settings.dayCutoff],
+                    onTap: () => showOptionSheet(
+                      context,
                       title: context.l10n.day_start,
-                      subtitle: SettingsActions.dayStartLabels(
-                        context,
-                      )[settings.dayCutoff],
-                      onTap: () => showOptionSheet(
-                        context,
-                        title: context.l10n.day_start,
-                        options: SettingsActions.dayStartLabels(context),
-                        index: settings.dayCutoff,
-                        onSelected: settings.setDayCutoff,
-                      ),
+                      options: SettingsActions.dayStartLabels(context),
+                      index: settings.dayCutoff,
+                      onSelected: settings.setDayCutoff,
                     ),
-                    settingsDivider(context),
-                    NavRow(
-                      icon: LucideIcons.sparkles,
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.sparkles,
+                    title: context.l10n.celebration,
+                    subtitle: SettingsActions.celebrationLabels(
+                      context,
+                    )[settings.celebration.index],
+                    onTap: () => showOptionSheet(
+                      context,
                       title: context.l10n.celebration,
-                      subtitle: SettingsActions.celebrationLabels(
-                        context,
-                      )[settings.celebration.index],
-                      onTap: () => showOptionSheet(
-                        context,
-                        title: context.l10n.celebration,
-                        options: SettingsActions.celebrationLabels(context),
-                        index: settings.celebration.index,
-                        onSelected: settings.setCelebration,
-                      ),
+                      options: SettingsActions.celebrationLabels(context),
+                      index: settings.celebration.index,
+                      onSelected: settings.setCelebration,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-            Entrance(index: 2, child: SectionLabel(context.l10n.today)),
-            Entrance(
-              index: 3,
-              child: Card(
-                child: Column(
-                  children: [
-                    NavRow(
-                      icon: LucideIcons.house,
+          ),
+          const SizedBox(height: 24),
+          Entrance(index: 2, child: SectionLabel(context.l10n.today)),
+          Entrance(
+            index: 3,
+            child: Card(
+              child: Column(
+                children: [
+                  NavRow(
+                    icon: LucideIcons.house,
+                    title: context.l10n.start_view,
+                    subtitle: SettingsActions.startViewLabels(
+                      context,
+                    )[settings.startView],
+                    onTap: () => showOptionSheet(
+                      context,
                       title: context.l10n.start_view,
-                      subtitle: SettingsActions.startViewLabels(
-                        context,
-                      )[settings.startView],
-                      onTap: () => showOptionSheet(
-                        context,
-                        title: context.l10n.start_view,
-                        options: SettingsActions.startViewLabels(context),
-                        index: settings.startView,
-                        onSelected: settings.setStartView,
-                      ),
+                      options: SettingsActions.startViewLabels(context),
+                      index: settings.startView,
+                      onSelected: settings.setStartView,
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.layoutList,
-                      title: context.l10n.view_switcher,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.viewSwitcher ? 1 : 0,
-                        onChanged: (i) => settings.setViewSwitcher(i == 1),
-                      ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.layoutList,
+                    title: context.l10n.view_switcher,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.viewSwitcher ? 1 : 0,
+                      onChanged: (i) => settings.setViewSwitcher(i == 1),
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.layoutGrid,
-                      title: context.l10n.card_activity,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.cardActivity ? 1 : 0,
-                        onChanged: (i) => settings.setCardActivity(i == 1),
-                      ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.layoutGrid,
+                    title: context.l10n.card_activity,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.cardActivity ? 1 : 0,
+                      onChanged: (i) => settings.setCardActivity(i == 1),
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.arrowDownWideNarrow,
-                      title: context.l10n.sort_completed_last,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.sortCompletedLast ? 1 : 0,
-                        onChanged: (i) => settings.setSortCompletedLast(i == 1),
-                      ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.arrowDownWideNarrow,
+                    title: context.l10n.sort_completed_last,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.sortCompletedLast ? 1 : 0,
+                      onChanged: (i) => settings.setSortCompletedLast(i == 1),
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.calendarCheck,
-                      title: context.l10n.today_only,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.todayOnly ? 1 : 0,
-                        onChanged: (i) => settings.setTodayOnly(i == 1),
-                      ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.calendarCheck,
+                    title: context.l10n.today_only,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.todayOnly ? 1 : 0,
+                      onChanged: (i) => settings.setTodayOnly(i == 1),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-            Entrance(index: 4, child: SectionLabel(context.l10n.prefs_features)),
-            Entrance(
-              index: 5,
-              child: Card(
-                child: Column(
-                  children: [
-                    SettingRow(
-                      icon: LucideIcons.timer,
-                      title: context.l10n.focus,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.focusEnabled ? 1 : 0,
-                        onChanged: (i) => settings.setFocusEnabled(i == 1),
-                      ),
+          ),
+          const SizedBox(height: 24),
+          Entrance(index: 4, child: SectionLabel(context.l10n.prefs_features)),
+          Entrance(
+            index: 5,
+            child: Card(
+              child: Column(
+                children: [
+                  SettingRow(
+                    icon: LucideIcons.timer,
+                    title: context.l10n.focus,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.focusEnabled ? 1 : 0,
+                      onChanged: (i) => settings.setFocusEnabled(i == 1),
                     ),
-                    if (settings.focusEnabled) ...[
-                      settingsDivider(context),
-                      PickerRow(
-                        icon: LucideIcons.target,
-                        title: context.l10n.focus_daily_goal,
-                        value: settings.focusDailyGoal == 0
-                            ? context.l10n.off
-                            : context.l10n.minutes_short(
-                                '${settings.focusDailyGoal}',
-                              ),
-                        onTap: () async {
-                          final value = await showNumberKeypadDialog(
-                            context,
-                            title: context.l10n.focus_daily_goal,
-                            value: settings.focusDailyGoal.toDouble(),
-                            unit: context.l10n.unit_min_short,
-                            min: 0,
-                          );
-                          if (value != null) {
-                            settings.setFocusDailyGoal(value.round());
-                          }
-                        },
-                      ),
-                    ],
+                  ),
+                  if (settings.focusEnabled) ...[
                     settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.notebookPen,
-                      title: context.l10n.notes,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.notesEnabled ? 1 : 0,
-                        onChanged: (i) => settings.setNotesEnabled(i == 1),
-                      ),
+                    PickerRow(
+                      icon: LucideIcons.target,
+                      title: context.l10n.focus_daily_goal,
+                      value: settings.focusDailyGoal == 0
+                          ? context.l10n.off
+                          : context.l10n.minutes_short(
+                              '${settings.focusDailyGoal}',
+                            ),
+                      onTap: () async {
+                        final value = await showNumberKeypadDialog(
+                          context,
+                          title: context.l10n.focus_daily_goal,
+                          value: settings.focusDailyGoal.toDouble(),
+                          unit: context.l10n.unit_min_short,
+                          min: 0,
+                        );
+                        if (value != null) {
+                          settings.setFocusDailyGoal(value.round());
+                        }
+                      },
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.listChecks,
-                      title: context.l10n.todos,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.todosEnabled ? 1 : 0,
-                        onChanged: (i) => settings.setTodosEnabled(i == 1),
-                      ),
+                  ],
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.notebookPen,
+                    title: context.l10n.notes,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.notesEnabled ? 1 : 0,
+                      onChanged: (i) => settings.setNotesEnabled(i == 1),
                     ),
-                    settingsDivider(context),
-                    SettingRow(
-                      icon: LucideIcons.calendarClock,
-                      title: context.l10n.plan_day,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.planningEnabled ? 1 : 0,
-                        onChanged: (i) => settings.setPlanningEnabled(i == 1),
-                      ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.listChecks,
+                    title: context.l10n.todos,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.todosEnabled ? 1 : 0,
+                      onChanged: (i) => settings.setTodosEnabled(i == 1),
                     ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.calendarClock,
+                    title: context.l10n.plan_day,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.planningEnabled ? 1 : 0,
+                      onChanged: (i) => settings.setPlanningEnabled(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.quote,
+                    title: context.l10n.quotes,
+                    onTap: () => AppNavigator.push(const QuotesPage()),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Entrance(index: 6, child: SectionLabel(context.l10n.prefs_privacy)),
+          Entrance(
+            index: 7,
+            child: Card(
+              child: Column(
+                children: [
+                  SettingRow(
+                    icon: LucideIcons.fingerprint,
+                    title: context.l10n.app_lock,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.appLock ? 1 : 0,
+                      onChanged: (i) =>
+                          SettingsActions.toggleAppLock(context, i == 1),
+                    ),
+                  ),
+                  if (settings.appLock) ...[
                     settingsDivider(context),
                     NavRow(
-                      icon: LucideIcons.quote,
-                      title: context.l10n.quotes,
-                      onTap: () => AppNavigator.push(const QuotesPage()),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Entrance(index: 6, child: SectionLabel(context.l10n.prefs_privacy)),
-            Entrance(
-              index: 7,
-              child: Card(
-                child: Column(
-                  children: [
-                    SettingRow(
-                      icon: LucideIcons.fingerprint,
-                      title: context.l10n.app_lock,
-                      trailing: Segmented(
-                        options: [context.l10n.off, context.l10n.on],
-                        index: settings.appLock ? 1 : 0,
-                        onChanged: (i) =>
-                            SettingsActions.toggleAppLock(context, i == 1),
-                      ),
-                    ),
-                    if (settings.appLock) ...[
-                      settingsDivider(context),
-                      NavRow(
-                        icon: LucideIcons.timer,
+                      icon: LucideIcons.timer,
+                      title: context.l10n.app_lock_delay,
+                      subtitle: SettingsActions.appLockDelayLabels(context)[
+                          SettingsActions.appLockDelayIndex(
+                              settings.appLockDelay)],
+                      onTap: () => showOptionSheet(
+                        context,
                         title: context.l10n.app_lock_delay,
-                        subtitle: SettingsActions.appLockDelayLabels(context)[
-                            SettingsActions.appLockDelayIndex(
-                                settings.appLockDelay)],
-                        onTap: () => showOptionSheet(
-                          context,
-                          title: context.l10n.app_lock_delay,
-                          options: SettingsActions.appLockDelayLabels(context),
-                          index: SettingsActions.appLockDelayIndex(
-                            settings.appLockDelay,
-                          ),
-                          onSelected: (i) => settings.setAppLockDelay(
-                            SettingsActions.appLockDelays[i],
-                          ),
+                        options: SettingsActions.appLockDelayLabels(context),
+                        index: SettingsActions.appLockDelayIndex(
+                          settings.appLockDelay,
+                        ),
+                        onSelected: (i) => settings.setAppLockDelay(
+                          SettingsActions.appLockDelays[i],
                         ),
                       ),
-                    ],
+                    ),
                   ],
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

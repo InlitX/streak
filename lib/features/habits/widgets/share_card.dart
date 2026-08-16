@@ -8,6 +8,7 @@ import 'package:gal/gal.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
@@ -133,118 +134,121 @@ class _SharePageState extends State<SharePage> {
         .clamp(240.0, 330.0)
         .toDouble();
 
-    return Scaffold(
-      backgroundColor: Color.lerp(_accent, Colors.black, 0.92),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Entrance(
-              delay: _entrance,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(LucideIcons.x, color: Colors.white),
-                    onPressed: () => AppNavigator.pop(),
-                  ),
-                  Expanded(
-                    child: Text(
-                      context.l10n.share,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'PlayfairDisplay',
-                        fontStyle: FontStyle.italic,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemBars(Brightness.dark),
+      child: Scaffold(
+        backgroundColor: Color.lerp(_accent, Colors.black, 0.92),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Entrance(
+                delay: _entrance,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(LucideIcons.x, color: Colors.white),
+                      onPressed: () => AppNavigator.pop(),
+                    ),
+                    Expanded(
+                      child: Text(
+                        context.l10n.share,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'PlayfairDisplay',
+                          fontStyle: FontStyle.italic,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-            Entrance(
-              index: 1,
-              delay: _entrance,
-              child: _RangeTabs(
-                range: _range,
-                onChanged: (value) => setState(() => _range = value),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Entrance(
-                    index: 2,
-                    delay: _entrance,
-                    child: Column(
-                      children: [
-                        RepaintBoundary(
-                          key: _cardKey,
-                          child: ShareStatCard(
-                            habit: widget.habit,
-                            accent: _accent,
-                            imagePath: _image,
-                            blur: _blur,
-                            range: _range,
-                            showStats: _stats,
-                            width: width,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          context.l10n.share_swipe_hint,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.4),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Entrance(
-              index: 3,
-              delay: _entrance,
-              child: _Options(
-                accent: _accent,
-                image: _image,
-                blur: _blur,
-                stats: _stats,
-                onColor: _pickColor,
-                onImage: _pickImage,
-                onClearImage: () => setState(() => _image = ''),
-                onBlur: (value) => setState(() => _blur = value),
-                onStats: (value) => setState(() => _stats = value),
-              ),
-            ),
-            Entrance(
-              index: 4,
-              delay: _entrance,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _CircleAction(
-                      icon: LucideIcons.share2,
-                      label: context.l10n.share,
-                      onTap: _busy ? null : _share,
-                    ),
-                    const SizedBox(width: 40),
-                    _CircleAction(
-                      icon: LucideIcons.download,
-                      label: context.l10n.share_save,
-                      onTap: _busy ? null : _save,
-                    ),
+                    const SizedBox(width: 48),
                   ],
                 ),
               ),
-            ),
-          ],
+              Entrance(
+                index: 1,
+                delay: _entrance,
+                child: _RangeTabs(
+                  range: _range,
+                  onChanged: (value) => setState(() => _range = value),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Entrance(
+                      index: 2,
+                      delay: _entrance,
+                      child: Column(
+                        children: [
+                          RepaintBoundary(
+                            key: _cardKey,
+                            child: ShareStatCard(
+                              habit: widget.habit,
+                              accent: _accent,
+                              imagePath: _image,
+                              blur: _blur,
+                              range: _range,
+                              showStats: _stats,
+                              width: width,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            context.l10n.share_swipe_hint,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withValues(alpha: 0.4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Entrance(
+                index: 3,
+                delay: _entrance,
+                child: _Options(
+                  accent: _accent,
+                  image: _image,
+                  blur: _blur,
+                  stats: _stats,
+                  onColor: _pickColor,
+                  onImage: _pickImage,
+                  onClearImage: () => setState(() => _image = ''),
+                  onBlur: (value) => setState(() => _blur = value),
+                  onStats: (value) => setState(() => _stats = value),
+                ),
+              ),
+              Entrance(
+                index: 4,
+                delay: _entrance,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _CircleAction(
+                        icon: LucideIcons.share2,
+                        label: context.l10n.share,
+                        onTap: _busy ? null : _share,
+                      ),
+                      const SizedBox(width: 40),
+                      _CircleAction(
+                        icon: LucideIcons.download,
+                        label: context.l10n.share_save,
+                        onTap: _busy ? null : _save,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_entrance.dart';
@@ -18,7 +19,8 @@ class MinimalHabitList extends StatelessWidget {
     this.leaving = const {},
   });
 
-  static const _padding = EdgeInsets.fromLTRB(16, 8, 16, 104);
+  static EdgeInsets _padding(BuildContext context) =>
+      context.pagePadding(16, 8, 16, 104);
 
   final List<Habit> habits;
   final HeatmapMode mode;
@@ -31,9 +33,9 @@ class MinimalHabitList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (mode == HeatmapMode.month) return _monthGrid();
+    if (mode == HeatmapMode.month) return _monthGrid(context);
     return ListView.builder(
-      padding: _padding,
+      padding: _padding(context),
       itemCount: habits.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) return header;
@@ -67,9 +69,9 @@ class MinimalHabitList extends StatelessWidget {
     );
   }
 
-  Widget _monthGrid() {
+  Widget _monthGrid(BuildContext context) {
     return ListView.builder(
-      padding: _padding,
+      padding: _padding(context),
       itemCount: (habits.length + 1) ~/ 2 + 1,
       itemBuilder: (context, index) {
         if (index == 0) return header;

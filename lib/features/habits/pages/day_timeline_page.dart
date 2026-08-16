@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
@@ -165,44 +166,41 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
             ),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                _WeekStrip(
-                  first: first,
-                  selected: _day,
-                  habits: habits,
-                  onSelected: _select,
-                  onShift: _shiftWeek,
-                ),
-                Expanded(
-                  child: plan.isEmpty
-                      ? AppEmptyState(
-                          icon: LucideIcons.calendarClock,
-                          title: context.l10n.day_timeline_empty,
-                          message: context.l10n.day_timeline_empty_sub,
-                        )
-                      : ListView(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-                          children: _rows(context, plan),
-                        ),
-                ),
-              ],
-            ),
-            Positioned.fill(
-              child: RepaintBoundary(
-                child: ValueListenableBuilder<int>(
-                  valueListenable: _celebration,
-                  builder: (context, trigger, _) =>
-                      CelebrationOverlay(trigger: trigger),
-                ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              _WeekStrip(
+                first: first,
+                selected: _day,
+                habits: habits,
+                onSelected: _select,
+                onShift: _shiftWeek,
+              ),
+              Expanded(
+                child: plan.isEmpty
+                    ? AppEmptyState(
+                        icon: LucideIcons.calendarClock,
+                        title: context.l10n.day_timeline_empty,
+                        message: context.l10n.day_timeline_empty_sub,
+                      )
+                    : ListView(
+                        padding: context.pagePadding(16, 8, 16, 28),
+                        children: _rows(context, plan),
+                      ),
+              ),
+            ],
+          ),
+          Positioned.fill(
+            child: RepaintBoundary(
+              child: ValueListenableBuilder<int>(
+                valueListenable: _celebration,
+                builder: (context, trigger, _) =>
+                    CelebrationOverlay(trigger: trigger),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

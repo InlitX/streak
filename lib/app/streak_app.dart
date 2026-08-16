@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_background.dart';
@@ -32,8 +33,11 @@ class StreakApp extends StatelessWidget {
           AppLocalizations.of(context),
           context.read<HabitsController>().asMap,
         );
-        return AppLockGate(
-          child: AppBackground(child: child ?? const SizedBox.shrink()),
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: AppTheme.systemBars(Theme.of(context).brightness),
+          child: AppLockGate(
+            child: AppBackground(child: child ?? const SizedBox.shrink()),
+          ),
         );
       },
       locale: settings.locale,

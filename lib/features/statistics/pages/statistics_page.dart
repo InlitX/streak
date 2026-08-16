@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
@@ -54,233 +55,230 @@ class _StatisticsPageState extends State<StatisticsPage> {
       appBar: minimal
           ? AppBar(toolbarHeight: 52)
           : AppBar(title: Text(context.l10n.statistics)),
-      body: SafeArea(
-        top: false,
-        child: Consumer<HabitsController>(
-          builder: (context, controller, _) {
-            final all = controller.habits;
-            if (all.isEmpty) {
-              return AppEmptyState(
-                icon: LucideIcons.chartColumn,
-                title: context.l10n.no_data_yet,
-                message: context.l10n.stats_empty,
-              );
-            }
+      body: Consumer<HabitsController>(
+        builder: (context, controller, _) {
+          final all = controller.habits;
+          if (all.isEmpty) {
+            return AppEmptyState(
+              icon: LucideIcons.chartColumn,
+              title: context.l10n.no_data_yet,
+              message: context.l10n.stats_empty,
+            );
+          }
 
-            if (_habitId != null && controller.byId(_habitId!) == null) {
-              _habitId = null;
-            }
-            final scoped =
-                _habitId == null ? all : [controller.byId(_habitId!)!];
-            final accent =
-                _habitId == null ? context.colors.primary : scoped.first.color;
-            final stats = _statsFor(scoped, all);
-            final currentYear = AppClock.now().year;
+          if (_habitId != null && controller.byId(_habitId!) == null) {
+            _habitId = null;
+          }
+          final scoped =
+              _habitId == null ? all : [controller.byId(_habitId!)!];
+          final accent =
+              _habitId == null ? context.colors.primary : scoped.first.color;
+          final stats = _statsFor(scoped, all);
+          final currentYear = AppClock.now().year;
 
-            return ListView(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                minimal ? 0 : 8,
-                16,
-                minimal ? 28 : 104,
+          return ListView(
+            padding: context.pagePadding(
+              16,
+              minimal ? 0 : 8,
+              16,
+              minimal ? 28 : 104,
+            ),
+            children: [
+              if (minimal)
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: MinimalTitle(title: context.l10n.statistics),
+                ),
+              HabitFilter(
+                habits: all,
+                selected: _habitId,
+                onSelected: (id) => setState(() => _habitId = id),
               ),
-              children: [
-                if (minimal)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: MinimalTitle(title: context.l10n.statistics),
-                  ),
-                HabitFilter(
-                  habits: all,
-                  selected: _habitId,
-                  onSelected: (id) => setState(() => _habitId = id),
+              const SizedBox(height: 16),
+              YearNavigator(
+                year: _year,
+                canGoForward: _year < currentYear,
+                onChanged: (delta) => setState(() => _year += delta),
+              ),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: Container(
+                decoration: BoxDecoration(
+                  color: context.colors.surfaceContainerHighest
+                      .withValues(alpha: 0.35),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                const SizedBox(height: 16),
-                YearNavigator(
-                  year: _year,
-                  canGoForward: _year < currentYear,
-                  onChanged: (delta) => setState(() => _year += delta),
-                ),
-                const SizedBox(height: 16),
-                StatReveal(
-                  child: Container(
-                  decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest
-                        .withValues(alpha: 0.35),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: YearHeatmap(
-                      year: _year,
-                      dailyCounts: stats.dailyCounts,
-                      maxCount: scoped.length,
-                      color: accent,
-                    ),
-                  ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                StatReveal(
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: MiniStat(
-                            icon: LucideIcons.hash,
-                            color: accent,
-                            value: '${stats.total}',
-                            label: context.l10n.completions,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: MiniStat(
-                            icon: LucideIcons.trophy,
-                            color: context.tokens.success,
-                            value: '${stats.bestStreak}',
-                            label: context.l10n.best_streak,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                StatReveal(
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: MiniStat(
-                            icon: LucideIcons.flame,
-                            color: context.tokens.warning,
-                            value: '${stats.currentStreak}',
-                            label: context.l10n.current_streak,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: MiniStat(
-                            icon: LucideIcons.percent,
-                            color: context.tokens.info,
-                            value: '${stats.monthRate}%',
-                            label: context.l10n.completion_rate,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (context.watch<SettingsController>().focusEnabled &&
-                    context.watch<FocusController>().sessionCount > 0) ...[
-                  const SizedBox(height: 12),
-                  StatReveal(
-                    child: _FocusStats(habitId: _habitId, accent: accent),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                StatReveal(
-                  child: _PerfectStreakCard(
-                    streak: stats.perfectStreak,
-                    best: stats.bestPerfectStreak,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: YearHeatmap(
+                    year: _year,
+                    dailyCounts: stats.dailyCounts,
+                    maxCount: scoped.length,
                     color: accent,
                   ),
                 ),
-                const SizedBox(height: 24),
-                _TrendCard(stats: stats, color: accent),
-                const SizedBox(height: 16),
-                StatReveal(
-                  child: StatCard(
-                    title: context.l10n.completions_per_month,
-                    icon: LucideIcons.chartSpline,
-                    color: accent,
-                    child: stats.total > 0
-                        ? MonthlyLine(
-                            key: ValueKey('monthly-$_year-$_habitId'),
-                            values: stats.monthly,
-                            color: accent,
-                            year: _year,
-                          )
-                        : _ChartPlaceholder(text: context.l10n.not_enough_data),
-                  ),
                 ),
-                const SizedBox(height: 16),
-                IntrinsicHeight(
+              ),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: IntrinsicHeight(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: StatCard(
-                          title: context.l10n.completion_rate_short,
-                          icon: LucideIcons.target,
+                        child: MiniStat(
+                          icon: LucideIcons.hash,
                           color: accent,
-                          child: Center(
-                            child: ConsistencyGauge(
-                              percent: stats.consistency,
-                              color: accent,
-                              caption: context.l10n.last_90_days,
-                              size: 130,
-                            ),
-                          ),
+                          value: '${stats.total}',
+                          label: context.l10n.completions,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: StatCard(
-                          title: context.l10n.when_best,
-                          icon: LucideIcons.calendarDays,
-                          color: accent,
-                          child: WeekdayBars(
-                            values: stats.weekday,
-                            color: accent,
-                            height: 150,
-                          ),
+                        child: MiniStat(
+                          icon: LucideIcons.trophy,
+                          color: context.tokens.success,
+                          value: '${stats.bestStreak}',
+                          label: context.l10n.best_streak,
                         ),
                       ),
                     ],
                   ),
                 ),
+              ),
+              const SizedBox(height: 12),
+              StatReveal(
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: MiniStat(
+                          icon: LucideIcons.flame,
+                          color: context.tokens.warning,
+                          value: '${stats.currentStreak}',
+                          label: context.l10n.current_streak,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: MiniStat(
+                          icon: LucideIcons.percent,
+                          color: context.tokens.info,
+                          value: '${stats.monthRate}%',
+                          label: context.l10n.completion_rate,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (context.watch<SettingsController>().focusEnabled &&
+                  context.watch<FocusController>().sessionCount > 0) ...[
+                const SizedBox(height: 12),
+                StatReveal(
+                  child: _FocusStats(habitId: _habitId, accent: accent),
+                ),
+              ],
+              const SizedBox(height: 16),
+              StatReveal(
+                child: _PerfectStreakCard(
+                  streak: stats.perfectStreak,
+                  best: stats.bestPerfectStreak,
+                  color: accent,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _TrendCard(stats: stats, color: accent),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: StatCard(
+                  title: context.l10n.completions_per_month,
+                  icon: LucideIcons.chartSpline,
+                  color: accent,
+                  child: stats.total > 0
+                      ? MonthlyLine(
+                          key: ValueKey('monthly-$_year-$_habitId'),
+                          values: stats.monthly,
+                          color: accent,
+                          year: _year,
+                        )
+                      : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                ),
+              ),
+              const SizedBox(height: 16),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: StatCard(
+                        title: context.l10n.completion_rate_short,
+                        icon: LucideIcons.target,
+                        color: accent,
+                        child: Center(
+                          child: ConsistencyGauge(
+                            percent: stats.consistency,
+                            color: accent,
+                            caption: context.l10n.last_90_days,
+                            size: 130,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatCard(
+                        title: context.l10n.when_best,
+                        icon: LucideIcons.calendarDays,
+                        color: accent,
+                        child: WeekdayBars(
+                          values: stats.weekday,
+                          color: accent,
+                          height: 150,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: StatCard(
+                  title: context.l10n.completion_time,
+                  icon: LucideIcons.clock,
+                  color: accent,
+                  child: stats.hourSamples >= 5
+                      ? HourArea(values: stats.hours, color: accent)
+                      : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                ),
+              ),
+
+              if (_habitId == null && all.length > 1) ...[
                 const SizedBox(height: 16),
                 StatReveal(
                   child: StatCard(
-                    title: context.l10n.completion_time,
-                    icon: LucideIcons.clock,
+                    title: context.l10n.by_habit,
+                    icon: LucideIcons.chartPie,
                     color: accent,
-                    child: stats.hourSamples >= 5
-                        ? HourArea(values: stats.hours, color: accent)
-                        : _ChartPlaceholder(text: context.l10n.not_enough_data),
+                    child: HabitDonut(entries: _ranking(all, stats)),
                   ),
                 ),
-
-                if (_habitId == null && all.length > 1) ...[
-                  const SizedBox(height: 16),
-                  StatReveal(
-                    child: StatCard(
-                      title: context.l10n.by_habit,
-                      icon: LucideIcons.chartPie,
-                      color: accent,
-                      child: HabitDonut(entries: _ranking(all, stats)),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  StatReveal(
-                    child: _RankingCard(
-                      accent: accent,
-                      entries: _ranking(all, stats, limit: all.length),
-                    ),
-                  ),
-                ],
                 const SizedBox(height: 16),
                 StatReveal(
-                  child: _SecondaryStats(stats: stats, accent: accent),
+                  child: _RankingCard(
+                    accent: accent,
+                    entries: _ranking(all, stats, limit: all.length),
+                  ),
                 ),
               ],
-            );
-          },
-        ),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: _SecondaryStats(stats: stats, accent: accent),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

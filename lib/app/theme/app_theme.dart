@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 
@@ -11,6 +12,22 @@ class AppTheme {
       _build(Brightness.light, accent ?? AppPalette.brand);
   static ThemeData dark([Color? accent]) =>
       _build(Brightness.dark, accent ?? AppPalette.brand);
+
+  static SystemUiOverlayStyle systemBars(Brightness brightness) {
+    final icons =
+        brightness == Brightness.dark ? Brightness.light : Brightness.dark;
+
+    return SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: brightness,
+      statusBarIconBrightness: icons,
+      systemStatusBarContrastEnforced: false,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: icons,
+      systemNavigationBarContrastEnforced: false,
+    );
+  }
 
   static ThemeData _build(Brightness brightness, Color accent) {
     final isDark = brightness == Brightness.dark;
@@ -42,6 +59,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
+        systemOverlayStyle: systemBars(brightness),
         foregroundColor: scheme.onSurface,
         titleTextStyle: TextStyle(
           fontFamily: _fontFamily,

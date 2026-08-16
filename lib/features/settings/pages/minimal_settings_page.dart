@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -25,74 +26,71 @@ class MinimalSettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(toolbarHeight: 52),
-      body: SafeArea(
-        top: false,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(22, 0, 22, 40),
-          children: [
-            _ProfileRow(
-              name: settings.profileName.isEmpty
-                  ? context.l10n.default_user
-                  : settings.profileName,
-              photoPath: settings.profilePhoto,
-            ),
-            const SizedBox(height: 28),
-            SoftCard(
-              children: [
-                SoftRow(
-                  icon: LucideIcons.smartphone,
-                  title: context.l10n.app_style,
-                  value: settings.isMinimalStyle
-                      ? context.l10n.style_minimal
-                      : context.l10n.style_classic,
-                  onTap: () => AppNavigator.push(const AppStylePage()),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            SoftCard(
-              children: [
-                SoftRow(
-                  icon: LucideIcons.palette,
-                  title: context.l10n.appearance,
-                  subtitle: context.l10n.appearance_sub,
-                  onTap: () => AppNavigator.push(const _AppearancePage()),
-                ),
-                SoftRow(
-                  icon: LucideIcons.slidersHorizontal,
-                  title: context.l10n.preferences,
-                  subtitle: context.l10n.preferences_sub,
-                  onTap: () => AppNavigator.push(const _PreferencesPage()),
-                ),
-                SoftRow(
-                  icon: LucideIcons.database,
-                  title: context.l10n.data,
-                  subtitle: context.l10n.data_sub,
-                  onTap: () => AppNavigator.push(const _DataPage()),
-                ),
-                SoftRow(
-                  icon: LucideIcons.heartHandshake,
-                  title: context.l10n.support,
-                  subtitle: context.l10n.support_sub,
-                  onTap: () => AppNavigator.push(const _SupportPage()),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            SoftCard(
-              children: [
-                SoftRow(
-                  icon: LucideIcons.info,
-                  title: context.l10n.about_app,
-                  subtitle: context.l10n.about_app_sub,
-                  onTap: () => AppNavigator.push(const AboutPage()),
-                ),
-              ],
-            ),
-            const SizedBox(height: 64),
-            const _Footer(),
-          ],
-        ),
+      body: ListView(
+        padding: context.pagePadding(22, 0, 22, 40),
+        children: [
+          _ProfileRow(
+            name: settings.profileName.isEmpty
+                ? context.l10n.default_user
+                : settings.profileName,
+            photoPath: settings.profilePhoto,
+          ),
+          const SizedBox(height: 28),
+          SoftCard(
+            children: [
+              SoftRow(
+                icon: LucideIcons.smartphone,
+                title: context.l10n.app_style,
+                value: settings.isMinimalStyle
+                    ? context.l10n.style_minimal
+                    : context.l10n.style_classic,
+                onTap: () => AppNavigator.push(const AppStylePage()),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SoftCard(
+            children: [
+              SoftRow(
+                icon: LucideIcons.palette,
+                title: context.l10n.appearance,
+                subtitle: context.l10n.appearance_sub,
+                onTap: () => AppNavigator.push(const _AppearancePage()),
+              ),
+              SoftRow(
+                icon: LucideIcons.slidersHorizontal,
+                title: context.l10n.preferences,
+                subtitle: context.l10n.preferences_sub,
+                onTap: () => AppNavigator.push(const _PreferencesPage()),
+              ),
+              SoftRow(
+                icon: LucideIcons.database,
+                title: context.l10n.data,
+                subtitle: context.l10n.data_sub,
+                onTap: () => AppNavigator.push(const _DataPage()),
+              ),
+              SoftRow(
+                icon: LucideIcons.heartHandshake,
+                title: context.l10n.support,
+                subtitle: context.l10n.support_sub,
+                onTap: () => AppNavigator.push(const _SupportPage()),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SoftCard(
+            children: [
+              SoftRow(
+                icon: LucideIcons.info,
+                title: context.l10n.about_app,
+                subtitle: context.l10n.about_app_sub,
+                onTap: () => AppNavigator.push(const AboutPage()),
+              ),
+            ],
+          ),
+          const SizedBox(height: 64),
+          const _Footer(),
+        ],
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -40,7 +41,7 @@ class ClassicHabitList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 104),
+      padding: context.pagePadding(16, 8, 16, 104),
       itemCount: habits.length,
       buildDefaultDragHandles: false,
       onReorder: (oldIndex, newIndex) {

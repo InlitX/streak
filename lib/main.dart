@@ -25,6 +25,7 @@ import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   await initializeDateFormatting();
   await LocalStore.init();

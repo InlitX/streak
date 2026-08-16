@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:streak/app/theme/app_theme.dart';
 
 class PhotoShot {
   const PhotoShot({required this.path, this.day = '', this.text = ''});
@@ -58,88 +60,91 @@ class _PhotoViewerState extends State<_PhotoViewer> {
     final shot = widget.shots[_index];
     final hasCaption = shot.day.isNotEmpty || shot.text.isNotEmpty;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _pages,
-            itemCount: widget.shots.length,
-            onPageChanged: (i) => setState(() => _index = i),
-            itemBuilder: (_, i) => InteractiveViewer(
-              maxScale: 4,
-              child: Center(
-                child: Hero(
-                  tag: photoHeroTag(i, widget.shots[i].path),
-                  child: Image.file(File(widget.shots[i].path)),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppTheme.systemBars(Brightness.dark),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            PageView.builder(
+              controller: _pages,
+              itemCount: widget.shots.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (_, i) => InteractiveViewer(
+                maxScale: 4,
+                child: Center(
+                  child: Hero(
+                    tag: photoHeroTag(i, widget.shots[i].path),
+                    child: Image.file(File(widget.shots[i].path)),
+                  ),
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(LucideIcons.x, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                if (widget.shots.length > 1)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 18),
-                    child: Text(
-                      '${_index + 1} / ${widget.shots.length}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white.withValues(alpha: 0.75),
+            SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(LucideIcons.x, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  if (widget.shots.length > 1)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 18),
+                      child: Text(
+                        '${_index + 1} / ${widget.shots.length}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.75),
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-          if (hasCaption)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: SafeArea(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
-                  color: Colors.black.withValues(alpha: 0.45),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (shot.day.isNotEmpty)
-                        Text(
-                          shot.day,
-                          style: TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.6),
+            if (hasCaption)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
+                    color: Colors.black.withValues(alpha: 0.45),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (shot.day.isNotEmpty)
+                          Text(
+                            shot.day,
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white.withValues(alpha: 0.6),
+                            ),
                           ),
-                        ),
-                      if (shot.text.isNotEmpty) ...[
-                        const SizedBox(height: 5),
-                        Text(
-                          shot.text,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            height: 1.35,
-                            color: Colors.white,
+                        if (shot.text.isNotEmpty) ...[
+                          const SizedBox(height: 5),
+                          Text(
+                            shot.text,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              height: 1.35,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

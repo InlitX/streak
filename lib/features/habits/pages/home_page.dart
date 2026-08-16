@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
@@ -270,119 +271,116 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          children: [
-            Consumer<HabitsController>(
-              builder: (context, controller, _) {
-                if (controller.isEmpty) return const _EmptyState();
+      body: Stack(
+        children: [
+          Consumer<HabitsController>(
+            builder: (context, controller, _) {
+              if (controller.isEmpty) return const _EmptyState();
 
-                final all = controller.habits;
-                final today = AppClock.now();
-                final active = all
-                    .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
-                    .toList();
-                final done =
-                    active.where((h) => h.isCompletedOn(today)).length;
-                final total = active.length;
+              final all = controller.habits;
+              final today = AppClock.now();
+              final active = all
+                  .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
+                  .toList();
+              final done =
+                  active.where((h) => h.isCompletedOn(today)).length;
+              final total = active.length;
 
-                final categories = _categoriesOf(all);
-                if (_category != null && !categories.contains(_category)) {
-                  _category = null;
-                }
-                final listed = settings.todayOnly
-                    ? all.where((h) => h.isScheduledOn(today)).toList()
-                    : all;
-                final filtered = _category == null
-                    ? listed
-                    : listed.where((h) => h.category == _category).toList();
+              final categories = _categoriesOf(all);
+              if (_category != null && !categories.contains(_category)) {
+                _category = null;
+              }
+              final listed = settings.todayOnly
+                  ? all.where((h) => h.isScheduledOn(today)).toList()
+                  : all;
+              final filtered = _category == null
+                  ? listed
+                  : listed.where((h) => h.category == _category).toList();
 
-                final visible = _reordering || !sortCompletedLast
-                    ? filtered
-                    : _completedLast(filtered);
+              final visible = _reordering || !sortCompletedLast
+                  ? filtered
+                  : _completedLast(filtered);
 
-                final header = _reordering
-                    ? _ReorderBanner(text: context.l10n.reorder_hint)
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (!minimal) const DailyQuote(),
-                          if (!minimal) const SizedBox(height: 8),
-                          if (!minimal) TodayProgress(done: done, total: total),
-                          if (!minimal &&
-                              settings.cardActivity &&
-                              settings.viewSwitcher) ...[
-                            const SizedBox(height: 20),
-                            _ViewSelector(mode: _mode, onChanged: _changeMode),
-                          ],
-                          if (categories.isNotEmpty) ...[
-                            const SizedBox(height: 14),
-                            _CategoryBar(
-                              categories: categories,
-                              selected: _category,
-                              onSelected: (c) => setState(() => _category = c),
-                            ),
-                          ],
-                          const SizedBox(height: 14),
+              final header = _reordering
+                  ? _ReorderBanner(text: context.l10n.reorder_hint)
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!minimal) const DailyQuote(),
+                        if (!minimal) const SizedBox(height: 8),
+                        if (!minimal) TodayProgress(done: done, total: total),
+                        if (!minimal &&
+                            settings.cardActivity &&
+                            settings.viewSwitcher) ...[
+                          const SizedBox(height: 20),
+                          _ViewSelector(mode: _mode, onChanged: _changeMode),
                         ],
-                      );
+                        if (categories.isNotEmpty) ...[
+                          const SizedBox(height: 14),
+                          _CategoryBar(
+                            categories: categories,
+                            selected: _category,
+                            onSelected: (c) => setState(() => _category = c),
+                          ),
+                        ],
+                        const SizedBox(height: 14),
+                      ],
+                    );
 
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    await Future<void>.delayed(
-                        const Duration(milliseconds: 300));
-                    controller.reload();
-                  },
-                  child: minimal && !_reordering
-                      ? MinimalHabitList(
-                          habits: visible,
-                          mode: _mode,
-                          header: header,
-                          onOpen: _openDetails,
-                          onToggleToday: (habit) => _toggle(habit, today),
-                          onToggleDay: _toggle,
-                          onLongPress: (habit) =>
-                              _showHabitActions(controller, habit),
-                          leaving: _leaving,
-                        )
-                      : ClassicHabitList(
-                          habits: visible,
-                          mode: _mode,
-                          reordering: _reordering,
-                          header: header,
-                          onReorder: (oldIndex, newIndex) =>
-                              controller.reorder(visible, oldIndex, newIndex),
-                          onOpen: _openDetails,
-                          onToggleToday: (habit) => _toggle(habit, today),
-                          onToggleDay: _toggle,
-                          onLongPress: (habit) =>
-                              _showHabitActions(controller, habit),
-                          leaving: _leaving,
-                        ),
-                );
-              },
-            ),
-            if (minimal && !_reordering && settings.viewSwitcher)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 16,
-                child: Center(
-                  child: GridViewSwitcher(mode: _mode, onChanged: _changeMode),
-                ),
-              ),
-            Positioned.fill(
-              child: RepaintBoundary(
-                child: ValueListenableBuilder<int>(
-                  valueListenable: _confetti,
-                  builder: (context, trigger, _) =>
-                      CelebrationOverlay(trigger: trigger),
-                ),
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await Future<void>.delayed(
+                      const Duration(milliseconds: 300));
+                  controller.reload();
+                },
+                child: minimal && !_reordering
+                    ? MinimalHabitList(
+                        habits: visible,
+                        mode: _mode,
+                        header: header,
+                        onOpen: _openDetails,
+                        onToggleToday: (habit) => _toggle(habit, today),
+                        onToggleDay: _toggle,
+                        onLongPress: (habit) =>
+                            _showHabitActions(controller, habit),
+                        leaving: _leaving,
+                      )
+                    : ClassicHabitList(
+                        habits: visible,
+                        mode: _mode,
+                        reordering: _reordering,
+                        header: header,
+                        onReorder: (oldIndex, newIndex) =>
+                            controller.reorder(visible, oldIndex, newIndex),
+                        onOpen: _openDetails,
+                        onToggleToday: (habit) => _toggle(habit, today),
+                        onToggleDay: _toggle,
+                        onLongPress: (habit) =>
+                            _showHabitActions(controller, habit),
+                        leaving: _leaving,
+                      ),
+              );
+            },
+          ),
+          if (minimal && !_reordering && settings.viewSwitcher)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 16 + context.bottomInset,
+              child: Center(
+                child: GridViewSwitcher(mode: _mode, onChanged: _changeMode),
               ),
             ),
-          ],
-        ),
+          Positioned.fill(
+            child: RepaintBoundary(
+              child: ValueListenableBuilder<int>(
+                valueListenable: _confetti,
+                builder: (context, trigger, _) =>
+                    CelebrationOverlay(trigger: trigger),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

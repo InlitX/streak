@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -114,7 +115,7 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
               message: context.l10n.focus_history_empty_sub,
             )
           : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+              padding: context.pagePadding(16, 8, 16, 28),
               children: [
                 StatReveal(
                   child: _StatPair(
