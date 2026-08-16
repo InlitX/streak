@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class AppBackground extends StatelessWidget {
@@ -13,16 +12,39 @@ class AppBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
-    final type = settings.appBackground;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    if (type == 4 &&
-        settings.bgImage.isNotEmpty &&
-        File(settings.bgImage).existsSync()) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        _Backdrop(
+          type: settings.appBackground,
+          image: settings.bgImage,
+          isDark: Theme.of(context).brightness == Brightness.dark,
+        ),
+        child,
+      ],
+    );
+  }
+}
+
+class _Backdrop extends StatelessWidget {
+  const _Backdrop({
+    required this.type,
+    required this.image,
+    required this.isDark,
+  });
+
+  final int type;
+  final String image;
+  final bool isDark;
+
+  @override
+  Widget build(BuildContext context) {
+    if (type == 4 && CoverImage.exists(image)) {
       return Stack(
         fit: StackFit.expand,
         children: [
-          Image.file(File(settings.bgImage), fit: BoxFit.cover),
+          CoverImage(path: image),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -40,7 +62,6 @@ class AppBackground extends StatelessWidget {
               ),
             ),
           ),
-          child,
         ],
       );
     }
@@ -48,57 +69,53 @@ class AppBackground extends StatelessWidget {
     if (isDark) {
       switch (type) {
         case 1:
-          return DecoratedBox(
-            decoration: const BoxDecoration(
+          return const DecoratedBox(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Color(0xFF161616), Color(0xFF0A0A0A)],
               ),
             ),
-            child: child,
           );
         case 2:
           return ColoredBox(
             color: AppPalette.darkBackground,
             child: CustomPaint(
               painter: _DotsPainter(Colors.white.withValues(alpha: 0.035)),
-              child: child,
             ),
           );
         case 3:
-          return ColoredBox(color: const Color(0xFF000000), child: child);
+          return const ColoredBox(color: Color(0xFF000000));
         case 0:
         default:
-          return ColoredBox(color: AppPalette.darkBackground, child: child);
+          return const ColoredBox(color: AppPalette.darkBackground);
       }
     }
 
     switch (type) {
       case 1:
-        return DecoratedBox(
-          decoration: const BoxDecoration(
+        return const DecoratedBox(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Color(0xFFFFFFFF), Color(0xFFDAD8EC)],
             ),
           ),
-          child: child,
         );
       case 2:
         return ColoredBox(
           color: const Color(0xFFF1F1F6),
           child: CustomPaint(
             painter: _DotsPainter(Colors.black.withValues(alpha: 0.09)),
-            child: child,
           ),
         );
       case 3:
-        return ColoredBox(color: const Color(0xFFFFFFFF), child: child);
+        return const ColoredBox(color: Color(0xFFFFFFFF));
       case 0:
       default:
-        return ColoredBox(color: const Color(0xFFEDEDF3), child: child);
+        return const ColoredBox(color: Color(0xFFEDEDF3));
     }
   }
 }
