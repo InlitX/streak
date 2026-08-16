@@ -97,7 +97,7 @@ class HomeWidgetService {
     _pendingSync = null;
     try {
       final icons = await WidgetIconService.resolve(
-        [...habits.values.map((h) => h.icon), _allHabitsIcon],
+        [..._ordered(habits).map((h) => h.icon), _allHabitsIcon],
         render: renderIcons,
       );
       await HomeWidget.saveWidgetData<String>(
@@ -130,14 +130,19 @@ class HomeWidgetService {
     } catch (_) {}
   }
 
+  static List<Habit> _ordered(Map<String, Habit> habits) =>
+      habits.values.where((habit) => !habit.isArchived).toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
+
   static String _encode(Map<String, Habit> habits, Map<String, String> icons) {
     final today = AppClock.now();
     final dates = List.generate(
       7,
       (i) => today.subtract(Duration(days: 6 - i)),
     );
+    final listed = _ordered(habits);
 
-    final widgetHabits = habits.values.map((habit) {
+    final widgetHabits = listed.map((habit) {
       return {
         'id': habit.id,
         'name': habit.name,
@@ -169,16 +174,16 @@ class HomeWidgetService {
       };
     }).toList();
 
-    final bestStreak = habits.values
+    final bestStreak = listed
         .map((h) => h.currentStreak)
         .fold<int>(0, (a, b) => a > b ? a : b);
 
-    final due = habits.values
+    final due = listed
         .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
         .toList();
 
     var weekDone = 0;
-    for (final habit in habits.values) {
+    for (final habit in listed) {
       for (final date in dates) {
         if (habit.isCompletedOn(date)) weekDone++;
       }
@@ -187,7 +192,7 @@ class HomeWidgetService {
     return json.encode({
       'habits': widgetHabits,
       'days': days,
-      'heatmap': _heatmapLevels(habits.values, today),
+      'heatmap': _heatmapLevels(listed, today),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       'summary': {
         'doneToday': due.where((h) => h.isCompletedOn(today)).length,
