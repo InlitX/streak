@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,8 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/widgets/photo_deck.dart';
+import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
@@ -35,6 +36,7 @@ class _TodoComposer extends StatefulWidget {
 class _TodoComposerState extends State<_TodoComposer> {
   late final _text = TextEditingController(text: widget.todo?.text ?? '');
   late String _date = widget.todo?.date ?? '';
+  late int? _minutes = widget.todo?.minutes;
   late TodoPriority _priority = widget.todo?.priority ?? TodoPriority.none;
   late final List<String> _photos = [...?widget.todo?.photos];
 
@@ -68,7 +70,10 @@ class _TodoComposerState extends State<_TodoComposer> {
       index: current,
       onSelected: (index) async {
         if (index == 3) {
-          setState(() => _date = '');
+          setState(() {
+            _date = '';
+            _minutes = null;
+          });
           return;
         }
         if (index == 0 || index == 1) {
@@ -84,6 +89,21 @@ class _TodoComposerState extends State<_TodoComposer> {
         if (picked != null && mounted) setState(() => _date = picked.dayKey);
       },
     );
+  }
+
+  Future<void> _pickTime() async {
+    final now = AppClock.now();
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _minutes == null
+          ? TimeOfDay(hour: now.hour, minute: 0)
+          : TimeOfDay(hour: _minutes! ~/ 60, minute: _minutes! % 60),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _minutes = picked.hour * 60 + picked.minute;
+      if (_date.isEmpty) _date = AppClock.today().dayKey;
+    });
   }
 
   Future<void> _pickPriority() => showOptionSheet(
@@ -113,6 +133,7 @@ class _TodoComposerState extends State<_TodoComposer> {
           ? todos.create(
               text: _text.text,
               date: _date,
+              minutes: _minutes,
               priority: _priority,
               photos: _photos,
             )
@@ -120,6 +141,8 @@ class _TodoComposerState extends State<_TodoComposer> {
               existing.copyWith(
                 text: _text.text.trim(),
                 date: _date,
+                minutes: _minutes,
+                clearMinutes: _minutes == null,
                 priority: _priority,
                 photos: _photos,
               ),
@@ -157,7 +180,20 @@ class _TodoComposerState extends State<_TodoComposer> {
                       icon: LucideIcons.calendar,
                       label: todoDateLabel(context, parseDayKey(_date)),
                       color: scheme.primary,
-                      onRemove: () => setState(() => _date = ''),
+                      onRemove: () => setState(() {
+                        _date = '';
+                        _minutes = null;
+                      }),
+                    ),
+                  if (_minutes != null)
+                    _Tag(
+                      icon: LucideIcons.clock,
+                      label: TimeOfDay(
+                        hour: _minutes! ~/ 60,
+                        minute: _minutes! % 60,
+                      ).format(context),
+                      color: scheme.primary,
+                      onRemove: () => setState(() => _minutes = null),
                     ),
                   if (_priority != TodoPriority.none)
                     _Tag(
@@ -198,47 +234,55 @@ class _TodoComposerState extends State<_TodoComposer> {
             ),
             if (_photos.isNotEmpty) ...[
               const SizedBox(height: 12),
-              SizedBox(
-                height: 64,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _photos.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
-                  itemBuilder: (_, index) => _Thumb(
-                    path: _photos[index],
-                    onRemove: () =>
-                        setState(() => _photos.removeAt(index)),
-                  ),
-                ),
+              PhotoDeck(
+                shots: [for (final path in _photos) PhotoShot(path: path)],
+                size: 72,
+                onRemove: (index) =>
+                    setState(() => _photos.removeAt(index)),
               ),
             ],
             const SizedBox(height: 6),
             Row(
               children: [
-                _Action(
-                  icon: LucideIcons.calendar,
-                  label: context.l10n.todo_date,
-                  active: _date.isNotEmpty,
-                  onTap: _pickDate,
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _Action(
+                          icon: LucideIcons.calendar,
+                          label: context.l10n.todo_date,
+                          active: _date.isNotEmpty,
+                          onTap: _pickDate,
+                        ),
+                        _Action(
+                          icon: LucideIcons.clock,
+                          label: context.l10n.todo_time,
+                          active: _minutes != null,
+                          onTap: _pickTime,
+                        ),
+                        _Action(
+                          icon: LucideIcons.flag,
+                          label: context.l10n.todo_priority,
+                          active: _priority != TodoPriority.none,
+                          onTap: _pickPriority,
+                        ),
+                        _Action(
+                          icon: LucideIcons.image,
+                          label: context.l10n.note_pick_photo,
+                          active: _photos.isNotEmpty,
+                          onTap: _addPhoto,
+                        ),
+                        _Action(
+                          icon: LucideIcons.camera,
+                          label: context.l10n.note_take_photo,
+                          onTap: () => _addPhoto(fromCamera: true),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                _Action(
-                  icon: LucideIcons.flag,
-                  label: context.l10n.todo_priority,
-                  active: _priority != TodoPriority.none,
-                  onTap: _pickPriority,
-                ),
-                _Action(
-                  icon: LucideIcons.image,
-                  label: context.l10n.note_pick_photo,
-                  active: _photos.isNotEmpty,
-                  onTap: _addPhoto,
-                ),
-                _Action(
-                  icon: LucideIcons.camera,
-                  label: context.l10n.note_take_photo,
-                  onTap: () => _addPhoto(fromCamera: true),
-                ),
-                const Spacer(),
+                const SizedBox(width: 6),
                 Semantics(
                   button: true,
                   label: context.l10n.save,
@@ -351,49 +395,3 @@ class _Tag extends StatelessWidget {
   }
 }
 
-class _Thumb extends StatelessWidget {
-  const _Thumb({required this.path, required this.onRemove});
-
-  final String path;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: 64,
-          height: 64,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: context.colors.surfaceContainerHighest,
-          ),
-          child: File(path).existsSync()
-              ? Image.file(File(path), fit: BoxFit.cover)
-              : null,
-        ),
-        Positioned(
-          top: 3,
-          right: 3,
-          child: Semantics(
-            button: true,
-            label: context.l10n.delete,
-            child: GestureDetector(
-              onTap: onRemove,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.black.withValues(alpha: 0.6),
-                ),
-                child: const Icon(LucideIcons.x, size: 12, color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

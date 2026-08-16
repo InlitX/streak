@@ -11,6 +11,7 @@ class Todo {
     required this.createdAt,
     this.done = false,
     this.date = '',
+    this.minutes,
     this.priority = TodoPriority.none,
     this.photos = const [],
     this.doneAt,
@@ -20,6 +21,7 @@ class Todo {
   final String text;
   final bool done;
   final String date;
+  final int? minutes;
   final TodoPriority priority;
   final List<String> photos;
   final DateTime createdAt;
@@ -34,20 +36,33 @@ class Todo {
 
   DateTime? get due => date.isEmpty ? null : parseDayKey(date);
 
+  TimeOfDay? get time => minutes == null
+      ? null
+      : TimeOfDay(hour: minutes! ~/ 60, minute: minutes! % 60);
+
+  DateTime? get dueAt {
+    final day = due;
+    if (day == null || minutes == null) return day;
+    return day.add(Duration(minutes: minutes!));
+  }
+
   Todo copyWith({
     String? text,
     bool? done,
     String? date,
+    int? minutes,
     TodoPriority? priority,
     List<String>? photos,
     DateTime? doneAt,
     bool clearDoneAt = false,
+    bool clearMinutes = false,
   }) =>
       Todo(
         id: id,
         text: text ?? this.text,
         done: done ?? this.done,
         date: date ?? this.date,
+        minutes: clearMinutes ? null : (minutes ?? this.minutes),
         priority: priority ?? this.priority,
         photos: photos ?? this.photos,
         createdAt: createdAt,
@@ -59,6 +74,7 @@ class Todo {
         'text': text,
         'done': done,
         'date': date,
+        'minutes': minutes,
         'priority': priority.index,
         'photos': photos,
         'createdAt': createdAt.toIso8601String(),
@@ -70,6 +86,7 @@ class Todo {
         text: (map['text'] ?? '') as String,
         done: (map['done'] ?? false) as bool,
         date: (map['date'] ?? '') as String,
+        minutes: (map['minutes'] as num?)?.toInt(),
         priority: TodoPriority.values[((map['priority'] ?? 0) as num)
             .toInt()
             .clamp(0, TodoPriority.values.length - 1)],

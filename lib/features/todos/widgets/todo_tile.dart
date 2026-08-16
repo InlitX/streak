@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
@@ -82,13 +81,15 @@ class TodoTile extends StatelessWidget {
                     Row(
                       children: [
                         Icon(
-                          LucideIcons.calendar,
+                          todo.time == null
+                              ? LucideIcons.calendar
+                              : LucideIcons.clock,
                           size: 12,
                           color: overdue ? context.tokens.danger : muted,
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          todoDateLabel(context, due),
+                          todoDueLabel(context, todo),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -100,7 +101,11 @@ class TodoTile extends StatelessWidget {
                   ],
                   if (todo.photos.isNotEmpty) ...[
                     const SizedBox(height: 10),
-                    _Photos(paths: todo.photos),
+                    PhotoDeck(
+                      shots: todoPhotoShots(todo),
+                      size: 58,
+                      swipe: false,
+                    ),
                   ],
                 ],
               ),
@@ -163,28 +168,3 @@ class _CheckButton extends StatelessWidget {
   }
 }
 
-class _Photos extends StatelessWidget {
-  const _Photos({required this.paths});
-
-  final List<String> paths;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 58,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: paths.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 6),
-        itemBuilder: (_, index) {
-          final file = File(paths[index]);
-          if (!file.existsSync()) return const SizedBox.shrink();
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.file(file, width: 58, height: 58, fit: BoxFit.cover),
-          );
-        },
-      ),
-    );
-  }
-}

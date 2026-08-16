@@ -1,8 +1,15 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/photo_viewer.dart';
+import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
+
+List<PhotoShot> todoPhotoShots(Todo todo) => [
+      for (final path in todo.photos)
+        PhotoShot(path: path, text: todo.text.trim()),
+    ];
 
 List<String> todoPriorityLabels(BuildContext context) => [
       context.l10n.priority_none,
@@ -18,6 +25,14 @@ String todoGroupLabel(BuildContext context, TodoGroup group) => switch (group) {
       TodoGroup.upcoming => context.l10n.todo_upcoming,
       TodoGroup.someday => context.l10n.todo_someday,
     };
+
+String todoDueLabel(BuildContext context, Todo todo) {
+  final due = todo.due;
+  if (due == null) return '';
+  final date = todoDateLabel(context, due);
+  final time = todo.time;
+  return time == null ? date : '$date · ${time.format(context)}';
+}
 
 String todoDateLabel(BuildContext context, DateTime date) {
   final days = date.epochDay - AppClock.today().epochDay;

@@ -6,6 +6,7 @@ import 'package:streak/features/todos/data/todo_groups.dart';
 Todo _todo(
   String id, {
   DateTime? due,
+  int? minutes,
   TodoPriority priority = TodoPriority.none,
   bool done = false,
   int createdMinutesAgo = 0,
@@ -15,6 +16,7 @@ Todo _todo(
       text: id,
       done: done,
       date: due?.dayKey ?? '',
+      minutes: minutes,
       priority: priority,
       createdAt: DateTime(2026, 8, 10, 12).subtract(
         Duration(minutes: createdMinutesAgo),
@@ -86,6 +88,27 @@ void main() {
     );
   });
 
+  test('on the same day the hour decides, and the timed ones go first', () {
+    final sections = groupPending([
+      _todo('loose', due: today, priority: TodoPriority.high),
+      _todo('evening', due: today, minutes: 20 * 60),
+      _todo('morning', due: today, minutes: 8 * 60),
+    ], today);
+
+    expect(
+      sections.single.todos.map((t) => t.id),
+      ['morning', 'evening', 'loose'],
+    );
+  });
+
+  test('an hour without a date is never asked to sort', () {
+    final todo = _todo('timed', due: today, minutes: 9 * 60);
+
+    expect(todo.dueAt, DateTime(2026, 8, 10, 9));
+    expect(_todo('plain', due: today).dueAt, today);
+    expect(_todo('loose').dueAt, isNull);
+  });
+
   test('undated to-dos keep the newest on top', () {
     final sections = groupPending([
       _todo('old', createdMinutesAgo: 120),
@@ -119,14 +142,26 @@ void main() {
   });
 
   test('a to-do survives a round trip through its map', () {
-    final todo = _todo('trip', due: tomorrow, priority: TodoPriority.medium)
-        .copyWith(photos: const ['/a.jpg']);
+    final todo = _todo(
+      'trip',
+      due: tomorrow,
+      minutes: 7 * 60 + 45,
+      priority: TodoPriority.medium,
+    ).copyWith(photos: const ['/a.jpg']);
     final back = Todo.fromMap(todo.toMap());
 
     expect(back.id, todo.id);
     expect(back.date, todo.date);
+    expect(back.minutes, 7 * 60 + 45);
     expect(back.priority, TodoPriority.medium);
     expect(back.photos, ['/a.jpg']);
     expect(back.doneAt, isNull);
+  });
+
+  test('clearing the hour survives copyWith', () {
+    final todo = _todo('trip', due: tomorrow, minutes: 600);
+
+    expect(todo.copyWith(clearMinutes: true).minutes, isNull);
+    expect(todo.copyWith(minutes: 60).minutes, 60);
   });
 }

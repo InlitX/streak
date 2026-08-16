@@ -389,6 +389,7 @@
   "todo_empty_body": "Apunta lo que quieras hacer en los próximos días.",
   "todo_date": "Fecha",
   "todo_no_date": "Sin fecha",
+  "todo_time": "Hora",
   "todo_priority": "Prioridad",
   "priority_none": "Sin prioridad",
   "priority_low": "Baja",

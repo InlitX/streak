@@ -36,6 +36,7 @@ class TodosController extends ChangeNotifier {
   Future<Todo> create({
     required String text,
     String date = '',
+    int? minutes,
     TodoPriority priority = TodoPriority.none,
     List<String> photos = const [],
   }) async {
@@ -43,6 +44,7 @@ class TodosController extends ChangeNotifier {
       id: const Uuid().v4(),
       text: text.trim(),
       date: date,
+      minutes: minutes,
       priority: priority,
       photos: photos,
       createdAt: DateTime.now(),

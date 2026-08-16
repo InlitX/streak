@@ -442,6 +442,7 @@
   "todo_empty_body": "Jot down what you want to get done over the next few days.",
   "todo_date": "Date",
   "todo_no_date": "No date",
+  "todo_time": "Time",
   "todo_priority": "Priority",
   "priority_none": "No priority",
   "priority_low": "Low",

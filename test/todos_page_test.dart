@@ -61,6 +61,29 @@ void main() {
     handle.dispose();
   });
 
+  testWidgets('choosing a date opens the calendar and leaves it open',
+      (tester) async {
+    await pumpScreen(tester, const TodosPage());
+
+    await tester.tap(find.widgetWithIcon(FilledButton, LucideIcons.plus));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(LucideIcons.calendar));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Pick a date'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+  });
+
+  testWidgets('an hour picked for a to-do reaches its tile', (tester) async {
+    await seedTodos(tester, [
+      testTodo(id: 'a', text: 'Call the plumber', due: today, minutes: 9 * 60),
+    ]);
+    await pumpScreen(tester, const TodosPage());
+
+    expect(find.text('Today · 9:00 AM'), findsOneWidget);
+  });
+
   testWidgets('writing a to-do adds it to the list', (tester) async {
     await pumpScreen(tester, const TodosPage());
 

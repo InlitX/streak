@@ -48,6 +48,12 @@ int _byUrgency(Todo a, Todo b) {
   if (first != null && second != null && !first.isSameDay(second)) {
     return first.compareTo(second);
   }
+  if (a.minutes != b.minutes) {
+    if (a.minutes == null || b.minutes == null) {
+      return a.minutes == null ? 1 : -1;
+    }
+    return a.minutes!.compareTo(b.minutes!);
+  }
   if (a.priority != b.priority) {
     return b.priority.index.compareTo(a.priority.index);
   }

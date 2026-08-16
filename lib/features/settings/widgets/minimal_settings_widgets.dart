@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class MinimalPage extends StatelessWidget {
   const MinimalPage({
@@ -204,6 +206,7 @@ Future<void> showOptionSheet(
   required int index,
   required ValueChanged<int> onSelected,
 }) {
+  final minimal = context.read<SettingsController>().isMinimalStyle;
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -222,9 +225,9 @@ Future<void> showOptionSheet(
             Text(
               title,
               style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+                fontFamily: minimal ? 'PlayfairDisplay' : null,
+                fontSize: minimal ? 24 : 19,
+                fontWeight: minimal ? FontWeight.w700 : FontWeight.w800,
                 color: context.colors.onSurface,
               ),
             ),
@@ -235,8 +238,8 @@ Future<void> showOptionSheet(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(14),
                   onTap: () {
-                    onSelected(i);
                     Navigator.of(sheet).pop();
+                    onSelected(i);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
