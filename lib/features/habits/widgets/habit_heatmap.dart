@@ -101,6 +101,20 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   Color _cell(BuildContext context, DateTime date, {bool inScope = true}) =>
       heatmapCellColor(context, widget.habit, date, inScope: inScope);
 
+  bool _isToday(DateTime date) => date.atMidnight == _today;
+
+  Border _todayRing(BuildContext context, Color fill, double width) {
+    final plain =
+        fill.a < 0.55 || fill == context.colors.surfaceContainerHighest;
+    final color = plain
+        ? widget.habit.color
+        : (fill.computeLuminance() > 0.55 ? Colors.black : Colors.white);
+    return Border.all(
+      color: color.withValues(alpha: plain ? 1 : 0.6),
+      width: width,
+    );
+  }
+
   bool get _dense =>
       widget.mode == HeatmapMode.mini || widget.mode == HeatmapMode.year;
 
@@ -169,10 +183,13 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                       width: double.infinity,
                       height: height,
                       decoration: BoxDecoration(
-                        color: _cell(context, date),
+                        color: fill,
                         borderRadius: BorderRadius.circular(
                           widget.circle ? 16 : 11,
                         ),
+                        border: _isToday(date)
+                            ? _todayRing(context, fill, 2)
+                            : null,
                       ),
                       child: ExcludeSemantics(
                         child: MediaQuery.withClampedTextScaling(
@@ -273,6 +290,11 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                     monthScope &&
                     date.month == _today.month &&
                     date.isAfter(_today);
+                final fill = future
+                    ? context.colors.surfaceContainerHighest.withValues(
+                        alpha: 0.4,
+                      )
+                    : _cell(context, date, inScope: inScope);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: gap),
                   child: _tappable(
@@ -283,11 +305,11 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                       height: cell,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: future
-                              ? context.colors.surfaceContainerHighest
-                                    .withValues(alpha: 0.4)
-                              : _cell(context, date, inScope: inScope),
+                          color: fill,
                           borderRadius: BorderRadius.circular(radius),
+                          border: big && _isToday(date)
+                              ? _todayRing(context, fill, 1.5)
+                              : null,
                         ),
                       ),
                     ),
@@ -333,15 +355,19 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                 final date = first.add(Duration(days: w * 7 + d));
                 final inMonth = date.month == _today.month;
                 final future = date.isAfter(_today);
+                final fill = !inMonth
+                    ? Colors.transparent
+                    : future
+                    ? context.colors.surfaceContainerHighest.withValues(
+                        alpha: 0.4,
+                      )
+                    : _cell(context, date);
                 final decoration = BoxDecoration(
-                  color: !inMonth
-                      ? Colors.transparent
-                      : future
-                      ? context.colors.surfaceContainerHighest.withValues(
-                          alpha: 0.4,
-                        )
-                      : _cell(context, date),
+                  color: fill,
                   borderRadius: BorderRadius.circular(widget.circle ? 999 : 9),
+                  border: _isToday(date)
+                      ? _todayRing(context, fill, widget.compact ? 1.2 : 1.5)
+                      : null,
                 );
                 return Expanded(
                   child: Padding(
