@@ -24,9 +24,9 @@
   },
   "note_photos": "",
   "app_background": "",
-  "onb2_body": "Des objectifs journaliers, hebdomadaires et mesuels avec des rappels intelligents pour que rien ne glisse",
+  "onb2_body": "Des objectifs journaliers, hebdomadaires et mensuels avec des rappels intelligents pour que rien ne glisse",
   "month": "",
-  "quant_preset_reading": "",
+  "quant_preset_reading": "Lecture",
   "auto_backup_run_now": "Sauvegarder maintenant",
   "your_habits": "Vos habitudes",
   "about_subtitle": "",
@@ -58,7 +58,7 @@
   },
   "new_category": "",
   "message_copied": "",
-  "kind_negative_hint": "",
+  "kind_negative_hint": "Les jours sont marqués vierges par défaut — ton streak grandit tout seul. Appuie sur la coche si tu échoues;ce jour deviendra rouge mais tu peux toujours annuler.",
   "monthly": "",
   "share_background": "",
   "focus_sessions": "",
@@ -102,7 +102,7 @@
   "about_inline": "",
   "widget_cfg_border": "",
   "ranking": "",
-  "count_months": "",
+  "count_months": "{count, plural, =1{1 mois} tout les {{count} mois}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -184,7 +184,7 @@
   "share_failed": "",
   "share_swipe_hint": "",
   "new_reminder": "",
-  "quant_daily_goal": "",
+  "quant_daily_goal": "But du jour",
   "import_merge": "",
   "focus_free_session": "",
   "relapses": "",
@@ -227,15 +227,15 @@
   "focus_built_in": "",
   "widget_no_habits": "",
   "focus_sound": "",
-  "quant_unit_hint": "",
-  "quant_preset_water": "",
+  "quant_unit_hint": "Unité (Ex: ml, pages, répétitions)",
+  "quant_preset_water": "Eau",
   "add_note": "",
   "theme": "Thème",
   "year": "",
   "import_backup_sub": "Restaurer les habitudes depuis une sauvegarde",
   "share_photo": "",
   "about_app_sub": "",
-  "appearance": "apparence",
+  "appearance": "Apparence",
   "note_kind_planned": "",
   "strength": "",
   "default_user": "",
@@ -249,7 +249,7 @@
       }
     }
   },
-  "sched_days": "",
+  "sched_days": "Jours",
   "circle": "",
   "wipe_data_confirm": "",
   "buy_coffee": "",
@@ -273,9 +273,9 @@
   "square": "",
   "unit_seconds": "",
   "focus_enable_sub": "",
-  "kind_negative": "",
+  "kind_negative": "Éviter",
   "focus_shuffle": "",
-  "habit_kind": "",
+  "habit_kind": "Type d'habitude",
   "focus_goal_today": "",
   "@focus_goal_today": {
     "placeholders": {
@@ -311,7 +311,7 @@
   },
   "category_learning": "Apprentissage",
   "focus_add_track": "",
-  "count_weeks": "",
+  "count_weeks": "{count, plural, =1{1 semaine} toutes les {{count} semaines}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
@@ -356,7 +356,7 @@
   "wipe_data": "",
   "auto_backup_weekly": "Toutes les semaines",
   "app_style": "",
-  "frequency": "",
+  "frequency": "Fréquence",
   "import_replace": "",
   "made_by": "",
   "wipe_data_done": "",
@@ -398,7 +398,7 @@
   "auto_backup_folder_default": "Fichier de l'application",
   "tomorrow": "",
   "perfect_days": "",
-  "kind_quantitative": "",
+  "kind_quantitative": "Quantité",
   "focus_round": "",
   "@focus_round": {
     "placeholders": {
@@ -428,7 +428,7 @@
     }
   },
   "widget_cfg_dot_color": "",
-  "daily": "",
+  "daily": "Journalier",
   "widget_cfg_style_card": "",
   "bg_gradient": "",
   "rate_github_sub": "",
@@ -458,13 +458,13 @@
   "habits_imported": "Habitudes importées",
   "focus": "",
   "mon": "Lun",
-  "quant_unit_ml": "",
+  "quant_unit_ml": "ml",
   "wipe_data_warning": "",
   "auto_backup_where": "Une sauvegarde entière est écrite quand tu ouvres l'app. Les cinq dernières sont gardées.",
   "streaks": "",
   "widget_demo_run": "",
   "widget_cfg_style_classic": "",
-  "quant_edit_title": "",
+  "quant_edit_title": "Quantité d'aujourd'hui",
   "reminder_message": "",
   "archived_habits_sub": "",
   "note_kind_note": "",
@@ -482,7 +482,7 @@
   "focus_pomodoro_sub": "",
   "focus_duration": "",
   "advanced_options": "",
-  "kind_locked_hint": "",
+  "kind_locked_hint": "Le type ne peut pas être changé après avoir créé l'habitude.",
   "reorder": "",
   "widget_cfg_image": "",
   "rate_github": "",
@@ -549,13 +549,13 @@
   "notif_action_done": "",
   "focus_history_empty_sub": "",
   "widget_no_data": "",
-  "weekly": "",
+  "weekly": "Hebdomadaire",
   "auto_backup_sub": "Off",
   "best_month": "",
   "share_save_failed": "",
   "overview": "",
   "consistency": "",
-  "kind_positive": "",
+  "kind_positive": "Normal",
   "icon_accent": "",
   "focus_done_title": "",
   "repeat_weekly": "",
@@ -598,7 +598,7 @@
   "unit_hours": "",
   "todays_checklist": "",
   "go": "",
-  "quant_preset_generic": "",
+  "quant_preset_generic": "Customisé",
   "focus_end_tasks": "",
   "@focus_end_tasks": {
     "placeholders": {
@@ -626,7 +626,7 @@
   "system": "Système",
   "less_icons": "",
   "my_heatmap_sub": "",
-  "quant_unit_pages": "",
+  "quant_unit_pages": "pages",
   "copy_message": "",
   "share": "",
   "sun": "Dim",
@@ -668,7 +668,7 @@
   "color": "Couleur",
   "widget_cfg_add": "",
   "emojis_tab": "",
-  "sched_interval": "",
+  "sched_interval": "Interval",
   "change_photo": "",
   "appearance_sub": "",
   "widget_cfg_show_activity": "",
@@ -770,5 +770,6 @@
   "a11y_pick_color": "",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "quant_per_day": "Quantité journalière"
 }
