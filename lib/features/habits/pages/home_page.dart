@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   final Map<String, bool> _frozen = {};
   final Set<String> _leaving = {};
+  List<Habit> _visible = const [];
   final Map<String, Timer> _timers = {};
 
   @override
@@ -306,6 +307,7 @@ class _HomePageState extends State<HomePage> {
               final visible = _reordering || !sortCompletedLast
                   ? filtered
                   : _completedLast(filtered);
+              _visible = visible;
 
               final header = _reordering
                   ? _ReorderBanner(text: context.l10n.reorder_hint)
@@ -419,7 +421,7 @@ class _HomePageState extends State<HomePage> {
     if (!animate) return;
 
     final settled = updated?.isDoneForNow ?? wasSettled;
-    if (settled == wasSettled) {
+    if (settled == wasSettled || !_changesSlot(id, settled)) {
       setState(() => _frozen.remove(id));
       return;
     }
@@ -446,14 +448,24 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List<Habit> _completedLast(List<Habit> habits) {
+  List<Habit> _completedLast(List<Habit> habits, {String? id, bool? settled}) {
     final pending = <Habit>[];
     final done = <Habit>[];
     for (final habit in habits) {
-      final settled = _frozen[habit.id] ?? habit.isDoneForNow;
-      (settled ? done : pending).add(habit);
+      final isDone = habit.id == id && settled != null
+          ? settled
+          : (_frozen[habit.id] ?? habit.isDoneForNow);
+      (isDone ? done : pending).add(habit);
     }
     return [...pending, ...done];
+  }
+
+  bool _changesSlot(String id, bool settled) {
+    if (!context.read<SettingsController>().sortCompletedLast) return false;
+    final before = _completedLast(_visible);
+    final after = _completedLast(_visible, id: id, settled: settled);
+    return before.indexWhere((h) => h.id == id) !=
+        after.indexWhere((h) => h.id == id);
   }
 
   List<String> _categoriesOf(List<Habit> habits) {
