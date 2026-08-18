@@ -455,9 +455,9 @@
   "widget_cfg_show_activity": "Mostrar atividade de",
   "widget_cfg_save": "Salvar",
   "active_days": "Dias ativos",
-  "focus_end_keep": "",
+  "focus_end_keep": "Continue",
   "share_friends_sub": "Compartilhar o app",
-  "focus_saved": "",
+  "focus_saved": "{time} gravado",
   "@focus_saved": {
     "placeholders": {
       "time": {
@@ -468,11 +468,11 @@
   "note_photos": "Fotos",
   "auto_backup_run_now": "Backup agora",
   "wipe_data_sub": "Hábitos, anotações, foco e configurações",
-  "focus_your_tracks": "",
+  "focus_your_tracks": "Suas trilhas",
   "message_copied": "Mensagem copiada",
   "share_background": "Tela de fundo",
-  "focus_sessions": "",
-  "focus_amount_added": "",
+  "focus_sessions": "Sessões",
+  "focus_amount_added": "{amount} adicionado à {habit}",
   "@focus_amount_added": {
     "placeholders": {
       "amount": {
@@ -483,7 +483,7 @@
       }
     }
   },
-  "notes_empty": "",
+  "notes_empty": "Ainda não há anotações para este dia",
   "archived_empty_sub": "Os hábitos que você exclui vêm parar aqui, com todo o seu histórico.",
   "wipe_data_sure": "Realmente apagar tudo?",
   "day_start_hour": "{hour}:00",
@@ -494,7 +494,7 @@
       }
     }
   },
-  "delete_note": "",
+  "delete_note": "Excluir nota",
   "archive_habit_body": "Arquivar \"{name}\"? O histórico é mantido e você pode restaurá-lo em Configurações.",
   "@archive_habit_body": {
     "placeholders": {
@@ -503,11 +503,11 @@
       }
     }
   },
-  "focus_end_anyway": "",
-  "focus_custom_duration": "",
-  "focus_tasks": "",
-  "style_classic": "",
-  "focus_history_day": "",
+  "focus_end_anyway": "Finalizar como está",
+  "focus_custom_duration": "Personalizado",
+  "focus_tasks": "Listar subtarefas",
+  "style_classic": "Clássico",
+  "focus_history_day": "{count, plural, =1{1 session} other{{count} sessões}}",
   "@focus_history_day": {
     "placeholders": {
       "count": {
@@ -515,47 +515,47 @@
       }
     }
   },
-  "focus_pomodoro": "",
-  "share_show_stats": "",
-  "about_sub": "",
-  "focus_track_pad": "",
-  "style_classic_desc": "",
-  "focus_history": "",
-  "save_note": "",
-  "focus_end_complete": "",
+  "focus_pomodoro": "Pomodoro",
+  "share_show_stats": "Mostrar estatísticas",
+  "about_sub": "Versão, código-fonte e suporte",
+  "focus_track_pad": "almofada quente",
+  "style_classic_desc": "Lista de hábitos, barra inferior e todas as configurações em uma única tela.",
+  "focus_history": "História",
+  "save_note": "Salvar nota",
+  "focus_end_complete": "Marcar como concluído",
   "archived_empty": "Nada arquivado",
-  "focus_scene_black": "",
+  "focus_scene_black": "Preto",
   "share_swipe_hint": "Deslize o cartão para navegar pelo tempo.",
-  "focus_free_session": "",
+  "focus_free_session": "Sessão gratuita",
   "day_start_midnight": "Meia noite",
   "share_size": "Tamanho",
-  "focus_track_too_long": "",
-  "focus_style_dots": "",
+  "focus_track_too_long": "As faixas devem ter menos de 20 minutos",
+  "focus_style_dots": "Pontos",
   "journey_empty": "Sem fotos ainda",
   "share_stats_short": "Estatísticas",
-  "share_save": "",
-  "app_style_sub": "",
+  "share_save": "Salvar",
+  "app_style_sub": "Escolha a aparência e o funcionamento de todo o aplicativo.",
   "app_lock_sub": "Use sua digital ou rosto para abrir ao app",
   "auto_backup_daily": "Todo dia",
   "restore": "Recuperar",
-  "preferences_sub": "",
+  "preferences_sub": "Idioma, semana e classificação",
   "auto_backup_no_permission": "Permissão de armazenamento negado",
-  "focus_built_in": "",
-  "focus_sound": "",
-  "add_note": "",
+  "focus_built_in": "Incluído",
+  "focus_sound": "Som",
+  "add_note": "Adicionar nota",
   "share_photo": "Foto",
-  "note_kind_planned": "",
-  "share_saved": "",
+  "note_kind_planned": "Planejado",
+  "share_saved": "Salvo na sua galeria",
   "wipe_data_confirm": "Apagar tudo",
-  "unit_minutes": "",
+  "unit_minutes": "minutos",
   "share_blur": "Desfoque",
-  "focus_end_reached": "",
-  "focus_personalize": "",
-  "focus_history_empty": "",
-  "unit_seconds": "",
-  "focus_enable_sub": "",
-  "focus_shuffle": "",
-  "focus_goal_today": "",
+  "focus_end_reached": "Meta alcançada. O hábito será marcado como concluído.",
+  "focus_personalize": "Personalizado",
+  "focus_history_empty": "Ainda não há sessões",
+  "unit_seconds": "segundos",
+  "focus_enable_sub": "Um cronômetro para hábitos que precisam de um",
+  "focus_shuffle": "Embaralhar",
+  "focus_goal_today": "{done} de {goal} hoje",
   "@focus_goal_today": {
     "placeholders": {
       "done": {
@@ -566,7 +566,7 @@
       }
     }
   },
-  "edit_entry": "",
+  "edit_entry": "Editar entrada",
   "delete_forever_body": "Excluir \"{name}\" e todo o seu histórico? Esta ação não pode ser desfeita.",
   "@delete_forever_body": {
     "placeholders": {
@@ -575,26 +575,26 @@
       }
     }
   },
-  "focus_add_track": "",
-  "notes": "",
-  "focus_no_sound": "",
+  "focus_add_track": "Adicionar faixa",
+  "notes": "Notas",
+  "focus_no_sound": "Nenhuma faixa selecionada",
   "wipe_data": "Apagar todos os dados",
   "auto_backup_weekly": "Toda semana",
-  "app_style": "",
+  "app_style": "Estilo do aplicativo",
   "wipe_data_done": "Todos os dados foram apagados",
-  "focus_pick_habit": "",
-  "unit_min_short": "",
+  "focus_pick_habit": "Em que você está se concentrando?",
+  "unit_min_short": "min",
   "day_start": "Início do dia",
   "note_take_photo": "Câmera",
   "delete_forever": "Deletar para sempre",
   "auto_backup_folder_failed": "Está pasta nao pode ser usada",
-  "note_hint": "",
-  "focus_style_digital": "",
-  "focus_stop_body": "",
+  "note_hint": "Escreva sua mensagem...",
+  "focus_style_digital": "Círculo",
+  "focus_stop_body": "Seus minutos serão salvos. O hábito só estará completo se você atingir a meta.",
   "app_lock_unlock": "Destrancar",
   "auto_backup_folder_default": "Pasta do app",
-  "tomorrow": "",
-  "focus_round": "",
+  "tomorrow": "Amanhã",
+  "focus_round": "Rodada {n}",
   "@focus_round": {
     "placeholders": {
       "n": {
@@ -603,15 +603,15 @@
     }
   },
   "journey": "Jornada",
-  "focus_target_reached": "",
+  "focus_target_reached": "Meta alcançada",
   "share_friends_message": "Estou mantendo meu hábitos frequentes com o Streak — um rastreador de hábitos pequeno, gratuito e offline, sem contas nem anúncios. Venha você também: https://inlitx.github.io/streak/",
-  "note_kind_completed": "",
-  "focus_break": "",
+  "note_kind_completed": "Concluído",
+  "focus_break": "Pausa",
   "undo": "Desfazer",
-  "focus_style": "",
-  "support_sub": "",
-  "note_type": "",
-  "focus_scene_custom": "",
+  "focus_style": "Estilo de temporizador",
+  "support_sub": "Reporte um erro ou solicite uma funcionalidade",
+  "note_type": "Tipo",
+  "focus_scene_custom": "Sua imagem",
   "journey_sub": "{count, plural, =1{1 photo} other{{count} fotos}}",
   "@journey_sub": {
     "placeholders": {
@@ -620,38 +620,38 @@
       }
     }
   },
-  "focus": "",
+  "focus": "Foco",
   "wipe_data_warning": "Isso apaga todos os hábitos, notas, sessões de foco e configurações deste telefone. A ação não pode ser desfeita, a menos que você tenha um arquivo de backup para importar posteriormente.",
   "auto_backup_where": "Um backup completo é escrito quando você abre o app. Os últimos 5 são mantidos.",
   "archived_habits_sub": "Recuperar ou deletar para sempre",
-  "note_kind_note": "",
-  "focus_pomodoro_sub": "",
-  "focus_duration": "",
-  "focus_images_limit": "",
-  "edit_note": "",
-  "notes_hint": "",
-  "focus_total": "",
+  "note_kind_note": "Nota",
+  "focus_pomodoro_sub": "Sequência focada com pausas curtas",
+  "focus_duration": "Duração",
+  "focus_images_limit": "Até 10 imagens",
+  "edit_note": "Editar nota",
+  "notes_hint": "Pressione e segure um dia para ver ou adicionar notas",
+  "focus_total": "Tempo de concentração",
   "share_size_large": "Altura",
   "share_size_small": "Quadrado",
-  "yesterday": "",
-  "focus_resume": "",
+  "yesterday": "Ontem",
+  "focus_resume": "Resumo",
   "app_lock_title": "O Streak esta trancado",
   "archived_habits": "Hábitos arquivados",
   "restored": "Hábito recuperado",
-  "see_less": "",
+  "see_less": "Ver menos",
   "habit_archived": "Hábito arquivado",
   "share_friends": "Compartilhar com um amigo",
   "auto_backup_off": "Desativar",
   "journey_empty_sub": "Adicione uma foto a uma anotação e ela aparecerá aqui.",
   "auto_backup_folder": "Pasta",
-  "focus_end": "",
-  "focus_pick_audio": "",
-  "focus_history_empty_sub": "",
+  "focus_end": "Fim",
+  "focus_pick_audio": "Escolha uma música do seu telefone",
+  "focus_history_empty_sub": "Cada sessão de foco que você concluir aparecerá aqui.",
   "auto_backup_sub": "Desligado",
-  "share_save_failed": "",
-  "focus_done_title": "",
+  "share_save_failed": "Não foi possível salvar a imagem",
+  "focus_done_title": "Sessão concluída",
   "note_pick_photo": "Galeria",
-  "notes_count": "",
+  "notes_count": "{count, plural, =1{1 note} other{{count} notes}}",
   "@notes_count": {
     "placeholders": {
       "count": {
@@ -660,25 +660,25 @@
     }
   },
   "app_lock_failed": "Não foi possível Verificar sua identidade",
-  "focus_style_flip": "",
-  "legend_note_added": "",
-  "style_minimal": "",
-  "vacation_day_on": "",
+  "focus_style_flip": "Virar",
+  "legend_note_added": "Nota adicionada",
+  "style_minimal": "Minimalista",
+  "vacation_day_on": "Marcar como dia de férias",
   "auto_backup": "Backup automático",
   "day_start_sub": "De madrugada conta como o dia anterior",
-  "focus_notif_body": "",
+  "focus_notif_body": "Sua sessão de foco terminou. Parabéns!",
   "app_lock_unavailable": "A biometria não está ativada neste aparelho",
   "auto_backup_folder_set": "Pasta salva",
   "archive_habit": "Arquivar hábito",
-  "focus_track_limit": "",
-  "style_minimal_desc": "",
-  "focus_keep_awake": "",
-  "data_sub": "",
-  "note_time_optional": "",
-  "focus_pause": "",
-  "focus_track_rain": "",
-  "unit_hours": "",
-  "focus_end_tasks": "",
+  "focus_track_limit": "Até 10 faixas",
+  "style_minimal_desc": "Grade de hábitos e configurações agrupadas em quatro seções.",
+  "focus_keep_awake": "Mantenha a tela ligada",
+  "data_sub": "Backup e importação",
+  "note_time_optional": "Tempo (opcional)",
+  "focus_pause": "Pausa",
+  "focus_track_rain": "Chuva",
+  "unit_hours": "horas",
+  "focus_end_tasks": "{count} tarefas ainda não foram verificadas.",
   "@focus_end_tasks": {
     "placeholders": {
       "count": {
@@ -686,20 +686,20 @@
       }
     }
   },
-  "notes_enable_sub": "",
+  "notes_enable_sub": "Anexe lembretes a qualquer dia de um hábito",
   "wipe_data_sure_body": "Última chance. Sem um backup, todos os dados serão apagados para sempre.",
   "archive": "Arquivo",
-  "focus_start": "",
-  "focus_stop_title": "",
-  "vacation_day_off": "",
+  "focus_start": "Iniciar sessão",
+  "focus_stop_title": "Encerrar sessão?",
+  "vacation_day_off": "Remover dia de férias",
   "app_lock": "Proteger app",
   "deleted_forever": "Hábito deletado",
-  "focus_loop": "",
-  "focus_daily_goal": "",
+  "focus_loop": "Na ordem",
+  "focus_daily_goal": "Objetivo",
   "copy_message": "Copiar mensagem",
-  "view_notes": "",
-  "focus_track_brown": "",
-  "focus_end_short": "",
+  "view_notes": "Ver notas",
+  "focus_track_brown": "Ruído marrom",
+  "focus_end_short": "Você está a {time} de atingir a meta.",
   "@focus_end_short": {
     "placeholders": {
       "time": {
@@ -707,7 +707,7 @@
       }
     }
   },
-  "appearance_sub": "",
+  "appearance_sub": "Tema, cores e plano de fundo",
   "stats": "Estatísticas",
   "statistics": "Estatísticas",
   "icon_accent": "Tricolor",
@@ -750,7 +750,7 @@
       }
     }
   },
-  "a11y_mark_done": "",
+  "a11y_mark_done": "Marcar {name} como feito",
   "@a11y_mark_done": {
     "description": "Screen reader label for the button that logs a habit",
     "placeholders": {
@@ -759,7 +759,7 @@
       }
     }
   },
-  "a11y_mark_not_done": "",
+  "a11y_mark_not_done": "Marcar {name} como não realizado",
   "@a11y_mark_not_done": {
     "description": "Screen reader label for the button that undoes a habit",
     "placeholders": {
@@ -771,5 +771,202 @@
   "a11y_pick_color": "",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "quant_per_day": "Quantidade por dia",
+  "app_lock_delay": "bloquear após",
+  "app_lock_delay_instant": "Imediatamente",
+  "app_lock_delay_seconds": "{value} segundos",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "clear_progress": "Limpar progresso",
+  "clear_progress_sub": "Histórico, notas e sessões de foco",
+  "clear_progress_warning": "Isso apaga todos os dias registrados, anotações e sessões de foco, mas mantém seus hábitos, seus horários e suas configurações. A ação não pode ser desfeita, a menos que você tenha um arquivo de backup para importar posteriormente.",
+  "clear_progress_confirm": "Limpar progresso",
+  "clear_progress_done": "Progresso limpo",
+  "quote_1": "Pequenos passos, todos os dias.",
+  "quote_2": "A consistência supera a intensidade.",
+  "quote_3": "Priorize você mesmo.",
+  "quote_4": "Um dia de cada vez.",
+  "quote_5": "Progresso, não perfeição.",
+  "quote_6": "Feito é melhor que perfeito.",
+  "quote_7": "Mantenha a sequência.",
+  "quote_8": "Pequenos hábitos, grandes mudanças.",
+  "quote_9": "Confie no processo.",
+  "quote_10": "Conquiste a manhã.",
+  "quote_11": "Disciplina é igual a liberdade.",
+  "quote_12": "Hoje conta.",
+  "quotes_my_list": "Minhas frases",
+  "quotes_both": "Ambos",
+  "quotes_add": "Adicionar frase",
+  "quotes_edit": "Editar frase",
+  "quotes_hint": "Escreva sua frase",
+  "quotes_empty": "Sem citações suas",
+  "quotes_empty_sub": "Escreva as suas próprias frases.",
+  "todos": "Pendência",
+  "todos_enable_sub": "Uma lista rápida ao lado dos seus hábitos",
+  "todo_new": "Nova tarefa",
+  "todo_hint": "O que precisa ser feito?",
+  "todo_empty_title": "Nada na lista",
+  "todo_empty_body": "Anote o que você quer realizar nos próximos dias.",
+  "todo_date": "Data",
+  "todo_no_date": "Sem data",
+  "todo_time": "Tempo",
+  "todo_priority": "Prioridade",
+  "priority_none": "Sem prioridade",
+  "priority_low": "Baixa",
+  "priority_medium": "Média",
+  "priority_high": "Alta",
+  "todo_upcoming": "Por vir",
+  "todo_someday": "Algum dia",
+  "todo_overdue": "Atrasado",
+  "pick_a_date": "Escolha uma data",
+  "todo_left": "{count, plural, =0{All done} =1{1 a fazer} other{{count} a fazer}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, =1{Completado(1)} other{Completo ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_clear_completed": "Limpar concluído",
+  "todo_clear_completed_body": "{count, plural, =1{Isso exclui a tarefa concluída.} other{Isso exclui a {count} tarefas concluídas.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "Geral",
+  "prefs_features": "Funcionalidades",
+  "prefs_privacy": "Privacidade",
+  "collapse_cards": "Recolher cartões",
+  "expand_cards": "Expandir cartões",
+  "view_switcher": "Seletor de visualização",
+  "view_switcher_sub": "Exibir os botões Semana/Mês/Ano em Hoje",
+  "unit_hour_short": "h",
+  "celebration": "Efeito de conclusão",
+  "celebration_confetti": "Confete",
+  "celebration_fireworks": "Fogos de artifício",
+  "celebration_surprise": "Me surpreenda",
+  "focus_notif_channel": "Sessões de foco",
+  "focus_notif_running": "Focando",
+  "focus_paused": "Em pausa",
+  "select_all": "Selecionar tudo",
+  "selected_count": "{count, plural, =1{1 selecionado} other{{count} selecionado}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_delete_sessions": "Excluir sessões?",
+  "focus_sessions_deleted": "{count, plural, =1{1 sessão excluída} other{{count} sessões excluídas}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_title": "Dia não programado",
+  "focus_delete_sessions_body": "{count, plural, =1{1 sessão de foco será removida. Esta ação não pode ser desfeita.} other{{count} sessões de foco serão removidas. Esta ação não pode ser desfeita.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_body": "Este hábito não está agendado em {day} . Registrar mesmo assim como um extra?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "unscheduled_confirm": "Registrar como extra",
+  "rest_days_none": "Nenhum",
+  "last_90_days": "Últimos 90 dias",
+  "focus_clear_today": "Limpar as sessões de hoje",
+  "focus_defaults": "Configurações padrão da sessão",
+  "plan_day": "Planeje o dia",
+  "plan_day_sub": "Dê um horário específico para cada hábito e visualize-os em uma linha do tempo.",
+  "habit_time": "Hora do dia",
+  "habit_time_none": "A qualquer momento",
+  "habit_duration": "Duração",
+  "habit_duration_none": "Sem duração",
+  "day_timeline": "Dia",
+  "day_timeline_free": "{span} livre",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "day_timeline_anytime": "A qualquer momento",
+  "day_timeline_empty": "Nada planejado para este dia",
+  "day_timeline_empty_sub": "Dê um horário específico ao seu hábito e ele aparecerá aqui.",
+  "clear": "Limpar",
+  "start_view": "A semana começa em",
+  "start_view_last": "Último uso",
+  "focus_stats": "Estatísticas de foco",
+  "focus_average": "Sessão média",
+  "focus_log": "Registrar uma sessão",
+  "focus_log_date": "Data",
+  "focus_log_saved": "Sessão adicionada",
+  "perfect_streak": "Sequência de dias perfeitos",
+  "report_issue": "Reportar um problema",
+  "card_activity": "Atividade em cartões",
+  "focus_only": "Somente com uma sessão de foco",
+  "focus_only_hint": "O hábito é verificado ao terminar uma sessão, não por meio de toques.",
+  "focus_only_title": "Precisa de uma sessão de foco",
+  "focus_only_body": "\"{name} \" é concluído ao finalizar uma sessão de foco.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_past": "\"{name} \" só é concluído por uma sessão de foco, portanto, dias anteriores não podem ser verificados.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_start": "Iniciar sessão",
+  "focus_flowtime": "Tempo de fluxo",
+  "focus_flowtime_hint": "Sem meta e sem alarme. O cronômetro faz a contagem regressiva e você para quando sentir que terminou.",
+  "focus_end_flow": "Você se concentrou por {time} .",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "rest_days": "Dias de descanso",
+  "rest_days_desc": "Faça uma pausa semanal nesses dias. Você ainda poderá registrá-los e eles serão contabilizados.",
+  "widget_cfg_follow_system": "Seguir o tema do sistema",
+  "widget_cfg_dark_color": "Tema escuro",
+  "widget_cfg_light_color": "Tema claro"
 }
