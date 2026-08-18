@@ -250,12 +250,14 @@ class MiniStat extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.color,
+    this.unit,
   });
 
   final String value;
   final String label;
   final IconData icon;
   final Color color;
+  final String? unit;
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +272,7 @@ class MiniStat extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(height: 10),
-          AnimatedStatNumber(value: value, style: statNumber(context, 22)),
+          _StatValue(value: value, unit: unit),
           const SizedBox(height: 4),
           Text(
             label,
@@ -278,6 +280,62 @@ class MiniStat extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: statLabel(context),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatValue extends StatelessWidget {
+  const _StatValue({required this.value, required this.unit});
+
+  final String value;
+  final String? unit;
+
+  @override
+  Widget build(BuildContext context) {
+    final unit = this.unit;
+    if (unit == null || unit.isEmpty) {
+      return AnimatedStatNumber(value: value, style: statNumber(context, 22));
+    }
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          AnimatedStatNumber(value: value, style: statNumber(context, 22)),
+          const SizedBox(width: 4),
+          Text(
+            unit,
+            style: TextStyle(
+              fontSize: 12.5,
+              fontWeight: FontWeight.w700,
+              color: context.tokens.muted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatPair extends StatelessWidget {
+  const StatPair({super.key, required this.left, required this.right});
+
+  final Widget left;
+  final Widget right;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: left),
+          const SizedBox(width: 12),
+          Expanded(child: right),
         ],
       ),
     );

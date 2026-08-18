@@ -118,7 +118,7 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
               padding: context.pagePadding(16, 8, 16, 28),
               children: [
                 StatReveal(
-                  child: _StatPair(
+                  child: StatPair(
                     left: MiniStat(
                       icon: LucideIcons.sun,
                       color: accent,
@@ -135,7 +135,7 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                 ),
                 const SizedBox(height: 12),
                 StatReveal(
-                  child: _StatPair(
+                  child: StatPair(
                     left: MiniStat(
                       icon: LucideIcons.calendarRange,
                       color: context.tokens.warning,
@@ -152,7 +152,7 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                 ),
                 const SizedBox(height: 12),
                 StatReveal(
-                  child: _StatPair(
+                  child: StatPair(
                     left: MiniStat(
                       icon: LucideIcons.circlePlay,
                       color: accent,
@@ -222,27 +222,6 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                 ],
               ],
             ),
-    );
-  }
-}
-
-class _StatPair extends StatelessWidget {
-  const _StatPair({required this.left, required this.right});
-
-  final Widget left;
-  final Widget right;
-
-  @override
-  Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: left),
-          const SizedBox(width: 12),
-          Expanded(child: right),
-        ],
-      ),
     );
   }
 }

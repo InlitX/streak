@@ -12,6 +12,7 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/pages/quant_stats_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
@@ -173,6 +174,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                 ),
               ),
+              if (scoped.length == 1 &&
+                  scoped.first.kind == HabitKind.quantitative) ...[
+                const SizedBox(height: 12),
+                StatReveal(child: QuantStatsRow(habit: scoped.first)),
+              ],
               if (context.watch<SettingsController>().focusEnabled &&
                   context.watch<FocusController>().sessionCount > 0) ...[
                 const SizedBox(height: 12),

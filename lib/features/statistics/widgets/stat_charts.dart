@@ -40,6 +40,7 @@ class ValueBars extends StatelessWidget {
     required this.tooltip,
     this.height = 150,
     this.barWidth = 12,
+    this.goal,
   });
 
   final List<double> values;
@@ -48,11 +49,14 @@ class ValueBars extends StatelessWidget {
   final String Function(double value) tooltip;
   final double height;
   final double barWidth;
+  final double? goal;
 
   @override
   Widget build(BuildContext context) {
+    final goal = this.goal;
     final maxV = values.isEmpty ? 0.0 : values.reduce((a, b) => a > b ? a : b);
-    final maxY = (maxV <= 0 ? 1.0 : maxV) * 1.2;
+    final ceiling = goal == null || goal < maxV ? maxV : goal;
+    final maxY = (ceiling <= 0 ? 1.0 : ceiling) * 1.2;
 
     return SizedBox(
       height: height,
@@ -62,6 +66,24 @@ class ValueBars extends StatelessWidget {
           maxY: maxY,
           gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
+          extraLinesData: ExtraLinesData(
+            horizontalLines: [
+              if (goal != null && goal > 0)
+                HorizontalLine(
+                  y: goal,
+                  color: context.tokens.muted.withValues(alpha: 0.55),
+                  strokeWidth: 1,
+                  dashArray: const [4, 4],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(bottom: 2, right: 2),
+                    style: statLabel(context),
+                    labelResolver: (_) => tooltip(goal),
+                  ),
+                ),
+            ],
+          ),
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => context.colors.surfaceContainerHighest,

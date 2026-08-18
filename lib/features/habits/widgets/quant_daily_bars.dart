@@ -24,6 +24,7 @@ class QuantDailyBars extends StatelessWidget {
       ],
       color: habit.color,
       height: 130,
+      goal: habit.perDayTarget,
       label: (index) => index >= 0 && index < dates.length
           ? '${dates[index].day}'
           : '',
