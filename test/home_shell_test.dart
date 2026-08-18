@@ -34,7 +34,11 @@ void main() {
   testWidgets('the to-do tab stays hidden while the setting is off',
       (tester) async {
     await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
-    await pumpScreen(tester, const HomeShell());
+    await pumpScreen(
+      tester,
+      const HomeShell(),
+      settings: {'todosEnabled': false},
+    );
 
     expect(find.byIcon(LucideIcons.listChecks), findsNothing);
     expect(find.byType(TodosPage), findsNothing);

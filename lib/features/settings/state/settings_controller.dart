@@ -59,7 +59,7 @@ class SettingsController extends ChangeNotifier {
     _cardActivity = LocalStore.setting('cardActivity', true);
     _viewSwitcher = LocalStore.setting('viewSwitcher', true);
     _compactCards = LocalStore.setting('compactCards', false);
-    _todosEnabled = LocalStore.setting('todosEnabled', false);
+    _todosEnabled = LocalStore.setting('todosEnabled', true);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
