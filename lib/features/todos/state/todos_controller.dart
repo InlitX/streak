@@ -1,16 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
+import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:uuid/uuid.dart';
 
 class TodosController extends ChangeNotifier {
   TodosController() {
     _todos = LocalStore.readTodos();
+    unawaited(_notifications.rescheduleTodos(_todos));
   }
+
+  final _notifications = NotificationService();
 
   late List<Todo> _todos;
 
@@ -56,6 +62,7 @@ class TodosController extends ChangeNotifier {
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(todo);
+    await _notifications.scheduleTodo(todo);
     return todo;
   }
 
@@ -68,6 +75,7 @@ class TodosController extends ChangeNotifier {
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(todo);
+    await _notifications.scheduleTodo(todo);
     await CoverStorage.forgetAll(dropped);
   }
 
@@ -84,6 +92,7 @@ class TodosController extends ChangeNotifier {
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(updated);
+    await _notifications.scheduleTodo(updated);
   }
 
   Future<void> remove(String id) async {
@@ -93,6 +102,7 @@ class TodosController extends ChangeNotifier {
     _todos.removeWhere((t) => t.id == id);
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
+    await _notifications.cancelTodo(id);
     await LocalStore.removeTodo(id);
     await CoverStorage.forgetAll(photos);
   }

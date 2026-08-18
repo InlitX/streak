@@ -12,6 +12,7 @@ import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/reminder_schedule.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/l10n/app_localizations_en.dart';
@@ -36,6 +37,9 @@ class NotificationService {
       habit.kind == HabitKind.quantitative || habit.effectiveTarget > 1;
 
   static void Function(String habitId)? onOpenHabit;
+  static void Function()? onOpenTodos;
+
+  static const _todoPayload = 'todo:';
 
   String? pendingHabitId;
 
@@ -44,6 +48,10 @@ class NotificationService {
   void _handleResponse(NotificationResponse response) {
     final id = response.payload;
     if (id == null || id.isEmpty) return;
+    if (id.startsWith(_todoPayload)) {
+      onOpenTodos?.call();
+      return;
+    }
     if (NotificationActions.handles(response.actionId)) {
       NotificationActions.apply(
         response.actionId!,
@@ -145,6 +153,9 @@ class NotificationService {
   Future<Set<int>> _schedule(Habit habit, Reminder reminder) async {
     final strings = await localizations();
     final body = _bodyFor(habit, reminder, strings);
+    if (reminder.isHourly) {
+      return _scheduleHourly(habit, reminder, body, strings);
+    }
     return reminder.isInterval
         ? _scheduleInterval(habit, reminder, body, strings)
         : _scheduleWeekly(habit, reminder, body, strings);
@@ -178,6 +189,42 @@ class NotificationService {
       body = '$body\n${strings.notif_streak('$streak')}';
     }
     return body;
+  }
+
+  Future<Set<int>> _scheduleHourly(Habit habit, Reminder reminder, String body,
+      AppLocalizations strings) async {
+    final ids = <int>{};
+    final slots = ReminderSchedule.hourlySlots(
+      hour: reminder.hour,
+      minute: reminder.minute,
+      everyHours: reminder.everyHours,
+    );
+    final now = tz.TZDateTime.now(tz.local);
+
+    for (final day in reminder.days) {
+      if (habit.restDays.contains(day)) continue;
+      for (var slot = 0; slot < slots.length; slot++) {
+        final id = ReminderSchedule.hourlyId(habit.id, reminder.id, day, slot);
+        ids.add(id);
+        final next = ReminderSchedule.nextWeekly(
+          now: now,
+          weekday: day,
+          hour: slots[slot] ~/ 60,
+          minute: slots[slot] % 60,
+        );
+        await _plugin.zonedSchedule(
+          id,
+          habit.name,
+          body,
+          tz.TZDateTime.from(next, tz.local),
+          _details(habit, body, strings),
+          payload: habit.id,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        );
+      }
+    }
+    return ids;
   }
 
   Future<Set<int>> _scheduleWeekly(Habit habit, Reminder reminder, String body,
@@ -372,6 +419,63 @@ class NotificationService {
       ),
       payload: habit.id,
     );
+  }
+
+  Future<void> scheduleTodo(Todo todo) async {
+    try {
+      await _scheduleTodo(todo);
+    } catch (e) {
+      debugPrint('Scheduling to-do ${todo.id} failed: $e');
+    }
+  }
+
+  Future<void> _scheduleTodo(Todo todo) async {
+    if (!_ready) await initialize();
+    final id = ReminderSchedule.todoNotificationId(todo.id);
+    await _plugin.cancel(id);
+
+    final at = ReminderSchedule.todoFireAt(
+      now: DateTime.now(),
+      done: todo.done,
+      due: todo.due,
+      minutes: todo.minutes,
+    );
+    if (at == null) return;
+
+    final strings = await localizations();
+    await _plugin.zonedSchedule(
+      id,
+      todo.title,
+      todo.body.isEmpty ? strings.todos : todo.body,
+      tz.TZDateTime.from(at, tz.local),
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          _channelId,
+          _channelName,
+          channelDescription: 'Reminders to keep your streaks alive',
+          importance: Importance.high,
+          priority: Priority.high,
+          styleInformation: BigTextStyleInformation(todo.body),
+        ),
+      ),
+      payload: '$_todoPayload${todo.id}',
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
+  }
+
+  Future<void> cancelTodo(String todoId) async {
+    try {
+      if (!_ready) await initialize();
+      await _plugin.cancel(ReminderSchedule.todoNotificationId(todoId));
+    } catch (e) {
+      debugPrint('Cancelling to-do $todoId failed: $e');
+    }
+  }
+
+  Future<void> rescheduleTodos(List<Todo> todos) async {
+    for (final todo in todos.toList()) {
+      await scheduleTodo(todo);
+    }
   }
 
   Future<void> cancelFor(String habitId) async {

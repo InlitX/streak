@@ -6,6 +6,7 @@ class Reminder {
     required this.days,
     this.message = '',
     this.everyDays = 1,
+    this.everyHours = 0,
     this.anchorEpochDay,
     this.snoozeMinutes = defaultSnoozeMinutes,
   });
@@ -23,11 +24,15 @@ class Reminder {
 
   final int everyDays;
 
+  final int everyHours;
+
   final int? anchorEpochDay;
 
   final int snoozeMinutes;
 
   bool get isInterval => everyDays >= 2;
+
+  bool get isHourly => everyHours >= 1;
 
   String get timeLabel {
     final period = hour >= 12 ? 'PM' : 'AM';
@@ -42,6 +47,7 @@ class Reminder {
         'selectedDays': days,
         'message': message,
         'everyDays': everyDays,
+        'everyHours': everyHours,
         'anchorEpochDay': anchorEpochDay,
         'snoozeMinutes': snoozeMinutes,
       };
@@ -53,6 +59,7 @@ class Reminder {
         days: List<int>.from((map['selectedDays'] ?? map['days']) as List),
         message: (map['message'] ?? '') as String,
         everyDays: (map['everyDays'] ?? 1) as int,
+        everyHours: (map['everyHours'] ?? 0) as int,
         anchorEpochDay: map['anchorEpochDay'] as int?,
         snoozeMinutes:
             (map['snoozeMinutes'] ?? defaultSnoozeMinutes) as int,

@@ -292,6 +292,13 @@
   "select_one_day": "Select at least one day",
   "every_day": "Every day",
   "no_days": "No days",
+  "repeat_hours": "Repeat during the day",
+  "every_n_hours": "Every {n} h",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": { "type": "String" }
+    }
+  },
   "repeat_weekly": "Specific days",
   "repeat_interval": "Every N days",
   "every_n_days": "Every {n} days",

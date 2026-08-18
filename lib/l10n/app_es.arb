@@ -250,6 +250,13 @@
   "select_one_day": "Selecciona al menos un día",
   "every_day": "Todos los días",
   "no_days": "Sin días",
+  "repeat_hours": "Repetir durante el día",
+  "every_n_hours": "Cada {n} h",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": { "type": "String" }
+    }
+  },
   "repeat_weekly": "Días concretos",
   "repeat_interval": "Cada N días",
   "every_n_days": "Cada {n} días",

@@ -32,6 +32,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
   final _snoozeField = TextEditingController();
   late bool _intervalMode;
   late int _everyDays;
+  late int _everyHours;
   late int _snooze;
 
   @override
@@ -45,6 +46,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
     _message = TextEditingController(text: initial?.message ?? '');
     _intervalMode = initial?.isInterval ?? false;
     _everyDays = (initial != null && initial.isInterval) ? initial.everyDays : 2;
+    _everyHours = initial?.everyHours ?? 0;
     _snooze = initial?.snoozeMinutes ?? Reminder.defaultSnoozeMinutes;
   }
 
@@ -136,6 +138,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
         days: _days.toList()..sort(),
         message: _message.text.trim(),
         everyDays: _intervalMode ? _everyDays : 1,
+        everyHours: _intervalMode ? 0 : _everyHours,
         anchorEpochDay: anchor,
         snoozeMinutes: _snooze,
       ),
@@ -293,6 +296,24 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                       ),
                     );
                   }),
+                ),
+                const SizedBox(height: 16),
+                Text(context.l10n.repeat_hours,
+                    style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: minimal ? 7 : 8,
+                  runSpacing: minimal ? 7 : 8,
+                  children: [
+                    for (final hours in const [0, 2, 3, 4, 6, 8, 12])
+                      CompactPill(
+                        label: hours == 0
+                            ? context.l10n.off
+                            : context.l10n.every_n_hours('$hours'),
+                        selected: _everyHours == hours,
+                        onTap: () => setState(() => _everyHours = hours),
+                      ),
+                  ],
                 ),
               ],
             const SizedBox(height: 20),

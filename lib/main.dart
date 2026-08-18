@@ -16,6 +16,7 @@ import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
@@ -38,6 +39,7 @@ Future<void> main() async {
   unawaited(ImageCleanupService.run());
 
   NotificationService.onOpenHabit = _openHabit;
+  NotificationService.onOpenTodos = _openTodos;
   FocusService.onPending = drainFocusActions;
   FocusService.listen();
   try {
@@ -105,6 +107,10 @@ void _openHabit(String habitId) {
   AppNavigator.push(HabitDetailsPage(habitId: habitId), fade: true);
 }
 
+void _openTodos() {
+  AppNavigator.push(const TodosPage(), fade: true);
+}
+
 void _startFocus(String habitId) {
   final context = AppNavigator.key.currentContext;
   if (context == null) return;
@@ -139,6 +145,7 @@ Future<void> widgetActionEntrypoint() async {
     await WidgetActionService.drain(habits, todos: todos);
     await HomeWidgetService.sync(habits, renderIcons: false);
     await TodosWidgetService.sync(todos);
+    await NotificationService().rescheduleTodos(todos);
   } catch (e) {
     debugPrint('Widget action entrypoint failed: $e');
   }
