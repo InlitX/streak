@@ -171,13 +171,18 @@ class _HomePageState extends State<HomePage> {
     final settings = context.watch<SettingsController>();
     final sortCompletedLast = settings.sortCompletedLast;
     final minimal = settings.isMinimalStyle;
+    final tight = !minimal && settings.planningEnabled;
     return Scaffold(
       appBar: AppBar(
         title: _reordering
             ? Text(context.l10n.reorder)
             : minimal
                 ? null
-                : Text(context.l10n.today),
+                : FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(context.l10n.today),
+                  ),
 
         leading: minimal && !_reordering
             ? IconButton(
@@ -189,7 +194,8 @@ class _HomePageState extends State<HomePage> {
           if (!_reordering && settings.planningEnabled)
             IconButton(
               tooltip: context.l10n.day_timeline,
-              icon: Icon(LucideIcons.calendarClock, size: minimal ? 22 : 24),
+              icon: const Icon(LucideIcons.calendarClock, size: 22),
+              visualDensity: VisualDensity.compact,
               onPressed: () => AppNavigator.push(const DayTimelinePage()),
             ),
           if (!minimal && !_reordering)
@@ -206,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                 size: 20,
               ),
             ),
-          if (!_reordering) FocusPill(compact: minimal),
+          if (!_reordering) FocusPill(compact: minimal, dense: tight),
           if (minimal && !_reordering && settings.todosEnabled)
             IconButton(
               tooltip: context.l10n.todos,
@@ -248,18 +254,18 @@ class _HomePageState extends State<HomePage> {
                           const HabitFormPage(),
                           fullscreenDialog: true,
                         ),
-                        icon: const Icon(LucideIcons.plus, size: 16),
+                        icon: Icon(LucideIcons.plus, size: tight ? 15 : 16),
                         label: Text(
                           context.l10n.new_label,
-                          style: const TextStyle(
-                            fontSize: 13.5,
+                          style: TextStyle(
+                            fontSize: tight ? 12.5 : 13.5,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: tight ? 9 : 12,
+                            vertical: tight ? 7 : 8,
                           ),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,

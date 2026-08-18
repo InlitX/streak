@@ -11,9 +11,10 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class FocusPill extends StatelessWidget {
-  const FocusPill({super.key, this.compact = false});
+  const FocusPill({super.key, this.compact = false, this.dense = false});
 
   final bool compact;
+  final bool dense;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,10 @@ class FocusPill extends StatelessWidget {
         child: GestureDetector(
           onTap: open,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: EdgeInsets.symmetric(
+              horizontal: dense ? 9 : 12,
+              vertical: dense ? 7 : 8,
+            ),
             decoration: BoxDecoration(
               color: active
                   ? accent.withValues(alpha: 0.16)
@@ -62,16 +66,16 @@ class FocusPill extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.timer,
-                  size: 16,
+                  size: dense ? 15 : 16,
                   color: active ? accent : context.tokens.muted,
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: dense ? 5 : 6),
                 Text(
                   active
                       ? formatDuration(focus.remainingSeconds)
                       : context.l10n.focus,
                   style: TextStyle(
-                    fontSize: 13.5,
+                    fontSize: dense ? 12.5 : 13.5,
                     fontWeight: FontWeight.w700,
                     color: active ? accent : context.tokens.muted,
                     fontFeatures: const [FontFeature.tabularFigures()],
