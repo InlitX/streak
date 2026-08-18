@@ -628,6 +628,13 @@
   "widget_open_to_sync": "Abre Streak para sincronizar",
   "widget_activity": "Actividad",
   "widget_today_progress": "Hoy  {done}/{total}",
+  "widget_todos_open": "Tareas  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "widget_todos_empty": "Nada pendiente para hoy",
   "widget_done_today": "hecho hoy",
   "widget_best_streak": "🔥 {streak} mejor racha",
   "widget_cfg_title": "Personalizar widget",
@@ -642,6 +649,9 @@
   "widget_cfg_opacity": "Opacidad  {value}%",
   "widget_cfg_border": "Borde",
   "widget_cfg_thickness": "Grosor  {value}dp",
+  "widget_cfg_todos_scope": "Tareas",
+  "widget_cfg_todos_all": "Mostrar todas las tareas",
+  "widget_cfg_todos_hint": "Apagado: solo las de hoy, atrasadas y sin fecha",
   "widget_cfg_show_activity": "Mostrar actividad de",
   "widget_cfg_dot_color": "Color de los puntos",
   "widget_cfg_style": "Estilo",

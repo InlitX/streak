@@ -48,3 +48,6 @@ app.*.map.json
 
 # web
 /web/
+
+# Kotlin compiler cache
+/android/.kotlin/

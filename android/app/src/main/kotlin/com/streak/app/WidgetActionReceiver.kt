@@ -10,6 +10,10 @@ import kotlinx.coroutines.launch
 class WidgetActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == ACTION_TOGGLE_TODO) {
+            toggleTodo(context, intent)
+            return
+        }
         if (intent.action != ACTION_TOGGLE) return
         val habitId = intent.getStringExtra(EXTRA_HABIT_ID) ?: return
         val dayKey = intent.getStringExtra(EXTRA_DAY_KEY) ?: WidgetPayload.todayKey()
@@ -38,6 +42,12 @@ class WidgetActionReceiver : BroadcastReceiver() {
             "streak://toggleHabit?habitId=$habitId&day=$dayKey" +
                 "&action=$action&delta=${WidgetText.amount(delta)}",
         )
+    }
+
+    private fun toggleTodo(context: Context, intent: Intent) {
+        val todoId = intent.getStringExtra(EXTRA_TODO_ID) ?: return
+        if (TodosPayload.toggleDone(context, todoId)) repaintGlance(context)
+        WidgetActionWorker.enqueue(context, "streak://toggleTodo?todoId=$todoId")
     }
 
     private fun columnOf(context: Context, dayKey: String): Int {
@@ -70,6 +80,8 @@ class WidgetActionReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_TOGGLE = "com.streak.app.TOGGLE_HABIT"
+        const val ACTION_TOGGLE_TODO = "com.streak.app.TOGGLE_TODO"
+        const val EXTRA_TODO_ID = "todoId"
         const val EXTRA_HABIT_ID = "habitId"
         const val EXTRA_WIDGET_ID = "appWidgetId"
         const val EXTRA_DAY_KEY = "dayKey"
@@ -83,6 +95,12 @@ class WidgetActionReceiver : BroadcastReceiver() {
                 action = ACTION_TOGGLE
                 putExtra(EXTRA_HABIT_ID, habitId)
                 putExtra(EXTRA_DAY_KEY, dayKey)
+            }
+
+        fun todoIntent(context: Context, todoId: String): Intent =
+            Intent(context, WidgetActionReceiver::class.java).apply {
+                action = ACTION_TOGGLE_TODO
+                putExtra(EXTRA_TODO_ID, todoId)
             }
     }
 }

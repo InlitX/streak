@@ -6,20 +6,31 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/todos/data/todo.dart';
 
 class WidgetActionService {
   const WidgetActionService._();
 
   static const _queueKey = 'pending_actions';
 
-  static Future<bool> drain(Map<String, Habit> habits) async {
+  static Future<bool> drain(
+    Map<String, Habit> habits, {
+    List<Todo> todos = const [],
+  }) async {
     final pending = await _read();
     if (pending.isEmpty) return false;
 
     final touched = <String>{};
+    final ticked = <Todo>[];
     for (final raw in pending) {
       try {
-        final id = _apply(habits, Uri.parse(raw));
+        final uri = Uri.parse(raw);
+        if (uri.queryParameters.containsKey('todoId')) {
+          final todo = _applyTodo(todos, uri);
+          if (todo != null) ticked.add(todo);
+          continue;
+        }
+        final id = _apply(habits, uri);
         if (id != null) touched.add(id);
       } catch (e) {
         debugPrint('Widget action skipped ($raw): $e');
@@ -30,8 +41,27 @@ class WidgetActionService {
       final habit = habits[id];
       if (habit != null) await LocalStore.writeHabit(habit);
     }
+    for (final todo in ticked) {
+      await LocalStore.writeTodo(todo);
+    }
     await _clear(pending.length);
-    return touched.isNotEmpty;
+    return touched.isNotEmpty || ticked.isNotEmpty;
+  }
+
+  static Todo? _applyTodo(List<Todo> todos, Uri uri) {
+    final id = uri.queryParameters['todoId'];
+    if (id == null) return null;
+    final index = todos.indexWhere((todo) => todo.id == id);
+    if (index == -1) return null;
+
+    final done = !todos[index].done;
+    final updated = todos[index].copyWith(
+      done: done,
+      doneAt: done ? DateTime.now() : null,
+      clearDoneAt: !done,
+    );
+    todos[index] = updated;
+    return updated;
   }
 
   static Future<List<String>> _read() async {

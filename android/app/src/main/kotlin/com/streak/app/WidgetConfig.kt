@@ -44,6 +44,13 @@ object WidgetConfig {
     fun image(context: Context, id: Int): String? =
         prefs(context).getString("image_$id", null)
 
+    fun todosAll(context: Context, id: Int): Boolean =
+        prefs(context).getBoolean("todosAll_$id", false)
+
+    fun setTodosAll(context: Context, id: Int, value: Boolean) {
+        prefs(context).edit().putBoolean("todosAll_$id", value).commit()
+    }
+
     fun exists(context: Context, id: Int): Boolean =
         prefs(context).contains("bg_$id")
 
@@ -83,6 +90,7 @@ object WidgetConfig {
             .remove("borderW_$id")
             .remove("bgMode_$id")
             .remove("image_$id")
+            .remove("todosAll_$id")
             .apply()
     }
 

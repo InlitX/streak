@@ -58,6 +58,7 @@ void main() {
 
     expect(find.text('Completed (2)'), findsOneWidget);
     expect(find.text('SOMEDAY'), findsNothing);
+    await tester.pump(const Duration(seconds: 1));
     handle.dispose();
   });
 

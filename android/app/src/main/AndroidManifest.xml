@@ -134,6 +134,19 @@
         </receiver>
 
         <receiver
+            android:name=".TodosWidgetProvider"
+            android:label="@string/widget_todos_label"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="es.antonborri.home_widget.action.UPDATE_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/todos_widget_info" />
+        </receiver>
+
+        <receiver
             android:name=".TodayWidgetProvider"
             android:label="@string/widget_today_label"
             android:exported="true">

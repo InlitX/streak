@@ -21,6 +21,7 @@ import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/image_cleanup_service.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:streak/services/todos_widget_service.dart';
 import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
@@ -30,7 +31,10 @@ Future<void> main() async {
   await initializeDateFormatting();
   await LocalStore.init();
   AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
-  await WidgetActionService.drain(LocalStore.readHabits());
+  await WidgetActionService.drain(
+    LocalStore.readHabits(),
+    todos: LocalStore.readTodos(),
+  );
   unawaited(ImageCleanupService.run());
 
   NotificationService.onOpenHabit = _openHabit;
@@ -73,7 +77,13 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => SettingsController()),
         ChangeNotifierProvider(create: (_) => CategoriesController()),
         ChangeNotifierProvider(create: (_) => NotesController()),
-        ChangeNotifierProvider(create: (_) => TodosController()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final controller = TodosController();
+            TodosWidgetService.sync(controller.all);
+            return controller;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => FocusController()),
         ChangeNotifierProvider(
           create: (_) {
@@ -125,8 +135,10 @@ Future<void> widgetActionEntrypoint() async {
     await LocalStore.init();
     await LocalStore.reloadHabits();
     final habits = LocalStore.readHabits();
-    await WidgetActionService.drain(habits);
+    final todos = LocalStore.readTodos();
+    await WidgetActionService.drain(habits, todos: todos);
     await HomeWidgetService.sync(habits, renderIcons: false);
+    await TodosWidgetService.sync(todos);
   } catch (e) {
     debugPrint('Widget action entrypoint failed: $e');
   }

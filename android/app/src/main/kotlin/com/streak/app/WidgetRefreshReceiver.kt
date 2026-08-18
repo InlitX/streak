@@ -40,6 +40,7 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
             TodayWidgetProvider::class.java,
             StatsWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
+            TodosWidgetProvider::class.java,
         )
 
         fun keepFresh(context: Context) {

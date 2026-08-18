@@ -4,6 +4,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
+import 'package:streak/services/todos_widget_service.dart';
 import 'package:uuid/uuid.dart';
 
 class TodosController extends ChangeNotifier {
@@ -32,6 +33,7 @@ class TodosController extends ChangeNotifier {
   void reload() {
     _todos = LocalStore.readTodos();
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
   }
 
   Future<Todo> create({
@@ -52,6 +54,7 @@ class TodosController extends ChangeNotifier {
     );
     _todos.add(todo);
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(todo);
     return todo;
   }
@@ -63,6 +66,7 @@ class TodosController extends ChangeNotifier {
         _todos[index].photos.where((p) => !todo.photos.contains(p)).toList();
     _todos[index] = todo;
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(todo);
     await CoverStorage.forgetAll(dropped);
   }
@@ -78,6 +82,7 @@ class TodosController extends ChangeNotifier {
     );
     _todos[index] = updated;
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(updated);
   }
 
@@ -87,6 +92,7 @@ class TodosController extends ChangeNotifier {
     ];
     _todos.removeWhere((t) => t.id == id);
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
     await LocalStore.removeTodo(id);
     await CoverStorage.forgetAll(photos);
   }
@@ -97,6 +103,7 @@ class TodosController extends ChangeNotifier {
     final photos = [for (final todo in done) ...todo.photos];
     _todos.removeWhere((t) => t.done);
     notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
     await LocalStore.removeTodos(done.map((t) => t.id));
     await CoverStorage.forgetAll(photos);
   }

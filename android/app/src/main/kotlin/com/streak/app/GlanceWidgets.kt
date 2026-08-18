@@ -14,6 +14,7 @@ object GlanceWidgets {
             HabitWidgetProvider::class.java to { HabitWidget() },
             TodayWidgetProvider::class.java to { TodayWidget() },
             StatsWidgetProvider::class.java to { StatsWidget() },
+            TodosWidgetProvider::class.java to { TodosWidget() },
         )
         for ((provider, widget) in widgets) {
             try {

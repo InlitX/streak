@@ -66,7 +66,7 @@ private val swatches = listOf(
     0x009688, 0x4CAF50, 0xFFC107, 0xFF9800, 0xF44336, 0xE91E63, 0x607D8B,
 )
 
-private enum class WType { HABIT, TODAY, STATS, HEATMAP }
+private enum class WType { HABIT, TODAY, STATS, HEATMAP, TODOS }
 
 private data class HabitOption(val id: String?, val name: String, val color: Color)
 
@@ -123,12 +123,14 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialLayout = HeatmapConfig.layoutOf(this, appWidgetId),
                 initialFollowSystem = WidgetConfig.followSystem(this, appWidgetId),
                 initialBgLight = WidgetConfig.bgLight(this, appWidgetId),
+                initialTodosAll = WidgetConfig.todosAll(this, appWidgetId),
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
         }
     }
 
     private fun typeOf(name: String) = when {
+        name.contains("Todos") -> WType.TODOS
         name.contains("Today") -> WType.TODAY
         name.contains("Stats") -> WType.STATS
         name.contains("Heatmap") -> WType.HEATMAP
@@ -143,7 +145,7 @@ class WidgetConfigActivity : ComponentActivity() {
     private fun save(
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
         habitId: String?, allColor: Int, layout: Int,
-        followSystem: Boolean, bgLight: Int,
+        followSystem: Boolean, bgLight: Int, todosAll: Boolean,
     ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
@@ -151,6 +153,7 @@ class WidgetConfigActivity : ComponentActivity() {
             if (image != null) 1 else 0, image, followSystem, bgLight,
         )
         if (image != originalImage) WidgetConfig.deleteImage(this, originalImage)
+        if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
         if (type == WType.HEATMAP) {
             HeatmapConfig.setHabit(this, appWidgetId, habitId)
             HeatmapConfig.setColor(this, appWidgetId, if (habitId == null) allColor else null)
@@ -182,6 +185,7 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     private fun widgetFor(t: WType): GlanceAppWidget = when (t) {
+        WType.TODOS -> TodosWidget()
         WType.TODAY -> TodayWidget()
         WType.STATS -> StatsWidget()
         WType.HEATMAP, WType.HABIT -> HabitWidget()
@@ -239,6 +243,7 @@ class WidgetConfigActivity : ComponentActivity() {
         initialLayout: Int,
         initialFollowSystem: Boolean,
         initialBgLight: Int,
+        initialTodosAll: Boolean,
         isEdit: Boolean,
     ) {
         var bg by remember { mutableStateOf(initialBg) }
@@ -252,6 +257,7 @@ class WidgetConfigActivity : ComponentActivity() {
         var followSystem by remember { mutableStateOf(initialFollowSystem) }
         var bgLight by remember { mutableStateOf(initialBgLight) }
         var lightCustom by remember { mutableStateOf(false) }
+        var todosAll by remember { mutableStateOf(initialTodosAll) }
         val mode by bgModeState
         val image by imageState
 
@@ -276,7 +282,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold,
                 )
                 Spacer(Modifier.height(18.dp))
-                Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor)
+                Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor, todosAll)
 
                 if (type == WType.HEATMAP) {
                     Spacer(Modifier.height(18.dp))
@@ -379,6 +385,28 @@ class WidgetConfigActivity : ComponentActivity() {
                     }
                 }
 
+                if (type == WType.TODOS) {
+                    Spacer(Modifier.height(14.dp))
+                    Section(tr("cfg_todos_scope", "Tasks")) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                tr("cfg_todos_all", "Show every task"),
+                                color = Color.White, fontSize = 15.sp,
+                                fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f),
+                            )
+                            Switch(
+                                checked = todosAll, onCheckedChange = { todosAll = it },
+                                colors = SwitchDefaults.colors(checkedTrackColor = brand),
+                            )
+                        }
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            tr("cfg_todos_hint", "Off: only today, late and undated tasks"),
+                            color = Color(0xFF9CA3AF), fontSize = 12.sp,
+                        )
+                    }
+                }
+
                 if (habits.isNotEmpty()) {
                     Spacer(Modifier.height(14.dp))
                     Section(tr("cfg_show_activity", "Show activity of")) {
@@ -412,7 +440,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 ) {
                     save(
                         bg, opacity, border, borderWidth, habitId, allColor, layout,
-                        followSystem, bgLight,
+                        followSystem, bgLight, todosAll,
                     )
                 }
                 Box(
@@ -525,6 +553,7 @@ class WidgetConfigActivity : ComponentActivity() {
         layout: Int,
         habitId: String?,
         allColor: Int,
+        todosAll: Boolean,
     ) = Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         val frame = if (type == WType.STATS) {
             Modifier.size(152.dp)
@@ -565,6 +594,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     WType.TODAY -> TodayPreview(style)
                     WType.STATS -> StatsPreview(style)
                     WType.HEATMAP -> LivePreview(style, layout, habitId, allColor)
+                    WType.TODOS -> TodosPreview(style, todosAll)
                 }
             }
         }
@@ -596,6 +626,32 @@ class WidgetConfigActivity : ComponentActivity() {
                 verticalAlignment = Alignment.CenterVertically) {
                 Text(name, color = s.content, fontSize = 13.sp, modifier = Modifier.weight(1f))
                 Dot(if (done) brand else s.cell, 22.dp, 8.dp)
+            }
+        }
+    }
+
+    @Composable
+    private fun TodosPreview(s: WidgetStyle, all: Boolean) = Column(
+        Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
+    ) {
+        val rows = if (all) 3 else 2
+        Text(trf("todos_open", "To-do  $rows", "{count}" to rows.toString()),
+            color = s.content, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
+        listOf(
+            tr("demo_read", "Read") to Color(0xFFEF4444),
+            tr("demo_run", "Run") to s.cell,
+            tr("demo_water", "Water") to Color(0xFFF59E0B),
+        ).take(rows).forEach { (name, dot) ->
+            Row(Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Dot(s.cell, 20.dp, 6.dp)
+                Spacer(Modifier.width(9.dp))
+                if (dot != s.cell) {
+                    Dot(dot, 7.dp, 4.dp)
+                    Spacer(Modifier.width(6.dp))
+                }
+                Text(name, color = s.content, fontSize = 13.sp, modifier = Modifier.weight(1f))
             }
         }
     }

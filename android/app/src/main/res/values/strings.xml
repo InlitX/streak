@@ -6,4 +6,6 @@
     <string name="widget_habit_label">Streak habits</string>
     <string name="widget_today_label">Streak today</string>
     <string name="widget_stats_label">Streak summary</string>
+    <string name="widget_todos_label">Streak to-do</string>
+    <string name="widget_todos_description">See what is left to do today</string>
 </resources>

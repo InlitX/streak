@@ -729,6 +729,13 @@
       "total": { "type": "String" }
     }
   },
+  "widget_todos_open": "To-do  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "widget_todos_empty": "Nothing left for today",
   "widget_done_today": "done today",
   "widget_best_streak": "🔥 {streak} best streak",
   "@widget_best_streak": {
@@ -758,6 +765,9 @@
       "value": { "type": "String" }
     }
   },
+  "widget_cfg_todos_scope": "Tasks",
+  "widget_cfg_todos_all": "Show every task",
+  "widget_cfg_todos_hint": "Off: only today, late and undated tasks",
   "widget_cfg_show_activity": "Show activity of",
   "widget_cfg_dot_color": "Dot color",
   "widget_cfg_style": "Style",
