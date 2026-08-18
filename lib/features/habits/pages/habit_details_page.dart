@@ -34,6 +34,7 @@ import 'package:streak/features/habits/widgets/activity_calendar.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
+import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quant_daily_bars.dart';
@@ -209,7 +210,12 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 ],
                 if (habit.hasSubsteps) ...[
                   SectionLabel(context.l10n.todays_checklist),
-                  _TodayChecklist(habit: habit),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: HabitChecklist(habit: habit, header: true),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                 ],
                 if (settings.focusEnabled) ...[
@@ -427,138 +433,6 @@ class _MinimalHeader extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TodayChecklist extends StatelessWidget {
-  const _TodayChecklist({required this.habit});
-
-  final Habit habit;
-
-  Future<void> _setStep(BuildContext context, String stepId, bool value) async {
-    final controller = context.read<HabitsController>();
-    final today = AppClock.now();
-    if (value) {
-      final allowed =
-          await confirmUnscheduledDay(context, habit: habit, date: today);
-      if (!allowed) return;
-    }
-    HapticFeedback.selectionClick();
-    await controller.setStep(habit.id, today, stepId, value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final sortCompletedLast = context.watch<SettingsController>().sortCompletedLast;
-    final today = AppClock.now();
-    final checked = habit.completions[today.dayKey]?.steps ?? const <String>{};
-    final done = habit.substeps.where((s) => checked.contains(s.id)).length;
-    final steps = sortCompletedLast
-        ? [
-            ...habit.substeps.where((s) => !checked.contains(s.id)),
-            ...habit.substeps.where((s) => checked.contains(s.id)),
-          ]
-        : habit.substeps;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      context.l10n.steps_done('$done', '${habit.substeps.length}'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: context.tokens.muted,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            for (final step in steps)
-              _ChecklistRow(
-                title: step.title,
-                checked: checked.contains(step.id),
-                color: habit.color,
-                onTap: () => unawaited(
-                  _setStep(context, step.id, !checked.contains(step.id)),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ChecklistRow extends StatelessWidget {
-  const _ChecklistRow({
-    required this.title,
-    required this.checked,
-    required this.color,
-    required this.onTap,
-  });
-
-  final String title;
-  final bool checked;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: Row(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  color: checked ? color : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: checked
-                      ? null
-                      : Border.all(
-                          color: color.withValues(alpha: 0.5), width: 1.6),
-                ),
-                child: checked
-                    ? const Icon(LucideIcons.check, size: 16, color: Colors.white)
-                    : null,
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: checked
-                        ? context.tokens.muted
-                        : context.colors.onSurface,
-                    decoration:
-                        checked ? TextDecoration.lineThrough : TextDecoration.none,
-                    decorationColor: context.tokens.muted,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -813,7 +687,7 @@ String _focusLine(BuildContext context, int total, int week, int today) {
     if (week > 0) '${context.l10n.week} ${formatHoursShort(week)}',
     if (today > 0) '${context.l10n.today} ${formatHoursShort(today)}',
   ];
-  return parts.join('  Â·  ');
+  return parts.join('  ·  ');
 }
 
 class _FocusTile extends StatelessWidget {
