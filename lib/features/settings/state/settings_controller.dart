@@ -3,6 +3,7 @@ import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/utils/money_format.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/backup_service.dart';
@@ -48,6 +49,7 @@ class SettingsController extends ChangeNotifier {
     _bgImage = LocalStore.setting('bgImage', '');
     _checkStyle = LocalStore.setting('checkStyle', 0);
     _profileName = LocalStore.setting('profileName', '');
+    _currency = LocalStore.setting('currency', defaultCurrencySymbol());
     _profilePhoto = LocalStore.setting('profilePhoto', '');
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
@@ -106,6 +108,7 @@ class SettingsController extends ChangeNotifier {
   late String _bgImage;
   late int _checkStyle;
   late String _profileName;
+  late String _currency;
   late String _profilePhoto;
   late int _appIcon;
   late int _accentColor;
@@ -156,6 +159,14 @@ class SettingsController extends ChangeNotifier {
 
   int get checkStyle => _checkStyle;
   bool get isCircleCheck => _checkStyle == 1;
+
+  String get currency => _currency;
+
+  Future<void> setCurrency(String value) async {
+    _currency = value;
+    await LocalStore.writeSetting('currency', value);
+    notifyListeners();
+  }
 
   String get profileName => _profileName;
   String get profilePhoto => _profilePhoto;

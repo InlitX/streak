@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/amount_format.dart';
@@ -8,7 +9,10 @@ import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/substep.dart';
+import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
+import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/substep_draft.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class KindSelector extends StatelessWidget {
   const KindSelector({
@@ -154,6 +158,56 @@ class NegativeHint extends StatelessWidget {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class CostField extends StatelessWidget {
+  const CostField({super.key, required this.controller, required this.color});
+
+  final TextEditingController controller;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return CompactCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
+            child: Text(
+              context.l10n.cost_per_day,
+              style: TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.w700,
+                color: context.colors.onSurface,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: AppTextField(
+                  hint: '0',
+                  controller: controller,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              const SizedBox(width: 10),
+              CompactPill(
+                label: context.watch<SettingsController>().currency,
+                selected: true,
+                color: color,
+                onTap: () => showCurrencySheet(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          CompactNote(text: context.l10n.cost_note, color: color),
         ],
       ),
     );

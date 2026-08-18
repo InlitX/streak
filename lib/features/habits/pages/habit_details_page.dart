@@ -37,6 +37,7 @@ import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quant_daily_bars.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
+import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
@@ -216,6 +217,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 ],
                 SectionLabel(context.l10n.streaks),
                 StreakSummary(habit: habit),
+                if (habit.hasCost) ...[
+                  const SizedBox(height: 12),
+                  SavedMoneyCard(habit: habit),
+                ],
                 const SizedBox(height: 20),
                 SectionLabel(
                   context.l10n.activity,

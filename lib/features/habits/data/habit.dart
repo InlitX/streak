@@ -53,6 +53,7 @@ class Habit {
     this.reminders = const [],
     this.coverPath = '',
     this.kind = HabitKind.positive,
+    this.dailyCost = 0,
     this.unitLabel = '',
     this.incrementAmount = 1,
     this.quantKind = QuantKind.generic,
@@ -107,6 +108,7 @@ class Habit {
   final DateTime createdAt;
 
   final HabitKind kind;
+  final double dailyCost;
   final String unitLabel;
   final double incrementAmount;
   final QuantKind quantKind;
@@ -204,6 +206,30 @@ class Habit {
     }
     return entry.count >= perDayTarget;
   }
+
+  bool get hasCost => kind == HabitKind.negative && dailyCost > 0;
+
+  late final int cleanDays = _cleanDays();
+
+  int _cleanDays() {
+    if (kind != HabitKind.negative) return 0;
+    final floor = createdAt.atMidnight;
+    final span = AppClock.now().atMidnight.epochDay - floor.epochDay + 1;
+    if (span <= 0) return 0;
+    return span - _relapsesSince(floor);
+  }
+
+  int _relapsesSince(DateTime floor) {
+    final today = AppClock.now().atMidnight;
+    var relapses = 0;
+    for (final entry in completions.values) {
+      final day = parseDayKey(entry.date);
+      if (!day.isBefore(floor) && !day.isAfter(today)) relapses++;
+    }
+    return relapses;
+  }
+
+  double get moneySaved => hasCost ? cleanDays * dailyCost : 0;
 
   late final int totalCompletions = _totalCompletions();
 
@@ -492,6 +518,7 @@ class Habit {
     List<Reminder>? reminders,
     String? coverPath,
     HabitKind? kind,
+    double? dailyCost,
     String? unitLabel,
     double? incrementAmount,
     QuantKind? quantKind,
@@ -525,6 +552,7 @@ class Habit {
       reminders: reminders ?? this.reminders,
       coverPath: coverPath ?? this.coverPath,
       kind: kind ?? this.kind,
+      dailyCost: dailyCost ?? this.dailyCost,
       unitLabel: unitLabel ?? this.unitLabel,
       incrementAmount: incrementAmount ?? this.incrementAmount,
       quantKind: quantKind ?? this.quantKind,
@@ -561,6 +589,7 @@ class Habit {
         'coverPath': coverPath,
         'createdAt': createdAt.toIso8601String(),
         'kind': kind.index,
+        'dailyCost': dailyCost,
         'unitLabel': unitLabel,
         'incrementAmount': incrementAmount,
         'quantKind': quantKind.index,
@@ -610,6 +639,7 @@ class Habit {
             ? DateTime.tryParse(map['createdAt'] as String)
             : null,
         kind: HabitKind.values[(map['kind'] ?? 0) as int],
+        dailyCost: ((map['dailyCost'] ?? 0) as num).toDouble(),
         unitLabel: (map['unitLabel'] ?? '') as String,
         incrementAmount: ((map['incrementAmount'] ?? 1) as num).toDouble(),
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],

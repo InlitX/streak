@@ -8,6 +8,7 @@ import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
@@ -46,6 +47,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   late final TextEditingController _name;
   late final TextEditingController _description;
   late final TextEditingController _unitLabel;
+  late final TextEditingController _dailyCost;
 
   String _icon = HabitIcons.defaultIcon;
   String _category = '';
@@ -94,6 +96,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
     _name = TextEditingController(text: habit?.name ?? '');
     _description = TextEditingController(text: habit?.description ?? '');
     _unitLabel = TextEditingController(text: habit?.unitLabel ?? '');
+    _dailyCost = TextEditingController(
+      text: (habit?.dailyCost ?? 0) > 0 ? formatAmount(habit!.dailyCost) : '',
+    );
     if (habit != null) {
       _icon = habit.icon;
       _category = habit.category;
@@ -129,6 +134,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
     _name.dispose();
     _description.dispose();
     _unitLabel.dispose();
+    _dailyCost.dispose();
     super.dispose();
   }
 
@@ -158,6 +164,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
     final description = _description.text.trim();
     final quantitative = _kind == HabitKind.quantitative;
     final negative = _kind == HabitKind.negative;
+    final dailyCost = negative
+        ? double.tryParse(_dailyCost.text.trim().replaceAll(',', '.')) ?? 0
+        : 0.0;
     final interval = negative ? HabitInterval.daily : _interval;
     final frequency = negative ? 1 : _frequency;
     final focusOnly = _kind == HabitKind.positive && _focusOnly;
@@ -179,6 +188,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           scheduleEvery: negative ? 2 : _scheduleEvery,
           reminders: _reminders,
           coverPath: _cover,
+          dailyCost: dailyCost,
           perDayTarget: quantitative ? _quantTarget : widget.habit!.perDayTarget,
           unitLabel: quantitative ? _unitLabel.text.trim() : widget.habit!.unitLabel,
           incrementAmount:
@@ -207,6 +217,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         reminders: _reminders,
         coverPath: _cover,
         kind: _kind,
+        dailyCost: dailyCost,
         perDayTarget: quantitative ? _quantTarget : 1,
         unitLabel: quantitative ? _unitLabel.text.trim() : '',
         incrementAmount: quantitative ? _quantIncrement : 1,
@@ -436,6 +447,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
       if (_kind == HabitKind.negative) ...[
         const SizedBox(height: 10),
         CompactNote(text: context.l10n.kind_negative_hint, color: _color),
+        const SizedBox(height: 10),
+        CostField(controller: _dailyCost, color: _color),
       ],
       if (_kind == HabitKind.positive) ...[
         const SizedBox(height: 16),
@@ -669,6 +682,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
             if (_kind == HabitKind.negative) ...[
               const SizedBox(height: 12),
               NegativeHint(color: _color),
+              const SizedBox(height: 12),
+              CostField(controller: _dailyCost, color: _color),
             ],
             if (_kind == HabitKind.positive) ...[
               const SizedBox(height: 20),
