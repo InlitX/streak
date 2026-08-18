@@ -113,6 +113,8 @@
   "cost_per_day": "Coste al día",
   "cost_note": "Opcional. Déjalo vacío si el hábito no cuesta dinero.",
   "currency": "Moneda",
+  "currency_custom": "Otra",
+  "currency_hint": "Símbolo o código",
   "money_saved": "Dinero ahorrado",
   "clean_days": "Días limpios",
   "quant_preset_water": "Agua",

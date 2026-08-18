@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +19,80 @@ String habitMoneySaved(BuildContext context, Habit habit) => formatMoney(
 
 Future<void> showCurrencySheet(BuildContext context) {
   final settings = context.read<SettingsController>();
+  final options = [...currencySymbols];
+  if (settings.currency.isNotEmpty && !options.contains(settings.currency)) {
+    options.add(settings.currency);
+  }
+
   return showOptionSheet(
     context,
     title: context.l10n.currency,
-    options: currencySymbols,
-    index: currencySymbols.indexOf(settings.currency),
-    onSelected: (index) => settings.setCurrency(currencySymbols[index]),
+    options: [...options, context.l10n.currency_custom],
+    index: options.indexOf(settings.currency),
+    onSelected: (choice) {
+      if (choice < options.length) {
+        settings.setCurrency(options[choice]);
+        return;
+      }
+      unawaited(_askCurrency(context, settings));
+    },
   );
+}
+
+Future<void> _askCurrency(
+  BuildContext context,
+  SettingsController settings,
+) async {
+  final value = await showDialog<String>(
+    context: context,
+    builder: (_) => _CurrencyDialog(initial: settings.currency),
+  );
+  final trimmed = value?.trim() ?? '';
+  if (trimmed.isNotEmpty) await settings.setCurrency(trimmed);
+}
+
+class _CurrencyDialog extends StatefulWidget {
+  const _CurrencyDialog({required this.initial});
+
+  final String initial;
+
+  @override
+  State<_CurrencyDialog> createState() => _CurrencyDialogState();
+}
+
+class _CurrencyDialogState extends State<_CurrencyDialog> {
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initial);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(context.l10n.currency),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        maxLength: 8,
+        decoration: InputDecoration(hintText: context.l10n.currency_hint),
+        onSubmitted: (value) => Navigator.of(context).pop(value),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(_controller.text),
+          child: Text(context.l10n.save),
+        ),
+      ],
+    );
+  }
 }
 
 class SavedMoneyCard extends StatelessWidget {
