@@ -18,7 +18,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
-import 'package:streak/features/focus/pages/focus_history_page.dart';
+import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_defaults_sheet.dart';
@@ -806,6 +806,15 @@ class _ModeToggle extends StatelessWidget {
   }
 }
 
+String _focusLine(BuildContext context, int total, int week, int today) {
+  final parts = [
+    formatHoursShort(total),
+    if (week > 0) '${context.l10n.week} ${formatHoursShort(week)}',
+    if (today > 0) '${context.l10n.today} ${formatHoursShort(today)}',
+  ];
+  return parts.join('  ·  ');
+}
+
 class _FocusTile extends StatelessWidget {
   const _FocusTile({required this.habit});
 
@@ -848,11 +857,15 @@ class _FocusTile extends StatelessWidget {
     final focus = context.watch<FocusController>();
     final seconds = focus.secondsForHabit(habit.id);
     final today = focus.secondsForHabitOnDay(habit.id, AppClock.now());
+    final week = focus.secondsForHabitSince(
+      habit.id,
+      AppClock.now().startOfWeek(context.watch<SettingsController>().weekStart),
+    );
 
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
-        onTap: () => AppNavigator.push(FocusHistoryPage(habitId: habit.id)),
+        onTap: () => AppNavigator.push(FocusStatsPage(habitId: habit.id)),
         onLongPress: () {
           HapticFeedback.mediumImpact();
           unawaited(_openActions(context));
@@ -877,9 +890,9 @@ class _FocusTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      today > 0
-                          ? '${formatHoursShort(seconds)}  ·  ${context.l10n.today} ${formatHoursShort(today)}'
-                          : formatHoursShort(seconds),
+                      _focusLine(context, seconds, week, today),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 12.5,
                         color: context.tokens.muted,
