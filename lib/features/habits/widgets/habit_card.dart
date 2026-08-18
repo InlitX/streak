@@ -17,6 +17,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
+import 'package:streak/features/habits/widgets/compact_activity_strip.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/strength_bar.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
@@ -247,6 +248,12 @@ class HabitCard extends StatelessWidget {
                           ),
                       ],
                     ),
+                    if (settings.cardActivity &&
+                        compact &&
+                        mode != HeatmapMode.week) ...[
+                      const SizedBox(height: 10),
+                      CompactActivityStrip(habit: habit, mode: mode),
+                    ],
                     if (settings.cardActivity && !compact) ...[
                       const SizedBox(height: 16),
                       AnimatedSize(
