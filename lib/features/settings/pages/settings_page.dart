@@ -359,6 +359,16 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.palmtree,
+                    title: context.l10n.vacation_all,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.vacationAll ? 1 : 0,
+                      onChanged: (i) => SettingsActions.setVacationAll(context, i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.calendarCheck,
                     title: context.l10n.today_only,
                     trailing: Segmented(

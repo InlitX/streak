@@ -613,6 +613,8 @@
       }
     }
   },
+  "vacation_all": "Pausar todos los hábitos",
+  "vacation_all_sub": "Mientras esté activo, nada cuenta como fallado",
   "vacation_mode": "Modo vacaciones",
   "vacation_on_desc": "En pausa: estos días no contarán como fallados ni completados.",
   "vacation_off_desc": "Pausa este hábito. Los días saltados no romperán tu racha.",

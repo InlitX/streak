@@ -223,6 +223,22 @@ class HabitsController extends ChangeNotifier {
     await update(habit.copyWith(vacations: periods));
   }
 
+  Future<List<String>> pauseAll() async {
+    final paused = <String>[];
+    for (final habit in habits) {
+      if (habit.isArchived || habit.isOnVacation) continue;
+      paused.add(habit.id);
+      await setVacation(habit.id, true);
+    }
+    return paused;
+  }
+
+  Future<void> resumeAll(List<String> ids) async {
+    for (final id in ids) {
+      await setVacation(id, false);
+    }
+  }
+
   Future<void> setRestDays(String id, List<int> days) async {
     final habit = _habits[id];
     if (habit == null) return;

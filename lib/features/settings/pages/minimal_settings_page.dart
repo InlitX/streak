@@ -427,6 +427,15 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.palmtree,
+              title: context.l10n.vacation_all,
+              subtitle: context.l10n.vacation_all_sub,
+              trailing: _SoftSwitch(
+                value: settings.vacationAll,
+                onChanged: (on) => SettingsActions.setVacationAll(context, on),
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.calendarCheck,
               title: context.l10n.today_only,
               trailing: _SoftSwitch(

@@ -360,6 +360,17 @@ class SettingsActions {
     }
   }
 
+  static Future<void> setVacationAll(BuildContext context, bool on) async {
+    final settings = context.read<SettingsController>();
+    final habits = context.read<HabitsController>();
+    if (!on) {
+      await habits.resumeAll(settings.vacationAllIds);
+      await settings.setVacationAll(false, const []);
+      return;
+    }
+    await settings.setVacationAll(true, await habits.pauseAll());
+  }
+
   static Future<void> editName(BuildContext context) async {
     final settings = context.read<SettingsController>();
     final name = await showDialog<String>(

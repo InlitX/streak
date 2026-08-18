@@ -708,6 +708,8 @@
       }
     }
   },
+  "vacation_all": "Pause every habit",
+  "vacation_all_sub": "Nothing counts as missed while it is on",
   "vacation_mode": "Vacation mode",
   "vacation_on_desc": "Paused — these days won't count as missed or completed.",
   "vacation_off_desc": "Pause this habit. Skipped days won't break your streak.",

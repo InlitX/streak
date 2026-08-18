@@ -50,6 +50,9 @@ class SettingsController extends ChangeNotifier {
     _checkStyle = LocalStore.setting('checkStyle', 0);
     _profileName = LocalStore.setting('profileName', '');
     _currency = LocalStore.setting('currency', defaultCurrencySymbol());
+    _vacationAll = LocalStore.setting('vacationAll', false);
+    _vacationAllIds =
+        List<String>.from(LocalStore.setting('vacationAllIds', const <String>[]));
     _profilePhoto = LocalStore.setting('profilePhoto', '');
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
@@ -109,6 +112,8 @@ class SettingsController extends ChangeNotifier {
   late int _checkStyle;
   late String _profileName;
   late String _currency;
+  late bool _vacationAll;
+  late List<String> _vacationAllIds;
   late String _profilePhoto;
   late int _appIcon;
   late int _accentColor;
@@ -161,6 +166,18 @@ class SettingsController extends ChangeNotifier {
   bool get isCircleCheck => _checkStyle == 1;
 
   String get currency => _currency;
+
+  bool get vacationAll => _vacationAll;
+  List<String> get vacationAllIds => List.unmodifiable(_vacationAllIds);
+
+  Future<void> setVacationAll(bool on, List<String> ids) async {
+    _vacationAll = on;
+    _vacationAllIds = on ? ids : const [];
+    await LocalStore.writeSetting('vacationAll', on);
+    await LocalStore.writeSetting('vacationAllIds', _vacationAllIds);
+    notifyListeners();
+  }
+
 
   Future<void> setCurrency(String value) async {
     _currency = value;

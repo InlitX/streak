@@ -125,6 +125,10 @@ class NotificationService {
 
   Future<void> scheduleFor(Habit habit) async {
     if (!_ready) await initialize();
+    if (habit.isOnVacation) {
+      await cancelFor(habit.id);
+      return;
+    }
     final live = <int>{};
     for (final reminder in habit.reminders) {
       try {
@@ -180,6 +184,7 @@ class NotificationService {
       AppLocalizations strings) async {
     final ids = <int>{};
     for (final day in reminder.days) {
+      if (habit.restDays.contains(day)) continue;
       final id = _notificationId(habit.id, reminder.id, day);
       ids.add(id);
       final now = tz.TZDateTime.now(tz.local);
