@@ -19,6 +19,7 @@ import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
+import 'package:streak/features/focus/widgets/focus_daily_bars.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_defaults_sheet.dart';
@@ -812,7 +813,7 @@ String _focusLine(BuildContext context, int total, int week, int today) {
     if (week > 0) '${context.l10n.week} ${formatHoursShort(week)}',
     if (today > 0) '${context.l10n.today} ${formatHoursShort(today)}',
   ];
-  return parts.join('  ·  ');
+  return parts.join('  Â·  ');
 }
 
 class _FocusTile extends StatelessWidget {
@@ -863,7 +864,9 @@ class _FocusTile extends StatelessWidget {
     );
 
     return Card(
-      child: InkWell(
+      child: Column(
+        children: [
+          InkWell(
         borderRadius: BorderRadius.circular(24),
         onTap: () => AppNavigator.push(FocusStatsPage(habitId: habit.id)),
         onLongPress: () {
@@ -919,6 +922,13 @@ class _FocusTile extends StatelessWidget {
             ],
           ),
         ),
+          ),
+          if (seconds > 0)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
+              child: FocusDailyBars(habit: habit),
+            ),
+        ],
       ),
     );
   }

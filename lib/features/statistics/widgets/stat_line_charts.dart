@@ -56,6 +56,8 @@ class TrendChart extends StatelessWidget {
     this.suffix = '',
     this.height = 190,
     this.stepped = false,
+    this.goal,
+    this.format,
   });
 
   final List<double> values;
@@ -63,16 +65,21 @@ class TrendChart extends StatelessWidget {
   final DateTime startDate;
   final String suffix;
   final double height;
+  final double? goal;
+  final String Function(double value)? format;
 
   final bool stepped;
 
   @override
   Widget build(BuildContext context) {
     if (values.isEmpty) return SizedBox(height: height);
+    final goal = this.goal;
     final maxValue = values.reduce((a, b) => a > b ? a : b);
-    final maxY = (maxValue <= 0 ? 1 : maxValue) * 1.25;
+    final ceiling = goal == null || goal < maxValue ? maxValue : goal;
+    final maxY = (ceiling <= 0 ? 1 : ceiling) * 1.25;
     final format = DateFormat.MMMd(Localizations.localeOf(context).toString());
     final average = values.reduce((a, b) => a + b) / values.length;
+    final label = this.format ?? (double v) => '${v.round()}$suffix';
 
     return Column(
       children: [
@@ -112,7 +119,7 @@ class TrendChart extends StatelessWidget {
                   getTooltipItems: (spots) => [
                     for (final spot in spots)
                       LineTooltipItem(
-                        '${spot.y.round()}$suffix\n'
+                        '${label(spot.y)}\n'
                         '${format.format(startDate.add(Duration(days: spot.x.toInt())))}',
                         _Chrome.tooltipText(context),
                       ),
@@ -132,9 +139,23 @@ class TrendChart extends StatelessWidget {
                       alignment: Alignment.topRight,
                       padding: const EdgeInsets.only(bottom: 2, right: 2),
                       style: statLabel(context),
-                      labelResolver: (_) => '⌀ ${average.round()}$suffix',
+                      labelResolver: (_) => '⌀ ${label(average)}',
                     ),
                   ),
+                  if (goal != null && goal > 0)
+                    HorizontalLine(
+                      y: goal,
+                      color: color.withValues(alpha: 0.45),
+                      strokeWidth: 1,
+                      dashArray: const [5, 5],
+                      label: HorizontalLineLabel(
+                        show: true,
+                        alignment: Alignment.bottomLeft,
+                        padding: const EdgeInsets.only(top: 2, left: 2),
+                        style: statLabel(context),
+                        labelResolver: (_) => label(goal),
+                      ),
+                    ),
                 ],
               ),
               lineBarsData: [
