@@ -208,7 +208,11 @@ Future<void> showOptionSheet(
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
     backgroundColor: context.colors.surface,
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.sizeOf(context).height * 0.85,
+    ),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
     ),
@@ -230,40 +234,50 @@ Future<void> showOptionSheet(
               ),
             ),
             const SizedBox(height: 10),
-            for (var i = 0; i < options.length; i++)
-              Semantics(
-                button: true,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    Navigator.of(sheet).pop();
-                    onSelected(i);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            options[i],
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight:
-                                  i == index ? FontWeight.w700 : FontWeight.w500,
-                              color: i == index
-                                  ? context.colors.primary
-                                  : context.colors.onSurface,
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (var i = 0; i < options.length; i++)
+                      Semantics(
+                        button: true,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () {
+                            Navigator.of(sheet).pop();
+                            onSelected(i);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    options[i],
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight:
+                                          i == index ? FontWeight.w700 : FontWeight.w500,
+                                      color: i == index
+                                          ? context.colors.primary
+                                          : context.colors.onSurface,
+                                    ),
+                                  ),
+                                ),
+                                if (i == index)
+                                  Icon(LucideIcons.check,
+                                      size: 18, color: context.colors.primary),
+                              ],
                             ),
                           ),
                         ),
-                        if (i == index)
-                          Icon(LucideIcons.check,
-                              size: 18, color: context.colors.primary),
-                      ],
-                    ),
-                  ),
+                      ),
+                  ],
                 ),
               ),
+            ),
           ],
         ),
       ),
