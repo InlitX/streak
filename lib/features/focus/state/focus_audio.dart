@@ -34,9 +34,9 @@ class FocusTrack {
 }
 
 const builtInTracks = <String, String>{
-  'rain.mp3': 'Rain',
-  'one_love.mp3': 'One Love',
-  'i_can_find_you.mp3': 'I Can Find You',
+  'rain.ogg': 'Rain',
+  'one_love.ogg': 'One Love',
+  'i_can_find_you.ogg': 'I Can Find You',
 };
 
 class FocusAudio {
@@ -135,7 +135,7 @@ class FocusAudio {
   static Future<void> chime() async {
     try {
       await _effects.stop();
-      await _effects.play(AssetSource('sounds/chime.wav'), volume: 0.9);
+      await _effects.play(AssetSource('sounds/chime.ogg'), volume: 0.9);
     } catch (_) {}
   }
 
