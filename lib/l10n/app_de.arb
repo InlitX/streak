@@ -12,7 +12,7 @@
     }
   },
   "app_background": "Hintergrund",
-  "onb2_body": "Täglich, Wöchentlich oder Monatliche Ziele mit schlauen Erinnerungen damit nichts durchfällt.",
+  "onb2_body": "Tägliche, Wöchentliche oder Monatliche Ziele mit schlauen Erinnerungen damit nichts durchfällt.",
   "month": "Monat",
   "quant_preset_reading": "Lesen",
   "your_habits": "Deine Gewohnheiten",
@@ -33,7 +33,7 @@
   },
   "my_heatmap": "Meine Heatmap",
   "new_category": "Neue Kategorie",
-  "onb1_body": "Trage eine Gewohnheit mit ein klick ein und schau wie dein Momentum jeden Tag wächst.",
+  "onb1_body": "Trage deine Gewohnheit mit nur einem Tipp ein und sieh zu, wie du jeden Tag weiterkommst.",
   "kind_negative_hint": "Jeder Tag zählt standardmäßig als clean — deine Serie wächst von alleine. Tippe das Häckchen nur wenn du einen Ausrutscher hast; der Tag wird rot und du kannst es Rückgängig machen.",
   "monthly": "Monatlich",
   "view_source": "Quellcode auf GitHub ansehen",
@@ -55,7 +55,7 @@
   "add_step": "Schritt hinzufügen",
   "every_day": "Jeden Tag",
   "weekends": "Wochenenden",
-  "get_started": "Los gets",
+  "get_started": "Los geht's",
   "steps_done": "{done}/{total} Schritten",
   "@steps_done": {
     "placeholders": {
@@ -193,7 +193,7 @@
       }
     }
   },
-  "onb1_title": "Baue echte Serien",
+  "onb1_title": "Baue echte Serien auf",
   "frequency": "Frequenz",
   "import_replace": "Ersetze alle",
   "no_habits_yet": "Noch keine Gewohnheiten",
@@ -213,7 +213,7 @@
   "customize_widgets": "Widgets anpassen",
   "new_label": "Neu",
   "cover_image": "Cover Image",
-  "empty_body": "Erstelle eine Gewohnheit und klicke einen Tag um sie einzutragen. Kleine schritte, jeden Tag.",
+  "empty_body": "Erstelle eine Gewohnheit und tippe auf einen Tag, um sie einzutragen. Kleine Schritte, jeden Tag.",
   "current_streak": "Aktuelle Serie",
   "paused": "Pausiert",
   "new_habit": "Neue Gewohnheit",
@@ -303,7 +303,7 @@
   "edit_name": "Name bearbeiten",
   "category_finance": "Finanzen",
   "onb3_title": "Sehe deinen Fortschritt",
-  "statistics": "Statistik",
+  "statistics": "Statistiken",
   "no_days": "Keine Tage",
   "checklist": "Checkliste",
   "language": "Sprache",
@@ -313,7 +313,7 @@
   "all_done_today": "Alles erledigt für Heute!",
   "overview": "Überblick",
   "kind_positive": "Normal",
-  "icon_accent": "Tricolor",
+  "icon_accent": "dreifarbig",
   "repeat_weekly": "Ausgewählte Tage",
   "widget_cfg_title": "Widget anpassen",
   "week": "Woche",
@@ -427,8 +427,8 @@
   },
   "notes_empty": "",
   "consistency_trend": "Konsequenz Trend",
-  "archived_empty_sub": "Gewohnheiten die du löschst landen hier, mit ihrer Geschichte.",
-  "wipe_data_sure": "",
+  "archived_empty_sub": "Gewohnheiten die du löschst landen hier, mit ihrem Verlauf.",
+  "wipe_data_sure": "Wirklich alles löschen?",
   "day_start_hour": "",
   "@day_start_hour": {
     "placeholders": {
@@ -450,7 +450,7 @@
   "delete_note": "",
   "notif_action_add_hint": "",
   "today_only": "",
-  "archive_habit_body": "\"{name}\" zum Archiv bewegen? Die Geschichte wird behalten und du kannst es in den Einstellungen wiederherstellen.",
+  "archive_habit_body": "\"{name}\" zum Archiv bewegen? Der Verlauf wird behalten und du kannst sie in den Einstellungen wiederherstellen.",
   "@archive_habit_body": {
     "placeholders": {
       "name": {
@@ -514,7 +514,7 @@
       }
     }
   },
-  "wipe_data_confirm": "",
+  "wipe_data_confirm": "Alles Löschen",
   "unit_minutes": "",
   "share_blur": "Unschärfe",
   "focus_end_reached": "",
@@ -535,7 +535,7 @@
     }
   },
   "edit_entry": "",
-  "delete_forever_body": "",
+  "delete_forever_body": "\"{name}\" löschen und sein ganzen Verlauf? Dies kann nicht rückgängig gemacht werden.",
   "@delete_forever_body": {
     "placeholders": {
       "name": {
@@ -558,16 +558,16 @@
   "wipe_data": "Alle Daten löschen",
   "auto_backup_weekly": "Wöchentlich",
   "app_style": "",
-  "wipe_data_done": "",
+  "wipe_data_done": "Alle Daten wurden gelöscht",
   "focus_pick_habit": "",
   "unit_min_short": "",
   "widget_cfg_style": "",
-  "day_start": "",
+  "day_start": "Tagesanfang",
   "notif_action_snooze": "",
   "note_take_photo": "Kamera",
   "delete_forever": "Endgültig löschen",
   "snooze_custom": "",
-  "auto_backup_folder_failed": "In den Ordner kann nicht geschrieben werden",
+  "auto_backup_folder_failed": "In diesem Ordner kann nicht geschrieben werden",
   "note_hint": "",
   "focus_style_digital": "",
   "focus_stop_body": "",
@@ -657,7 +657,7 @@
       }
     }
   },
-  "app_lock_failed": "",
+  "app_lock_failed": "Konnte nicht verifizieren",
   "focus_style_flip": "",
   "legend_note_added": "",
   "style_minimal": "",
@@ -665,7 +665,7 @@
   "auto_backup": "Automatische Sicherheitskopie",
   "day_start_sub": "",
   "focus_notif_body": "",
-  "app_lock_unavailable": "Biometrie nicht eingerichtet",
+  "app_lock_unavailable": "Biometrie Sperre nicht Verfügbar",
   "auto_backup_folder_set": "Ordner gespeichert",
   "archive_habit": "Aktive Gewohnheit",
   "focus_track_limit": "",
@@ -686,7 +686,7 @@
     }
   },
   "notes_enable_sub": "",
-  "wipe_data_sure_body": "",
+  "wipe_data_sure_body": "Bist du sicher? Ohne ein Backup werden die Daten für immer gelöscht.",
   "archive": "Archiv",
   "completions": "Abschluss",
   "focus_start": "",
@@ -770,5 +770,19 @@
   "a11y_pick_color": "",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "quant_per_day": "Menge pro Tag",
+  "app_lock_delay_instant": "Sofort",
+  "app_lock_delay_seconds": "{value} Sekunden",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "clear_progress": "Klarer Fortschritt",
+  "clear_progress_sub": "Verlauf, Notizen und Fokus Sitzungen",
+  "clear_progress_confirm": "Klarer Fortschritt",
+  "clear_progress_done": "Fortschritt gelöscht"
 }

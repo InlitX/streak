@@ -75,24 +75,20 @@
   },
   "accent_color": "Акцентний колір",
   "notif_action_add_hint": "Як багато?",
-  "today_only": "Лише сьогоднішні звички",
+  "today_only": "Лише сьогоднішні",
   "card_activity": "Активність на картках",
   "focus_only": "Лише через сеанс фокусування",
   "focus_only_hint": "Звичка позначається після завершення сеансу, а не натисканням.",
   "focus_only_title": "Потрібен сеанс фокусування",
   "focus_only_body": "«{name}» позначається завершенням сеансу фокусування.",
-  "focus_only_past": "«{name}» позначається лише сеансом фокусування, тому минулі дні позначити не можна.",
-  "focus_only_start": "Почати сеанс",
-  "focus_flowtime": "Флоутайм",
-  "focus_flowtime_hint": "Без цілі та без будильника. Час іде вперед, а ви зупиняєтеся, коли відчуваєте, що досить.",
-  "focus_end_flow": "Ви фокусувалися {time}.",
-  "@focus_end_flow": {
+  "@focus_only_body": {
     "placeholders": {
-      "time": {
+      "name": {
         "type": "String"
       }
     }
   },
+  "focus_only_past": "«{name}» позначається лише сеансом фокусування, тому минулі дні позначити не можна.",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -100,9 +96,13 @@
       }
     }
   },
-  "@focus_only_body": {
+  "focus_only_start": "Почати сеанс",
+  "focus_flowtime": "Флоутайм",
+  "focus_flowtime_hint": "Без цілі та без будильника. Час іде вперед, а ви зупиняєтеся, коли відчуваєте, що досить.",
+  "focus_end_flow": "Ви фокусувалися {time}.",
+  "@focus_end_flow": {
     "placeholders": {
-      "name": {
+      "time": {
         "type": "String"
       }
     }
@@ -314,7 +314,7 @@
   },
   "streak_evolution": "Еволюція серії",
   "notif_action_add": "Додати кількість",
-  "week_starts_on": "Тиждень починається з",
+  "week_starts_on": "Тиждень починається",
   "minutes_short": "{value} хв",
   "@minutes_short": {
     "placeholders": {
@@ -425,14 +425,14 @@
   "widget_cfg_light_color": "Світла тема",
   "todays_checklist": "Сьогоднішній перелік пунктів",
   "go": "Уперед",
-  "quote_1": "Маленькі кроки, щодня.",
-  "quote_2": "Постійність важливіша за інтенсивність.",
-  "quote_3": "Роби це заради себе.",
-  "quote_4": "День за днем.",
-  "quote_5": "Поступ, а не досконалість.",
-  "quote_6": "Зроблено краще, ніж ідеально.",
-  "quote_7": "Не переривай серію.",
-  "quote_8": "Маленькі звички, великі зміни.",
+  "quote_1": "Маленькі кроки кожного дня.",
+  "quote_2": "Стабільність важливіша за інтенсивність.",
+  "quote_3": "Будь вірним собі.",
+  "quote_4": "Один день за раз.",
+  "quote_5": "Прогрес важливіший за досконалість.",
+  "quote_6": "Краще зроблене, ніж ідеальне.",
+  "quote_7": "Підтримуй серію перемог.",
+  "quote_8": "Маленькі звички — великі зміни.",
   "quote_9": "Довірся процесу.",
   "quote_10": "Виграй ранок.",
   "quote_11": "Дисципліна дорівнює свободі.",
@@ -641,7 +641,7 @@
   "wipe_data_done": "Усі дані стерто",
   "focus_pick_habit": "На чому ви зосереджені?",
   "unit_min_short": "хв",
-  "day_start": "Початок дня о",
+  "day_start": "Початок дня",
   "note_take_photo": "Камера",
   "delete_forever": "Видалити назавжди",
   "auto_backup_folder_failed": "Ця тека захищена від запису",
@@ -697,11 +697,39 @@
   "focus_images_limit": "До 10 зображень",
   "select_all": "Вибрати все",
   "selected_count": "{count, plural, other{Вибрано: {count}}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_delete_sessions": "Видалити сеанси?",
   "focus_delete_sessions_body": "{count, plural, one{Буде видалено {count} сеанс фокусування. Цю дію неможливо скасувати.} few{Буде видалено {count} сеанси фокусування. Цю дію неможливо скасувати.} many{Буде видалено {count} сеансів фокусування. Цю дію неможливо скасувати.} other{Буде видалено {count} сеансів фокусування. Цю дію неможливо скасувати.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_sessions_deleted": "{count, plural, one{Видалено {count} сеанс} few{Видалено {count} сеанси} many{Видалено {count} сеансів} other{Видалено {count} сеансів}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "unscheduled_title": "День не за розкладом",
   "unscheduled_body": "Ця звичка не запланована на {day}. Усе одно позначити її як додаткову?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "unscheduled_confirm": "Усе одно позначити",
   "rest_days_none": "Немає",
   "last_90_days": "Останні 90 днів",
@@ -715,6 +743,13 @@
   "habit_duration_none": "Без тривалості",
   "day_timeline": "День",
   "day_timeline_free": "{span} вільно",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
   "day_timeline_anytime": "Будь-коли",
   "day_timeline_empty": "На цей день нічого не заплановано",
   "day_timeline_empty_sub": "Задайте звичці час доби, і вона з'явиться тут.",
@@ -727,41 +762,6 @@
   "focus_log_date": "Дата",
   "focus_log_saved": "Сеанс додано",
   "perfect_streak": "Серія ідеальних днів",
-  "@day_timeline_free": {
-    "placeholders": {
-      "span": {
-        "type": "String"
-      }
-    }
-  },
-  "@unscheduled_body": {
-    "placeholders": {
-      "day": {
-        "type": "String"
-      }
-    }
-  },
-  "@focus_sessions_deleted": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@focus_delete_sessions_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@selected_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "edit_note": "Редагувати нотатку",
   "notes_hint": "Затисніть день, щоб переглянути або додати нотатки",
   "focus_total": "Час фокусування",
@@ -786,6 +786,13 @@
   "focus_done_title": "Сеанс завершено",
   "note_pick_photo": "Галерея",
   "notes_count": "{count, plural, one{1 нотатка} few{{count} нотатки} many{{count} нотаток} other{{count} нотаток}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "todos": "Завдання",
   "todos_enable_sub": "Швидкий список поруч зі звичками",
   "todo_new": "Нове завдання",
@@ -804,30 +811,6 @@
   "todo_someday": "Колись",
   "pick_a_date": "Оберіть дату",
   "todo_left": "{count, plural, =0{Усе зроблено} one{{count} завдання} few{{count} завдання} many{{count} завдань} other{{count} завдання}}",
-  "todo_completed_count": "{count, plural, other{Виконано ({count})}}",
-  "todo_clear_completed": "Видалити виконані",
-  "todo_clear_completed_body": "{count, plural, one{Це видалить {count} виконане завдання.} few{Це видалить {count} виконані завдання.} many{Це видалить {count} виконаних завдань.} other{Це видалить {count} виконані завдання.}}",
-  "prefs_general": "Загальні",
-  "prefs_features": "Функції",
-  "prefs_privacy": "Конфіденційність",
-  "collapse_cards": "Згорнути картки",
-  "expand_cards": "Розгорнути картки",
-  "view_switcher": "Перемикач вигляду",
-  "view_switcher_sub": "Показувати кнопки «Тиждень / Місяць / Рік» на екрані «Сьогодні»",
-  "@todo_clear_completed_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@todo_completed_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@todo_left": {
     "placeholders": {
       "count": {
@@ -835,13 +818,30 @@
       }
     }
   },
-  "@notes_count": {
+  "todo_completed_count": "{count, plural, other{Виконано ({count})}}",
+  "@todo_completed_count": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "todo_clear_completed": "Видалити виконані",
+  "todo_clear_completed_body": "{count, plural, one{Це видалить {count} виконане завдання.} few{Це видалить {count} виконані завдання.} many{Це видалить {count} виконаних завдань.} other{Це видалить {count} виконані завдання.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "Загальні",
+  "prefs_features": "Функції",
+  "prefs_privacy": "Конфіденційність",
+  "collapse_cards": "Згорнути картки",
+  "expand_cards": "Розгорнути картки",
+  "view_switcher": "Перемикач вигляду",
+  "view_switcher_sub": "Показувати кнопки «Тиждень / Місяць / Рік» на екрані «Сьогодні»",
   "app_lock_failed": "Не вдалося підтвердити вашу особу",
   "focus_style_flip": "Перевернутий",
   "legend_note_added": "Нотатку додано",
@@ -884,13 +884,13 @@
   "vacation_day_off": "Видалити вихідний",
   "app_lock": "Блокування застосунку",
   "deleted_forever": "Звичку видалено",
-  "clear_progress": "Очистити поступ",
+  "clear_progress": "Очистити прогрес",
   "clear_progress_sub": "Історія, нотатки та сеанси фокусування",
-  "clear_progress_warning": "Це видалить усі позначені дні, нотатки та сеанси фокусування, але збереже ваші звички, їхні розклади та налаштування. Цю дію неможливо скасувати, якщо у вас немає файлу резервної копії для подальшого імпорту.",
-  "clear_progress_confirm": "Очистити поступ",
-  "clear_progress_done": "Поступ очищено",
+  "clear_progress_warning": "Це призведе до видалення всіх зафіксованих днів, нотаток та сеансів фокусування, але збереже ваші звички, їхній розклад та ваші налаштування. Цю дію неможливо скасувати, якщо у вас немає файлу резервної копії для подальшого імпорту.",
+  "clear_progress_confirm": "Очистити прогрес",
+  "clear_progress_done": "Прогрес очищено",
   "focus_loop": "По порядку",
-  "focus_daily_goal": "Щоденна ціль для фокусування",
+  "focus_daily_goal": "Ціль для фокусування",
   "copy_message": "Копіювати повідомлення",
   "view_notes": "Переглянути нотатки",
   "focus_track_brown": "Червоний шум",
@@ -921,11 +921,11 @@
     "description": "Screen reader label for the minus button of a number stepper"
   },
   "a11y_not_done": "не виконано",
-  "a11y_previous_week": "Попередній тиждень",
-  "a11y_next_week": "Наступний тиждень",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
+  "a11y_previous_week": "Попередній тиждень",
+  "a11y_next_week": "Наступний тиждень",
   "a11y_increase": "Збільшити",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
@@ -972,5 +972,6 @@
   },
   "report_issue": "Повідомити про проблему",
   "rest_days": "Дні відпочинку",
-  "rest_days_desc": "Призупиняє її щотижня в ці дні. Ви все одно можете їх реєструвати, і вони будуть зараховані."
+  "rest_days_desc": "Призупиняє її щотижня в ці дні. Ви все одно можете їх реєструвати, і вони будуть зараховані.",
+  "todo_time": "Час"
 }

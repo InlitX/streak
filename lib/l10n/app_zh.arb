@@ -51,7 +51,7 @@
   "system": "系统",
   "light": "浅色",
   "dark": "深色",
-  "week_starts_on": "每周起始于",
+  "week_starts_on": "周起始日",
   "mon": "周一",
   "sat": "周六",
   "sun": "周日",
@@ -432,24 +432,20 @@
   "ranking": "排行榜",
   "delete_note": "删除笔记",
   "notif_action_add_hint": "多少？",
-  "today_only": "仅显示今日习惯",
+  "today_only": "仅今日",
   "card_activity": "卡片上的打卡记录",
   "focus_only": "仅通过专注计时完成",
   "focus_only_hint": "这个习惯在你完成一次计时后才算完成，而不是点一下。",
   "focus_only_title": "需要一次专注计时",
   "focus_only_body": "「{name}」需要完成一次专注计时才算完成。",
-  "focus_only_past": "「{name}」只能通过专注计时完成，因此无法补打过去的日子。",
-  "focus_only_start": "开始计时",
-  "focus_flowtime": "心流计时",
-  "focus_flowtime_hint": "没有目标，也没有提醒。时间往上走，你觉得够了就停。",
-  "focus_end_flow": "你专注了 {time}。",
-  "@focus_end_flow": {
+  "@focus_only_body": {
     "placeholders": {
-      "time": {
+      "name": {
         "type": "String"
       }
     }
   },
+  "focus_only_past": "「{name}」只能通过专注计时完成，因此无法补打过去的日子。",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -457,9 +453,13 @@
       }
     }
   },
-  "@focus_only_body": {
+  "focus_only_start": "开始计时",
+  "focus_flowtime": "心流计时",
+  "focus_flowtime_hint": "没有目标，也没有提醒。时间往上走，你觉得够了就停。",
+  "focus_end_flow": "你专注了 {time}。",
+  "@focus_end_flow": {
     "placeholders": {
-      "name": {
+      "time": {
         "type": "String"
       }
     }
@@ -564,7 +564,7 @@
   "widget_cfg_hue": "色相",
   "unit_min_short": "分钟",
   "widget_cfg_style": "样式",
-  "day_start": "每日起始时间",
+  "day_start": "日起始时间",
   "notif_action_snooze": "暂缓",
   "widget_demo_water": "水",
   "note_take_photo": "相机",
@@ -648,11 +648,39 @@
   "focus_images_limit": "最多10张图片",
   "select_all": "全选",
   "selected_count": "{count, plural, other{已选择 {count} 项}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_delete_sessions": "删除这些记录？",
   "focus_delete_sessions_body": "{count, plural, other{将删除 {count} 条专注记录，此操作无法撤销。}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_sessions_deleted": "{count, plural, other{已删除 {count} 条记录}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "unscheduled_title": "这天没有安排",
   "unscheduled_body": "这个习惯在 {day} 没有安排。仍然作为额外记录打卡吗？",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "unscheduled_confirm": "仍然打卡",
   "rest_days_none": "无",
   "last_90_days": "最近 90 天",
@@ -666,6 +694,13 @@
   "habit_duration_none": "不设时长",
   "day_timeline": "日程",
   "day_timeline_free": "空闲 {span}",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
   "day_timeline_anytime": "任意时间",
   "day_timeline_empty": "这天没有安排任何计划",
   "day_timeline_empty_sub": "给习惯设定一个时间，它就会出现在这里。",
@@ -678,41 +713,6 @@
   "focus_log_date": "日期",
   "focus_log_saved": "已添加记录",
   "perfect_streak": "完美天数连胜",
-  "@day_timeline_free": {
-    "placeholders": {
-      "span": {
-        "type": "String"
-      }
-    }
-  },
-  "@unscheduled_body": {
-    "placeholders": {
-      "day": {
-        "type": "String"
-      }
-    }
-  },
-  "@focus_sessions_deleted": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@focus_delete_sessions_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@selected_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "edit_note": "编辑笔记",
   "notes_hint": "长按某一天即可查看或添加笔记",
   "focus_total": "专注时间",
@@ -750,6 +750,13 @@
   "note_pick_photo": "相册",
   "widget_cfg_title": "自定义小组件",
   "notes_count": "{count, plural, =1{1 笔记} other{{count} 笔记}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "todos": "待办",
   "todos_enable_sub": "习惯旁边的快捷清单",
   "todo_new": "新建待办",
@@ -768,30 +775,6 @@
   "todo_someday": "有空再说",
   "pick_a_date": "选择日期",
   "todo_left": "{count, plural, =0{全部完成} other{{count} 项待办}}",
-  "todo_completed_count": "{count, plural, other{已完成 ({count})}}",
-  "todo_clear_completed": "清除已完成",
-  "todo_clear_completed_body": "{count, plural, other{这将删除 {count} 项已完成的待办。}}",
-  "prefs_general": "通用",
-  "prefs_features": "功能",
-  "prefs_privacy": "隐私",
-  "collapse_cards": "折叠卡片",
-  "expand_cards": "展开卡片",
-  "view_switcher": "视图切换器",
-  "view_switcher_sub": "在「今天」页面显示周 / 月 / 年按钮",
-  "@todo_clear_completed_body": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "@todo_completed_count": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "@todo_left": {
     "placeholders": {
       "count": {
@@ -799,13 +782,30 @@
       }
     }
   },
-  "@notes_count": {
+  "todo_completed_count": "{count, plural, other{已完成 ({count})}}",
+  "@todo_completed_count": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "todo_clear_completed": "清除已完成",
+  "todo_clear_completed_body": "{count, plural, other{这将删除 {count} 项已完成的待办。}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "通用",
+  "prefs_features": "功能",
+  "prefs_privacy": "隐私",
+  "collapse_cards": "折叠卡片",
+  "expand_cards": "展开卡片",
+  "view_switcher": "视图切换器",
+  "view_switcher_sub": "在「今天」页面显示周 / 月 / 年按钮",
   "app_lock_failed": "无法验证您的身份",
   "focus_style_flip": "翻页",
   "legend_note_added": "笔记已添加",
@@ -862,7 +862,7 @@
   "clear_progress_confirm": "清除进度",
   "clear_progress_done": "进度已清除",
   "focus_loop": "顺序播放",
-  "focus_daily_goal": "每日专注目标",
+  "focus_daily_goal": "首要目标",
   "copy_message": "复制消息",
   "widget_cfg_reset": "恢复默认设置",
   "widget_cfg_thickness": "粗细  {value}dp",
@@ -902,11 +902,11 @@
     "description": "Screen reader label for the minus button of a number stepper"
   },
   "a11y_not_done": "未完成",
-  "a11y_previous_week": "上一周",
-  "a11y_next_week": "下一周",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
+  "a11y_previous_week": "上一周",
+  "a11y_next_week": "下一周",
   "a11y_increase": "数值增加",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
