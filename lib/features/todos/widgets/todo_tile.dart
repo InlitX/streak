@@ -76,26 +76,29 @@ class TodoTile extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (due != null && !todo.done) ...[
+                  if (!todo.done &&
+                      (due != null ||
+                          todo.priority != TodoPriority.none)) ...[
                     const SizedBox(height: 7),
-                    Row(
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 4,
                       children: [
-                        Icon(
-                          todo.time == null
-                              ? LucideIcons.calendar
-                              : LucideIcons.clock,
-                          size: 12,
-                          color: overdue ? context.tokens.danger : muted,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          todoDueLabel(context, todo),
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                        if (due != null)
+                          _MetaLabel(
+                            icon: todo.time == null
+                                ? LucideIcons.calendar
+                                : LucideIcons.clock,
+                            label: todoDueLabel(context, todo),
                             color: overdue ? context.tokens.danger : muted,
                           ),
-                        ),
+                        if (todo.priority != TodoPriority.none)
+                          _MetaLabel(
+                            icon: LucideIcons.flag,
+                            label:
+                                todoPriorityLabels(context)[todo.priority.index],
+                            color: accent,
+                          ),
                       ],
                     ),
                   ],
@@ -115,6 +118,37 @@ class TodoTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MetaLabel extends StatelessWidget {
+  const _MetaLabel({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 12, color: color),
+        const SizedBox(width: 5),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }
