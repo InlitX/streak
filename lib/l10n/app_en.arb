@@ -479,6 +479,8 @@
   "@todo_completed_count": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "todo_search": "Search to-dos",
+  "todo_search_empty": "Nothing matches that",
   "todo_clear_completed": "Clear completed",
   "todo_clear_completed_body": "{count, plural, =1{This deletes the completed to-do.} other{This deletes the {count} completed to-dos.}}",
   "@todo_clear_completed_body": {
@@ -676,6 +678,8 @@
   "reorder_hint": "Drag the habits to reorder them",
   "done": "Done",
   "accent_color": "Accent color",
+  "heatmap_path": "Connect the days",
+  "heatmap_path_sub": "Draws the grid as one long walk",
   "sort_completed_last": "Completed last",
   "today_only": "Only today's",
   "card_activity": "Activity on cards",

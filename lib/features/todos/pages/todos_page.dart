@@ -8,6 +8,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -30,6 +31,30 @@ class TodosPage extends StatefulWidget {
 
 class _TodosPageState extends State<TodosPage> {
   bool _showCompleted = false;
+  bool _searching = false;
+  String _query = '';
+
+  void _toggleSearch() {
+    setState(() {
+      _searching = !_searching;
+      if (!_searching) _query = '';
+    });
+  }
+
+  bool _matches(Todo todo) =>
+      _query.isEmpty || todo.text.toLowerCase().contains(_query);
+
+  List<TodoSection> _visibleSections(List<TodoSection> sections) {
+    if (_query.isEmpty) return sections;
+    final result = <TodoSection>[];
+    for (final section in sections) {
+      final todos = section.todos.where(_matches).toList();
+      if (todos.isNotEmpty) {
+        result.add(TodoSection(group: section.group, todos: todos));
+      }
+    }
+    return result;
+  }
 
   Future<void> _delete(Todo todo) async {
     final confirmed = await showDeleteSheet(context);
@@ -56,8 +81,10 @@ class _TodosPageState extends State<TodosPage> {
   Widget build(BuildContext context) {
     final minimal = context.watch<SettingsController>().isMinimalStyle;
     final todos = context.watch<TodosController>();
-    final sections = todos.sections;
-    final completed = todos.completed;
+    final all = todos.sections;
+    final sections = _visibleSections(all);
+    final completed = todos.completed.where(_matches).toList();
+    final searchable = all.isNotEmpty || todos.completed.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +97,14 @@ class _TodosPageState extends State<TodosPage> {
               )
             : null,
         actions: [
-          if (completed.isNotEmpty)
+          if (searchable)
+            IconButton(
+              tooltip: context.l10n.todo_search,
+              icon: Icon(_searching ? LucideIcons.x : LucideIcons.search,
+                  size: 20),
+              onPressed: _toggleSearch,
+            ),
+          if (completed.isNotEmpty && !_searching)
             IconButton(
               tooltip: context.l10n.todo_clear_completed,
               icon: const Icon(LucideIcons.eraser, size: 20),
@@ -81,10 +115,28 @@ class _TodosPageState extends State<TodosPage> {
       ),
       body: Stack(
         children: [
-          if (sections.isEmpty && completed.isEmpty)
-            _EmptyState(onAdd: () => showTodoComposer(context))
-          else
-            ListView(
+          Column(
+            children: [
+              if (_searching)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(minimal ? 22 : 16, 0,
+                      minimal ? 22 : 16, 12),
+                  child: AppTextField(
+                    hint: context.l10n.todo_search,
+                    autofocus: true,
+                    onChanged: (value) =>
+                        setState(() => _query = value.trim().toLowerCase()),
+                  ),
+                ),
+              Expanded(
+                child: sections.isEmpty && completed.isEmpty
+                    ? (_query.isEmpty
+                        ? _EmptyState(onAdd: () => showTodoComposer(context))
+                        : AppEmptyState(
+                            icon: LucideIcons.search,
+                            title: context.l10n.todo_search_empty,
+                          ))
+                    : ListView(
               padding: context.pagePadding(
                 minimal ? 22 : 16,
                 minimal ? 0 : 8,
@@ -125,11 +177,11 @@ class _TodosPageState extends State<TodosPage> {
                 if (completed.isNotEmpty) ...[
                   _CompletedHeader(
                     count: completed.length,
-                    expanded: _showCompleted,
+                    expanded: _showCompleted || _query.isNotEmpty,
                     onTap: () =>
                         setState(() => _showCompleted = !_showCompleted),
                   ),
-                  if (_showCompleted)
+                  if (_showCompleted || _query.isNotEmpty)
                     for (final (index, todo) in completed.indexed)
                       _Swipeable(
                         todo: todo,
@@ -146,6 +198,9 @@ class _TodosPageState extends State<TodosPage> {
                 ],
               ],
             ),
+              ),
+            ],
+          ),
           Positioned(
             right: (minimal ? 20 : 16) + context.safeInsets.right,
             bottom: (minimal ? 20 : 78) + context.bottomInset,

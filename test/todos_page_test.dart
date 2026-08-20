@@ -102,4 +102,28 @@ void main() {
     expect(find.text('SOMEDAY'), findsOneWidget);
     expect(find.text('Book the flight'), findsOneWidget);
   });
+
+  testWidgets('the search box keeps only what matches, done ones included',
+      (tester) async {
+    await seedTodos(tester, [
+      testTodo(id: 'a', text: 'Call the plumber', due: today),
+      testTodo(id: 'b', text: 'Buy new running shoes'),
+      testTodo(id: 'c', text: 'Buy milk', done: true),
+    ]);
+    await pumpScreen(tester, const TodosPage());
+
+    await tester.tap(find.byIcon(LucideIcons.search));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'buy');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Buy new running shoes'), findsOneWidget);
+    expect(find.text('Buy milk'), findsOneWidget);
+    expect(find.text('Call the plumber'), findsNothing);
+
+    await tester.tap(find.byIcon(LucideIcons.x));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Call the plumber'), findsOneWidget);
+  });
 }
