@@ -592,7 +592,7 @@ class _ViewSelector extends StatelessWidget {
                       ),
                       child: AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 220),
-                        style: TextStyle(
+                        style: DefaultTextStyle.of(context).style.copyWith(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: value == mode
@@ -687,7 +687,7 @@ class _Chip extends StatelessWidget {
               ),
               child: AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 220),
-                style: TextStyle(
+                style: DefaultTextStyle.of(context).style.copyWith(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: active ? scheme.onPrimary : context.tokens.muted,

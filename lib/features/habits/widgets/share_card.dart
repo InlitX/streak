@@ -289,7 +289,7 @@ class _RangeTabs extends StatelessWidget {
                   children: [
                     AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 220),
-                      style: TextStyle(
+                      style: DefaultTextStyle.of(context).style.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: Colors.white
