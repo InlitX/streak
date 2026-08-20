@@ -16,6 +16,7 @@ import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/check_progress.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/compact_activity_strip.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
@@ -773,15 +774,12 @@ class _QuantityButtonState extends State<_QuantityButton>
                 tween: Tween(begin: 0, end: progress.fraction),
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeOutCubic,
-                builder: (context, t, _) => SizedBox(
-                  width: 44,
-                  height: 44,
-                  child: CircularProgressIndicator(
-                    value: t,
-                    strokeWidth: 3,
-                    backgroundColor: track,
-                    valueColor: AlwaysStoppedAnimation(activeColor),
-                  ),
+                builder: (context, t, _) => CheckProgress(
+                  value: t,
+                  size: 44,
+                  color: activeColor,
+                  track: track,
+                  circle: widget.circle,
                 ),
               ),
               Container(
