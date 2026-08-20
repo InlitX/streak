@@ -304,7 +304,7 @@ class _DayChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 7),
           decoration: BoxDecoration(
             color: selected ? accent.withValues(alpha: 0.12) : null,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(11),
             border: Border.all(
               color: selected
                   ? accent
