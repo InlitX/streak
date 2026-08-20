@@ -102,7 +102,7 @@
   "about_inline": "",
   "widget_cfg_border": "",
   "ranking": "",
-  "count_months": "{count, plural, =1{1 mois} tout les {{count} mois}}",
+  "count_months": "{count, plural, =1{1 mois} other{{count} mois}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -311,7 +311,7 @@
   },
   "category_learning": "Apprentissage",
   "focus_add_track": "",
-  "count_weeks": "{count, plural, =1{1 semaine} toutes les {{count} semaines}}",
+  "count_weeks": "{count, plural, =1{1 semaine} other{{count} semaines}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
