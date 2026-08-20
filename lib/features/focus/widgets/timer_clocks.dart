@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flip_board/flip_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 
 enum ClockStyle { ring, flip, dots }
 
@@ -27,12 +28,7 @@ class FocusClock extends StatelessWidget {
   final String label;
   final double size;
 
-  static String clockText(int seconds) {
-    final h = seconds ~/ 3600;
-    final m = ((seconds % 3600) ~/ 60).toString().padLeft(2, '0');
-    final s = (seconds % 60).toString().padLeft(2, '0');
-    return h > 0 ? '${h.toString().padLeft(2, '0')}:$m:$s' : '$m:$s';
-  }
+  static String clockText(int seconds) => formatDuration(seconds);
 
   @override
   Widget build(BuildContext context) {
@@ -301,13 +297,16 @@ class _FlipClock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hours = seconds ~/ 3600;
-    final groups = <String>[
-      if (hours > 0) hours.toString().padLeft(2, '0'),
-      ((seconds % 3600) ~/ 60).toString().padLeft(2, '0'),
-      (seconds % 60).toString().padLeft(2, '0'),
+    final groups = <({String unit, String value})>[
+      if (hours > 0) (unit: 'h', value: hours.toString().padLeft(2, '0')),
+      (
+        unit: 'm',
+        value: ((seconds % 3600) ~/ 60).toString().padLeft(2, '0'),
+      ),
+      (unit: 's', value: (seconds % 60).toString().padLeft(2, '0')),
     ];
 
-    final width = groups.length > 2 ? size * 0.5 : size * 0.64;
+    final width = groups.length > 2 ? size * 0.42 : size * 0.64;
     final height = width * 1.3;
 
     return Column(
@@ -315,7 +314,12 @@ class _FlipClock extends StatelessWidget {
       children: [
         for (var i = 0; i < groups.length; i++) ...[
           if (i > 0) SizedBox(height: height * 0.13),
-          _FlipGroup(value: groups[i], width: width, height: height),
+          _FlipGroup(
+            key: ValueKey('${groups[i].unit}:$width'),
+            value: groups[i].value,
+            width: width,
+            height: height,
+          ),
         ],
       ],
     );
@@ -324,6 +328,7 @@ class _FlipClock extends StatelessWidget {
 
 class _FlipGroup extends StatefulWidget {
   const _FlipGroup({
+    super.key,
     required this.value,
     required this.width,
     required this.height,

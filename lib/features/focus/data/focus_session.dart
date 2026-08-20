@@ -39,11 +39,9 @@ class FocusSession {
 
 String formatDuration(int seconds) {
   final h = seconds ~/ 3600;
-  final m = (seconds % 3600) ~/ 60;
-  final s = seconds % 60;
-  return '${h.toString().padLeft(2, '0')}:'
-      '${m.toString().padLeft(2, '0')}:'
-      '${s.toString().padLeft(2, '0')}';
+  final m = ((seconds % 3600) ~/ 60).toString().padLeft(2, '0');
+  final s = (seconds % 60).toString().padLeft(2, '0');
+  return h > 0 ? '${h.toString().padLeft(2, '0')}:$m:$s' : '$m:$s';
 }
 
 String formatHoursShort(int seconds) {

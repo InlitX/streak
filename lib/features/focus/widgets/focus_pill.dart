@@ -72,7 +72,7 @@ class FocusPill extends StatelessWidget {
                 SizedBox(width: dense ? 5 : 6),
                 Text(
                   active
-                      ? formatDuration(focus.remainingSeconds)
+                      ? formatDuration(focus.displaySeconds)
                       : context.l10n.focus,
                   style: TextStyle(
                     fontSize: dense ? 12.5 : 13.5,
