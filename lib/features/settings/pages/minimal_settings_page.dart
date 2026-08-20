@@ -419,6 +419,15 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.route,
+              title: context.l10n.heatmap_path,
+              subtitle: context.l10n.heatmap_path_sub,
+              trailing: _SoftSwitch(
+                value: settings.heatmapPath,
+                onChanged: settings.setHeatmapPath,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.arrowDownWideNarrow,
               title: context.l10n.sort_completed_last,
               trailing: _SoftSwitch(

@@ -13,6 +13,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/heatmap_path.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -561,7 +562,6 @@ class _GridYearStrip extends StatefulWidget {
 
 class _GridYearStripState extends State<_GridYearStrip> {
   static const _weeks = 53;
-  static const _gap = 3.0;
   static const _cell = 13.0;
 
   final _scroll = ScrollController();
@@ -579,6 +579,8 @@ class _GridYearStripState extends State<_GridYearStrip> {
     final monday = today.subtract(Duration(days: today.weekday - 1));
     final start = monday.subtract(const Duration(days: 7 * (_weeks - 1)));
     final months = DateFormat.MMM(Localizations.localeOf(context).languageCode);
+    final path = heatmapPathOn(context);
+    final gap = path ? heatmapPathGap : 3.0;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrolled && _scroll.hasClients) {
@@ -590,7 +592,20 @@ class _GridYearStripState extends State<_GridYearStrip> {
     return SingleChildScrollView(
       controller: _scroll,
       scrollDirection: Axis.horizontal,
-      child: Row(
+      child: withHeatmapPath(
+        on: path,
+        columns: _weeks,
+        rows: 7,
+        cell: _cell,
+        gap: gap,
+        top: 14,
+        inkFor: (column, row) {
+          final date = start.add(Duration(days: column * 7 + row));
+          return widget.habit.isCompletedOn(date)
+              ? heatmapPathColor(context, widget.habit.color)
+              : context.colors.surfaceContainerHighest;
+        },
+        child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(_weeks, (column) {
           final first = start.add(Duration(days: column * 7));
@@ -598,7 +613,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
           final newMonth = column == 0 || first.month != previous.month;
 
           return Padding(
-            padding: const EdgeInsets.only(right: _gap),
+            padding: EdgeInsets.only(right: gap),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -622,13 +637,14 @@ class _GridYearStripState extends State<_GridYearStrip> {
                 ),
                 for (var row = 0; row < 7; row++)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: _gap),
+                    padding: EdgeInsets.only(bottom: gap),
                     child: _yearCell(context, first.add(Duration(days: row))),
                   ),
               ],
             ),
           );
         }),
+        ),
       ),
     );
   }

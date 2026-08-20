@@ -349,6 +349,16 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.route,
+                    title: context.l10n.heatmap_path,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.heatmapPath ? 1 : 0,
+                      onChanged: (i) => settings.setHeatmapPath(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.arrowDownWideNarrow,
                     title: context.l10n.sort_completed_last,
                     trailing: Segmented(

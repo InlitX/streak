@@ -8,6 +8,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/widgets/day_stamp.dart';
+import 'package:streak/features/habits/widgets/heatmap_path.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -90,6 +91,8 @@ class HabitHeatmap extends StatefulWidget {
 }
 
 class _HabitHeatmapState extends State<HabitHeatmap> {
+  static const _monthCellMax = 40.0;
+
   final _scroll = ScrollController();
   bool _scrolled = false;
 
@@ -113,6 +116,13 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
       color: color.withValues(alpha: plain ? 1 : 0.6),
       width: width,
     );
+  }
+
+  Color? _pathInk(BuildContext context, DateTime date, {bool inMonth = false}) {
+    if (inMonth && date.month != _today.month) return null;
+    return widget.habit.isCompletedOn(date)
+        ? heatmapPathColor(context, widget.habit.color)
+        : context.colors.surfaceContainerHighest;
   }
 
   bool get _dense =>
@@ -270,14 +280,16 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
       start = _mondayOf(_today).subtract(Duration(days: 7 * (columns - 1)));
     }
 
+    final path = heatmapPathOn(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        const gap = 3.0;
+        final gap = path ? heatmapPathGap : 3.0;
         var cell = (constraints.maxWidth - gap * (columns - 1)) / columns;
         cell = cell.clamp(6.0, big ? 34.0 : 18.0);
         final radius = widget.circle ? cell / 2 : (big ? 8.0 : 4.0);
 
-        return Wrap(
+        final grid = Wrap(
           spacing: gap,
           children: List.generate(columns, (col) {
             return Column(
@@ -296,7 +308,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                       )
                     : _cell(context, date, inScope: inScope);
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: gap),
+                  padding: EdgeInsets.only(bottom: gap),
                   child: _tappable(
                     date: date,
                     enabled: inScope,
@@ -319,6 +331,20 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
             );
           }),
         );
+
+        return withHeatmapPath(
+          on: path,
+          columns: columns,
+          rows: 7,
+          cell: cell,
+          gap: gap,
+          inkFor: (col, row) => _pathInk(
+            context,
+            start.add(Duration(days: col * 7 + row)),
+            inMonth: monthScope,
+          ),
+          child: grid,
+        );
       },
     );
   }
@@ -331,8 +357,15 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final weeks =
         (lastDay.startOfWeek(weekStart).difference(first).inDays / 7).round() +
         1;
+    final path = heatmapPathOn(context);
 
-    return Column(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final side = (constraints.maxWidth / 7 - (widget.compact ? 2 : 3))
+            .clamp(0.0, _monthCellMax);
+        final gap = (constraints.maxWidth - side * 7) / 6;
+
+        return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (!widget.compact)
@@ -347,10 +380,25 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
               ),
             ),
           ),
+        withHeatmapPath(
+          on: path,
+          columns: 7,
+          rows: weeks,
+          cell: side,
+          gap: gap,
+          byRows: true,
+          inkFor: (column, row) => _pathInk(
+            context,
+            first.add(Duration(days: row * 7 + column)),
+            inMonth: true,
+          ),
+          child: Column(
+            children: [
         for (var w = 0; w < weeks; w++)
           Padding(
-            padding: EdgeInsets.only(bottom: widget.compact ? 2 : 3),
+            padding: EdgeInsets.only(bottom: w == weeks - 1 ? 0 : gap),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(7, (d) {
                 final date = first.add(Duration(days: w * 7 + d));
                 final inMonth = date.month == _today.month;
@@ -369,28 +417,29 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                       ? _todayRing(context, fill, widget.compact ? 1.2 : 1.5)
                       : null,
                 );
-                return Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(widget.compact ? 1 : 1.5),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: _tappable(
-                        date: date,
-                        enabled: inMonth,
-                        child: widget.compact
-                            ? DecoratedBox(decoration: decoration)
-                            : AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: decoration,
-                              ),
-                      ),
-                    ),
+                return SizedBox(
+                  width: side,
+                  height: side,
+                  child: _tappable(
+                    date: date,
+                    enabled: inMonth,
+                    child: widget.compact
+                        ? DecoratedBox(decoration: decoration)
+                        : AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: decoration,
+                          ),
                   ),
                 );
               }),
             ),
           ),
+            ],
+          ),
+        ),
       ],
+        );
+      },
     );
   }
 
@@ -419,7 +468,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
 
   Widget _yearGrid(BuildContext context) {
     const columns = 53;
-    const gap = 3.0;
+    final path = heatmapPathOn(context);
+    final gap = path ? heatmapPathGap : 3.0;
     const cell = 13.0;
     final start = _mondayOf(_today).subtract(
       const Duration(days: 7 * (columns - 1)),
@@ -436,14 +486,23 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     return SingleChildScrollView(
       controller: _scroll,
       scrollDirection: Axis.horizontal,
-      child: Row(
+      child: withHeatmapPath(
+        on: path,
+        columns: columns,
+        rows: 7,
+        cell: cell,
+        gap: gap,
+        top: 14,
+        inkFor: (col, row) =>
+            _pathInk(context, start.add(Duration(days: col * 7 + row))),
+        child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(columns, (col) {
           final colDate = start.add(Duration(days: col * 7));
           final prevDate = start.add(Duration(days: (col - 1) * 7));
           final isNewMonth = col == 0 || colDate.month != prevDate.month;
           return Padding(
-            padding: const EdgeInsets.only(right: gap),
+            padding: EdgeInsets.only(right: gap),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -467,7 +526,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                 ),
                 for (var row = 0; row < 7; row++)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: gap),
+                    padding: EdgeInsets.only(bottom: gap),
                     child: _yearCell(
                       context,
                       start.add(Duration(days: col * 7 + row)),
@@ -478,6 +537,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
             ),
           );
         }),
+        ),
       ),
     );
   }
