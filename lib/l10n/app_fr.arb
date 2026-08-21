@@ -778,7 +778,7 @@
   "rest_days_none": "Aucun",
   "expand_cards": "Etendre cartes",
   "habit_duration": "Durée",
-  "focus_only_title": "",
+  "focus_only_title": "Besoin d'une session de concentration",
   "focus_only_past": "",
   "@focus_only_past": {
     "placeholders": {
@@ -788,7 +788,7 @@
     }
   },
   "focus_average": "Session moyenne",
-  "focus_only_body": "",
+  "focus_only_body": "\"{name}\" est terminé en finissant une session de concentration",
   "@focus_only_body": {
     "placeholders": {
       "name": {
@@ -898,7 +898,7 @@
   "focus_stats": "Statistiques de concentration",
   "focus_log": "Enregistrer une session",
   "collapse_cards": "Réduire cartes",
-  "focus_only_hint": "",
+  "focus_only_hint": "L'habitude est coché seulement quand tu as terminé la session, non en appuyant dessus",
   "view_switcher_sub": "Afficher les boutons Semaine / Mois / Année sur Aujourd'hui",
   "focus_only": "Seulement avec une session de concentration",
   "focus_delete_sessions": "Supprimer les sessions ?",
