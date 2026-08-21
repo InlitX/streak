@@ -143,6 +143,7 @@ Future<void> widgetActionEntrypoint() async {
   try {
     await initializeDateFormatting();
     await LocalStore.init();
+    AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
     await LocalStore.reloadHabits();
     final habits = LocalStore.readHabits();
     final todos = LocalStore.readTodos();
