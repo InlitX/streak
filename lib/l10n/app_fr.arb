@@ -779,7 +779,7 @@
   "expand_cards": "Etendre cartes",
   "habit_duration": "Durée",
   "focus_only_title": "Besoin d'une session de concentration",
-  "focus_only_past": "",
+  "focus_only_past": "\"{name}\" est uniquement complété par une session de concentration, donc les jours antérieurs  ne peuvent pas être coché",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -798,7 +798,7 @@
   },
   "widget_cfg_dark_color": "",
   "focus_clear_today": "Supprimer les sessions d'aujourd'hui",
-  "focus_end_flow": "",
+  "focus_end_flow": "Tu t'es concentré pendant {time}.",
   "@focus_end_flow": {
     "placeholders": {
       "time": {
@@ -851,7 +851,7 @@
   "plan_day_sub": "Donnez aux habitudes une heure dans la journée et observez les dans le temps.",
   "day_timeline_anytime": "N'importe quelle heure",
   "widget_cfg_todos_hint": "",
-  "focus_only_start": "",
+  "focus_only_start": "Commencer une session",
   "selected_count": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
   "@selected_count": {
     "placeholders": {
@@ -885,7 +885,7 @@
   "widget_cfg_follow_system": "",
   "day_timeline_empty": "Rien prévu pour cette journée",
   "todo_clear_completed": "Suppression terminée",
-  "focus_flowtime_hint": "",
+  "focus_flowtime_hint": "Pas d'objectifs ni d'alarmes. L'horloge tourne et tu arrêtes quand tu as terminé.",
   "focus_notif_channel": "Sessions focus",
   "todo_clear_completed_body": "{count, plural, =1{Ceci supprime les to-do fait.} other{Ceci supprime les {count} to-do fait.}}",
   "@todo_clear_completed_body": {
@@ -914,7 +914,7 @@
   "celebration_fireworks": "Feux d'artifices",
   "habit_time_none": "N'importe quelle heure",
   "perfect_streak": "Série de jours parfait",
-  "focus_flowtime": "",
+  "focus_flowtime": "Temps dans le flow",
   "todo_time": "Heure",
   "currency_hint": "Symbole ou code",
   "money_saved": "Epargne",
