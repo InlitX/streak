@@ -973,5 +973,41 @@
   "a11y_pick_color": "Выбрать цвет",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "widget_cfg_todos_scope": "",
+  "todo_time": "",
+  "vacation_all_sub": "",
+  "currency_hint": "",
+  "money_saved": "",
+  "clean_days": "",
+  "cost_per_day": "",
+  "currency": "",
+  "quant_average": "",
+  "vacation_all": "",
+  "widget_todos_empty": "",
+  "repeat_hours": "",
+  "quant_logged_days": "",
+  "widget_cfg_todos_hint": "",
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "currency_custom": "",
+  "quant_best_day": "",
+  "quant_stats_empty": "",
+  "quant_goal_days": "",
+  "widget_cfg_todos_all": "",
+  "every_n_hours": "",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "cost_note": ""
 }
