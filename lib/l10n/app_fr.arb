@@ -238,7 +238,7 @@
   "appearance": "Apparence",
   "note_kind_planned": "Prévu",
   "strength": "Force",
-  "default_user": "",
+  "default_user": "Inlitx",
   "description": "Description",
   "share_saved": "Sauvegardé dans votre galerie",
   "count_days": "{count, plural, =1{1 day} other{{count} days}}",
