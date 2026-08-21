@@ -260,7 +260,7 @@
   "edit_category": "Edité catégorie",
   "focus_end_reached": "Objectif atteint. Votre habitude est complétée.",
   "save_reminder": "Sauvegarder le rappel",
-  "app_icon": "",
+  "app_icon": "Icône de l'application",
   "export_backup_sub": "Sauvegarder toutes les habitudes dans un fichier",
   "preferences": "Préférences",
   "icon_neutral": "",
@@ -287,7 +287,7 @@
       }
     }
   },
-  "icon_default": "",
+  "icon_default": "Par default",
   "edit_entry": "Modifier la rubrique",
   "widget_demo_read": "",
   "import_failed": "Impossible d'importer ce fichier",
@@ -331,7 +331,7 @@
   },
   "end_vacation": "",
   "notes": "Notes",
-  "notif_greeting": "",
+  "notif_greeting": "Bonjour{name}, ",
   "@notif_greeting": {
     "placeholders": {
       "name": {
