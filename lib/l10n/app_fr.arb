@@ -329,7 +329,7 @@
       }
     }
   },
-  "end_vacation": "",
+  "end_vacation": "Arrêter les vacances",
   "notes": "Notes",
   "notif_greeting": "Bonjour{name}, ",
   "@notif_greeting": {
@@ -380,7 +380,7 @@
   "cover_image": "Image de couverture",
   "current_streak": "Streak actuel",
   "notif_action_snooze": "",
-  "paused": "",
+  "paused": "Mise en pause",
   "new_habit": "Nouvelle habitude",
   "widget_demo_water": "",
   "note_take_photo": "Caméra",
@@ -675,7 +675,7 @@
   "vacation_on_desc": "Mise en pause - ces jours ne conteront pas comme loupé ou complété",
   "profile": "Profil",
   "widget_cfg_save": "",
-  "start_vacation": "",
+  "start_vacation": "Commencer les vacances",
   "done": "Fait",
   "reminders": "Rappels",
   "active_days": "Journées actives",
