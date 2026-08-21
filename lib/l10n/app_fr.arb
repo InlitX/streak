@@ -78,7 +78,7 @@
   "add_image": "Ajouter une image",
   "consistency_trend": "Tendance regulière",
   "archived_empty_sub": "Les habitudes supprimés arriverons ici avec tous les historiques.",
-  "widget_cfg_change_image": "",
+  "widget_cfg_change_image": "Changer l'image",
   "freq_per_month_short": "{n}×/mois",
   "@freq_per_month_short": {
     "placeholders": {
@@ -100,7 +100,7 @@
   "remove_photo": "Retirer la photo",
   "widget_activity": "Activité",
   "about_inline": "Streak est une application open-source pour suivre vos habitudes. Pas de comptes, pas de limites, pas de paiements. Tout reste sur le téléphone.\n\nN'importe qui peut voir le code source, l'améliorer ou l'utiliser librement.",
-  "widget_cfg_border": "",
+  "widget_cfg_border": "Bordures",
   "ranking": "Classement",
   "count_months": "{count, plural, =1{1 month} other{{count} months}}",
   "@count_months": {
@@ -176,7 +176,7 @@
   "category_fitness": "Fitness",
   "import_question_body": "Remplacez toutes vos habitudes actuelles avec la sauvegarde, ou fusionnez-les ensemble?",
   "focus_end_complete": "Notez comme complété",
-  "widget_done_today": "",
+  "widget_done_today": "fait aujourd'hui",
   "archived_empty": "Rien archivé",
   "focus_scene_black": "Noir",
   "checklist_hint": "Divisez vos habitudes en étapes. Ça sera validé lorsque chaque étape est coché.",
@@ -267,7 +267,7 @@
   "focus_personalize": "Personalisé",
   "focus_history_empty": "Pas de sessions pour le moment",
   "off": "Désactivé",
-  "widget_cfg_color": "",
+  "widget_cfg_color": "Couleur",
   "widget_border": "Bordure",
   "light": "Clair",
   "square": "Carré",
@@ -407,7 +407,7 @@
       }
     }
   },
-  "widget_best_streak": "",
+  "widget_best_streak": "🔥 {streak} meilleure série",
   "@widget_best_streak": {
     "placeholders": {
       "streak": {
@@ -438,7 +438,7 @@
   "focus_break": "Pause",
   "no_data_yet": "Pas encore de données",
   "about": "À propos",
-  "widget_cfg_choose_image": "",
+  "widget_cfg_choose_image": "Choisir une image",
   "undo": "Annuler",
   "see_more": "Voir plus",
   "focus_style": "Style de minuteur",
@@ -484,14 +484,14 @@
   "advanced_options": "Options avancées",
   "kind_locked_hint": "Le type ne peut pas être changé après avoir créé l'habitude.",
   "reorder": "Réagencer",
-  "widget_cfg_image": "",
+  "widget_cfg_image": "Image",
   "rate_github": "Etoile sur GitHub",
   "focus_images_limit": "Jusqu'à 10 images",
   "edit_note": "Modifier la note",
   "dark": "Sombre",
   "notes_hint": "Appuyer longuement sur un jour pour voir ou ajouter des notes",
   "focus_total": "Temps focus",
-  "widget_cfg_opacity": "",
+  "widget_cfg_opacity": "Opacité  {value}%",
   "@widget_cfg_opacity": {
     "placeholders": {
       "value": {
@@ -560,7 +560,7 @@
   "focus_done_title": "Session complétée",
   "repeat_weekly": "Jours spécifiques",
   "note_pick_photo": "Galerie",
-  "widget_cfg_title": "",
+  "widget_cfg_title": "Personnaliser le widget",
   "notes_count": "{count, plural, =1{1 note} other{{count} notes}}",
   "@notes_count": {
     "placeholders": {
@@ -592,7 +592,7 @@
   "focus_keep_awake": "Gardez l'écran allumé",
   "data_sub": "Sauvegardes et importations",
   "note_time_optional": "Temps (facultatif)",
-  "widget_cfg_custom_color": "",
+  "widget_cfg_custom_color": "Couleur personnalisée",
   "focus_pause": "Pause",
   "focus_track_rain": "Pluie",
   "unit_hours": "heures",
@@ -635,7 +635,7 @@
   "done_today": "Fait aujourd'hui",
   "widget_cfg_reset": "",
   "time": "Heure",
-  "widget_cfg_thickness": "",
+  "widget_cfg_thickness": "Épaisseur {value} dp",
   "@widget_cfg_thickness": {
     "placeholders": {
       "value": {
@@ -796,7 +796,7 @@
       }
     }
   },
-  "widget_cfg_dark_color": "",
+  "widget_cfg_dark_color": "Mode sombre",
   "focus_clear_today": "Supprimer les sessions d'aujourd'hui",
   "focus_end_flow": "Vous vous êtes concentrés pendant {time}.",
   "@focus_end_flow": {
@@ -816,7 +816,7 @@
   "habit_duration_none": "Aucune durée",
   "prefs_privacy": "Vie privée",
   "report_issue": "Rapporter un bug",
-  "widget_cfg_light_color": "",
+  "widget_cfg_light_color": "Mode clair",
   "focus_paused": "En pause",
   "focus_delete_sessions_body": "{count, plural, =1{1 session focus va être supprimé. Ceci ne pourra pas être annulé.} other{{count} sessions focus vont être supprimé. Ceci ne pourra pas être annulé.}}",
   "@focus_delete_sessions_body": {
@@ -882,7 +882,7 @@
   "widget_cfg_todos_all": "",
   "focus_log_date": "Date",
   "prefs_general": "Général",
-  "widget_cfg_follow_system": "",
+  "widget_cfg_follow_system": "Suivre le thème du système",
   "day_timeline_empty": "Rien prévu pour cette journée",
   "todo_clear_completed": "Suppression terminée",
   "focus_flowtime_hint": "Pas d'objectifs ni d'alarmes. L'horloge tourne et vous pouvez l'arrêter quand vous voulez.",
