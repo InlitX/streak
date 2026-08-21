@@ -442,7 +442,7 @@
   "undo": "Annuler",
   "see_more": "",
   "focus_style": "Style de minuteur",
-  "support_sub": "",
+  "support_sub": "Rapporter un bug ou demander une fonctionnalité",
   "note_type": "Type",
   "focus_scene_custom": "Votre image",
   "journey_sub": "{count, plural, =1{1 photo} other{{count} photos}}",
