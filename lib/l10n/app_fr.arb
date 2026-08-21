@@ -158,7 +158,7 @@
   "share_show_stats": "Afficher les statistiques",
   "about_sub": "Version, code source et support",
   "focus_track_pad": "Tapis chaud",
-  "total_logs": "Total inscrits",
+  "total_logs": "Total entrées",
   "add_reminder": "Ajouter un rappel",
   "backup_saved": "Sauvegarde effectuée",
   "widget_opacity": "Opacité",
@@ -241,7 +241,7 @@
   "default_user": "Inlitx",
   "description": "Description",
   "share_saved": "Sauvegardé dans votre galerie",
-  "count_days": "{count, plural, =1{1 day} other{{count} days}}",
+  "count_days": "{compte, pluriel, =1{1 day} autre{{count} jours}}",
   "@count_days": {
     "placeholders": {
       "count": {
@@ -631,7 +631,7 @@
   "share": "Partager",
   "sun": "Dim",
   "motiv_start": "Commencez en force la journée 💪",
-  "about_body": "Streaks est né d'une idée simple : pourquoi payer pour suivre tes habitudes ? \nCette application est complètement open-source. N'importe qui peut vérifier son fonctionnement, suggéré des améliorations, et même créer leur propre version. Pas de boîte noire. Pas de surprises.\nTa vie privée est total - tout le contenu reste sur ton téléphone. Pas de comptes, pas de serveurs, pas de pubs. Pas un seul octet ne quitte ton téléphone.\nPas de limites. Tu peux créer autant d'habitude que tu le souhaite. Pas d'abonnement, pas de version \"pro\", pas d'annonce qui t'incite à payer. Jamais\nSi cette application t'apporte quelque chose, tu peux la supporter en étoilant le projet sur GitHubou en m'achetant un café. Mais c'est optionnel- cette application est la tienne dans tout les cas.",
+  "about_body": "Streaks est né d'une idée simple: pourquoi payer pour suivre tes habitudes?\nCette application est complètement open-source. N'importe qui peut vérifier son fonctionnement, suggéré des améliorations, et même créer leur propre version. Pas de boîte noire. Pas de surprises.\nTa vie privée est total - tout le contenu reste sur ton téléphone. Pas de comptes, pas de serveurs, pas de pubs. Pas un seul octet ne quitte ton téléphone.\nPas de limites. Tu peux créer autant d'habitude que tu le souhaite. Pas d'abonnement, pas de version \"pro\", pas d'annonce qui t'incite à payer. Jamais\nSi cette application t'apporte quelque chose, tu peux la supporter en étoilant le projet sur GitHubou en m'achetant un café. Mais c'est optionnel- cette application est la tienne dans tout les cas.",
   "done_today": "Fait aujourd'hui",
   "widget_cfg_reset": "Réinitialiser par défaut",
   "time": "Heure",
@@ -719,7 +719,7 @@
       }
     }
   },
-  "a11y_decrease": "",
+  "a11y_decrease": "Diminuer",
   "@a11y_decrease": {
     "description": "Screen reader label for the minus button of a number stepper"
   },
@@ -727,7 +727,7 @@
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
-  "a11y_increase": "",
+  "a11y_increase": "Augmenter",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
   },
@@ -767,7 +767,7 @@
       }
     }
   },
-  "a11y_pick_color": "",
+  "a11y_pick_color": "Choisir une couleur",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
   },
