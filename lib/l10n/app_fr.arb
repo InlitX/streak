@@ -128,7 +128,7 @@
   "per_week": "Par semaine",
   "get_started": "Commencer",
   "focus_end_anyway": "Confirmez la fin",
-  "snooze_custom_hint": "",
+  "snooze_custom_hint": "Minutes",
   "bg_solid": "Uni",
   "focus_custom_duration": "Personalisé",
   "focus_tasks": "Liste de sous-tâches",
@@ -389,7 +389,7 @@
   "buy_coffee_sub": "Aider à garder la gratuité de application",
   "delete_forever": "Supprimer pour de bon",
   "bg_dots": "Points",
-  "snooze_custom": "",
+  "snooze_custom": "Personnalisé",
   "auto_backup_folder_failed": "Il est impossible d'écrire dans ce dossier",
   "note_hint": "Ecrivez votre note...",
   "focus_style_digital": "Cercle",
@@ -419,7 +419,7 @@
   "journey": "Journée",
   "notif_action_add": "Ajouter une quantité",
   "week_starts_on": "La semaine commence le",
-  "minutes_short": "",
+  "minutes_short": "{value} min",
   "@minutes_short": {
     "placeholders": {
       "value": {
@@ -710,7 +710,7 @@
     }
   },
   "today": "Aujourd'hui",
-  "a11y_add_amount": "",
+  "a11y_add_amount": "Ajouter à {name}",
   "@a11y_add_amount": {
     "description": "Screen reader label for the button that adds progress to a quantitative habit",
     "placeholders": {
@@ -723,7 +723,7 @@
   "@a11y_decrease": {
     "description": "Screen reader label for the minus button of a number stepper"
   },
-  "a11y_not_done": "",
+  "a11y_not_done": "Non terminé",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
@@ -731,7 +731,7 @@
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
   },
-  "a11y_clear_relapse": "",
+  "a11y_clear_relapse": "Supprimer la rechute d'aujourd'hui pour {name}",
   "@a11y_clear_relapse": {
     "description": "Screen reader label for the button that removes today's relapse",
     "placeholders": {
@@ -740,7 +740,7 @@
       }
     }
   },
-  "a11y_log_relapse": "",
+  "a11y_log_relapse": "Enregistrer une rechute pour {name}",
   "@a11y_log_relapse": {
     "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
     "placeholders": {
@@ -749,7 +749,7 @@
       }
     }
   },
-  "a11y_mark_done": "",
+  "a11y_mark_done": "Marquer {name} comme terminé",
   "@a11y_mark_done": {
     "description": "Screen reader label for the button that logs a habit",
     "placeholders": {
@@ -758,7 +758,7 @@
       }
     }
   },
-  "a11y_mark_not_done": "",
+  "a11y_mark_not_done": "Marquer {name} comme non terminé",
   "@a11y_mark_not_done": {
     "description": "Screen reader label for the button that undoes a habit",
     "placeholders": {
@@ -812,7 +812,7 @@
   "celebration_surprise": "Surprenez-moi",
   "rest_days": "Jours de repos",
   "day_timeline_empty_sub": "Donnez à une habitude une heure et celle-ci apparaitra ici.",
-  "a11y_previous_week": "",
+  "a11y_previous_week": "Semaine précédente",
   "habit_duration_none": "Aucune durée",
   "prefs_privacy": "Vie privée",
   "report_issue": "Rapporter un bug",
@@ -832,7 +832,7 @@
   "vacation_all": "Mettre en pause toutes les habitudes",
   "start_view": "Aujourd'hui s'ouvre sur",
   "last_90_days": "Derniers 90 jours",
-  "a11y_next_week": "",
+  "a11y_next_week": "Semaine prochaine",
   "day_timeline": "Jour",
   "celebration_confetti": "Confetti",
   "select_all": "Tout séléctionner",
