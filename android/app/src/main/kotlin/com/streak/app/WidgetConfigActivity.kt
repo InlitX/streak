@@ -103,8 +103,7 @@ class WidgetConfigActivity : ComponentActivity() {
             return
         }
 
-        providerClass = AppWidgetManager.getInstance(this)
-            .getAppWidgetInfo(appWidgetId)?.provider?.className ?: ""
+        providerClass = providerOf(appWidgetId)
         type = typeOf(providerClass)
 
         originalImage = WidgetConfig.image(this, appWidgetId)
@@ -127,6 +126,24 @@ class WidgetConfigActivity : ComponentActivity() {
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
         }
+    }
+
+    private fun providerOf(id: Int): String {
+        val manager = AppWidgetManager.getInstance(this)
+        val declared = manager.getAppWidgetInfo(id)?.provider?.className
+        if (!declared.isNullOrEmpty()) return declared
+        val providers = listOf(
+            TodosWidgetProvider::class.java,
+            TodayWidgetProvider::class.java,
+            StatsWidgetProvider::class.java,
+            HeatmapWidgetProvider::class.java,
+            HabitWidgetProvider::class.java,
+        )
+        for (provider in providers) {
+            val ids = manager.getAppWidgetIds(ComponentName(this, provider))
+            if (ids.any { it == id }) return provider.name
+        }
+        return ""
     }
 
     private fun typeOf(name: String) = when {
@@ -177,7 +194,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 updateAppWidgetState<HomeWidgetGlanceState>(
                     ctx, HomeWidgetGlanceStateDefinition(), glanceId,
                 ) { it }
-                widgetFor(type).update(ctx, glanceId)
+                if (providerClass.isNotEmpty()) widgetFor(type).update(ctx, glanceId)
             } catch (_: Exception) {
             }
             finish()
