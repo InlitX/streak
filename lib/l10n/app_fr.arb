@@ -143,7 +143,7 @@
       }
     }
   },
-  "style_classic": "",
+  "style_classic": "Classique",
   "your_name": "",
   "edit_habit": "Modifier l'habitude",
   "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
@@ -167,7 +167,7 @@
   "bg_oled": "OLED",
   "stats_empty": "Ajoutez des habitudes pour voir vos statistiques",
   "when_best": "Quand êtes-vous le plus régulier ?",
-  "style_classic_desc": "",
+  "style_classic_desc": "Liste d'habitudes, barre du bas et chaque paramètres sur un écran.",
   "focus_history": "Historique",
   "save_note": "Sauvegardez note",
   "next": "Suivant",
@@ -206,7 +206,7 @@
   "share_stats_short": "Stats",
   "share_save": "Sauvegarder",
   "activity": "Activité",
-  "app_style_sub": "",
+  "app_style_sub": "Choisis à quoi ressemble l'application toute entière",
   "freq_per_week_short": "{n}×/semaine",
   "@freq_per_week_short": {
     "placeholders": {
@@ -574,7 +574,7 @@
   "onb3_body": "Des statistiques riches et une grille annuelle révèle tout ton progrès.",
   "focus_style_flip": "Retourner",
   "legend_note_added": "Note ajoutée",
-  "style_minimal": "",
+  "style_minimal": "Minimal",
   "vacation_day_on": "",
   "auto_backup": "Sauvegarde automatique",
   "more_icons": "Plus d'icônes",
