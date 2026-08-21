@@ -862,7 +862,7 @@
   "clear_progress_confirm": "清除进度",
   "clear_progress_done": "进度已清除",
   "focus_loop": "顺序播放",
-  "focus_daily_goal": "首要目标",
+  "focus_daily_goal": "专注目标",
   "copy_message": "复制消息",
   "widget_cfg_reset": "恢复默认设置",
   "widget_cfg_thickness": "粗细  {value}dp",
@@ -952,20 +952,20 @@
     "description": "Screen reader label for a colour swatch in the picker"
   },
   "report_issue": "报告问题",
-  "widget_cfg_todos_scope": "",
-  "todo_time": "",
-  "vacation_all_sub": "",
-  "currency_hint": "",
-  "money_saved": "",
+  "widget_cfg_todos_scope": "任务",
+  "todo_time": "时间",
+  "vacation_all_sub": "开启后，任何习惯都不会算作未完成",
+  "currency_hint": "符号或代码",
+  "money_saved": "已省金额",
   "clean_days": "",
-  "cost_per_day": "",
-  "currency": "",
-  "quant_average": "",
-  "vacation_all": "",
-  "widget_todos_empty": "",
-  "repeat_hours": "",
-  "quant_logged_days": "",
-  "widget_cfg_todos_hint": "",
+  "cost_per_day": "每日花费",
+  "currency": "货币",
+  "quant_average": "平均每天",
+  "vacation_all": "暂停所有习惯",
+  "widget_todos_empty": "今日无剩余待办",
+  "repeat_hours": "重复",
+  "quant_logged_days": "记录天数",
+  "widget_cfg_todos_hint": "关闭仅显示今天、逾期和无日期的任务",
   "widget_todos_open": "",
   "@widget_todos_open": {
     "placeholders": {
@@ -974,12 +974,12 @@
       }
     }
   },
-  "currency_custom": "",
-  "quant_best_day": "",
-  "quant_stats_empty": "",
-  "quant_goal_days": "",
-  "widget_cfg_todos_all": "",
-  "every_n_hours": "",
+  "currency_custom": "自定义",
+  "quant_best_day": "最佳记录",
+  "quant_stats_empty": "即使当天未达到目标，记录的数量也会在这里累计显示。",
+  "quant_goal_days": "目标达成",
+  "widget_cfg_todos_all": "显示所有任务",
+  "every_n_hours": "每{n}小时",
   "@every_n_hours": {
     "placeholders": {
       "n": {
@@ -987,5 +987,5 @@
       }
     }
   },
-  "cost_note": ""
+  "cost_note": "可选，不涉及花费可留空。"
 }
