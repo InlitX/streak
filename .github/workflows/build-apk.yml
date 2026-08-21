@@ -73,9 +73,47 @@ jobs:
           path: build/app/outputs/flutter-apk/Streak-*.apk
           if-no-files-found: error
 
+  windows:
+    name: Build Windows
+    runs-on: windows-latest
+    # Same rule as the release job: only a tagged run produces desktop builds.
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      # The zip carries a single Streak folder so unpacking it does not scatter
+      # the engine, the plugins and the assets over the download directory.
+      - name: Package
+        run: |
+          Rename-Item build/windows/x64/runner/Release Streak
+          Compress-Archive -Path build/windows/x64/runner/Streak -DestinationPath Streak-windows-x64.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-windows
+          path: Streak-windows-x64.zip
+          if-no-files-found: error
+
   release:
     name: Publish release
     runs-on: ubuntu-latest
+    needs: windows
     # Only when manually dispatched with a tag. The notes are generated from the
     # merged pull requests, and the rest is filled in by hand after publishing.
     if: github.event_name == 'workflow_dispatch'
@@ -150,6 +188,11 @@ jobs:
           mv app-armeabi-v7a-release.apk   Streak-armeabi-v7a.apk
           mv app-x86_64-release.apk        Streak-x86_64.apk
 
+      - name: Download the Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: streak-windows
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -160,3 +203,4 @@ jobs:
             build/app/outputs/flutter-apk/Streak-arm64-v8a.apk
             build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
             build/app/outputs/flutter-apk/Streak-x86_64.apk
+            Streak-windows-x64.zip
