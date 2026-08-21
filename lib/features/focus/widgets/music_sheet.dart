@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
@@ -24,6 +25,7 @@ Future<void> showMusicSheet(BuildContext context) {
     isScrollControlled: true,
     backgroundColor: context.colors.surface,
     constraints: BoxConstraints(
+      maxWidth: phoneWidth,
       maxHeight: MediaQuery.sizeOf(context).height * 0.85,
     ),
     shape: const RoundedRectangleBorder(

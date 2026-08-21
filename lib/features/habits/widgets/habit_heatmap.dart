@@ -93,6 +93,8 @@ class HabitHeatmap extends StatefulWidget {
 class _HabitHeatmapState extends State<HabitHeatmap> {
   static const _monthCellMax = 40.0;
 
+  static const _monthGapMax = 12.0;
+
   final _scroll = ScrollController();
   bool _scrolled = false;
 
@@ -361,9 +363,14 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final side = (constraints.maxWidth / 7 - (widget.compact ? 2 : 3))
+        var side = (constraints.maxWidth / 7 - (widget.compact ? 2 : 3))
             .clamp(0.0, _monthCellMax);
-        final gap = (constraints.maxWidth - side * 7) / 6;
+        var gap = (constraints.maxWidth - side * 7) / 6;
+        final maxGap = path ? heatmapPathGap : _monthGapMax;
+        if (gap > maxGap) {
+          gap = maxGap;
+          side = (constraints.maxWidth - gap * 6) / 7;
+        }
 
         return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/utils/responsive.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -51,7 +52,7 @@ class AppTheme {
 
       scaffoldBackgroundColor: Colors.transparent,
       fontFamily: _fontFamily,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
+      visualDensity: VisualDensity.standard,
       splashFactory: NoSplash.splashFactory,
       extensions: [isDark ? AppTokens.dark : AppTokens.light],
       appBarTheme: AppBarTheme(
@@ -79,6 +80,7 @@ class AppTheme {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: cardColor,
         surfaceTintColor: Colors.transparent,
+        constraints: const BoxConstraints(maxWidth: phoneWidth),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),

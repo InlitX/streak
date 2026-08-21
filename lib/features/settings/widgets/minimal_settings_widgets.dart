@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class MinimalPage extends StatelessWidget {
@@ -211,6 +212,7 @@ Future<void> showOptionSheet(
     isScrollControlled: true,
     backgroundColor: context.colors.surface,
     constraints: BoxConstraints(
+      maxWidth: phoneWidth,
       maxHeight: MediaQuery.sizeOf(context).height * 0.85,
     ),
     shape: const RoundedRectangleBorder(
