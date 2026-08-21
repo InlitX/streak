@@ -97,7 +97,7 @@
       }
     }
   },
-  "remove_photo": "Enlever la photo",
+  "remove_photo": "Retirer la photo",
   "widget_activity": "",
   "about_inline": "Streak est une application open-source pour suivre vos habitudes. Pas de comptes, pas de limites, pas de paiements. Tout reste sur le téléphone.\n\nN'importe qui peut voir le code source, l'améliorer ou l'utiliser librement.",
   "widget_cfg_border": "",
@@ -113,8 +113,8 @@
   "delete_note": "Supprimer la note",
   "accent_color": "Couleur d'accent",
   "notif_action_add_hint": "",
-  "today_only": "Seulement aujourd'hui",
-  "add_step": "",
+  "today_only": "Uniquement aujourd'hui",
+  "add_step": "Ajouter étape",
   "archive_habit_body": "Déplacer \"{name}\" dans l'archive ? Son historique est conservé et vous pouvez le restaurer depuis les paramètres.",
   "@archive_habit_body": {
     "placeholders": {
@@ -132,7 +132,7 @@
   "bg_solid": "Uni",
   "focus_custom_duration": "Personalisé",
   "focus_tasks": "Liste de sous-tâches",
-  "steps_done": "",
+  "steps_done": "{done}/{total} étapes",
   "@steps_done": {
     "placeholders": {
       "done": {
@@ -144,7 +144,7 @@
     }
   },
   "style_classic": "Classique",
-  "your_name": "Ton nom",
+  "your_name": "Votre nom",
   "edit_habit": "Modifier l'habitude",
   "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
   "@focus_history_day": {
@@ -179,7 +179,7 @@
   "widget_done_today": "",
   "archived_empty": "Rien archivé",
   "focus_scene_black": "Noir",
-  "checklist_hint": "",
+  "checklist_hint": "Divisez vos habitudes en étapes. Ca sera validé lorsque chaque étape est coché.",
   "active_habits": "Habitudes actives",
   "share_failed": "Impossible de créer l'image",
   "share_swipe_hint": "Swipe la carte pour voyager dans le temps",
@@ -216,7 +216,7 @@
     }
   },
   "motiv_perfect": "Journée parfaite ! 🔥",
-  "on": "Actif",
+  "on": "Activé",
   "app_lock_sub": "Pour ouvrir Streak avec vos empreinte ou visage",
   "edit": "Editer",
   "not_enough_data": "Pas assez de données",
@@ -250,10 +250,10 @@
     }
   },
   "sched_days": "Jours",
-  "circle": "Circulaire",
+  "circle": "Cercle",
   "wipe_data_confirm": "Tout supprimé",
   "buy_coffee": "Achète-moi un café",
-  "sort_completed_last": "Complété en dernier",
+  "sort_completed_last": "Dernièrement complété",
   "unit_minutes": "minutes",
   "share_blur": "Flou",
   "name": "Nom",
@@ -266,7 +266,7 @@
   "icon_neutral": "Vert",
   "focus_personalize": "Personalisé",
   "focus_history_empty": "Pas de sessions pour le moment",
-  "off": "",
+  "off": "Désactivé",
   "widget_cfg_color": "",
   "widget_border": "Bordure",
   "light": "Clair",
@@ -287,7 +287,7 @@
       }
     }
   },
-  "icon_default": "Par default",
+  "icon_default": "Par défaut",
   "edit_entry": "Modifier la rubrique",
   "widget_demo_read": "",
   "import_failed": "Impossible d'importer ce fichier",
@@ -384,7 +384,7 @@
   "new_habit": "Nouvelle habitude",
   "widget_demo_water": "",
   "note_take_photo": "Caméra",
-  "step_hint": "",
+  "step_hint": "Nom de l'étape",
   "skip": "Passer",
   "buy_coffee_sub": "Aider à garder la gratuité de application",
   "delete_forever": "Supprimer pour de bon",
@@ -483,7 +483,7 @@
   "focus_duration": "Durée",
   "advanced_options": "Options avancées",
   "kind_locked_hint": "Le type ne peut pas être changé après avoir créé l'habitude.",
-  "reorder": "Réorganisé",
+  "reorder": "Réagencer",
   "widget_cfg_image": "",
   "rate_github": "Etoile sur GitHub",
   "focus_images_limit": "Jusqu'à 10 images",
@@ -530,7 +530,7 @@
   "uncategorized": "Non classé",
   "github_star_row": "Voir la source & donner une étoile",
   "habit_archived": "Habitude archivée",
-  "reorder_hint": "Déplacer les habitudes pour les réorganisés",
+  "reorder_hint": "Déplacer les habitudes pour les réagencé",
   "import_from_app_sub": "Loop Habit Tracker, HabitKit..",
   "edit_name": "Modifier le nom",
   "category_finance": "Finances",
@@ -539,7 +539,7 @@
   "share_friends": "Partager avec un ami",
   "no_days": "Pas de jours",
   "auto_backup_off": "Désactivée",
-  "checklist": "",
+  "checklist": "Check-list",
   "journey_empty_sub": "Ajoutez une photo à une note et elle apparaît ici.",
   "language": "Langue",
   "sat": "Sam",
@@ -547,7 +547,7 @@
   "focus_end": "Fin",
   "focus_pick_audio": "Choissiez un track depuis votre téléphone",
   "notif_action_done": "",
-  "focus_history_empty_sub": "Chaque session de concentration que tu finis sera affiché ici",
+  "focus_history_empty_sub": "Chaque session focus finie, sera affichée ici",
   "widget_no_data": "",
   "weekly": "Hebdomadaire",
   "auto_backup_sub": "Désactivée",
@@ -574,7 +574,7 @@
   "onb3_body": "Des statistiques riches et une grille annuelle révèle tout ton progrès.",
   "focus_style_flip": "Retourner",
   "legend_note_added": "Note ajoutée",
-  "style_minimal": "Minimal",
+  "style_minimal": "Minimaliste",
   "vacation_day_on": "",
   "auto_backup": "Sauvegarde automatique",
   "more_icons": "Plus d'icônes",
@@ -588,7 +588,7 @@
   "archive_habit": "Archiver l'habitude",
   "focus_track_limit": "Jusqu'à 10 tracks",
   "check_style": "Vérifier le style",
-  "style_minimal_desc": "Grille d'habitudes et paramètres groupé en quatre sections.",
+  "style_minimal_desc": "Grille d'habitudes et paramètres groupés en quatre sections.",
   "focus_keep_awake": "Gardez l'écran allumé",
   "data_sub": "Sauvegardes et importations",
   "note_time_optional": "Temps (facultatif)",
@@ -596,7 +596,7 @@
   "focus_pause": "Pause",
   "focus_track_rain": "Pluie",
   "unit_hours": "heures",
-  "todays_checklist": "",
+  "todays_checklist": "Check-list d'aujourd'hui",
   "go": "C'est parti",
   "quant_preset_generic": "Customisé",
   "focus_end_tasks": "{count} tâches pas complétés.",
@@ -669,8 +669,8 @@
   "widget_cfg_add": "",
   "emojis_tab": "Emojis",
   "sched_interval": "Interval",
-  "change_photo": "Changer la photo",
-  "appearance_sub": "Thème, accent et couleur du fond",
+  "change_photo": "Changer de photo",
+  "appearance_sub": "Thème, couleur et arrière-fond",
   "widget_cfg_show_activity": "",
   "vacation_on_desc": "",
   "profile": "Profil",
@@ -778,8 +778,8 @@
   "rest_days_none": "Aucun",
   "expand_cards": "Etendre cartes",
   "habit_duration": "Durée",
-  "focus_only_title": "Besoin d'une session de concentration",
-  "focus_only_past": "\"{name}\" est uniquement complété par une session de concentration, donc les jours antérieurs  ne peuvent pas être coché",
+  "focus_only_title": "Besoin d'une session focus",
+  "focus_only_past": "\"{name}\" est uniquement complété par une session focus, donc les jours antérieurs ne peuvent pas être cochés.",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -788,7 +788,7 @@
     }
   },
   "focus_average": "Session moyenne",
-  "focus_only_body": "\"{name}\" est terminé en finissant une session de concentration",
+  "focus_only_body": "\"{name}\" est terminé en finissant une session focus",
   "@focus_only_body": {
     "placeholders": {
       "name": {
@@ -798,7 +798,7 @@
   },
   "widget_cfg_dark_color": "",
   "focus_clear_today": "Supprimer les sessions d'aujourd'hui",
-  "focus_end_flow": "Tu t'es concentré pendant {time}.",
+  "focus_end_flow": "Vous vous êtes concentrés pendant {time}.",
   "@focus_end_flow": {
     "placeholders": {
       "time": {
@@ -829,7 +829,7 @@
   "plan_day": "Plan pour aujourd'hui",
   "celebration": "Effect d'achèvement",
   "habit_time": "Heure du jour",
-  "vacation_all": "",
+  "vacation_all": "Mettre en pause toutes les habitudes",
   "start_view": "Aujourd'hui s'ouvre sur",
   "last_90_days": "Derniers 90 jours",
   "a11y_next_week": "",
@@ -839,7 +839,7 @@
   "widget_todos_empty": "",
   "unscheduled_confirm": "Enregistrer quand même",
   "unscheduled_title": "Jours non prévus",
-  "start_view_last": "",
+  "start_view_last": "Dernier utilisé",
   "focus_sessions_deleted": "{count, plural, =1{1 session supprimée} other{{count} sessions supprimées}}",
   "@focus_sessions_deleted": {
     "placeholders": {
@@ -851,7 +851,7 @@
   "plan_day_sub": "Donnez aux habitudes une heure dans la journée et observez les dans le temps.",
   "day_timeline_anytime": "N'importe quelle heure",
   "widget_cfg_todos_hint": "",
-  "focus_only_start": "Commencer une session",
+  "focus_only_start": "Démarrer une session",
   "selected_count": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
   "@selected_count": {
     "placeholders": {
@@ -885,7 +885,7 @@
   "widget_cfg_follow_system": "",
   "day_timeline_empty": "Rien prévu pour cette journée",
   "todo_clear_completed": "Suppression terminée",
-  "focus_flowtime_hint": "Pas d'objectifs ni d'alarmes. L'horloge tourne et tu arrêtes quand tu as terminé.",
+  "focus_flowtime_hint": "Pas d'objectifs ni d'alarmes. L'horloge tourne et vous pouvez l'arrêter quand vous voulez.",
   "focus_notif_channel": "Sessions focus",
   "todo_clear_completed_body": "{count, plural, =1{Ceci supprime les to-do fait.} other{Ceci supprime les {count} to-do fait.}}",
   "@todo_clear_completed_body": {
@@ -898,9 +898,9 @@
   "focus_stats": "Statistiques de concentration",
   "focus_log": "Enregistrer une session",
   "collapse_cards": "Réduire cartes",
-  "focus_only_hint": "L'habitude est coché seulement quand tu as terminé la session, non en appuyant dessus",
+  "focus_only_hint": "L'habitude est coché seulement quand la session se termine, non en appuyant dessus",
   "view_switcher_sub": "Afficher les boutons Semaine / Mois / Année sur Aujourd'hui",
-  "focus_only": "Seulement avec une session de concentration",
+  "focus_only": "Seulement avec une session focus",
   "focus_delete_sessions": "Supprimer les sessions ?",
   "rest_days_desc": "",
   "day_timeline_free": "{span} libre",
