@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,10 +67,13 @@ Future<void> main() async {
       NotificationService().pendingHabitId = null;
       _openHabit(pending);
     }
-    final launched = await _appChannel.invokeMethod<String>('consumeLaunchHabit');
-    if (launched != null) _openHabit(launched);
-    final focusOn = await _appChannel.invokeMethod<String>('consumeLaunchFocus');
-    if (focusOn != null) _startFocus(focusOn);
+    if (Platform.isAndroid) {
+      final launched =
+          await _appChannel.invokeMethod<String>('consumeLaunchHabit');
+      if (launched != null) _openHabit(launched);
+      final focusOn = await _appChannel.invokeMethod<String>('consumeLaunchFocus');
+      if (focusOn != null) _startFocus(focusOn);
+    }
     await drainFocusActions();
   });
 

@@ -72,8 +72,13 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(zone.identifier));
 
     const android = AndroidInitializationSettings('ic_stat_notify');
+    const windows = WindowsInitializationSettings(
+      appName: 'Streak',
+      appUserModelId: 'com.streak.app',
+      guid: 'cfb32a7d-9c06-495b-8afa-df8829d33edc',
+    );
     await _plugin.initialize(
-      const InitializationSettings(android: android),
+      const InitializationSettings(android: android, windows: windows),
       onDidReceiveNotificationResponse: _handleResponse,
       onDidReceiveBackgroundNotificationResponse: notificationActionEntrypoint,
     );

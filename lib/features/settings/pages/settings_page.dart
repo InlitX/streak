@@ -7,6 +7,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -202,20 +203,22 @@ class _ClassicAppearancePage extends StatelessWidget {
             onChanged: settings.setCheckStyle,
           ),
         ),
-        settingsDivider(context),
-        SettingRow(
-          icon: LucideIcons.appWindow,
-          title: context.l10n.app_icon,
-          trailing: Segmented(
-            options: [
-              context.l10n.icon_default,
-              context.l10n.icon_neutral,
-              context.l10n.icon_accent,
-            ],
-            index: settings.appIcon,
-            onChanged: settings.setAppIcon,
+        if (isMobile) ...[
+          settingsDivider(context),
+          SettingRow(
+            icon: LucideIcons.appWindow,
+            title: context.l10n.app_icon,
+            trailing: Segmented(
+              options: [
+                context.l10n.icon_default,
+                context.l10n.icon_neutral,
+                context.l10n.icon_accent,
+              ],
+              index: settings.appIcon,
+              onChanged: settings.setAppIcon,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

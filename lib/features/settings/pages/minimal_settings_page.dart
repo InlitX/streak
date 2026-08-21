@@ -8,6 +8,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
@@ -295,26 +296,28 @@ class _AppearancePage extends StatelessWidget {
                 onSelected: settings.setCheckStyle,
               ),
             ),
-            SoftRow(
-              icon: LucideIcons.appWindow,
-              title: context.l10n.app_icon,
-              value: [
-                context.l10n.icon_default,
-                context.l10n.icon_neutral,
-                context.l10n.icon_accent,
-              ][settings.appIcon],
-              onTap: () => showOptionSheet(
-                context,
+            if (isMobile) ...[
+              SoftRow(
+                icon: LucideIcons.appWindow,
                 title: context.l10n.app_icon,
-                options: [
+                value: [
                   context.l10n.icon_default,
                   context.l10n.icon_neutral,
                   context.l10n.icon_accent,
-                ],
-                index: settings.appIcon,
-                onSelected: settings.setAppIcon,
+                ][settings.appIcon],
+                onTap: () => showOptionSheet(
+                  context,
+                  title: context.l10n.app_icon,
+                  options: [
+                    context.l10n.icon_default,
+                    context.l10n.icon_neutral,
+                    context.l10n.icon_accent,
+                  ],
+                  index: settings.appIcon,
+                  onSelected: settings.setAppIcon,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ],
