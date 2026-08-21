@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
@@ -15,13 +17,46 @@ import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
 
-Future<void> showTodoComposer(BuildContext context, {Todo? todo}) {
-  return showModalBottomSheet<void>(
+Future<void> showTodoComposer(BuildContext context, {Todo? todo}) async {
+  if (isWideLayout(context)) {
+    AppNavigator.clearPane();
+    await AppNavigator.push<void>(_ComposerPage(todo: todo), fade: true);
+    return;
+  }
+  await showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) => _TodoComposer(todo: todo),
   );
+}
+
+class _ComposerPage extends StatelessWidget {
+  const _ComposerPage({this.todo});
+
+  final Todo? todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.chevronLeft),
+          onPressed: () => AppNavigator.pop(),
+        ),
+        title: Text(todo == null ? context.l10n.todo_new : context.l10n.edit),
+      ),
+      body: SingleChildScrollView(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: phoneWidth),
+            child: _TodoComposer(todo: todo),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _TodoComposer extends StatefulWidget {
