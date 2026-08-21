@@ -111,9 +111,9 @@
     }
   },
   "delete_note": "Supprimer la note",
-  "accent_color": "",
+  "accent_color": "Couleur d'accent",
   "notif_action_add_hint": "",
-  "today_only": "",
+  "today_only": "Seulement aujourd'hui",
   "add_step": "",
   "archive_habit_body": "Déplacer \"{name}\" dans l'archive ? Son historique est conservé et vous pouvez le restaurer depuis les paramètres.",
   "@archive_habit_body": {
@@ -253,7 +253,7 @@
   "circle": "Circulaire",
   "wipe_data_confirm": "Tout supprimé",
   "buy_coffee": "Achète-moi un café",
-  "sort_completed_last": "",
+  "sort_completed_last": "Complété en dernier",
   "unit_minutes": "minutes",
   "share_blur": "Flou",
   "name": "Nom",
@@ -807,7 +807,7 @@
     }
   },
   "view_switcher": "Changer de vue",
-  "card_activity": "",
+  "card_activity": "Activité sur les cartes",
   "clear": "Effacer",
   "celebration_surprise": "Surprenez-moi",
   "rest_days": "",
@@ -900,7 +900,7 @@
   "collapse_cards": "Réduire cartes",
   "focus_only_hint": "",
   "view_switcher_sub": "Afficher les boutons Semaine / Mois / Année sur Aujourd'hui",
-  "focus_only": "",
+  "focus_only": "Seulement avec une session de concentration",
   "focus_delete_sessions": "Supprimer les sessions ?",
   "rest_days_desc": "",
   "day_timeline_free": "{span} libre",
