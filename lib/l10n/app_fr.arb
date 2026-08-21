@@ -3,7 +3,7 @@
   "focus_end_keep": "Conituez",
   "motiv_almost": "Presque ! Percévérez",
   "share_friends_sub": "Envoyer leur l'application",
-  "about_story": "Cette application est née d'une frustration avec les traqueurs d'habitude. La plupart limites combien d'habitudes vous pouvez créer, cacher les caractéristiques de base derrière un accès payant, vous traque ou vous bombarde avec des pubs. J'ai donc décidé de construire Streak: complètement libre, pas de pubs, pas de paiements, pas de suivi. Tout fonctionne localement — vos données sont à vous. Open source, pas de piège.",
+  "about_story": "Cette application est née d'une frustration avec les traqueurs d'habitude. La plupart limitent combien d'habitudes vous pouvez créer, cachent les caractéristiques de base derrière un accès payant, vous traquent ou vous bombardent avec des pubs. J'ai donc décidé de construire Streak : complètement libre, pas de pubs, pas de paiements, pas de suivi. Tout fonctionne localement — vos données sont à vous. Open source, sans piège.",
   "about_app": "A propos de cette application",
   "description_hint": "Note optionnelle",
   "times_per_month": "{n} fois par mois",
@@ -100,9 +100,9 @@
   "remove_photo": "Retirer la photo",
   "widget_activity": "Activité",
   "about_inline": "Streak est une application open-source pour suivre vos habitudes. Pas de comptes, pas de limites, pas de paiements. Tout reste sur le téléphone.\n\nN'importe qui peut voir le code source, l'améliorer ou l'utiliser librement.",
-  "widget_cfg_border": "Bordures",
+  "widget_cfg_border": "Bordure",
   "ranking": "Classement",
-  "count_months": "{count, plural, =1{1 month} other{{count} months}}",
+  "count_months": "{count, plural, =1{1 mois} other{{count} mois}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -158,7 +158,7 @@
   "share_show_stats": "Afficher les statistiques",
   "about_sub": "Version, code source et support",
   "focus_track_pad": "Tapis chaud",
-  "total_logs": "Total entrées",
+  "total_logs": "Total enregistrés",
   "add_reminder": "Ajouter un rappel",
   "backup_saved": "Sauvegarde effectuée",
   "widget_opacity": "Opacité",
@@ -174,7 +174,7 @@
   "widget_preview": "Aperçu",
   "completion_time": "Temps d'achèvement",
   "category_fitness": "Fitness",
-  "import_question_body": "Remplacez toutes vos habitudes actuelles avec la sauvegarde, ou fusionnez-les ensemble?",
+  "import_question_body": "Remplacez toutes vos habitudes actuelles avec la sauvegarde, ou fusionnez-les ensemble ?",
   "focus_end_complete": "Notez comme complété",
   "widget_done_today": "fait aujourd'hui",
   "archived_empty": "Rien archivé",
@@ -206,7 +206,7 @@
   "share_stats_short": "Stats",
   "share_save": "Sauvegarder",
   "activity": "Activité",
-  "app_style_sub": "Choisis à quoi ressemble l'application toute entière",
+  "app_style_sub": "Choisis à quoi ressemble l'application toute entière.",
   "freq_per_week_short": "{n}×/semaine",
   "@freq_per_week_short": {
     "placeholders": {
@@ -227,7 +227,7 @@
   "focus_built_in": "Inclus",
   "widget_no_habits": "Pas encore d'habitudes\nAppuyez sur pour ouvrir Streak",
   "focus_sound": "Son",
-  "quant_unit_hint": "Unité (Ex: ml, pages, répétitions)",
+  "quant_unit_hint": "Unité (Ex. : ml, pages, répétitions)",
   "quant_preset_water": "Eau",
   "add_note": "Ajouter une note",
   "theme": "Thème",
@@ -241,7 +241,7 @@
   "default_user": "Inlitx",
   "description": "Description",
   "share_saved": "Sauvegardé dans votre galerie",
-  "count_days": "{compte, pluriel, =1{1 day} autre{{count} jours}}",
+  "count_days": "{count, plural, =1{1 jour} other{{count} jours}}",
   "@count_days": {
     "placeholders": {
       "count": {
@@ -311,7 +311,7 @@
   },
   "category_learning": "Apprentissage",
   "focus_add_track": "Ajouter une piste",
-  "count_weeks": "{count, plural, =1{1 week} other{{count} weeks}}",
+  "count_weeks": "{count, plural, =1{1 semaine} other{{count} semaines}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
@@ -329,7 +329,7 @@
       }
     }
   },
-  "end_vacation": "Arrêter les vacances",
+  "end_vacation": "Finir les vacances",
   "notes": "Notes",
   "notif_greeting": "Bonjour{name}, ",
   "@notif_greeting": {
@@ -362,7 +362,7 @@
   "wipe_data_done": "Toutes les données effacées",
   "reminder_message_hint": "Laisser vide pour une citation motivativate",
   "focus_pick_habit": "Quel est votre focus ?",
-  "widget_cfg_hue": "",
+  "widget_cfg_hue": "Teinte",
   "delete_habit_body": "Supprimez \"{name}\" ? Cela ne pourra pas être annulé.",
   "@delete_habit_body": {
     "placeholders": {
@@ -373,16 +373,16 @@
   },
   "unit_min_short": "min",
   "edit_reminder": "Modifier le rappel",
-  "widget_cfg_style": "",
+  "widget_cfg_style": "Style",
   "completions_per_month": "Achèvements / mois",
   "customize_widgets": "Personnaliser les widgets",
   "day_start": "La journée commence",
   "cover_image": "Image de couverture",
   "current_streak": "Streak actuel",
-  "notif_action_snooze": "Répéter",
-  "paused": "Mise en pause",
+  "notif_action_snooze": "Snooze",
+  "paused": "En pause",
   "new_habit": "Nouvelle habitude",
-  "widget_demo_water": "",
+  "widget_demo_water": "Eau",
   "note_take_photo": "Caméra",
   "step_hint": "Nom de l'étape",
   "skip": "Passer",
@@ -427,13 +427,13 @@
       }
     }
   },
-  "widget_cfg_dot_color": "",
+  "widget_cfg_dot_color": "Couleur du point",
   "daily": "Journalier",
-  "widget_cfg_style_card": "",
+  "widget_cfg_style_card": "Carte",
   "bg_gradient": "Gradient",
   "rate_github_sub": "Supporter le projet avec une étoile",
   "focus_target_reached": "Objectif atteint",
-  "share_friends_message": "Je garde ma série vivant avec Streak - un tracker d'habitude petit, gratuit, hors ligne et sans compte ni pubs. Faites les vôtres sur: https://inlitx.github.io/streak/",
+  "share_friends_message": "Je garde ma série vivant avec Streak - un petit tracker d'habitude gratuit, hors ligne et sans compte ni pubs. Faites les vôtres sur : https://inlitx.github.io/streak/",
   "note_kind_completed": "Complété",
   "focus_break": "Pause",
   "no_data_yet": "Pas encore de données",
@@ -462,8 +462,8 @@
   "wipe_data_warning": "Ceci efface toutes les habitudes, notes, séances de focus et paramètres de ce téléphone. Ca ne pourra pas être annulé à moins que vous ayez un fichier de sauvegarde à importer après.",
   "auto_backup_where": "Une sauvegarde entière est écrite quand tu ouvres l'app. Les cinq dernières sont gardées.",
   "streaks": "Streaks",
-  "widget_demo_run": "",
-  "widget_cfg_style_classic": "",
+  "widget_demo_run": "Courir",
+  "widget_cfg_style_classic": "Classique",
   "quant_edit_title": "Quantité d'aujourd'hui",
   "reminder_message": "Message (optionnel)",
   "archived_habits_sub": "Les restaurer ou les supprimer définitivement",
@@ -477,7 +477,7 @@
     }
   },
   "export_cancelled": "Export annulé",
-  "widget_cfg_all_habits": "",
+  "widget_cfg_all_habits": "Toutes les habitudes",
   "motiv_progress": "Vous êtes sur la bonne voie, continuez",
   "focus_pomodoro_sub": "Suite de temps focus avec des petites pauses",
   "focus_duration": "Durée",
@@ -531,7 +531,7 @@
   "github_star_row": "Voir la source & donner une étoile",
   "habit_archived": "Habitude archivée",
   "reorder_hint": "Déplacer les habitudes pour les réagencé",
-  "import_from_app_sub": "Loop Habit Tracker, HabitKit..",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
   "edit_name": "Modifier le nom",
   "category_finance": "Finances",
   "onb3_title": "Vois ton progrès",
@@ -547,7 +547,7 @@
   "focus_end": "Fin",
   "focus_pick_audio": "Choissiez un track depuis votre téléphone",
   "notif_action_done": "Fait",
-  "focus_history_empty_sub": "Chaque session focus finie, sera affichée ici",
+  "focus_history_empty_sub": "Chaque session focus finie, sera affichée ici.",
   "widget_no_data": "Pas encore de données\nOuvre Streak pour synchroniser",
   "weekly": "Hebdomadaire",
   "auto_backup_sub": "Désactivée",
@@ -569,13 +569,13 @@
       }
     }
   },
-  "app_lock_failed": "Impossible de vérifier qu'il s'agissait bien de vous.",
+  "app_lock_failed": "Impossible de vérifier qu'il s'agisse bien de vous",
   "week": "Semaine",
   "onb3_body": "Des statistiques riches et une grille annuelle révèle tout ton progrès.",
   "focus_style_flip": "Retourner",
   "legend_note_added": "Note ajoutée",
   "style_minimal": "Minimaliste",
-  "vacation_day_on": "Marqué comme jour de vacances",
+  "vacation_day_on": "Marquer comme jour de vacances",
   "auto_backup": "Sauvegarde automatique",
   "more_icons": "Plus d'icônes",
   "day_start_sub": "Les nuits tardives comptent encore pour la veille",
@@ -631,7 +631,7 @@
   "share": "Partager",
   "sun": "Dim",
   "motiv_start": "Commencez en force la journée 💪",
-  "about_body": "Streaks est né d'une idée simple: pourquoi payer pour suivre tes habitudes?\nCette application est complètement open-source. N'importe qui peut vérifier son fonctionnement, suggéré des améliorations, et même créer leur propre version. Pas de boîte noire. Pas de surprises.\nTa vie privée est total - tout le contenu reste sur ton téléphone. Pas de comptes, pas de serveurs, pas de pubs. Pas un seul octet ne quitte ton téléphone.\nPas de limites. Tu peux créer autant d'habitude que tu le souhaite. Pas d'abonnement, pas de version \"pro\", pas d'annonce qui t'incite à payer. Jamais\nSi cette application t'apporte quelque chose, tu peux la supporter en étoilant le projet sur GitHubou en m'achetant un café. Mais c'est optionnel- cette application est la tienne dans tout les cas.",
+  "about_body": "Streaks est né d'une idée simple : pourquoi payer pour suivre tes habitudes?\n\nCette application est complètement open-source. N'importe qui peut vérifier son fonctionnement, suggéré des améliorations, et même créer leur propre version. Pas de boîte noire. Pas de surprises.\n\nTa vie privée est total - tout le contenu reste sur ton téléphone. Pas de comptes, pas de serveurs, pas de pubs. Pas un seul octet ne quitte ton téléphone.\n\nPas de limites. Tu peux créer autant d'habitude que tu le souhaite. Pas d'abonnement, pas de version \"pro\", pas d'annonce qui t'incite à payer. Jamais.\n\nSi cette application t'apporte quelque chose, tu peux la supporter en étoilant le projet sur GitHub ou en m'achetant un café. Mais c'est optionnel — cette application est la tienne dans tout les cas.",
   "done_today": "Fait aujourd'hui",
   "widget_cfg_reset": "Réinitialiser par défaut",
   "time": "Heure",
@@ -672,7 +672,7 @@
   "change_photo": "Changer de photo",
   "appearance_sub": "Thème, couleur et arrière-fond",
   "widget_cfg_show_activity": "Afficher l'activité de",
-  "vacation_on_desc": "Mise en pause - ces jours ne conteront pas comme loupé ou complété",
+  "vacation_on_desc": "Mise en pause - ces jours ne conteront pas comme loupés ou complétés.",
   "profile": "Profil",
   "widget_cfg_save": "Sauvegarder",
   "start_vacation": "Commencer les vacances",
@@ -723,7 +723,7 @@
   "@a11y_decrease": {
     "description": "Screen reader label for the minus button of a number stepper"
   },
-  "a11y_not_done": "Non terminé",
+  "a11y_not_done": "non terminé",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
@@ -788,7 +788,7 @@
     }
   },
   "focus_average": "Session moyenne",
-  "focus_only_body": "\"{name}\" est terminé en finissant une session focus",
+  "focus_only_body": "\"{name}\" est terminé en finissant une session focus.",
   "@focus_only_body": {
     "placeholders": {
       "name": {
@@ -812,7 +812,7 @@
   "celebration_surprise": "Surprenez-moi",
   "rest_days": "Jours de repos",
   "day_timeline_empty_sub": "Donnez à une habitude une heure et celle-ci apparaitra ici.",
-  "a11y_previous_week": "Semaine précédente",
+  "a11y_previous_week": "Semaine passée",
   "habit_duration_none": "Aucune durée",
   "prefs_privacy": "Vie privée",
   "report_issue": "Rapporter un bug",
@@ -836,7 +836,7 @@
   "day_timeline": "Jour",
   "celebration_confetti": "Confetti",
   "select_all": "Tout séléctionner",
-  "widget_todos_empty": "Rien pour aujourd'hui",
+  "widget_todos_empty": "Plus rien pour aujourd'hui",
   "unscheduled_confirm": "Enregistrer quand même",
   "unscheduled_title": "Jours non prévus",
   "start_view_last": "Dernier utilisé",
@@ -850,7 +850,7 @@
   },
   "plan_day_sub": "Donnez aux habitudes une heure dans la journée et observez les dans le temps.",
   "day_timeline_anytime": "N'importe quelle heure",
-  "widget_cfg_todos_hint": "Désactivé: seulement aujourd'hui, tâches tardives et non datées",
+  "widget_cfg_todos_hint": "Désactivé : seulement aujourd'hui, tâches tardives et non datées",
   "focus_only_start": "Démarrer une session",
   "selected_count": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
   "@selected_count": {
@@ -870,7 +870,7 @@
       }
     }
   },
-  "widget_todos_open": "To-do {compte}",
+  "widget_todos_open": "To-do {count}",
   "@widget_todos_open": {
     "placeholders": {
       "count": {
@@ -898,7 +898,7 @@
   "focus_stats": "Statistiques de concentration",
   "focus_log": "Enregistrer une session",
   "collapse_cards": "Réduire cartes",
-  "focus_only_hint": "L'habitude est coché seulement quand la session se termine, non en appuyant dessus",
+  "focus_only_hint": "L'habitude est cochée seulement quand la session se termine, non en appuyant dessus.",
   "view_switcher_sub": "Afficher les boutons Semaine / Mois / Année sur Aujourd'hui",
   "focus_only": "Seulement avec une session focus",
   "focus_delete_sessions": "Supprimer les sessions ?",
@@ -938,7 +938,7 @@
   "quote_6": "C'est mieux que parfait.",
   "todo_empty_body": "Ecrivez ce que vous voulez faire dans les prochains jours.",
   "todo_date": "Date",
-  "todo_completed_count": "{count, plural, =1{Completed (1)} other{Completed ({count})}}",
+  "todo_completed_count": "{count, plural, =1{Complété (1)} other{Complétés({count})}}",
   "@todo_completed_count": {
     "placeholders": {
       "count": {
@@ -976,7 +976,7 @@
   },
   "quote_3": "Prenez soin de vous.",
   "priority_medium": "Moyen",
-  "todo_left": "{count, plural, =0{All done} =1{1 to do} other{{count} to do}}",
+  "todo_left": "{count, plural, =0{Tout fait} =1{1 à faire} other{{count} à faire}}",
   "@todo_left": {
     "placeholders": {
       "count": {
