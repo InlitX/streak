@@ -771,5 +771,147 @@
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
   },
-  "quant_per_day": "Quantité journalière"
+  "quant_per_day": "Quantité journalière",
+  "widget_cfg_todos_scope": "",
+  "vacation_all_sub": "",
+  "focus_notif_running": "",
+  "rest_days_none": "",
+  "expand_cards": "",
+  "habit_duration": "",
+  "focus_only_title": "",
+  "focus_only_past": "",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_average": "",
+  "focus_only_body": "",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dark_color": "",
+  "focus_clear_today": "",
+  "focus_end_flow": "",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "view_switcher": "",
+  "card_activity": "",
+  "clear": "",
+  "celebration_surprise": "",
+  "rest_days": "",
+  "day_timeline_empty_sub": "",
+  "a11y_previous_week": "",
+  "habit_duration_none": "",
+  "prefs_privacy": "",
+  "report_issue": "",
+  "widget_cfg_light_color": "",
+  "focus_paused": "",
+  "focus_delete_sessions_body": "",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plan_day": "",
+  "celebration": "",
+  "habit_time": "",
+  "vacation_all": "",
+  "start_view": "",
+  "last_90_days": "",
+  "a11y_next_week": "",
+  "day_timeline": "",
+  "celebration_confetti": "",
+  "select_all": "",
+  "widget_todos_empty": "",
+  "unscheduled_confirm": "",
+  "unscheduled_title": "",
+  "start_view_last": "",
+  "focus_sessions_deleted": "",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plan_day_sub": "",
+  "day_timeline_anytime": "",
+  "widget_cfg_todos_hint": "",
+  "focus_only_start": "",
+  "selected_count": "",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_defaults": "",
+  "prefs_features": "",
+  "unscheduled_body": "",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_log_saved": "",
+  "widget_cfg_todos_all": "",
+  "focus_log_date": "",
+  "prefs_general": "",
+  "widget_cfg_follow_system": "",
+  "day_timeline_empty": "",
+  "todo_clear_completed": "",
+  "focus_flowtime_hint": "",
+  "focus_notif_channel": "",
+  "todo_clear_completed_body": "",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_stats": "",
+  "focus_log": "",
+  "collapse_cards": "",
+  "focus_only_hint": "",
+  "view_switcher_sub": "",
+  "focus_only": "",
+  "focus_delete_sessions": "",
+  "rest_days_desc": "",
+  "day_timeline_free": "",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "celebration_fireworks": "",
+  "habit_time_none": "",
+  "perfect_streak": ""
 }
