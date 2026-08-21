@@ -12,6 +12,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
@@ -28,7 +29,7 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-class FocusPage extends StatefulWidget {
+class FocusPage extends StatefulWidget implements FullWidthPage {
   const FocusPage({
     super.key,
     this.startHabitId,
@@ -315,7 +316,14 @@ class _FocusPageState extends State<FocusPage> {
                               key: const ValueKey('focus-tasks'),
                               child: SingleChildScrollView(
                                 padding: const EdgeInsets.fromLTRB(8, 8, 20, 20),
-                                child: tasks,
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: ConstrainedBox(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 420),
+                                    child: tasks,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -574,6 +582,7 @@ class _TopBar extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: context.colors.surface,
       constraints: BoxConstraints(
+        maxWidth: phoneWidth,
         maxHeight: MediaQuery.sizeOf(context).height * 0.85,
       ),
       shape: const RoundedRectangleBorder(

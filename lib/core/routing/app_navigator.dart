@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/app_background.dart';
 
+abstract interface class FullWidthPage {}
+
 class AppNavigator {
   const AppNavigator._();
 
   static final key = GlobalKey<NavigatorState>();
+
+  static final paneKey = GlobalKey<NavigatorState>();
+
+  static NavigatorState? get _pane {
+    final root = key.currentState;
+    if (root == null || root.canPop()) return null;
+    return paneKey.currentState;
+  }
 
   static Future<T?> push<T>(
     Widget page, {
@@ -12,22 +22,39 @@ class AppNavigator {
     bool fade = false,
     String? name,
   }) {
-    return key.currentState!.push<T>(
+    final pane = page is FullWidthPage ? null : _pane;
+    final target = pane ?? key.currentState!;
+    return target.push<T>(
       route(page, fullscreenDialog: fullscreenDialog, fade: fade, name: name),
     );
   }
 
-  static void pop<T>([T? result]) => key.currentState?.pop<T>(result);
+  static void pop<T>([T? result]) {
+    final root = key.currentState;
+    if (root != null && root.canPop()) {
+      root.pop<T>(result);
+      return;
+    }
+    final pane = paneKey.currentState;
+    if (pane != null && pane.canPop()) pane.pop<T>(result);
+  }
+
+  static void clearPane() {
+    final pane = paneKey.currentState;
+    if (pane != null && pane.canPop()) pane.popUntil((route) => route.isFirst);
+  }
 
   static bool isShowing(String name) {
-    final navigator = key.currentState;
-    if (navigator == null) return false;
-    var found = false;
-    navigator.popUntil((route) {
-      found = found || route.settings.name == name;
-      return true;
-    });
-    return found;
+    for (final navigator in [key.currentState, paneKey.currentState]) {
+      if (navigator == null) continue;
+      var found = false;
+      navigator.popUntil((route) {
+        found = found || route.settings.name == name;
+        return true;
+      });
+      if (found) return true;
+    }
+    return false;
   }
 
   static Route<T> route<T>(

@@ -393,10 +393,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _openDetails(Habit habit) => AppNavigator.push(
-        HabitDetailsPage(habitId: habit.id),
-        fade: true,
-      );
+  void _openDetails(Habit habit) {
+    AppNavigator.clearPane();
+    AppNavigator.push(HabitDetailsPage(habitId: habit.id), fade: true);
+  }
 
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();

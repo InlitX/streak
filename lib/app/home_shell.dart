@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -23,6 +25,8 @@ class HomeShell extends StatefulWidget {
 }
 
 enum _Tab { today, todos, stats, settings }
+
+final _paneTab = ValueNotifier(_Tab.today);
 
 class _HomeShellState extends State<HomeShell>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
@@ -66,6 +70,8 @@ class _HomeShellState extends State<HomeShell>
       _direction = tabs.indexOf(tab) > tabs.indexOf(_tab) ? 1 : -1;
       _tab = tab;
     });
+    _paneTab.value = tab;
+    AppNavigator.clearPane();
     _swap.forward(from: 0);
   }
 
@@ -89,8 +95,11 @@ class _HomeShellState extends State<HomeShell>
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final wide = isWideLayout(context);
     if (settings.isMinimalStyle) {
-      return const Scaffold(body: HomePage());
+      return wide
+          ? const _SplitScaffold(page: HomePage())
+          : const Scaffold(body: HomePage());
     }
     final scheme = Theme.of(context).colorScheme;
     final tabs = [
@@ -100,6 +109,24 @@ class _HomeShellState extends State<HomeShell>
       _Tab.settings,
     ];
     final current = tabs.contains(_tab) ? _tab : _Tab.today;
+
+    if (wide) {
+      return _SplitScaffold(
+        full: current == _Tab.stats,
+        rail: _NavRail(
+          tabs: tabs,
+          current: current,
+          onSelect: (tab) => _select(tabs, tab),
+        ),
+        page: FadeTransition(
+          opacity: _fade,
+          child: IndexedStack(
+            index: tabs.indexOf(current),
+            children: [for (final tab in tabs) _pageOf(tab)],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       body: Stack(
@@ -261,6 +288,230 @@ class _NavItem extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SplitScaffold extends StatelessWidget {
+  const _SplitScaffold({this.rail, required this.page, this.full = false});
+
+  final Widget? rail;
+  final Widget page;
+  final bool full;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          if (rail != null) ...[rail!, const _Line()],
+          if (full)
+            Expanded(child: page)
+          else ...[
+            SizedBox(width: paneWidth, child: page),
+            const _Line(),
+            Expanded(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: detailWidth),
+                  child: const SizedBox.expand(child: _DetailPane()),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _Line extends StatelessWidget {
+  const _Line();
+
+  @override
+  Widget build(BuildContext context) => VerticalDivider(
+        width: 1,
+        thickness: 1,
+        color: Theme.of(context)
+            .colorScheme
+            .outlineVariant
+            .withValues(alpha: 0.32),
+      );
+}
+
+class _DetailPane extends StatelessWidget {
+  const _DetailPane();
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: AppNavigator.paneKey,
+      onGenerateRoute: (settings) => PageRouteBuilder<void>(
+        settings: settings,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => ValueListenableBuilder<_Tab>(
+          valueListenable: _paneTab,
+          builder: (_, tab, __) => _DetailPlaceholder(tab: tab),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailPlaceholder extends StatelessWidget {
+  const _DetailPlaceholder({required this.tab});
+
+  final _Tab tab;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Icon(
+        _iconOf(tab),
+        size: 92,
+        color: context.tokens.muted.withValues(alpha: 0.16),
+      ),
+    );
+  }
+}
+
+class _NavRail extends StatelessWidget {
+  const _NavRail({
+    required this.tabs,
+    required this.current,
+    required this.onSelect,
+  });
+
+  static const _width = 212.0;
+
+  final List<_Tab> tabs;
+  final _Tab current;
+  final void Function(_Tab tab) onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: _width,
+      child: SafeArea(
+        right: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 22, 14, 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const _RailBrand(),
+              const SizedBox(height: 26),
+              for (final tab in tabs)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: _RailItem(
+                    icon: _iconOf(tab),
+                    label: _labelOf(context, tab),
+                    selected: tab == current,
+                    onTap: () => onSelect(tab),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RailBrand extends StatelessWidget {
+  const _RailBrand();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(left: 6),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: Image.asset(
+              'assets/icon.png',
+              width: 30,
+              height: 30,
+              filterQuality: FilterQuality.medium,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            'Streak',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
+              color: scheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RailItem extends StatelessWidget {
+  const _RailItem({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final tint = selected ? scheme.primary : context.tokens.muted;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      onTap: onTap,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+            decoration: BoxDecoration(
+              color: scheme.primary.withValues(alpha: selected ? 0.14 : 0),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, size: 19, color: tint),
+                const SizedBox(width: 11),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                      color: tint,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
