@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:streak/core/database/local_store.dart';
@@ -35,7 +36,7 @@ class BackupService {
   static Future<Directory?> defaultBackupDir() async {
     final root = Platform.isAndroid
         ? await getExternalStorageDirectory()
-        : await getApplicationDocumentsDirectory();
+        : await appDataDir();
     if (root == null) return null;
     return Directory('${root.path}/backups');
   }

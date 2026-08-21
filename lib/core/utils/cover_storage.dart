@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 
 class CoverStorage {
@@ -22,7 +23,7 @@ class CoverStorage {
     final source = fromCamera ? await _shoot() : await _browse();
     if (source == null) return null;
 
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await appDataDir();
     final target = Directory('${dir.path}/$folder');
     if (!target.existsSync()) target.createSync(recursive: true);
 
@@ -38,7 +39,7 @@ class CoverStorage {
     if (path.isEmpty) return;
     final clean = path.split('?').first;
     try {
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = await appDataDir();
       if (!_isOurs(clean, dir.path)) return;
       final file = File(clean);
       if (file.existsSync()) await file.delete();
@@ -57,7 +58,7 @@ class CoverStorage {
   static Future<int> sweep(Set<String> used) async {
     var freed = 0;
     try {
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = await appDataDir();
       final kept = {for (final path in used) _plain(path)};
       for (final folder in folders) {
         final target = Directory('${dir.path}/$folder');

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_lock.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -326,7 +326,7 @@ class SettingsActions {
       imageQuality: 85,
     );
     if (picked == null) return;
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await appDataDir();
     final dest =
         '${dir.path}/profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
     await File(picked.path).copy(dest);
@@ -347,7 +347,7 @@ class SettingsActions {
       imageQuality: 90,
     );
     if (picked == null) return;
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await appDataDir();
     final dest = '${dir.path}/bg_${DateTime.now().millisecondsSinceEpoch}.jpg';
     await File(picked.path).copy(dest);
     final old = settings.bgImage;

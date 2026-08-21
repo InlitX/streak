@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
@@ -12,7 +12,7 @@ import 'package:streak/services/image_cleanup_service.dart';
 import 'support/app_harness.dart';
 
 Future<String> _image(String folder, String name, {int bytes = 32}) async {
-  final docs = await getApplicationDocumentsDirectory();
+  final docs = await appDataDir();
   final dir = Directory('${docs.path}/$folder');
   dir.createSync(recursive: true);
   final file = File('${dir.path}/$name')
@@ -21,7 +21,7 @@ Future<String> _image(String folder, String name, {int bytes = 32}) async {
 }
 
 Future<String> _loose(String name) async {
-  final docs = await getApplicationDocumentsDirectory();
+  final docs = await appDataDir();
   final file = File('${docs.path}/$name')..writeAsBytesSync(const [0]);
   return file.path;
 }

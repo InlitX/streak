@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
@@ -24,7 +25,7 @@ class LocalStore {
   static late Box _todos;
 
   static Future<void> init() async {
-    await Hive.initFlutter();
+    await Hive.initFlutter(isMobile ? null : appDataFolder);
     _habits = await Hive.openBox(_habitsBox);
     _settings = await Hive.openBox(_settingsBox);
     _categories = await Hive.openBox(_categoriesBox);

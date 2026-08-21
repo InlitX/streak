@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 
 class WidgetIconService {
@@ -113,7 +113,7 @@ class WidgetIconService {
   static Future<Directory> _iconDir() async {
     final cached = _dir;
     if (cached != null && cached.existsSync()) return cached;
-    final docs = await getApplicationDocumentsDirectory();
+    final docs = await appDataDir();
     final dir = Directory('${docs.path}/widget_icons');
     if (!dir.existsSync()) dir.createSync(recursive: true);
     _dir = dir;
