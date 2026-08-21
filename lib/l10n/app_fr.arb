@@ -671,7 +671,7 @@
   "sched_interval": "Interval",
   "change_photo": "Changer de photo",
   "appearance_sub": "Thème, couleur et arrière-fond",
-  "widget_cfg_show_activity": "",
+  "widget_cfg_show_activity": "Afficher l'activité de",
   "vacation_on_desc": "Mise en pause - ces jours ne conteront pas comme loupé ou complété",
   "profile": "Profil",
   "widget_cfg_save": "",
@@ -850,7 +850,7 @@
   },
   "plan_day_sub": "Donnez aux habitudes une heure dans la journée et observez les dans le temps.",
   "day_timeline_anytime": "N'importe quelle heure",
-  "widget_cfg_todos_hint": "",
+  "widget_cfg_todos_hint": "Désactivé: seulement aujourd'hui, tâches tardives et non datées",
   "focus_only_start": "Démarrer une session",
   "selected_count": "{count, plural, =1{1 sélectionné} other{{count} sélectionnés}}",
   "@selected_count": {
