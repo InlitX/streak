@@ -86,55 +86,61 @@ class _YearHeatmapState extends State<YearHeatmap> {
       return Color.lerp(widget.color.withValues(alpha: 0.35), widget.color, ratio)!;
     }
 
-    return SingleChildScrollView(
-      controller: _scroll,
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(columns, (col) {
-          final colDate = start.add(Duration(days: col * 7));
-          final prevDate = start.add(Duration(days: (col - 1) * 7));
-          final isNewMonth = colDate.year == widget.year &&
-              (col == 0 || colDate.month != prevDate.month);
-          return Padding(
-            padding: const EdgeInsets.only(right: _gap),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 14,
-                  width: _cell,
-                  child: isNewMonth
-                      ? OverflowBox(
-                          maxWidth: 40,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            DateFormat.MMM(locale).format(colDate),
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: context.tokens.muted,
-                            ),
-                          ),
-                        )
-                      : null,
-                ),
-                for (var row = 0; row < 7; row++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: _gap),
-                    child: Container(
+    return LayoutBuilder(
+      builder: (context, box) => SingleChildScrollView(
+        controller: _scroll,
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: box.maxWidth),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(columns, (col) {
+              final colDate = start.add(Duration(days: col * 7));
+              final prevDate = start.add(Duration(days: (col - 1) * 7));
+              final isNewMonth = colDate.year == widget.year &&
+                  (col == 0 || colDate.month != prevDate.month);
+              return Padding(
+                padding: const EdgeInsets.only(right: _gap),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 14,
                       width: _cell,
-                      height: _cell,
-                      decoration: BoxDecoration(
-                        color: cellColor(start.add(Duration(days: col * 7 + row))),
-                        borderRadius: BorderRadius.circular(3),
-                      ),
+                      child: isNewMonth
+                          ? OverflowBox(
+                              maxWidth: 40,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                DateFormat.MMM(locale).format(colDate),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: context.tokens.muted,
+                                ),
+                              ),
+                            )
+                          : null,
                     ),
-                  ),
-              ],
-            ),
-          );
-        }),
+                    for (var row = 0; row < 7; row++)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: _gap),
+                        child: Container(
+                          width: _cell,
+                          height: _cell,
+                          decoration: BoxDecoration(
+                            color: cellColor(start.add(Duration(days: col * 7 + row))),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     );
   }
