@@ -772,7 +772,7 @@
     "description": "Screen reader label for a colour swatch in the picker"
   },
   "quant_per_day": "Quantité journalière",
-  "widget_cfg_todos_scope": "",
+  "widget_cfg_todos_scope": "Tâches",
   "vacation_all_sub": "Cela ne comptera pas comme raté tant que ce sera actif",
   "focus_notif_running": "En focus",
   "rest_days_none": "Aucun",
@@ -879,7 +879,7 @@
     }
   },
   "focus_log_saved": "Session ajouté",
-  "widget_cfg_todos_all": "",
+  "widget_cfg_todos_all": "Montrer toutes les tâches",
   "focus_log_date": "Date",
   "prefs_general": "Général",
   "widget_cfg_follow_system": "Suivre le thème du système",
