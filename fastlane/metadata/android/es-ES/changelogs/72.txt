@@ -1,0 +1,9 @@
+🚀 Nueva versión 1.6.0
+📋 Un widget de tareas para la pantalla de inicio
+🔔 Recordatorios en las tareas, y en los hábitos cada pocas horas
+🏖️ Pausa todos los hábitos de golpe, y sin avisos en pausa
+📊 Estadísticas de hábitos de cantidad, y dinero ahorrado al evitar
+✅ Marca los pasos de un hábito desde la pantalla de inicio
+🎨 293 iconos y 358 emojis, y un buscador para tus tareas
+🌍 Streak ya habla portugués
+🐛 Arreglados widgets desfasados, almacenamiento y reloj de Flowtime

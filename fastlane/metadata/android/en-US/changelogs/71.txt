@@ -1,0 +1,9 @@
+🚀 New version 1.6.0
+📋 A to-do widget for the home screen
+🔔 Reminders for to-dos, and habit reminders every few hours
+🏖️ Pause every habit at once, with no reminders while paused
+📊 Stats for amount habits, and money saved by avoiding
+✅ Tick a habit checklist straight from the home screen
+🎨 293 icons and 358 emojis, and a search box for your to-dos
+🌍 Streak now speaks Portuguese
+🐛 Fixed stale widgets, storage not freeing and the flowtime clock
