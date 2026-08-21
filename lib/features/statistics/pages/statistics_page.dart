@@ -118,6 +118,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     dailyCounts: stats.dailyCounts,
                     maxCount: scoped.length,
                     color: accent,
+                    habit: _habitId == null ? null : scoped.first,
                   ),
                 ),
                 ),

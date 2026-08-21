@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 
 const _cell = 12.0;
 const _gap = 3.0;
@@ -14,12 +16,14 @@ class YearHeatmap extends StatefulWidget {
     required this.dailyCounts,
     required this.maxCount,
     required this.color,
+    this.habit,
   });
 
   final int year;
   final Map<String, int> dailyCounts;
   final int maxCount;
   final Color color;
+  final Habit? habit;
 
   @override
   State<YearHeatmap> createState() => _YearHeatmapState();
@@ -79,6 +83,8 @@ class _YearHeatmapState extends State<YearHeatmap> {
 
     Color cellColor(DateTime date) {
       if (date.year != widget.year) return Colors.transparent;
+      final habit = widget.habit;
+      if (habit != null) return heatmapCellColor(context, habit, date);
       if (date.isAfter(today)) return empty.withValues(alpha: 0.4);
       final count = widget.dailyCounts[date.dayKey] ?? 0;
       if (count <= 0) return empty;
