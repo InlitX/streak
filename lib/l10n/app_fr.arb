@@ -97,7 +97,7 @@
       }
     }
   },
-  "remove_photo": "",
+  "remove_photo": "Enlever la photo",
   "widget_activity": "",
   "about_inline": "Streak est une application open-source pour suivre vos habitudes. Pas de comptes, pas de limites, pas de paiements. Tout reste sur le téléphone.\n\nN'importe qui peut voir le code source, l'améliorer ou l'utiliser librement.",
   "widget_cfg_border": "",
