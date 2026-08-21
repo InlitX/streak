@@ -146,7 +146,7 @@
   "style_classic": "",
   "your_name": "",
   "edit_habit": "Modifier l'habitude",
-  "focus_history_day": "",
+  "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
   "@focus_history_day": {
     "placeholders": {
       "count": {
@@ -355,7 +355,7 @@
   },
   "wipe_data": "Supprimer toutes les données",
   "auto_backup_weekly": "Toutes les semaines",
-  "app_style": "",
+  "app_style": "Style de l'application",
   "frequency": "Fréquence",
   "import_replace": "Tout remplacer",
   "made_by": "Réalisé avec ❤️ par @InlitX",
@@ -489,7 +489,7 @@
   "focus_images_limit": "Jusqu'à 10 images",
   "edit_note": "Modifier la note",
   "dark": "Sombre",
-  "notes_hint": "",
+  "notes_hint": "Appuyer longuement sur un jour pour voir ou ajouter des notes",
   "focus_total": "Temps focus",
   "widget_cfg_opacity": "",
   "@widget_cfg_opacity": {
@@ -503,7 +503,7 @@
   "share_size_large": "Grand",
   "name_hint": "e.x. Course matinale",
   "share_size_small": "Carré",
-  "yesterday": "",
+  "yesterday": "Hier",
   "focus_resume": "Résumé",
   "import_from_app_done": "Habitudes importées {habits} ({days} jours) de {source}",
   "@import_from_app_done": {
