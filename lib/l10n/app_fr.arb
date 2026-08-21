@@ -144,7 +144,7 @@
     }
   },
   "style_classic": "Classique",
-  "your_name": "",
+  "your_name": "Ton nom",
   "edit_habit": "Modifier l'habitude",
   "focus_history_day": "{count, plural, =1{1 session} other{{count} sessions}}",
   "@focus_history_day": {
@@ -532,7 +532,7 @@
   "habit_archived": "Habitude archivée",
   "reorder_hint": "",
   "import_from_app_sub": "Loop Habit Tracker, HabitKit..",
-  "edit_name": "",
+  "edit_name": "Modifier le nom",
   "category_finance": "Finances",
   "onb3_title": "Vois ton progrès",
   "statistics": "Statistiques",
@@ -669,7 +669,7 @@
   "widget_cfg_add": "",
   "emojis_tab": "Emojis",
   "sched_interval": "Interval",
-  "change_photo": "",
+  "change_photo": "Changer la photo",
   "appearance_sub": "Thème, accent et couleur du fond",
   "widget_cfg_show_activity": "",
   "vacation_on_desc": "",
