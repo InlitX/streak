@@ -599,6 +599,8 @@
   "@focus_only_past": {
     "placeholders": { "name": { "type": "String" } }
   },
+  "focus_only_clear_title": "¿Quitar la marca?",
+  "focus_only_clear_body": "Solo una sesión de foco puede volver a marcar \"{name}\".",
   "focus_only_start": "Empezar sesión",
   "focus_flowtime": "Flowtime",
   "focus_flowtime_hint": "Sin meta y sin alarma. El reloj cuenta hacia arriba y paras cuando lo veas.",

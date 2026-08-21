@@ -694,6 +694,11 @@
   "@focus_only_past": {
     "placeholders": { "name": { "type": "String" } }
   },
+  "focus_only_clear_title": "Clear this check?",
+  "focus_only_clear_body": "Only a focus session can check \"{name}\" again.",
+  "@focus_only_clear_body": {
+    "placeholders": { "name": { "type": "String" } }
+  },
   "focus_only_start": "Start session",
   "focus_flowtime": "Flowtime",
   "focus_flowtime_hint": "No goal and no alarm. The clock counts up and you stop when you feel done.",

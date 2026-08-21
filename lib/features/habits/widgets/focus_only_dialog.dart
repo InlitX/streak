@@ -15,6 +15,17 @@ Future<bool> allowManualCheck(
   required Habit habit,
   required DateTime date,
 }) async {
+  if (habit.needsFocusSession && habit.isCompletedOn(date)) {
+    final cleared = await showAppConfirmDialog(
+      context,
+      title: context.l10n.focus_only_clear_title,
+      message: context.l10n.focus_only_clear_body(habit.name),
+      confirmLabel: context.l10n.clear,
+      icon: LucideIcons.timer,
+    );
+    return cleared == true;
+  }
+
   if (!habit.blocksManualCheck(date)) return true;
 
   if (date.dayKey != AppClock.now().dayKey) {

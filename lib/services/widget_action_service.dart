@@ -115,7 +115,7 @@ class WidgetActionService {
         habit.incrementAmount;
 
     final action = uri.queryParameters['action'] ?? 'toggle';
-    if (action == 'toggle' && habit.blocksManualCheck(target)) return null;
+    if (action == 'toggle' && habit.needsFocusSession) return null;
 
     final completions = switch (action) {
       'relapse' => habit.completions.containsKey(target.dayKey)

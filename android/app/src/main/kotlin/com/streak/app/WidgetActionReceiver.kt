@@ -20,8 +20,10 @@ class WidgetActionReceiver : BroadcastReceiver() {
         val data = HabitCardData.load(context, habitId, null) ?: return
         val column = columnOf(context, dayKey)
 
-        if (data.focusOnly && !data.isDoneOn(column)) {
-            if (dayKey == WidgetPayload.todayKey()) startFocus(context, habitId)
+        if (data.focusOnly) {
+            if (!data.isDoneOn(column) && dayKey == WidgetPayload.todayKey()) {
+                startFocus(context, habitId)
+            }
             return
         }
 
