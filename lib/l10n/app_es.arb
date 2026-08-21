@@ -254,7 +254,9 @@
   "every_n_hours": "Cada {n} h",
   "@every_n_hours": {
     "placeholders": {
-      "n": { "type": "String" }
+      "n": {
+        "type": "String"
+      }
     }
   },
   "repeat_weekly": "Días concretos",
@@ -506,7 +508,6 @@
   "unscheduled_body": "Este hábito no está programado el {day}. ¿Registrarlo de todos modos como extra?",
   "unscheduled_confirm": "Registrar",
   "rest_days_none": "Ninguno",
-  "consistency": "Constancia",
   "last_90_days": "Últimos 90 días",
   "focus_clear_today": "Borrar las sesiones de hoy",
   "focus_defaults": "Sesión por defecto",
@@ -519,7 +520,11 @@
   "day_timeline": "Día",
   "day_timeline_free": "{span} libre",
   "@day_timeline_free": {
-    "placeholders": { "span": { "type": "String" } }
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
   },
   "day_timeline_anytime": "A cualquier hora",
   "day_timeline_empty": "Nada planificado para este día",
@@ -593,11 +598,19 @@
   "focus_only_title": "Necesita una sesión de foco",
   "focus_only_body": "\"{name}\" se completa al terminar una sesión de foco.",
   "@focus_only_body": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "focus_only_past": "\"{name}\" solo se completa con una sesión de foco, así que no se pueden marcar días pasados.",
   "@focus_only_past": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "focus_only_clear_title": "¿Quitar la marca?",
   "focus_only_clear_body": "Solo una sesión de foco puede volver a marcar \"{name}\".",
@@ -606,7 +619,11 @@
   "focus_flowtime_hint": "Sin meta y sin alarma. El reloj cuenta hacia arriba y paras cuando lo veas.",
   "focus_end_flow": "Te has concentrado {time}.",
   "@focus_end_flow": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "on": "Sí",
   "off": "No",
@@ -646,7 +663,9 @@
   "widget_todos_open": "Tareas  {count}",
   "@widget_todos_open": {
     "placeholders": {
-      "count": { "type": "String" }
+      "count": {
+        "type": "String"
+      }
     }
   },
   "widget_todos_empty": "Nada pendiente para hoy",
