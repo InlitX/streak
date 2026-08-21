@@ -1005,5 +1005,8 @@
   "habit_time_none": "",
   "widget_cfg_save": "",
   "start_vacation": "",
-  "perfect_streak": ""
+  "perfect_streak": "",
+  "focus_flowtime": "",
+  "focus_pomodoro": "",
+  "quotes_both": ""
 }
