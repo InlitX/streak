@@ -22,6 +22,9 @@ jobs:
   build:
     name: Build split APKs
     runs-on: ubuntu-latest
+    # Only as a pull request check. A tagged run goes straight to release, which
+    # builds and signs on its own, so nothing is compiled twice.
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout
@@ -72,10 +75,9 @@ jobs:
 
   release:
     name: Publish release
-    needs: build
     runs-on: ubuntu-latest
-    # Only when manually dispatched with a tag. The release body is left empty
-    # on purpose so it can be filled in by hand after publishing.
+    # Only when manually dispatched with a tag. The notes are generated from the
+    # merged pull requests, and the rest is filled in by hand after publishing.
     if: github.event_name == 'workflow_dispatch'
 
     # Reproducible build: keep the pub cache at a fixed path inside the workspace
@@ -103,6 +105,12 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test
 
       # Reproducibility: the jni package bakes a unique build-id into libdartjni.so.
       # Force --build-id=none so the native lib is deterministic. F-Droid applies
@@ -147,6 +155,7 @@ jobs:
         with:
           tag_name: ${{ inputs.tag }}
           name: ${{ inputs.tag }}
+          generate_release_notes: true
           files: |
             build/app/outputs/flutter-apk/Streak-arm64-v8a.apk
             build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
