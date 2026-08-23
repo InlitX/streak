@@ -872,5 +872,25 @@
   "a11y_pick_color": "Pick a colour",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
-  }
+  },
+  "period_this_week": "This week",
+  "period_last_week": "Last week",
+  "period_this_month": "This month",
+  "period_last_month": "Last month",
+  "period_this_year": "This year",
+  "period_last_year": "Last year",
+  "period_week_of": "Week of {date}",
+  "@period_week_of": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "focus_period_sessions": "{count, plural, =0{No sessions} =1{1 session} other{{count} sessions}}",
+  "@focus_period_sessions": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "notes_all": "All notes",
+  "notes_empty_all": "No notes yet",
+  "quant_preset_time": "Time",
+  "style_express": "Express",
+  "style_express_desc": "Rounded shapes, springy motion and a wider typeface.",
+  "celebration_none": "None"
 }

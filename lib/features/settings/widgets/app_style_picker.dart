@@ -7,10 +7,9 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class AppStylePicker extends StatelessWidget {
-  const AppStylePicker({super.key, this.width = 96, this.withDescription = false});
+  const AppStylePicker({super.key, this.width = 96});
 
   final double width;
-  final bool withDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -22,33 +21,28 @@ class AppStylePicker extends StatelessWidget {
       settings.setAppStyle(value);
     }
 
+    final options = [
+      (context.l10n.style_classic, const _ClassicSkeleton()),
+      (context.l10n.style_minimal, const _MinimalSkeleton()),
+      (context.l10n.style_express, const _ExpressSkeleton()),
+    ];
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: width,
-          child: _StyleOption(
-            label: context.l10n.style_classic,
-            description:
-                withDescription ? context.l10n.style_classic_desc : null,
-            selected: settings.appStyle == 0,
-            preview: const _ClassicSkeleton(),
-            onTap: () => choose(0),
+        for (var i = 0; i < options.length; i++) ...[
+          if (i > 0) const SizedBox(width: 16),
+          SizedBox(
+            width: width,
+            child: _StyleOption(
+              label: options[i].$1,
+              selected: settings.appStyle == i,
+              preview: options[i].$2,
+              onTap: () => choose(i),
+            ),
           ),
-        ),
-        SizedBox(width: withDescription ? 18 : 26),
-        SizedBox(
-          width: width,
-          child: _StyleOption(
-            label: context.l10n.style_minimal,
-            description:
-                withDescription ? context.l10n.style_minimal_desc : null,
-            selected: settings.appStyle == 1,
-            preview: const _MinimalSkeleton(),
-            onTap: () => choose(1),
-          ),
-        ),
+        ],
       ],
     );
   }
@@ -60,11 +54,9 @@ class _StyleOption extends StatelessWidget {
     required this.selected,
     required this.preview,
     required this.onTap,
-    this.description,
   });
 
   final String label;
-  final String? description;
   final bool selected;
   final Widget preview;
   final VoidCallback onTap;
@@ -125,54 +117,151 @@ class _StyleOption extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 9),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 13,
-                  height: 13,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: selected ? accent : Colors.transparent,
-                    border: selected
-                        ? null
-                        : Border.all(color: context.tokens.muted, width: 1.2),
+            const SizedBox(height: 12),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 240),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontSize: selected ? 16 : 15,
+                    fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+                    letterSpacing: -0.2,
+                    color: selected ? accent : context.tokens.muted,
                   ),
-                  child: selected
-                      ? Icon(LucideIcons.check,
-                          size: 9, color: context.colors.onPrimary)
-                      : null,
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: selected ? accent : context.tokens.muted,
-                    ),
-                  ),
-                ),
-              ],
+              child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
             ),
-            if (description != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                description!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  height: 1.45,
-                  color: context.tokens.muted,
+            const SizedBox(height: 6),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 260),
+              curve: Curves.easeOutCubic,
+              height: 4,
+              width: selected ? 26 : 0,
+              decoration: BoxDecoration(
+                color: accent,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AppStyleLegend extends StatelessWidget {
+  const AppStyleLegend({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    final rows = [
+      (context.l10n.style_classic, context.l10n.style_classic_desc),
+      (context.l10n.style_minimal, context.l10n.style_minimal_desc),
+      (context.l10n.style_express, context.l10n.style_express_desc),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < rows.length; i++)
+          Padding(
+            padding: EdgeInsets.only(bottom: i == rows.length - 1 ? 0 : 8),
+            child: _LegendRow(
+              title: rows[i].$1,
+              description: rows[i].$2,
+              selected: settings.appStyle == i,
+              onTap: () {
+                if (settings.appStyle == i) return;
+                HapticFeedback.selectionClick();
+                settings.setAppStyle(i);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _LegendRow extends StatelessWidget {
+  const _LegendRow({
+    required this.title,
+    required this.description,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String title;
+  final String description;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = context.colors.primary;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+          decoration: BoxDecoration(
+            color: selected
+                ? accent.withValues(alpha: 0.12)
+                : context.colors.surfaceContainerHigh.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(selected ? 22 : 16),
+            border: Border.all(
+              color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.2,
+                        color: selected ? accent : context.colors.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.4,
+                        color: context.tokens.muted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              AnimatedScale(
+                scale: selected ? 1 : 0,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOutBack,
+                child: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: accent),
+                  child: Icon(
+                    LucideIcons.check,
+                    size: 14,
+                    color: context.colors.onPrimary,
+                  ),
                 ),
               ),
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -398,6 +487,100 @@ class _MinimalSkeleton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _block(5 * s, 5 * s, skin.accent, radius: 2.5 * s),
+                      _block(5 * s, 5 * s, skin.faint, radius: 2.5 * s),
+                      _block(5 * s, 5 * s, skin.faint, radius: 2.5 * s),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ExpressSkeleton extends StatelessWidget {
+  const _ExpressSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final skin = _Skin(
+      context,
+      context.colors.primary,
+      Theme.of(context).brightness == Brightness.dark,
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final s = constraints.maxWidth / 86;
+
+        Widget row(double topRadius, double bottomRadius) => Container(
+              height: 17 * s,
+              padding: EdgeInsets.symmetric(horizontal: 4 * s),
+              decoration: BoxDecoration(
+                color: skin.card,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(topRadius * s),
+                  bottom: Radius.circular(bottomRadius * s),
+                ),
+              ),
+              child: Row(
+                children: [
+                  _block(11 * s, 11 * s, skin.tint, radius: 5.5 * s),
+                  SizedBox(width: 4 * s),
+                  _block(20 * s, 3 * s, skin.text, radius: 2 * s),
+                  const Spacer(),
+                  _block(11 * s, 11 * s, skin.accent, radius: 5.5 * s),
+                ],
+              ),
+            );
+
+        return Padding(
+          padding: EdgeInsets.fromLTRB(5 * s, 7 * s, 5 * s, 5 * s),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _block(30 * s, 7 * s, context.colors.onSurface.withValues(alpha: 0.7),
+                  radius: 3 * s),
+              SizedBox(height: 6 * s),
+              Container(
+                height: 26 * s,
+                padding: EdgeInsets.symmetric(horizontal: 6 * s),
+                decoration: BoxDecoration(
+                  color: skin.card,
+                  borderRadius: BorderRadius.circular(11 * s),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _block(22 * s, 10 * s, skin.accent, radius: 3 * s),
+                    SizedBox(height: 5 * s),
+                    _block(64 * s, 3.4 * s, skin.tint, radius: 2 * s),
+                  ],
+                ),
+              ),
+              SizedBox(height: 6 * s),
+              row(8, 2),
+              SizedBox(height: 1.5 * s),
+              row(2, 2),
+              SizedBox(height: 1.5 * s),
+              row(2, 8),
+              const Spacer(),
+              Center(
+                child: Container(
+                  width: 46 * s,
+                  height: 13 * s,
+                  padding: EdgeInsets.symmetric(horizontal: 2 * s),
+                  decoration: BoxDecoration(
+                    color: skin.tint,
+                    borderRadius: BorderRadius.circular(6.5 * s),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _block(18 * s, 9 * s, skin.accent, radius: 4.5 * s),
                       _block(5 * s, 5 * s, skin.faint, radius: 2.5 * s),
                       _block(5 * s, 5 * s, skin.faint, radius: 2.5 * s),
                     ],

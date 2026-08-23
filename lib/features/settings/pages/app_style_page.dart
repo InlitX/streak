@@ -14,7 +14,7 @@ class AppStylePage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final width =
-              ((constraints.maxWidth - 44 - 18) / 2).clamp(110.0, 160.0);
+              ((constraints.maxWidth - 44 - 32) / 3).clamp(80.0, 150.0);
           return ListView(
             padding: context.pagePadding(22, 0, 22, 40),
             children: [
@@ -22,7 +22,9 @@ class AppStylePage extends StatelessWidget {
                 title: context.l10n.app_style,
                 subtitle: context.l10n.app_style_sub,
               ),
-              AppStylePicker(width: width, withDescription: true),
+              AppStylePicker(width: width),
+              const SizedBox(height: 32),
+              const AppStyleLegend(),
             ],
           );
         },

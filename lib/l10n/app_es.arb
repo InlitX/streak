@@ -715,5 +715,25 @@
   "a11y_next_week": "Semana siguiente",
   "a11y_increase": "Aumentar",
   "a11y_decrease": "Disminuir",
-  "a11y_pick_color": "Elegir color"
+  "a11y_pick_color": "Elegir color",
+  "period_this_week": "Esta semana",
+  "period_last_week": "La semana pasada",
+  "period_this_month": "Este mes",
+  "period_last_month": "El mes pasado",
+  "period_this_year": "Este año",
+  "period_last_year": "El año pasado",
+  "period_week_of": "Semana del {date}",
+  "@period_week_of": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "focus_period_sessions": "{count, plural, =0{Sin sesiones} =1{1 sesión} other{{count} sesiones}}",
+  "@focus_period_sessions": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "notes_all": "Todas las notas",
+  "notes_empty_all": "Todavía no hay notas",
+  "quant_preset_time": "Tiempo",
+  "style_express": "Express",
+  "style_express_desc": "Formas redondeadas, movimiento con muelle y una letra más ancha.",
+  "celebration_none": "Ninguno"
 }
