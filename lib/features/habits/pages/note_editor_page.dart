@@ -3,6 +3,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_type.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
@@ -10,6 +16,8 @@ import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/express_form_kit.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 
 const _kMaxLength = 500;
@@ -93,37 +101,77 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
   @override
   Widget build(BuildContext context) {
     final muted = context.tokens.muted;
+    final style = context.watch<SettingsController>().appStyle;
+    final express = style == 2;
+    final minimal = style == 1;
+    final title = widget.note == null
+        ? context.l10n.add_note
+        : context.l10n.edit_note;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       excludeFromSemantics: true,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            widget.note == null ? context.l10n.add_note : context.l10n.edit_note,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-          ),
-          leading: IconButton(
-            icon: const Icon(LucideIcons.arrowLeft),
-            onPressed: () => AppNavigator.pop(),
-          ),
+          toolbarHeight: express ? 60 : (minimal ? 52 : null),
+          leadingWidth: express ? 68 : null,
+          title: express || minimal
+              ? null
+              : Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+          leading: express
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Center(child: ExpressIconButton(
+                    icon: LucideIcons.arrowLeft,
+                    onPressed: () => AppNavigator.pop(),
+                  )),
+                )
+              : IconButton(
+                  icon: const Icon(LucideIcons.arrowLeft),
+                  onPressed: () => AppNavigator.pop(),
+                ),
           actions: [
-            TextButton(
-              onPressed: _canSave ? _save : null,
-              child: Text(
-                context.l10n.save,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+            if (!express)
+              TextButton(
+                onPressed: _canSave ? _save : null,
+                child: Text(
+                  context.l10n.save,
+                  style: sheetActionStyle(context, size: 16),
                 ),
               ),
-            ),
             const SizedBox(width: 8),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: express
+            ? ExpressSaveBar(
+                label: context.l10n.save,
+                onPressed: _canSave ? _save : null,
+              )
+            : null,
         body: ListView(
-          padding: context.pagePadding(16, 8, 16, 24),
+          padding: context.pagePadding(
+            minimal ? 22 : 16,
+            8,
+            minimal ? 22 : 16,
+            express ? 120 : 24,
+          ),
           children: [
+            if (minimal) MinimalTitle(title: title),
+            if (express) ...[
+              ExpressHeadline(
+                title: widget.note == null
+                    ? context.l10n.add_note
+                    : context.l10n.edit_note,
+              ),
+              const SizedBox(height: 20),
+            ],
             _Label(context.l10n.note_type),
             NoteTypeChips(
               selected: _type,
@@ -133,8 +181,10 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
             _Label(context.l10n.notes),
             Container(
               decoration: BoxDecoration(
-                color: context.colors.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(16),
+                color: minimal
+                    ? minimalSurface(context)
+                    : context.colors.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(minimal ? 20 : 16),
               ),
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
               child: Column(
@@ -189,8 +239,10 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
                   decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
+                    color: minimal
+                        ? minimalSurface(context)
+                        : context.colors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(minimal ? 20 : 16),
                   ),
                   child: Row(
                     children: [
@@ -201,12 +253,10 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
                           _time == null
                               ? context.l10n.note_time_optional
                               : _time!.format(context),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: _time == null
-                                ? muted
-                                : context.colors.onSurface,
+                          style: sheetOptionStyle(
+                            context,
+                            size: 15,
+                            color: _time == null ? muted : null,
                           ),
                         ),
                       ),
@@ -221,6 +271,7 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
               ),
             ),
             const SizedBox(height: 28),
+            if (!express)
             SizedBox(
               height: 52,
               child: FilledButton(
@@ -233,9 +284,9 @@ class _NoteEditorPageState extends State<NoteEditorPage> {
                 ),
                 child: Text(
                   context.l10n.save_note,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                  style: sheetActionStyle(
+                    context,
+                    size: 16,
                     color: widget.accent.computeLuminance() > 0.6
                         ? Colors.black
                         : Colors.white,
@@ -272,12 +323,14 @@ class _PhotoStrip extends StatelessWidget {
         _AddTile(
           icon: LucideIcons.camera,
           label: context.l10n.note_take_photo,
+          accent: accent,
           onTap: onCamera,
         ),
         const SizedBox(width: 10),
         _AddTile(
           icon: LucideIcons.image,
           label: context.l10n.note_pick_photo,
+          accent: accent,
           onTap: onGallery,
         ),
         if (photos.isNotEmpty) ...[
@@ -296,42 +349,79 @@ class _AddTile extends StatelessWidget {
   const _AddTile({
     required this.icon,
     required this.label,
+    required this.accent,
     required this.onTap,
   });
 
   final IconData icon;
   final String label;
+  final Color accent;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
     return Semantics(
       button: true,
       child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 88,
-          height: 88,
-          decoration: BoxDecoration(
-            color: context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 20, color: context.tokens.muted),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: context.tokens.muted,
+        onTap: express ? null : onTap,
+        child: express
+            ? ExpressSquish(
+                onTap: onTap,
+                child: Container(
+                  width: 92,
+                  height: 92,
+                  decoration: BoxDecoration(
+                    color: accent.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ExpressBlob(
+                        size: 36,
+                        color: accent.withValues(alpha: 0.22),
+                        shape: ExpressShape.cookie,
+                        child: Icon(icon, size: 17, color: accent),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: ExpressType.body.at(
+                          11,
+                          weight: 800,
+                          color: accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: context.colors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 20, color: context.tokens.muted),
+                    const SizedBox(height: 6),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: context.tokens.muted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -347,11 +437,13 @@ class _Label extends StatelessWidget {
         padding: const EdgeInsets.only(left: 2, bottom: 10),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: context.tokens.muted,
-          ),
+          style: context.watch<SettingsController>().isExpressStyle
+              ? ExpressType.headline.at(
+                  15,
+                  weight: 800,
+                  color: context.colors.primary,
+                )
+              : sheetLabelStyle(context),
         ),
       );
 }

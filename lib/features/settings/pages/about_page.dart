@@ -8,6 +8,13 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/typewriter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:streak/core/express/express_page.dart';
+import 'package:provider/provider.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
+import 'package:streak/core/minimal/minimal_type.dart';
 
 const _kGitHubUrl = 'https://github.com/InlitX/streak';
 const _kProfileUrl = 'https://github.com/InlitX';
@@ -47,11 +54,64 @@ class _AboutPageState extends State<AboutPage> {
     final scheme = context.colors;
     final muted = context.tokens.muted;
 
+    final style = context.watch<SettingsController>().appStyle;
+    final express = style == 2;
+
+    final nameStyle = switch (style) {
+      2 => ExpressType.display.at(
+          48,
+          height: 1,
+          spacing: -0.6,
+          color: scheme.onSurface,
+        ),
+      1 => MinimalType.display(46, color: scheme.onSurface, height: 1),
+      _ => TextStyle(
+          fontFamily: 'PlayfairDisplay',
+          fontSize: 46,
+          fontWeight: FontWeight.w700,
+          height: 1.0,
+          letterSpacing: -1,
+          color: scheme.onSurface,
+        ),
+    };
+
+    final subtitleStyle = switch (style) {
+      2 => ExpressType.headline.at(18, height: 1.35, weight: 700, color: muted),
+      1 => MinimalType.body(18, height: 1.35, color: muted, weight: 500),
+      _ => TextStyle(
+          fontFamily: 'PlayfairDisplay',
+          fontStyle: FontStyle.italic,
+          fontSize: 18,
+          height: 1.3,
+          color: muted,
+        ),
+    };
+
+    final storyStyle = switch (style) {
+      2 => ExpressType.body.at(
+          15,
+          height: 1.7,
+          color: scheme.onSurface.withValues(alpha: 0.85),
+        ),
+      1 => MinimalType.body(
+          15,
+          height: 1.7,
+          color: scheme.onSurface.withValues(alpha: 0.85),
+        ),
+      _ => TextStyle(
+          fontSize: 15,
+          height: 1.7,
+          color: scheme.onSurface.withValues(alpha: 0.85),
+        ),
+    };
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: express
+          ? expressBar()
+          : AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
       body: ListView(
         padding: context.pagePadding(24, 8, 24, 40),
         children: [
@@ -98,14 +158,7 @@ class _AboutPageState extends State<AboutPage> {
               text: 'Streak',
               duration: const Duration(milliseconds: 640),
               delay: const Duration(milliseconds: 120),
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 46,
-                fontWeight: FontWeight.w700,
-                height: 1.0,
-                letterSpacing: -1,
-                color: scheme.onSurface,
-              ),
+              style: nameStyle,
             ),
           ),
           const SizedBox(height: 10),
@@ -116,13 +169,7 @@ class _AboutPageState extends State<AboutPage> {
               text: context.l10n.about_subtitle,
               duration: const Duration(milliseconds: 1000),
               delay: const Duration(milliseconds: 380),
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontStyle: FontStyle.italic,
-                fontSize: 18,
-                height: 1.3,
-                color: muted,
-              ),
+              style: subtitleStyle,
             ),
           ),
           const SizedBox(height: 30),
@@ -133,11 +180,7 @@ class _AboutPageState extends State<AboutPage> {
               text: context.l10n.about_story,
               duration: const Duration(milliseconds: 2200),
               delay: const Duration(milliseconds: 1400),
-              style: TextStyle(
-                fontSize: 15,
-                height: 1.7,
-                color: scheme.onSurface.withValues(alpha: 0.85),
-              ),
+              style: storyStyle,
             ),
           ),
           const SizedBox(height: 32),
@@ -153,7 +196,7 @@ class _AboutPageState extends State<AboutPage> {
                     onTap: () => _open(_kGitHubUrl),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: Express.groupGap),
                 Expanded(
                   child: _LinkButton(
                     icon: LucideIcons.coffee,
@@ -261,6 +304,42 @@ class _LinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
+    if (context.watch<SettingsController>().isExpressStyle) {
+      return ExpressSquish(
+        onTap: onTap,
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: expressSurface(context),
+            borderRadius: BorderRadius.circular(29),
+            border: expressHairline(context),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 17, color: scheme.primary),
+              const SizedBox(width: 8),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: ExpressType.headline.at(
+                      14,
+                      weight: 800,
+                      width: 100,
+                      color: scheme.onSurface,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return Material(
       color: scheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(14),
