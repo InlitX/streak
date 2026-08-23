@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 
@@ -61,49 +62,32 @@ class NoteLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
-      child: Column(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 14,
+        runSpacing: 6,
         children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 14,
-            runSpacing: 6,
-            children: [
-              for (final type in NoteType.values)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: noteTypeColor(context, type),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      type == NoteType.note
-                          ? context.l10n.legend_note_added
-                          : noteTypeLabel(context, type),
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w600,
-                        color: context.tokens.muted,
-                      ),
-                    ),
-                  ],
+          for (final type in NoteType.values)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: noteTypeColor(context, type),
+                  ),
                 ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.notes_hint,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 11.5,
-              color: context.tokens.muted.withValues(alpha: 0.75),
+                const SizedBox(width: 5),
+                Text(
+                  type == NoteType.note
+                      ? context.l10n.legend_note_added
+                      : noteTypeLabel(context, type),
+                  style: sheetLabelStyle(context, size: 11.5),
+                ),
+              ],
             ),
-          ),
         ],
       ),
     );
