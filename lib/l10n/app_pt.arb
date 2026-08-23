@@ -968,5 +968,46 @@
   "rest_days_desc": "Faça uma pausa semanal nesses dias. Você ainda poderá registrá-los e eles serão contabilizados.",
   "widget_cfg_follow_system": "Seguir o tema do sistema",
   "widget_cfg_dark_color": "Tema escuro",
-  "widget_cfg_light_color": "Tema claro"
+  "widget_cfg_light_color": "Tema claro",
+  "widget_cfg_todos_scope": "",
+  "vacation_all_sub": "",
+  "currency_hint": "",
+  "money_saved": "",
+  "clean_days": "",
+  "cost_per_day": "",
+  "quotes_app": "",
+  "currency": "",
+  "a11y_previous_week": "",
+  "quant_average": "",
+  "vacation_all": "",
+  "a11y_next_week": "",
+  "widget_todos_empty": "",
+  "quotes_which": "",
+  "repeat_hours": "",
+  "quant_logged_days": "",
+  "widget_cfg_todos_hint": "",
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "currency_custom": "",
+  "quant_best_day": "",
+  "quant_stats_empty": "",
+  "quant_goal_days": "",
+  "widget_cfg_todos_all": "",
+  "quotes": "",
+  "every_n_hours": "",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_mine": "",
+  "cost_note": ""
 }

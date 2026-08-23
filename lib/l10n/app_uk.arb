@@ -973,5 +973,53 @@
   "report_issue": "Повідомити про проблему",
   "rest_days": "Дні відпочинку",
   "rest_days_desc": "Призупиняє її щотижня в ці дні. Ви все одно можете їх реєструвати, і вони будуть зараховані.",
-  "todo_time": "Час"
+  "todo_time": "Час",
+  "widget_cfg_todos_scope": "Задачі",
+  "vacation_all_sub": "Ніщо не вважається пропущеним, поки вона ввімкнена",
+  "currency_hint": "Символ або код",
+  "money_saved": "Заощаджені гроші",
+  "clean_days": "Чистих днів",
+  "cost_per_day": "Вартість за день",
+  "currency": "Валюта",
+  "quant_average": "Середнє за день",
+  "vacation_all": "Призупити кожну звичку",
+  "widget_todos_empty": "На сьогодні все",
+  "repeat_hours": "Повторювати протягом дня",
+  "quant_logged_days": "Активних днів",
+  "widget_cfg_todos_hint": "Вимкнено: лише сьогоднішні, прострочені та завдання без дати",
+  "widget_todos_open": "Список справ  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "currency_custom": "Власна",
+  "quant_best_day": "Найкращий день",
+  "quant_stats_empty": "Записуйте суму, і вона додаватиметься сюди, навіть у ті дні, коли вам не вдається досягти мети.",
+  "quant_goal_days": "Мету досягнуто",
+  "widget_cfg_todos_all": "Показати кожну задачу",
+  "every_n_hours": "Кожні {n} год",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "cost_note": "Необов’язково. Залиште порожнім, якщо ця звичка не потребує грошових витрат.",
+  "todo_search": "Пошук завдань",
+  "todo_search_empty": "Нічого не знайдено",
+  "heatmap_path": "Поєднувати дні",
+  "heatmap_path_sub": "Малює сітку як одну довгу лінію",
+  "focus_only_clear_title": "Зняти позначку?",
+  "focus_only_clear_body": "Тільки сеанс фокусування може знову перевірити «{name}».",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
