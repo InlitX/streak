@@ -14,7 +14,9 @@ import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
-import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
@@ -79,7 +81,9 @@ class _TodosPageState extends State<TodosPage> {
 
   @override
   Widget build(BuildContext context) {
-    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final style = context.watch<SettingsController>();
+    final minimal = style.isMinimalStyle;
+    final express = style.isExpressStyle;
     final todos = context.watch<TodosController>();
     final all = todos.sections;
     final sections = _visibleSections(all);
@@ -88,8 +92,8 @@ class _TodosPageState extends State<TodosPage> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: minimal ? 52 : null,
-        title: minimal ? null : Text(context.l10n.todos),
+        toolbarHeight: minimal || express ? 52 : null,
+        title: minimal || express ? null : Text(context.l10n.todos),
         leading: minimal
             ? IconButton(
                 icon: const Icon(LucideIcons.arrowLeft),
@@ -139,7 +143,7 @@ class _TodosPageState extends State<TodosPage> {
                     : ListView(
               padding: context.pagePadding(
                 minimal ? 22 : 16,
-                minimal ? 0 : 8,
+                minimal || express ? 0 : 8,
                 minimal ? 22 : 16,
                 minimal ? 96 : 148,
               ),
@@ -149,6 +153,13 @@ class _TodosPageState extends State<TodosPage> {
                     title: context.l10n.todos,
                     subtitle: context.l10n.todo_left(todos.pendingCount),
                   ),
+                if (express) ...[
+                  ExpressHeadline(
+                    title: context.l10n.todos,
+                    subtitle: context.l10n.todo_left(todos.pendingCount),
+                  ),
+                  const SizedBox(height: 18),
+                ],
                 for (final section in sections) ...[
                   _SectionHeader(
                     label: todoGroupLabel(context, section.group),
@@ -161,12 +172,13 @@ class _TodosPageState extends State<TodosPage> {
                       index: index,
                       child: _Swipeable(
                         todo: todo,
-                        corners: stackedCorners(index, section.todos.length),
+                        corners: _corners(express, index, section.todos.length),
                         onDelete: () => _delete(todo),
                         child: TodoTile(
                           todo: todo,
                           overdue: section.group == TodoGroup.overdue,
-                          corners: stackedCorners(index, section.todos.length),
+                          corners:
+                              _corners(express, index, section.todos.length),
                           onToggle: () => todos.toggle(todo.id),
                           onEdit: () => showTodoComposer(context, todo: todo),
                         ),
@@ -185,12 +197,12 @@ class _TodosPageState extends State<TodosPage> {
                     for (final (index, todo) in completed.indexed)
                       _Swipeable(
                         todo: todo,
-                        corners: stackedCorners(index, completed.length),
+                        corners: _corners(express, index, completed.length),
                         onDelete: () => _delete(todo),
                         child: TodoTile(
                           todo: todo,
                           overdue: false,
-                          corners: stackedCorners(index, completed.length),
+                          corners: _corners(express, index, completed.length),
                           onToggle: () => todos.toggle(todo.id),
                           onEdit: () => showTodoComposer(context, todo: todo),
                         ),
@@ -204,13 +216,23 @@ class _TodosPageState extends State<TodosPage> {
           Positioned(
             right: (minimal ? 20 : 16) + context.safeInsets.right,
             bottom: (minimal ? 20 : 78) + context.bottomInset,
-            child: _AddButton(onTap: () => showTodoComposer(context)),
+            child: express
+                ? ExpressFab(
+                    icon: LucideIcons.plus,
+                    label: context.l10n.todo_new,
+                    onPressed: () => showTodoComposer(context),
+                  )
+                : _AddButton(onTap: () => showTodoComposer(context)),
           ),
         ],
       ),
     );
   }
 }
+
+BorderRadius _corners(bool express, int index, int length) => express
+    ? expressSlotRadius(index, length)
+    : stackedCorners(index, length);
 
 class _Swipeable extends StatelessWidget {
   const _Swipeable({
@@ -336,6 +358,7 @@ class _AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
+    final minimal = context.watch<SettingsController>().isMinimalStyle;
     return Semantics(
       button: true,
       label: context.l10n.todo_new,
@@ -348,17 +371,24 @@ class _AddButton extends StatelessWidget {
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            color: scheme.primary,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: scheme.primary.withValues(alpha: 0.34),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
+            color: minimal ? scheme.onSurface : scheme.primary,
+            shape: minimal ? BoxShape.rectangle : BoxShape.circle,
+            borderRadius: minimal ? BorderRadius.circular(19) : null,
+            boxShadow: minimal
+                ? null
+                : [
+                    BoxShadow(
+                      color: scheme.primary.withValues(alpha: 0.34),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
           ),
-          child: Icon(LucideIcons.plus, size: 24, color: scheme.onPrimary),
+          child: Icon(
+            LucideIcons.plus,
+            size: 24,
+            color: minimal ? scheme.surface : scheme.onPrimary,
+          ),
         ),
       ),
     );
@@ -376,17 +406,25 @@ class _EmptyState extends StatelessWidget {
       icon: LucideIcons.listChecks,
       title: context.l10n.todo_empty_title,
       message: context.l10n.todo_empty_body,
-      action: FilledButton.icon(
-        onPressed: onAdd,
-        icon: const Icon(LucideIcons.plus, size: 18),
-        label: Text(context.l10n.todo_new),
-        style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
+      action: context.watch<SettingsController>().isMinimalStyle
+          ? MinimalButton(
+              icon: LucideIcons.plus,
+              label: context.l10n.todo_new,
+              height: 48,
+              onPressed: onAdd,
+            )
+          : FilledButton.icon(
+              onPressed: onAdd,
+              icon: const Icon(LucideIcons.plus, size: 18),
+              label: Text(context.l10n.todo_new),
+              style: FilledButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/utils/responsive.dart';
@@ -407,11 +408,7 @@ class _Tag extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
+            style: sheetLabelStyle(context, size: 12.5, color: color),
           ),
           Semantics(
             button: true,
