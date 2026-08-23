@@ -24,6 +24,19 @@ class LocalStore {
   static late Box _focus;
   static late Box _todos;
 
+  static int _writing = 0;
+
+  static bool get isWriting => _writing > 0;
+
+  static Future<T> guardWrites<T>(Future<T> Function() action) async {
+    _writing++;
+    try {
+      return await action();
+    } finally {
+      _writing--;
+    }
+  }
+
   static Future<void> init() async {
     await Hive.initFlutter(isMobile ? null : appDataFolder);
     _habits = await Hive.openBox(_habitsBox);
@@ -125,6 +138,7 @@ class LocalStore {
   static Future<void> removeHabit(String id) => _habits.delete(id);
 
   static Future<void> reloadHabits() async {
+    if (_writing > 0) return;
     if (_habits.isOpen) await _habits.close();
     _habits = await Hive.openBox(_habitsBox);
   }
@@ -167,6 +181,14 @@ class LocalStore {
     }
     await _notes.clear();
     await _focus.clear();
+  }
+
+  static Future<void> wipeContent() async {
+    await _habits.clear();
+    await _notes.clear();
+    await _focus.clear();
+    await _todos.clear();
+    await _categories.clear();
   }
 
   static Future<void> wipeEverything() async {

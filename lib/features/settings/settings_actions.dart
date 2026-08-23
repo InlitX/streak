@@ -10,8 +10,10 @@ import 'package:streak/app/app_lock.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/utils/share_origin.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
@@ -42,7 +44,7 @@ class SettingsActions {
 
   static Future<void> exportBackup(BuildContext context) async {
     final controller = context.read<HabitsController>();
-    final ok = await controller.exportBackup();
+    final ok = await controller.exportBackup(origin: shareOrigin(context));
     if (!context.mounted) return;
     ok
         ? AppSnackbar.success(context, context.l10n.backup_saved)
@@ -59,6 +61,7 @@ class SettingsActions {
       context.read<NotesController>().reload();
       context.read<FocusController>().reload();
       context.read<TodosController>().reload();
+      context.read<CategoriesController>().reload();
       AppSnackbar.success(context, context.l10n.habits_imported);
     } else {
       AppSnackbar.error(context, error);
@@ -134,10 +137,6 @@ class SettingsActions {
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      backgroundColor: context.colors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-      ),
       builder: (sheet) => SafeArea(
         top: false,
         child: Consumer<SettingsController>(
@@ -147,21 +146,21 @@ class SettingsActions {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                SheetTitle(
                   context.l10n.auto_backup,
-                  style:
-                      const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  context.l10n.auto_backup_where,
-                  style: TextStyle(fontSize: 13, color: context.tokens.muted),
+                  subtitle: context.l10n.auto_backup_where,
                 ),
                 const SizedBox(height: 10),
                 for (var i = 0; i < 3; i++)
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(autoBackupLabel(context, i)),
+                    title: Text(
+                      autoBackupLabel(context, i),
+                      style: sheetOptionStyle(
+                        sheetContext,
+                        selected: s.autoBackup == i,
+                      ),
+                    ),
                     trailing: s.autoBackup == i
                         ? Icon(LucideIcons.check, color: context.colors.primary)
                         : null,
@@ -171,7 +170,10 @@ class SettingsActions {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(LucideIcons.folder, color: context.tokens.muted),
-                  title: Text(context.l10n.auto_backup_folder),
+                  title: Text(
+                    context.l10n.auto_backup_folder,
+                    style: sheetOptionStyle(sheetContext, size: 15),
+                  ),
                   subtitle: Text(
                     backupFolderLabel(context, s.autoBackupFolder),
                     maxLines: 1,
@@ -288,7 +290,10 @@ class SettingsActions {
   }
 
   static Future<void> shareWithFriend(BuildContext context) async {
-    await Share.share(context.l10n.share_friends_message);
+    await Share.share(
+      context.l10n.share_friends_message,
+      sharePositionOrigin: shareOrigin(context),
+    );
   }
 
   static Future<bool?> _askImportMode(BuildContext context) {
@@ -405,6 +410,7 @@ class SettingsActions {
         context.l10n.celebration_confetti,
         context.l10n.celebration_fireworks,
         context.l10n.celebration_surprise,
+        context.l10n.celebration_none,
       ];
 
   static List<String> dayStartLabels(BuildContext context) => [

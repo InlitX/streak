@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
@@ -9,12 +10,34 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/todos/data/todo.dart';
 
 const _kBackupVersion = 1;
 const _kAutoBackupKeep = 5;
+
+class BackupData {
+  const BackupData({
+    required this.habits,
+    required this.notes,
+    required this.focus,
+    required this.todos,
+    required this.categories,
+    required this.skipped,
+  });
+
+  final List<Habit> habits;
+  final List<HabitNote> notes;
+  final List<FocusSession> focus;
+  final List<Todo> todos;
+  final List<Category> categories;
+  final int skipped;
+
+  bool get isEmpty =>
+      habits.isEmpty && notes.isEmpty && focus.isEmpty && todos.isEmpty;
+}
 
 class BackupService {
   const BackupService._();
@@ -29,6 +52,8 @@ class BackupService {
       'focus':
           LocalStore.readFocusSessions().map((f) => f.toMap()).toList(),
       'todos': LocalStore.readTodos().map((t) => t.toMap()).toList(),
+      'categories':
+          LocalStore.readCategories().map((c) => c.toMap()).toList(),
     };
     return const JsonEncoder.withIndent('  ').convert(payload);
   }
@@ -93,7 +118,7 @@ class BackupService {
     return file.path;
   }
 
-  static Future<bool> export(List<Habit> habits) async {
+  static Future<bool> export(List<Habit> habits, {Rect? origin}) async {
     final content = _payloadFor(habits);
     final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
 
@@ -104,12 +129,13 @@ class BackupService {
     final result = await Share.shareXFiles(
       [XFile(file.path, mimeType: 'application/json')],
       subject: 'Streak backup',
+      sharePositionOrigin: origin,
     );
     return result.status == ShareResultStatus.success ||
         result.status == ShareResultStatus.dismissed;
   }
 
-  static Future<List<Habit>> import() async {
+  static Future<BackupData> read() async {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Select a Streak backup file',
       type: FileType.any,
@@ -129,6 +155,10 @@ class BackupService {
       throw Exception('Could not read the selected file');
     }
 
+    return parse(raw);
+  }
+
+  static BackupData parse(String raw) {
     dynamic decoded;
     try {
       decoded = json.decode(raw);
@@ -137,57 +167,46 @@ class BackupService {
     }
 
     final List<dynamic> entries;
+    final Map<String, dynamic> root;
     if (decoded is List) {
       entries = decoded;
+      root = const {};
     } else if (decoded is Map && decoded['habits'] is List) {
       entries = decoded['habits'] as List;
+      root = Map<String, dynamic>.from(decoded);
     } else {
       throw Exception('Unrecognised backup format');
     }
 
-    final habits = <Habit>[];
-    for (final entry in entries) {
-      if (entry is! Map) continue;
-      try {
-        habits.add(Habit.fromMap(Map<String, dynamic>.from(entry)));
-      } catch (_) {
-      }
-    }
-    if (habits.isEmpty) throw Exception('No habits found in that file');
-
-    if (decoded is Map) {
-      final notes = decoded['notes'];
-      if (notes is List) {
-        for (final raw in notes) {
-          if (raw is Map) {
-            await LocalStore.writeNote(
-              HabitNote.fromMap(Map<String, dynamic>.from(raw)),
-            );
-          }
+    var skipped = 0;
+    List<T> collect<T>(Object? source, T Function(Map<String, dynamic>) build) {
+      if (source is! List) return <T>[];
+      final out = <T>[];
+      for (final raw in source) {
+        if (raw is! Map) {
+          skipped++;
+          continue;
+        }
+        try {
+          out.add(build(Map<String, dynamic>.from(raw)));
+        } catch (_) {
+          skipped++;
         }
       }
-      final focus = decoded['focus'];
-      if (focus is List) {
-        for (final raw in focus) {
-          if (raw is Map) {
-            await LocalStore.writeFocusSession(
-              FocusSession.fromMap(Map<String, dynamic>.from(raw)),
-            );
-          }
-        }
-      }
-      final todos = decoded['todos'];
-      if (todos is List) {
-        for (final raw in todos) {
-          if (raw is Map) {
-            await LocalStore.writeTodo(
-              Todo.fromMap(Map<String, dynamic>.from(raw)),
-            );
-          }
-        }
-      }
+      return out;
     }
 
-    return habits;
+    final habits = collect(entries, Habit.fromMap);
+    final data = BackupData(
+      habits: habits,
+      notes: collect(root['notes'], HabitNote.fromMap),
+      focus: collect(root['focus'], FocusSession.fromMap),
+      todos: collect(root['todos'], Todo.fromMap),
+      categories: collect(root['categories'], Category.fromMap),
+      skipped: skipped,
+    );
+
+    if (data.isEmpty) throw Exception('No habits found in that file');
+    return data;
   }
 }

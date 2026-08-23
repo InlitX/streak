@@ -66,6 +66,7 @@ class HabitsController extends ChangeNotifier {
   }
 
   Future<void> reload() async {
+    if (LocalStore.isWriting) return;
     await LocalStore.reloadHabits();
     _habits = LocalStore.readHabits();
     notifyListeners();
@@ -141,7 +142,7 @@ class HabitsController extends ChangeNotifier {
     await LocalStore.writeHabit(habit);
     notifyListeners();
     if (reminders.isNotEmpty) await _notifications.scheduleFor(habit);
-    HomeWidgetService.syncSoon(asMap);
+    HomeWidgetService.syncSoon(() => asMap);
   }
 
   Future<void> update(Habit habit) async {
@@ -149,7 +150,7 @@ class HabitsController extends ChangeNotifier {
     await LocalStore.writeHabit(habit);
     notifyListeners();
     await _notifications.scheduleFor(habit);
-    HomeWidgetService.syncSoon(asMap);
+    HomeWidgetService.syncSoon(() => asMap);
   }
 
   Future<void> toggle(String id, DateTime date, {bool fromFocus = false}) async {
@@ -292,9 +293,9 @@ class HabitsController extends ChangeNotifier {
       }
     }
     _habits[habit.id] = updated;
-    await LocalStore.writeHabit(updated);
     notifyListeners();
-    HomeWidgetService.syncSoon(asMap);
+    HomeWidgetService.syncSoon(() => asMap);
+    await LocalStore.writeHabit(updated);
   }
 
   Future<void> reorder(List<Habit> visible, int oldIndex, int newIndex) async {
@@ -370,26 +371,31 @@ class HabitsController extends ChangeNotifier {
     await HomeWidgetService.sync(asMap);
   }
 
-  Future<bool> exportBackup() async {
+  Future<bool> exportBackup({Rect? origin}) async {
     try {
-      return await BackupService.export(_habits.values.toList());
+      return await BackupService.export(
+        _habits.values.toList(),
+        origin: origin,
+      );
     } catch (_) {
       return false;
     }
   }
 
   Future<ImportOutcome?> importFromApp() async {
-    final outcome = await ImportService.pickAndParse();
+    final outcome = await LocalStore.guardWrites(ImportService.pickAndParse);
     if (outcome == null) return null;
-    var order = habits.length;
-    for (final habit in outcome.habits) {
-      final placed = habit.copyWith(order: order++);
-      _habits[placed.id] = placed;
-      await LocalStore.writeHabit(placed);
-      if (placed.reminders.isNotEmpty) {
-        await _notifications.scheduleFor(placed);
+    await LocalStore.guardWrites(() async {
+      var order = habits.length;
+      for (final habit in outcome.habits) {
+        final placed = habit.copyWith(order: order++);
+        _habits[placed.id] = placed;
+        await LocalStore.writeHabit(placed);
+        if (placed.reminders.isNotEmpty) {
+          await _notifications.scheduleFor(placed);
+        }
       }
-    }
+    });
     notifyListeners();
     await HomeWidgetService.sync(asMap);
     return outcome;
@@ -397,26 +403,42 @@ class HabitsController extends ChangeNotifier {
 
   Future<String?> importBackup({bool replace = false}) async {
     try {
-      final imported = await BackupService.import();
-      if (replace) {
-        for (final id in _habits.keys.toList()) {
-          await _notifications.cancelFor(id);
-          await LocalStore.removeHabit(id);
-        }
-        _habits.clear();
-      }
-      for (final habit in imported) {
-        _habits[habit.id] = habit;
-        await LocalStore.writeHabit(habit);
-        if (habit.reminders.isNotEmpty) {
-          await _notifications.scheduleFor(habit);
-        }
-      }
+      final data = await LocalStore.guardWrites(BackupService.read);
+      await LocalStore.guardWrites(() => _applyBackup(data, replace: replace));
       notifyListeners();
       await HomeWidgetService.sync(asMap);
       return null;
     } catch (e) {
       return e.toString().replaceFirst('Exception: ', '');
+    }
+  }
+
+  Future<void> _applyBackup(BackupData data, {required bool replace}) async {
+    if (replace) {
+      for (final id in _habits.keys.toList()) {
+        await _notifications.cancelFor(id);
+      }
+      await LocalStore.wipeContent();
+      _habits.clear();
+    }
+    for (final habit in data.habits) {
+      _habits[habit.id] = habit;
+      await LocalStore.writeHabit(habit);
+    }
+    for (final category in data.categories) {
+      await LocalStore.writeCategory(category);
+    }
+    for (final note in data.notes) {
+      await LocalStore.writeNote(note);
+    }
+    for (final session in data.focus) {
+      await LocalStore.writeFocusSession(session);
+    }
+    for (final todo in data.todos) {
+      await LocalStore.writeTodo(todo);
+    }
+    for (final habit in data.habits) {
+      if (habit.reminders.isNotEmpty) await _notifications.scheduleFor(habit);
     }
   }
 
