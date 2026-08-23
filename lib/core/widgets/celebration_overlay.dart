@@ -6,7 +6,7 @@ import 'package:streak/core/widgets/confetti_overlay.dart';
 import 'package:streak/core/widgets/fireworks_overlay.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
-enum CelebrationStyle { confetti, fireworks, surprise }
+enum CelebrationStyle { confetti, fireworks, surprise, none }
 
 class CelebrationOverlay extends StatefulWidget {
   const CelebrationOverlay({super.key, required this.trigger});
@@ -41,7 +41,11 @@ class _CelebrationOverlayState extends State<CelebrationOverlay> {
   }
 
   @override
-  Widget build(BuildContext context) => _fireworks
-      ? FireworksOverlay(trigger: widget.trigger)
-      : ConfettiOverlay(trigger: widget.trigger);
+  Widget build(BuildContext context) {
+    final style = context.watch<SettingsController>().celebration;
+    if (style == CelebrationStyle.none) return const SizedBox.shrink();
+    return _fireworks
+        ? FireworksOverlay(trigger: widget.trigger)
+        : ConfettiOverlay(trigger: widget.trigger);
+  }
 }
