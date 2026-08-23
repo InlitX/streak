@@ -371,7 +371,7 @@ class HabitCardData(
         private fun habitOf(root: JSONObject, habitId: String): HabitCardData? {
             val habits = root.optJSONArray("habits") ?: return null
             for (i in 0 until habits.length()) {
-                val habit = habits.getJSONObject(i)
+                val habit = habits.optJSONObject(i) ?: continue
                 if (habit.optString("id") == habitId) return from(habit)
             }
             return null
@@ -402,7 +402,7 @@ class HabitCardData(
                 id = habit.optString("id"),
                 name = habit.optString("name"),
                 description = habit.optString("description", ""),
-                color = habit.getInt("color"),
+                color = habit.optInt("color", BRAND),
                 iconPath = habit.optString("iconPath", ""),
                 iconTintable = habit.optBoolean("iconTintable", true),
                 kind = habit.optInt("kind", 0),

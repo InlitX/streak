@@ -66,9 +66,10 @@ object FocusBridge {
     private fun drain(context: Context): List<Map<String, Any>> = synchronized(this) {
         val queue = read(context)
         write(context, JSONArray())
-        (0 until queue.length()).map { index ->
-            val entry = queue.getJSONObject(index)
-            mapOf("kind" to entry.optString("kind"), "at" to entry.optLong("at"))
+        (0 until queue.length()).mapNotNull { index ->
+            queue.optJSONObject(index)?.let {
+                mapOf("kind" to it.optString("kind"), "at" to it.optLong("at"))
+            }
         }
     }
 

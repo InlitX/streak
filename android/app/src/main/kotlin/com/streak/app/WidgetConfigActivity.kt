@@ -70,6 +70,8 @@ private enum class WType { HABIT, TODAY, STATS, HEATMAP, TODOS }
 
 private data class HabitOption(val id: String?, val name: String, val color: Color)
 
+private const val BRAND_FALLBACK = 0xFF7C3AED.toInt()
+
 class WidgetConfigActivity : ComponentActivity() {
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
@@ -239,9 +241,14 @@ class WidgetConfigActivity : ComponentActivity() {
             val json = getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
                 .getString("habits_data", null) ?: return all
             val habits = JSONObject(json).optJSONArray("habits") ?: return all
-            all + (0 until habits.length()).map { i ->
-                val h = habits.getJSONObject(i)
-                HabitOption(h.optString("id"), h.optString("name"), Color(h.getInt("color")))
+            all + (0 until habits.length()).mapNotNull { i ->
+                habits.optJSONObject(i)?.let {
+                    HabitOption(
+                        it.optString("id"),
+                        it.optString("name"),
+                        Color(it.optInt("color", BRAND_FALLBACK)),
+                    )
+                }
             }
         } catch (e: Exception) {
             all
