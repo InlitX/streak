@@ -72,13 +72,22 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(zone.identifier));
 
     const android = AndroidInitializationSettings('ic_stat_notify');
+    const darwin = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
     const windows = WindowsInitializationSettings(
       appName: 'Streak',
       appUserModelId: 'com.streak.app',
       guid: 'cfb32a7d-9c06-495b-8afa-df8829d33edc',
     );
     await _plugin.initialize(
-      const InitializationSettings(android: android, windows: windows),
+      const InitializationSettings(
+        android: android,
+        iOS: darwin,
+        windows: windows,
+      ),
       onDidReceiveNotificationResponse: _handleResponse,
       onDidReceiveBackgroundNotificationResponse: notificationActionEntrypoint,
     );
@@ -153,7 +162,7 @@ class NotificationService {
     await _cancelExcept(habit.id, live);
   }
 
-  static const _intervalWindow = 24;
+  static int get _intervalWindow => Platform.isIOS ? 8 : 24;
 
   Future<Set<int>> _schedule(Habit habit, Reminder reminder) async {
     final strings = await localizations();

@@ -55,13 +55,15 @@ void main() {
     expect(find.byType(HabitDonut), findsOneWidget);
   });
 
-  testWidgets('minimal draws every chart down to the bottom', (tester) async {
+  testWidgets('minimal keeps the heatmap and drops the extra charts',
+      (tester) async {
     await _seedTwo(tester);
     await pumpScreen(tester, const StatisticsPage(), minimal: true);
 
     expect(find.text('Statistics'), findsOneWidget);
+    expect(find.byType(YearHeatmap), findsOneWidget);
     await scrollToEnd(tester);
-    expect(find.byType(HabitDonut), findsOneWidget);
+    expect(find.byType(HabitDonut), findsNothing);
   });
 
   testWidgets('the year heatmap opens on the current month', (tester) async {

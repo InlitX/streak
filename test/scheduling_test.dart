@@ -39,21 +39,19 @@ void main() {
         every: 3,
         createdAt: _ago(6),
       );
-      expect(h.isScheduledOn(_ago(6)), isTrue); // diff 0
+      expect(h.isScheduledOn(_ago(6)), isTrue);
       expect(h.isScheduledOn(_ago(5)), isFalse);
-      expect(h.isScheduledOn(_ago(3)), isTrue); // diff 3
-      expect(h.isScheduledOn(_ago(0)), isTrue); // diff 6
+      expect(h.isScheduledOn(_ago(3)), isTrue);
+      expect(h.isScheduledOn(_ago(0)), isTrue);
     });
 
     test('streak counts scheduled completions, skips off days', () {
-      // every 2 days from 6 days ago → due on -6,-4,-2,0. Done on -6,-4,-2.
       final h = _habit(
         interval: HabitInterval.everyXDays,
         every: 2,
         createdAt: _ago(6),
         completions: _done([_ago(6), _ago(4), _ago(2)]),
       );
-      // Today is due but not done → grace; the three past due days give 3.
       expect(h.currentStreak, 3);
     });
 
@@ -68,7 +66,6 @@ void main() {
     });
 
     test('a missed scheduled day breaks the streak', () {
-      // Skip -4 (a due day). Walk back: 0 grace, -2 done(+1), -4 missed → stop.
       final h = _habit(
         interval: HabitInterval.everyXDays,
         every: 2,
@@ -79,7 +76,6 @@ void main() {
     });
 
     test('doing it a day early keeps the due day standing', () {
-      // due on -6,-3,0. Done on -6 and on -4, a day ahead of the -3 due day.
       final h = _habit(
         interval: HabitInterval.everyXDays,
         every: 3,
@@ -91,7 +87,6 @@ void main() {
     });
 
     test('an early day only covers the due day it belongs to', () {
-      // -5 sits in the window of the -3 due day, not of the -6 one.
       final h = _habit(
         interval: HabitInterval.everyXDays,
         every: 3,
@@ -126,7 +121,6 @@ void main() {
     });
 
     test('isDoneForNow is true when today is not a scheduled day', () {
-      // due on even offsets; yesterday-anchored so today (diff 1) is off.
       final h = _habit(
         interval: HabitInterval.everyXDays,
         every: 2,
@@ -171,7 +165,7 @@ void main() {
     test('isScheduledOn only on the selected weekdays', () {
       final h = _habit(
         interval: HabitInterval.weekdays,
-        weekdays: const [1, 3, 5], // Mon, Wed, Fri
+        weekdays: const [1, 3, 5],
         createdAt: _ago(30),
       );
       for (final d in [_ago(0), _ago(1), _ago(2), _ago(3), _ago(4), _ago(5)]) {
@@ -180,7 +174,6 @@ void main() {
     });
 
     test('streak walks weekly scheduled days, skipping off days', () {
-      // Only today's weekday is scheduled → one due day per week.
       final wd = _today().weekday;
       final h = _habit(
         interval: HabitInterval.weekdays,
@@ -188,7 +181,6 @@ void main() {
         createdAt: _ago(21),
         completions: _done([_ago(0), _ago(7), _ago(14)]),
       );
-      // today, -7, -14 all done and scheduled; -21 (createdAt) due but missed.
       expect(h.currentStreak, 3);
     });
 
@@ -198,7 +190,7 @@ void main() {
         interval: HabitInterval.weekdays,
         weekdays: [wd],
         createdAt: _ago(21),
-        completions: _done([_ago(0), _ago(7)]), // -14 missed
+        completions: _done([_ago(0), _ago(7)]),
       );
       expect(h.currentStreak, 2);
     });
@@ -209,7 +201,7 @@ void main() {
         interval: HabitInterval.weekdays,
         weekdays: [wd],
         createdAt: _ago(21),
-        completions: _done([_ago(21), _ago(14), _ago(7)]), // 3 in a row, not today
+        completions: _done([_ago(21), _ago(14), _ago(7)]),
       );
       expect(h.longestStreak, 3);
     });

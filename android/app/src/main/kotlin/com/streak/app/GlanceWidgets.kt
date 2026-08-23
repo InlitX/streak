@@ -4,7 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.updateAll
+import androidx.glance.appwidget.GlanceAppWidgetManager
 
 object GlanceWidgets {
 
@@ -16,10 +16,13 @@ object GlanceWidgets {
             StatsWidgetProvider::class.java to { StatsWidget() },
             TodosWidgetProvider::class.java to { TodosWidget() },
         )
+        val glance = GlanceAppWidgetManager(context)
         for ((provider, widget) in widgets) {
             try {
-                if (manager.getAppWidgetIds(ComponentName(context, provider)).isEmpty()) continue
-                widget().updateAll(context)
+                val ids = manager.getAppWidgetIds(ComponentName(context, provider))
+                if (ids.isEmpty()) continue
+                val instance = widget()
+                for (id in ids) instance.update(context, glance.getGlanceIdBy(id))
             } catch (e: Exception) {
                 continue
             }

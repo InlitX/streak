@@ -6,6 +6,10 @@ const appDataFolder = 'Streak';
 
 bool get isMobile => Platform.isAndroid || Platform.isIOS;
 
+bool get hasAppIcons => Platform.isAndroid;
+
+bool get hasHomeWidgets => !Platform.isIOS;
+
 Future<Directory> appDataDir() async {
   final root = await getApplicationDocumentsDirectory();
   if (isMobile) return root;

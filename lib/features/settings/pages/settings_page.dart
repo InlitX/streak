@@ -14,6 +14,7 @@ import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
+import 'package:streak/features/settings/pages/express_settings_page.dart';
 import 'package:streak/features/settings/pages/minimal_settings_page.dart';
 import 'package:streak/features/settings/pages/quotes_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
@@ -27,7 +28,9 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<SettingsController>().isMinimalStyle
+    final settings = context.watch<SettingsController>();
+    if (settings.isExpressStyle) return const ExpressSettingsPage();
+    return settings.isMinimalStyle
         ? const MinimalSettingsPage()
         : const ClassicSettingsPage();
   }
@@ -60,9 +63,11 @@ class ClassicSettingsPage extends StatelessWidget {
               child: PickerRow(
                 icon: LucideIcons.smartphone,
                 title: context.l10n.app_style,
-                value: settings.isMinimalStyle
-                    ? context.l10n.style_minimal
-                    : context.l10n.style_classic,
+                value: switch (settings.appStyle) {
+                  1 => context.l10n.style_minimal,
+                  2 => context.l10n.style_express,
+                  _ => context.l10n.style_classic,
+                },
                 onTap: () => AppNavigator.push(const AppStylePage()),
               ),
             ),
@@ -203,7 +208,7 @@ class _ClassicAppearancePage extends StatelessWidget {
             onChanged: settings.setCheckStyle,
           ),
         ),
-        if (isMobile) ...[
+        if (hasAppIcons) ...[
           settingsDivider(context),
           SettingRow(
             icon: LucideIcons.appWindow,

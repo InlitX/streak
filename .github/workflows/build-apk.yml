@@ -110,10 +110,50 @@ jobs:
           path: Streak-windows-x64.zip
           if-no-files-found: error
 
+  ios:
+    name: Build iOS
+    runs-on: macos-latest
+    # Same rule as the windows job: only a tagged run produces an iOS build.
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # There is no Apple developer account behind this app, so the build is
+      # unsigned: it is for people who sideload it and sign it themselves.
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
+
+      # An .ipa is just a zip with the .app inside a Payload folder. Sideloadly
+      # and AltStore take it from here.
+      - name: Package
+        run: |
+          mkdir -p Payload
+          mv build/ios/iphoneos/Runner.app Payload/
+          zip -qry Streak-ios.ipa Payload
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-ios
+          path: Streak-ios.ipa
+          if-no-files-found: error
+
   release:
     name: Publish release
     runs-on: ubuntu-latest
-    needs: windows
+    needs: [windows, ios]
     # Only when manually dispatched with a tag. The notes are generated from the
     # merged pull requests, and the rest is filled in by hand after publishing.
     if: github.event_name == 'workflow_dispatch'
@@ -193,6 +233,11 @@ jobs:
         with:
           name: streak-windows
 
+      - name: Download the iOS build
+        uses: actions/download-artifact@v4
+        with:
+          name: streak-ios
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -204,3 +249,4 @@ jobs:
             build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
             build/app/outputs/flutter-apk/Streak-x86_64.apk
             Streak-windows-x64.zip
+            Streak-ios.ipa

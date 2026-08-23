@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
 
@@ -29,6 +30,7 @@ class TodosWidgetService {
   static Future<void> sync(List<Todo> todos) async {
     _pendingSync?.cancel();
     _pendingSync = null;
+    if (!hasHomeWidgets) return;
     try {
       await HomeWidget.saveWidgetData<String>('todos_data', _encode(todos));
       await HomeWidget.updateWidget(androidName: _provider);
