@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/focus_service.dart';
 
 import 'support/app_harness.dart';
@@ -175,6 +176,49 @@ void main() {
 
       expect(focus.isRunning, isFalse);
       expect(focus.elapsedSeconds, closeTo(300, 5));
+    });
+  });
+
+  group('what the focus screen remembers', () {
+    test('a free session starts with the last setup, not with 25', () async {
+      var settings = SettingsController();
+      expect(settings.focusMinutes, 25);
+      expect(settings.focusBreakMinutes, 0);
+
+      await settings.rememberFocusSetup(50, 10);
+      await coldStart();
+
+      settings = SettingsController();
+      expect(settings.focusMinutes, 50);
+      expect(settings.focusBreakMinutes, 10);
+    });
+
+    test('turning pomodoro off is remembered too', () async {
+      var settings = SettingsController();
+      await settings.rememberFocusSetup(50, 10);
+      await settings.rememberFocusSetup(30, 0);
+      await coldStart();
+
+      settings = SettingsController();
+      expect(settings.focusMinutes, 30);
+      expect(settings.focusBreakMinutes, 0);
+    });
+
+    test('the track survives a cold start, and stopping forgets it', () async {
+      var settings = SettingsController();
+      expect(settings.focusTrack, '');
+
+      await settings.setFocusTrack('rain');
+      await coldStart();
+
+      settings = SettingsController();
+      expect(settings.focusTrack, 'rain');
+
+      await settings.setFocusTrack('');
+      await coldStart();
+
+      settings = SettingsController();
+      expect(settings.focusTrack, '');
     });
   });
 }

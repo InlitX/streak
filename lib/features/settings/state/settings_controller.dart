@@ -77,6 +77,9 @@ class SettingsController extends ChangeNotifier {
     _focusTracks =
         List<String>.from(LocalStore.setting('focusTracks', const <String>[]));
     _focusShuffle = LocalStore.setting('focusShuffle', false);
+    _focusMinutes = LocalStore.setting('focusMinutes', 25);
+    _focusBreakMinutes = LocalStore.setting('focusBreakMinutes', 0);
+    _focusTrack = LocalStore.setting('focusTrack', '');
     _focusDailyGoal = LocalStore.setting('focusDailyGoal', 0);
     _focusKeepAwake = LocalStore.setting('focusKeepAwake', true);
     _focusImages =
@@ -138,6 +141,9 @@ class SettingsController extends ChangeNotifier {
   late String _focusImage;
   late List<String> _focusTracks;
   late bool _focusShuffle;
+  late int _focusMinutes;
+  late int _focusBreakMinutes;
+  late String _focusTrack;
   late int _focusDailyGoal;
   late bool _focusKeepAwake;
   late List<String> _focusImages;
@@ -300,6 +306,24 @@ class SettingsController extends ChangeNotifier {
   }
   List<String> get focusTracks => List.unmodifiable(_focusTracks);
   bool get focusShuffle => _focusShuffle;
+  int get focusMinutes => _focusMinutes;
+  int get focusBreakMinutes => _focusBreakMinutes;
+  String get focusTrack => _focusTrack;
+
+  Future<void> rememberFocusSetup(int minutes, int breakMinutes) async {
+    if (_focusMinutes == minutes && _focusBreakMinutes == breakMinutes) return;
+    _focusMinutes = minutes;
+    _focusBreakMinutes = breakMinutes;
+    await LocalStore.writeSetting('focusMinutes', minutes);
+    await LocalStore.writeSetting('focusBreakMinutes', breakMinutes);
+  }
+
+  Future<void> setFocusTrack(String id) async {
+    if (_focusTrack == id) return;
+    _focusTrack = id;
+    await LocalStore.writeSetting('focusTrack', id);
+    notifyListeners();
+  }
   int get focusDailyGoal => _focusDailyGoal;
   bool get focusKeepAwake => _focusKeepAwake;
   List<String> get focusImages => List.unmodifiable(_focusImages);

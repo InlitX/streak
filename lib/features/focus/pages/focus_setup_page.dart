@@ -37,8 +37,24 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
   int _minutes = 25;
   bool _pomodoro = false;
   int _breakMinutes = 5;
+  bool _restored = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_restored || widget.habitId != null) return;
+    _restored = true;
+    final settings = context.read<SettingsController>();
+    _minutes = settings.focusMinutes;
+    _pomodoro = settings.focusBreakMinutes > 0;
+    if (_pomodoro) _breakMinutes = settings.focusBreakMinutes;
+  }
 
   void _start() {
+    context.read<SettingsController>().rememberFocusSetup(
+          _minutes,
+          _pomodoro ? _breakMinutes : 0,
+        );
     AppNavigator.pop();
     AppNavigator.push(
       FocusPage(

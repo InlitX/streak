@@ -222,16 +222,20 @@ class _TrackRow extends StatelessWidget {
                         if (await showDeleteSheet(context)) onDelete!();
                       },
                 onTap: () async {
+                  final settings = context.read<SettingsController>();
                   if (isPlaying) {
                     await FocusAudio.pause();
+                    await settings.setFocusTrack('');
                   } else if (active) {
                     await FocusAudio.resume();
+                    await settings.setFocusTrack(track.id);
                   } else {
                     await FocusAudio.playQueue(
                       tracks,
                       shuffle: shuffle,
                       from: track,
                     );
+                    await settings.setFocusTrack(track.id);
                   }
                 },
                 child: Padding(

@@ -82,7 +82,24 @@ class _FocusPageState extends State<FocusPage> {
         breakMinutes: widget.breakMinutes ?? 0,
       );
       _scheduleEndAlarm();
+      unawaited(_startSavedTrack());
     });
+  }
+
+  Future<void> _startSavedTrack() async {
+    if (FocusAudio.playing.value) return;
+    final settings = context.read<SettingsController>();
+    final saved = settings.focusTrack;
+    if (saved.isEmpty) return;
+
+    final tracks = focusTracksOf(context, settings);
+    final index = tracks.indexWhere((track) => track.id == saved);
+    if (index == -1) return;
+    await FocusAudio.playQueue(
+      tracks,
+      shuffle: settings.focusShuffle,
+      from: tracks[index],
+    );
   }
 
   void _runLead(VoidCallback then) {
