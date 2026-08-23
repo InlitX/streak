@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/data/substep.dart';
@@ -33,7 +34,7 @@ extension HabitIntervalLabel on HabitInterval {
 
 enum HabitKind { positive, negative, quantitative }
 
-enum QuantKind { generic, water, reading }
+enum QuantKind { generic, water, reading, time }
 
 class Habit {
   Habit({
@@ -128,6 +129,12 @@ class Habit {
 
   int get endMinute =>
       (startMinute + durationMinutes).clamp(startMinute, dayMinutes);
+
+  bool get isTimeAmount =>
+      kind == HabitKind.quantitative && quantKind == QuantKind.time;
+
+  String amountText(double value) =>
+      isTimeAmount ? formatMinutes(value) : formatAmount(value);
 
   bool get needsFocusSession =>
       focusOnly && kind == HabitKind.positive && substeps.isEmpty;
