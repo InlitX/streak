@@ -13,6 +13,9 @@ import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
+import 'package:streak/core/express/express_page.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
 
@@ -42,15 +45,10 @@ class JourneyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final shots = journeyShots(context.watch<NotesController>(), habitId);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(context.l10n.journey),
-      ),
-      body: shots.isEmpty
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
+    final body = shots.isEmpty
           ? AppEmptyState(
               icon: LucideIcons.images,
               title: context.l10n.journey_empty,
@@ -75,7 +73,24 @@ class JourneyPage extends StatelessWidget {
                   onTap: () => showJourneyViewer(context, shots, index),
                 ),
               ),
+            );
+
+    return Scaffold(
+      appBar: express
+          ? expressBar()
+          : AppBar(
+              toolbarHeight: minimal ? 52 : null,
+              leading: IconButton(
+                icon: const Icon(LucideIcons.chevronLeft),
+                onPressed: () => AppNavigator.pop(),
+              ),
+              title: minimal ? null : Text(context.l10n.journey),
             ),
+      body: express
+          ? expressBody(title: context.l10n.journey, child: body)
+          : minimal
+          ? minimalBody(title: context.l10n.journey, child: body)
+          : body,
     );
   }
 }

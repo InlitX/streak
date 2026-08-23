@@ -10,6 +10,11 @@ import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
+import 'package:streak/core/express/express_page.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/express/express_type.dart';
 
 class QuotesPage extends StatelessWidget {
   const QuotesPage({super.key});
@@ -51,20 +56,36 @@ class QuotesPage extends StatelessWidget {
     final settings = context.watch<SettingsController>();
     final quotes = settings.customQuotes;
 
+    final express = settings.isExpressStyle;
+    final minimal = settings.isMinimalStyle;
+
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(context.l10n.quotes),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _add(context),
-        icon: const Icon(LucideIcons.plus, size: 20),
-        label: Text(context.l10n.quotes_add),
-      ),
-      body: ListView(
+      appBar: express
+          ? expressBar()
+          : AppBar(
+              toolbarHeight: minimal ? 52 : null,
+              leading: IconButton(
+                icon: const Icon(LucideIcons.chevronLeft),
+                onPressed: () => AppNavigator.pop(),
+              ),
+              title: minimal ? null : Text(context.l10n.quotes),
+            ),
+      floatingActionButton: express
+          ? ExpressFab(
+              icon: LucideIcons.plus,
+              label: context.l10n.quotes_add,
+              onPressed: () => _add(context),
+            )
+          : FloatingActionButton.extended(
+              onPressed: () => _add(context),
+              icon: const Icon(LucideIcons.plus, size: 20),
+              label: Text(context.l10n.quotes_add),
+            ),
+      body: _wrap(
+        context,
+        express,
+        minimal,
+        ListView(
         padding: context.pagePadding(16, 12, 16, 96),
         children: [
           Card(
@@ -101,6 +122,7 @@ class QuotesPage extends StatelessWidget {
                 ),
               ),
         ],
+        ),
       ),
     );
   }
@@ -119,25 +141,36 @@ class _QuoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
     return InkWell(
       onTap: onEdit,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(express ? 24 : 18),
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
         decoration: BoxDecoration(
-          color: context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(18),
+          color: express
+              ? expressSurface(context)
+              : context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(express ? 24 : 18),
+          border: express ? expressHairline(context) : null,
         ),
         child: Row(
           children: [
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: context.colors.onSurface,
-                ),
+                style: express
+                    ? ExpressType.body.at(
+                        15,
+                        height: 1.35,
+                        weight: 600,
+                        color: context.colors.onSurface,
+                      )
+                    : TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: context.colors.onSurface,
+                      ),
               ),
             ),
             const SizedBox(width: 8),
@@ -156,6 +189,17 @@ class _QuoteTile extends StatelessWidget {
     );
   }
 }
+
+Widget _wrap(
+  BuildContext context,
+  bool express,
+  bool minimal,
+  Widget child,
+) => express
+    ? expressBody(title: context.l10n.quotes, child: child)
+    : minimal
+    ? minimalBody(title: context.l10n.quotes, child: child)
+    : child;
 
 class _QuoteDialog extends StatefulWidget {
   const _QuoteDialog({required this.title, required this.initial});

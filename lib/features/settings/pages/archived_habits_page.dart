@@ -15,6 +15,12 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/core/express/express_page.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class ArchivedHabitsPage extends StatelessWidget {
   const ArchivedHabitsPage({super.key});
@@ -41,15 +47,10 @@ class ArchivedHabitsPage extends StatelessWidget {
     final archived = context.watch<HabitsController>().archived;
     final locale = Localizations.localeOf(context).toString();
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(context.l10n.archived_habits),
-      ),
-      body: archived.isEmpty
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
+    final body = archived.isEmpty
           ? AppEmptyState(
               icon: LucideIcons.archive,
               title: context.l10n.archived_empty,
@@ -64,13 +65,28 @@ class ArchivedHabitsPage extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
                   decoration: BoxDecoration(
-                    color: context.colors.surfaceContainerHighest
-                        .withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(18),
+                    color: express
+                        ? expressSurface(context)
+                        : context.colors.surfaceContainerHighest
+                              .withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(express ? 24 : 18),
+                    border: express ? expressHairline(context) : null,
                   ),
                   child: Row(
                     children: [
-                      Container(
+                      if (express)
+                        ExpressBlob(
+                          size: 42,
+                          color: habit.color.withValues(alpha: 0.16),
+                          shape: ExpressShape.squircle,
+                          child: HabitGlyph(
+                            glyph: habit.icon,
+                            color: habit.color,
+                            size: 19,
+                          ),
+                        )
+                      else
+                        Container(
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
@@ -92,19 +108,31 @@ class ArchivedHabitsPage extends StatelessWidget {
                               habit.name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 15.5,
-                                fontWeight: FontWeight.w700,
-                                color: context.colors.onSurface,
-                              ),
+                              style: express
+                                  ? ExpressType.headline.at(
+                                      15.5,
+                                      weight: 800,
+                                      color: context.colors.onSurface,
+                                    )
+                                  : TextStyle(
+                                      fontSize: 15.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: context.colors.onSurface,
+                                    ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               DateFormat.yMMMd(locale).format(habit.archivedAt!),
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                color: context.tokens.muted,
-                              ),
+                              style: express
+                                  ? ExpressType.body.at(
+                                      12.5,
+                                      weight: 600,
+                                      color: context.tokens.muted,
+                                    )
+                                  : TextStyle(
+                                      fontSize: 12.5,
+                                      color: context.tokens.muted,
+                                    ),
                             ),
                           ],
                         ),
@@ -134,7 +162,24 @@ class ArchivedHabitsPage extends StatelessWidget {
                   ),
                 );
               },
+            );
+
+    return Scaffold(
+      appBar: express
+          ? expressBar()
+          : AppBar(
+              toolbarHeight: minimal ? 52 : null,
+              leading: IconButton(
+                icon: const Icon(LucideIcons.chevronLeft),
+                onPressed: () => AppNavigator.pop(),
+              ),
+              title: minimal ? null : Text(context.l10n.archived_habits),
             ),
+      body: express
+          ? expressBody(title: context.l10n.archived_habits, child: body)
+          : minimal
+          ? minimalBody(title: context.l10n.archived_habits, child: body)
+          : body,
     );
   }
 }
