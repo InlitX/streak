@@ -324,6 +324,10 @@ class ImportService {
   static int? _parseHexColor(String raw) {
     var s = raw.trim();
     if (s.startsWith('#')) s = s.substring(1);
+    if (s.toLowerCase().startsWith('0x')) s = s.substring(2);
+    if (s.length == 3) {
+      s = s.split('').map((c) => '$c$c').join();
+    }
     if (s.length == 6) s = 'FF$s';
     if (s.length != 8) return null;
     return int.tryParse(s, radix: 16);
@@ -360,7 +364,12 @@ class ImportService {
   static bool _isHabitKit(dynamic decoded) =>
       decoded is Map &&
       decoded['habits'] is List &&
-      decoded['completions'] is List;
+      (decoded['completions'] is List ||
+          decoded['intervals'] is List ||
+          (decoded['habits'] as List).any(
+            (h) => h is Map && (h.containsKey('iconName') ||
+                h.containsKey('orderIndex')),
+          ));
 
   static List<_RawHabit> _parseHabitKit(dynamic decoded) {
     final habitsJson = decoded['habits'];
@@ -378,14 +387,20 @@ class ImportService {
     }
 
     final byId = <String, _RawHabit>{};
-    final ordered = <_RawHabit>[];
-    for (final h in habitsJson) {
+    final ordered = <({int order, _RawHabit habit})>[];
+    var archived = 0;
+    for (var i = 0; i < habitsJson.length; i++) {
+      final h = habitsJson[i];
       if (h is! Map) continue;
-      if (h['archived'] == true) continue;
+      if (h['archived'] == true) {
+        archived++;
+        continue;
+      }
       final id = h['id']?.toString();
       if (id == null) continue;
       final target = targetById[id] ?? 1;
       final measurable = target > 1;
+      final index = h['orderIndex'];
       final raw = _RawHabit(
         (h['name'] ?? '').toString(),
         color: _habitKitColor(h['color']?.toString()),
@@ -393,7 +408,14 @@ class ImportService {
         target: measurable ? target : 1,
       );
       byId[id] = raw;
-      ordered.add(raw);
+      ordered.add((order: index is num ? index.toInt() : i, habit: raw));
+    }
+
+    if (byId.isEmpty && archived > 0) {
+      throw const ImportException(
+        'Every habit in that file is archived. Un-archive the ones you want '
+        'in HabitKit and export again.',
+      );
     }
 
     final completions = decoded['completions'];
@@ -410,7 +432,8 @@ class ImportService {
         raw.mark(date, n <= 0 ? 1 : n);
       }
     }
-    return ordered;
+    ordered.sort((a, b) => a.order.compareTo(b.order));
+    return [for (final entry in ordered) entry.habit];
   }
 
   static DateTime? _habitKitDate(dynamic dateRaw, dynamic offsetRaw) {
@@ -423,7 +446,9 @@ class ImportService {
   }
 
   static int? _habitKitColor(String? name) {
-    if (name == null) return null;
+    if (name == null || name.trim().isEmpty) return null;
+    final hex = _parseHexColor(name);
+    if (hex != null) return hex;
     const m = {
       'red': 0xFFF44336, 'pink': 0xFFE91E63, 'purple': 0xFF9C27B0,
       'deeppurple': 0xFF673AB7, 'indigo': 0xFF3F51B5, 'blue': 0xFF2196F3,

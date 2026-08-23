@@ -28,7 +28,7 @@ Run,,Health,3,2024-01-03,0,
       final read = _byName(o, 'Read');
       final run = _byName(o, 'Run');
       expect(read.completions.length, 2);
-      expect(run.completions.length, 1); // the 0-value day is skipped
+      expect(run.completions.length, 1);
       expect(o.entries, 3);
     });
 
@@ -73,12 +73,10 @@ Date,Meditate,Exercise
       final med = _byName(o, 'Meditate');
       expect(med.createdAt, DateTime(2024, 1, 1));
       expect(med.isCompletedOn(DateTime(2024, 1, 2)), isTrue);
-      expect(med.isCompletedOn(DateTime(2024, 1, 3)), isFalse); // value 0
+      expect(med.isCompletedOn(DateTime(2024, 1, 3)), isFalse);
     });
 
     test('imports habits from Habits.csv even with zero history', () {
-      // Mirrors a real Loop export of freshly-created habits: Habits.csv lists
-      // them, the top-level Checkmarks.csv is a header-only matrix.
       final archive = Archive()
         ..addFile(ArchiveFile(
             'Habits.csv',
@@ -95,7 +93,6 @@ Date,Meditate,Exercise
       expect(o.source, 'Loop Habit Tracker');
       expect(o.habits.length, 2);
       expect(o.entries, 0);
-      // Colour comes from Habits.csv.
       expect(_byName(o, 'Cgf').color.toARGB32(), 0xFF1976D2);
       expect(_byName(o, 'Fggg').color.toARGB32(), 0xFFE53935);
     });
@@ -127,8 +124,8 @@ Date,Meditate,Exercise
       expect(w.kind, HabitKind.quantitative);
       expect(w.perDayTarget, 8);
       expect(w.unitLabel, 'glasses');
-      expect(w.isCompletedOn(DateTime(2024, 3, 1)), isTrue); // 8 >= 8
-      expect(w.isCompletedOn(DateTime(2024, 3, 2)), isFalse); // 3 < 8
+      expect(w.isCompletedOn(DateTime(2024, 3, 1)), isTrue);
+      expect(w.isCompletedOn(DateTime(2024, 3, 2)), isFalse);
     });
 
     test('prefers the top-level Checkmarks.csv over per-habit ones', () {
@@ -139,7 +136,7 @@ Date,Meditate,Exercise
             ArchiveFile('Checkmarks.csv', checkmarks.length, _b(checkmarks)));
       final zipped = ZipEncoder().encode(archive)!;
       final o = ImportService.parseBytes(zipped, fileName: 'loop.zip');
-      expect(o.habits.length, 2); // used the top-level, 2-column file
+      expect(o.habits.length, 2);
     });
   });
 
@@ -173,14 +170,13 @@ Date,Meditate,Exercise
     test('imports habits + completions, skips archived, maps colours', () {
       final o = ImportService.parseBytes(_b(hk()), fileName: 'habitkit.json');
       expect(o.source, 'HabitKit');
-      expect(o.habits.length, 2); // archived 'Old' skipped
+      expect(o.habits.length, 2);
       expect(_byName(o, 'Ytyy').color.toARGB32(), 0xFF2196F3);
       expect(_byName(o, 'Cgg').color.toARGB32(), 0xFFF44336);
     });
 
     test('shifts UTC completion to the local calendar day', () {
       final o = ImportService.parseBytes(_b(hk()), fileName: 'habitkit.json');
-      // 2026-07-21T22:00Z + 120min → 2026-07-22.
       expect(_byName(o, 'Ytyy')
           .completions
           .containsKey(DateTime(2026, 7, 22).dayKey), isTrue);
@@ -191,6 +187,77 @@ Date,Meditate,Exercise
       final cgg = _byName(o, 'Cgg');
       expect(cgg.kind, HabitKind.quantitative);
       expect(cgg.perDayTarget, 3);
+    });
+
+    test('hex colours import as themselves, in every notation', () {
+      final raw = json.encode({
+        'habits': [
+          {'id': 'a', 'name': 'Hash', 'color': '#FF5722'},
+          {'id': 'b', 'name': 'Bare', 'color': '4CAF50'},
+          {'id': 'c', 'name': 'Prefixed', 'color': '0xFF2196F3'},
+          {'id': 'd', 'name': 'Short', 'color': '#0F0'},
+        ],
+        'completions': [
+          {'date': '2026-07-21T10:00:00.000Z', 'habitId': 'a'},
+        ],
+      });
+      final o = ImportService.parseBytes(_b(raw), fileName: 'habitkit.json');
+
+      expect(o.source, 'HabitKit');
+      expect(_byName(o, 'Hash').color.toARGB32(), 0xFFFF5722);
+      expect(_byName(o, 'Bare').color.toARGB32(), 0xFF4CAF50);
+      expect(_byName(o, 'Prefixed').color.toARGB32(), 0xFF2196F3);
+      expect(_byName(o, 'Short').color.toARGB32(), 0xFF00FF00);
+    });
+
+    test('a file with no completions yet still imports the habits', () {
+      final raw = json.encode({
+        'habits': [
+          {'id': 'a', 'name': 'Fresh', 'color': 'blue', 'orderIndex': 0},
+        ],
+        'intervals': [
+          {'habitId': 'a', 'requiredNumberOfCompletionsPerDay': 1},
+        ],
+      });
+      final o = ImportService.parseBytes(_b(raw), fileName: 'habitkit.json');
+
+      expect(o.source, 'HabitKit');
+      expect(o.habits.single.name, 'Fresh');
+      expect(o.entries, 0);
+    });
+
+    test('orderIndex decides the order, not the position in the file', () {
+      final raw = json.encode({
+        'habits': [
+          {'id': 'a', 'name': 'Third', 'orderIndex': 2, 'iconName': 'x'},
+          {'id': 'b', 'name': 'First', 'orderIndex': 0, 'iconName': 'x'},
+          {'id': 'c', 'name': 'Second', 'orderIndex': 1, 'iconName': 'x'},
+        ],
+      });
+      final o = ImportService.parseBytes(_b(raw), fileName: 'habitkit.json');
+
+      expect(o.habits.map((h) => h.name), ['First', 'Second', 'Third']);
+      expect(o.habits.map((h) => h.order), [0, 1, 2]);
+    });
+
+    test('an all-archived export says so instead of failing blankly', () {
+      final raw = json.encode({
+        'habits': [
+          {'id': 'a', 'name': 'Old', 'archived': true},
+        ],
+        'completions': <dynamic>[],
+      });
+
+      expect(
+        () => ImportService.parseBytes(_b(raw), fileName: 'habitkit.json'),
+        throwsA(
+          isA<ImportException>().having(
+            (e) => e.message,
+            'message',
+            contains('archived'),
+          ),
+        ),
+      );
     });
   });
 
@@ -210,7 +277,7 @@ Date,Meditate,Exercise
           'text': 'Pushups',
           'history': [
             {'date': 1704067200000, 'value': 0},
-            {'date': 1704153600000, 'value': 1}, // value rose → done that day
+            {'date': 1704153600000, 'value': 1},
           ],
         },
         {'type': 'todo', 'text': 'ignored'},
@@ -221,8 +288,8 @@ Date,Meditate,Exercise
       final o = ImportService.parseBytes(_b(jsonStr), fileName: 'user.json');
       expect(o.source, 'Habitica');
       expect(o.habits.length, 2);
-      expect(_byName(o, 'Water').completions.length, 1); // only the completed day
-      expect(_byName(o, 'Pushups').completions.length, 1); // only the rise
+      expect(_byName(o, 'Water').completions.length, 1);
+      expect(_byName(o, 'Pushups').completions.length, 1);
     });
 
     test('supports the data.tasks nesting', () {
@@ -252,8 +319,8 @@ Date,Meditate,Exercise
           '2024-01-03;;true\n';
       final o = ImportService.parseBytes(_b(csv), fileName: 'export.csv');
       expect(o.source, 'CSV');
-      expect(_byName(o, 'Leer').completions.length, 2); // 01, 02
-      expect(_byName(o, 'Correr').completions.length, 2); // 02, 03
+      expect(_byName(o, 'Leer').completions.length, 2);
+      expect(_byName(o, 'Correr').completions.length, 2);
     });
 
     test('long/tidy format (habit,date,value)', () {
@@ -269,8 +336,8 @@ Date,Meditate,Exercise
 
     test('parses dd/MM/yyyy and MM/dd/yyyy day-first-safely', () {
       const csv = 'Date,A\n'
-          '31/01/2024,1\n' // clearly dd/MM
-          '01/02/2024,1\n'; // ambiguous → day-first
+          '31/01/2024,1\n'
+          '01/02/2024,1\n';
       final o = ImportService.parseBytes(_b(csv), fileName: 'x.csv');
       final a = _byName(o, 'A');
       expect(a.completions.containsKey(DateTime(2024, 1, 31).dayKey), isTrue);
@@ -287,8 +354,6 @@ Date,Meditate,Exercise
     });
 
     test('.db files are rejected with guidance', () {
-      // parseBytes doesn't see the extension guard (that's in pickAndParse),
-      // but random binary should not crash — it should throw ImportException.
       expect(
         () => ImportService.parseBytes([0x00, 0x01, 0x02, 0x03]),
         throwsA(isA<ImportException>()),
