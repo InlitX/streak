@@ -42,9 +42,11 @@ class MinimalSettingsPage extends StatelessWidget {
               SoftRow(
                 icon: LucideIcons.smartphone,
                 title: context.l10n.app_style,
-                value: settings.isMinimalStyle
-                    ? context.l10n.style_minimal
-                    : context.l10n.style_classic,
+                value: switch (settings.appStyle) {
+                  1 => context.l10n.style_minimal,
+                  2 => context.l10n.style_express,
+                  _ => context.l10n.style_classic,
+                },
                 onTap: () => AppNavigator.push(const AppStylePage()),
               ),
             ],
@@ -296,7 +298,7 @@ class _AppearancePage extends StatelessWidget {
                 onSelected: settings.setCheckStyle,
               ),
             ),
-            if (isMobile) ...[
+            if (hasAppIcons) ...[
               SoftRow(
                 icon: LucideIcons.appWindow,
                 title: context.l10n.app_icon,

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
+export 'package:streak/core/minimal/minimal_kit.dart'
+    show MinimalTitle;
+
+import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/utils/responsive.dart';
-import 'package:streak/features/settings/state/settings_controller.dart';
 
 class MinimalPage extends StatelessWidget {
   const MinimalPage({
@@ -35,47 +38,6 @@ class MinimalPage extends StatelessWidget {
   }
 }
 
-class MinimalTitle extends StatelessWidget {
-  const MinimalTitle({super.key, required this.title, this.subtitle});
-
-  final String title;
-  final String? subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 26),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'PlayfairDisplay',
-              fontSize: 38,
-              fontWeight: FontWeight.w700,
-              height: 1.05,
-              letterSpacing: -0.8,
-              color: context.colors.onSurface,
-            ),
-          ),
-          if (subtitle != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              subtitle!,
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.4,
-                color: context.tokens.muted,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
 class SoftCard extends StatelessWidget {
   const SoftCard({super.key, required this.children});
 
@@ -83,17 +45,11 @@ class SoftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        color: isDark
-            ? context.colors.surfaceContainerHighest.withValues(alpha: 0.38)
-            : Colors.white.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: context.tokens.muted.withValues(alpha: isDark ? 0.14 : 0.10),
-        ),
+        color: minimalSurface(context),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Column(children: children),
     );
@@ -124,11 +80,8 @@ class SoftRow extends StatelessWidget {
 
     return Semantics(
       button: true,
-      child: InkWell(
+      child: MinimalPress(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        splashFactory: NoSplash.splashFactory,
-        highlightColor: context.tokens.muted.withValues(alpha: 0.06),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
           child: Row(
@@ -205,18 +158,13 @@ Future<void> showOptionSheet(
   required int index,
   required ValueChanged<int> onSelected,
 }) {
-  final minimal = context.read<SettingsController>().isMinimalStyle;
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    backgroundColor: context.colors.surface,
     constraints: BoxConstraints(
       maxWidth: phoneWidth,
       maxHeight: MediaQuery.sizeOf(context).height * 0.85,
-    ),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
     ),
     builder: (sheet) => SafeArea(
       top: false,
@@ -226,15 +174,7 @@ Future<void> showOptionSheet(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontFamily: minimal ? 'PlayfairDisplay' : null,
-                fontSize: minimal ? 24 : 19,
-                fontWeight: minimal ? FontWeight.w700 : FontWeight.w800,
-                color: context.colors.onSurface,
-              ),
-            ),
+            Text(title, style: sheetTitleStyle(sheet)),
             const SizedBox(height: 10),
             Flexible(
               child: SingleChildScrollView(
@@ -258,13 +198,12 @@ Future<void> showOptionSheet(
                                 Expanded(
                                   child: Text(
                                     options[i],
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight:
-                                          i == index ? FontWeight.w700 : FontWeight.w500,
+                                    style: sheetOptionStyle(
+                                      sheet,
+                                      selected: i == index,
                                       color: i == index
                                           ? context.colors.primary
-                                          : context.colors.onSurface,
+                                          : null,
                                     ),
                                   ),
                                 ),
