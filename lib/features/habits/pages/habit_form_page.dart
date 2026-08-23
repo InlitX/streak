@@ -24,6 +24,12 @@ import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 import 'package:streak/features/habits/widgets/habit_time_fields.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/features/habits/widgets/express_form_kit.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/minimal_pickers.dart';
 import 'package:streak/features/habits/widgets/minimal_substeps.dart';
@@ -48,6 +54,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
   late final TextEditingController _description;
   late final TextEditingController _unitLabel;
   late final TextEditingController _dailyCost;
+  final _scroll = ScrollController();
+  final _lookAnchor = GlobalKey();
 
   String _icon = HabitIcons.defaultIcon;
   String _category = '';
@@ -135,6 +143,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
     _description.dispose();
     _unitLabel.dispose();
     _dailyCost.dispose();
+    _scroll.dispose();
     super.dispose();
   }
 
@@ -151,6 +160,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
           _unitLabel.text = context.l10n.quant_unit_pages;
           _quantTarget = 20;
           _quantIncrement = 1;
+          break;
+        case QuantKind.time:
+          _unitLabel.text = context.l10n.unit_min_short;
+          _quantTarget = 30;
+          _quantIncrement = 5;
           break;
         case QuantKind.generic:
           break;
@@ -294,20 +308,249 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final style = context.watch<SettingsController>();
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       excludeFromSemantics: true,
-      child: minimal ? _buildMinimal(context) : _buildClassic(context),
+      child: style.isMinimalStyle
+          ? _buildMinimal(context)
+          : style.isExpressStyle
+              ? _buildExpress(context)
+              : _buildClassic(context),
     );
+  }
+
+  void _revealLook() {
+    final target = _lookAnchor.currentContext;
+    if (target == null) return;
+    Scrollable.ensureVisible(
+      target,
+      duration: Express.normal,
+      curve: Express.emphasized,
+      alignment: 0.1,
+    );
+  }
+
+  Widget _buildExpress(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 64,
+        leadingWidth: 68,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Center(child: ExpressIconButton(
+            icon: LucideIcons.x,
+            tooltip: context.l10n.cancel,
+            onPressed: () => AppNavigator.pop(),
+          )),
+        ),
+        actions: [
+          if (widget.isEditing)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(child: ExpressIconButton(
+                icon: LucideIcons.trash2,
+                tint: context.tokens.danger,
+                background: context.tokens.danger.withValues(alpha: 0.14),
+                onPressed: _confirmDelete,
+              )),
+            ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: ExpressSaveBar(
+        label: context.l10n.save,
+        onPressed: _canSave ? _submit : null,
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: ListView(
+            controller: _scroll,
+            padding: context.pagePadding(18, 8, 18, 140),
+            children: _expressFields(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _expressFields(BuildContext context) {
+    final title =
+        widget.isEditing ? context.l10n.edit_habit : context.l10n.new_habit;
+
+    return [
+      ExpressHeadline(title: title),
+      const SizedBox(height: 20),
+      ExpressFormHero(
+        icon: _icon,
+        color: _color,
+        cover: _cover,
+        controller: _name,
+        onChanged: () => setState(() {}),
+        onShuffleIcon: _revealLook,
+      ),
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.habit_kind),
+      ExpressKindPills(
+        kind: _kind,
+        locked: _kindLocked,
+        onChanged: (kind) => setState(() => _kind = kind),
+      ),
+      if (_kindLocked) ...[
+        const SizedBox(height: 10),
+        NegativeHint(color: _color),
+      ],
+      if (_kind == HabitKind.quantitative) ...[
+        const SizedBox(height: 12),
+        QuantitativeFields(
+          quantKind: _quantKind,
+          unitController: _unitLabel,
+          target: _quantTarget,
+          increment: _quantIncrement,
+          onPresetSelected: _applyQuantPreset,
+          onUnitChanged: () => setState(() {}),
+          onTargetChanged: (v) => setState(() => _quantTarget = v),
+          onIncrementChanged: (v) => setState(() => _quantIncrement = v),
+        ),
+        if (_quantKind == QuantKind.reading) ...[
+          const SizedBox(height: 20),
+          SectionLabel(context.l10n.book_cover),
+          CoverPicker(
+            path: _bookCover,
+            color: _color,
+            onPick: _pickBookCover,
+            onRemove: () => setState(() => _bookCover = ''),
+          ),
+        ],
+      ],
+      if (_kind == HabitKind.negative) ...[
+        const SizedBox(height: 12),
+        CostField(controller: _dailyCost, color: _color),
+      ],
+      if (_kind == HabitKind.positive) ...[
+        const SizedBox(height: 12),
+        FocusOnlyToggle(
+          value: _focusOnly,
+          color: _color,
+          onChanged: (v) => setState(() => _focusOnly = v),
+        ),
+        if (_focusOnly) ...[
+          const SizedBox(height: 20),
+          SectionLabel(context.l10n.focus_duration),
+          FocusDurationChips(
+            minutes: _focusMinutes,
+            onChanged: (v) => setState(() => _focusMinutes = v),
+          ),
+          if (_focusMinutes > 0) ...[
+            const SizedBox(height: 12),
+            FocusPomodoroCard(
+              enabled: _pomodoro,
+              breakMinutes: _breakMinutes,
+              onToggle: (v) => setState(() => _pomodoro = v),
+              onBreakChanged: (v) => setState(() => _breakMinutes = v),
+            ),
+          ],
+        ],
+        if (!_focusOnly) ...[
+          const SizedBox(height: 26),
+          SectionLabel(context.l10n.checklist),
+          SubstepsEditor(
+            substeps: _substeps,
+            color: _color,
+            onChanged: (list) => _substeps = list,
+          ),
+        ],
+      ],
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.description),
+      AppTextField(
+        hint: context.l10n.description_hint,
+        controller: _description,
+      ),
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.icon, key: _lookAnchor),
+      IconPicker(
+        selected: _icon,
+        color: _color,
+        onSelected: (icon) => setState(() => _icon = icon),
+      ),
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.color),
+      ExpressCard(
+        padding: const EdgeInsets.all(16),
+        child: ColorPicker(
+          selected: _color,
+          onSelected: (c) => setState(() => _color = c),
+        ),
+      ),
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.category),
+      CategoryPicker(
+        selected: _category,
+        onSelected: (c) => setState(() => _category = c),
+      ),
+      if (_kind != HabitKind.negative) ...[
+        const SizedBox(height: 26),
+        SectionLabel(context.l10n.frequency),
+        IntervalSelector(
+          interval: _interval,
+          frequency: _frequency,
+          weekdays: _scheduleWeekdays,
+          every: _scheduleEvery,
+          onIntervalChanged: (interval) => setState(() {
+            _interval = interval;
+            _frequency = switch (interval) {
+              HabitInterval.weekly => 3,
+              HabitInterval.monthly => 10,
+              _ => 1,
+            };
+          }),
+          onFrequencyChanged: (value) => setState(() => _frequency = value),
+          onWeekdaysChanged: (days) => setState(() => _scheduleWeekdays = days),
+          onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+        ),
+      ],
+      if (_kind != HabitKind.negative && _planning) ...[
+        const SizedBox(height: 26),
+        SectionLabel(context.l10n.habit_time),
+        HabitTimeFields(
+          startMinute: _startMinute,
+          durationMinutes: _durationMinutes,
+          color: _color,
+          onChanged: (start, duration) => setState(() {
+            _startMinute = start;
+            _durationMinutes = duration;
+          }),
+        ),
+      ],
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.reminders),
+      for (final reminder in _reminders)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: ReminderTile(
+            reminder: reminder,
+            onEdit: () => _editReminder(reminder),
+            onDelete: () => setState(() => _reminders.remove(reminder)),
+          ),
+        ),
+      AddReminderButton(onTap: _addReminder),
+      const SizedBox(height: 26),
+      SectionLabel(context.l10n.cover_image),
+      CoverPicker(
+        path: _cover,
+        color: _color,
+        onPick: _pickCover,
+        onRemove: () => setState(() => _cover = ''),
+      ),
+    ];
   }
 
   Widget _buildMinimal(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.isEditing ? context.l10n.edit_habit : context.l10n.new_habit,
-        ),
+        toolbarHeight: 52,
         leading: IconButton(
           icon: const Icon(LucideIcons.x),
           onPressed: () => AppNavigator.pop(),
@@ -322,15 +565,22 @@ class _HabitFormPageState extends State<HabitFormPage> {
             onPressed: _canSave ? _submit : null,
             child: Text(
               context.l10n.save,
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+              style: sheetActionStyle(context, size: 16),
             ),
           ),
           const SizedBox(width: 8),
         ],
       ),
       body: ListView(
-        padding: context.pagePadding(16, 16, 16, 32),
-        children: _minimalFields(context),
+        padding: context.pagePadding(20, 0, 20, 32),
+        children: [
+          MinimalTitle(
+            title: widget.isEditing
+                ? context.l10n.edit_habit
+                : context.l10n.new_habit,
+          ),
+          ..._minimalFields(context),
+        ],
       ),
     );
   }
@@ -353,26 +603,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
       ),
       const SizedBox(height: 16),
       SectionLabel(context.l10n.habit_kind),
-      Row(
-        children: [
-          for (final option in [
-            (HabitKind.positive, context.l10n.kind_positive),
-            (HabitKind.negative, context.l10n.kind_negative),
-            (HabitKind.quantitative, context.l10n.kind_quantitative),
-          ]) ...[
-            if (option.$1 != HabitKind.positive) const SizedBox(width: 7),
-            Expanded(
-              child: CompactPill(
-                label: option.$2,
-                selected: option.$1 == _kind,
-                dimmed: _kindLocked && option.$1 != _kind,
-                expand: true,
-                onTap:
-                    _kindLocked ? null : () => setState(() => _kind = option.$1),
-              ),
-            ),
-          ],
+      MinimalSegmented(
+        expand: true,
+        enabled: !_kindLocked,
+        index: HabitKind.values.indexOf(_kind),
+        options: [
+          context.l10n.kind_positive,
+          context.l10n.kind_negative,
+          context.l10n.kind_quantitative,
         ],
+        onChanged: (i) => setState(() => _kind = HabitKind.values[i]),
       ),
       if (_kindLocked) ...[
         const SizedBox(height: 8),
@@ -389,6 +629,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   for (final preset in [
                     (QuantKind.water, context.l10n.quant_preset_water),
                     (QuantKind.reading, context.l10n.quant_preset_reading),
+                    (QuantKind.time, context.l10n.quant_preset_time),
                     (QuantKind.generic, context.l10n.quant_preset_generic),
                   ]) ...[
                     if (preset.$1 != QuantKind.water) const SizedBox(width: 7),
@@ -591,7 +832,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
     ];
   }
 
-  double get _quantStep => _quantKind == QuantKind.water ? 50 : 1;
+  double get _quantStep => switch (_quantKind) {
+        QuantKind.water => 50,
+        QuantKind.time => 5,
+        _ => 1,
+      };
 
   String _intervalLabel(BuildContext context, HabitInterval option) =>
       switch (option) {
@@ -603,11 +848,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
       };
 
   Widget _buildClassic(BuildContext context) {
+    final title =
+        widget.isEditing ? context.l10n.edit_habit : context.l10n.new_habit;
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            widget.isEditing ? context.l10n.edit_habit : context.l10n.new_habit,
-          ),
+          title: Text(title),
           leading: IconButton(
             icon: const Icon(LucideIcons.x),
             onPressed: () => AppNavigator.pop(),
@@ -622,7 +867,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
               onPressed: _canSave ? _submit : null,
               child: Text(
                 context.l10n.save,
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
               ),
             ),
             const SizedBox(width: 8),

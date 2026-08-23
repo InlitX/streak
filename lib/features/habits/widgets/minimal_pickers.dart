@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/cover_action_button.dart';
 import 'package:streak/core/icons/habit_emojis.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
@@ -348,14 +349,20 @@ class CompactCategoryPicker extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(LucideIcons.pencil, color: context.colors.onSurface),
-              title: Text(context.l10n.edit),
+              title: Text(
+                context.l10n.edit,
+                style: sheetOptionStyle(sheetContext),
+              ),
               onTap: () => Navigator.of(sheetContext).pop('edit'),
             ),
             ListTile(
               leading: Icon(LucideIcons.trash2, color: context.tokens.danger),
               title: Text(
                 context.l10n.delete,
-                style: TextStyle(color: context.tokens.danger),
+                style: sheetOptionStyle(
+                  sheetContext,
+                  color: context.tokens.danger,
+                ),
               ),
               onTap: () => Navigator.of(sheetContext).pop('delete'),
             ),
