@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
-import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 
@@ -14,7 +13,9 @@ class QuantDailyBars extends StatelessWidget {
   Widget build(BuildContext context) {
     final today = AppClock.now().atMidnight;
     final start = today.subtract(Duration(days: days - 1));
-    final unit = habit.unitLabel.isEmpty ? '' : ' ${habit.unitLabel}';
+    final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
+        ? ''
+        : ' ${habit.unitLabel}';
 
     return TrendChart(
       values: [
@@ -25,7 +26,7 @@ class QuantDailyBars extends StatelessWidget {
       startDate: start,
       height: 132,
       goal: habit.perDayTarget,
-      format: (value) => '${formatAmount(value)}$unit',
+      format: (value) => '${habit.amountText(value)}$unit',
     );
   }
 }

@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
-import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
@@ -73,7 +72,7 @@ class QuantitativeProgress extends StatelessWidget {
                 _WaterCups(count: count, target: habit.perDayTarget),
               QuantKind.reading =>
                 ReadingBooks(habit: habit, ratio: ratio, count: count),
-              QuantKind.generic => _GenericRing(
+              QuantKind.generic || QuantKind.time => _GenericRing(
                   progress: QuantProgress.of(
                     count: count,
                     target: habit.perDayTarget,
@@ -92,8 +91,9 @@ class QuantitativeProgress extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${formatAmount(count)} / '
-                        '${formatAmount(habit.perDayTarget)} ${habit.unitLabel}',
+                        '${habit.amountText(count)} / '
+                        '${habit.amountText(habit.perDayTarget)}'
+                        '${habit.isTimeAmount ? '' : ' ${habit.unitLabel}'}',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
