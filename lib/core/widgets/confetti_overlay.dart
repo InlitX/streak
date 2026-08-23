@@ -115,12 +115,18 @@ class _ConfettiPainter extends CustomPainter {
     final alpha = opacity.clamp(0.0, 1.0);
     if (alpha < 0.04) return;
     final paint = Paint();
+    final margin = size.width * 0.15;
 
     for (final p in particles) {
       final dx = origin.dx + math.cos(p.angle) * p.speed * progress;
       final dy = origin.dy +
           math.sin(p.angle) * p.speed * progress +
           gravity * progress * progress;
+      if (dx < -margin ||
+          dx > size.width + margin ||
+          dy > size.height + margin) {
+        continue;
+      }
 
       paint.color = p.color.withValues(alpha: alpha);
 

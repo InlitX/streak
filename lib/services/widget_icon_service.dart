@@ -30,7 +30,7 @@ class WidgetIconService {
     if (glyph.isEmpty) return null;
     final key = 'badge_${_keyFor(glyph)}_${color.toRadixString(16)}';
     final cached = _paths[key];
-    if (cached != null && File(cached).existsSync()) return cached;
+    if (cached != null) return cached;
 
     try {
       final dir = await _iconDir();
@@ -92,7 +92,7 @@ class WidgetIconService {
   static Future<String?> _pathFor(String glyph, bool render) async {
     if (glyph.isEmpty) return null;
     final cached = _paths[glyph];
-    if (cached != null && File(cached).existsSync()) return cached;
+    if (cached != null) return cached;
 
     try {
       final dir = await _iconDir();
@@ -112,7 +112,7 @@ class WidgetIconService {
 
   static Future<Directory> _iconDir() async {
     final cached = _dir;
-    if (cached != null && cached.existsSync()) return cached;
+    if (cached != null) return cached;
     final docs = await appDataDir();
     final dir = Directory('${docs.path}/widget_icons');
     if (!dir.existsSync()) dir.createSync(recursive: true);

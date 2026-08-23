@@ -206,6 +206,10 @@ class _FireworksPainter extends CustomPainter {
 
       final reach = spark.speed * unit;
       final head = origin + spark.direction * (reach * spread) + drop;
+      if (head.dy > size.height + unit || head.dx < -unit ||
+          head.dx > size.width + unit) {
+        continue;
+      }
       final tail = origin + spark.direction * (reach * backSpread) + backDrop;
 
       paint

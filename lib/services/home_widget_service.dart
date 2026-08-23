@@ -6,6 +6,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/icons/habit_icons.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/services/widget_icon_service.dart';
@@ -91,11 +92,11 @@ class HomeWidgetService {
 
   static Timer? _pendingSync;
 
-  static void syncSoon(Map<String, Habit> habits) {
+  static void syncSoon(Map<String, Habit> Function() habits) {
     _pendingSync?.cancel();
     _pendingSync = Timer(const Duration(milliseconds: 700), () {
       _pendingSync = null;
-      sync(habits);
+      sync(habits());
     });
   }
 
@@ -105,6 +106,7 @@ class HomeWidgetService {
   }) async {
     _pendingSync?.cancel();
     _pendingSync = null;
+    if (!hasHomeWidgets) return;
     try {
       final icons = await WidgetIconService.resolve(
         [..._ordered(habits).map((h) => h.icon), _allHabitsIcon],
