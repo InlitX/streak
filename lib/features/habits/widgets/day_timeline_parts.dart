@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
-import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const timelineGutter = 46.0;
 const _cardPadding = 12.0;
@@ -46,8 +47,11 @@ class TimelineBlock extends StatelessWidget {
   String? _progressLabel(BuildContext context) {
     if (habit.kind == HabitKind.quantitative) {
       final count = habit.completions[date.dayKey]?.count ?? 0;
-      final unit = habit.unitLabel.isEmpty ? '' : ' ${habit.unitLabel}';
-      return '${formatAmount(count)}/${formatAmount(habit.perDayTarget)}$unit';
+      final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
+          ? ''
+          : ' ${habit.unitLabel}';
+      return '${habit.amountText(count)}/'
+          '${habit.amountText(habit.perDayTarget)}$unit';
     }
     if (habit.hasSubsteps) {
       final steps = habit.completions[date.dayKey]?.steps.length ?? 0;
@@ -198,6 +202,7 @@ class TimelineCheck extends StatelessWidget {
       target: habit.perDayTarget,
     );
     final color = _quant ? progress.activeColor(habit.color) : habit.color;
+    final circle = context.watch<SettingsController>().isCircleCheck;
 
     return Semantics(
       button: true,
@@ -236,7 +241,9 @@ class TimelineCheck extends StatelessWidget {
                 height: _quant ? 28 : 34,
                 decoration: BoxDecoration(
                   color: done ? color : Colors.transparent,
-                  borderRadius: BorderRadius.circular(_quant ? 14 : 11),
+                  borderRadius: BorderRadius.circular(
+                    circle ? 17 : (_quant ? 14 : 11),
+                  ),
                   border: _quant && !done
                       ? null
                       : Border.all(
