@@ -98,14 +98,12 @@ void main() {
         };
 
     test('paused days do not break the daily streak', () {
-      // Done today and 4 days ago; days 1-3 ago are a vacation.
       final done = [today, today.subtract(const Duration(days: 4))];
       final vac = VacationPeriod(
         start: today.subtract(const Duration(days: 3)),
         end: today.subtract(const Duration(days: 1)),
       );
       final habit = _base(completions: completed(done), vacations: [vac]);
-      // today (1) + skipped 3 + day4 (1) = streak 2, unbroken.
       expect(habit.currentStreak, 2);
     });
 
@@ -124,7 +122,6 @@ void main() {
       final habit =
           _base(completions: completed([loggedDay]), vacations: [vac]);
       expect(habit.isPausedOn(loggedDay), isTrue);
-      // Logged day inside a vacation still counts (not neutral).
       expect(habit.isNeutralOn(loggedDay), isFalse);
       expect(
         habit.isNeutralOn(today.subtract(const Duration(days: 3))),
@@ -212,7 +209,6 @@ void main() {
       );
       expect(habit.isCompletedOn(wednesday), isTrue);
 
-      // What setProgress(0) does: delta back down to zero clears the day.
       final current = habit.completions[wednesday.dayKey]!.count;
       habit = habit.copyWith(
         completions: CompletionOps.addProgress(habit, wednesday, -current),
@@ -225,6 +221,36 @@ void main() {
       final habit = _base(kind: HabitKind.negative, createdAt: today);
       expect(habit.isCompletedOn(yesterday), isFalse);
       expect(habit.isCompletedOn(today), isTrue);
+    });
+
+    test('tapping a negative before it existed records nothing', () {
+      final before = today.subtract(const Duration(days: 40));
+      final habit = _base(kind: HabitKind.negative, createdAt: today);
+
+      final tapped = CompletionOps.toggle(habit, before);
+      expect(tapped.containsKey(before.dayKey), isFalse);
+
+      final again = CompletionOps.toggle(
+        habit.copyWith(completions: tapped),
+        before,
+      );
+      expect(again.containsKey(before.dayKey), isFalse);
+    });
+
+    test('a relapse mistakenly stored before createdAt can be tapped away', () {
+      final before = today.subtract(const Duration(days: 40));
+      final habit = _base(
+        kind: HabitKind.negative,
+        createdAt: today,
+        completions: {
+          before.dayKey: Completion(date: before.dayKey, count: 1, hour: 9),
+        },
+      );
+
+      expect(
+        CompletionOps.toggle(habit, before).containsKey(before.dayKey),
+        isFalse,
+      );
     });
   });
 
