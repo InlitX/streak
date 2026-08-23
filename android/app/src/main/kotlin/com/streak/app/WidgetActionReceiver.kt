@@ -3,6 +3,7 @@ package com.streak.app
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,12 +17,12 @@ class WidgetActionReceiver : BroadcastReceiver() {
         }
         if (intent.action != ACTION_TOGGLE) return
         val habitId = intent.getStringExtra(EXTRA_HABIT_ID) ?: return
-        val dayKey = intent.getStringExtra(EXTRA_DAY_KEY) ?: WidgetPayload.todayKey()
+        val dayKey = intent.getStringExtra(EXTRA_DAY_KEY) ?: WidgetPayload.todayKey(context)
         val data = HabitCardData.load(context, habitId, null) ?: return
         val column = columnOf(context, dayKey)
 
         if (data.focusOnly) {
-            if (!data.isDoneOn(column) && dayKey == WidgetPayload.todayKey()) {
+            if (!data.isDoneOn(column) && dayKey == WidgetPayload.todayKey(context)) {
                 startFocus(context, habitId)
             }
             return
@@ -97,12 +98,14 @@ class WidgetActionReceiver : BroadcastReceiver() {
                 action = ACTION_TOGGLE
                 putExtra(EXTRA_HABIT_ID, habitId)
                 putExtra(EXTRA_DAY_KEY, dayKey)
+                data = Uri.parse("streak://toggleHabit/$habitId/$dayKey")
             }
 
         fun todoIntent(context: Context, todoId: String): Intent =
             Intent(context, WidgetActionReceiver::class.java).apply {
                 action = ACTION_TOGGLE_TODO
                 putExtra(EXTRA_TODO_ID, todoId)
+                data = Uri.parse("streak://toggleTodo/$todoId")
             }
     }
 }
