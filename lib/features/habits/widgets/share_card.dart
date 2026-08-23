@@ -8,17 +8,48 @@ import 'package:gal/gal.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_theme.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/utils/share_origin.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/habits/widgets/share_range_pages.dart';
 import 'package:streak/features/habits/widgets/share_stat_card.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
+
+int _styleOf(BuildContext context) =>
+    context.watch<SettingsController>().appStyle;
+
+TextStyle _shareTitle(int style) => switch (style) {
+      2 => ExpressType.display.at(24, spacing: -0.4, color: Colors.white),
+      1 => MinimalType.display(24, color: Colors.white),
+      _ => const TextStyle(
+          fontFamily: 'PlayfairDisplay',
+          fontStyle: FontStyle.italic,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+    };
+
+TextStyle _shareLabel(int style, double size, Color color) => switch (style) {
+      2 => ExpressType.headline.at(size, weight: 800, color: color),
+      1 => MinimalType.label(size: size, color: color),
+      _ => TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
+    };
 
 Future<void> showShareCard(BuildContext context, Habit habit) async {
   AppNavigator.push(SharePage(habit: habit), fullscreenDialog: true);
@@ -48,10 +79,6 @@ class _SharePageState extends State<SharePage> {
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
       builder: (_) => StatefulBuilder(
         builder: (_, setSheetState) => SafeArea(
           top: false,
@@ -91,6 +118,7 @@ class _SharePageState extends State<SharePage> {
   Future<void> _share() async {
     if (_busy) return;
     setState(() => _busy = true);
+    final origin = shareOrigin(context);
     try {
       HapticFeedback.mediumImpact();
       final bytes = await _render();
@@ -101,6 +129,7 @@ class _SharePageState extends State<SharePage> {
       await Share.shareXFiles(
         [XFile(file.path, mimeType: 'image/png')],
         subject: widget.habit.name,
+        sharePositionOrigin: origin,
       );
     } catch (_) {
       if (mounted) AppSnackbar.error(context, context.l10n.share_failed);
@@ -133,6 +162,7 @@ class _SharePageState extends State<SharePage> {
     final width = (MediaQuery.sizeOf(context).width - 56)
         .clamp(240.0, 330.0)
         .toDouble();
+    final style = _styleOf(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: AppTheme.systemBars(Brightness.dark),
@@ -153,13 +183,7 @@ class _SharePageState extends State<SharePage> {
                       child: Text(
                         context.l10n.share,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'PlayfairDisplay',
-                          fontStyle: FontStyle.italic,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                        style: _shareTitle(style),
                       ),
                     ),
                     const SizedBox(width: 48),
@@ -170,6 +194,7 @@ class _SharePageState extends State<SharePage> {
                 index: 1,
                 delay: _entrance,
                 child: _RangeTabs(
+                  style: style,
                   range: _range,
                   onChanged: (value) => setState(() => _range = value),
                 ),
@@ -198,9 +223,10 @@ class _SharePageState extends State<SharePage> {
                           const SizedBox(height: 8),
                           Text(
                             context.l10n.share_swipe_hint,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white.withValues(alpha: 0.4),
+                            style: _shareLabel(
+                              style,
+                              12,
+                              Colors.white.withValues(alpha: 0.4),
                             ),
                           ),
                         ],
@@ -213,6 +239,7 @@ class _SharePageState extends State<SharePage> {
                 index: 3,
                 delay: _entrance,
                 child: _Options(
+                  style: style,
                   accent: _accent,
                   image: _image,
                   blur: _blur,
@@ -233,12 +260,15 @@ class _SharePageState extends State<SharePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _CircleAction(
+                        style: style,
                         icon: LucideIcons.share2,
                         label: context.l10n.share,
                         onTap: _busy ? null : _share,
                       ),
                       const SizedBox(width: 40),
                       _CircleAction(
+                        style: style,
+                        shapeIndex: 3,
                         icon: LucideIcons.download,
                         label: context.l10n.share_save,
                         onTap: _busy ? null : _save,
@@ -256,10 +286,66 @@ class _SharePageState extends State<SharePage> {
 }
 
 class _RangeTabs extends StatelessWidget {
-  const _RangeTabs({required this.range, required this.onChanged});
+  const _RangeTabs({
+    required this.style,
+    required this.range,
+    required this.onChanged,
+  });
 
+  final int style;
   final ShareRange range;
   final ValueChanged<ShareRange> onChanged;
+
+  Widget _pill(BuildContext context, Map<ShareRange, String> labels) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(style == 2 ? 24 : 14),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final entry in labels.entries)
+            Semantics(
+              button: true,
+              selected: range == entry.key,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  onChanged(entry.key);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: range == entry.key
+                        ? Colors.white
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(style == 2 ? 21 : 11),
+                  ),
+                  child: Text(
+                    entry.value,
+                    style: _shareLabel(
+                      style,
+                      13,
+                      range == entry.key
+                          ? Colors.black.withValues(alpha: 0.85)
+                          : Colors.white.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +354,13 @@ class _RangeTabs extends StatelessWidget {
       ShareRange.month: context.l10n.month,
       ShareRange.year: context.l10n.year,
     };
+
+    if (style != 0) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Center(child: _pill(context, labels)),
+      );
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -320,6 +413,7 @@ class _RangeTabs extends StatelessWidget {
 
 class _Options extends StatelessWidget {
   const _Options({
+    required this.style,
     required this.accent,
     required this.image,
     required this.blur,
@@ -331,6 +425,7 @@ class _Options extends StatelessWidget {
     required this.onStats,
   });
 
+  final int style;
   final Color accent;
   final String image;
   final double blur;
@@ -350,6 +445,7 @@ class _Options extends StatelessWidget {
           child: Row(
             children: [
               _Toggle(
+                style: style,
                 icon: LucideIcons.palette,
                 label: context.l10n.color,
                 selected: image.isEmpty,
@@ -358,6 +454,7 @@ class _Options extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _Toggle(
+                style: style,
                 icon: LucideIcons.image,
                 label: context.l10n.share_photo,
                 selected: image.isNotEmpty,
@@ -366,6 +463,7 @@ class _Options extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _Toggle(
+                style: style,
                 icon: LucideIcons.flame,
                 label: context.l10n.share_stats_short,
                 selected: stats,
@@ -411,10 +509,10 @@ class _Options extends StatelessWidget {
                         child: Text(
                           blur.round().toString(),
                           textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.7),
+                          style: _shareLabel(
+                            style,
+                            12,
+                            Colors.white.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -429,6 +527,7 @@ class _Options extends StatelessWidget {
 
 class _Toggle extends StatelessWidget {
   const _Toggle({
+    required this.style,
     required this.icon,
     required this.label,
     required this.selected,
@@ -437,6 +536,7 @@ class _Toggle extends StatelessWidget {
     this.badge,
   });
 
+  final int style;
   final IconData icon;
   final String label;
   final bool selected;
@@ -465,10 +565,12 @@ class _Toggle extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: selected ? 0.18 : 0.06),
-                borderRadius: BorderRadius.circular(13),
+                borderRadius: BorderRadius.circular(
+                  switch (style) { 2 => 22.0, 1 => 10.0, _ => 13.0 },
+                ),
                 border: Border.all(
                   color: selected
-                      ? Colors.white.withValues(alpha: 0.5)
+                      ? Colors.white.withValues(alpha: style == 1 ? 0.32 : 0.5)
                       : Colors.transparent,
                 ),
               ),
@@ -496,11 +598,7 @@ class _Toggle extends StatelessWidget {
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                      style: _shareLabel(style, 12, Colors.white),
                     ),
                   ),
                   if (badge != null) ...[
@@ -519,14 +617,18 @@ class _Toggle extends StatelessWidget {
 
 class _CircleAction extends StatefulWidget {
   const _CircleAction({
+    required this.style,
     required this.icon,
     required this.label,
     required this.onTap,
+    this.shapeIndex = 0,
   });
 
+  final int style;
   final IconData icon;
   final String label;
   final VoidCallback? onTap;
+  final int shapeIndex;
 
   @override
   State<_CircleAction> createState() => _CircleActionState();
@@ -538,6 +640,31 @@ class _CircleActionState extends State<_CircleAction> {
   void _press(bool value) {
     if (widget.onTap == null) return;
     setState(() => _pressed = value);
+  }
+
+  Widget _button() {
+    final fill = Colors.white.withValues(alpha: 0.14);
+    final icon = Icon(widget.icon, size: 21, color: Colors.white);
+
+    if (widget.style == 2) {
+      return ExpressBlob(
+        size: 58,
+        color: fill,
+        shape: ExpressShape.pick(widget.shapeIndex),
+        child: icon,
+      );
+    }
+
+    return Container(
+      width: 56,
+      height: 56,
+      decoration: BoxDecoration(
+        color: fill,
+        shape: widget.style == 1 ? BoxShape.rectangle : BoxShape.circle,
+        borderRadius: widget.style == 1 ? BorderRadius.circular(17) : null,
+      ),
+      child: icon,
+    );
   }
 
   @override
@@ -559,22 +686,14 @@ class _CircleActionState extends State<_CircleAction> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.14),
-                  ),
-                  child: Icon(widget.icon, size: 21, color: Colors.white),
-                ),
+                _button(),
                 const SizedBox(height: 6),
                 Text(
                   widget.label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.7),
+                  style: _shareLabel(
+                    widget.style,
+                    12,
+                    Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
