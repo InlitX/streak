@@ -398,5 +398,615 @@
   "widget_activity": "פעילות",
   "widget_cfg_color": "צבע",
   "widget_cfg_image": "תמונה",
-  "widget_cfg_border": "גבול"
+  "widget_cfg_border": "גבול",
+  "widget_cfg_todos_scope": "",
+  "todo_time": "",
+  "widget_cfg_brightness": "",
+  "focus_end_keep": "",
+  "a11y_add_amount": "",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "share_friends_sub": "",
+  "vacation_all_sub": "",
+  "currency_hint": "",
+  "about_story": "",
+  "money_saved": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "app_lock_delay_instant": "",
+  "focus_notif_running": "",
+  "onb2_body": "",
+  "about_subtitle": "",
+  "focus_your_tracks": "",
+  "streak_off": "",
+  "rest_days_none": "",
+  "widget_today_progress": "",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "onb1_body": "",
+  "expand_cards": "",
+  "kind_negative_hint": "",
+  "todo_overdue": "",
+  "todo_no_date": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "",
+  "clean_days": "",
+  "cost_per_day": "",
+  "habit_duration": "",
+  "widget_cfg_change_image": "",
+  "days_active": "",
+  "quotes_edit": "",
+  "wipe_data_sure": "",
+  "quotes_app": "",
+  "remove_photo": "",
+  "a11y_decrease": "",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "about_inline": "",
+  "focus_only_title": "",
+  "clear_progress": "",
+  "notif_action_add_hint": "",
+  "a11y_not_done": "",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_increase": "",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "today_only": "",
+  "focus_only_past": "",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "currency": "",
+  "add_step": "",
+  "clear_progress_done": "",
+  "focus_end_anyway": "",
+  "snooze_custom_hint": "",
+  "focus_tasks": "",
+  "style_classic": "",
+  "quote_11": "",
+  "your_name": "",
+  "onb2_title": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share_show_stats": "",
+  "about_sub": "",
+  "focus_average": "",
+  "focus_track_pad": "",
+  "quotes_empty_sub": "",
+  "bg_oled": "",
+  "when_best": "",
+  "focus_only_body": "",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dark_color": "",
+  "style_classic_desc": "",
+  "focus_history": "",
+  "focus_clear_today": "",
+  "focus_end_flow": "",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "import_question_body": "",
+  "focus_end_complete": "",
+  "widget_done_today": "",
+  "focus_scene_black": "",
+  "checklist_hint": "",
+  "share_failed": "",
+  "share_swipe_hint": "",
+  "view_switcher": "",
+  "focus_free_session": "",
+  "quote_2": "",
+  "card_activity": "",
+  "clear": "",
+  "pick_a_date": "",
+  "focus_track_too_long": "",
+  "dev_role": "",
+  "vacation_off_desc": "",
+  "clear_progress_warning": "",
+  "book_cover": "",
+  "celebration_surprise": "",
+  "quote_1": "",
+  "quote_6": "",
+  "todo_empty_body": "",
+  "app_style_sub": "",
+  "not_enough_data": "",
+  "day_timeline_empty_sub": "",
+  "todo_date": "",
+  "preferences_sub": "",
+  "focus_built_in": "",
+  "widget_no_habits": "",
+  "todo_completed_count": "",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "a11y_previous_week": "",
+  "habit_duration_none": "",
+  "quant_average": "",
+  "prefs_privacy": "",
+  "empty_title": "",
+  "default_user": "",
+  "share_saved": "",
+  "report_issue": "",
+  "circle": "",
+  "buy_coffee": "",
+  "sort_completed_last": "",
+  "a11y_clear_relapse": "",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_reached": "",
+  "app_icon": "",
+  "icon_neutral": "",
+  "widget_cfg_light_color": "",
+  "focus_paused": "",
+  "focus_personalize": "",
+  "focus_history_empty": "",
+  "square": "",
+  "focus_enable_sub": "",
+  "focus_shuffle": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "icon_default": "",
+  "widget_demo_read": "",
+  "about_credits_body": "",
+  "widget_cfg_saturation": "",
+  "clear_progress_sub": "",
+  "a11y_log_relapse": "",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "select_one_day": "",
+  "todos_enable_sub": "",
+  "focus_delete_sessions_body": "",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_add_track": "",
+  "plan_day": "",
+  "snooze_duration": "",
+  "celebration": "",
+  "habit_time": "",
+  "end_vacation": "",
+  "todo_empty_title": "",
+  "notif_greeting": "",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all": "",
+  "dev_handle": "",
+  "focus_no_sound": "",
+  "log_relapse_body": "",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quote_5": "",
+  "app_style": "",
+  "start_view": "",
+  "made_by": "",
+  "priority_none": "",
+  "reminder_message_hint": "",
+  "widget_cfg_hue": "",
+  "last_90_days": "",
+  "todo_hint": "",
+  "unit_min_short": "",
+  "a11y_next_week": "",
+  "widget_cfg_style": "",
+  "quote_4": "",
+  "day_timeline": "",
+  "cover_image": "",
+  "empty_body": "",
+  "celebration_confetti": "",
+  "notif_action_snooze": "",
+  "paused": "",
+  "widget_demo_water": "",
+  "select_all": "",
+  "step_hint": "",
+  "buy_coffee_sub": "",
+  "snooze_custom": "",
+  "note_hint": "",
+  "focus_style_digital": "",
+  "focus_stop_body": "",
+  "widget_todos_empty": "",
+  "quote_7": "",
+  "auto_backup_folder_default": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "quotes_add": "",
+  "widget_best_streak": "",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "unscheduled_confirm": "",
+  "streak_evolution": "",
+  "journey": "",
+  "notif_action_add": "",
+  "minutes_short": "",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "",
+  "widget_cfg_style_card": "",
+  "priority_low": "",
+  "rate_github_sub": "",
+  "focus_break": "",
+  "no_data_yet": "",
+  "widget_cfg_choose_image": "",
+  "focus_style": "",
+  "support_sub": "",
+  "unscheduled_title": "",
+  "quotes_empty": "",
+  "start_view_last": "",
+  "about_footer": "",
+  "todo_new": "",
+  "wipe_data_warning": "",
+  "auto_backup_where": "",
+  "todo_priority": "",
+  "widget_demo_run": "",
+  "widget_cfg_style_classic": "",
+  "quant_edit_title": "",
+  "reminder_message": "",
+  "a11y_mark_done": "",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_sessions_deleted": "",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_on": "",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_which": "",
+  "widget_cfg_all_habits": "",
+  "motiv_progress": "",
+  "focus_pomodoro_sub": "",
+  "advanced_options": "",
+  "reorder": "",
+  "repeat_hours": "",
+  "plan_day_sub": "",
+  "unit_hour_short": "",
+  "todo_someday": "",
+  "focus_images_limit": "",
+  "day_timeline_anytime": "",
+  "notes_hint": "",
+  "focus_total": "",
+  "widget_cfg_opacity": "",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "share_size_large": "",
+  "quote_12": "",
+  "share_size_small": "",
+  "yesterday": "",
+  "quant_logged_days": "",
+  "app_lock_delay_seconds": "",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "quote_3": "",
+  "widget_cfg_todos_hint": "",
+  "focus_only_start": "",
+  "selected_count": "",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quant_tap_amount": "",
+  "icons_tab": "",
+  "uncategorized": "",
+  "focus_defaults": "",
+  "github_star_row": "",
+  "priority_medium": "",
+  "prefs_features": "",
+  "reorder_hint": "",
+  "edit_name": "",
+  "todo_left": "",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_body": "",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "currency_custom": "",
+  "a11y_mark_not_done": "",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "no_days": "",
+  "quant_best_day": "",
+  "focus_log_saved": "",
+  "focus_end": "",
+  "quant_stats_empty": "",
+  "focus_pick_audio": "",
+  "quant_goal_days": "",
+  "notif_action_done": "",
+  "focus_history_empty_sub": "",
+  "widget_cfg_todos_all": "",
+  "widget_no_data": "",
+  "todo_upcoming": "",
+  "focus_log_date": "",
+  "share_save_failed": "",
+  "overview": "",
+  "quotes_my_list": "",
+  "quant_per_day": "",
+  "icon_accent": "",
+  "focus_done_title": "",
+  "repeat_weekly": "",
+  "a11y_pick_color": "",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "widget_cfg_title": "",
+  "onb3_body": "",
+  "focus_style_flip": "",
+  "style_minimal": "",
+  "vacation_day_on": "",
+  "prefs_general": "",
+  "widget_cfg_follow_system": "",
+  "day_timeline_empty": "",
+  "day_start_sub": "",
+  "focus_notif_body": "",
+  "widget_open_to_sync": "",
+  "todo_clear_completed": "",
+  "quote_10": "",
+  "focus_track_limit": "",
+  "check_style": "",
+  "style_minimal_desc": "",
+  "clear_progress_confirm": "",
+  "focus_flowtime_hint": "",
+  "focus_keep_awake": "",
+  "data_sub": "",
+  "focus_notif_channel": "",
+  "quotes": "",
+  "widget_cfg_custom_color": "",
+  "focus_track_rain": "",
+  "todays_checklist": "",
+  "go": "",
+  "todo_clear_completed_body": "",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quotes_hint": "",
+  "notes_enable_sub": "",
+  "wipe_data_sure_body": "",
+  "focus_stop_title": "",
+  "vacation_day_off": "",
+  "quote_9": "",
+  "every_n_hours": "",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_loop": "",
+  "focus_daily_goal": "",
+  "my_heatmap_sub": "",
+  "focus_stats": "",
+  "app_lock_delay": "",
+  "focus_log": "",
+  "motiv_start": "",
+  "about_body": "",
+  "widget_cfg_reset": "",
+  "widget_cfg_thickness": "",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "quote_8": "",
+  "about_title": "",
+  "collapse_cards": "",
+  "focus_track_brown": "",
+  "focus_only_hint": "",
+  "view_switcher_sub": "",
+  "todos": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_mine": "",
+  "widget_cfg_add": "",
+  "cost_note": "",
+  "emojis_tab": "",
+  "focus_only": "",
+  "change_photo": "",
+  "appearance_sub": "",
+  "priority_high": "",
+  "widget_cfg_show_activity": "",
+  "vacation_on_desc": "",
+  "focus_delete_sessions": "",
+  "rest_days_desc": "",
+  "day_timeline_free": "",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "celebration_fireworks": "",
+  "habit_time_none": "",
+  "widget_cfg_save": "",
+  "start_vacation": "",
+  "perfect_streak": "",
+  "focus_flowtime": "",
+  "focus_pomodoro": "",
+  "quotes_both": ""
 }

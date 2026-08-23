@@ -892,5 +892,6 @@
   "quant_preset_time": "Time",
   "style_express": "Express",
   "style_express_desc": "Rounded shapes, springy motion and a wider typeface.",
-  "celebration_none": "None"
+  "celebration_none": "None",
+  "quant_add_title": "Add amount"
 }
