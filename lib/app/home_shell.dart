@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_nav.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/responsive.dart';
@@ -102,6 +103,7 @@ class _HomeShellState extends State<HomeShell>
           : const Scaffold(body: HomePage());
     }
     final scheme = Theme.of(context).colorScheme;
+    final express = settings.isExpressStyle;
     final tabs = [
       _Tab.today,
       if (settings.todosEnabled) _Tab.todos,
@@ -113,11 +115,24 @@ class _HomeShellState extends State<HomeShell>
     if (wide) {
       return _SplitScaffold(
         full: current == _Tab.stats,
-        rail: _NavRail(
-          tabs: tabs,
-          current: current,
-          onSelect: (tab) => _select(tabs, tab),
-        ),
+        rail: express
+            ? ExpressNavRail(
+                items: [
+                  for (final tab in tabs)
+                    ExpressNavItem(
+                      icon: _iconOf(tab),
+                      label: _labelOf(context, tab),
+                    ),
+                ],
+                index: tabs.indexOf(current),
+                onSelect: (i) => _select(tabs, tabs[i]),
+                brand: const _RailBrand(),
+              )
+            : _NavRail(
+                tabs: tabs,
+                current: current,
+                onSelect: (tab) => _select(tabs, tab),
+              ),
         page: FadeTransition(
           opacity: _fade,
           child: IndexedStack(
@@ -153,7 +168,19 @@ class _HomeShellState extends State<HomeShell>
             right: 0,
             bottom: MediaQuery.paddingOf(context).bottom + 12,
             child: Center(
-              child: Container(
+              child: express
+                  ? ExpressNavBar(
+                      items: [
+                        for (final tab in tabs)
+                          ExpressNavItem(
+                            icon: _iconOf(tab),
+                            label: _labelOf(context, tab),
+                          ),
+                      ],
+                      index: tabs.indexOf(current),
+                      onSelect: (i) => _select(tabs, tabs[i]),
+                    )
+                  : Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                 decoration: BoxDecoration(
                   color: scheme.surface.withValues(alpha: 0.94),

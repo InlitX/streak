@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class Entrance extends StatefulWidget {
   const Entrance({
@@ -49,15 +52,25 @@ class _EntranceState extends State<Entrance>
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) => Opacity(
+  Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final settle = express
+            ? Express.springy.transform(_controller.value)
+            : _rise.value;
+        return Opacity(
           opacity: _fade.value,
           child: Transform.translate(
-            offset: Offset(0, widget.offset * (1 - _rise.value)),
-            child: child,
+            offset: Offset(0, widget.offset * (1 - settle)),
+            child: express
+                ? Transform.scale(scale: 0.97 + 0.03 * settle, child: child)
+                : child,
           ),
-        ),
-        child: widget.child,
-      );
+        );
+      },
+      child: widget.child,
+    );
+  }
 }
