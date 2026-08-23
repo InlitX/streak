@@ -7,37 +7,40 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
-Set<String> checkedStepsOf(Habit habit) =>
-    habit.completions[AppClock.now().dayKey]?.steps ?? const <String>{};
+Set<String> checkedStepsOf(Habit habit, [DateTime? date]) =>
+    habit.completions[(date ?? AppClock.now()).dayKey]?.steps ??
+    const <String>{};
 
 Future<void> setHabitStep(
   BuildContext context,
   Habit habit,
   String stepId,
-  bool value,
-) async {
+  bool value, {
+  DateTime? date,
+}) async {
   final controller = context.read<HabitsController>();
-  final today = AppClock.now();
+  final day = date ?? AppClock.now();
   if (value) {
     final allowed = await confirmUnscheduledDay(
       context,
       habit: habit,
-      date: today,
+      date: day,
     );
     if (!allowed) return;
   }
   HapticFeedback.selectionClick();
-  await controller.setStep(habit.id, today, stepId, value);
+  await controller.setStep(habit.id, day, stepId, value);
 }
 
-List<Substep> orderedSteps(BuildContext context, Habit habit) {
-  final checked = checkedStepsOf(habit);
+List<Substep> orderedSteps(BuildContext context, Habit habit, [DateTime? date]) {
+  final checked = checkedStepsOf(habit, date);
   if (!context.watch<SettingsController>().sortCompletedLast) {
     return habit.substeps;
   }
@@ -53,15 +56,17 @@ class HabitChecklist extends StatelessWidget {
     required this.habit,
     this.dense = false,
     this.header = false,
+    this.date,
   });
 
   final Habit habit;
   final bool dense;
   final bool header;
+  final DateTime? date;
 
   @override
   Widget build(BuildContext context) {
-    final checked = checkedStepsOf(habit);
+    final checked = checkedStepsOf(habit, date);
     final done = habit.substeps.where((s) => checked.contains(s.id)).length;
 
     return Column(
@@ -72,21 +77,23 @@ class HabitChecklist extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
             child: Text(
               context.l10n.steps_done('$done', '${habit.substeps.length}'),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: context.tokens.muted,
-              ),
+              style: sheetLabelStyle(context),
             ),
           ),
-        for (final step in orderedSteps(context, habit))
+        for (final step in orderedSteps(context, habit, date))
           ChecklistRow(
             title: step.title,
             checked: checked.contains(step.id),
             color: habit.color,
             dense: dense,
             onTap: () => unawaited(
-              setHabitStep(context, habit, step.id, !checked.contains(step.id)),
+              setHabitStep(
+                context,
+                habit,
+                step.id,
+                !checked.contains(step.id),
+                date: date,
+              ),
             ),
           ),
       ],

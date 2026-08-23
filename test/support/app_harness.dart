@@ -14,6 +14,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
@@ -71,6 +72,7 @@ Habit testHabit({
   int startMinute = -1,
   int durationMinutes = 0,
   bool focusOnly = false,
+  List<Substep> substeps = const [],
 }) =>
     Habit(
       id: id,
@@ -87,6 +89,7 @@ Habit testHabit({
       startMinute: startMinute,
       durationMinutes: durationMinutes,
       focusOnly: focusOnly,
+      substeps: substeps,
       createdAt: AppClock.now().subtract(Duration(days: daysOld)),
       completions: {
         for (final day in done)

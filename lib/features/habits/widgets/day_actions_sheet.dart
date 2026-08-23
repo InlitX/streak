@@ -6,12 +6,15 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/sheet_action.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/pages/notes_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/habit_checklist.dart';
 
 Future<void> showDayActionsSheet(
   BuildContext context, {
@@ -27,13 +30,14 @@ Future<void> showDayActionsSheet(
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+    isScrollControlled: true,
+    constraints: BoxConstraints(
+      maxWidth: phoneWidth,
+      maxHeight: MediaQuery.sizeOf(context).height * 0.85,
     ),
     builder: (sheet) => SafeArea(
       top: false,
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -43,13 +47,21 @@ Future<void> showDayActionsSheet(
               padding: const EdgeInsets.only(left: 4, bottom: 12),
               child: Text(
                 DateFormat.yMMMMEEEEd(locale).format(date),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: context.colors.onSurface,
-                ),
+                style: sheetTitleStyle(context, size: 17),
               ),
             ),
+            if (habit.hasSubsteps &&
+                !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
+              Consumer<HabitsController>(
+                builder: (inner, controller, _) => HabitChecklist(
+                  habit: controller.byId(habit.id) ?? habit,
+                  date: date,
+                  dense: true,
+                  header: true,
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
             if (!habit.isRestDay(date) &&
                 !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
               SheetAction(
@@ -115,10 +127,7 @@ Future<void> showDayActionsSheet(
                 ),
                 child: Text(
                   context.l10n.cancel,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: sheetActionStyle(context),
                 ),
               ),
             ),
