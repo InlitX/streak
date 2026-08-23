@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_switch.dart';
+import 'package:streak/core/express/express_tabs.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const focusPresets = [25, 45];
 const focusBreakPresets = [5, 15];
@@ -80,11 +88,21 @@ class FocusPomodoroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 6, 10, 10),
+      padding: express
+          ? const EdgeInsets.fromLTRB(18, 12, 14, 12)
+          : const EdgeInsets.fromLTRB(16, 6, 10, 10),
       decoration: BoxDecoration(
-        color: context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(16),
+        color: express
+            ? expressSurface(context)
+            : minimal
+            ? minimalSurface(context)
+            : context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(express ? 24 : (minimal ? 20 : 16)),
+        border: express ? expressHairline(context) : null,
       ),
       child: Column(
         children: [
@@ -96,24 +114,39 @@ class FocusPomodoroCard extends StatelessWidget {
                   children: [
                     Text(
                       context.l10n.focus_pomodoro,
-                      style: TextStyle(
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w700,
-                        color: context.colors.onSurface,
-                      ),
+                      style: express
+                          ? ExpressType.headline.at(
+                              16,
+                              weight: 800,
+                              color: context.colors.onSurface,
+                            )
+                          : TextStyle(
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.w700,
+                              color: context.colors.onSurface,
+                            ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       context.l10n.focus_pomodoro_sub,
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        color: context.tokens.muted,
-                      ),
+                      style: express
+                          ? ExpressType.body.at(
+                              12.5,
+                              weight: 600,
+                              color: context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 12.5,
+                              color: context.tokens.muted,
+                            ),
                     ),
                   ],
                 ),
               ),
-              Switch(value: enabled, onChanged: onToggle),
+              if (express)
+                ExpressSwitch(value: enabled, onChanged: onToggle)
+              else
+                Switch(value: enabled, onChanged: onToggle),
             ],
           ),
           if (enabled)
@@ -124,11 +157,17 @@ class FocusPomodoroCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       context.l10n.focus_break,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: context.tokens.muted,
-                      ),
+                      style: express
+                          ? ExpressType.body.at(
+                              13.5,
+                              weight: 700,
+                              color: context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: context.tokens.muted,
+                            ),
                     ),
                   ),
                   for (final value in focusBreakPresets) ...[
@@ -187,6 +226,18 @@ class FocusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.watch<SettingsController>();
+    if (style.isExpressStyle) {
+      return ExpressChip(
+        label: label,
+        icon: icon,
+        active: selected,
+        onTap: onTap,
+      );
+    }
+    if (style.isMinimalStyle) {
+      return MinimalChip(label: label, active: selected, onTap: onTap);
+    }
     final accent = context.colors.primary;
     return Semantics(
       button: true,
@@ -240,6 +291,39 @@ class _PencilButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.watch<SettingsController>();
+    if (style.isExpressStyle) {
+      return ExpressIconButton(
+        icon: LucideIcons.pencil,
+        size: 42,
+        tooltip: context.l10n.edit,
+        tint: context.colors.primary,
+        onPressed: onTap,
+      );
+    }
+    if (style.isMinimalStyle) {
+      return Semantics(
+        button: true,
+        label: context.l10n.edit,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            width: 40,
+            height: 34,
+            decoration: BoxDecoration(
+              color: minimalRaised(context),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              LucideIcons.pencil,
+              size: 15,
+              color: context.tokens.muted,
+            ),
+          ),
+        ),
+      );
+    }
     return Semantics(
       button: true,
       label: context.l10n.edit,

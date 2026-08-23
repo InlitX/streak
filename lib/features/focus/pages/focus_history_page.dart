@@ -4,6 +4,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/core/express/express_page.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
@@ -16,6 +22,8 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_log_sheet.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
 
@@ -79,13 +87,30 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
   }
 
   PreferredSizeWidget _appBar(BuildContext context, List<FocusSession> all) {
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
     if (!_selecting) {
+      if (express) {
+        return expressBar(
+          actions: [
+            Center(
+              child: ExpressIconButton(
+                icon: LucideIcons.plus,
+                tooltip: context.l10n.focus_log,
+                onPressed: _log,
+              ),
+            ),
+          ],
+        );
+      }
       return AppBar(
+        toolbarHeight: minimal ? 52 : null,
         leading: IconButton(
           icon: const Icon(LucideIcons.chevronLeft),
           onPressed: () => AppNavigator.pop(),
         ),
-        title: Text(_title(context)),
+        title: minimal ? null : Text(_title(context)),
         actions: [
           IconButton(
             tooltip: context.l10n.focus_log,
@@ -96,11 +121,24 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
       );
     }
     return AppBar(
-      leading: IconButton(
-        icon: const Icon(LucideIcons.x),
-        tooltip: context.l10n.cancel,
-        onPressed: () => setState(_selected.clear),
-      ),
+      toolbarHeight: express ? 60 : null,
+      leadingWidth: express ? 68 : null,
+      leading: express
+          ? Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Center(
+                child: ExpressIconButton(
+                  icon: LucideIcons.x,
+                  tooltip: context.l10n.cancel,
+                  onPressed: () => setState(_selected.clear),
+                ),
+              ),
+            )
+          : IconButton(
+              icon: const Icon(LucideIcons.x),
+              tooltip: context.l10n.cancel,
+              onPressed: () => setState(_selected.clear),
+            ),
       title: Text(context.l10n.selected_count(_selected.length)),
       actions: [
         IconButton(
@@ -119,6 +157,9 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
     final habitId = widget.habitId;
     final sessions = context
         .watch<FocusController>()
@@ -146,8 +187,18 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
                 message: context.l10n.focus_history_empty_sub,
               )
             : ListView(
-                padding: context.pagePadding(16, 8, 16, 28),
+                padding: express
+                    ? context.pagePadding(18, 0, 18, 28)
+                    : minimal
+                    ? context.pagePadding(20, 0, 20, 28)
+                    : context.pagePadding(16, 8, 16, 28),
                 children: [
+                  if (express)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: ExpressHeadline(title: _title(context)),
+                    ),
+                  if (minimal) MinimalTitle(title: _title(context)),
                   for (final (index, day) in days.entries.indexed)
                     Entrance(
                       index: index,
@@ -202,28 +253,43 @@ class _DayHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
+      padding: EdgeInsets.fromLTRB(express ? 6 : 4, 12, 4, 10),
       child: Row(
         children: [
           Expanded(
             child: Text(
               _label(context),
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: context.colors.onSurface,
-              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: express
+                  ? ExpressType.headline.at(
+                      15,
+                      weight: 800,
+                      color: context.colors.primary,
+                    )
+                  : TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: context.colors.onSurface,
+                    ),
             ),
           ),
           Text(
             '${context.l10n.focus_history_day(sessions)}  ·  '
             '${formatHoursShort(seconds)}',
-            style: TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-              color: context.tokens.muted,
-            ),
+            style: express
+                ? ExpressType.body.at(
+                    12,
+                    weight: 700,
+                    color: context.tokens.muted,
+                  )
+                : TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    color: context.tokens.muted,
+                  ),
           ),
         ],
       ),
@@ -252,9 +318,10 @@ class _SessionTile extends StatelessWidget {
     final color = habit?.color ?? context.colors.primary;
     final locale = Localizations.localeOf(context).toString();
     final scheme = context.colors;
+    final express = context.watch<SettingsController>().isExpressStyle;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: express ? 6 : 8),
       child: Semantics(
         button: true,
         selected: selected,
@@ -262,21 +329,47 @@ class _SessionTile extends StatelessWidget {
           onTap: selecting ? onToggle : null,
           onLongPress: onToggle,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
+            duration: express
+                ? Express.normal
+                : const Duration(milliseconds: 180),
+            curve: express ? Express.emphasized : Curves.linear,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
               color: selected
                   ? scheme.primary.withValues(alpha: 0.16)
-                  : scheme.surfaceContainerHighest.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: selected ? scheme.primary : Colors.transparent,
-                width: 1.5,
+                  : express
+                      ? expressSurface(context)
+                      : scheme.surfaceContainerHighest.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(
+                express ? (selected ? 26 : 22) : 16,
               ),
+              border: selected
+                  ? Border.all(color: scheme.primary, width: 1.5)
+                  : express
+                      ? expressHairline(context)
+                      : Border.all(color: Colors.transparent, width: 1.5),
             ),
             child: Row(
               children: [
-                Container(
+                if (express)
+                  ExpressBlob(
+                    size: 40,
+                    color: color.withValues(alpha: selected ? 0.24 : 0.14),
+                    shape: session.completed
+                        ? ExpressShape.cookie.copyWith(rotation: 0.2)
+                        : ExpressShape.squircle,
+                    child: selected
+                        ? Icon(LucideIcons.check, size: 19, color: color)
+                        : habit == null
+                            ? Icon(LucideIcons.timer, size: 18, color: color)
+                            : HabitGlyph(
+                                glyph: habit.icon,
+                                color: color,
+                                size: 18,
+                              ),
+                  )
+                else
+                  Container(
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
@@ -306,21 +399,33 @@ class _SessionTile extends StatelessWidget {
                             : habit.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: scheme.onSurface,
-                        ),
+                        style: express
+                            ? ExpressType.headline.at(
+                                15.5,
+                                weight: 800,
+                                color: scheme.onSurface,
+                              )
+                            : TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: scheme.onSurface,
+                              ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '${DateFormat.Hm(locale).format(session.startedAt)}'
                         '  ·  '
                         '${session.targetMinutes <= 0 ? context.l10n.focus_flowtime : context.l10n.minutes_short('${session.targetMinutes}')}',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: context.tokens.muted,
-                        ),
+                        style: express
+                            ? ExpressType.body.at(
+                                12,
+                                weight: 600,
+                                color: context.tokens.muted,
+                              )
+                            : TextStyle(
+                                fontSize: 12.5,
+                                color: context.tokens.muted,
+                              ),
                       ),
                     ],
                   ),
@@ -331,12 +436,21 @@ class _SessionTile extends StatelessWidget {
                   children: [
                     Text(
                       formatHoursShort(session.seconds),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: color,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
+                      style: express
+                          ? ExpressType.display.at(
+                              17,
+                              spacing: -0.3,
+                              color: color,
+                              tabular: true,
+                            )
+                          : TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              color: color,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                            ),
                     ),
                     if (session.completed) ...[
                       const SizedBox(height: 3),
