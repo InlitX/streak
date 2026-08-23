@@ -20,6 +20,10 @@ class AppBackground extends StatelessWidget {
           type: settings.appBackground,
           image: settings.bgImage,
           isDark: Theme.of(context).brightness == Brightness.dark,
+          flat: settings.isExpressStyle || settings.isMinimalStyle
+              ? Theme.of(context).colorScheme.surface
+              : null,
+          dotAlpha: settings.isMinimalStyle ? 0.06 : null,
         ),
         child,
       ],
@@ -32,11 +36,15 @@ class _Backdrop extends StatelessWidget {
     required this.type,
     required this.image,
     required this.isDark,
+    required this.flat,
+    this.dotAlpha,
   });
 
   final int type;
   final String image;
   final bool isDark;
+  final Color? flat;
+  final double? dotAlpha;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +71,21 @@ class _Backdrop extends StatelessWidget {
             ),
           ),
         ],
+      );
+    }
+
+    final base = flat;
+    if (base != null && type != 1 && type != 3) {
+      if (type != 2) return ColoredBox(color: base);
+      return ColoredBox(
+        color: base,
+        child: CustomPaint(
+          painter: _DotsPainter(
+            (isDark ? Colors.white : Colors.black).withValues(
+              alpha: dotAlpha ?? (isDark ? 0.03 : 0.035),
+            ),
+          ),
+        ),
       );
     }
 

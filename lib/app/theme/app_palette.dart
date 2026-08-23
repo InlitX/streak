@@ -13,6 +13,9 @@ class AppPalette {
   static const info = Color(0xFF3B82F6);
 
   static const darkBackground = Color(0xFF0D0D0D);
+  static const paperDark = Color(0xFF090909);
+  static const paperDarkCard = Color(0xFF131313);
+  static const paperDarkRaised = Color(0xFF212121);
   static const darkSurface = Color(0xFF141414);
   static const darkCard = Color(0xFF1A1A1A);
   static const darkElevated = Color(0xFF232326);
@@ -46,6 +49,7 @@ class AppPalette {
     Color(0xFF1ABC9C),
 
     Color(0xFF4ECDC4),
+    Color(0xFF006689),
     Color(0xFF26C6DA),
     Color(0xFF00BCD4),
     Color(0xFF5AC8FA),

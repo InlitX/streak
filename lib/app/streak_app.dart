@@ -27,8 +27,8 @@ class StreakApp extends StatelessWidget {
       title: 'Streak',
       debugShowCheckedModeBanner: false,
       navigatorKey: AppNavigator.key,
-      theme: AppTheme.light(settings.accentColor),
-      darkTheme: AppTheme.dark(settings.accentColor),
+      theme: AppTheme.light(settings.accentColor, settings.appStyle),
+      darkTheme: AppTheme.dark(settings.accentColor, settings.appStyle),
       themeMode: settings.themeMode,
       builder: (context, child) {
         HomeWidgetService.localize(

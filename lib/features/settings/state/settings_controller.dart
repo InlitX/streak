@@ -503,6 +503,7 @@ class SettingsController extends ChangeNotifier {
 
   int get appStyle => _appStyle;
   bool get isMinimalStyle => _appStyle == 1;
+  bool get isExpressStyle => _appStyle == 2;
 
   Future<void> setAppStyle(int value) async {
     _appStyle = value;
