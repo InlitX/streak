@@ -4,9 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -150,30 +156,71 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     final locale = Localizations.localeOf(context).toString();
     final first = _day.startOfWeek(weekStart);
 
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(DateFormat.yMMMM(locale).format(_day)),
+        toolbarHeight: express ? 60 : null,
+        leadingWidth: express ? 68 : null,
+        leading: express
+            ? Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Center(child: ExpressIconButton(
+                  icon: LucideIcons.chevronLeft,
+                  onPressed: () => AppNavigator.pop(),
+                )),
+              )
+            : IconButton(
+                icon: const Icon(LucideIcons.chevronLeft),
+                onPressed: () => AppNavigator.pop(),
+              ),
+        title: express || minimal
+            ? null
+            : Text(DateFormat.yMMMM(locale).format(_day)),
         actions: [
           if (!_isToday)
-            IconButton(
-              tooltip: context.l10n.today,
-              icon: const Icon(LucideIcons.calendarCheck),
-              onPressed: () => _select(AppClock.now()),
-            ),
+            express
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Center(child: ExpressIconButton(
+                      icon: LucideIcons.calendarCheck,
+                      tooltip: context.l10n.today,
+                      onPressed: () => _select(AppClock.now()),
+                    )),
+                  )
+                : IconButton(
+                    tooltip: context.l10n.today,
+                    icon: const Icon(LucideIcons.calendarCheck),
+                    onPressed: () => _select(AppClock.now()),
+                  ),
         ],
       ),
       body: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (express)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 0, 18, 14),
+                  child: ExpressHeadline(
+                    title: DateFormat.yMMMM(locale).format(_day),
+                  ),
+                ),
+              if (minimal)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: MinimalTitle(
+                    title: DateFormat.yMMMM(locale).format(_day),
+                  ),
+                ),
               _WeekStrip(
                 first: first,
                 selected: _day,
                 habits: habits,
+                style: style.appStyle,
                 onSelected: _select,
                 onShift: _shiftWeek,
               ),
@@ -211,6 +258,7 @@ class _WeekStrip extends StatelessWidget {
     required this.first,
     required this.selected,
     required this.habits,
+    required this.style,
     required this.onSelected,
     required this.onShift,
   });
@@ -218,52 +266,84 @@ class _WeekStrip extends StatelessWidget {
   final DateTime first;
   final DateTime selected;
   final List<Habit> habits;
+  final int style;
   final ValueChanged<DateTime> onSelected;
   final ValueChanged<int> onShift;
 
   @override
   Widget build(BuildContext context) {
+    final express = style == 2;
     final labels = WeekdayLabels.shortFrom(
       Localizations.localeOf(context).languageCode,
       first.weekday,
     );
 
-    return Column(
+    final row = Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            children: [
-              IconButton(
+        express
+            ? ExpressIconButton(
+                icon: LucideIcons.chevronLeft,
+                size: 26,
+                tint: context.tokens.muted,
+                background: Colors.transparent,
+                tooltip: context.l10n.a11y_previous_week,
+                onPressed: () => onShift(-1),
+              )
+            : IconButton(
                 icon: const Icon(LucideIcons.chevronLeft, size: 18),
                 tooltip: context.l10n.a11y_previous_week,
                 visualDensity: VisualDensity.compact,
                 onPressed: () => onShift(-1),
               ),
-              for (var i = 0; i < 7; i++)
-                Expanded(
-                  child: _DayChip(
-                    day: DateTime(first.year, first.month, first.day + i),
-                    label: labels[i],
-                    selected: DateTime(
-                      first.year,
-                      first.month,
-                      first.day + i,
-                    ).isSameDay(selected),
-                    habits: habits,
-                    onTap: onSelected,
-                  ),
-                ),
-              IconButton(
+        for (var i = 0; i < 7; i++)
+          Expanded(
+            child: _DayChip(
+              day: DateTime(first.year, first.month, first.day + i),
+              label: labels[i],
+              selected: DateTime(
+                first.year,
+                first.month,
+                first.day + i,
+              ).isSameDay(selected),
+              habits: habits,
+              style: style,
+              onTap: onSelected,
+            ),
+          ),
+        express
+            ? ExpressIconButton(
+                icon: LucideIcons.chevronRight,
+                size: 26,
+                tint: context.tokens.muted,
+                background: Colors.transparent,
+                tooltip: context.l10n.a11y_next_week,
+                onPressed: () => onShift(1),
+              )
+            : IconButton(
                 icon: const Icon(LucideIcons.chevronRight, size: 18),
                 tooltip: context.l10n.a11y_next_week,
                 visualDensity: VisualDensity.compact,
                 onPressed: () => onShift(1),
               ),
-            ],
-          ),
+      ],
+    );
+
+    return Column(
+      children: [
+        Padding(
+          padding: express
+              ? const EdgeInsets.symmetric(horizontal: 6)
+              : const EdgeInsets.symmetric(horizontal: 4),
+          child: express
+              ? GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onHorizontalDragEnd: (details) =>
+                      onShift((details.primaryVelocity ?? 0) < 0 ? 1 : -1),
+                  child: row,
+                )
+              : row,
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: express ? 14 : 8),
       ],
     );
   }
@@ -275,6 +355,7 @@ class _DayChip extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.habits,
+    required this.style,
     required this.onTap,
   });
 
@@ -282,11 +363,15 @@ class _DayChip extends StatelessWidget {
   final String label;
   final bool selected;
   final List<Habit> habits;
+  final int style;
   final ValueChanged<DateTime> onTap;
 
   @override
   Widget build(BuildContext context) {
-    final accent = context.colors.primary;
+    final express = style == 2;
+    final minimal = style == 1;
+    final scheme = context.colors;
+    final accent = scheme.primary;
     final today = day.isSameDay(AppClock.now());
     final dots = [
       for (final habit in habits)
@@ -299,19 +384,36 @@ class _DayChip extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onTap(day),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          margin: const EdgeInsets.symmetric(horizontal: 2.5),
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          decoration: BoxDecoration(
-            color: selected ? accent.withValues(alpha: 0.12) : null,
-            borderRadius: BorderRadius.circular(11),
-            border: Border.all(
-              color: selected
-                  ? accent
-                  : context.colors.outlineVariant.withValues(alpha: 0.5),
-              width: selected ? 1.5 : 1,
-            ),
-          ),
+          duration: express ? Express.morph : const Duration(milliseconds: 180),
+          curve: express ? Express.bouncy : Curves.easeOut,
+          margin: EdgeInsets.symmetric(horizontal: express ? 1.5 : 2.5),
+          padding: EdgeInsets.symmetric(vertical: express ? 8 : 7),
+          decoration: express
+              ? BoxDecoration(
+                  color: selected
+                      ? accent
+                      : scheme.surfaceContainerHigh.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(selected ? 22 : 14),
+                )
+              : minimal
+                  ? BoxDecoration(
+                      color: selected
+                          ? scheme.onSurface
+                          : scheme.surfaceContainerHighest.withValues(
+                              alpha: 0.5,
+                            ),
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                  : BoxDecoration(
+                      color: selected ? accent.withValues(alpha: 0.12) : null,
+                      borderRadius: BorderRadius.circular(11),
+                      border: Border.all(
+                        color: selected
+                            ? accent
+                            : scheme.outlineVariant.withValues(alpha: 0.5),
+                        width: selected ? 1.5 : 1,
+                      ),
+                    ),
           child: MediaQuery.withClampedTextScaling(
             maxScaleFactor: 1.2,
             child: Column(
@@ -322,27 +424,64 @@ class _DayChip extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.clip,
                   softWrap: false,
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    height: 1.1,
-                    color: selected ? accent : context.tokens.muted,
-                  ),
+                  style: express
+                      ? ExpressType.body.at(
+                          10,
+                          weight: 800,
+                          height: 1.1,
+                          color: selected
+                              ? scheme.onPrimary
+                              : context.tokens.muted,
+                        )
+                      : minimal
+                          ? MinimalType.label(
+                              size: 10.5,
+                              color: selected
+                                  ? scheme.surface
+                                  : context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              height: 1.1,
+                              color: selected ? accent : context.tokens.muted,
+                            ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '${day.day}',
                   maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    height: 1.1,
-                    color: selected
-                        ? accent
-                        : today
-                            ? context.colors.onSurface
-                            : context.tokens.muted,
-                  ),
+                  style: express
+                      ? ExpressType.display.at(
+                          17,
+                          height: 1.1,
+                          color: selected
+                              ? scheme.onPrimary
+                              : today
+                                  ? scheme.onSurface
+                                  : context.tokens.muted,
+                          tabular: true,
+                        )
+                      : minimal
+                          ? MinimalType.figure(
+                              16,
+                              height: 1.1,
+                              color: selected
+                                  ? scheme.surface
+                                  : today
+                                      ? scheme.onSurface
+                                      : context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              height: 1.1,
+                              color: selected
+                                  ? accent
+                                  : today
+                                      ? scheme.onSurface
+                                      : context.tokens.muted,
+                            ),
                 ),
                 const SizedBox(height: 4),
                 SizedBox(
