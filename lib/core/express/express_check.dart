@@ -10,6 +10,7 @@ class ExpressCheck extends StatefulWidget {
     required this.done,
     required this.color,
     required this.onTap,
+    this.onLongPress,
     this.size = 48,
     this.icon = LucideIcons.check,
     this.circle = true,
@@ -18,6 +19,7 @@ class ExpressCheck extends StatefulWidget {
   final bool done;
   final Color color;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final double size;
   final IconData icon;
   final bool circle;
@@ -72,6 +74,7 @@ class _ExpressCheckState extends State<ExpressCheck>
               widget.onTap!();
             }
           : null,
+      onLongPress: widget.onLongPress,
       child: SizedBox(
         width: widget.size + 12,
         height: widget.size + 12,

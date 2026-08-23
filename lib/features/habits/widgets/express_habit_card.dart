@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -18,6 +20,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
@@ -365,6 +368,9 @@ class ExpressAction extends StatelessWidget {
         size: size,
         circle: context.watch<SettingsController>().isCircleCheck,
         onTap: onTap,
+        onLongPress: habit.kind == HabitKind.quantitative
+            ? () => unawaited(addCustomAmount(context, habit))
+            : null,
       ),
     );
   }

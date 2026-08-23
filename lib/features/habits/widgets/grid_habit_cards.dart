@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -128,6 +131,7 @@ class _QuantTile extends StatelessWidget {
       label: context.l10n.a11y_add_amount(habit.name),
       child: GestureDetector(
         onTap: () => _add(context, today),
+        onLongPress: () => unawaited(addCustomAmount(context, habit)),
         child: SizedBox(
           width: size,
           height: size,

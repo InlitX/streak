@@ -4,7 +4,9 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -254,5 +256,34 @@ void main() {
         tester.getSize(cards.at(1)).height,
       );
     });
+  });
+
+  testWidgets('holding the add button asks for a custom amount', (tester) async {
+    await seedHabits(tester, [
+      testHabit(
+        id: 'w',
+        name: 'Water',
+        kind: HabitKind.quantitative,
+        perDayTarget: 8,
+        unitLabel: 'glasses',
+      ),
+    ]);
+    await pumpScreen(tester, const HomePage());
+
+    final habits = tester.element(find.byType(HomePage)).read<HabitsController>();
+    expect(habits.byId('w')!.completions, isEmpty);
+
+    await tester.longPress(find.bySemanticsLabel(RegExp('Water')).last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Add amount'), findsOneWidget);
+
+    await tester.tap(find.text('3'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 800));
+
+    expect(habits.byId('w')!.completions.values.single.count, 3);
   });
 }

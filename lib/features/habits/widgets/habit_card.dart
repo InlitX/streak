@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_progress.dart';
@@ -449,11 +452,14 @@ class _ActionButton extends StatelessWidget {
           target: habit.perDayTarget,
         );
 
+        void addCustom() => unawaited(addCustomAmount(context, habit));
+
         switch (habit.quantKind) {
           case QuantKind.water:
             return _WaterButton(
               ratio: ratio.clamp(0.0, 1.0),
               onTap: addProgress,
+              onLongPress: addCustom,
             );
           case QuantKind.reading:
             return _BookButton(
@@ -461,6 +467,7 @@ class _ActionButton extends StatelessWidget {
               ratio: ratio.clamp(0.0, 1.0),
               done: doneToday,
               onTap: addProgress,
+              onLongPress: addCustom,
             );
           case QuantKind.generic:
           case QuantKind.time:
@@ -470,6 +477,7 @@ class _ActionButton extends StatelessWidget {
               done: doneToday,
               circle: circle,
               onTap: addProgress,
+              onLongPress: addCustom,
             );
         }
     }
@@ -477,15 +485,21 @@ class _ActionButton extends StatelessWidget {
 }
 
 class _WaterButton extends StatelessWidget {
-  const _WaterButton({required this.ratio, required this.onTap});
+  const _WaterButton({
+    required this.ratio,
+    required this.onTap,
+    this.onLongPress,
+  });
 
   final double ratio;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: SizedBox(
         width: 44,
         height: 44,
@@ -512,17 +526,20 @@ class _BookButton extends StatelessWidget {
     required this.ratio,
     required this.done,
     required this.onTap,
+    this.onLongPress,
   });
 
   final Color color;
   final double ratio;
   final bool done;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: SizedBox(
         width: 44,
         height: 44,
@@ -716,6 +733,7 @@ class _QuantityButton extends StatefulWidget {
     required this.progress,
     required this.done,
     required this.onTap,
+    this.onLongPress,
     this.circle = false,
   });
 
@@ -723,6 +741,7 @@ class _QuantityButton extends StatefulWidget {
   final QuantProgress progress;
   final bool done;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   final bool circle;
 
   @override
@@ -760,6 +779,7 @@ class _QuantityButtonState extends State<_QuantityButton>
     final track = reached ? reachedColor : widget.color.withValues(alpha: 0.14);
     return GestureDetector(
       onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       child: AnimatedBuilder(
         animation: _pop,
         builder: (context, child) {
