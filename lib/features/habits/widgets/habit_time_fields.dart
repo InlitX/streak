@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -16,10 +17,6 @@ Future<int?> showDurationSheet(
   return showModalBottomSheet<int>(
     context: context,
     showDragHandle: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-    ),
     builder: (_) => _DurationSheet(minutes: minutes),
   );
 }
@@ -67,11 +64,7 @@ class _DurationSheetState extends State<_DurationSheet> {
               padding: const EdgeInsets.only(left: 2, bottom: 14),
               child: Text(
                 context.l10n.habit_duration,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: context.colors.onSurface,
-                ),
+                style: sheetTitleStyle(context, size: 18),
               ),
             ),
             Center(
@@ -79,10 +72,9 @@ class _DurationSheetState extends State<_DurationSheet> {
                 _minutes == 0
                     ? context.l10n.habit_duration_none
                     : spanLabel(_minutes),
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                  height: 1.1,
+                style: sheetFigureStyle(
+                  context,
+                  size: 30,
                   color: context.colors.onSurface,
                 ),
               ),
@@ -128,10 +120,7 @@ class _DurationSheetState extends State<_DurationSheet> {
                 ),
                 child: Text(
                   context.l10n.save,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: sheetActionStyle(context),
                 ),
               ),
             ),
@@ -172,11 +161,7 @@ class _StepRow extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: context.colors.onSurface,
-              ),
+              style: sheetHeadingStyle(context, size: 14),
             ),
           ),
           IconButton(
@@ -191,11 +176,10 @@ class _StepRow extends StatelessWidget {
               child: Text(
                 value,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
+                style: sheetFigureStyle(
+                  context,
+                  size: 17,
                   color: context.colors.onSurface,
-                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ),

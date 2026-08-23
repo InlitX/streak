@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -14,10 +14,6 @@ Future<void> showFocusDefaultsSheet(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-    ),
     builder: (_) => _FocusDefaults(habit: habit),
   );
 }
@@ -61,23 +57,14 @@ class _FocusDefaultsState extends State<_FocusDefaults> {
               padding: const EdgeInsets.only(left: 2, bottom: 16),
               child: Text(
                 context.l10n.focus_defaults,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: context.colors.onSurface,
-                ),
+                style: sheetTitleStyle(context, size: 18),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 2, bottom: 10),
               child: Text(
                 context.l10n.focus_duration,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
-                  color: context.tokens.muted,
-                ),
+                style: sheetLabelStyle(context),
               ),
             ),
             FocusDurationChips(
@@ -104,10 +91,7 @@ class _FocusDefaultsState extends State<_FocusDefaults> {
                 ),
                 child: Text(
                   context.l10n.save,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: sheetActionStyle(context),
                 ),
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:provider/provider.dart';
@@ -166,11 +167,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 widget.initial == null
                     ? context.l10n.new_reminder
                     : context.l10n.edit_reminder,
-                style: TextStyle(
-                  color: scheme.onSurface,
-                  fontSize: minimal ? 18 : 20,
-                  fontWeight: minimal ? FontWeight.w700 : FontWeight.w800,
-                ),
+                style: sheetTitleStyle(context),
               ),
               const SizedBox(height: 16),
               if (minimal)
@@ -241,7 +238,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 ),
                 const SizedBox(height: 16),
                 Text(context.l10n.days,
-                    style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                    style: sheetBodyStyle(context, size: 13)),
                 const SizedBox(height: 8),
                 if (minimal)
                   CompactWeekdays(
@@ -299,7 +296,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 ),
                 const SizedBox(height: 16),
                 Text(context.l10n.repeat_hours,
-                    style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                    style: sheetBodyStyle(context, size: 13)),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: minimal ? 7 : 8,
@@ -318,7 +315,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
               ],
             const SizedBox(height: 20),
             Text(context.l10n.time,
-                style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                style: sheetBodyStyle(context, size: 13)),
             const SizedBox(height: 8),
             Semantics(
               button: true,
@@ -344,11 +341,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                       SizedBox(width: minimal ? 11 : 12),
                       Text(
                         _time.format(context),
-                        style: TextStyle(
-                          color: scheme.onSurface,
-                          fontSize: minimal ? 15 : 16,
-                          fontWeight: minimal ? FontWeight.w700 : FontWeight.w600,
-                        ),
+                        style: sheetOptionStyle(context, selected: true),
                       ),
                     ],
                   ),
@@ -357,7 +350,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             ),
             const SizedBox(height: 20),
             Text(context.l10n.snooze_duration,
-                style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                style: sheetBodyStyle(context, size: 13)),
             const SizedBox(height: 8),
             Wrap(
               spacing: minimal ? 7 : 8,
@@ -395,7 +388,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             ),
             const SizedBox(height: 20),
             Text(context.l10n.reminder_message,
-                style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                style: sheetBodyStyle(context, size: 13)),
             const SizedBox(height: 8),
             AppTextField(
               controller: _message,
@@ -414,10 +407,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 ),
                 child: Text(
                   context.l10n.save_reminder,
-                  style: TextStyle(
-                    fontSize: minimal ? 15 : 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: sheetActionStyle(context, size: minimal ? 15 : 16),
                 ),
               ),
             ),
@@ -458,9 +448,8 @@ class _ModeToggle extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                  style: sheetLabelStyle(
+                    context,
                     color: active ? scheme.onPrimary : context.tokens.muted,
                   ),
                 ),
@@ -520,8 +509,7 @@ class _IntervalStepper extends StatelessWidget {
           Expanded(
             child: Text(
               context.l10n.every_n_days(value),
-              style: TextStyle(
-                  color: scheme.onSurface, fontWeight: FontWeight.w700),
+              style: sheetOptionStyle(context, size: 14, selected: true),
             ),
           ),
           btn(LucideIcons.minus, value > min ? () => onChanged(value - 1) : null),
@@ -566,10 +554,9 @@ class _SnoozeChip extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: TextStyle(
+            style: sheetLabelStyle(
+              context,
               color: selected ? scheme.primary : context.tokens.muted,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
             ),
           ),
         ),
@@ -598,10 +585,10 @@ class _PresetChip extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: TextStyle(
+            style: sheetLabelStyle(
+              context,
+              size: 12,
               color: context.colors.primary,
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
             ),
           ),
         ),

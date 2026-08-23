@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 
 class FocusEndDialog extends StatelessWidget {
   const FocusEndDialog({
@@ -44,21 +45,13 @@ class FocusEndDialog extends StatelessWidget {
             Text(
               context.l10n.focus_stop_title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w800,
-                color: context.colors.onSurface,
-              ),
+              style: sheetTitleStyle(context, size: 19),
             ),
             const SizedBox(height: 10),
             Text(
               lines.join('\n'),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.5,
-                color: context.tokens.muted,
-              ),
+              style: sheetBodyStyle(context, size: 14),
             ),
             const SizedBox(height: 24),
             if (!reached) ...[
@@ -92,11 +85,7 @@ class FocusEndDialog extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 context.l10n.focus_end_keep,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: context.tokens.muted,
-                ),
+                style: sheetActionStyle(context, color: context.tokens.muted),
               ),
             ),
           ],
@@ -129,10 +118,7 @@ class _FocusDialogButton extends StatelessWidget {
       child: FilledButton.icon(
         onPressed: onTap,
         icon: Icon(icon, size: 18),
-        label: Text(
-          label,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
-        ),
+        label: Text(label, style: sheetActionStyle(context)),
         style: FilledButton.styleFrom(
           backgroundColor: background,
           foregroundColor: foreground,

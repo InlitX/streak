@@ -7,8 +7,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_motion.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
@@ -580,15 +583,11 @@ class _TopBar extends StatelessWidget {
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      backgroundColor: context.colors.surface,
       constraints: BoxConstraints(
         maxWidth: phoneWidth,
         maxHeight: MediaQuery.sizeOf(context).height * 0.85,
       ),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-      ),
-      builder: (_) => SafeArea(
+      builder: (sheet) => SafeArea(
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
@@ -596,11 +595,7 @@ class _TopBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
+              Text(title, style: sheetTitleStyle(sheet)),
               const SizedBox(height: 16),
               Flexible(child: SingleChildScrollView(child: child)),
             ],
@@ -708,24 +703,36 @@ class _Controls extends StatelessWidget {
         const SizedBox(width: 18),
         Semantics(
           button: true,
-          child: GestureDetector(
+          child: ExpressSquish(
+            haptic: false,
+            scale: 0.93,
             onTap: () {
               HapticFeedback.mediumImpact();
               onToggle();
             },
-            child: Container(
+            child: AnimatedContainer(
+              duration: Express.normal,
+              curve: Express.bouncy,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.16),
-                borderRadius: BorderRadius.circular(30),
+                color: Colors.white.withValues(alpha: running ? 0.16 : 0.24),
+                borderRadius: BorderRadius.circular(running ? 20 : 30),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    running ? LucideIcons.pause : LucideIcons.play,
-                    size: 18,
-                    color: Colors.white,
+                  AnimatedSwitcher(
+                    duration: Express.quick,
+                    transitionBuilder: (child, animation) => ScaleTransition(
+                      scale: animation,
+                      child: FadeTransition(opacity: animation, child: child),
+                    ),
+                    child: Icon(
+                      running ? LucideIcons.pause : LucideIcons.play,
+                      key: ValueKey(running),
+                      size: 18,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Text(
@@ -761,7 +768,9 @@ class _RoundButton extends StatelessWidget {
     return Semantics(
       button: true,
       label: context.l10n.focus_end,
-      child: GestureDetector(
+      child: ExpressSquish(
+        haptic: false,
+        scale: 0.88,
         onTap: onTap,
         child: Container(
           width: 50,

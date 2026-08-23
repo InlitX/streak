@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -14,10 +15,6 @@ Future<void> showSheet(BuildContext context, WidgetBuilder builder) {
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
     builder: builder,
   );
 }
@@ -33,7 +30,7 @@ Future<void> showAccentSheet(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SheetTitle(context.l10n.accent_color),
+            SheetTitle(context.l10n.accent_color),
             const SizedBox(height: 16),
             Consumer<SettingsController>(
               builder: (_, s, __) => ColorPicker(
@@ -59,7 +56,7 @@ Future<void> showBackgroundSheet(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SheetTitle(context.l10n.app_background),
+            SheetTitle(context.l10n.app_background),
             const SizedBox(height: 18),
             Consumer<SettingsController>(
               builder: (inner, s, __) => Row(
@@ -108,7 +105,7 @@ Future<void> showLanguageSheet(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _SheetTitle(context.l10n.language),
+              SheetTitle(context.l10n.language),
               const SizedBox(height: 8),
               Flexible(
                 child: ListView(
@@ -142,18 +139,6 @@ Future<void> showLanguageSheet(BuildContext context) {
   );
 }
 
-class _SheetTitle extends StatelessWidget {
-  const _SheetTitle(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-      );
-}
-
 class _LanguageTile extends StatelessWidget {
   const _LanguageTile({
     required this.label,
@@ -180,9 +165,9 @@ class _LanguageTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  style: sheetOptionStyle(
+                    context,
+                    selected: selected,
                     color: selected ? color : null,
                   ),
                 ),

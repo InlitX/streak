@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
@@ -23,13 +24,9 @@ Future<void> showMusicSheet(BuildContext context) {
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    backgroundColor: context.colors.surface,
     constraints: BoxConstraints(
       maxWidth: phoneWidth,
       maxHeight: MediaQuery.sizeOf(context).height * 0.85,
-    ),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
     ),
     builder: (_) => const _MusicSheet(),
   );
@@ -79,10 +76,7 @@ class _MusicSheet extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.l10n.focus_sound,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: sheetTitleStyle(context),
                   ),
                 ),
                 _ModeToggle(
@@ -135,10 +129,7 @@ class _MusicSheet extends StatelessWidget {
                 label: Text(
                   '${context.l10n.focus_add_track}  '
                   '($userCount/${FocusAudio.maxTracks})',
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: sheetActionStyle(context, size: 14.5),
                 ),
                 style: FilledButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -184,9 +175,9 @@ class _ModeToggle extends StatelessWidget {
               const SizedBox(width: 7),
               Text(
                 shuffle ? context.l10n.focus_shuffle : context.l10n.focus_loop,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w700,
+                style: sheetLabelStyle(
+                  context,
+                  size: 12.5,
                   color: context.colors.primary,
                 ),
               ),
@@ -270,12 +261,11 @@ class _TrackRow extends StatelessWidget {
                           track.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: active ? FontWeight.w700 : FontWeight.w600,
-                            color: active
-                                ? context.colors.primary
-                                : context.colors.onSurface,
+                          style: sheetOptionStyle(
+                            context,
+                            size: 15,
+                            selected: active,
+                            color: active ? context.colors.primary : null,
                           ),
                         ),
                       ),
@@ -284,11 +274,7 @@ class _TrackRow extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8),
                           child: Text(
                             context.l10n.focus_built_in,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: context.tokens.muted,
-                            ),
+                            style: sheetLabelStyle(context, size: 11),
                           ),
                         ),
                     ],

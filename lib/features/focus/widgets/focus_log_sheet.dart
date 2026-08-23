@@ -3,21 +3,23 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 Future<bool?> showFocusLogSheet(BuildContext context, {String? habitId}) {
   return showModalBottomSheet<bool>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-    ),
     builder: (_) => _FocusLog(habitId: habitId ?? ''),
   );
 }
@@ -72,6 +74,7 @@ class _FocusLogState extends State<_FocusLog> {
   Widget build(BuildContext context) {
     final habits = context.watch<HabitsController>().habits;
     final locale = Localizations.localeOf(context).toString();
+    final express = context.watch<SettingsController>().isExpressStyle;
 
     return SafeArea(
       top: false,
@@ -85,11 +88,7 @@ class _FocusLogState extends State<_FocusLog> {
               padding: const EdgeInsets.only(left: 2, bottom: 16),
               child: Text(
                 context.l10n.focus_log,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: context.colors.onSurface,
-                ),
+                style: sheetTitleStyle(context, size: 18),
               ),
             ),
             _Label(context.l10n.focus_pick_habit),
@@ -145,7 +144,15 @@ class _FocusLogState extends State<_FocusLog> {
               onChanged: (value) => setState(() => _minutes = value),
             ),
             const SizedBox(height: 20),
-            SizedBox(
+            if (express)
+              ExpressButton(
+                label: context.l10n.save,
+                icon: LucideIcons.check,
+                expand: true,
+                onPressed: _save,
+              )
+            else
+              SizedBox(
               height: 50,
               child: FilledButton(
                 onPressed: _save,
@@ -156,10 +163,7 @@ class _FocusLogState extends State<_FocusLog> {
                 ),
                 child: Text(
                   context.l10n.save,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: sheetActionStyle(context),
                 ),
               ),
             ),
@@ -177,17 +181,12 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (context.watch<SettingsController>().isExpressStyle) {
+      return SectionLabel(text);
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 2, bottom: 10),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
-          color: context.tokens.muted,
-        ),
-      ),
+      child: Text(text, style: sheetLabelStyle(context)),
     );
   }
 }
@@ -207,20 +206,36 @@ class _PickField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
     return Semantics(
       button: true,
       label: '$label $value',
-      child: GestureDetector(
+      child: ExpressSquish(
         onTap: onTap,
+        haptic: express,
+        scale: express ? 0.965 : 1,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: express ? 12 : 14,
+            vertical: 12,
+          ),
           decoration: BoxDecoration(
-            color: context.colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(14),
+            color: express
+                ? expressSurface(context, level: 2)
+                : context.colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(express ? 20 : 14),
           ),
           child: Row(
             children: [
-              Icon(icon, size: 16, color: context.colors.primary),
+              if (express)
+                ExpressBlob(
+                  size: 32,
+                  color: context.colors.primary.withValues(alpha: 0.16),
+                  shape: ExpressShape.cookie,
+                  child: Icon(icon, size: 15, color: context.colors.primary),
+                )
+              else
+                Icon(icon, size: 16, color: context.colors.primary),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -228,22 +243,14 @@ class _PickField extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: context.tokens.muted,
-                      ),
+                      style: sheetLabelStyle(context, size: 11),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       value,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: context.colors.onSurface,
-                      ),
+                      style: sheetHeadingStyle(context, size: 14),
                     ),
                   ],
                 ),

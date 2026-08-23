@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/sheet_action.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -28,10 +29,6 @@ Future<FocusHabitAction?> showFocusHabitSheet(
   return showModalBottomSheet<FocusHabitAction>(
     context: context,
     showDragHandle: true,
-    backgroundColor: context.colors.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-    ),
     builder: (sheet) => SafeArea(
       top: false,
       child: Padding(
@@ -46,11 +43,7 @@ Future<FocusHabitAction?> showFocusHabitSheet(
                 habit.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: context.colors.onSurface,
-                ),
+                style: sheetTitleStyle(context, size: 18),
               ),
             ),
             SheetAction(
@@ -86,10 +79,7 @@ Future<FocusHabitAction?> showFocusHabitSheet(
                 ),
                 child: Text(
                   context.l10n.cancel,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: sheetActionStyle(context),
                 ),
               ),
             ),

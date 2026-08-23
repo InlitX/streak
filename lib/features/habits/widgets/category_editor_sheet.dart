@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
@@ -70,11 +71,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                 widget.initial == null
                     ? context.l10n.new_category
                     : context.l10n.edit_category,
-                style: TextStyle(
-                  color: context.colors.onSurface,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: sheetTitleStyle(context),
               ),
               const SizedBox(height: 18),
               AppTextField(
@@ -84,7 +81,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
               ),
               const SizedBox(height: 18),
               Text(context.l10n.icon,
-                  style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                  style: sheetBodyStyle(context, size: 13)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 10,
@@ -133,10 +130,9 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                           ),
                           child: Text(
                             context.l10n.see_more,
-                            style: TextStyle(
+                            style: sheetLabelStyle(
+                              context,
                               color: context.colors.primary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -146,7 +142,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
               ),
               const SizedBox(height: 18),
               Text(context.l10n.color,
-                  style: TextStyle(color: context.tokens.muted, fontSize: 13)),
+                  style: sheetBodyStyle(context, size: 13)),
               const SizedBox(height: 10),
               ColorPicker(
                 selected: _color,
@@ -165,8 +161,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
                   ),
                   child: Text(
                     context.l10n.save,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700),
+                    style: sheetActionStyle(context, size: 16),
                   ),
                 ),
               ),
