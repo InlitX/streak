@@ -29,6 +29,7 @@ import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
 
+private const val FALLBACK_COLOR = 0xFF7C3AED.toInt()
 private const val KIND_POSITIVE = 0
 private const val KIND_NEGATIVE = 1
 private const val KIND_QUANTITATIVE = 2
@@ -79,7 +80,7 @@ class TodayWidget : GlanceAppWidget() {
             if (habits != null && habits.length() > 0) {
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
                     items(habits.length()) { i ->
-                        Row(style, habits.getJSONObject(i))
+                        habits.optJSONObject(i)?.let { Row(style, it) }
                     }
                 }
             } else {
@@ -98,9 +99,9 @@ class TodayWidget : GlanceAppWidget() {
     @Composable
     private fun Row(style: WidgetStyle, habit: JSONObject) {
         val context = androidx.glance.LocalContext.current
-        val habitId = habit.getString("id")
-        val name = habit.getString("name")
-        val colorInt = habit.getInt("color")
+        val habitId = habit.optString("id")
+        val name = habit.optString("name")
+        val colorInt = habit.optInt("color", FALLBACK_COLOR)
         val color = androidx.compose.ui.graphics.Color(colorInt)
         val kind = habit.optInt("kind", KIND_POSITIVE)
         val perDayTarget = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
@@ -176,7 +177,7 @@ class TodayWidget : GlanceAppWidget() {
                             WidgetActionReceiver.intent(
                                 context,
                                 habitId,
-                                WidgetPayload.todayKey(),
+                                WidgetPayload.todayKey(context),
                             )
                         )
                     ),

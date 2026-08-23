@@ -70,12 +70,15 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
 
         fun schedule(context: Context) {
             try {
+                val cutoff = WidgetPayload.dayCutoff(context)
                 val next = Calendar.getInstance().apply {
-                    add(Calendar.DAY_OF_YEAR, 1)
-                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.HOUR_OF_DAY, cutoff)
                     set(Calendar.MINUTE, 0)
                     set(Calendar.SECOND, 5)
                     set(Calendar.MILLISECOND, 0)
+                    if (timeInMillis <= System.currentTimeMillis()) {
+                        add(Calendar.DAY_OF_YEAR, 1)
+                    }
                 }
                 val alarms = context.getSystemService(AlarmManager::class.java)
                 val at = next.timeInMillis

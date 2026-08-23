@@ -219,6 +219,7 @@ class HomeWidgetService {
       'habits': widgetHabits,
       'days': days,
       'todayKey': today.dayKey,
+      'dayCutoff': AppClock.cutoffHour,
       'heatmap': _heatmapLevels(listed, today),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       'summary': {

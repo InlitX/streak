@@ -33,10 +33,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
+import org.json.JSONArray
 import org.json.JSONObject
 
 private val brandColor = androidx.compose.ui.graphics.Color(0xFF6C5CE7)
 
+private const val FALLBACK_COLOR = 0xFF7C3AED.toInt()
 private const val KIND_POSITIVE = 0
 private const val KIND_NEGATIVE = 1
 private const val KIND_QUANTITATIVE = 2
@@ -98,10 +100,10 @@ class HabitWidget : GlanceAppWidget() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             for (i in 0 until 7) {
-                                if (i < days.length()) {
-                                    val day = days.getJSONObject(i)
-                                    val label = day.getString("label")
-                                    val isToday = day.getBoolean("isToday")
+                                val day = days.optJSONObject(i)
+                                if (day != null) {
+                                    val label = day.optString("label")
+                                    val isToday = day.optBoolean("isToday", false)
                                     Box(
                                         modifier = GlanceModifier.defaultWeight(),
                                         contentAlignment = Alignment.Center
@@ -123,14 +125,16 @@ class HabitWidget : GlanceAppWidget() {
                     }
 
                     val keys = List(days.length()) {
-                        days.optJSONObject(it)?.optString("key") ?: WidgetPayload.todayKey()
+                        days.optJSONObject(it)?.optString("key") ?: WidgetPayload.todayKey(context)
                     }
 
                     LazyColumn(
                         modifier = GlanceModifier.fillMaxWidth().defaultWeight()
                     ) {
                         items(habits.length()) { habitIndex ->
-                            HabitRow(style, habits.getJSONObject(habitIndex), keys)
+                            habits.optJSONObject(habitIndex)?.let {
+                                HabitRow(style, it, keys)
+                            }
                         }
                     }
                 } else {
@@ -185,11 +189,11 @@ class HabitWidget : GlanceAppWidget() {
     @Composable
     private fun HabitRow(style: WidgetStyle, habit: JSONObject, dayKeys: List<String>) {
         val context = androidx.glance.LocalContext.current
-        val habitId = habit.getString("id")
-        val name = habit.getString("name")
-        val colorInt = habit.getInt("color")
+        val habitId = habit.optString("id")
+        val name = habit.optString("name")
+        val colorInt = habit.optInt("color", FALLBACK_COLOR)
         val color = androidx.compose.ui.graphics.Color(colorInt)
-        val completions = habit.getJSONArray("completions")
+        val completions = habit.optJSONArray("completions") ?: JSONArray()
         val kind = habit.optInt("kind", KIND_POSITIVE)
         val perDayTarget = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val counts = habit.optJSONArray("counts")
@@ -245,7 +249,7 @@ class HabitWidget : GlanceAppWidget() {
                                         WidgetActionReceiver.intent(
                                             context,
                                             habitId,
-                                            dayKeys.getOrElse(i) { WidgetPayload.todayKey() },
+                                            dayKeys.getOrElse(i) { WidgetPayload.todayKey(context) },
                                         )
                                     )
                                 ),

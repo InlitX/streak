@@ -11,7 +11,13 @@ object WidgetPayload {
     const val WEEK = 7
     const val TODAY = WEEK - 1
 
-    fun todayKey(): String {
+    fun todayKey(context: Context): String =
+        raw(context)?.optString("todayKey").orEmpty().ifEmpty { systemDayKey() }
+
+    fun dayCutoff(context: Context): Int =
+        (raw(context)?.optInt("dayCutoff", 0) ?: 0).coerceIn(0, 6)
+
+    fun systemDayKey(): String {
         val now = Calendar.getInstance()
         return String.format(
             Locale.US,
@@ -31,12 +37,12 @@ object WidgetPayload {
         null
     }
 
-    fun aligned(context: Context): JSONObject? = raw(context)?.let { align(it, todayKey()) }
+    fun aligned(context: Context): JSONObject? = raw(context)?.let { align(it, todayKey(context)) }
 
     fun isStale(context: Context): Boolean {
         val root = raw(context) ?: return false
         val stored = root.optString("todayKey", "")
-        return stored.isNotEmpty() && stored != todayKey()
+        return stored.isNotEmpty() && stored != systemDayKey()
     }
 
     fun windowIndexOf(root: JSONObject, dayKey: String): Int {

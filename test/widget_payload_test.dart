@@ -109,4 +109,18 @@ void main() {
       ['First', 'Second', 'Third'],
     );
   });
+
+  test('the payload tells the widget where the day is cut', () async {
+    addTearDown(() => AppClock.cutoffHour = 0);
+
+    AppClock.cutoffHour = 0;
+    var payload = await _payloadOf([testHabit(id: 'a', name: 'Read')]);
+    expect(payload['dayCutoff'], 0);
+    expect(payload['todayKey'], AppClock.now().dayKey);
+
+    AppClock.cutoffHour = 3;
+    payload = await _payloadOf([testHabit(id: 'a', name: 'Read')]);
+    expect(payload['dayCutoff'], 3);
+    expect(payload['todayKey'], AppClock.now().dayKey);
+  });
 }

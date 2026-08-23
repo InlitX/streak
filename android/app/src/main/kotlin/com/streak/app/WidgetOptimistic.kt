@@ -17,12 +17,13 @@ object WidgetOptimistic {
             try {
                 val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
                 val root = JSONObject(prefs.getString(KEY, null) ?: return@synchronized false)
-                val day = indexOf(root, dayKey)
-                val today = indexOf(root, WidgetPayload.todayKey())
+                val todayKey = WidgetPayload.todayKey(context)
+                val day = indexOf(root, dayKey, todayKey)
+                val today = indexOf(root, todayKey, todayKey)
                 if (day < 0) return@synchronized false
                 val habits = root.optJSONArray("habits") ?: return@synchronized false
                 for (i in 0 until habits.length()) {
-                    val habit = habits.getJSONObject(i)
+                    val habit = habits.optJSONObject(i) ?: continue
                     if (habit.optString("id") != habitId) continue
                     if (!mutate(habit, day, today, delta)) return@synchronized false
                     resummarize(root, habits, today)
@@ -36,10 +37,10 @@ object WidgetOptimistic {
         }
     }
 
-    private fun indexOf(root: JSONObject, dayKey: String): Int {
+    private fun indexOf(root: JSONObject, dayKey: String, todayKey: String): Int {
         val days = root.optJSONArray("days") ?: return -1
         if (days.length() > 0 && days.optJSONObject(0)?.has("key") != true) {
-            return if (dayKey == WidgetPayload.todayKey()) WidgetPayload.TODAY else -1
+            return if (dayKey == todayKey) WidgetPayload.TODAY else -1
         }
         return WidgetPayload.windowIndexOf(root, dayKey)
     }
@@ -49,7 +50,7 @@ object WidgetOptimistic {
         if (today < 0) return
         var done = 0
         for (i in 0 until habits.length()) {
-            val habit = habits.getJSONObject(i)
+            val habit = habits.optJSONObject(i) ?: continue
             val scheduled = habit.optJSONArray("scheduled")
             if (scheduled != null && !scheduled.optBoolean(today, false)) continue
             val completions = habit.optJSONArray("completions") ?: continue
