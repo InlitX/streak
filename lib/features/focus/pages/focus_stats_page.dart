@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
-import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/data/focus_stats.dart';
+import 'package:streak/features/focus/pages/express_focus_stats_page.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
+import 'package:streak/features/focus/pages/minimal_focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_period_bar.dart';
+import 'package:streak/features/focus/widgets/focus_range_bars.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
@@ -30,6 +32,7 @@ class FocusStatsPage extends StatefulWidget {
 
 class _FocusStatsPageState extends State<FocusStatsPage> {
   FocusRange _range = FocusRange.week;
+  int _offset = 0;
 
   List<({String name, Color color, int count})> _ranking(
     FocusStats stats,
@@ -47,38 +50,16 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
     return entries.take(8).toList();
   }
 
-  String _barLabel(FocusStats stats, int index) {
-    if (index < 0 || index >= stats.buckets.length) return '';
-    final locale = Localizations.localeOf(context).toString();
-    switch (_range) {
-      case FocusRange.week:
-        return WeekdayLabels.narrowFrom(
-          Localizations.localeOf(context).languageCode,
-          context.read<SettingsController>().weekStart,
-        )[index];
-      case FocusRange.month:
-        final day = index + 1;
-        return day == 1 || day % 5 == 0 ? '$day' : '';
-      case FocusRange.year:
-        return index.isEven
-            ? DateFormat.MMM(locale).format(stats.buckets[index])
-            : '';
-    }
-  }
-
-  double _barWidth() {
-    switch (_range) {
-      case FocusRange.week:
-        return 14;
-      case FocusRange.month:
-        return 5;
-      case FocusRange.year:
-        return 11;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    if (settings.isExpressStyle) {
+      return ExpressFocusStatsPage(habitId: widget.habitId);
+    }
+    if (settings.isMinimalStyle) {
+      return MinimalFocusStatsPage(habitId: widget.habitId);
+    }
+
     final focus = context.watch<FocusController>();
     final habits = context.watch<HabitsController>();
     final habit = widget.habitId == null ? null : habits.byId(widget.habitId!);
@@ -88,27 +69,13 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
       sessions: focus.sessions,
       range: _range,
       now: AppClock.now(),
-      weekStart: context.watch<SettingsController>().weekStart,
+      weekStart: settings.weekStart,
       habitId: widget.habitId,
+      offset: _offset,
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(habit?.name ?? context.l10n.focus_stats),
-        actions: [
-          IconButton(
-            tooltip: context.l10n.focus_history,
-            icon: const Icon(LucideIcons.history),
-            onPressed: () =>
-                AppNavigator.push(FocusHistoryPage(habitId: widget.habitId)),
-          ),
-        ],
-      ),
-      body: stats.sessionCount == 0
+    final title = habit?.name ?? context.l10n.focus_stats;
+    final body = stats.sessionCount == 0
           ? AppEmptyState(
               icon: LucideIcons.timer,
               title: context.l10n.no_data_yet,
@@ -185,22 +152,25 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                               context.l10n.year,
                             ],
                             index: FocusRange.values.indexOf(_range),
-                            onChanged: (index) => setState(
-                              () => _range = FocusRange.values[index],
-                            ),
+                            onChanged: (index) => setState(() {
+                              _range = FocusRange.values[index];
+                              _offset = 0;
+                            }),
                           ),
                         ),
-                        const SizedBox(height: 18),
-                        ValueBars(
-                          key: ValueKey(_range),
-                          values: [
-                            for (final seconds in stats.series) seconds / 60,
-                          ],
+                        const SizedBox(height: 12),
+                        FocusPeriodBar(
+                          range: _range,
+                          offset: _offset,
+                          stats: stats,
+                          accent: accent,
+                          onOffset: (value) => setState(() => _offset = value),
+                        ),
+                        const SizedBox(height: 14),
+                        FocusRangeBars(
+                          stats: stats,
+                          range: _range,
                           color: accent,
-                          barWidth: _barWidth(),
-                          label: (index) => _barLabel(stats, index),
-                          tooltip: (value) =>
-                              formatHoursShort((value * 60).round()),
                         ),
                       ],
                     ),
@@ -221,7 +191,26 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                   ),
                 ],
               ],
+            );
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.chevronLeft),
+          onPressed: () => AppNavigator.pop(),
+        ),
+        title: Text(title),
+        actions: [
+          IconButton(
+            tooltip: context.l10n.focus_history,
+            icon: const Icon(LucideIcons.history),
+            onPressed: () => AppNavigator.push(
+              FocusHistoryPage(habitId: widget.habitId),
             ),
+          ),
+        ],
+      ),
+      body: body,
     );
   }
 }

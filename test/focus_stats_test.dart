@@ -23,6 +23,7 @@ FocusStats _stats(
   FocusRange range = FocusRange.week,
   int weekStart = DateTime.monday,
   String? habitId,
+  int offset = 0,
 }) =>
     FocusStats.compute(
       sessions: sessions,
@@ -30,6 +31,7 @@ FocusStats _stats(
       now: _now,
       weekStart: weekStart,
       habitId: habitId,
+      offset: offset,
     );
 
 void main() {
@@ -130,5 +132,42 @@ void main() {
     expect(stats.averageSeconds, 0);
     expect(stats.rangeSeconds, 0);
     expect(stats.bestBucket, 0);
+  });
+
+  test('the offset walks whole weeks, months and years', () {
+    final sessions = [
+      _session(habitId: 'a', startedAt: _now, minutes: 30),
+      _session(
+        habitId: 'a',
+        startedAt: _now.subtract(const Duration(days: 7)),
+        minutes: 40,
+      ),
+      _session(habitId: 'a', startedAt: DateTime(2026, 7, 3), minutes: 50),
+      _session(habitId: 'a', startedAt: DateTime(2025, 5, 9), minutes: 60),
+    ];
+
+    expect(_stats(sessions).rangeSeconds, 30 * 60);
+    expect(_stats(sessions, offset: -1).rangeSeconds, 40 * 60);
+    expect(_stats(sessions, offset: -1).rangeCount, 1);
+
+    final lastMonth = _stats(sessions, range: FocusRange.month, offset: -1);
+    expect(lastMonth.buckets.first, DateTime(2026, 7, 1));
+    expect(lastMonth.rangeSeconds, 50 * 60);
+
+    final lastYear = _stats(sessions, range: FocusRange.year, offset: -1);
+    expect(lastYear.buckets.first.year, 2025);
+    expect(lastYear.rangeSeconds, 60 * 60);
+    expect(lastYear.series[4], 60 * 60);
+  });
+
+  test('a period with nothing in it reports zeros, not the whole history', () {
+    final stats = _stats(
+      [_session(habitId: 'a', startedAt: _now, minutes: 30)],
+      offset: -3,
+    );
+
+    expect(stats.rangeSeconds, 0);
+    expect(stats.rangeCount, 0);
+    expect(stats.totalSeconds, 30 * 60);
   });
 }

@@ -15,6 +15,7 @@ class FocusStats {
     required this.buckets,
     required this.series,
     required this.perHabit,
+    required this.rangeCount,
   });
 
   final int todaySeconds;
@@ -25,6 +26,7 @@ class FocusStats {
   final List<DateTime> buckets;
   final List<int> series;
   final Map<String, int> perHabit;
+  final int rangeCount;
 
   int get averageSeconds =>
       sessionCount == 0 ? 0 : totalSeconds ~/ sessionCount;
@@ -43,18 +45,24 @@ class FocusStats {
     FocusRange range,
     DateTime today,
     int weekStart,
+    int offset,
   ) {
     switch (range) {
       case FocusRange.week:
-        final first = today.startOfWeek(weekStart);
+        final first = today
+            .startOfWeek(weekStart)
+            .add(Duration(days: offset * 7));
         return [for (var i = 0; i < 7; i++) first.add(Duration(days: i))];
       case FocusRange.month:
-        final days = DateTime(today.year, today.month + 1, 0).day;
+        final anchor = DateTime(today.year, today.month + offset);
+        final days = DateTime(anchor.year, anchor.month + 1, 0).day;
         return [
-          for (var i = 1; i <= days; i++) DateTime(today.year, today.month, i),
+          for (var i = 1; i <= days; i++)
+            DateTime(anchor.year, anchor.month, i),
         ];
       case FocusRange.year:
-        return [for (var m = 1; m <= 12; m++) DateTime(today.year, m)];
+        final year = today.year + offset;
+        return [for (var m = 1; m <= 12; m++) DateTime(year, m)];
     }
   }
 
@@ -77,6 +85,7 @@ class FocusStats {
     required DateTime now,
     required int weekStart,
     String? habitId,
+    int offset = 0,
   }) {
     final scoped = habitId == null
         ? sessions
@@ -84,10 +93,11 @@ class FocusStats {
 
     final today = now.atMidnight;
     final weekFrom = today.startOfWeek(weekStart);
-    final buckets = _bucketsFor(range, today, weekStart);
+    final buckets = _bucketsFor(range, today, weekStart, offset);
     final series = List<int>.filled(buckets.length, 0);
     final perHabit = <String, int>{};
 
+    var rangeCount = 0;
     var todaySeconds = 0;
     var weekSeconds = 0;
     var monthSeconds = 0;
@@ -97,14 +107,15 @@ class FocusStats {
       final day = session.startedAt.atMidnight;
       totalSeconds += session.seconds;
       if (day.isSameDay(today)) todaySeconds += session.seconds;
-      final offset = day.epochDay - weekFrom.epochDay;
-      if (offset >= 0 && offset < 7) weekSeconds += session.seconds;
+      final weekOffset = day.epochDay - weekFrom.epochDay;
+      if (weekOffset >= 0 && weekOffset < 7) weekSeconds += session.seconds;
       if (day.year == today.year && day.month == today.month) {
         monthSeconds += session.seconds;
       }
 
       final index = _bucketOf(range, buckets, session.startedAt);
       if (index < 0) continue;
+      rangeCount++;
       series[index] += session.seconds;
       perHabit[session.habitId] =
           (perHabit[session.habitId] ?? 0) + session.seconds;
@@ -119,6 +130,7 @@ class FocusStats {
       buckets: buckets,
       series: series,
       perHabit: perHabit,
+      rangeCount: rangeCount,
     );
   }
 }
