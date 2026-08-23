@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +24,20 @@ class NotesController extends ChangeNotifier {
         .where((n) => n.habitId == habitId && n.date == dayKey)
         .toList()
       ..sort((a, b) {
+        final am = a.minutes ?? 24 * 60;
+        final bm = b.minutes ?? 24 * 60;
+        return am != bm ? am.compareTo(bm) : a.createdAt.compareTo(b.createdAt);
+      });
+    return list;
+  }
+
+  List<HabitNote> byDate({String? habitId}) {
+    final list = _notes
+        .where((n) => habitId == null || n.habitId == habitId)
+        .toList()
+      ..sort((a, b) {
+        final byDay = parseDayKey(b.date).compareTo(parseDayKey(a.date));
+        if (byDay != 0) return byDay;
         final am = a.minutes ?? 24 * 60;
         final bm = b.minutes ?? 24 * 60;
         return am != bm ? am.compareTo(bm) : a.createdAt.compareTo(b.createdAt);

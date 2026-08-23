@@ -7,12 +7,18 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/widgets/sheet_action.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/pages/all_notes_page.dart';
 import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
@@ -20,6 +26,8 @@ import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/classic_habit_list.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
+import 'package:streak/features/habits/widgets/express_habit_list.dart';
+import 'package:streak/features/habits/widgets/express_today_hero.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
@@ -27,6 +35,7 @@ import 'package:streak/features/habits/widgets/slot_transition.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
+import 'package:streak/features/habits/widgets/vacation_sheet.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
@@ -80,69 +89,125 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _ActionTile(
-              icon: LucideIcons.pencil,
-              label: context.l10n.edit_habit,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                AppNavigator.push(
+      builder: (sheetContext) {
+        void run(VoidCallback action) {
+          Navigator.of(sheetContext).pop();
+          action();
+        }
+
+        final actions = <(IconData, String, VoidCallback, bool)>[
+          (
+            LucideIcons.pencil,
+            context.l10n.edit_habit,
+            () => run(() => AppNavigator.push(
                   HabitFormPage(habit: habit),
                   fullscreenDialog: true,
-                );
-              },
-            ),
-            _ActionTile(
-              icon: LucideIcons.chartColumn,
-              label: context.l10n.statistics,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                AppNavigator.push(
+                )),
+            false,
+          ),
+          (
+            LucideIcons.chartColumn,
+            context.l10n.statistics,
+            () => run(() => AppNavigator.push(
                   HabitDetailsPage(habitId: habit.id),
                   fullscreenDialog: true,
-                );
-              },
-            ),
-            _ActionTile(
-              icon: habit.isOnVacation
-                  ? LucideIcons.play
-                  : LucideIcons.palmtree,
-              label: habit.isOnVacation
-                  ? context.l10n.end_vacation
-                  : context.l10n.start_vacation,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                HapticFeedback.mediumImpact();
-                controller.setVacation(habit.id, !habit.isOnVacation);
-              },
-            ),
-            _ActionTile(
-              icon: LucideIcons.arrowUpDown,
-              label: context.l10n.reorder,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                setState(() {
+                )),
+            false,
+          ),
+          (
+            LucideIcons.palmtree,
+            context.l10n.vacation_mode,
+            () => run(() => showVacationSheet(context, habit: habit)),
+            false,
+          ),
+          (
+            LucideIcons.arrowUpDown,
+            context.l10n.reorder,
+            () => run(() => setState(() {
                   _category = null;
                   _reordering = true;
-                });
-              },
-            ),
-            _ActionTile(
-              icon: LucideIcons.archive,
-              label: context.l10n.archive_habit,
-              danger: true,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                _confirmDelete(controller, habit);
-              },
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
+                })),
+            false,
+          ),
+          (
+            LucideIcons.archive,
+            context.l10n.archive_habit,
+            () => run(() => _confirmDelete(controller, habit)),
+            true,
+          ),
+        ];
+
+        return SafeArea(
+          child: switch (sheetStyle(sheetContext)) {
+            1 => Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SheetTitle(habit.name),
+                    const SizedBox(height: 14),
+                    MinimalList(
+                      children: [
+                        for (final (icon, label, onTap, danger)
+                            in actions)
+                          MinimalRow(
+                            label: label,
+                            leading: Icon(
+                              icon,
+                              size: 18,
+                              color: danger
+                                  ? sheetContext.tokens.danger
+                                  : sheetContext.tokens.muted,
+                            ),
+                            tint: danger ? sheetContext.tokens.danger : null,
+                            last: label == actions.last.$2,
+                            onTap: onTap,
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            2 => Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6, bottom: 10),
+                      child: SheetTitle(habit.name),
+                    ),
+                    for (final (icon, label, onTap, danger) in actions) ...[
+                      SheetAction(
+                        icon: icon,
+                        label: label,
+                        accent: danger ? sheetContext.tokens.danger : null,
+                        highlighted: danger,
+                        onTap: onTap,
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                  ],
+                ),
+              ),
+            _ => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final (icon, label, onTap, danger) in actions)
+                    _ActionTile(
+                      icon: icon,
+                      label: label,
+                      danger: danger,
+                      onTap: onTap,
+                    ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+          },
+        );
+      },
     );
   }
 
@@ -172,12 +237,29 @@ class _HomePageState extends State<HomePage> {
     final settings = context.watch<SettingsController>();
     final sortCompletedLast = settings.sortCompletedLast;
     final minimal = settings.isMinimalStyle;
-    final tight = !minimal && settings.planningEnabled;
+    final express = settings.isExpressStyle;
+    final tight = !minimal && !express && settings.planningEnabled;
+    final bigText = MediaQuery.textScalerOf(context).scale(14) > 20;
     return Scaffold(
+      floatingActionButton: express && !_reordering
+          ? Padding(
+              padding: EdgeInsets.only(
+                bottom: isWideLayout(context) ? 0 : 74,
+              ),
+              child: ExpressFab(
+                icon: LucideIcons.plus,
+                label: context.l10n.add_habit,
+                onPressed: () => AppNavigator.push(
+                  const HabitFormPage(),
+                  fullscreenDialog: true,
+                ),
+              ),
+            )
+          : null,
       appBar: AppBar(
         title: _reordering
             ? Text(context.l10n.reorder)
-            : minimal
+            : minimal || express
                 ? null
                 : FittedBox(
                     fit: BoxFit.scaleDown,
@@ -199,6 +281,13 @@ class _HomePageState extends State<HomePage> {
               visualDensity: VisualDensity.compact,
               onPressed: () => AppNavigator.push(const DayTimelinePage()),
             ),
+          if (!_reordering && settings.notesEnabled)
+            IconButton(
+              tooltip: context.l10n.notes_all,
+              icon: const Icon(LucideIcons.notebookPen, size: 21),
+              visualDensity: VisualDensity.compact,
+              onPressed: () => AppNavigator.push(const AllNotesPage()),
+            ),
           if (!minimal && !_reordering)
             IconButton(
               tooltip: settings.compactCards
@@ -213,7 +302,8 @@ class _HomePageState extends State<HomePage> {
                 size: 20,
               ),
             ),
-          if (!_reordering) FocusPill(compact: minimal, dense: tight),
+          if (!_reordering)
+            FocusPill(compact: minimal || express, dense: tight),
           if (minimal && !_reordering && settings.todosEnabled)
             IconButton(
               tooltip: context.l10n.todos,
@@ -238,7 +328,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )
-                : minimal
+                : express
+                    ? const SizedBox.shrink()
+                    : minimal || bigText
                     ? IconButton(
                         onPressed: () => AppNavigator.push(
                           const HabitFormPage(),
@@ -311,6 +403,19 @@ class _HomePageState extends State<HomePage> {
 
               final header = _reordering
                   ? _ReorderBanner(text: context.l10n.reorder_hint)
+                  : express
+                  ? ExpressTodayHeader(
+                      habits: active,
+                      done: done,
+                      total: total,
+                      mode: _mode,
+                      onMode: _changeMode,
+                      showModes:
+                          settings.cardActivity && settings.viewSwitcher,
+                      categories: categories,
+                      category: _category,
+                      onCategory: (c) => setState(() => _category = c),
+                    )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -341,7 +446,22 @@ class _HomePageState extends State<HomePage> {
                       const Duration(milliseconds: 300));
                   controller.reload();
                 },
-                child: minimal && !_reordering
+                child: express
+                    ? ExpressHabitList(
+                        habits: visible,
+                        mode: _mode,
+                        reordering: _reordering,
+                        header: header,
+                        onReorder: (oldIndex, newIndex) =>
+                            controller.reorder(visible, oldIndex, newIndex),
+                        onOpen: _openDetails,
+                        onToggleToday: (habit) => _toggle(habit, today),
+                        onToggleDay: _toggle,
+                        onLongPress: (habit) =>
+                            _showHabitActions(controller, habit),
+                        leaving: _leaving,
+                      )
+                    : minimal && !_reordering
                     ? MinimalHabitList(
                         habits: visible,
                         mode: _mode,
@@ -495,14 +615,7 @@ class _ActionTile extends StatelessWidget {
     final color = danger ? context.tokens.danger : context.colors.onSurface;
     return ListTile(
       leading: Icon(icon, color: color, size: 22),
-      title: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: 16,
-        ),
-      ),
+      title: Text(label, style: sheetOptionStyle(context, color: color)),
       onTap: onTap,
     );
   }
