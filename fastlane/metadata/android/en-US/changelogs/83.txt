@@ -1,0 +1,10 @@
+🚀 New version 1.7.0
+🎨 Three app styles: Classic, Minimal and the new Express
+⚡ Express: rounded shapes, springy motion and a variable typeface
+◻️ Minimal rebuilt: its own black, compact cards and animations
+📤 Sharing dresses in the style you picked
+➕ Hold the add button to type a custom amount
+📝 All your notes in one place, and time as an amount
+⏱️ Walk back through weeks and months in the focus stats
+🇫🇷 Streak now speaks French
+🐛 Fixed widgets overlapping and half-imported backups

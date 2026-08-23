@@ -3,7 +3,7 @@ description: "Streak: a minimal habit tracker that helps you build lasting strea
 
 publish_to: 'none'
 
-version: 1.6.0+7
+version: 1.7.0+8
 
 environment:
   sdk: ^3.9.2
@@ -85,6 +85,9 @@ flutter:
           weight: 800
         - asset: fonts/Figtree-Black.ttf
           weight: 900
+    - family: GoogleSansFlex
+      fonts:
+        - asset: fonts/GoogleSansFlex.ttf
     - family: PlayfairDisplay
       fonts:
         - asset: fonts/PlayfairDisplay.ttf

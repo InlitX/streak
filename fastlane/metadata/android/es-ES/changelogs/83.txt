@@ -1,0 +1,10 @@
+🚀 Nueva versión 1.7.0
+🎨 Tres estilos: Clásico, Minimal y el nuevo Express
+⚡ Express: formas redondeadas, muelle y letra variable
+◻️ Minimal rehecho: su negro, tarjetas compactas y animaciones
+📤 Compartir se viste con el estilo que elijas
+➕ Mantén pulsado el botón de sumar para escribir la cantidad
+📝 Todas tus notas en un sitio, y el tiempo como cantidad
+⏱️ Vuelve atrás por semanas y meses en las stats de foco
+🇫🇷 Streak ya habla francés
+🐛 Arreglados los widgets que se pisaban y las copias
