@@ -446,8 +446,8 @@ class QuantitativeFields extends StatelessWidget {
 
   double get _step => switch (quantKind) {
         QuantKind.water => 50,
-        QuantKind.reading => 1,
-        QuantKind.generic => 1,
+        QuantKind.time => 5,
+        QuantKind.reading || QuantKind.generic => 1,
       };
 
   @override
@@ -476,6 +476,15 @@ class QuantitativeFields extends StatelessWidget {
                     label: context.l10n.quant_preset_reading,
                     selected: quantKind == QuantKind.reading,
                     onTap: () => onPresetSelected(QuantKind.reading),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _PresetChip(
+                    icon: LucideIcons.timer,
+                    label: context.l10n.quant_preset_time,
+                    selected: quantKind == QuantKind.time,
+                    onTap: () => onPresetSelected(QuantKind.time),
                   ),
                 ),
                 const SizedBox(width: 8),

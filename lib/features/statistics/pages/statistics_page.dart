@@ -19,6 +19,8 @@ import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
+import 'package:streak/features/statistics/pages/express_statistics_page.dart';
+import 'package:streak/features/statistics/pages/minimal_statistics_page.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
 import 'package:streak/features/statistics/widgets/statistics_filters.dart';
 import 'package:streak/features/statistics/widgets/stat_donut.dart';
@@ -52,7 +54,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final minimal = context.watch<SettingsController>().isMinimalStyle;
+    final settings = context.watch<SettingsController>();
+    if (settings.isExpressStyle) return const ExpressStatisticsPage();
+    if (settings.isMinimalStyle) return const MinimalStatisticsPage();
+    final minimal = settings.isMinimalStyle;
 
     return Scaffold(
       appBar: minimal
@@ -502,7 +507,7 @@ class _PerfectStreakCard extends StatelessWidget {
         : context.l10n.streak_off;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 15),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [color.withValues(alpha: 0.22), color.withValues(alpha: 0.06)],
@@ -530,7 +535,7 @@ class _PerfectStreakCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (best > 0) ...[
+              if (best > streak) ...[
                 const SizedBox(width: 10),
                 Flexible(
                   child: Text(

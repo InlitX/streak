@@ -3,8 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/entrance.dart';
@@ -13,6 +17,7 @@ import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 
 const _entrance = Duration(milliseconds: 340);
@@ -42,28 +47,59 @@ class NotesPage extends StatelessWidget {
     final notes = context.watch<NotesController>().forDay(habitId, date.dayKey);
     final locale = Localizations.localeOf(context).toString();
 
+    final style = context.watch<SettingsController>();
+    final express = style.isExpressStyle;
+    final minimal = style.isMinimalStyle;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.arrowLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Row(
-          children: [
-            Icon(LucideIcons.notebookPen, size: 20, color: accent),
-            const SizedBox(width: 10),
-            Text(
-              context.l10n.notes,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-            ),
-          ],
-        ),
+        toolbarHeight: express ? 60 : null,
+        leadingWidth: express ? 68 : null,
+        leading: express
+            ? Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Center(child: ExpressIconButton(
+                  icon: LucideIcons.arrowLeft,
+                  onPressed: () => AppNavigator.pop(),
+                )),
+              )
+            : IconButton(
+                icon: const Icon(LucideIcons.arrowLeft),
+                onPressed: () => AppNavigator.pop(),
+              ),
+        title: express || minimal
+            ? null
+            : Row(
+                children: [
+                  Icon(LucideIcons.notebookPen, size: 20, color: accent),
+                  const SizedBox(width: 10),
+                  Text(
+                    context.l10n.notes,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
         actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.plus),
-            onPressed: () => _add(context),
-          ),
-          const SizedBox(width: 4),
+          if (express)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(child: ExpressIconButton(
+                icon: LucideIcons.plus,
+                tint: accent,
+                background: accent.withValues(alpha: 0.16),
+                onPressed: () => _add(context),
+              )),
+            )
+          else ...[
+            IconButton(
+              icon: const Icon(LucideIcons.plus),
+              onPressed: () => _add(context),
+            ),
+            const SizedBox(width: 4),
+          ],
         ],
       ),
       body: SafeArea(
@@ -73,25 +109,41 @@ class NotesPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 14),
               child: Entrance(
                 delay: _entrance,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DateFormat.yMMMMd(locale).format(date),
-                      style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w800,
-                        color: context.colors.onSurface,
+                child: express
+                    ? ExpressHeadline(
+                        title: DateFormat.yMMMMd(locale).format(date),
+                        subtitle: context.l10n.notes_count(notes.length),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            DateFormat.yMMMMd(locale).format(date),
+                            style: minimal
+                                ? MinimalType.display(
+                                    26,
+                                    color: context.colors.onSurface,
+                                  )
+                                : TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w800,
+                                    color: context.colors.onSurface,
+                                  ),
+                          ),
+                          SizedBox(height: minimal ? 6 : 3),
+                          Text(
+                            context.l10n.notes_count(notes.length),
+                            style: minimal
+                                ? MinimalType.label(
+                                    color: context.tokens.muted,
+                                  )
+                                : TextStyle(
+                                    fontSize: 13,
+                                    color: context.tokens.muted,
+                                  ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      context.l10n.notes_count(notes.length),
-                      style:
-                          TextStyle(fontSize: 13, color: context.tokens.muted),
-                    ),
-                  ],
-                ),
               ),
             ),
             Expanded(
@@ -162,12 +214,14 @@ class NoteCard extends StatelessWidget {
     required this.date,
     required this.accent,
     this.corners,
+    this.habitName = '',
   });
 
   final HabitNote note;
   final DateTime date;
   final Color accent;
   final BorderRadius? corners;
+  final String habitName;
 
   Future<void> _menu(BuildContext context) async {
     final action = await showModalBottomSheet<String>(
@@ -179,14 +233,14 @@ class NoteCard extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(LucideIcons.pencil, color: context.colors.onSurface),
-              title: Text(context.l10n.edit),
+              title: Text(context.l10n.edit, style: sheetOptionStyle(sheet)),
               onTap: () => Navigator.of(sheet).pop('edit'),
             ),
             ListTile(
               leading: Icon(LucideIcons.trash2, color: context.tokens.danger),
               title: Text(
                 context.l10n.delete,
-                style: TextStyle(color: context.tokens.danger),
+                style: sheetOptionStyle(sheet, color: context.tokens.danger),
               ),
               onTap: () => Navigator.of(sheet).pop('delete'),
             ),
@@ -251,6 +305,19 @@ class NoteCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (habitName.isNotEmpty) ...[
+                  Text(
+                    habitName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
+                      color: accent,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                ],
                 if (label.isNotEmpty) ...[
                   Row(
                     children: [

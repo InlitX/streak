@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
-import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
@@ -32,11 +31,20 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/features/habits/widgets/minimal_detail_parts.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
-import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/express/express_month.dart';
+import 'package:streak/core/express/express_type.dart';
+import 'package:streak/features/statistics/widgets/year_heatmap.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_streak_row.dart';
+import 'package:streak/core/express/express_tabs.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/features/habits/widgets/quant_daily_bars.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
@@ -44,6 +52,7 @@ import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
+import 'package:streak/features/habits/widgets/vacation_sheet.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class HabitDetailsPage extends StatefulWidget {
@@ -133,6 +142,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
 
         final settings = context.watch<SettingsController>();
         final minimal = settings.isMinimalStyle;
+        final express = settings.isExpressStyle;
         final notesOn = settings.notesEnabled;
 
         void openDay(DateTime date) => showDayActionsSheet(
@@ -144,8 +154,8 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
 
         return Scaffold(
           appBar: AppBar(
-            toolbarHeight: minimal ? 52 : null,
-            title: minimal
+            toolbarHeight: minimal || express ? 52 : null,
+            title: minimal || express
                 ? null
                 : Row(
               children: [
@@ -181,12 +191,15 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
             child: ListView(
               padding: context.pagePadding(16, 16, 16, 16),
               children: [
-                if (minimal) _MinimalHeader(habit: habit),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: FrequencyChip(habit: habit),
-                ),
-                const SizedBox(height: 14),
+                if (minimal) MinimalDetailHeader(habit: habit),
+                if (express) _ExpressHeader(habit: habit),
+                if (!minimal) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FrequencyChip(habit: habit),
+                  ),
+                  const SizedBox(height: 14),
+                ],
                 if (habit.description.isNotEmpty) ...[
                   Text(
                     habit.description,
@@ -219,34 +232,78 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   const SizedBox(height: 20),
                 ],
                 if (settings.focusEnabled) ...[
-                  _FocusTile(habit: habit),
+                  if (minimal)
+                    MinimalFocusRow(habit: habit)
+                  else
+                    _FocusTile(habit: habit),
                   const SizedBox(height: 20),
                 ],
-                SectionLabel(context.l10n.streaks),
-                StreakSummary(habit: habit),
-                if (habit.hasCost) ...[
-                  const SizedBox(height: 12),
-                  SavedMoneyCard(habit: habit),
-                ],
-                const SizedBox(height: 20),
-                SectionLabel(
-                  context.l10n.activity,
-                  trailing: _ModeToggle(
-                    mode: _mode,
-                    onChanged: _changeMode,
+                if (minimal) ...[
+                  MinimalSection(
+                    title: context.l10n.streaks,
+                    child: MinimalStreakTiles(habit: habit),
                   ),
-                ),
+                  if (habit.hasCost)
+                    MinimalSection(
+                      title: context.l10n.money_saved,
+                      child: MinimalMoneyTiles(habit: habit),
+                    ),
+                ] else ...[
+                  SectionLabel(context.l10n.streaks),
+                  StreakSummary(habit: habit),
+                  if (habit.hasCost) ...[
+                    const SizedBox(height: 12),
+                    SavedMoneyCard(habit: habit),
+                  ],
+                  const SizedBox(height: 20),
+                ],
+                if (minimal)
+                  MinimalHeading(
+                    title: context.l10n.activity,
+                    trailing: MinimalSegmented(
+                      options: [
+                        context.l10n.week,
+                        context.l10n.month,
+                        context.l10n.year,
+                      ],
+                      index: _mode.index.clamp(0, 2),
+                      onChanged: (i) => _changeMode(HeatmapMode.values[i]),
+                    ),
+                  )
+                else
+                  SectionLabel(
+                    context.l10n.activity,
+                    trailing: express
+                        ? null
+                        : _ModeToggle(mode: _mode, onChanged: _changeMode),
+                  ),
+                if (express) ...[
+                  ExpressTabs(
+                    labels: [
+                      context.l10n.week,
+                      context.l10n.month,
+                      context.l10n.year,
+                    ],
+                    index: _mode.index.clamp(0, 2),
+                    onChanged: (i) => _changeMode(HeatmapMode.values[i]),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 _ActivityView(
                   habit: habit,
                   mode: _mode,
                   onToggle: toggle,
                   onLongPress: openDay,
                   showNotes: notesOn,
+                  express: express,
                 ),
                 if (notesOn && _mode != HeatmapMode.year) const NoteLegend(),
                 if (notesOn) _JourneyStrip(habit: habit),
                 const SizedBox(height: 20),
-                _VacationTile(habit: habit),
+                if (minimal)
+                  MinimalVacationRow(habit: habit)
+                else
+                  _VacationTile(habit: habit),
               ],
             ),
           ),
@@ -370,6 +427,7 @@ class _ActivityView extends StatelessWidget {
     required this.onToggle,
     required this.onLongPress,
     required this.showNotes,
+    required this.express,
   });
 
   final Habit habit;
@@ -377,9 +435,42 @@ class _ActivityView extends StatelessWidget {
   final void Function(DateTime date) onToggle;
   final void Function(DateTime date)? onLongPress;
   final bool showNotes;
+  final bool express;
 
   @override
   Widget build(BuildContext context) {
+    if (express && mode == HeatmapMode.year) {
+      return ExpressCard(
+        padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
+        child: YearHeatmap(
+          year: AppClock.now().year,
+          dailyCounts: const {},
+          maxCount: 1,
+          color: habit.color,
+          habit: habit,
+          express: true,
+        ),
+      );
+    }
+    if (express && mode == HeatmapMode.month) {
+      return ExpressMonthCalendar(
+        habit: habit,
+        onToggle: onToggle,
+        onLongPress: onLongPress,
+        showNotes: showNotes,
+      );
+    }
+    if (express && mode == HeatmapMode.week) {
+      return ExpressCard(
+        padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
+        child: ExpressStreakRow(
+          habit: habit,
+          height: 60,
+          onToggle: onToggle,
+          onLongPress: onLongPress,
+        ),
+      );
+    }
     if (mode == HeatmapMode.month) {
       return ActivityCalendar(
         habit: habit,
@@ -403,31 +494,34 @@ class _ActivityView extends StatelessWidget {
   }
 }
 
-class _MinimalHeader extends StatelessWidget {
-  const _MinimalHeader({required this.habit});
+class _ExpressHeader extends StatelessWidget {
+  const _ExpressHeader({required this.habit});
 
   final Habit habit;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 18),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          HabitGlyph(glyph: habit.icon, color: habit.color, size: 30),
-          const SizedBox(width: 14),
+          ExpressBlob(
+            size: 58,
+            color: habit.color.withValues(alpha: 0.18),
+            shape: ExpressShape.cookie,
+            child: HabitGlyph(glyph: habit.icon, color: habit.color, size: 27),
+          ),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               habit.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
                 fontSize: 30,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w900,
                 height: 1.1,
-                letterSpacing: -0.6,
+                letterSpacing: -1.1,
                 color: context.colors.onSurface,
               ),
             ),
@@ -445,171 +539,52 @@ class _VacationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final on = habit.isOnVacation;
     final color = context.tokens.info;
+    final summary = vacationSummary(context, habit);
+    final express = context.watch<SettingsController>().isExpressStyle;
+
+    if (express) {
+      return ExpressTile(
+        icon: LucideIcons.palmtree,
+        title: context.l10n.vacation_mode,
+        value: summary,
+        tint: color,
+        onTap: () => showVacationSheet(context, habit: habit),
+      );
+    }
+
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 12, 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListTile(
+        onTap: () => showVacationSheet(context, habit: habit),
+        leading: Icon(LucideIcons.palmtree, size: 22, color: color),
+        title: Text(
+          context.l10n.vacation_mode,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: context.colors.onSurface,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Icon(LucideIcons.palmtree, size: 22, color: color),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        context.l10n.vacation_mode,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: context.colors.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        on
-                            ? context.l10n.vacation_on_desc
-                            : context.l10n.vacation_off_desc,
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          height: 1.35,
-                          color: context.tokens.muted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Switch(
-                  value: on,
-                  onChanged: (v) {
-                    HapticFeedback.mediumImpact();
-                    context.read<HabitsController>().setVacation(habit.id, v);
-                  },
-                ),
-              ],
+            Text(
+              summary,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: habit.isOnVacation ? color : context.tokens.muted,
+              ),
             ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.only(left: 36, right: 4),
-              child: _RestDays(habit: habit, accent: color),
+            const SizedBox(width: 4),
+            Icon(
+              LucideIcons.chevronRight,
+              size: 18,
+              color: context.tokens.muted,
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _RestDays extends StatefulWidget {
-  const _RestDays({required this.habit, required this.accent});
-
-  final Habit habit;
-  final Color accent;
-
-  @override
-  State<_RestDays> createState() => _RestDaysState();
-}
-
-class _RestDaysState extends State<_RestDays> {
-  bool _open = false;
-
-  String _summary(BuildContext context) {
-    final days = [...widget.habit.restDays]..sort();
-    if (days.isEmpty) return context.l10n.rest_days_none;
-    final labels = WeekdayLabels.shortMonFirst(
-      Localizations.localeOf(context).languageCode,
-    );
-    return days.map((day) => labels[day - 1]).join(', ');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Semantics(
-          button: true,
-          expanded: _open,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => setState(() => _open = !_open),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      context.l10n.rest_days,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: context.colors.onSurface,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    _summary(context),
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w600,
-                      color: widget.habit.restDays.isEmpty
-                          ? context.tokens.muted
-                          : widget.accent,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  AnimatedRotation(
-                    turns: _open ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      LucideIcons.chevronDown,
-                      size: 18,
-                      color: context.tokens.muted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOutCubic,
-          alignment: Alignment.topCenter,
-          child: _open
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      context.l10n.rest_days_desc,
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        height: 1.35,
-                        color: context.tokens.muted,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    CompactWeekdays(
-                      selected: widget.habit.restDays,
-                      accent: widget.accent,
-                      onChanged: (days) {
-                        HapticFeedback.selectionClick();
-                        context
-                            .read<HabitsController>()
-                            .setRestDays(widget.habit.id, days);
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                )
-              : const SizedBox(width: double.infinity),
-        ),
-      ],
     );
   }
 }
@@ -737,6 +712,8 @@ class _FocusTile extends StatelessWidget {
       AppClock.now().startOfWeek(context.watch<SettingsController>().weekStart),
     );
 
+    final express = context.watch<SettingsController>().isExpressStyle;
+
     return Card(
       child: Column(
         children: [
@@ -748,10 +725,20 @@ class _FocusTile extends StatelessWidget {
           unawaited(_openActions(context));
         },
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
+          padding: express
+              ? const EdgeInsets.fromLTRB(16, 14, 14, 14)
+              : const EdgeInsets.fromLTRB(16, 12, 10, 12),
           child: Row(
             children: [
-              Icon(LucideIcons.timer, size: 21, color: habit.color),
+              if (express)
+                ExpressBlob(
+                  size: 44,
+                  color: habit.color.withValues(alpha: 0.18),
+                  shape: ExpressShape.cookie,
+                  child: Icon(LucideIcons.timer, size: 20, color: habit.color),
+                )
+              else
+                Icon(LucideIcons.timer, size: 21, color: habit.color),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -759,40 +746,76 @@ class _FocusTile extends StatelessWidget {
                   children: [
                     Text(
                       context.l10n.focus_total,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: context.colors.onSurface,
-                      ),
+                      style: express
+                          ? ExpressType.headline.at(
+                              16,
+                              weight: 800,
+                              color: context.colors.onSurface,
+                            )
+                          : TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: context.colors.onSurface,
+                            ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       _focusLine(context, seconds, week, today),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        color: context.tokens.muted,
-                      ),
+                      style: express
+                          ? ExpressType.body.at(
+                              12.5,
+                              weight: 600,
+                              color: context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 12.5,
+                              color: context.tokens.muted,
+                            ),
                     ),
                   ],
                 ),
               ),
-              IconButton(
-                tooltip: context.l10n.focus_start,
-                icon: Icon(LucideIcons.circlePlay, color: habit.color),
-                onPressed: () => AppNavigator.push(
-                  focus.isActive
-                      ? const FocusPage()
-                      : FocusPage(
-                          startHabitId: habit.id,
-                          startMinutes: habit.focusMinutes,
-                          breakMinutes: habit.focusBreakMinutes,
-                        ),
-                  fade: true,
-                  name: FocusPage.routeName,
+              if (express)
+                ExpressIconButton(
+                  icon: LucideIcons.play,
+                  tooltip: context.l10n.focus_start,
+                  size: 46,
+                  tint: habit.color.computeLuminance() > 0.55
+                      ? Colors.black
+                      : Colors.white,
+                  background: habit.color,
+                  resting: ExpressShape.cookie,
+                  pressed: ExpressShape.flower,
+                  onPressed: () => AppNavigator.push(
+                    focus.isActive
+                        ? const FocusPage()
+                        : FocusPage(
+                            startHabitId: habit.id,
+                            startMinutes: habit.focusMinutes,
+                            breakMinutes: habit.focusBreakMinutes,
+                          ),
+                    fade: true,
+                    name: FocusPage.routeName,
+                  ),
+                )
+              else
+                IconButton(
+                  tooltip: context.l10n.focus_start,
+                  icon: Icon(LucideIcons.circlePlay, color: habit.color),
+                  onPressed: () => AppNavigator.push(
+                    focus.isActive
+                        ? const FocusPage()
+                        : FocusPage(
+                            startHabitId: habit.id,
+                            startMinutes: habit.focusMinutes,
+                            breakMinutes: habit.focusBreakMinutes,
+                          ),
+                    fade: true,
+                    name: FocusPage.routeName,
+                  ),
                 ),
-              ),
             ],
           ),
         ),

@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
-import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_stats.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
-import 'package:streak/features/statistics/widgets/stat_charts.dart';
+import 'package:streak/features/habits/pages/express_quant_stats_page.dart';
+import 'package:streak/features/habits/pages/minimal_quant_stats_page.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/features/habits/widgets/quant_range_bars.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
-
-String amountWithUnit(double value, String unit) =>
-    unit.isEmpty ? formatAmount(value) : '${formatAmount(value)} $unit';
 
 class QuantStatsPage extends StatefulWidget {
   const QuantStatsPage({super.key, required this.habitId});
@@ -33,54 +30,29 @@ class QuantStatsPage extends StatefulWidget {
 class _QuantStatsPageState extends State<QuantStatsPage> {
   QuantRange _range = QuantRange.week;
 
-  String _barLabel(QuantStats stats, int index) {
-    if (index < 0 || index >= stats.buckets.length) return '';
-    final locale = Localizations.localeOf(context).toString();
-    switch (_range) {
-      case QuantRange.week:
-        return WeekdayLabels.narrowFrom(
-          Localizations.localeOf(context).languageCode,
-          context.read<SettingsController>().weekStart,
-        )[index];
-      case QuantRange.month:
-        final day = index + 1;
-        return day == 1 || day % 5 == 0 ? '$day' : '';
-      case QuantRange.year:
-        return index.isEven
-            ? DateFormat.MMM(locale).format(stats.buckets[index])
-            : '';
-    }
-  }
-
-  double _barWidth() => switch (_range) {
-        QuantRange.week => 14,
-        QuantRange.month => 5,
-        QuantRange.year => 11,
-      };
-
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    if (settings.isExpressStyle) {
+      return ExpressQuantStatsPage(habitId: widget.habitId);
+    }
+    if (settings.isMinimalStyle) {
+      return MinimalQuantStatsPage(habitId: widget.habitId);
+    }
+
     final habit = context.watch<HabitsController>().byId(widget.habitId);
     if (habit == null) return const SizedBox.shrink();
 
-    final unit = habit.unitLabel;
+    final unit = habit.isTimeAmount ? '' : habit.unitLabel;
     final stats = QuantStats.compute(
       habit: habit,
       range: _range,
       now: AppClock.now(),
-      weekStart: context.watch<SettingsController>().weekStart,
+      weekStart: settings.weekStart,
     );
     final totals = stats.totals;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(LucideIcons.chevronLeft),
-          onPressed: () => AppNavigator.pop(),
-        ),
-        title: Text(habit.name),
-      ),
-      body: totals.loggedDays == 0
+    final body = totals.loggedDays == 0
           ? AppEmptyState(
               icon: LucideIcons.chartColumn,
               title: context.l10n.no_data_yet,
@@ -94,14 +66,14 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
                     left: MiniStat(
                       icon: LucideIcons.sun,
                       color: habit.color,
-                      value: formatAmount(stats.today),
+                      value: habit.amountText(stats.today),
                       unit: unit,
                       label: context.l10n.today,
                     ),
                     right: MiniStat(
                       icon: LucideIcons.calendarDays,
                       color: context.tokens.info,
-                      value: formatAmount(stats.week),
+                      value: habit.amountText(stats.week),
                       unit: unit,
                       label: context.l10n.week,
                     ),
@@ -113,14 +85,14 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
                     left: MiniStat(
                       icon: LucideIcons.calendarRange,
                       color: context.tokens.warning,
-                      value: formatAmount(stats.month),
+                      value: habit.amountText(stats.month),
                       unit: unit,
                       label: context.l10n.month,
                     ),
                     right: MiniStat(
                       icon: LucideIcons.sigma,
                       color: context.tokens.success,
-                      value: formatAmount(totals.total),
+                      value: habit.amountText(totals.total),
                       unit: unit,
                       label: context.l10n.total,
                     ),
@@ -138,7 +110,7 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
                     right: MiniStat(
                       icon: LucideIcons.activity,
                       color: context.tokens.info,
-                      value: formatAmount(totals.average),
+                      value: habit.amountText(totals.average),
                       unit: unit,
                       label: context.l10n.quant_average,
                     ),
@@ -150,7 +122,7 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
                     left: MiniStat(
                       icon: LucideIcons.trophy,
                       color: context.tokens.warning,
-                      value: formatAmount(totals.best),
+                      value: habit.amountText(totals.best),
                       unit: unit,
                       label: context.l10n.quant_best_day,
                     ),
@@ -186,23 +158,27 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
                           ),
                         ),
                         const SizedBox(height: 18),
-                        ValueBars(
-                          key: ValueKey(_range),
-                          values: stats.series,
-                          color: habit.color,
-                          barWidth: _barWidth(),
-                          goal: _range == QuantRange.year
-                              ? null
-                              : habit.perDayTarget,
-                          label: (index) => _barLabel(stats, index),
-                          tooltip: (value) => amountWithUnit(value, unit),
+                        QuantRangeBars(
+                          habit: habit,
+                          stats: stats,
+                          range: _range,
                         ),
                       ],
                     ),
                   ),
                 ),
               ],
-            ),
+            );
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(LucideIcons.chevronLeft),
+          onPressed: () => AppNavigator.pop(),
+        ),
+        title: Text(habit.name),
+      ),
+      body: body,
     );
   }
 }
@@ -256,7 +232,36 @@ class QuantStatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totals = QuantStats.totalsOf(habit, AppClock.now());
-    final unit = habit.unitLabel;
+    final unit = habit.isTimeAmount ? '' : habit.unitLabel;
+
+    if (context.watch<SettingsController>().isExpressStyle) {
+      return ExpressCard(
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+        onTap: () => AppNavigator.push(QuantStatsPage(habitId: habit.id)),
+        child: ExpressMiniRow(
+          children: [
+            ExpressMiniStat(
+              icon: LucideIcons.sigma,
+              value: habit.amountText(totals.total),
+              label: unit.isEmpty ? context.l10n.total : unit,
+              tint: habit.color,
+            ),
+            ExpressMiniStat(
+              icon: LucideIcons.activity,
+              value: habit.amountText(totals.average),
+              label: context.l10n.quant_average,
+              tint: context.tokens.info,
+            ),
+            ExpressMiniStat(
+              icon: LucideIcons.circleCheck,
+              value: '${totals.goalDays}',
+              label: context.l10n.quant_goal_days,
+              tint: context.tokens.success,
+            ),
+          ],
+        ),
+      );
+    }
 
     return Semantics(
       button: true,
@@ -270,7 +275,7 @@ class QuantStatsRow extends StatelessWidget {
                 child: MiniStat(
                   icon: LucideIcons.sigma,
                   color: habit.color,
-                  value: formatAmount(totals.total),
+                  value: habit.amountText(totals.total),
                   unit: unit,
                   label: context.l10n.total,
                 ),
@@ -280,7 +285,7 @@ class QuantStatsRow extends StatelessWidget {
                 child: MiniStat(
                   icon: LucideIcons.activity,
                   color: context.tokens.info,
-                  value: formatAmount(totals.average),
+                  value: habit.amountText(totals.average),
                   unit: unit,
                   label: context.l10n.quant_average,
                 ),

@@ -5,9 +5,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 
-const _cell = 12.0;
 const _gap = 3.0;
-const _step = _cell + _gap;
 
 class YearHeatmap extends StatefulWidget {
   const YearHeatmap({
@@ -17,6 +15,7 @@ class YearHeatmap extends StatefulWidget {
     required this.maxCount,
     required this.color,
     this.habit,
+    this.express = false,
   });
 
   final int year;
@@ -24,6 +23,7 @@ class YearHeatmap extends StatefulWidget {
   final int maxCount;
   final Color color;
   final Habit? habit;
+  final bool express;
 
   @override
   State<YearHeatmap> createState() => _YearHeatmapState();
@@ -31,6 +31,10 @@ class YearHeatmap extends StatefulWidget {
 
 class _YearHeatmapState extends State<YearHeatmap> {
   final _scroll = ScrollController();
+
+  double get _cell => widget.express ? 15 : 12;
+
+  double get _step => _cell + _gap;
 
   DateTime get _start {
     final firstOfYear = DateTime(widget.year, 1, 1);
@@ -136,8 +140,12 @@ class _YearHeatmapState extends State<YearHeatmap> {
                           width: _cell,
                           height: _cell,
                           decoration: BoxDecoration(
-                            color: cellColor(start.add(Duration(days: col * 7 + row))),
-                            borderRadius: BorderRadius.circular(3),
+                            color: cellColor(
+                              start.add(Duration(days: col * 7 + row)),
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              widget.express ? 4 : 3,
+                            ),
                           ),
                         ),
                       ),
