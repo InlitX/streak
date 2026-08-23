@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/utils/amount_format.dart';
 
 Future<double?> showNumberKeypadDialog(
@@ -112,9 +113,9 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
   Widget _digit(String d) => _key(
         Text(
           d,
-          style: TextStyle(
-            fontSize: 21,
-            fontWeight: FontWeight.w700,
+          style: sheetFigureStyle(
+            context,
+            size: 21,
             color: context.colors.onSurface,
           ),
         ),
@@ -141,11 +142,7 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
             Text(
               widget.title,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: scheme.onSurface,
-              ),
+              style: sheetTitleStyle(context, size: 17),
             ),
             const SizedBox(height: 14),
             FittedBox(
@@ -157,9 +154,8 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                 children: [
                   Text(
                     _text.isEmpty ? '0' : _text,
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w800,
+                    style: sheetFigureStyle(
+                      context,
                       color: _text.isEmpty ? context.tokens.muted : accent,
                     ),
                   ),
@@ -167,9 +163,8 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                     const SizedBox(width: 8),
                     Text(
                       suffix,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+                      style: sheetHeadingStyle(
+                        context,
                         color: context.tokens.muted,
                       ),
                     ),
@@ -190,9 +185,9 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                     ? _key(
                         Text(
                           '.',
-                          style: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.w700,
+                          style: sheetFigureStyle(
+                            context,
+                            size: 21,
                             color: context.colors.onSurface,
                           ),
                         ),
@@ -229,10 +224,7 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                     ),
                     child: Text(
                       context.l10n.cancel,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: scheme.onSurface,
-                      ),
+                      style: sheetActionStyle(context, color: scheme.onSurface),
                     ),
                   ),
                 ),
@@ -250,7 +242,7 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                     ),
                     child: Text(
                       context.l10n.save,
-                      style: const TextStyle(fontWeight: FontWeight.w800),
+                      style: sheetActionStyle(context),
                     ),
                   ),
                 ),

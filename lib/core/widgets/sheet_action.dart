@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 
 class SheetAction extends StatelessWidget {
   const SheetAction({
@@ -51,11 +52,7 @@ class SheetAction extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: context.colors.onSurface,
-                    ),
+                    style: sheetOptionStyle(context, selected: highlighted),
                   ),
                 ),
                 if (badge != null)
@@ -68,11 +65,7 @@ class SheetAction extends StatelessWidget {
                     ),
                     child: Text(
                       badge!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: color,
-                      ),
+                      style: sheetActionStyle(context, size: 12, color: color),
                     ),
                   ),
                 if (trailing != null) ...[

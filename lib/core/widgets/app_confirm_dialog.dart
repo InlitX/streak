@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 
 Future<bool?> showAppConfirmDialog(
   BuildContext context, {
@@ -41,21 +42,13 @@ Future<bool?> showAppConfirmDialog(
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w800,
-                  color: scheme.onSurface,
-                ),
+                style: sheetTitleStyle(dialogContext, size: 19),
               ),
               const SizedBox(height: 8),
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  height: 1.45,
-                  color: dialogContext.tokens.muted,
-                ),
+                style: sheetBodyStyle(dialogContext, size: 14),
               ),
               const SizedBox(height: 22),
               Row(
@@ -73,8 +66,8 @@ Future<bool?> showAppConfirmDialog(
                       child: Text(
                         cancelLabel ?? dialogContext.l10n.cancel,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
+                        style: sheetActionStyle(
+                          dialogContext,
                           color: scheme.onSurface,
                         ),
                       ),
@@ -86,6 +79,9 @@ Future<bool?> showAppConfirmDialog(
                       onPressed: () => Navigator.of(dialogContext).pop(true),
                       style: FilledButton.styleFrom(
                         backgroundColor: accent,
+                        foregroundColor: accent.computeLuminance() > 0.6
+                            ? Colors.black
+                            : Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
@@ -94,7 +90,7 @@ Future<bool?> showAppConfirmDialog(
                       child: Text(
                         confirmLabel,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.w800),
+                        style: sheetActionStyle(dialogContext),
                       ),
                     ),
                   ),
