@@ -95,11 +95,15 @@ class _FocusPageState extends State<FocusPage> {
     final tracks = focusTracksOf(context, settings);
     final index = tracks.indexWhere((track) => track.id == saved);
     if (index == -1) return;
-    await FocusAudio.playQueue(
-      tracks,
-      shuffle: settings.focusShuffle,
-      from: tracks[index],
-    );
+    try {
+      await FocusAudio.playQueue(
+        tracks,
+        shuffle: settings.focusShuffle,
+        from: tracks[index],
+      );
+    } catch (e) {
+      debugPrint('Could not start the saved track: $e');
+    }
   }
 
   void _runLead(VoidCallback then) {

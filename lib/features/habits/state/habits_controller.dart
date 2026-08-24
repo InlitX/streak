@@ -295,7 +295,7 @@ class HabitsController extends ChangeNotifier {
     _habits[habit.id] = updated;
     notifyListeners();
     HomeWidgetService.syncSoon(() => asMap);
-    await LocalStore.writeHabit(updated);
+    await LocalStore.guardWrites(() => LocalStore.writeHabit(updated));
   }
 
   Future<void> reorder(List<Habit> visible, int oldIndex, int newIndex) async {
@@ -319,9 +319,11 @@ class HabitsController extends ChangeNotifier {
     }
     notifyListeners();
 
-    for (final habit in reordered) {
-      await LocalStore.writeHabit(habit);
-    }
+    await LocalStore.guardWrites(() async {
+      for (final habit in reordered) {
+        await LocalStore.writeHabit(habit);
+      }
+    });
     await HomeWidgetService.sync(asMap);
   }
 
@@ -363,9 +365,11 @@ class HabitsController extends ChangeNotifier {
         if (note.habitId == id) ...note.photos,
     ];
     _habits.remove(id);
-    await LocalStore.removeHabit(id);
-    await LocalStore.removeNotesFor(id);
-    await LocalStore.removeFocusFor(id);
+    await LocalStore.guardWrites(() async {
+      await LocalStore.removeHabit(id);
+      await LocalStore.removeNotesFor(id);
+      await LocalStore.removeFocusFor(id);
+    });
     notifyListeners();
     await CoverStorage.forgetAll(images);
     await HomeWidgetService.sync(asMap);
