@@ -711,7 +711,7 @@
   "stats": "Estatísticas",
   "statistics": "Estatísticas",
   "icon_accent": "Tricolor",
-  "a11y_add_amount": "",
+  "a11y_add_amount": "Adicionar a {name}",
   "@a11y_add_amount": {
     "description": "Screen reader label for the button that adds progress to a quantitative habit",
     "placeholders": {
@@ -720,19 +720,19 @@
       }
     }
   },
-  "a11y_decrease": "",
+  "a11y_decrease": "Diminuir",
   "@a11y_decrease": {
     "description": "Screen reader label for the minus button of a number stepper"
   },
-  "a11y_not_done": "",
+  "a11y_not_done": "Não feito",
   "@a11y_not_done": {
     "description": "Screen reader state of a day that has not been logged"
   },
-  "a11y_increase": "",
+  "a11y_increase": "Aumentar",
   "@a11y_increase": {
     "description": "Screen reader label for the plus button of a number stepper"
   },
-  "a11y_clear_relapse": "",
+  "a11y_clear_relapse": "Limpar o registro de recaída de {name}",
   "@a11y_clear_relapse": {
     "description": "Screen reader label for the button that removes today's relapse",
     "placeholders": {
@@ -741,7 +741,7 @@
       }
     }
   },
-  "a11y_log_relapse": "",
+  "a11y_log_relapse": "Adicionar uma recaída para {name}",
   "@a11y_log_relapse": {
     "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
     "placeholders": {
@@ -768,7 +768,7 @@
       }
     }
   },
-  "a11y_pick_color": "",
+  "a11y_pick_color": "Selecionar uma cor",
   "@a11y_pick_color": {
     "description": "Screen reader label for a colour swatch in the picker"
   },
@@ -969,24 +969,24 @@
   "widget_cfg_follow_system": "Seguir o tema do sistema",
   "widget_cfg_dark_color": "Tema escuro",
   "widget_cfg_light_color": "Tema claro",
-  "widget_cfg_todos_scope": "",
-  "vacation_all_sub": "",
-  "currency_hint": "",
-  "money_saved": "",
-  "clean_days": "",
-  "cost_per_day": "",
-  "quotes_app": "",
-  "currency": "",
-  "a11y_previous_week": "",
-  "quant_average": "",
-  "vacation_all": "",
-  "a11y_next_week": "",
-  "widget_todos_empty": "",
-  "quotes_which": "",
-  "repeat_hours": "",
-  "quant_logged_days": "",
-  "widget_cfg_todos_hint": "",
-  "widget_todos_open": "",
+  "widget_cfg_todos_scope": "Tarefas",
+  "vacation_all_sub": "Enquanto estiver ativo, nada será considerado como perdido",
+  "currency_hint": "Símbolo ou código",
+  "money_saved": "Dinheiro guardado",
+  "clean_days": "Dias limpos",
+  "cost_per_day": "Quantidade por dia",
+  "quotes_app": "Do aplicativo",
+  "currency": "Moeda",
+  "a11y_previous_week": "Semanas anteriores",
+  "quant_average": "Total por dia",
+  "vacation_all": "Pause todos os hábitos",
+  "a11y_next_week": "Próxima semana",
+  "widget_todos_empty": "Não falta mais nada para hoje",
+  "quotes_which": "Quais frases",
+  "repeat_hours": "Repete ao longo do dia",
+  "quant_logged_days": "Dias logado",
+  "widget_cfg_todos_hint": "Desativado: apenas tarefas de hoje, atrasadas e sem data",
+  "widget_todos_open": "A fazer {count}",
   "@widget_todos_open": {
     "placeholders": {
       "count": {
@@ -994,13 +994,13 @@
       }
     }
   },
-  "currency_custom": "",
-  "quant_best_day": "",
-  "quant_stats_empty": "",
-  "quant_goal_days": "",
-  "widget_cfg_todos_all": "",
-  "quotes": "",
-  "every_n_hours": "",
+  "currency_custom": "Customizar",
+  "quant_best_day": "Melhor dia",
+  "quant_stats_empty": "Registre uma quantidade e ela será somada aqui, mesmo nos dias em que você não atingir a meta.",
+  "quant_goal_days": "Objetivos alcançados",
+  "widget_cfg_todos_all": "Mostrar as tarefas",
+  "quotes": "Frases",
+  "every_n_hours": "A cada {n} h",
   "@every_n_hours": {
     "placeholders": {
       "n": {
@@ -1008,6 +1008,19 @@
       }
     }
   },
-  "quotes_mine": "",
-  "cost_note": ""
+  "quotes_mine": "Minhas",
+  "cost_note": "Opcional. Deixe vazio se esse hábito nao custar nada.",
+  "todo_search": "Procurar afazeres",
+  "todo_search_empty": "Nenhuma correspondência",
+  "heatmap_path": "Conecte os dias",
+  "heatmap_path_sub": "Desenha a matriz como um grande percurso",
+  "focus_only_clear_title": "Limpar esse registro?",
+  "focus_only_clear_body": "Apenas uma seção de foco pode registrar \"{name}\" de novo.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
