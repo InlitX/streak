@@ -142,8 +142,8 @@ It is fast, offline, and built to feel calm rather than demanding.
 
 ### 🎨 Making it yours
 
-- **Classic or Minimal**: the habit list with a bottom bar, or a grid with
-  everything grouped into four sections
+- **Classic, Minimal or Express**: three complete designs, each with its own
+  typography, shapes and motion
 - Minimalist icon pack, or any emoji you like
 - Custom accent color with a full picker
 - Light and dark themes, plus five app backgrounds: solid, gradient, dots,
@@ -180,7 +180,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 - **App lock** with a PIN or your fingerprint, for phones without one
 - **Archive** habits without losing a day of their history
 - Everything is offline: no account, no server, nothing to sync
-- Ten languages, with more open on Weblate
+- Seven languages, with more open on Weblate
 
 </td>
 </tr>
@@ -240,9 +240,9 @@ your phone.
 
 ## 🌍 Translations
 
-Streak speaks **English, Spanish, Russian and Chinese** in full, with **German,
-Portuguese, Ukrainian, Polish, French and Indonesian** on their way, and more
-languages are very welcome.
+Streak speaks **English, Spanish, French, Portuguese, Russian, Ukrainian and
+Chinese** in full, with **German, Polish, Hebrew, Indonesian and Persian** on
+their way, and more languages are very welcome.
 Translations are managed on [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no coding needed, just short phrases you translate in your browser.
 

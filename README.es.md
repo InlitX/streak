@@ -150,7 +150,7 @@ exigir.
 
 ### 🎨 Hacerla tuya
 
-- **Clásico o Minimal**: la lista de hábitos con barra inferior, o una
+- **Clásico, Minimal o Express**: tres diseños completos, cada uno con su
   cuadrícula con todo agrupado en cuatro secciones
 - Pack de iconos minimalista, o cualquier emoji que quieras
 - Color de acento personalizado con selector completo
@@ -190,7 +190,7 @@ exigir.
 - **Bloqueo de la app** con PIN o huella, para móviles que no lo traen
 - **Archiva** hábitos sin perder un solo día de su historial
 - Todo sin conexión: sin cuenta, sin servidor, nada que sincronizar
-- Diez idiomas, con más abiertos en Weblate
+- Siete idiomas, con más abiertos en Weblate
 
 </td>
 </tr>
@@ -251,9 +251,9 @@ que le toca a tu teléfono.
 
 ## 🌍 Traducciones
 
-Streak habla **inglés, español, ruso y chino** por completo, y **alemán,
-portugués, ucraniano, polaco, francés e indonesio** están en camino; cualquier
-idioma nuevo es bienvenido. Las
+Streak habla **inglés, español, francés, portugués, ruso, ucraniano y chino**
+por completo, y **alemán, polaco, hebreo, indonesio y persa** están en camino;
+cualquier idioma nuevo es bienvenido. Las
 traducciones se gestionan en [**Weblate**](https://hosted.weblate.org/engage/streak/):
 no hace falta programar, solo son frases cortas que traduces en el navegador.
 
