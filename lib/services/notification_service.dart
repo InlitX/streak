@@ -527,6 +527,7 @@ class NotificationActions {
   ]) async {
     try {
       await LocalStore.init();
+      AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
       await LocalStore.reloadHabits();
       final habits = LocalStore.readHabits();
       final habit = habits[habitId];
@@ -537,7 +538,7 @@ class NotificationActions {
         return;
       }
 
-      final today = DateTime.now().atMidnight;
+      final today = AppClock.now().atMidnight;
       final amount = double.tryParse(input?.trim() ?? '');
 
       final Map<String, Completion> completions;
