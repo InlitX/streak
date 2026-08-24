@@ -76,7 +76,6 @@ jobs:
   release:
     name: Publish release
     runs-on: ubuntu-latest
-    needs: [build]
     # Only when manually dispatched with a tag. The notes are generated from the
     # merged pull requests, and the rest is filled in by hand after publishing.
     if: github.event_name == 'workflow_dispatch'
