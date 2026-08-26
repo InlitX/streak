@@ -29,7 +29,7 @@
   <img alt="GPLv3 许可证" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="无广告、无追踪" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
-<a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/79460?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/79460" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
 <br/>
 
@@ -46,11 +46,12 @@
 <br/>
 
 <sub>
-  <a href="#-功能">功能</a> ·
-  <a href="#-从其他应用迁移">导入</a> ·
-  <a href="#-下载">下载</a> ·
-  <a href="#-隐私">隐私</a> ·
-  <a href="#-翻译">翻译</a>
+  <a href="#-功能">✨ 功能</a> ·
+  <a href="#-从其他应用迁移">📦 导入</a> ·
+  <a href="#-下载">⬇️ 下载</a> ·
+  <a href="#-隐私">🔒 隐私</a> ·
+  <a href="#-翻译">🌍 翻译</a> ·
+  <a href="#-支持">❤️ 支持</a>
 </sub>
 
 </div>
@@ -81,10 +82,6 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 并通过类似 GitHub 的活动网格、连续记录计数器和统计面板来跟踪进度。
 
 它快速、可离线使用，力求让人感到平静，而非催促。
-
-> [!TIP]
-> **完全属于你。** 无需账号、无订阅、无广告、无追踪。
-> 每个习惯和设置都保存在你的设备上，而且全部源代码开放。
 
 ---
 
@@ -181,11 +178,16 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ## 📦 从其他应用迁移
 
+<details>
+<summary><b>导入是怎么运作的</b></summary>
+
 把你的历史一起带过来。Streak 可以读取 **Loop Habit Tracker**、**HabitKit**、
 **Habitica** 和 **HabitBull** 的导出文件，让你过去的记录和连续记录都不丢失。
 其他 CSV 只要有习惯和日期，也一样可以导入。
 
 <div align="center"><sub><b>设置 → 数据 → 从其他应用导入</b></sub></div>
+
+</details>
 
 ---
 
@@ -195,6 +197,19 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 它会安装 Streak 并自动保持更新。也可以在
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 和 [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/) 上获取。
+
+目前 Streak 是一款 Android 应用，其他平台正在路上：
+
+| 平台 | 状态 |
+|------|------|
+| Android | ✅ 已支持 |
+| Windows | 🚧 开发中 |
+| Linux | 📅 计划中 |
+| macOS | 📅 计划中 |
+| iOS | 📅 计划中 |
+
+<details>
+<summary><b>自己安装 APK</b></summary>
 
 想直接下载 APK？前往 [**Releases**](https://github.com/InlitX/streak/releases)
 页面，每种手机类型对应一个文件，以保持下载包小巧：
@@ -215,6 +230,8 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 > Streak 未上架 Play 商店。由于该 APK 不是来自应用商店，Android 在首次安装时
 > 可能会要求你允许从浏览器或文件管理器安装。
 
+</details>
+
 ---
 
 ## 🔒 隐私
@@ -234,8 +251,6 @@ Streak 已完整支持**英语、西班牙语、法语、葡萄牙语、俄语�
 
 [![各语言翻译状态](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![翻译状态](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
-
 了解详情 → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
@@ -250,6 +265,9 @@ Streak 已完整支持**英语、西班牙语、法语、葡萄牙语、俄语�
 
 ## 🙏 灵感来源
 
+<details>
+<summary><b>影响了 Streak 的应用</b></summary>
+
 Streak 并非凭空而来。以下这些应用塑造了它：
 
 - **[Loop Habit Tracker](https://github.com/iSoron/uhabits)**，它证明了习惯记录
@@ -262,17 +280,41 @@ Streak 并非凭空而来。以下这些应用塑造了它：
 
 这里没有任何东西是照搬它们的。它们的想法只是起点，之后 Streak 走了自己的路。
 
+</details>
+
 ---
 
 ## ❤️ 支持
 
 <div align="center">
 
-如果 Streak 帮你更常坚持下来，一颗星或一杯咖啡都意义重大。
+Streak 免费、开源、没有广告，以后也一样。
 
-<a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="在 GitHub 上加星" height="38" /></a>
-&nbsp;&nbsp;
+如果它能帮你更常坚持下来，这就够了。如果你还想回馈一点什么，一颗星、一份
+翻译或一份清楚的错误报告，和一杯咖啡一样有帮助。
+
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="在 Ko-fi 上支持我" height="38" /></a>
+
+<sub><b>加密货币钱包</b></sub>
+
+<table align="center">
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
+  </tr>
+</table>
 
 <br/>
 <br/>

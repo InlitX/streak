@@ -29,7 +29,7 @@
   <img alt="Лицензия GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="Без рекламы, без слежки" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
-<a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/79460?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/79460" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
 <br/>
 
@@ -46,11 +46,12 @@
 <br/>
 
 <sub>
-  <a href="#-возможности">Возможности</a> ·
-  <a href="#-переходите-с-другого-приложения">Импорт</a> ·
-  <a href="#-скачать">Скачать</a> ·
-  <a href="#-конфиденциальность">Конфиденциальность</a> ·
-  <a href="#-переводы">Переводы</a>
+  <a href="#-возможности">✨ Возможности</a> ·
+  <a href="#-переходите-с-другого-приложения">📦 Импорт</a> ·
+  <a href="#-скачать">⬇️ Скачать</a> ·
+  <a href="#-конфиденциальность">🔒 Конфиденциальность</a> ·
+  <a href="#-переводы">🌍 Переводы</a> ·
+  <a href="#-поддержка">❤️ Поддержка</a>
 </sub>
 
 </div>
@@ -83,10 +84,6 @@ Streak: трекер привычек с открытым исходным ко�
 статистики.
 
 Приложение быстрое, работает офлайн и создано для спокойствия, а не давления.
-
-> [!TIP]
-> **Полностью ваше.** Никаких аккаунтов, подписок, рекламы и слежки. Каждая
-> привычка и настройка остаются на вашем устройстве, а весь код открыт.
 
 ---
 
@@ -198,12 +195,17 @@ Streak: трекер привычек с открытым исходным ко�
 
 ## 📦 Переходите с другого приложения?
 
+<details>
+<summary><b>Как работает импорт</b></summary>
+
 Перенесите свою историю с собой. Streak читает экспорт из **Loop Habit Tracker**,
 **HabitKit**, **Habitica** и **HabitBull**, поэтому прошедшие дни и серии
 переживают переезд. Подойдёт и любой другой CSV, если в нём есть привычка
 и дата.
 
 <div align="center"><sub><b>Настройки → Данные → Импорт из другого приложения</b></sub></div>
+
+</details>
 
 ---
 
@@ -214,6 +216,19 @@ Streak: трекер привычек с открытым исходным ко�
 Также доступно на
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 и [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
+
+Сейчас Streak это приложение для Android, остальные платформы уже в работе:
+
+| Платформа | Статус |
+|-----------|--------|
+| Android | ✅ Поддерживается |
+| Windows | 🚧 В работе |
+| Linux | 📅 Запланировано |
+| macOS | 📅 Запланировано |
+| iOS | 📅 Запланировано |
+
+<details>
+<summary><b>Установить APK вручную</b></summary>
 
 Предпочитаете обычный APK? Он на странице
 [**Releases**](https://github.com/InlitX/streak/releases), по одному файлу на
@@ -237,6 +252,8 @@ Streak: трекер привычек с открытым исходным ко�
 > установке Android может попросить разрешить установку из вашего браузера
 > или файлового менеджера.
 
+</details>
+
 ---
 
 ## 🔒 Конфиденциальность
@@ -259,8 +276,6 @@ Streak полностью говорит на **английском, испан
 
 [![Статус перевода по языкам](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Статус перевода](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
-
 Как это работает → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
@@ -274,6 +289,9 @@ Streak полностью говорит на **английском, испан
 ---
 
 ## 🙏 Вдохновение
+
+<details>
+<summary><b>Приложения, которые повлияли на Streak</b></summary>
 
 Streak появился не на пустом месте. Вот приложения, которые на него повлияли:
 
@@ -289,17 +307,42 @@ Streak появился не на пустом месте. Вот приложе
 Здесь нет ничего скопированного у них. Их идеи были отправной точкой, а дальше
 Streak пошёл своим путём.
 
+</details>
+
 ---
 
 ## ❤️ Поддержка
 
 <div align="center">
 
-Если Streak помогает вам действовать чаще, звезда или чашка кофе значат многое.
+Streak бесплатен, с открытым кодом и без рекламы, так и останется.
 
-<a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Звезда на GitHub" height="38" /></a>
-&nbsp;&nbsp;
+Если он помогает вам действовать чаще, этого уже достаточно. А если хочется
+что-то вернуть, то звезда, перевод или понятный отчёт об ошибке помогают не
+меньше, чем чашка кофе.
+
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Поддержать на Ko-fi" height="38" /></a>
+
+<sub><b>Криптокошельки</b></sub>
+
+<table align="center">
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
+  </tr>
+</table>
 
 <br/>
 <br/>

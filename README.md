@@ -29,7 +29,7 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
   <img alt="License GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
-<a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/79460?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/79460" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
 <br/>
 
@@ -46,11 +46,12 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 <br/>
 
 <sub>
-  <a href="#-features">Features</a> ·
-  <a href="#-coming-from-another-app">Import</a> ·
-  <a href="#-download">Download</a> ·
-  <a href="#-privacy">Privacy</a> ·
-  <a href="#-translations">Translations</a>
+  <a href="#-features">✨ Features</a> ·
+  <a href="#-coming-from-another-app">📦 Import</a> ·
+  <a href="#-download">⬇️ Download</a> ·
+  <a href="#-privacy">🔒 Privacy</a> ·
+  <a href="#-translations">🌍 Translations</a> ·
+  <a href="#-support">❤️ Support</a>
 </sub>
 
 </div>
@@ -82,10 +83,6 @@ many habits as you like, log them with one tap, and watch your progress build up
 in a GitHub-style activity grid, streak counters and a statistics dashboard.
 
 It is fast, offline, and built to feel calm rather than demanding.
-
-> [!TIP]
-> **Yours, completely.** No accounts, no subscriptions, no ads, no tracking.
-> Every habit and setting stays on your device, and the full source is open.
 
 ---
 
@@ -190,11 +187,16 @@ It is fast, offline, and built to feel calm rather than demanding.
 
 ## 📦 Coming from another app?
 
+<details>
+<summary><b>How the import works</b></summary>
+
 Bring your history with you. Streak reads exports from **Loop Habit Tracker**,
 **HabitKit**, **Habitica** and **HabitBull**, so your past days and your streaks
 survive the move. Any other CSV works too, as long as it has a habit and a date.
 
 <div align="center"><sub><b>Settings → Data → Import from another app</b></sub></div>
+
+</details>
 
 ---
 
@@ -204,6 +206,19 @@ survive the move. Any other CSV works too, as long as it has a habit and a date.
 it installs Streak and keeps it updated for you. It's also on
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 and [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
+
+Streak is an Android app today, and the other platforms are on their way:
+
+| Platform | Status |
+|----------|--------|
+| Android | ✅ Supported |
+| Windows | 🚧 In progress |
+| Linux | 📅 Planned |
+| macOS | 📅 Planned |
+| iOS | 📅 Planned |
+
+<details>
+<summary><b>Install the APK yourself</b></summary>
 
 Prefer the raw APK? It's on the
 [**Releases**](https://github.com/InlitX/streak/releases) page, one file per
@@ -227,6 +242,8 @@ your phone.
 > Android may ask you to allow installs from your browser or file manager the
 > first time.
 
+</details>
+
 ---
 
 ## 🔒 Privacy
@@ -248,8 +265,6 @@ no coding needed, just short phrases you translate in your browser.
 
 [![Translation status per language](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Translation status](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
-
 How it works → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
@@ -263,6 +278,9 @@ issue first so we can agree on the direction.
 ---
 
 ## 🙏 Inspiration
+
+<details>
+<summary><b>The apps that shaped Streak</b></summary>
 
 Streak did not appear out of nowhere. These are the apps that shaped it:
 
@@ -278,17 +296,42 @@ Streak did not appear out of nowhere. These are the apps that shaped it:
 Nothing here is copied from them. Their ideas were the starting point, and
 Streak went its own way from there.
 
+</details>
+
 ---
 
 ## ❤️ Support
 
 <div align="center">
 
-If Streak helps you show up more often, a star or a coffee goes a long way.
+Streak is free, open source and free of ads, and it stays that way.
 
-<a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star on GitHub" height="38" /></a>
-&nbsp;&nbsp;
+If it helps you show up more often, that is already enough. If you also feel
+like giving something back, a star, a translation or a clear bug report help as
+much as a coffee does.
+
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" height="38" /></a>
+
+<sub><b>Crypto wallets</b></sub>
+
+<table align="center">
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
+  </tr>
+</table>
 
 <br/>
 <br/>

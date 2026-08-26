@@ -29,7 +29,7 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
   <img alt="Licencia GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="Sin anuncios, sin rastreo" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
 </p>
-<a href="https://trendshift.io/repositories/79460?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/79460/daily?language=Dart" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/79460?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/79460" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
 <br/>
 
@@ -46,11 +46,12 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 <br/>
 
 <sub>
-  <a href="#-características">Características</a> ·
-  <a href="#-vienes-de-otra-app">Importar</a> ·
-  <a href="#-descarga">Descarga</a> ·
-  <a href="#-privacidad">Privacidad</a> ·
-  <a href="#-traducciones">Traducciones</a>
+  <a href="#-características">✨ Características</a> ·
+  <a href="#-vienes-de-otra-app">📦 Importar</a> ·
+  <a href="#-descarga">⬇️ Descarga</a> ·
+  <a href="#-privacidad">🔒 Privacidad</a> ·
+  <a href="#-traducciones">🌍 Traducciones</a> ·
+  <a href="#-apoyo">❤️ Apoyo</a>
 </sub>
 
 </div>
@@ -84,11 +85,6 @@ un panel de estadísticas.
 
 Es rápido, funciona sin conexión y está pensado para transmitir calma en lugar de
 exigir.
-
-> [!TIP]
-> **Tuya, por completo.** Sin cuentas, sin suscripciones, sin anuncios, sin
-> rastreo. Cada hábito y ajuste se queda en tu dispositivo, y todo el código es
-> abierto.
 
 ---
 
@@ -200,12 +196,17 @@ exigir.
 
 ## 📦 ¿Vienes de otra app?
 
+<details>
+<summary><b>Cómo funciona la importación</b></summary>
+
 Tráete tu historial. Streak lee exportaciones de **Loop Habit Tracker**,
 **HabitKit**, **Habitica** y **HabitBull**, así que tus días pasados y tus
 rachas sobreviven a la mudanza. Cualquier otro CSV vale también, mientras tenga
 un hábito y una fecha.
 
 <div align="center"><sub><b>Ajustes → Datos → Importar de otra app</b></sub></div>
+
+</details>
 
 ---
 
@@ -215,6 +216,19 @@ un hábito y una fecha.
 instala Streak y lo mantiene actualizado por ti. También está en
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 y [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
+
+Hoy Streak es una app de Android, y el resto de plataformas están en camino:
+
+| Plataforma | Estado |
+|------------|--------|
+| Android | ✅ Compatible |
+| Windows | 🚧 En curso |
+| Linux | 📅 Planeado |
+| macOS | 📅 Planeado |
+| iOS | 📅 Planeado |
+
+<details>
+<summary><b>Instalar el APK por tu cuenta</b></summary>
 
 ¿Prefieres el APK directo? Está en la página de
 [**Releases**](https://github.com/InlitX/streak/releases), un archivo por tipo de
@@ -238,6 +252,8 @@ que le toca a tu teléfono.
 > Android te pida permitir instalaciones desde tu navegador o gestor de archivos
 > la primera vez.
 
+</details>
+
 ---
 
 ## 🔒 Privacidad
@@ -259,8 +275,6 @@ no hace falta programar, solo son frases cortas que traduces en el navegador.
 
 [![Estado de la traducción por idioma](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Estado de la traducción](https://hosted.weblate.org/widget/streak/287x66-grey.png)](https://hosted.weblate.org/engage/streak/)
-
 Cómo funciona → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
@@ -274,6 +288,9 @@ antes una incidencia y acordamos la dirección.
 ---
 
 ## 🙏 Inspiración
+
+<details>
+<summary><b>Las apps que la moldearon</b></summary>
 
 Streak no salió de la nada. Estas son las apps que la moldearon:
 
@@ -289,17 +306,42 @@ Streak no salió de la nada. Estas son las apps que la moldearon:
 Aquí no hay nada copiado de ellas. Sus ideas fueron el punto de partida y Streak
 siguió su propio camino.
 
+</details>
+
 ---
 
 ## ❤️ Apoyo
 
 <div align="center">
 
-Si Streak te ayuda a mantener la constancia, una estrella o un café significan mucho.
+Streak es gratis, de código abierto y sin anuncios, y así se queda.
 
-<a href="https://github.com/InlitX/streak"><img src="https://img.shields.io/badge/Star%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Estrella en GitHub" height="38" /></a>
-&nbsp;&nbsp;
+Si te ayuda a mantener la constancia, con eso ya me vale. Y si además te apetece
+devolver algo, una estrella, una traducción o un informe de fallo bien contado
+ayudan tanto como un café.
+
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Apóyame en Ko-fi" height="38" /></a>
+
+<sub><b>Monederos de cripto</b></sub>
+
+<table align="center">
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
+  </tr>
+  <tr>
+    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
+  </tr>
+</table>
 
 <br/>
 <br/>
