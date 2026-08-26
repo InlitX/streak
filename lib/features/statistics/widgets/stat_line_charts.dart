@@ -6,36 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/features/statistics/widgets/stat_axis.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 
 class _Chrome {
   const _Chrome._();
-
-  static FlGridData grid(BuildContext context, double interval) => FlGridData(
-        show: true,
-        drawVerticalLine: false,
-        horizontalInterval: interval > 0 ? interval : 1,
-        getDrawingHorizontalLine: (_) => FlLine(
-          color: context.tokens.muted.withValues(alpha: 0.16),
-          strokeWidth: 1,
-        ),
-      );
-
-  static double step(double maxValue, int lines) {
-    if (maxValue <= 0) return 1;
-    final raw = maxValue / lines;
-    final magnitude = math.pow(10, (math.log(raw) / math.ln10).floor())
-        .toDouble();
-    final normalised = raw / magnitude;
-    final rounded = normalised <= 1
-        ? 1.0
-        : normalised <= 2
-        ? 2.0
-        : normalised <= 5
-        ? 5.0
-        : 10.0;
-    return math.max(1, rounded * magnitude);
-  }
 
   static Color tooltip(BuildContext context) =>
       context.colors.inverseSurface.withValues(alpha: 0.92);
@@ -58,6 +34,7 @@ class TrendChart extends StatelessWidget {
     this.stepped = false,
     this.goal,
     this.format,
+    this.axisFormat,
   });
 
   final List<double> values;
@@ -67,6 +44,7 @@ class TrendChart extends StatelessWidget {
   final double height;
   final double? goal;
   final String Function(double value)? format;
+  final String Function(double value)? axisFormat;
 
   final bool stepped;
 
@@ -76,7 +54,8 @@ class TrendChart extends StatelessWidget {
     final goal = this.goal;
     final maxValue = values.reduce((a, b) => a > b ? a : b);
     final ceiling = goal == null || goal < maxValue ? maxValue : goal;
-    final maxY = (ceiling <= 0 ? 1 : ceiling) * 1.25;
+    final scale = axisScale(ceiling, lines: 3);
+    final maxY = scale.maxY;
     final format = DateFormat.MMMd(Localizations.localeOf(context).toString());
     final average = values.reduce((a, b) => a + b) / values.length;
     final label = this.format ?? (double v) => '${v.round()}$suffix';
@@ -95,8 +74,18 @@ class TrendChart extends StatelessWidget {
               minY: 0,
               maxY: maxY,
               clipData: const FlClipData.all(),
-              gridData: const FlGridData(show: false),
-              titlesData: const FlTitlesData(show: false),
+              gridData: axisGrid(context, scale.step, top: scale.top),
+              titlesData: FlTitlesData(
+                topTitles: const AxisTitles(),
+                rightTitles: const AxisTitles(),
+                bottomTitles: const AxisTitles(),
+                leftTitles: axisLeftTitles(
+                  context,
+                  interval: scale.step,
+                  top: scale.top,
+                  format: axisFormat ?? label,
+                ),
+              ),
               borderData: FlBorderData(show: false),
               lineTouchData: LineTouchData(
                 getTouchedSpotIndicator: (bar, indexes) => [
@@ -139,7 +128,8 @@ class TrendChart extends StatelessWidget {
                       alignment: Alignment.topRight,
                       padding: const EdgeInsets.only(bottom: 2, right: 2),
                       style: statLabel(context),
-                      labelResolver: (_) => '⌀ ${label(average)}',
+                      labelResolver: (_) =>
+                          '${context.l10n.average_short} ${label(average)}',
                     ),
                   ),
                   if (goal != null && goal > 0)
@@ -226,7 +216,8 @@ class HourArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxValue = values.isEmpty ? 0 : values.reduce((a, b) => a > b ? a : b);
-    final maxY = (maxValue <= 0 ? 1 : maxValue) * 1.3;
+    final scale = axisScale(maxValue.toDouble(), lines: 2);
+    final maxY = scale.maxY;
     var peak = 0;
     for (var i = 1; i < values.length; i++) {
       if (values[i] > values[peak]) peak = i;
@@ -244,7 +235,7 @@ class HourArea extends StatelessWidget {
           minY: 0,
           maxY: maxY,
           clipData: const FlClipData.all(),
-          gridData: const FlGridData(show: false),
+          gridData: axisGrid(context, scale.step, top: scale.top),
           borderData: FlBorderData(show: false),
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
@@ -260,7 +251,12 @@ class HourArea extends StatelessWidget {
             ),
           ),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(),
+            leftTitles: axisLeftTitles(
+              context,
+              interval: scale.step,
+              top: scale.top,
+              format: (value) => '${value.round()}',
+            ),
             topTitles: const AxisTitles(),
             rightTitles: const AxisTitles(),
             bottomTitles: AxisTitles(
@@ -356,10 +352,9 @@ class MonthlyLine extends StatelessWidget {
     final last = year >= now.year ? now.month - 1 : 11;
     final shown = values.take(last + 1).toList();
     final maxValue = shown.fold(0, math.max);
-    final step = _Chrome.step(maxValue.toDouble(), 4);
-    final maxY = maxValue <= 0
-        ? 4.0
-        : (maxValue / step).ceil() * step + step * 0.5;
+    final scale = axisScale(maxValue.toDouble(), lines: 3, headroom: 0.45);
+    final step = scale.step;
+    final maxY = scale.maxY;
     final average = shown.isEmpty
         ? 0.0
         : shown.reduce((a, b) => a + b) / shown.length;
@@ -378,10 +373,15 @@ class MonthlyLine extends StatelessWidget {
           maxX: 11,
           minY: 0,
           maxY: maxY,
-          gridData: _Chrome.grid(context, step),
+          gridData: axisGrid(context, step, top: scale.top),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: const AxisTitles(),
+            leftTitles: axisLeftTitles(
+              context,
+              interval: step,
+              top: scale.top,
+              format: (value) => '${value.round()}',
+            ),
             topTitles: const AxisTitles(),
             rightTitles: const AxisTitles(),
             bottomTitles: AxisTitles(
@@ -455,7 +455,8 @@ class MonthlyLine extends StatelessWidget {
                     alignment: Alignment.topRight,
                     padding: const EdgeInsets.only(bottom: 2, right: 2),
                     style: statLabel(context),
-                    labelResolver: (_) => '⌀ ${average.round()}',
+                    labelResolver: (_) =>
+                        '${context.l10n.average_short} ${average.round()}',
                   ),
                 ),
             ],

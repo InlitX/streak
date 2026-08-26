@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/features/statistics/widgets/stat_axis.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 
 class WeekdayBars extends StatelessWidget {
@@ -38,6 +39,7 @@ class ValueBars extends StatelessWidget {
     required this.color,
     required this.label,
     required this.tooltip,
+    this.axisFormat,
     this.height = 150,
     this.barWidth = 12,
     this.goal,
@@ -47,6 +49,7 @@ class ValueBars extends StatelessWidget {
   final Color color;
   final String Function(int index) label;
   final String Function(double value) tooltip;
+  final String Function(double value)? axisFormat;
   final double height;
   final double barWidth;
   final double? goal;
@@ -56,7 +59,8 @@ class ValueBars extends StatelessWidget {
     final goal = this.goal;
     final maxV = values.isEmpty ? 0.0 : values.reduce((a, b) => a > b ? a : b);
     final ceiling = goal == null || goal < maxV ? maxV : goal;
-    final maxY = (ceiling <= 0 ? 1.0 : ceiling) * 1.2;
+    final scale = axisScale(ceiling, lines: 3, headroom: 0.12);
+    final maxY = scale.maxY;
 
     return SizedBox(
       height: height,
@@ -64,7 +68,7 @@ class ValueBars extends StatelessWidget {
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
           maxY: maxY,
-          gridData: const FlGridData(show: false),
+          gridData: axisGrid(context, scale.step, top: scale.top),
           borderData: FlBorderData(show: false),
           extraLinesData: ExtraLinesData(
             horizontalLines: [
@@ -97,8 +101,12 @@ class ValueBars extends StatelessWidget {
             ),
           ),
           titlesData: FlTitlesData(
-            leftTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: axisLeftTitles(
+              context,
+              interval: scale.step,
+              top: scale.top,
+              format: axisFormat ?? tooltip,
+            ),
             rightTitles:
                 const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles:

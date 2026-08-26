@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/statistics/widgets/express_line_chart.dart';
 import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 
 class QuantDailyBars extends StatelessWidget {
@@ -11,22 +15,46 @@ class QuantDailyBars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
+    final span = express ? 30 : days;
     final today = AppClock.now().atMidnight;
-    final start = today.subtract(Duration(days: days - 1));
+    final start = today.subtract(Duration(days: span - 1));
     final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
         ? ''
         : ' ${habit.unitLabel}';
+    final amounts = [
+      for (var i = 0; i < span; i++)
+        habit.completions[start.add(Duration(days: i)).dayKey]?.count ?? 0,
+    ];
+    String label(double value) => '${habit.amountText(value)}$unit';
+    String axis(double value) => habit.amountText(value);
+
+    if (express) {
+      final month = DateFormat.MMM(Localizations.localeOf(context).toString());
+      return ExpressLineChart(
+        values: amounts,
+        color: habit.color,
+        window: 10,
+        height: 176,
+        goal: habit.perDayTarget,
+        format: label,
+        axisFormat: axis,
+        label: (index) => '${start.add(Duration(days: index)).day}',
+        subLabel: (index) {
+          final day = start.add(Duration(days: index));
+          return day.day == 1 || index == 0 ? month.format(day) : null;
+        },
+      );
+    }
 
     return TrendChart(
-      values: [
-        for (var i = 0; i < days; i++)
-          habit.completions[start.add(Duration(days: i)).dayKey]?.count ?? 0,
-      ],
+      values: amounts,
       color: habit.color,
       startDate: start,
       height: 132,
       goal: habit.perDayTarget,
-      format: (value) => '${habit.amountText(value)}$unit',
+      format: label,
+      axisFormat: axis,
     );
   }
 }

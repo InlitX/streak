@@ -56,6 +56,8 @@ class FocusRangeBars extends StatelessWidget {
       barWidth: _barWidth,
       label: (index) => _label(context, index),
       tooltip: (value) => formatHoursShort((value * 60).round()),
+      axisFormat: (value) =>
+          value <= 0 ? '0' : formatHoursShort((value * 60).round()),
     );
   }
 }
