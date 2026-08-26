@@ -74,6 +74,14 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
     _mode = HeatmapMode.values[saved.clamp(0, 2)];
   }
 
+  @override
+  void dispose() {
+    if (AppNavigator.paneItem.value == widget.habitId) {
+      AppNavigator.paneItem.value = null;
+    }
+    super.dispose();
+  }
+
   void _changeMode(HeatmapMode mode) {
     setState(() => _mode = mode);
     context.read<SettingsController>().setHeatmapMode(mode.index);

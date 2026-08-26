@@ -39,7 +39,10 @@ class StreakApp extends StatelessWidget {
           value: AppTheme.systemBars(Theme.of(context).brightness),
           child: AppLockGate(
             child: AppBackground(
-              child: _DesktopFrame(child: child ?? const SizedBox.shrink()),
+              child: _DesktopFrame(
+                shell: settings.onboardingDone,
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           ),
         );
@@ -60,13 +63,14 @@ class StreakApp extends StatelessWidget {
 }
 
 class _DesktopFrame extends StatelessWidget {
-  const _DesktopFrame({required this.child});
+  const _DesktopFrame({required this.shell, required this.child});
 
+  final bool shell;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    if (isMobile || isWideLayout(context)) return child;
+    if (isMobile || (shell && isWideLayout(context))) return child;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: phoneWidth),

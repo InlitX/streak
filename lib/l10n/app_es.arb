@@ -755,5 +755,7 @@
   "style_express": "Express",
   "style_express_desc": "Formas redondeadas, movimiento con muelle y una letra más ancha.",
   "celebration_none": "Ninguno",
-  "quant_add_title": "Añadir cantidad"
+  "quant_add_title": "Añadir cantidad",
+  "pane_hint": "Abre algo de la lista para verlo aquí",
+  "average_short": "Media"
 }

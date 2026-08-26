@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/widgets/pane_mark.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/habit_entrance.dart';
@@ -48,20 +49,25 @@ class MinimalHabitList extends StatelessWidget {
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: mode == HeatmapMode.week
-                  ? GridWeekCard(
-                      habit: habit,
-                      onOpen: () => onOpen(habit),
-                      onToggleDay: (d) => onToggleDay(habit, d),
-                      onLongPress: () => onLongPress(habit),
-                    )
-                  : GridYearCard(
-                      habit: habit,
-                      onOpen: () => onOpen(habit),
-                      onToggleToday: () => onToggleToday(habit),
-                      onToggleDay: (d) => onToggleDay(habit, d),
-                      onLongPress: () => onLongPress(habit),
-                    ),
+              child: PaneMark(
+                id: habit.id,
+                tint: habit.color,
+                corners: BorderRadius.circular(20),
+                child: mode == HeatmapMode.week
+                    ? GridWeekCard(
+                        habit: habit,
+                        onOpen: () => onOpen(habit),
+                        onToggleDay: (d) => onToggleDay(habit, d),
+                        onLongPress: () => onLongPress(habit),
+                      )
+                    : GridYearCard(
+                        habit: habit,
+                        onOpen: () => onOpen(habit),
+                        onToggleToday: () => onToggleToday(habit),
+                        onToggleDay: (d) => onToggleDay(habit, d),
+                        onLongPress: () => onLongPress(habit),
+                      ),
+              ),
             ),
           ),
         );
@@ -102,12 +108,17 @@ class MinimalHabitList extends StatelessWidget {
   }
 
   Widget _monthCard(Habit habit) {
-    return GridMonthCard(
-      habit: habit,
-      onOpen: () => onOpen(habit),
-      onToggleToday: () => onToggleToday(habit),
-      onToggleDay: (d) => onToggleDay(habit, d),
-      onLongPress: () => onLongPress(habit),
+    return PaneMark(
+      id: habit.id,
+      tint: habit.color,
+      corners: BorderRadius.circular(30),
+      child: GridMonthCard(
+        habit: habit,
+        onOpen: () => onOpen(habit),
+        onToggleToday: () => onToggleToday(habit),
+        onToggleDay: (d) => onToggleDay(habit, d),
+        onLongPress: () => onLongPress(habit),
+      ),
     );
   }
 }

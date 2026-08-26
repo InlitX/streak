@@ -238,14 +238,14 @@ class _HomePageState extends State<HomePage> {
     final sortCompletedLast = settings.sortCompletedLast;
     final minimal = settings.isMinimalStyle;
     final express = settings.isExpressStyle;
+    final wide = isWideLayout(context);
+    final railed = minimal && wide;
     final tight = !minimal && !express && settings.planningEnabled;
     final bigText = MediaQuery.textScalerOf(context).scale(14) > 20;
     return Scaffold(
       floatingActionButton: express && !_reordering
           ? Padding(
-              padding: EdgeInsets.only(
-                bottom: isWideLayout(context) ? 0 : 74,
-              ),
+              padding: EdgeInsets.only(bottom: wide ? 0 : 74),
               child: ExpressFab(
                 icon: LucideIcons.plus,
                 label: context.l10n.add_habit,
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(context.l10n.today),
                   ),
 
-        leading: minimal && !_reordering
+        leading: minimal && !railed && !_reordering
             ? IconButton(
                 icon: const Icon(LucideIcons.settings),
                 onPressed: () => AppNavigator.push(const SettingsPage()),
@@ -304,13 +304,13 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!_reordering)
             FocusPill(compact: minimal || express, dense: tight),
-          if (minimal && !_reordering && settings.todosEnabled)
+          if (minimal && !railed && !_reordering && settings.todosEnabled)
             IconButton(
               tooltip: context.l10n.todos,
               icon: const Icon(LucideIcons.listChecks, size: 22),
               onPressed: () => AppNavigator.push(const TodosPage()),
             ),
-          if (minimal && !_reordering)
+          if (minimal && !railed && !_reordering)
             IconButton(
               icon: const Icon(LucideIcons.chartColumn),
               onPressed: () => AppNavigator.push(const StatisticsPage()),
@@ -515,6 +515,7 @@ class _HomePageState extends State<HomePage> {
 
   void _openDetails(Habit habit) {
     AppNavigator.clearPane();
+    if (isWideLayout(context)) AppNavigator.paneItem.value = habit.id;
     AppNavigator.push(HabitDetailsPage(habitId: habit.id), fade: true);
   }
 

@@ -5,6 +5,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/widgets/pane_mark.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/express_habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_entrance.dart';
@@ -96,14 +97,19 @@ class ExpressHabitList extends StatelessWidget {
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: const EdgeInsets.only(bottom: Express.groupGap),
-              child: ExpressHabitCard(
-                habit: habit,
-                mode: mode,
-                radius: radius,
-                onOpen: () => onOpen(habit),
-                onToggleToday: () => onToggleToday(habit),
-                onToggleDay: (date) => onToggleDay(habit, date),
-                onLongPress: () => onLongPress(habit),
+              child: PaneMark(
+                id: habit.id,
+                tint: habit.color,
+                corners: radius,
+                child: ExpressHabitCard(
+                  habit: habit,
+                  mode: mode,
+                  radius: radius,
+                  onOpen: () => onOpen(habit),
+                  onToggleToday: () => onToggleToday(habit),
+                  onToggleDay: (date) => onToggleDay(habit, date),
+                  onLongPress: () => onLongPress(habit),
+                ),
               ),
             ),
           ),

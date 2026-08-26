@@ -10,6 +10,8 @@ class AppNavigator {
 
   static final paneKey = GlobalKey<NavigatorState>();
 
+  static final paneItem = ValueNotifier<String?>(null);
+
   static NavigatorState? get _pane {
     final root = key.currentState;
     if (root == null || root.canPop()) return null;
@@ -40,6 +42,7 @@ class AppNavigator {
   }
 
   static void clearPane() {
+    paneItem.value = null;
     final pane = paneKey.currentState;
     if (pane != null && pane.canPop()) pane.popUntil((route) => route.isFirst);
   }

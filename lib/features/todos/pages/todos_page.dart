@@ -94,7 +94,7 @@ class _TodosPageState extends State<TodosPage> {
       appBar: AppBar(
         toolbarHeight: minimal || express ? 52 : null,
         title: minimal || express ? null : Text(context.l10n.todos),
-        leading: minimal
+        leading: minimal && Navigator.of(context).canPop()
             ? IconButton(
                 icon: const Icon(LucideIcons.arrowLeft),
                 onPressed: () => AppNavigator.pop(),

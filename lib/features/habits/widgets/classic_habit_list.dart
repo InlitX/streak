@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/widgets/pane_mark.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -91,16 +92,23 @@ class ClassicHabitList extends StatelessWidget {
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: EdgeInsets.only(bottom: compact ? 3 : 12),
-              child: HabitCard(
-                habit: habit,
-                mode: mode,
+              child: PaneMark(
+                id: habit.id,
+                tint: habit.color,
                 corners: compact
                     ? stackedCorners(index, habits.length)
-                    : null,
-                onOpen: () => onOpen(habit),
-                onToggleToday: () => onToggleToday(habit),
-                onToggleDay: (date) => onToggleDay(habit, date),
-                onLongPress: () => onLongPress(habit),
+                    : BorderRadius.circular(24),
+                child: HabitCard(
+                  habit: habit,
+                  mode: mode,
+                  corners: compact
+                      ? stackedCorners(index, habits.length)
+                      : null,
+                  onOpen: () => onOpen(habit),
+                  onToggleToday: () => onToggleToday(habit),
+                  onToggleDay: (date) => onToggleDay(habit, date),
+                  onLongPress: () => onLongPress(habit),
+                ),
               ),
             ),
           ),

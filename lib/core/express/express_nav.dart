@@ -184,7 +184,7 @@ class ExpressNavRail extends StatelessWidget {
   }
 }
 
-class _RailPill extends StatelessWidget {
+class _RailPill extends StatefulWidget {
   const _RailPill({
     required this.item,
     required this.selected,
@@ -196,7 +196,16 @@ class _RailPill extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_RailPill> createState() => _RailPillState();
+}
+
+class _RailPillState extends State<_RailPill> {
+  bool _hover = false;
+
+  @override
   Widget build(BuildContext context) {
+    final item = widget.item;
+    final selected = widget.selected;
     final scheme = context.colors;
     final tint = selected ? scheme.onPrimary : context.tokens.muted;
 
@@ -205,11 +214,15 @@ class _RailPill extends StatelessWidget {
       selected: selected,
       label: item.label,
       excludeSemantics: true,
-      child: GestureDetector(
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _hover = true),
+        onExit: (_) => setState(() => _hover = false),
+        child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
           HapticFeedback.selectionClick();
-          onTap();
+          widget.onTap();
         },
         child: AnimatedContainer(
           duration: Express.normal,
@@ -218,7 +231,7 @@ class _RailPill extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected
                 ? scheme.primary
-                : scheme.primary.withValues(alpha: 0.06),
+                : scheme.primary.withValues(alpha: _hover ? 0.16 : 0.06),
             borderRadius: BorderRadius.circular(selected ? 24 : 14),
           ),
           child: Row(
@@ -251,6 +264,7 @@ class _RailPill extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

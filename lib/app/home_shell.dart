@@ -4,7 +4,13 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_nav.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
+import 'package:streak/core/minimal/minimal_nav.dart';
+import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
@@ -48,6 +54,7 @@ class _HomeShellState extends State<HomeShell>
   @override
   void initState() {
     super.initState();
+    _paneTab.value = _tab;
     _swap = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 380),
@@ -76,6 +83,42 @@ class _HomeShellState extends State<HomeShell>
     _swap.forward(from: 0);
   }
 
+  Widget _rail(
+    BuildContext context,
+    List<_Tab> tabs,
+    _Tab current,
+    int style,
+  ) {
+    final index = tabs.indexOf(current);
+    if (style == 2) {
+      return ExpressNavRail(
+        items: [
+          for (final tab in tabs)
+            ExpressNavItem(icon: _iconOf(tab), label: _labelOf(context, tab)),
+        ],
+        index: index,
+        onSelect: (i) => _select(tabs, tabs[i]),
+        brand: const _RailBrand(),
+      );
+    }
+    if (style == 1) {
+      return MinimalNavRail(
+        items: [
+          for (final tab in tabs)
+            MinimalNavItem(icon: _iconOf(tab), label: _labelOf(context, tab)),
+        ],
+        index: index,
+        onSelect: (i) => _select(tabs, tabs[i]),
+        brand: const _RailBrand(),
+      );
+    }
+    return _NavRail(
+      tabs: tabs,
+      current: current,
+      onSelect: (tab) => _select(tabs, tab),
+    );
+  }
+
   void _swipe(List<_Tab> tabs, double velocity) {
     final next = tabs.indexOf(_tab) + (velocity < 0 ? 1 : -1);
     if (next < 0 || next >= tabs.length) return;
@@ -97,11 +140,8 @@ class _HomeShellState extends State<HomeShell>
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
     final wide = isWideLayout(context);
-    if (settings.isMinimalStyle) {
-      return wide
-          ? const _SplitScaffold(page: HomePage())
-          : const Scaffold(body: HomePage());
-    }
+    final minimal = settings.isMinimalStyle;
+    if (minimal && !wide) return const Scaffold(body: HomePage());
     final scheme = Theme.of(context).colorScheme;
     final express = settings.isExpressStyle;
     final tabs = [
@@ -115,24 +155,7 @@ class _HomeShellState extends State<HomeShell>
     if (wide) {
       return _SplitScaffold(
         full: current == _Tab.stats,
-        rail: express
-            ? ExpressNavRail(
-                items: [
-                  for (final tab in tabs)
-                    ExpressNavItem(
-                      icon: _iconOf(tab),
-                      label: _labelOf(context, tab),
-                    ),
-                ],
-                index: tabs.indexOf(current),
-                onSelect: (i) => _select(tabs, tabs[i]),
-                brand: const _RailBrand(),
-              )
-            : _NavRail(
-                tabs: tabs,
-                current: current,
-                onSelect: (tab) => _select(tabs, tab),
-              ),
+        rail: _rail(context, tabs, current, settings.appStyle),
         page: FadeTransition(
           opacity: _fade,
           child: IndexedStack(
@@ -323,7 +346,7 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-class _SplitScaffold extends StatelessWidget {
+class _SplitScaffold extends StatefulWidget {
   const _SplitScaffold({this.rail, required this.page, this.full = false});
 
   final Widget? rail;
@@ -331,15 +354,55 @@ class _SplitScaffold extends StatelessWidget {
   final bool full;
 
   @override
+  State<_SplitScaffold> createState() => _SplitScaffoldState();
+}
+
+class _SplitScaffoldState extends State<_SplitScaffold> {
+  @override
+  void initState() {
+    super.initState();
+    HardwareKeyboard.instance.addHandler(_onKey);
+  }
+
+  @override
+  void dispose() {
+    HardwareKeyboard.instance.removeHandler(_onKey);
+    super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is! KeyDownEvent) return false;
+    if (event.logicalKey != LogicalKeyboardKey.escape) return false;
+    final root = AppNavigator.key.currentState;
+    if (root == null || root.canPop()) return false;
+    final pane = AppNavigator.paneKey.currentState;
+    if (pane == null || !pane.canPop()) return false;
+    AppNavigator.pop();
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    final tint = settings.isMinimalStyle
+        ? minimalSurface(context).withValues(alpha: 0.5)
+        : settings.isExpressStyle
+        ? Theme.of(context).colorScheme.surfaceContainerLowest
+        : null;
+
     return Scaffold(
       body: Row(
         children: [
-          if (rail != null) ...[rail!, const _Line()],
-          if (full)
-            Expanded(child: page)
+          if (widget.rail != null) ...[
+            tint == null
+                ? widget.rail!
+                : ColoredBox(color: tint, child: widget.rail!),
+            const _Line(),
+          ],
+          if (widget.full)
+            Expanded(child: widget.page)
           else ...[
-            SizedBox(width: paneWidth, child: page),
+            SizedBox(width: paneWidth, child: widget.page),
             const _Line(),
             Expanded(
               child: Center(
@@ -360,14 +423,18 @@ class _Line extends StatelessWidget {
   const _Line();
 
   @override
-  Widget build(BuildContext context) => VerticalDivider(
-        width: 1,
-        thickness: 1,
-        color: Theme.of(context)
-            .colorScheme
-            .outlineVariant
-            .withValues(alpha: 0.32),
-      );
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    return VerticalDivider(
+      width: 1,
+      thickness: 1,
+      color: settings.isMinimalStyle
+          ? minimalLineColor(context)
+          : settings.isExpressStyle
+          ? expressHairlineColor(context)
+          : Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.32),
+    );
+  }
 }
 
 class _DetailPane extends StatelessWidget {
@@ -397,11 +464,67 @@ class _DetailPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    final settings = context.watch<SettingsController>();
+    final scheme = Theme.of(context).colorScheme;
+    final muted = context.tokens.muted;
+    final express = settings.isExpressStyle;
+    final minimal = settings.isMinimalStyle;
+
+    final tile = Container(
+      width: 92,
+      height: 92,
+      alignment: Alignment.center,
+      decoration: express
+          ? ShapeDecoration(
+              color: scheme.primary.withValues(alpha: 0.10),
+              shape: const ExpressBorder(shape: ExpressShape.cookie),
+            )
+          : BoxDecoration(
+              color: minimal
+                  ? minimalRaised(context)
+                  : scheme.primary.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(minimal ? 26 : 46),
+            ),
       child: Icon(
         _iconOf(tab),
-        size: 92,
-        color: context.tokens.muted.withValues(alpha: 0.16),
+        size: 34,
+        color: minimal ? muted : scheme.primary.withValues(alpha: 0.75),
+      ),
+    );
+
+    final title = _labelOf(context, tab);
+    final titleStyle = express
+        ? ExpressType.display.at(21, spacing: -0.2, color: scheme.onSurface)
+        : minimal
+        ? MinimalType.title(19, weight: 700, color: scheme.onSurface)
+        : TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: scheme.onSurface,
+          );
+    final hintStyle = express
+        ? ExpressType.body.at(13.5, color: muted)
+        : minimal
+        ? MinimalType.body(13.5, color: muted)
+        : TextStyle(fontSize: 13.5, color: muted);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            tile,
+            const SizedBox(height: 20),
+            Text(title, style: titleStyle),
+            const SizedBox(height: 8),
+            Text(
+              context.l10n.pane_hint,
+              textAlign: TextAlign.center,
+              style: hintStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -456,6 +579,7 @@ class _RailBrand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
     final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(left: 6),
@@ -473,11 +597,19 @@ class _RailBrand extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             'Streak',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w800,
-              color: scheme.onSurface,
-            ),
+            style: settings.isExpressStyle
+                ? ExpressType.headline.at(
+                    17,
+                    weight: 800,
+                    color: scheme.onSurface,
+                  )
+                : settings.isMinimalStyle
+                ? MinimalType.title(17, weight: 700, color: scheme.onSurface)
+                : TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: scheme.onSurface,
+                  ),
           ),
         ],
       ),

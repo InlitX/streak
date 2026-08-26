@@ -893,5 +893,7 @@
   "style_express": "Express",
   "style_express_desc": "Rounded shapes, springy motion and a wider typeface.",
   "celebration_none": "None",
-  "quant_add_title": "Add amount"
+  "quant_add_title": "Add amount",
+  "pane_hint": "Open something from the list to see it here",
+  "average_short": "Avg"
 }
