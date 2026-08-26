@@ -7,7 +7,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/widgets/stat_columns.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
@@ -91,7 +91,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
               16,
               minimal ? 28 : 104,
             ),
-            children: _spanned(context, [
+            children: spanned(context, [
               if (minimal)
                 Padding(
                   padding: const EdgeInsets.only(left: 6),
@@ -128,7 +128,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 ),
               ),
-              const _SpanEnd(),
+              const SpanEnd(),
               const SizedBox(height: 16),
               StatReveal(
                 child: IntrinsicHeight(
@@ -646,62 +646,6 @@ class _FocusStats extends StatelessWidget {
         ),
         ),
       ),
-    );
-  }
-}
-
-class _SpanEnd extends StatelessWidget {
-  const _SpanEnd();
-
-  @override
-  Widget build(BuildContext context) => const SizedBox.shrink();
-}
-
-List<Widget> _spanned(BuildContext context, List<Widget> items) {
-  final cut = items.indexWhere((item) => item is _SpanEnd);
-  if (cut == -1) return items;
-  if (!isWideLayout(context)) return [...items]..removeAt(cut);
-  return [
-    ...items.take(cut),
-    _StatColumns(cards: items.skip(cut + 1).toList()),
-  ];
-}
-
-class _StatColumns extends StatelessWidget {
-  const _StatColumns({required this.cards});
-
-  final List<Widget> cards;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, box) {
-        if (box.maxWidth < columnsWidth) {
-          return Column(mainAxisSize: MainAxisSize.min, children: cards);
-        }
-        final left = <Widget>[];
-        final right = <Widget>[];
-        var group = <Widget>[];
-        for (final card in cards) {
-          group.add(card);
-          if (card is SizedBox) continue;
-          (left.length <= right.length ? left : right).addAll(group);
-          group = <Widget>[];
-        }
-        left.addAll(group);
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(mainAxisSize: MainAxisSize.min, children: left),
-            ),
-            const SizedBox(width: 18),
-            Expanded(
-              child: Column(mainAxisSize: MainAxisSize.min, children: right),
-            ),
-          ],
-        );
-      },
     );
   }
 }

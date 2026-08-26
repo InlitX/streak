@@ -11,10 +11,13 @@ import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/express/express_wave.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/core/widgets/stat_columns.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -24,9 +27,9 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
+import 'package:streak/features/statistics/widgets/express_line_chart.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
-import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 import 'package:streak/features/statistics/widgets/year_heatmap.dart';
 
 class ExpressStatisticsPage extends StatefulWidget {
@@ -43,6 +46,9 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
 
   ({List<Habit> habits, String? id, int year})? _statsKey;
   late HabitStats _stats;
+
+  int get _lastMonth =>
+      _year >= AppClock.now().year ? AppClock.now().month - 1 : 11;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
     final key = (habits: all, id: _habitId, year: _year);
@@ -87,16 +93,21 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
               : scoped.first.color;
           final stats = _statsFor(scoped, all);
 
+          final wide = isWideLayout(context);
+
           return Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 760),
+              constraints: BoxConstraints(maxWidth: wide ? 1080 : 760),
               child: ListView(
                 padding: context.pagePadding(16, 4, 16, 128),
                 children: [
-                  ExpressTabs(
-                    labels: [context.l10n.overview, context.l10n.activity],
-                    index: _tab,
-                    onChanged: (i) => setState(() => _tab = i),
+                  _Header(
+                    wide: wide,
+                    child: ExpressTabs(
+                      labels: [context.l10n.overview, context.l10n.activity],
+                      index: _tab,
+                      onChanged: (i) => setState(() => _tab = i),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _HabitScope(
@@ -105,10 +116,13 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
                     onSelected: (id) => setState(() => _habitId = id),
                   ),
                   const SizedBox(height: 14),
-                  ExpressYearNav(
-                    year: _year,
-                    canGoForward: _year < AppClock.now().year,
-                    onChanged: (delta) => setState(() => _year += delta),
+                  _Header(
+                    wide: wide,
+                    child: ExpressYearNav(
+                      year: _year,
+                      canGoForward: _year < AppClock.now().year,
+                      onChanged: (delta) => setState(() => _year += delta),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   AnimatedSwitcher(
@@ -150,6 +164,14 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
                         final items = _tab == 0
                             ? _overview(context, stats, scoped, all, accent)
                             : _activity(context, stats, scoped, accent);
+                        if (wide) {
+                          return ExpressReveal(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: spanned(context, items),
+                            ),
+                          );
+                        }
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -315,6 +337,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
           express: true,
         ),
       ),
+      const SpanEnd(),
       const SizedBox(height: 12),
       ExpressStatPanel(
         title: context.l10n.completions_per_month,
@@ -322,11 +345,15 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
         tint: accent,
         shape: ExpressShape.sunny,
         child: stats.total > 0
-            ? MonthlyLine(
+            ? ExpressLineChart(
                 key: ValueKey('express-monthly-$_year-$_habitId'),
-                values: stats.monthly,
+                values: [
+                  for (var i = 0; i <= _lastMonth; i++)
+                    stats.monthly[i].toDouble(),
+                ],
                 color: accent,
-                year: _year,
+                label: (index) => _months(context)[index],
+                height: 200,
               )
             : _Placeholder(text: context.l10n.not_enough_data),
       ),
@@ -339,6 +366,27 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
         child: WeekdayBars(values: stats.weekday, color: accent, height: 170),
       ),
     ];
+  }
+}
+
+List<String> _months(BuildContext context) =>
+    MonthLabels.short(Localizations.localeOf(context).toString());
+
+class _Header extends StatelessWidget {
+  const _Header({required this.wide, required this.child});
+
+  final bool wide;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!wide) return child;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: child,
+      ),
+    );
   }
 }
 

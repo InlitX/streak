@@ -8,7 +8,9 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/stat_columns.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -83,12 +85,14 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
           final stats = _statsFor(scoped, all);
           final ranked = _ranking(all, stats);
 
+          final wide = isWideLayout(context);
+
           return Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 720),
+              constraints: BoxConstraints(maxWidth: wide ? 1120 : 720),
               child: ListView(
                 padding: context.pagePadding(20, 0, 20, 40),
-                children: [
+                children: spanned(context, [
                   MinimalTitle(title: context.l10n.statistics),
                   if (all.length > 1) ...[
                     MinimalChips(
@@ -155,6 +159,7 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                       ),
                     ),
                   ),
+                  const SpanEnd(),
                   MinimalSection(
                     title: context.l10n.when_best,
                     child: MinimalCard(
@@ -200,7 +205,7 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                         ],
                       ),
                     ),
-                  _FocusSection(habitId: _habitId),
+                  ?_focusSection(context, _habitId),
                   if (_habitId == null && ranked.length > 1)
                     MinimalSection(
                       title: context.l10n.by_habit,
@@ -224,7 +229,7 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                         ],
                       ),
                     ),
-                ],
+                ]),
               ),
             ),
           );
@@ -234,46 +239,37 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
   }
 }
 
-class _FocusSection extends StatelessWidget {
-  const _FocusSection({required this.habitId});
+Widget? _focusSection(BuildContext context, String? habitId) {
+  if (!context.watch<SettingsController>().focusEnabled) return null;
+  final focus = context.watch<FocusController>();
+  if (focus.sessionCount == 0) return null;
 
-  final String? habitId;
+  final sessions = habitId == null
+      ? focus.sessionCount
+      : focus.sessions.where((s) => s.habitId == habitId).length;
+  final seconds = habitId == null
+      ? focus.totalSeconds
+      : focus.secondsForHabit(habitId);
 
-  @override
-  Widget build(BuildContext context) {
-    if (!context.watch<SettingsController>().focusEnabled) {
-      return const SizedBox.shrink();
-    }
-    final focus = context.watch<FocusController>();
-    if (focus.sessionCount == 0) return const SizedBox.shrink();
-
-    final sessions = habitId == null
-        ? focus.sessionCount
-        : focus.sessions.where((s) => s.habitId == habitId).length;
-    final seconds = habitId == null
-        ? focus.totalSeconds
-        : focus.secondsForHabit(habitId!);
-
-    return MinimalSection(
-      title: context.l10n.focus,
-      child: MinimalGrid(
-        children: [
-          MinimalTile(
-            icon: LucideIcons.timer,
-            label: context.l10n.focus_total,
-            value: formatHoursShort(seconds),
-            onTap: () => AppNavigator.push(FocusStatsPage(habitId: habitId)),
-          ),
-          MinimalTile(
-            icon: LucideIcons.circlePlay,
-            label: context.l10n.focus_sessions,
-            value: '$sessions',
-            onTap: () => AppNavigator.push(FocusStatsPage(habitId: habitId)),
-          ),
-        ],
-      ),
-    );
-  }
+  return MinimalSection(
+    title: context.l10n.focus,
+    child: MinimalGrid(
+      children: [
+        MinimalTile(
+          icon: LucideIcons.timer,
+          label: context.l10n.focus_total,
+          value: formatHoursShort(seconds),
+          onTap: () => AppNavigator.push(FocusStatsPage(habitId: habitId)),
+        ),
+        MinimalTile(
+          icon: LucideIcons.circlePlay,
+          label: context.l10n.focus_sessions,
+          value: '$sessions',
+          onTap: () => AppNavigator.push(FocusStatsPage(habitId: habitId)),
+        ),
+      ],
+    ),
+  );
 }
 
 class _YearNav extends StatelessWidget {
