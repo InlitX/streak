@@ -987,5 +987,46 @@
       }
     }
   },
-  "cost_note": "可选，不涉及花费可留空。"
+  "cost_note": "可选，不涉及花费可留空。",
+  "celebration_none": "无",
+  "quant_preset_time": "时间",
+  "style_express": "活泼",
+  "style_express_desc": "圆润的形状、轻快的动效和更宽的字体。",
+  "todo_search": "搜索待办",
+  "todo_search_empty": "没有匹配项",
+  "heatmap_path": "连接日期",
+  "heatmap_path_sub": "把日期连成一条连续路径",
+  "focus_only_clear_body": "只有完成一次专注才能再次打卡「{name}」。",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_clear_title": "取消这次打卡？",
+  "focus_period_sessions": "{count} 次专注",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "全部笔记",
+  "notes_empty_all": "暂无笔记",
+  "period_week_of": "{date} 所在周",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "period_this_week": "本周",
+  "period_last_week": "上周",
+  "period_this_month": "本月",
+  "period_last_month": "上月",
+  "period_this_year": "本年",
+  "period_last_year": "去年"
 }
