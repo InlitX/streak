@@ -1050,5 +1050,7 @@
   "style_express_desc": "Закруглені форми, пружний рух і ширший шрифт.",
   "style_express": "Експрес",
   "celebration_none": "Немає",
-  "quant_add_title": "Додати кількість"
+  "quant_add_title": "Додати кількість",
+  "pane_hint": "Відкрийте щось зі списку, щоби переглянути тут",
+  "average_short": "Сер."
 }
