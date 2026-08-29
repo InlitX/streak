@@ -17,9 +17,11 @@ import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/focus_service.dart';
+import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/image_cleanup_service.dart';
 import 'package:streak/services/notification_service.dart';
@@ -37,6 +39,7 @@ Future<void> main() async {
     LocalStore.readHabits(),
     todos: LocalStore.readTodos(),
   );
+  await FolderSync.pull();
   unawaited(ImageCleanupService.run());
 
   NotificationService.onOpenHabit = _openHabit;
@@ -58,6 +61,10 @@ Future<void> main() async {
       final id = call.arguments as String?;
       if (id != null) _startFocus(id);
     }
+    if (call.method == 'openPage') {
+      final page = call.arguments as String?;
+      if (page != null) _openPage(page);
+    }
     return null;
   });
 
@@ -73,6 +80,8 @@ Future<void> main() async {
       if (launched != null) _openHabit(launched);
       final focusOn = await _appChannel.invokeMethod<String>('consumeLaunchFocus');
       if (focusOn != null) _startFocus(focusOn);
+      final page = await _appChannel.invokeMethod<String>('consumeLaunchPage');
+      if (page != null) _openPage(page);
     }
     await drainFocusActions();
   });
@@ -113,6 +122,11 @@ void _openHabit(String habitId) {
 
 void _openTodos() {
   AppNavigator.push(const TodosPage(), fade: true);
+}
+
+void _openPage(String page) {
+  if (page == 'todos') _openTodos();
+  if (page == 'stats') AppNavigator.push(const StatisticsPage(), fade: true);
 }
 
 void _startFocus(String habitId) {

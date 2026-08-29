@@ -23,6 +23,7 @@ import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/backup_service.dart';
+import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/import_service.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -68,6 +69,31 @@ class SettingsActions {
     }
   }
 
+  static bool canRefresh(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    return settings.autoBackup > 0 && settings.autoBackupFolder.isNotEmpty;
+  }
+
+  static Future<void> refreshFolder(BuildContext context) async {
+    final settings = context.read<SettingsController>();
+    final habits = context.read<HabitsController>();
+    final brought = await LocalStore.guardWrites(FolderSync.pull);
+    if (!context.mounted) return;
+    if (brought > 0) {
+      await habits.reload();
+      if (!context.mounted) return;
+      context.read<NotesController>().reload();
+      context.read<FocusController>().reload();
+      context.read<TodosController>().reload();
+      context.read<CategoriesController>().reload();
+    }
+    await settings.runAutoBackup(force: true);
+    if (!context.mounted) return;
+    brought > 0
+        ? AppSnackbar.success(context, context.l10n.refresh_brought)
+        : AppSnackbar.info(context, context.l10n.refresh_nothing);
+  }
+
   static Future<void> importFromApp(BuildContext context) async {
     final controller = context.read<HabitsController>();
     try {
@@ -83,7 +109,8 @@ class SettingsActions {
       );
     } on ImportException catch (e) {
       if (context.mounted) AppSnackbar.error(context, e.message);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Import from another app failed: $e');
       if (context.mounted) AppSnackbar.error(context, context.l10n.import_failed);
     }
   }
@@ -137,10 +164,11 @@ class SettingsActions {
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
       builder: (sheet) => SafeArea(
         top: false,
         child: Consumer<SettingsController>(
-          builder: (sheetContext, s, _) => Padding(
+          builder: (sheetContext, s, _) => SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -186,6 +214,21 @@ class SettingsActions {
                           onPressed: () => settings.setAutoBackupFolder(''),
                         ),
                   onTap: () => chooseBackupFolder(sheetContext),
+                ),
+                SwitchListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  secondary: Icon(
+                    LucideIcons.fileText,
+                    color: context.tokens.muted,
+                  ),
+                  title: Text(
+                    context.l10n.readable_copy,
+                    style: sheetOptionStyle(sheetContext, size: 15),
+                  ),
+                  subtitle: Text(context.l10n.readable_copy_sub),
+                  value: s.readableCopy,
+                  onChanged: settings.setReadableCopy,
                 ),
                 const SizedBox(height: 4),
                 SizedBox(

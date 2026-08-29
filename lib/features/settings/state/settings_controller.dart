@@ -103,6 +103,7 @@ class SettingsController extends ChangeNotifier {
     _autoBackup = LocalStore.setting('autoBackup', 0);
     _autoBackupAt = LocalStore.setting('autoBackupAt', '');
     _autoBackupFolder = LocalStore.setting('autoBackupFolder', '');
+    _readableCopy = LocalStore.setting('readableCopy', true);
     _widgetBgColor = LocalStore.setting('widgetBgColor', defaultWidgetBg);
     _widgetOpacity = LocalStore.setting('widgetOpacity', 100);
     _widgetBorder = LocalStore.setting('widgetBorder', false);
@@ -159,6 +160,7 @@ class SettingsController extends ChangeNotifier {
   late int _autoBackup;
   late String _autoBackupAt;
   late String _autoBackupFolder;
+  late bool _readableCopy;
   late int _widgetBgColor;
   late int _widgetOpacity;
   late bool _widgetBorder;
@@ -439,6 +441,14 @@ class SettingsController extends ChangeNotifier {
   DateTime? get autoBackupAt => DateTime.tryParse(_autoBackupAt);
   String get autoBackupFolder => _autoBackupFolder;
 
+  bool get readableCopy => _readableCopy;
+
+  Future<void> setReadableCopy(bool value) async {
+    _readableCopy = value;
+    await LocalStore.writeSetting('readableCopy', value);
+    notifyListeners();
+  }
+
   Future<void> setAutoBackup(int value) async {
     if (_autoBackup == value) return;
     _autoBackup = value;
@@ -462,7 +472,10 @@ class SettingsController extends ChangeNotifier {
           : last.add(const Duration(days: 7));
       if (DateTime.now().isBefore(due)) return false;
     }
-    final path = await BackupService.runAuto(folder: _autoBackupFolder);
+    final path = await BackupService.runAuto(
+      folder: _autoBackupFolder,
+      readable: _readableCopy,
+    );
     if (path == null) return false;
     _autoBackupAt = DateTime.now().toIso8601String();
     await LocalStore.writeSetting('autoBackupAt', _autoBackupAt);

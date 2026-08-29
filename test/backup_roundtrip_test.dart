@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +13,7 @@ import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/backup_service.dart';
+import 'package:streak/services/vault_writer.dart';
 
 import 'support/app_harness.dart';
 
@@ -264,6 +266,25 @@ void main() {
       () => BackupService.parse(json.encode({'habits': []})),
       throwsException,
     );
+  });
+
+  test('the automatic backup drops the json and the readable copy', () async {
+    await _seedEverything(5);
+    final dir = await Directory.systemTemp.createTemp('streak_auto');
+    addTearDown(() => dir.deleteSync(recursive: true));
+
+    final path = await BackupService.runAuto(folder: dir.path);
+
+    expect(path, isNotNull);
+    expect(File(path!).existsSync(), isTrue);
+    expect(BackupService.parse(File(path).readAsStringSync()).habits, hasLength(5));
+
+    final vault = '${dir.path}/$vaultFolder';
+    expect(File('$vault/README.md').existsSync(), isTrue);
+    expect(File('$vault/habits/Habit 0.md').existsSync(), isTrue);
+    expect(File('$vault/tasks.md').existsSync(), isTrue);
+    expect(File('$vault/notes.md').existsSync(), isTrue);
+    expect(File('$vault/focus.md').existsSync(), isTrue);
   });
 
   test('a completion keeps its steps, hour and amount through the trip', () {

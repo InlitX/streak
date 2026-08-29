@@ -3,17 +3,20 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/services/import_service.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/services/vault_writer.dart';
 
 const _kBackupVersion = 1;
 const _kAutoBackupKeep = 5;
@@ -26,6 +29,7 @@ class BackupData {
     required this.todos,
     required this.categories,
     required this.skipped,
+    this.exportedAt,
   });
 
   final List<Habit> habits;
@@ -34,6 +38,7 @@ class BackupData {
   final List<Todo> todos;
   final List<Category> categories;
   final int skipped;
+  final DateTime? exportedAt;
 
   bool get isEmpty =>
       habits.isEmpty && notes.isEmpty && focus.isEmpty && todos.isEmpty;
@@ -89,7 +94,10 @@ class BackupService {
     return path;
   }
 
-  static Future<String?> runAuto({String folder = ''}) async {
+  static Future<String?> runAuto({
+    String folder = '',
+    bool readable = true,
+  }) async {
     final dir = folder.isEmpty
         ? await defaultBackupDir()
         : Directory(folder);
@@ -102,7 +110,23 @@ class BackupService {
 
     final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
     final file = File('${dir.path}/streak_backup_$stamp.json');
-    await file.writeAsString(_payloadFor(LocalStore.readHabits().values.toList()));
+    final habits = LocalStore.readHabits().values.toList();
+    await file.writeAsString(_payloadFor(habits));
+
+    try {
+      if (readable) {
+        await VaultWriter.write(
+          Directory('${dir.path}/$vaultFolder'),
+          habits: habits,
+          categories: LocalStore.readCategories(),
+          notes: LocalStore.readNotes(),
+          todos: LocalStore.readTodos(),
+          focus: LocalStore.readFocusSessions(),
+        );
+      }
+    } catch (e) {
+      debugPrint('Could not write the readable copy: $e');
+    }
 
     final old = dir
         .listSync()
@@ -146,16 +170,27 @@ class BackupService {
     }
 
     final picked = result.files.single;
-    String raw;
-    if (picked.bytes != null) {
-      raw = utf8.decode(picked.bytes!);
-    } else if (picked.path != null) {
-      raw = await File(picked.path!).readAsString();
-    } else {
+    List<int>? bytes = picked.bytes;
+    if (bytes == null && picked.path != null) {
+      try {
+        bytes = await File(picked.path!).readAsBytes();
+      } catch (e) {
+        debugPrint('Could not read ${picked.path}: $e');
+        throw Exception('That file could not be read');
+      }
+    }
+    if (bytes == null) {
       throw Exception('Could not read the selected file');
     }
+    if (ImportService.looksLikeZip(bytes) ||
+        ImportService.looksLikeSqlite(bytes)) {
+      throw Exception(
+        'That is an export from another app, not a Streak backup. '
+        'Use "Import from another app" for it.',
+      );
+    }
 
-    return parse(raw);
+    return parse(const Utf8Decoder(allowMalformed: true).convert(bytes));
   }
 
   static BackupData parse(String raw) {
@@ -204,6 +239,7 @@ class BackupService {
       todos: collect(root['todos'], Todo.fromMap),
       categories: collect(root['categories'], Category.fromMap),
       skipped: skipped,
+      exportedAt: DateTime.tryParse((root['exportedAt'] ?? '') as String),
     );
 
     if (data.isEmpty) throw Exception('No habits found in that file');

@@ -95,9 +95,9 @@ class ImportService {
   static ImportOutcome parseBytes(List<int> bytes, {String fileName = ''}) {
     final name = fileName.toLowerCase();
 
-    if (_looksLikeSqlite(bytes)) throw const ImportException(_kDatabaseHint);
+    if (looksLikeSqlite(bytes)) throw const ImportException(_kDatabaseHint);
 
-    if (name.endsWith('.zip') || _looksLikeZip(bytes)) {
+    if (name.endsWith('.zip') || looksLikeZip(bytes)) {
       final raw = _parseLoopZip(bytes);
       return _build(raw, 'Loop Habit Tracker');
     }
@@ -679,7 +679,7 @@ class ImportService {
     }
   }
 
-  static bool _looksLikeSqlite(List<int> bytes) {
+  static bool looksLikeSqlite(List<int> bytes) {
     const header = 'SQLite format 3';
     if (bytes.length < header.length) return false;
     for (var i = 0; i < header.length; i++) {
@@ -688,7 +688,7 @@ class ImportService {
     return true;
   }
 
-  static bool _looksLikeZip(List<int> bytes) =>
+  static bool looksLikeZip(List<int> bytes) =>
       bytes.length >= 4 &&
       bytes[0] == 0x50 &&
       bytes[1] == 0x4B &&
