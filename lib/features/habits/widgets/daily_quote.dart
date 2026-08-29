@@ -30,6 +30,7 @@ class DailyQuote extends StatefulWidget {
       switch (s.quoteSource) {
         1 => s.customQuotes,
         2 => [...appQuotes(context), ...s.customQuotes],
+        3 => const [],
         _ => appQuotes(context),
       };
 

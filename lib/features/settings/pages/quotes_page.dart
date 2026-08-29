@@ -23,6 +23,7 @@ class QuotesPage extends StatelessWidget {
         context.l10n.quotes_app,
         context.l10n.quotes_mine,
         context.l10n.quotes_both,
+        context.l10n.quotes_off,
       ];
 
   Future<void> _add(BuildContext context) async {

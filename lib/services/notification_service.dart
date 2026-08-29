@@ -193,9 +193,12 @@ class NotificationService {
   String _bodyFor(Habit habit, Reminder? reminder, AppLocalizations strings) {
     final lang = LocalStore.setting('locale', '') == 'es' ? 'es' : 'en';
     final message = reminder?.message.trim() ?? '';
-    var body = message.isNotEmpty ? message : MotivationalQuotes.random(lang);
+    final quotesOff = LocalStore.setting('quoteSource', 0) == 3;
+    var body = message.isNotEmpty
+        ? message
+        : (quotesOff ? '' : MotivationalQuotes.random(lang));
     final name = LocalStore.setting('profileName', '').trim();
-    if (name.isNotEmpty) {
+    if (name.isNotEmpty && body.isNotEmpty) {
       body = (lang == 'es' ? 'Hola $name, ' : 'Hi $name, ') + body;
     }
     final streak = habit.currentStreak;
