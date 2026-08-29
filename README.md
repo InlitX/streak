@@ -28,6 +28,7 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
   <img alt="Android" src="https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white" />
   <img alt="License GPLv3" src="https://img.shields.io/badge/License-GPLv3-7C3AED?style=flat&logo=gnu&logoColor=white" />
   <img alt="No ads, no tracking" src="https://img.shields.io/badge/No%20ads%20%C2%B7%20No%20tracking-22C55E?style=flat&logo=shield&logoColor=white" />
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/InlitX/streak/total?style=flat&logo=github&logoColor=white&label=Downloads&color=7C3AED" />
 </p>
 <a href="https://trendshift.io/repositories/79460?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-79460" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/79460" alt="InlitX%2Fstreak | Trendshift" width="250" height="55"/></a>
 
