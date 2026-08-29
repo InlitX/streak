@@ -15,6 +15,53 @@ FocusController _controller() {
 void main() {
   useEmptyStore();
 
+  group('coming back to a saved session', () {
+    Future<void> save({
+      required int acc,
+      required String since,
+      bool open = true,
+    }) =>
+        LocalStore.writeSetting('focusActive', {
+          'habitId': 'h1',
+          'target': 25,
+          'focus': 25,
+          'break': 0,
+          'isBreak': false,
+          'round': 1,
+          'acc': acc,
+          'since': since,
+          'open': open,
+        });
+
+    test('one that was left paused at zero is dropped, not restored', () async {
+      await save(acc: 0, since: '');
+      expect(_controller().isActive, isFalse);
+    });
+
+    test('one with time on the clock is restored', () async {
+      await save(acc: 300, since: '');
+      final focus = _controller();
+      expect(focus.isActive, isTrue);
+      expect(focus.elapsedSeconds, 300);
+    });
+
+    test('one still running is restored', () async {
+      await save(acc: 0, since: DateTime.now().toIso8601String());
+      expect(_controller().isActive, isTrue);
+    });
+
+    test('a dropped one does not block starting another habit', () async {
+      await save(acc: 0, since: '');
+      final focus = _controller();
+      expect(focus.isActive, isFalse);
+
+      focus.start(habitId: 'h2', targetMinutes: 45);
+      expect(focus.isActive, isTrue);
+      expect(focus.habitId, 'h2');
+      expect(focus.targetSeconds, 2700);
+    });
+  });
+
   group('countdown', () {
     test('a timed session keeps its target and counts down', () {
       final focus = _controller();

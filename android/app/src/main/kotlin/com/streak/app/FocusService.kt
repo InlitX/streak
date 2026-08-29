@@ -95,8 +95,13 @@ class FocusService : Service() {
             if (running) {
                 setViewVisibility(R.id.focus_clock, View.VISIBLE)
                 setViewVisibility(R.id.focus_frozen, View.GONE)
-                val offset = seconds * 1000L
-                val base = SystemClock.elapsedRealtime() + if (countDown) offset else -offset
+                val anchor = state.optLong("anchor", 0L)
+                val base = if (anchor > 0L) {
+                    SystemClock.elapsedRealtime() + (anchor - System.currentTimeMillis())
+                } else {
+                    val offset = seconds * 1000L
+                    SystemClock.elapsedRealtime() + if (countDown) offset else -offset
+                }
                 setChronometer(R.id.focus_clock, base, null, true)
                 setChronometerCountDown(R.id.focus_clock, countDown)
             } else {

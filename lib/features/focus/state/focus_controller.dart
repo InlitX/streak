@@ -39,6 +39,10 @@ class FocusController extends ChangeNotifier {
     _since = since.isEmpty ? null : DateTime.tryParse(since);
     _open = (map['open'] ?? false) as bool;
     if (!_open) return;
+    if (_since == null && _accumulated <= 0) {
+      _open = false;
+      return;
+    }
     if (isRunning) _startTicker();
     _sync();
   }
@@ -317,6 +321,13 @@ class FocusController extends ChangeNotifier {
     _ticker = null;
   }
 
+  int get _anchorMs {
+    final since = _since;
+    if (since == null) return 0;
+    final began = since.millisecondsSinceEpoch - _accumulated * 1000;
+    return isFlow ? began : began + targetSeconds * 1000 + 999;
+  }
+
   Future<void> _sync() async {
     try {
       if (!_open) {
@@ -353,6 +364,7 @@ class FocusController extends ChangeNotifier {
         done: done,
         countDown: !isFlow,
         seconds: displaySeconds,
+        anchor: _anchorMs,
         channelName: strings.focus_notif_channel,
         pauseLabel: strings.focus_pause,
         resumeLabel: strings.focus_resume,

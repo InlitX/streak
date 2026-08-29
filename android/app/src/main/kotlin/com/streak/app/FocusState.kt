@@ -43,7 +43,8 @@ object FocusState {
         state.put("done", arguments["done"] as? Boolean ?: false)
         state.put("countDown", countDown)
         state.put("frozen", seconds)
-        state.put("anchor", anchorFor(countDown, seconds))
+        val sent = (arguments["anchor"] as? Number)?.toLong() ?: 0L
+        state.put("anchor", if (sent > 0L) sent else anchorFor(countDown, seconds))
         return state
     }
 
