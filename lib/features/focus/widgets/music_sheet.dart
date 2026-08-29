@@ -8,6 +8,7 @@ import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -19,7 +20,9 @@ List<FocusTrack> focusTracksOf(BuildContext context, SettingsController s) => [
         if (FocusTrack.decode(raw) != null) FocusTrack.decode(raw)!,
     ];
 
-Future<void> showMusicSheet(BuildContext context) {
+Future<void> showMusicSheet(BuildContext context) async {
+  await context.read<SettingsController>().pruneFocusTracks();
+  if (!context.mounted) return;
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -54,7 +57,9 @@ class _MusicSheet extends StatelessWidget {
       AppSnackbar.warning(context, context.l10n.focus_track_too_long);
       return;
     }
-    await settings.addFocusTrack('${file.path}|${file.name}');
+    final kept = await FocusTrack.store(file.path!);
+    await CoverStorage.clearPickerCache();
+    await settings.addFocusTrack('$kept|${file.name}');
   }
 
   @override

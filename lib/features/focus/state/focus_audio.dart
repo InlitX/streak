@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 
 class FocusTrack {
   const FocusTrack({
@@ -30,6 +31,29 @@ class FocusTrack {
       name: raw.substring(index + 1),
       asset: false,
     );
+  }
+
+  static const _folder = 'tracks';
+
+  static Future<String> store(String source) async {
+    final dir = Directory('${(await appDataDir()).path}/$_folder');
+    if (!dir.existsSync()) dir.createSync(recursive: true);
+    final found = source.split('.').last.toLowerCase();
+    final extension = FocusAudio.trackExtensions.contains(found) ? found : 'mp3';
+    final dest = '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.$extension';
+    await File(source).copy(dest);
+    return dest;
+  }
+
+  static Future<void> forget(String path) async {
+    try {
+      final root = (await appDataDir()).path.replaceAll(r'\', '/');
+      if (!path.replaceAll(r'\', '/').startsWith('$root/$_folder/')) return;
+      final file = File(path);
+      if (file.existsSync()) await file.delete();
+    } catch (e) {
+      debugPrint('Could not delete the track: $e');
+    }
   }
 }
 

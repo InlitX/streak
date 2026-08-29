@@ -5,6 +5,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/utils/money_format.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
+import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/home_widget_service.dart';
@@ -67,6 +68,7 @@ class SettingsController extends ChangeNotifier {
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
+    _trackingOption = LocalStore.setting('trackingOption', false);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
         List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
@@ -133,6 +135,7 @@ class SettingsController extends ChangeNotifier {
   late bool _sortCompletedLast;
   late bool _todayOnly;
   late bool _notesEnabled;
+  late bool _trackingOption;
   late int _quoteSource;
   late List<String> _customQuotes;
   late bool _focusEnabled;
@@ -477,6 +480,16 @@ class SettingsController extends ChangeNotifier {
   Future<void> removeFocusTrack(String encoded) async {
     _focusTracks = _focusTracks.where((t) => t != encoded).toList();
     await LocalStore.writeSetting('focusTracks', _focusTracks);
+    await FocusTrack.forget(encoded.split('|').first);
+    notifyListeners();
+  }
+
+  Future<void> pruneFocusTracks() async {
+    final alive =
+        _focusTracks.where((t) => FocusTrack.decode(t) != null).toList();
+    if (alive.length == _focusTracks.length) return;
+    _focusTracks = alive;
+    await LocalStore.writeSetting('focusTracks', _focusTracks);
     notifyListeners();
   }
 
@@ -489,6 +502,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setNotesEnabled(bool value) async {
     _notesEnabled = value;
     await LocalStore.writeSetting('notesEnabled', value);
+    notifyListeners();
+  }
+
+  bool get trackingOption => _trackingOption;
+
+  Future<void> setTrackingOption(bool value) async {
+    _trackingOption = value;
+    await LocalStore.writeSetting('trackingOption', value);
     notifyListeners();
   }
 
