@@ -328,6 +328,7 @@ class _Toggle extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.subtitle,
+    this.enabled = true,
   });
 
   final IconData icon;
@@ -335,16 +336,19 @@ class _Toggle extends StatelessWidget {
   final String? subtitle;
   final bool value;
   final ValueChanged<bool> onChanged;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return ExpressTile(
+    final tile = ExpressTile(
       icon: icon,
       title: title,
       subtitle: subtitle,
       onTap: () => onChanged(!value),
       trailing: ExpressSwitch(value: value, onChanged: onChanged),
     );
+    if (enabled) return tile;
+    return IgnorePointer(child: Opacity(opacity: 0.45, child: tile));
   }
 }
 
@@ -368,6 +372,7 @@ List<Widget> _appearanceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.sunMoon,
           title: context.l10n.theme,
+          subtitle: context.l10n.theme_sub,
           value: themes[settings.themeMode.index],
           onTap: () => showOptionSheet(
             context,
@@ -380,6 +385,7 @@ List<Widget> _appearanceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.palette,
           title: context.l10n.accent_color,
+          subtitle: context.l10n.accent_color_sub,
           trailing: ExpressBlob(
             size: 26,
             color: settings.accentColor,
@@ -390,6 +396,7 @@ List<Widget> _appearanceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.image,
           title: context.l10n.app_background,
+          subtitle: context.l10n.app_background_sub,
           value: SettingsActions.backgroundLabel(
             context,
             settings.appBackground,
@@ -399,6 +406,7 @@ List<Widget> _appearanceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.squareCheck,
           title: context.l10n.check_style,
+          subtitle: context.l10n.check_style_sub,
           value: checks[settings.checkStyle],
           onTap: () => showOptionSheet(
             context,
@@ -412,6 +420,7 @@ List<Widget> _appearanceTiles(BuildContext context) {
           ExpressTile(
             icon: LucideIcons.appWindow,
             title: context.l10n.app_icon,
+            subtitle: context.l10n.app_icon_sub,
             value: icons[settings.appIcon],
             onTap: () => showOptionSheet(
               context,
@@ -442,12 +451,14 @@ List<Widget> _preferenceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.languages,
           title: context.l10n.language,
+          subtitle: context.l10n.language_sub,
           value: SettingsActions.languageLabel(context, settings.localeCode),
           onTap: () => showLanguageSheet(context),
         ),
         ExpressTile(
           icon: LucideIcons.calendarDays,
           title: context.l10n.week_starts_on,
+          subtitle: context.l10n.week_start_sub,
           value: weekDays[weekIndex],
           onTap: () => showOptionSheet(
             context,
@@ -466,6 +477,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.moon,
           title: context.l10n.day_start,
+          subtitle: context.l10n.day_start_sub,
           value: SettingsActions.dayStartLabels(context)[settings.dayCutoff],
           onTap: () => showOptionSheet(
             context,
@@ -478,6 +490,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.sparkles,
           title: context.l10n.celebration,
+          subtitle: context.l10n.celebration_sub,
           value: SettingsActions.celebrationLabels(
             context,
           )[settings.celebration.index],
@@ -498,6 +511,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.house,
           title: context.l10n.start_view,
+          subtitle: context.l10n.start_view_sub,
           value: SettingsActions.startViewLabels(context)[settings.startView],
           onTap: () => showOptionSheet(
             context,
@@ -508,21 +522,26 @@ List<Widget> _preferenceTiles(BuildContext context) {
           ),
         ),
         _Toggle(
-          icon: LucideIcons.layoutList,
-          title: context.l10n.view_switcher,
-          subtitle: context.l10n.view_switcher_sub,
-          value: settings.viewSwitcher,
-          onChanged: settings.setViewSwitcher,
-        ),
-        _Toggle(
           icon: LucideIcons.layoutGrid,
           title: context.l10n.card_activity,
+          subtitle: context.l10n.card_activity_sub,
           value: settings.cardActivity,
           onChanged: settings.setCardActivity,
         ),
         _Toggle(
+          icon: LucideIcons.layoutList,
+          title: context.l10n.view_switcher,
+          subtitle: settings.cardActivity
+              ? context.l10n.view_switcher_sub
+              : context.l10n.view_switcher_needs,
+          enabled: settings.cardActivity,
+          value: settings.viewSwitcher,
+          onChanged: settings.setViewSwitcher,
+        ),
+        _Toggle(
           icon: LucideIcons.arrowDownWideNarrow,
           title: context.l10n.sort_completed_last,
+          subtitle: context.l10n.sort_completed_last_sub,
           value: settings.sortCompletedLast,
           onChanged: settings.setSortCompletedLast,
         ),
@@ -536,6 +555,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
         _Toggle(
           icon: LucideIcons.calendarCheck,
           title: context.l10n.today_only,
+          subtitle: context.l10n.today_only_sub,
           value: settings.todayOnly,
           onChanged: settings.setTodayOnly,
         ),
@@ -556,6 +576,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
           ExpressTile(
             icon: LucideIcons.target,
             title: context.l10n.focus_daily_goal,
+            subtitle: context.l10n.focus_daily_goal_sub,
             value: settings.focusDailyGoal == 0
                 ? context.l10n.off
                 : context.l10n.minutes_short('${settings.focusDailyGoal}'),
@@ -591,9 +612,17 @@ List<Widget> _preferenceTiles(BuildContext context) {
           value: settings.planningEnabled,
           onChanged: settings.setPlanningEnabled,
         ),
+        _Toggle(
+          icon: LucideIcons.activity,
+          title: context.l10n.just_tracking_option,
+          subtitle: context.l10n.just_tracking_option_sub,
+          value: settings.trackingOption,
+          onChanged: settings.setTrackingOption,
+        ),
         ExpressTile(
           icon: LucideIcons.quote,
           title: context.l10n.quotes,
+          subtitle: context.l10n.quotes_sub,
           onTap: () => AppNavigator.push(const QuotesPage()),
         ),
       ],
@@ -605,6 +634,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
         _Toggle(
           icon: LucideIcons.fingerprint,
           title: context.l10n.app_lock,
+          subtitle: context.l10n.app_lock_sub,
           value: settings.appLock,
           onChanged: (v) => SettingsActions.toggleAppLock(context, v),
         ),
@@ -612,6 +642,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
           ExpressTile(
             icon: LucideIcons.timer,
             title: context.l10n.app_lock_delay,
+            subtitle: context.l10n.app_lock_delay_sub,
             value: SettingsActions.appLockDelayLabels(
               context,
             )[SettingsActions.appLockDelayIndex(settings.appLockDelay)],
@@ -658,6 +689,13 @@ List<Widget> _dataTiles(BuildContext context) {
           subtitle: SettingsActions.autoBackupSubtitle(context),
           onTap: () => SettingsActions.pickAutoBackup(context),
         ),
+        if (SettingsActions.canRefresh(context))
+          ExpressTile(
+            icon: LucideIcons.refreshCw,
+            title: context.l10n.refresh_now,
+            subtitle: context.l10n.refresh_now_sub,
+            onTap: () => SettingsActions.refreshFolder(context),
+          ),
         ExpressTile(
           icon: LucideIcons.archive,
           title: context.l10n.archived_habits,
@@ -695,16 +733,19 @@ List<Widget> _supportTiles(BuildContext context) {
         ExpressTile(
           icon: LucideIcons.star,
           title: context.l10n.github_star_row,
+          subtitle: context.l10n.github_star_sub,
           onTap: () => SettingsActions.openUrl(context, kGitHubUrl),
         ),
         ExpressTile(
           icon: LucideIcons.coffee,
           title: context.l10n.buy_coffee,
+          subtitle: context.l10n.buy_coffee_sub,
           onTap: () => SettingsActions.openUrl(context, kCoffeeUrl),
         ),
         ExpressTile(
           icon: LucideIcons.messageSquare,
           title: context.l10n.report_issue,
+          subtitle: context.l10n.report_issue_sub,
           onTap: () => SettingsActions.openUrl(context, '$kIssuesUrl/new'),
         ),
       ],

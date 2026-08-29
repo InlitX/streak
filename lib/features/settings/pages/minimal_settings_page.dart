@@ -244,6 +244,7 @@ class _AppearancePage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.sunMoon,
               title: context.l10n.theme,
+              subtitle: context.l10n.theme_sub,
               value: [
                 context.l10n.system,
                 context.l10n.light,
@@ -264,6 +265,7 @@ class _AppearancePage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.palette,
               title: context.l10n.accent_color,
+              subtitle: context.l10n.accent_color_sub,
               trailing: Container(
                 width: 20,
                 height: 20,
@@ -277,6 +279,7 @@ class _AppearancePage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.image,
               title: context.l10n.app_background,
+              subtitle: context.l10n.app_background_sub,
               value: SettingsActions.backgroundLabel(
                 context,
                 settings.appBackground,
@@ -286,6 +289,7 @@ class _AppearancePage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.squareCheck,
               title: context.l10n.check_style,
+              subtitle: context.l10n.check_style_sub,
               value: [
                 context.l10n.square,
                 context.l10n.circle,
@@ -302,6 +306,7 @@ class _AppearancePage extends StatelessWidget {
               SoftRow(
                 icon: LucideIcons.appWindow,
                 title: context.l10n.app_icon,
+                subtitle: context.l10n.app_icon_sub,
                 value: [
                   context.l10n.icon_default,
                   context.l10n.icon_neutral,
@@ -345,12 +350,14 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.languages,
               title: context.l10n.language,
+              subtitle: context.l10n.language_sub,
               value: SettingsActions.languageLabel(context, settings.localeCode),
               onTap: () => showLanguageSheet(context),
             ),
             SoftRow(
               icon: LucideIcons.calendarDays,
               title: context.l10n.week_starts_on,
+              subtitle: context.l10n.week_start_sub,
               value: [
                 context.l10n.mon,
                 context.l10n.sat,
@@ -373,6 +380,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.moon,
               title: context.l10n.day_start,
+              subtitle: context.l10n.day_start_sub,
               value: SettingsActions.dayStartLabels(context)[settings.dayCutoff],
               onTap: () => showOptionSheet(
                 context,
@@ -385,6 +393,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.sparkles,
               title: context.l10n.celebration,
+              subtitle: context.l10n.celebration_sub,
               value: SettingsActions.celebrationLabels(context)[
                   settings.celebration.index],
               onTap: () => showOptionSheet(
@@ -404,6 +413,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.house,
               title: context.l10n.start_view,
+              subtitle: context.l10n.start_view_sub,
               value:
                   SettingsActions.startViewLabels(context)[settings.startView],
               onTap: () => showOptionSheet(
@@ -435,6 +445,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.arrowDownWideNarrow,
               title: context.l10n.sort_completed_last,
+              subtitle: context.l10n.sort_completed_last_sub,
               trailing: _SoftSwitch(
                 value: settings.sortCompletedLast,
                 onChanged: settings.setSortCompletedLast,
@@ -452,6 +463,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.calendarCheck,
               title: context.l10n.today_only,
+              subtitle: context.l10n.today_only_sub,
               trailing: _SoftSwitch(
                 value: settings.todayOnly,
                 onChanged: settings.setTodayOnly,
@@ -499,6 +511,15 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: settings.setPlanningEnabled,
               ),
             ),
+            SoftRow(
+              icon: LucideIcons.activity,
+              title: context.l10n.just_tracking_option,
+              subtitle: context.l10n.just_tracking_option_sub,
+              trailing: _SoftSwitch(
+                value: settings.trackingOption,
+                onChanged: settings.setTrackingOption,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 22),
@@ -508,6 +529,7 @@ class _PreferencesPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.fingerprint,
               title: context.l10n.app_lock,
+              subtitle: context.l10n.app_lock_sub,
               trailing: _SoftSwitch(
                 value: settings.appLock,
                 onChanged: (v) => SettingsActions.toggleAppLock(context, v),
@@ -517,6 +539,7 @@ class _PreferencesPage extends StatelessWidget {
               SoftRow(
                 icon: LucideIcons.timer,
                 title: context.l10n.app_lock_delay,
+                subtitle: context.l10n.app_lock_delay_sub,
                 value: SettingsActions.appLockDelayLabels(context)[
                     SettingsActions.appLockDelayIndex(settings.appLockDelay)],
                 onTap: () => showOptionSheet(
@@ -589,6 +612,13 @@ class _DataPage extends StatelessWidget {
               subtitle: SettingsActions.autoBackupSubtitle(context),
               onTap: () => SettingsActions.pickAutoBackup(context),
             ),
+            if (SettingsActions.canRefresh(context))
+              SoftRow(
+                icon: LucideIcons.refreshCw,
+                title: context.l10n.refresh_now,
+                subtitle: context.l10n.refresh_now_sub,
+                onTap: () => SettingsActions.refreshFolder(context),
+              ),
             SoftRow(
               icon: LucideIcons.archive,
               title: context.l10n.archived_habits,
@@ -634,16 +664,19 @@ class _SupportPage extends StatelessWidget {
             SoftRow(
               icon: LucideIcons.star,
               title: context.l10n.github_star_row,
+              subtitle: context.l10n.github_star_sub,
               onTap: () => SettingsActions.openUrl(context, kGitHubUrl),
             ),
             SoftRow(
               icon: LucideIcons.coffee,
               title: context.l10n.buy_coffee,
+              subtitle: context.l10n.buy_coffee_sub,
               onTap: () => SettingsActions.openUrl(context, kCoffeeUrl),
             ),
             SoftRow(
               icon: LucideIcons.messageSquare,
               title: context.l10n.report_issue,
+              subtitle: context.l10n.report_issue_sub,
               onTap: () => SettingsActions.openUrl(context, '$kIssuesUrl/new'),
             ),
           ],

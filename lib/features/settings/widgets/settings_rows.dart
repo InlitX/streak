@@ -38,24 +38,43 @@ class SettingRow extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.trailing,
+    this.subtitle,
+    this.enabled = true,
   });
 
   final IconData icon;
   final String title;
+  final String? subtitle;
   final Widget trailing;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final row = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           IconBadge(icon: icon),
           const SizedBox(width: 14),
           Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: TextStyle(fontSize: 13, color: context.tokens.muted),
+                  ),
+                ],
+              ],
             ),
           ),
           const SizedBox(width: 12),
@@ -63,6 +82,8 @@ class SettingRow extends StatelessWidget {
         ],
       ),
     );
+    if (enabled) return row;
+    return IgnorePointer(child: Opacity(opacity: 0.45, child: row));
   }
 }
 
@@ -73,6 +94,7 @@ class NavRow extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.subtitle,
+    this.value,
     this.badge,
     this.tint,
   });
@@ -80,6 +102,7 @@ class NavRow extends StatelessWidget {
   final IconData icon;
   final String title;
   final String? subtitle;
+  final String? value;
   final VoidCallback onTap;
   final String? badge;
   final Color? tint;
@@ -106,8 +129,23 @@ class NavRow extends StatelessWidget {
       subtitle: subtitle == null
           ? null
           : Text(subtitle!, style: TextStyle(color: context.tokens.muted)),
-      trailing:
-          Icon(LucideIcons.chevronRight, size: 18, color: context.tokens.muted),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (value != null)
+            Text(
+              value!,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: context.tokens.muted,
+              ),
+            ),
+          const SizedBox(width: 6),
+          Icon(LucideIcons.chevronRight,
+              size: 18, color: context.tokens.muted),
+        ],
+      ),
       onTap: onTap,
     );
   }
@@ -146,10 +184,12 @@ class LinkRow extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.onTap,
+    this.subtitle,
   });
 
   final IconData icon;
   final String title;
+  final String? subtitle;
   final VoidCallback onTap;
 
   @override
@@ -162,6 +202,9 @@ class LinkRow extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
+      subtitle: subtitle == null
+          ? null
+          : Text(subtitle!, style: TextStyle(color: context.tokens.muted)),
       trailing:
           Icon(LucideIcons.chevronRight, size: 18, color: context.tokens.muted),
       onTap: onTap,
@@ -176,12 +219,14 @@ class PickerRow extends StatelessWidget {
     required this.title,
     required this.value,
     required this.onTap,
+    this.subtitle,
     this.trailing,
   });
 
   final IconData icon;
   final String title;
   final String? value;
+  final String? subtitle;
   final VoidCallback onTap;
   final Widget? trailing;
 
@@ -198,10 +243,27 @@ class PickerRow extends StatelessWidget {
               IconBadge(icon: icon),
               const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  title,
-                  style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: context.tokens.muted,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
               if (value != null)

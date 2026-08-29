@@ -170,6 +170,7 @@ class _ClassicAppearancePage extends StatelessWidget {
         SettingRow(
           icon: LucideIcons.sunMoon,
           title: context.l10n.theme,
+          subtitle: context.l10n.theme_sub,
           trailing: Segmented(
             options: [
               context.l10n.system,
@@ -184,6 +185,7 @@ class _ClassicAppearancePage extends StatelessWidget {
         PickerRow(
           icon: LucideIcons.palette,
           title: context.l10n.accent_color,
+          subtitle: context.l10n.accent_color_sub,
           value: null,
           trailing: _AccentDot(color: settings.accentColor),
           onTap: () => showAccentSheet(context),
@@ -192,6 +194,7 @@ class _ClassicAppearancePage extends StatelessWidget {
         PickerRow(
           icon: LucideIcons.image,
           title: context.l10n.app_background,
+          subtitle: context.l10n.app_background_sub,
           value: SettingsActions.backgroundLabel(
             context,
             settings.appBackground,
@@ -202,6 +205,7 @@ class _ClassicAppearancePage extends StatelessWidget {
         SettingRow(
           icon: LucideIcons.squareCheck,
           title: context.l10n.check_style,
+          subtitle: context.l10n.check_style_sub,
           trailing: Segmented(
             options: [context.l10n.square, context.l10n.circle],
             index: settings.checkStyle,
@@ -213,6 +217,7 @@ class _ClassicAppearancePage extends StatelessWidget {
           SettingRow(
             icon: LucideIcons.appWindow,
             title: context.l10n.app_icon,
+            subtitle: context.l10n.app_icon_sub,
             trailing: Segmented(
               options: [
                 context.l10n.icon_default,
@@ -250,6 +255,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   PickerRow(
                     icon: LucideIcons.languages,
                     title: context.l10n.language,
+                    subtitle: context.l10n.language_sub,
                     value: SettingsActions.languageLabel(
                       context,
                       settings.localeCode,
@@ -260,6 +266,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.calendarDays,
                     title: context.l10n.week_starts_on,
+                    subtitle: context.l10n.week_start_sub,
                     trailing: Segmented(
                       options: [
                         context.l10n.mon,
@@ -284,7 +291,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   NavRow(
                     icon: LucideIcons.moon,
                     title: context.l10n.day_start,
-                    subtitle: SettingsActions.dayStartLabels(
+                    subtitle: context.l10n.day_start_sub,
+                    value: SettingsActions.dayStartLabels(
                       context,
                     )[settings.dayCutoff],
                     onTap: () => showOptionSheet(
@@ -299,7 +307,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   NavRow(
                     icon: LucideIcons.sparkles,
                     title: context.l10n.celebration,
-                    subtitle: SettingsActions.celebrationLabels(
+                    subtitle: context.l10n.celebration_sub,
+                    value: SettingsActions.celebrationLabels(
                       context,
                     )[settings.celebration.index],
                     onTap: () => showOptionSheet(
@@ -324,7 +333,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   NavRow(
                     icon: LucideIcons.house,
                     title: context.l10n.start_view,
-                    subtitle: SettingsActions.startViewLabels(
+                    subtitle: context.l10n.start_view_sub,
+                    value: SettingsActions.startViewLabels(
                       context,
                     )[settings.startView],
                     onTap: () => showOptionSheet(
@@ -337,18 +347,9 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
-                    icon: LucideIcons.layoutList,
-                    title: context.l10n.view_switcher,
-                    trailing: Segmented(
-                      options: [context.l10n.off, context.l10n.on],
-                      index: settings.viewSwitcher ? 1 : 0,
-                      onChanged: (i) => settings.setViewSwitcher(i == 1),
-                    ),
-                  ),
-                  settingsDivider(context),
-                  SettingRow(
                     icon: LucideIcons.layoutGrid,
                     title: context.l10n.card_activity,
+                    subtitle: context.l10n.card_activity_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.cardActivity ? 1 : 0,
@@ -357,8 +358,23 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.layoutList,
+                    title: context.l10n.view_switcher,
+                    subtitle: settings.cardActivity
+                        ? context.l10n.view_switcher_sub
+                        : context.l10n.view_switcher_needs,
+                    enabled: settings.cardActivity,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.viewSwitcher ? 1 : 0,
+                      onChanged: (i) => settings.setViewSwitcher(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.route,
                     title: context.l10n.heatmap_path,
+                    subtitle: context.l10n.heatmap_path_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.heatmapPath ? 1 : 0,
@@ -369,6 +385,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.arrowDownWideNarrow,
                     title: context.l10n.sort_completed_last,
+                    subtitle: context.l10n.sort_completed_last_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.sortCompletedLast ? 1 : 0,
@@ -379,6 +396,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.palmtree,
                     title: context.l10n.vacation_all,
+                    subtitle: context.l10n.vacation_all_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.vacationAll ? 1 : 0,
@@ -389,6 +407,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.calendarCheck,
                     title: context.l10n.today_only,
+                    subtitle: context.l10n.today_only_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.todayOnly ? 1 : 0,
@@ -409,6 +428,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.timer,
                     title: context.l10n.focus,
+                    subtitle: context.l10n.focus_enable_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.focusEnabled ? 1 : 0,
@@ -420,6 +440,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     PickerRow(
                       icon: LucideIcons.target,
                       title: context.l10n.focus_daily_goal,
+                      subtitle: context.l10n.focus_daily_goal_sub,
                       value: settings.focusDailyGoal == 0
                           ? context.l10n.off
                           : context.l10n.minutes_short(
@@ -443,6 +464,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.notebookPen,
                     title: context.l10n.notes,
+                    subtitle: context.l10n.notes_enable_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.notesEnabled ? 1 : 0,
@@ -453,6 +475,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.listChecks,
                     title: context.l10n.todos,
+                    subtitle: context.l10n.todos_enable_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.todosEnabled ? 1 : 0,
@@ -463,6 +486,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.calendarClock,
                     title: context.l10n.plan_day,
+                    subtitle: context.l10n.plan_day_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.planningEnabled ? 1 : 0,
@@ -470,9 +494,21 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     ),
                   ),
                   settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.activity,
+                    title: context.l10n.just_tracking_option,
+                    subtitle: context.l10n.just_tracking_option_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.trackingOption ? 1 : 0,
+                      onChanged: (i) => settings.setTrackingOption(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
                   NavRow(
                     icon: LucideIcons.quote,
                     title: context.l10n.quotes,
+                    subtitle: context.l10n.quotes_sub,
                     onTap: () => AppNavigator.push(const QuotesPage()),
                   ),
                 ],
@@ -489,6 +525,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   SettingRow(
                     icon: LucideIcons.fingerprint,
                     title: context.l10n.app_lock,
+                    subtitle: context.l10n.app_lock_sub,
                     trailing: Segmented(
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.appLock ? 1 : 0,
@@ -501,7 +538,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     NavRow(
                       icon: LucideIcons.timer,
                       title: context.l10n.app_lock_delay,
-                      subtitle: SettingsActions.appLockDelayLabels(context)[
+                      subtitle: context.l10n.app_lock_delay_sub,
+                      value: SettingsActions.appLockDelayLabels(context)[
                           SettingsActions.appLockDelayIndex(
                               settings.appLockDelay)],
                       onTap: () => showOptionSheet(
@@ -564,6 +602,15 @@ class _ClassicDataPage extends StatelessWidget {
           subtitle: SettingsActions.autoBackupSubtitle(context),
           onTap: () => SettingsActions.pickAutoBackup(context),
         ),
+        if (SettingsActions.canRefresh(context)) ...[
+          settingsDivider(context),
+          NavRow(
+            icon: LucideIcons.refreshCw,
+            title: context.l10n.refresh_now,
+            subtitle: context.l10n.refresh_now_sub,
+            onTap: () => SettingsActions.refreshFolder(context),
+          ),
+        ],
         settingsDivider(context),
         NavRow(
           icon: LucideIcons.archive,
@@ -610,18 +657,21 @@ class _ClassicSupportPage extends StatelessWidget {
         LinkRow(
           icon: LucideIcons.star,
           title: context.l10n.github_star_row,
+          subtitle: context.l10n.github_star_sub,
           onTap: () => SettingsActions.openUrl(context, kGitHubUrl),
         ),
         settingsDivider(context),
         LinkRow(
           icon: LucideIcons.coffee,
           title: context.l10n.buy_coffee,
+          subtitle: context.l10n.buy_coffee_sub,
           onTap: () => SettingsActions.openUrl(context, kCoffeeUrl),
         ),
         settingsDivider(context),
         LinkRow(
           icon: LucideIcons.messageSquare,
           title: context.l10n.report_issue,
+          subtitle: context.l10n.report_issue_sub,
           onTap: () => SettingsActions.openUrl(context, '$kIssuesUrl/new'),
         ),
       ],
