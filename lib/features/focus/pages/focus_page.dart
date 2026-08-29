@@ -193,12 +193,19 @@ class _FocusPageState extends State<FocusPage> {
 
     if (session != null) {
       final target = habitId.isEmpty ? null : habits.byId(habitId);
-      if (completed &&
+      if (target != null && target.isTimeAmount) {
+        await habits.addProgress(
+          target.id,
+          DateTime.now(),
+          session.seconds / 60,
+        );
+      } else if (completed &&
           target != null &&
           target.kind == HabitKind.positive &&
           !target.isCompletedOn(DateTime.now())) {
         habits.toggle(target.id, DateTime.now(), fromFocus: true);
       }
+      if (!mounted) return;
       AppSnackbar.success(
         context,
         context.l10n.focus_saved(formatHoursShort(session.seconds)),

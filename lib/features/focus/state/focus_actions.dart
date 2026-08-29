@@ -15,12 +15,18 @@ Future<void> applyFocusAction(FocusAction action) async {
   final habits = context.read<HabitsController>();
   final habitId = focus.habitId;
   final session = await focus.apply(action);
-  if (session == null || !session.completed || habitId.isEmpty) return;
+  if (session == null || habitId.isEmpty) return;
 
   final habit = habits.byId(habitId);
-  if (habit == null || habit.kind != HabitKind.positive) return;
+  if (habit == null) return;
 
   final today = DateTime.now();
+  if (habit.isTimeAmount) {
+    await habits.addProgress(habit.id, today, session.seconds / 60);
+    return;
+  }
+
+  if (!session.completed || habit.kind != HabitKind.positive) return;
   if (habit.isCompletedOn(today)) return;
   habits.toggle(habit.id, today, fromFocus: true);
 }
