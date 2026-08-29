@@ -22,7 +22,6 @@ import androidx.glance.text.TextStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.action.clickable
-import androidx.glance.action.actionStartActivity
 import androidx.glance.unit.ColorProvider
 import org.json.JSONObject
 
@@ -59,7 +58,7 @@ class StatsWidget : GlanceAppWidget() {
                 modifier = GlanceModifier
                     .fillMaxSize()
                     .padding(pad.dp)
-                    .clickable(actionStartActivity<MainActivity>()),
+                    .clickable(openPageAction(context, "stats")),
                 verticalAlignment = Alignment.Top,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

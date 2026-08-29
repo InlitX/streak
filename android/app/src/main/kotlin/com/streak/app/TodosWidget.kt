@@ -15,7 +15,6 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.background
 import androidx.glance.currentState
@@ -70,7 +69,7 @@ class TodosWidget : GlanceAppWidget() {
                 modifier = GlanceModifier
                     .fillMaxSize()
                     .padding(16.dp)
-                    .clickable(actionStartActivity<MainActivity>())
+                    .clickable(openPageAction(context, "todos"))
             ) {
                 Text(
                     text = WidgetText.format(
@@ -165,7 +164,7 @@ class TodosWidget : GlanceAppWidget() {
                 maxLines = 1,
                 modifier = GlanceModifier
                     .defaultWeight()
-                    .clickable(actionStartActivity<MainActivity>()),
+                    .clickable(openPageAction(context, "todos")),
             )
             val label = if (done) "" else trailing(context, todo, overdue)
             if (label.isNotEmpty()) {

@@ -43,6 +43,7 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                     "consumeLaunchHabit" -> result.success(takeHabitId(intent))
                     "consumeLaunchFocus" -> result.success(takeFocusId(intent))
+                    "consumeLaunchPage" -> result.success(takePage(intent))
                     else -> result.notImplemented()
                 }
             }
@@ -83,12 +84,19 @@ class MainActivity : FlutterFragmentActivity() {
         setIntent(intent)
         takeHabitId(intent)?.let { channel?.invokeMethod("openHabit", it) }
         takeFocusId(intent)?.let { channel?.invokeMethod("startFocus", it) }
+        takePage(intent)?.let { channel?.invokeMethod("openPage", it) }
     }
 
     private fun takeHabitId(intent: Intent?): String? {
         val habitId = intent?.getStringExtra("openHabitId") ?: return null
         intent.removeExtra("openHabitId")
         return habitId
+    }
+
+    private fun takePage(intent: Intent?): String? {
+        val page = intent?.getStringExtra(EXTRA_OPEN_PAGE) ?: return null
+        intent.removeExtra(EXTRA_OPEN_PAGE)
+        return page
     }
 
     private fun takeFocusId(intent: Intent?): String? {
