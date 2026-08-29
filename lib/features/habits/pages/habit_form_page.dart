@@ -73,6 +73,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   double _quantIncrement = 1;
   String _bookCover = '';
   bool _focusOnly = false;
+  bool _tracking = false;
   int _focusMinutes = 25;
   bool _pomodoro = false;
   int _breakMinutes = 5;
@@ -84,9 +85,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   bool get _planning => context.watch<SettingsController>().planningEnabled;
 
+  bool get _offersTracking =>
+      _tracking || context.watch<SettingsController>().trackingOption;
+
   bool get _canSave {
     if (_name.text.trim().isEmpty) return false;
-    if (_kind == HabitKind.quantitative && _unitLabel.text.trim().isEmpty) {
+    if (_kind == HabitKind.quantitative &&
+        _quantKind != QuantKind.time &&
+        _unitLabel.text.trim().isEmpty) {
       return false;
     }
     if (_kind != HabitKind.negative &&
@@ -125,6 +131,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _quantIncrement = habit.incrementAmount;
       _bookCover = habit.bookCoverPath;
       _focusOnly = habit.focusOnly;
+      _tracking = habit.tracking;
       _focusMinutes = habit.focusMinutes;
       _pomodoro = habit.focusBreakMinutes > 0;
       if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
@@ -204,12 +211,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
           coverPath: _cover,
           dailyCost: dailyCost,
           perDayTarget: quantitative ? _quantTarget : widget.habit!.perDayTarget,
-          unitLabel: quantitative ? _unitLabel.text.trim() : widget.habit!.unitLabel,
+          unitLabel: quantitative ? _quantUnit : widget.habit!.unitLabel,
           incrementAmount:
               quantitative ? _quantIncrement : widget.habit!.incrementAmount,
           quantKind: quantitative ? _quantKind : widget.habit!.quantKind,
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
           focusOnly: focusOnly,
+          tracking: _tracking,
           focusMinutes: _focusMinutes,
           focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
           startMinute: negative ? -1 : _startMinute,
@@ -233,11 +241,12 @@ class _HabitFormPageState extends State<HabitFormPage> {
         kind: _kind,
         dailyCost: dailyCost,
         perDayTarget: quantitative ? _quantTarget : 1,
-        unitLabel: quantitative ? _unitLabel.text.trim() : '',
+        unitLabel: quantitative ? _quantUnit : '',
         incrementAmount: quantitative ? _quantIncrement : 1,
         quantKind: quantitative ? _quantKind : QuantKind.generic,
         bookCoverPath: quantitative ? _bookCover : '',
         focusOnly: focusOnly,
+        tracking: _tracking,
         focusMinutes: _focusMinutes,
         focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
         startMinute: negative ? -1 : _startMinute,
@@ -462,6 +471,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ),
         ],
       ],
+      if (_offersTracking) ...[
+        const SizedBox(height: 12),
+        TrackingToggle(
+          value: _tracking,
+          color: _color,
+          onChanged: (v) => setState(() => _tracking = v),
+        ),
+      ],
       const SizedBox(height: 26),
       SectionLabel(context.l10n.description),
       AppTextField(
@@ -644,17 +661,19 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   ],
                 ],
               ),
-              const SizedBox(height: 14),
-              AppTextField(
-                hint: context.l10n.quant_unit_hint,
-                controller: _unitLabel,
-                onChanged: (_) => setState(() {}),
-              ),
+              if (_quantKind != QuantKind.time) ...[
+                const SizedBox(height: 14),
+                AppTextField(
+                  hint: context.l10n.quant_unit_hint,
+                  controller: _unitLabel,
+                  onChanged: (_) => setState(() {}),
+                ),
+              ],
               const SizedBox(height: 10),
               CompactStepperRow(
                 label: context.l10n.quant_daily_goal,
                 value: _quantTarget,
-                unit: _unitLabel.text.trim(),
+                unit: _quantUnit,
                 step: _quantStep,
                 min: _quantStep,
                 editable: true,
@@ -665,7 +684,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
               CompactStepperRow(
                 label: context.l10n.quant_tap_amount,
                 value: _quantIncrement,
-                unit: _unitLabel.text.trim(),
+                unit: _quantUnit,
                 step: _quantStep,
                 min: _quantStep,
                 editable: true,
@@ -725,6 +744,15 @@ class _HabitFormPageState extends State<HabitFormPage> {
             onChanged: (list) => _substeps = list,
           ),
         ],
+      ],
+      if (_offersTracking) ...[
+        const SizedBox(height: 16),
+        TrackingToggle(
+          value: _tracking,
+          color: _color,
+          compact: true,
+          onChanged: (v) => setState(() => _tracking = v),
+        ),
       ],
       const SizedBox(height: 16),
       SectionLabel(context.l10n.icon),
@@ -831,6 +859,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
       CompactAddButton(label: context.l10n.add_reminder, onTap: _addReminder),
     ];
   }
+
+  String get _quantUnit => _quantKind == QuantKind.time
+      ? context.l10n.unit_min_short
+      : _unitLabel.text.trim();
 
   double get _quantStep => switch (_quantKind) {
         QuantKind.water => 50,
@@ -964,6 +996,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   onChanged: (list) => _substeps = list,
                 ),
               ],
+            ],
+            if (_offersTracking) ...[
+              const SizedBox(height: 20),
+              TrackingToggle(
+                value: _tracking,
+                color: _color,
+                onChanged: (v) => setState(() => _tracking = v),
+              ),
             ],
             const SizedBox(height: 20),
             SectionLabel(context.l10n.icon),

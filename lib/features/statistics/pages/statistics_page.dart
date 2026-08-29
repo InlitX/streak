@@ -77,8 +77,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
           if (_habitId != null && controller.byId(_habitId!) == null) {
             _habitId = null;
           }
-          final scoped =
-              _habitId == null ? all : [controller.byId(_habitId!)!];
+          final scoped = _habitId == null
+              ? HabitStats.counted(all)
+              : [controller.byId(_habitId!)!];
           final accent =
               _habitId == null ? context.colors.primary : scoped.first.color;
           final stats = _statsFor(scoped, all);

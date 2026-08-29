@@ -133,6 +133,9 @@ class HabitStats {
     return best;
   }
 
+  static List<Habit> counted(List<Habit> habits) =>
+      habits.where((h) => !h.tracking).toList();
+
   static HabitStats compute(List<Habit> habits, int year) {
     final daily = <String, int>{};
     final monthly = List<int>.filled(12, 0);

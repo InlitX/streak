@@ -79,7 +79,9 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
           if (_habitId != null && controller.byId(_habitId!) == null) {
             _habitId = null;
           }
-          final scoped = _habitId == null ? all : [controller.byId(_habitId!)!];
+          final scoped = _habitId == null
+              ? HabitStats.counted(all)
+              : [controller.byId(_habitId!)!];
           final habit = _habitId == null ? null : scoped.first;
           final accent = habit?.color ?? context.colors.primary;
           final stats = _statsFor(scoped, all);

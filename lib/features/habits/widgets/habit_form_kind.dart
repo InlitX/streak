@@ -229,6 +229,64 @@ class FocusOnlyToggle extends StatelessWidget {
   final bool compact;
 
   @override
+  Widget build(BuildContext context) => HabitFlagToggle(
+        icon: LucideIcons.timer,
+        title: context.l10n.focus_only,
+        hint: context.l10n.focus_only_hint,
+        value: value,
+        color: color,
+        onChanged: onChanged,
+        compact: compact,
+      );
+}
+
+class TrackingToggle extends StatelessWidget {
+  const TrackingToggle({
+    super.key,
+    required this.value,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final bool value;
+  final Color color;
+  final ValueChanged<bool> onChanged;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) => HabitFlagToggle(
+        icon: LucideIcons.activity,
+        title: context.l10n.just_tracking,
+        hint: context.l10n.just_tracking_sub,
+        value: value,
+        color: color,
+        onChanged: onChanged,
+        compact: compact,
+      );
+}
+
+class HabitFlagToggle extends StatelessWidget {
+  const HabitFlagToggle({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.hint,
+    required this.value,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final String hint;
+  final bool value;
+  final Color color;
+  final ValueChanged<bool> onChanged;
+  final bool compact;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(compact ? 12 : 14),
@@ -239,14 +297,14 @@ class FocusOnlyToggle extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.timer, size: 18, color: color),
+          Icon(icon, size: 18, color: color),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  context.l10n.focus_only,
+                  title,
                   style: TextStyle(
                     fontSize: compact ? 13 : 14,
                     fontWeight: FontWeight.w700,
@@ -255,7 +313,7 @@ class FocusOnlyToggle extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  context.l10n.focus_only_hint,
+                  hint,
                   style: TextStyle(
                     fontSize: compact ? 11.5 : 12.5,
                     height: 1.35,
@@ -452,7 +510,9 @@ class QuantitativeFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unit = unitController.text.trim();
+    final time = quantKind == QuantKind.time;
+    final unit =
+        time ? context.l10n.unit_min_short : unitController.text.trim();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -498,12 +558,14 @@ class QuantitativeFields extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            AppTextField(
-              hint: context.l10n.quant_unit_hint,
-              controller: unitController,
-              onChanged: (_) => onUnitChanged(),
-            ),
+            if (!time) ...[
+              const SizedBox(height: 16),
+              AppTextField(
+                hint: context.l10n.quant_unit_hint,
+                controller: unitController,
+                onChanged: (_) => onUnitChanged(),
+              ),
+            ],
             const SizedBox(height: 12),
             _QuantityStepperRow(
               label: context.l10n.quant_daily_goal,

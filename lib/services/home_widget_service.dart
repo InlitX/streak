@@ -200,16 +200,18 @@ class HomeWidgetService {
       };
     }).toList();
 
-    final bestStreak = listed
+    final counted = listed.where((h) => !h.tracking).toList();
+
+    final bestStreak = counted
         .map((h) => h.currentStreak)
         .fold<int>(0, (a, b) => a > b ? a : b);
 
-    final due = listed
+    final due = counted
         .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
         .toList();
 
     var weekDone = 0;
-    for (final habit in listed) {
+    for (final habit in counted) {
       for (final date in dates) {
         if (habit.isCompletedOn(date)) weekDone++;
       }

@@ -62,6 +62,7 @@ class Habit {
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
+    this.tracking = false,
     this.startMinute = -1,
     this.durationMinutes = 0,
     this.substeps = const [],
@@ -119,6 +120,8 @@ class Habit {
   final int focusMinutes;
   final int focusBreakMinutes;
   final bool focusOnly;
+
+  final bool tracking;
 
   final int startMinute;
   final int durationMinutes;
@@ -533,6 +536,7 @@ class Habit {
     int? focusMinutes,
     int? focusBreakMinutes,
     bool? focusOnly,
+    bool? tracking,
     int? startMinute,
     int? durationMinutes,
     List<Substep>? substeps,
@@ -566,6 +570,7 @@ class Habit {
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
+      tracking: tracking ?? this.tracking,
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       startMinute: startMinute ?? this.startMinute,
       durationMinutes: durationMinutes ?? this.durationMinutes,
@@ -604,6 +609,7 @@ class Habit {
         'focusMinutes': focusMinutes,
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
+        'tracking': tracking,
         'startMinute': startMinute,
         'durationMinutes': durationMinutes,
         'substeps': substeps.map((s) => s.toMap()).toList(),
@@ -655,6 +661,7 @@ class Habit {
         focusBreakMinutes:
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
         focusOnly: (map['focusOnly'] ?? false) as bool,
+        tracking: (map['tracking'] ?? false) as bool,
         startMinute: ((map['startMinute'] ?? -1) as num).toInt(),
         durationMinutes: ((map['durationMinutes'] ?? 0) as num).toInt(),
         substeps: map['substeps'] == null
