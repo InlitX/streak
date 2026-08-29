@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 class WidgetRefreshReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        schedule(context)
         if (!hasWidgets(context)) return
+        schedule(context)
         val pending = goAsync()
         CoroutineScope(Dispatchers.Main).launch {
             try {
