@@ -7,9 +7,13 @@ class CompletionOps {
   const CompletionOps._();
 
   static Map<String, Completion> toggle(Habit habit, DateTime date) {
-    if (habit.kind == HabitKind.negative &&
-        date.atMidnight.isBefore(habit.createdAt.atMidnight)) {
-      return {...habit.completions}..remove(date.dayKey);
+    if (habit.kind == HabitKind.negative) {
+      if (date.atMidnight.isBefore(habit.createdAt.atMidnight)) {
+        return {...habit.completions}..remove(date.dayKey);
+      }
+      return habit.isCompletedOn(date)
+          ? logRelapse(habit, date)
+          : clearRelapse(habit, date);
     }
     if (habit.hasSubsteps) return toggleAllSteps(habit, date);
     final completions = {...habit.completions};

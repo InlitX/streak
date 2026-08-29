@@ -223,6 +223,19 @@ void main() {
       expect(habit.isCompletedOn(today), isTrue);
     });
 
+    test('tapping a clean negative logs the relapse, and back again', () {
+      final habit = _base(kind: HabitKind.negative, createdAt: today);
+
+      final relapsed = CompletionOps.toggle(habit, today);
+      expect(habit.copyWith(completions: relapsed).isCompletedOn(today), isFalse);
+
+      final clean = CompletionOps.toggle(
+        habit.copyWith(completions: relapsed),
+        today,
+      );
+      expect(clean.containsKey(today.dayKey), isFalse);
+    });
+
     test('tapping a negative before it existed records nothing', () {
       final before = today.subtract(const Duration(days: 40));
       final habit = _base(kind: HabitKind.negative, createdAt: today);
