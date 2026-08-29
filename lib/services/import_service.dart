@@ -11,6 +11,10 @@ import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:uuid/uuid.dart';
 
+const _kDatabaseHint =
+    'That looks like a database file. In Loop Habit Tracker open Settings, '
+    'choose "Export as CSV", and pick the zip it creates.';
+
 class ImportOutcome {
   ImportOutcome({
     required this.habits,
@@ -65,19 +69,24 @@ class ImportService {
     final picked = result.files.single;
     final name = picked.name.toLowerCase();
 
+    if (name.endsWith('.db') || name.endsWith('.sqlite')) {
+      throw const ImportException(_kDatabaseHint);
+    }
+
     List<int>? bytes = picked.bytes;
     if (bytes == null && picked.path != null) {
-      bytes = await File(picked.path!).readAsBytes();
+      try {
+        bytes = await File(picked.path!).readAsBytes();
+      } catch (e) {
+        debugPrint('Could not read ${picked.path}: $e');
+        throw const ImportException(
+          'That file could not be read. Copy it to your phone first, then try '
+          'again.',
+        );
+      }
     }
     if (bytes == null) {
       throw const ImportException('Could not read the selected file.');
-    }
-
-    if (name.endsWith('.db') || name.endsWith('.sqlite')) {
-      throw const ImportException(
-        'That looks like a database file. In Loop Habit Tracker use '
-        '"Export as CSV" and pick the resulting zip or CSV.',
-      );
     }
 
     return parseBytes(bytes, fileName: name);
@@ -85,6 +94,8 @@ class ImportService {
 
   static ImportOutcome parseBytes(List<int> bytes, {String fileName = ''}) {
     final name = fileName.toLowerCase();
+
+    if (_looksLikeSqlite(bytes)) throw const ImportException(_kDatabaseHint);
 
     if (name.endsWith('.zip') || _looksLikeZip(bytes)) {
       final raw = _parseLoopZip(bytes);
@@ -208,10 +219,22 @@ class ImportService {
   }
 
   static List<_RawHabit> _parseLoopZip(List<int> bytes) {
-    final archive = ZipDecoder().decodeBytes(bytes);
+    final Archive archive;
+    try {
+      archive = ZipDecoder().decodeBytes(bytes);
+    } catch (e) {
+      debugPrint('Could not open that zip: $e');
+      throw const ImportException(
+        'That zip could not be opened. In Loop Habit Tracker use '
+        '"Export as CSV" and pick the zip it creates.',
+      );
+    }
     final files = <String, List<int>>{};
     for (final f in archive.files) {
-      if (f.isFile) files[f.name.replaceAll('\\', '/')] = f.content as List<int>;
+      final content = f.isFile ? f.content : null;
+      if (content is List<int>) {
+        files[f.name.replaceAll('\\', '/')] = content;
+      }
     }
 
     final habitsCsv = _entry(files, 'habits.csv');
@@ -654,6 +677,15 @@ class ImportService {
     } on FormatException {
       return null;
     }
+  }
+
+  static bool _looksLikeSqlite(List<int> bytes) {
+    const header = 'SQLite format 3';
+    if (bytes.length < header.length) return false;
+    for (var i = 0; i < header.length; i++) {
+      if (bytes[i] != header.codeUnitAt(i)) return false;
+    }
+    return true;
   }
 
   static bool _looksLikeZip(List<int> bytes) =>

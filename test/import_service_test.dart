@@ -43,6 +43,42 @@ Run,,Health,3,2024-01-03,0,
     });
   });
 
+  group('a Loop database file', () {
+    List<int> sqlite() => [
+          ...'SQLite format 3'.codeUnits,
+          0,
+          ...List<int>.filled(200, 7),
+        ];
+
+    test('is refused with instructions even without a file name', () {
+      expect(
+        () => ImportService.parseBytes(sqlite()),
+        throwsA(
+          isA<ImportException>().having(
+            (e) => e.message,
+            'message',
+            contains('Export as CSV'),
+          ),
+        ),
+      );
+    });
+
+    test('is refused when it is named too', () {
+      expect(
+        () => ImportService.parseBytes(sqlite(), fileName: 'Loop Habits.db'),
+        throwsA(isA<ImportException>()),
+      );
+    });
+
+    test('a real csv is still not mistaken for one', () {
+      final o = ImportService.parseBytes(
+        _b('Date,Walk\n2026-03-02,1\n'),
+        fileName: 'loop.csv',
+      );
+      expect(o.habits, hasLength(1));
+    });
+  });
+
   group('Loop Habit Tracker', () {
     const checkmarks = '''
 Date,Meditate,Exercise
