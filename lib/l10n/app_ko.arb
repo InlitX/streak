@@ -1,0 +1,1056 @@
+{
+  "app_tagline": "습관 트래커",
+  "today": "오늘",
+  "stats": "통계",
+  "settings": "설정",
+  "new_label": "신규",
+  "save": "저장",
+  "cancel": "취소",
+  "delete": "삭제",
+  "x_of_y_completed": "{done} / {total} 완료",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "no_habits_yet": "아직 습관이 없어요",
+  "all_done_today": "오늘은 모두 끝냈어요!",
+  "good_morning": "좋은 아침이에요",
+  "good_afternoon": "좋은 오후예요",
+  "good_evening": "좋은 저녁이에요",
+  "empty_title": "연속 기록 시작하기",
+  "empty_body": "습관을 만들고 날짜를 눌러 기록하세요. 매일매일, 작은 발걸음.",
+  "add_habit": "습관 추가",
+  "all": "모두",
+  "skip": "건너뛰기",
+  "next": "다음",
+  "last_7_days": "최근 7일",
+  "last_30_days": "최근 30일",
+  "your_habits": "내 습관",
+  "stats_empty": "통계를 보려면 습관을 추가하세요",
+  "completion_rate_short": "꾸준함",
+  "completion_rate": "달성률",
+  "appearance": "모습",
+  "theme": "테마",
+  "system": "시스템",
+  "light": "밝게",
+  "dark": "어둡게",
+  "week_starts_on": "한 주 시작 요일",
+  "mon": "월",
+  "sat": "토",
+  "sun": "일",
+  "language": "언어",
+  "data": "데이터",
+  "export_backup": "백업 내보내기",
+  "export_backup_sub": "모든 습관을 파일로 저장",
+  "auto_backup": "자동 백업",
+  "auto_backup_sub": "꺼짐",
+  "auto_backup_off": "꺼짐",
+  "auto_backup_daily": "매일",
+  "auto_backup_weekly": "매주",
+  "auto_backup_where": "앱을 열 때 모든 데이터를 백업해요. 최근 5개를 저장해요.",
+  "auto_backup_folder": "폴더",
+  "auto_backup_folder_default": "앱 폴더",
+  "auto_backup_folder_set": "폴더를 저장했어요",
+  "auto_backup_folder_failed": "해당 폴더로는 쓸 수 없어요",
+  "auto_backup_no_permission": "저장소 권한이 거부되었어요",
+  "auto_backup_run_now": "지금 백업",
+  "import_backup": "백업 가져오기",
+  "import_backup_sub": "파일에서 습관 복원",
+  "import_from_app": "다른 앱에서 가져오기",
+  "import_from_app_done": "{source}에서 습관 {habits}개({days}일)를 가져왔어요",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "파일을 가져올 수 없어요",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "about": "정보",
+  "backup_saved": "백업을 저장했어요",
+  "export_cancelled": "내보내기를 취소했어요",
+  "habits_imported": "습관을 가져왔어요",
+  "new_habit": "새 습관",
+  "edit_habit": "습관 편집",
+  "name": "이름",
+  "name_hint": "예: 아침 달리기",
+  "description": "설명",
+  "icon": "아이콘",
+  "color": "색상",
+  "category": "분류",
+  "category_health": "건강",
+  "category_fitness": "운동",
+  "category_mindfulness": "마음챙김",
+  "category_productivity": "생산성",
+  "category_learning": "공부",
+  "category_finance": "금융",
+  "count_days": "{count, plural, other{{count}일}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, other{{count}주}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, other{{count}달}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "habit_kind": "습관 유형",
+  "kind_positive": "일반",
+  "kind_negative": "절제",
+  "kind_quantitative": "수량",
+  "kind_locked_hint": "습관을 만든 후에는 유형을 변경할 수 없어요.",
+  "kind_negative_hint": "기본적으로 매일 성공한 것으로 헤아려서, 저절로 기록이 연장돼요. 실수했을 때만 체크하세요. 그럼 그 날은 빨간색으로 표시되며 되돌릴 수 있어요.",
+  "cost_per_day": "일일 비용",
+  "currency": "통화",
+  "currency_custom": "맞춤 설정",
+  "currency_hint": "기호 또는 코드",
+  "cost_note": "선택 사항이에요. 습관에 돈이 들지 않는다면 비워 두세요.",
+  "money_saved": "절약한 돈",
+  "clean_days": "절제한 날",
+  "quant_preset_water": "물",
+  "quant_preset_reading": "독서",
+  "quant_preset_generic": "맞춤",
+  "quant_unit_hint": "단위 (예: ml, 쪽, 회)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "쪽",
+  "quant_edit_title": "오늘 해낸 양",
+  "quant_daily_goal": "일일 목표",
+  "quant_tap_amount": "누를 때 채울 양",
+  "frequency": "빈도",
+  "daily": "매일",
+  "weekly": "매주",
+  "monthly": "매월",
+  "sched_days": "요일",
+  "sched_interval": "구간",
+  "times_per_week": "매주 {n}번",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "매월 {n}번",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/주",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/월",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "알림",
+  "add_reminder": "알림 추가",
+  "delete_habit": "습관 삭제",
+  "archive_habit": "습관 보관처리",
+  "archive": "보관처리",
+  "share_friends": "친구와 공유하기",
+  "share_friends_sub": "앱 보내주기",
+  "copy_message": "메시지 복사",
+  "message_copied": "메시지를 복사했어요",
+  "app_lock": "앱 잠금",
+  "app_lock_sub": "Streak를 열 때 지문이나 얼굴 인증을 요청해요",
+  "app_lock_unavailable": "폰에 설정된 생체 인증이 없어요",
+  "app_lock_failed": "본인인지 확인하지 못했어요",
+  "app_lock_title": "Streak 잠김",
+  "app_lock_unlock": "잠금 해제",
+  "app_lock_delay": "잠금 시간",
+  "app_lock_delay_instant": "즉시",
+  "app_lock_delay_seconds": "{value}초",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "사진",
+  "note_take_photo": "카메라",
+  "note_pick_photo": "갤러리",
+  "journey": "여정",
+  "journey_sub": "{count, plural, other{사진 {count}장}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "아직 사진이 없어요",
+  "journey_empty_sub": "노트에 사진을 추가하면 여기에 나타나요.",
+  "archive_habit_body": "\"{name}\" 습관을 보관처리할까요? 내역은 유지되고 설정에서 복원할 수 있어요.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "보관처리한 습관",
+  "archived_habits_sub": "복원하거나 영구 삭제",
+  "archived_empty": "보관처리하지 않았어요",
+  "archived_empty_sub": "삭제한 습관이 기록과 함께 여기 머물러요.",
+  "restore": "복원",
+  "restored": "습관을 복원했어요",
+  "delete_forever": "영구 삭제",
+  "delete_forever_body": "\"{name}\" 습관과 모든 기록을 삭제할까요? 되돌릴 수 없어요.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "습관을 삭제했어요",
+  "clear_progress": "진척 지우기",
+  "clear_progress_sub": "기록, 노트, 집중 시간",
+  "clear_progress_warning": "모든 기록한 날, 노트, 집중 시간을 지우지만, 습관, 일정, 설정은 남겨둬요. 이후에 가져올 백업 파일이 없다면 되돌릴 수 없어요.",
+  "clear_progress_confirm": "진척 지우기",
+  "clear_progress_done": "진척을 지웠어요",
+  "wipe_data": "모든 데이터 지우기",
+  "wipe_data_sub": "습관, 노트, 집중 시간, 설정",
+  "wipe_data_warning": "이 폰의 습관, 노트, 집중 시간, 설정을 모두 지워요. 이후에 가져올 백업 파일이 없다면 되돌릴 수 없어요.",
+  "wipe_data_sure": "정말로 모두 지울까요?",
+  "wipe_data_sure_body": "마지막 기회예요. 백업이 없다면, 데이터가 영원히 사라져요.",
+  "wipe_data_confirm": "모두 지우기",
+  "wipe_data_done": "데이터를 모두 지웠어요",
+  "day_start": "하루 시작 시간",
+  "day_start_sub": "밤이 늦어도 이 시간이 지나기 전에는 당일로 치기",
+  "day_start_midnight": "자정",
+  "day_start_hour": "오전 {hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "사진",
+  "share_stats_short": "통계",
+  "undo": "되돌리기",
+  "habit_archived": "습관을 보관처리했어요",
+  "share_blur": "흐림",
+  "delete_habit_body": "\"{name}\" 습관을 삭제할까요? 되돌릴 수 없어요.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "실수를 기록할까요?",
+  "log_relapse_body": "\"{name}\" 습관의 오늘 기록을 깨게 돼요. 다시 눌러 되돌릴 수 있어요.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "네, 기록하기",
+  "permission_required": "알림 권한이 필요해요",
+  "streaks": "연속 기록",
+  "activity": "활동",
+  "current": "현재",
+  "best": "최고",
+  "total": "총",
+  "relapses": "실수",
+  "week": "주",
+  "month": "월",
+  "year": "년",
+  "new_reminder": "새 알림",
+  "edit_reminder": "알림 편집",
+  "days": "요일",
+  "time": "시간",
+  "save_reminder": "알림 저장",
+  "select_one_day": "최소한 요일 하나를 선택하세요",
+  "every_day": "모든 요일",
+  "no_days": "요일 없음",
+  "repeat_hours": "하루 동안 반복",
+  "every_n_hours": "{n}시간마다",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "특정 요일",
+  "repeat_interval": "N일마다",
+  "every_n_days": "{n}일마다",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "미분류",
+  "more_icons": "아이콘 더 보기",
+  "less_icons": "아이콘 덜 보기",
+  "completions": "완료",
+  "completion_time": "완료 시간",
+  "current_streak": "현재 연속 기록",
+  "days_active": "활성 일수",
+  "completions_per_month": "월별 완료",
+  "overview": "개요",
+  "preferences": "환경",
+  "support": "지원",
+  "profile": "프로필",
+  "about_app": "앱 정보",
+  "about_app_sub": "버전, 크레디트, 소스 코드",
+  "my_heatmap": "내 히트맵",
+  "my_heatmap_sub": "연간 활동 표 열기",
+  "rate_github": "GitHub 별 주기",
+  "rate_github_sub": "별표로 프로젝트 지원하기",
+  "buy_coffee": "커피 사기",
+  "buy_coffee_sub": "앱이 무료일 수 있도록 돕기",
+  "view_source": "GitHub에서 소스 보기",
+  "about_footer": "☕와 수많은 여가 시간을 들여 만듦.",
+  "about_title": "당신을 위해 제작. 무료, 영원히.",
+  "about_body": "Streak는 간단한 발상으로부터 시작했어요. \"왜 습관을 지켜보는 데 돈을 내야 할까?\"\n\n이 앱은 완전히 오픈 소스예요. 누구나 어떻게 동작하는지 볼 수 있고, 개선점을 제안할 수 있고, 심지어 자신만의 버전으로 앱을 만들 수도 있어요. 숨겨진 것도, 예상치 못한 것도 없어요.\n\n개인정보는 소중하니까 — 모두 폰 안에서 머물러요. 계정도, 서버도, 광고도 없어요. 어떤 사소한 정보도 기기 밖으로 나가지 않아요.\n\n제한이 없어요. 원하는 만큼 습관을 많이 만들 수 있어요. 구독도, \"Pro 버전\"도, 결제 유도 팝업도 없어요. 절대로요.\n\n앱이 도움이 되었다면, GitHub에서 별을 찍어 주시거나 커피를 사 주셔서 지원할 수 있어요. 하지만 완전히 선택 사항이에요 — 상관없이 앱은 사용자의 것이에요.",
+  "close": "닫기",
+  "no_data_yet": "아직 데이터가 없어요",
+  "import_question_body": "백업한 습관을 현재 습관으로 교체하실래요, 아니면 함께 합치실래요?",
+  "import_replace": "모두 교체",
+  "import_merge": "합치기",
+  "go": "출발",
+  "quotes": "어록",
+  "quotes_which": "표시할 어록",
+  "quotes_app": "앱에서 제공",
+  "quotes_mine": "내 어록",
+  "quotes_both": "둘 다",
+  "quotes_my_list": "내 어록",
+  "quotes_add": "어록 추가",
+  "quotes_edit": "어록 편집",
+  "quotes_hint": "내 어록 쓰기",
+  "quotes_empty": "스스로의 어록이 없어요",
+  "quotes_empty_sub": "자신만의 어록을 쓰면 '오늘' 페이지에 나타나요.",
+  "app_background": "배경",
+  "widgets": "위젯",
+  "customize_widgets": "위젯 맞춤 설정",
+  "customize_widgets_sub": "배경, 불투명도, 테두리",
+  "widget_background": "배경색",
+  "widget_opacity": "불투명도",
+  "widget_border": "테두리",
+  "widget_preview": "미리보기",
+  "bg_solid": "채움",
+  "bg_gradient": "그라데이션",
+  "bg_dots": "점",
+  "weekdays": "평일",
+  "bg_oled": "OLED",
+  "weekends": "주말",
+  "reminder_message": "메시지 (선택)",
+  "reminder_message_hint": "비워 두면 동기부여 어록을 표시해요",
+  "new_category": "새 분류",
+  "edit_category": "분류 편집",
+  "add_category": "신규",
+  "delete_category": "분류 삭제",
+  "edit": "편집",
+  "cover_image": "표지 사진",
+  "book_cover": "책 표지",
+  "add_image": "사진 추가",
+  "when_best": "언제가 가장 꾸준할까요?",
+  "share_background": "배경",
+  "share_size": "크기",
+  "share_size_large": "길게",
+  "share_size_small": "정사각형",
+  "share_show_stats": "통계 표시",
+  "share_save": "저장",
+  "share_saved": "갤러리에 저장했어요",
+  "share_save_failed": "사진을 저장할 수 없었어요",
+  "share_swipe_hint": "카드를 밀어서 시간을 이동하세요",
+  "share": "공유",
+  "share_progress": "진척 공유",
+  "share_failed": "사진을 만들 수 없었어요",
+  "about_developer": "개발자",
+  "about_credits": "크레디트",
+  "dev_handle": "@InlitX",
+  "dev_role": "인디 제작자 · Streak",
+  "about_credits_body": "Flutter로 빌드. Lucide에서 아이콘 제공. fl_chart에서 차트 제공. Figtree & Playfair Display에서 글꼴 제공.",
+  "add_note": "노트 추가",
+  "edit_note": "노트 편집",
+  "view_notes": "노트 보기",
+  "edit_entry": "항목 편집",
+  "note_type": "유형",
+  "note_kind_note": "노트",
+  "note_kind_planned": "계획됨",
+  "note_kind_completed": "완료됨",
+  "note_hint": "노트를 작성하세요...",
+  "note_time_optional": "시간 (선택)",
+  "save_note": "노트 저장",
+  "notes_empty": "아직 이 날의 노트가 없어요",
+  "delete_note": "노트 삭제",
+  "legend_note_added": "노트를 추가했어요",
+  "tomorrow": "내일",
+  "notes_count": "{count, plural, other{노트 {count}개}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "할 일",
+  "get_started": "시작하기",
+  "statistics": "통계",
+  "best_streak": "연속 최고 기록",
+  "active_habits": "활성 습관",
+  "total_logs": "총 기록",
+  "description_hint": "필요하면 노트에 기록하세요",
+  "quant_per_day": "일별 양",
+  "quant_average": "일별 평균",
+  "quant_logged_days": "기록 일수",
+  "quant_best_day": "최고의 날",
+  "quant_goal_days": "목표 달성",
+  "quant_stats_empty": "양을 기록하면 목표 달성에 실패했더라도, 여기에 누적돼요.",
+  "ranking": "순위",
+  "made_by": "@InlitX가 ❤️을 담아 만듦",
+  "not_enough_data": "아직 데이터가 충분하지 않아요",
+  "streak_on": "🔥 {n}일 연속 달성했어요. 계속하세요!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 오늘부터 새 연속 기록을 시작해 봐요",
+  "active_days": "활성 일수",
+  "perfect_days": "완벽 일수",
+  "best_month": "최고의 달",
+  "per_week": "매주",
+  "motiv_start": "힘차게 하루를 시작해요 💪",
+  "motiv_progress": "잘하고 있어요, 계속하세요",
+  "motiv_almost": "거의 다 됐어요! 조금만 더 해봐요",
+  "motiv_perfect": "완벽한 하루예요! 🔥",
+  "streak_evolution": "연속 기록",
+  "consistency": "꾸준함",
+  "consistency_trend": "꾸준함 추세",
+  "by_habit": "습관별",
+  "todo_hint": "무엇을 해야 하나요?",
+  "todo_empty_title": "목록에 아무것도 없어요",
+  "todo_empty_body": "며칠 내로 끝내고 싶은 것들을 써 내려 보세요.",
+  "todo_date": "날짜",
+  "todo_no_date": "날짜 없음",
+  "todo_time": "시간",
+  "todo_priority": "우선순위",
+  "priority_none": "우선순위 없음",
+  "priority_low": "낮음",
+  "priority_medium": "중간",
+  "priority_high": "높음",
+  "todo_overdue": "미뤄둠",
+  "todo_upcoming": "다가옴",
+  "todo_someday": "언젠가",
+  "pick_a_date": "날짜 선택",
+  "todo_left": "{count, plural, =0{모두 완료} other{할 일 {count}개}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, other{완료함 ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "할 일 검색",
+  "todo_clear_completed": "완료한 일 지우기",
+  "todo_clear_completed_body": "{count, plural, other{완료한 할 일 {count}개를 삭제해요.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search_empty": "일치하는 할 일이 없어요",
+  "prefs_general": "일반",
+  "prefs_features": "기능",
+  "prefs_privacy": "보호",
+  "collapse_cards": "카드 접기",
+  "expand_cards": "카드 펼치기",
+  "view_switcher": "전환기 표시",
+  "view_switcher_sub": "'오늘' 페이지에 주 / 월 / 년 버튼 표시",
+  "focus": "집중",
+  "focus_enable_sub": "집중해야 하는 습관을 위한 타이머",
+  "focus_free_session": "자율 시간",
+  "focus_duration": "시간",
+  "focus_start": "집중 시간 시작",
+  "focus_style": "타이머 스타일",
+  "focus_style_digital": "원",
+  "focus_style_flip": "뒤집기",
+  "focus_style_dots": "점",
+  "focus_stop_title": "집중 시간을 끝낼까요?",
+  "focus_sessions": "집중 시간",
+  "focus_total": "집중 시간",
+  "focus_saved": "{time} 기록했어요",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end": "종료",
+  "focus_pick_habit": "무엇에 집중하고 있나요?",
+  "focus_scene_custom": "내 사진",
+  "unit_hours": "시간",
+  "unit_minutes": "분",
+  "unit_seconds": "초",
+  "focus_target_reached": "목표를 달성했어요",
+  "focus_pause": "정지",
+  "focus_resume": "재개",
+  "focus_sound": "소리",
+  "focus_pick_audio": "폰에서 음악을 고르세요",
+  "focus_no_sound": "음악을 고르지 않았어요",
+  "focus_tasks": "하위 작업 추가",
+  "focus_custom_duration": "맞춤",
+  "focus_end_short": "목표를 달성하려면 {time} 남았어요.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "작업 {count}개를 완료하지 않았어요.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "목표를 달성했어요. 습관을 완료로 표시할게요.",
+  "focus_end_keep": "계속 진행하기",
+  "focus_end_anyway": "어쨌든 끝내기",
+  "focus_end_complete": "완료로 표시하기",
+  "focus_amount_added": "{habit}에 {amount} 더했어요",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "맞춤",
+  "focus_add_track": "음악 추가",
+  "focus_shuffle": "뒤섞기",
+  "focus_loop": "순서대로",
+  "focus_track_rain": "비",
+  "focus_track_brown": "갈색소음",
+  "focus_track_pad": "따스한 배경음",
+  "focus_track_too_long": "음악은 20분보다 짧아야 해요",
+  "focus_track_limit": "최대 10곡",
+  "focus_done_title": "집중 시간 완료",
+  "focus_your_tracks": "내 음악",
+  "focus_built_in": "내장",
+  "unit_hour_short": "시간",
+  "unit_min_short": "분",
+  "focus_notif_body": "집중 시간이 끝났어요. 잘하셨어요!",
+  "celebration": "완료 효과",
+  "focus_notif_channel": "집중 시간",
+  "focus_notif_running": "집중하는 중",
+  "focus_paused": "정지됨",
+  "focus_scene_black": "검정",
+  "focus_pomodoro": "포모도로",
+  "focus_round": "{n}회차",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_daily_goal": "집중 목표",
+  "focus_images_limit": "최대 사진 10개",
+  "select_all": "모두 선택",
+  "focus_keep_awake": "화면 켜 두기",
+  "focus_pomodoro_sub": "짧게 쉰 뒤 집중 시간 반복",
+  "focus_break": "휴식",
+  "focus_goal_today": "오늘 {done} / {goal}",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "selected_count": "{count, plural, other{{count}개 선택함}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_delete_sessions": "집중 시간을 삭제할까요?",
+  "focus_delete_sessions_body": "{count, plural, other{집중 시간 {count}개를 지워요. 되돌릴 수 없어요.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_sessions_deleted": "{count, plural, other{집중 시간 {count}개를 삭제했어요}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_stats": "집중 통계",
+  "focus_average": "평균 시간",
+  "focus_log": "집중 시간 기록",
+  "focus_log_date": "날짜",
+  "focus_log_saved": "집중 시간을 추가했어요",
+  "focus_history_empty": "아직 집중한 시간이 없어요",
+  "focus_history_empty_sub": "집중 시간을 마치면 모두 여기에 나타나요.",
+  "focus_history_day": "{count, plural, other{집중 {count}회}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "어제",
+  "focus_history": "기록",
+  "perfect_streak": "완벽일 연속",
+  "day_timeline_empty": "이 날에는 계획이 없어요",
+  "day_timeline_empty_sub": "이 날에 습관 일정을 지정하면 여기에 나타나요.",
+  "clear": "지우기",
+  "app_style": "앱 스타일",
+  "onb1_title": "연속 기록을 쌓아가요",
+  "onb1_body": "한 번 눌러 습관을 기록하고 매일 성장하는 자신의 모습을 지켜보세요.",
+  "onb2_title": "계획대로 해봐요",
+  "onb2_body": "빠뜨리지 않도록 일간, 주간, 월간 목표를 똑똑하게 알려줘요.",
+  "onb3_title": "진척을 돌아봐요",
+  "onb3_body": "세세한 통계와 연간 표로 얼마나 발전했는지 확인할 수 있어요.",
+  "quote_1": "매일매일, 작은 발걸음.",
+  "quote_2": "꾸준함이 치열함을 이깁니다.",
+  "quote_3": "자신을 위해 해내세요.",
+  "quote_4": "하루씩 차근차근.",
+  "quote_5": "완벽이 아니라, 발전.",
+  "quote_6": "완성이 완벽보다 낫습니다.",
+  "quote_8": "작은 습관, 큰 변화.",
+  "quote_9": "발전하고 있다고 믿으세요.",
+  "quote_10": "아침을 이겨내세요.",
+  "quote_11": "규율이 곧 자유입니다.",
+  "quote_12": "하루는 쌓아가는 것입니다.",
+  "quote_7": "좋은 흐름을 멈추지 마세요.",
+  "todo_new": "새 할 일",
+  "focus_stop_body": "어쨌든 집중한 시간은 저장돼요. 습관은 목표한 시간에 도달해야 완료돼요.",
+  "celebration_confetti": "색종이",
+  "celebration_fireworks": "폭죽",
+  "celebration_surprise": "놀래기",
+  "unscheduled_confirm": "그래도 기록",
+  "unscheduled_title": "예정한 날이 아니예요",
+  "unscheduled_body": "{day}에는 이 습관의 일정이 없어요. 그래도 추가로 기록할까요?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "rest_days_none": "없음",
+  "last_90_days": "최근 90일",
+  "focus_clear_today": "오늘의 집중 시간 지우기",
+  "focus_defaults": "기본 집중 시간",
+  "check_style": "체크 스타일",
+  "square": "사각형",
+  "circle": "원",
+  "github_star_row": "소스 보기 & 별 주기",
+  "icons_tab": "아이콘",
+  "emojis_tab": "이모지",
+  "report_issue": "문제 신고하기",
+  "advanced_options": "고급 옵션",
+  "default_user": "Inlitx",
+  "your_name": "내 이름",
+  "edit_name": "이름 편집",
+  "change_photo": "사진 변경",
+  "remove_photo": "사진 제거",
+  "notif_greeting": "안녕하세요 {name} 님, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "앱 아이콘",
+  "icon_default": "기본",
+  "icon_neutral": "초록",
+  "icon_accent": "삼색",
+  "custom": "맞춤",
+  "see_more": "더 보기",
+  "see_less": "덜 보기",
+  "colors_tab": "색상",
+  "reorder": "순서 변경",
+  "reorder_hint": "습관을 드래그해 순서를 바꾸세요",
+  "done": "완료",
+  "accent_color": "강조 색상",
+  "heatmap_path": "날짜 연결",
+  "heatmap_path_sub": "칸을 긴 경로로 그리기",
+  "sort_completed_last": "최근 완료",
+  "focus_only": "집중 시간으로만 완료",
+  "focus_only_hint": "습관을 누르는 게 아니라, 집중 시간을 끝내야 체크하도록 해요.",
+  "focus_only_title": "집중 시간 필요",
+  "focus_only_body": "\"{name}\" 습관은 집중 시간을 끝내야 완료할 수 있어요.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_past": "\"{name}\" 습관은 집중 시간으로만 완료할 수 있어서, 이전 날짜를 체크할 수 없어요.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_clear_title": "이 체크를 지울까요?",
+  "focus_only_clear_body": "집중 시간을 끝내야만 \"{name}\" 습관을 다시 체크할 수 있어요.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_start": "집중 시간 시작",
+  "focus_flowtime": "시간흐름",
+  "focus_flowtime_hint": "목표도 알람도 없어요. 시계는 시간을 셀 뿐이고, 다 끝났다고 생각하면 멈추세요.",
+  "focus_end_flow": "{time} 동안 집중했어요.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "on": "켬",
+  "off": "끔",
+  "checklist": "체크리스트",
+  "checklist_hint": "습관을 단계별로 쪼개세요. 모든 단계를 체크해야 완료돼요.",
+  "add_step": "단계 추가",
+  "step_hint": "단계 이름",
+  "todays_checklist": "오늘의 체크리스트",
+  "steps_done": "{done}/{total}단계",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all": "모든 습관 중지",
+  "vacation_all_sub": "켜진 동안에는 놓쳤다고 기록하지 않음",
+  "vacation_mode": "휴가 모드",
+  "vacation_on_desc": "중지됨 — 놓친 날짜나 완료한 날짜로 기록하지 않아요.",
+  "vacation_off_desc": "이 습관을 중지하세요. 건너뛴 날짜가 연속 기록을 깨지 않아요.",
+  "paused": "중지됨",
+  "start_vacation": "휴가 시작",
+  "end_vacation": "휴가 종료",
+  "vacation_day_on": "휴가일로 표시",
+  "vacation_day_off": "휴가일 제거",
+  "rest_days": "휴식일",
+  "rest_days_desc": "매주 해당 요일에는 중지해요. 그래도 기록할 수 있고, 횟수에 들어가요.",
+  "widget_no_habits": "아직 습관이 없어요\n눌러서 Streak 열기",
+  "widget_no_data": "아직 데이터가 없어요\nStreak을 열어 동기화",
+  "widget_open_to_sync": "Streak을 열어 동기화",
+  "widget_activity": "활동",
+  "widget_today_progress": "오늘  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "할 일  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "about_sub": "버전, 소스 코드, 지원",
+  "support_sub": "버그를 신고하거나 기능 제안하기",
+  "style_classic_desc": "습관 목록, 하단 막대, 모든 설정을 한 화면에 담았어요.",
+  "style_minimal_desc": "습관과 설정을 네 영역으로 묶었어요.",
+  "appearance_sub": "테마, 강조, 배경",
+  "preferences_sub": "언어, 주, 정렬",
+  "data_sub": "백업, 가져오기",
+  "widget_cfg_color": "색상",
+  "widget_cfg_title": "위젯 맞춤 설정",
+  "widget_cfg_image": "사진",
+  "widget_cfg_choose_image": "사진 선택",
+  "widget_cfg_change_image": "사진 변경",
+  "widget_cfg_custom_color": "맞춤 색상",
+  "widget_cfg_follow_system": "시스템 테마 따르기",
+  "widget_cfg_dark_color": "어두운 테마",
+  "widget_cfg_light_color": "밝은 테마",
+  "widget_cfg_opacity": "불투명도  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_border": "테두리",
+  "widget_cfg_thickness": "굵기  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_todos_scope": "할 일",
+  "widget_cfg_todos_all": "모든 할 일 표시",
+  "widget_cfg_todos_hint": "끔: 오늘, 미뤄둔, 언젠가 할 일만 표시",
+  "widget_cfg_dot_color": "점 색상",
+  "widget_cfg_style": "스타일",
+  "widget_cfg_style_classic": "클래식",
+  "widget_cfg_style_card": "카드",
+  "widget_cfg_all_habits": "모든 습관",
+  "widget_cfg_save": "저장",
+  "widget_cfg_add": "위젯 추가",
+  "widget_cfg_reset": "기본값으로 초기화",
+  "widget_cfg_hue": "색조",
+  "widget_cfg_saturation": "채도",
+  "widget_cfg_brightness": "명도",
+  "widget_demo_run": "달리기",
+  "widget_demo_read": "독서",
+  "widget_demo_water": "물",
+  "notif_streak": "🔥 {streak}일 연속",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_done": "완료",
+  "notif_action_add": "양 추가",
+  "notif_action_add_hint": "얼마나요?",
+  "notif_action_snooze": "다시 알림",
+  "snooze_duration": "다시 알림 시간",
+  "snooze_custom": "맞춤",
+  "snooze_custom_hint": "분",
+  "minutes_short": "{value}분",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_done": "{name} 완료로 표시",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_not_done": "{name} 미완료로 표시",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_add_amount": "{name}에 추가",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_log_relapse": "{name}에 실수 기록",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_clear_relapse": "{name}의 오늘 실수 지우기",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_not_done": "미완료",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_previous_week": "이전 주",
+  "a11y_next_week": "다음 주",
+  "a11y_increase": "증가",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "a11y_decrease": "감소",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "a11y_pick_color": "색상 선택",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "period_this_week": "이번주",
+  "period_last_week": "지난주",
+  "period_this_month": "이번달",
+  "period_last_month": "지난달",
+  "period_this_year": "올해",
+  "period_last_year": "작년",
+  "focus_period_sessions": "{count, plural, =0{집중 시간 없음} other{집중 시간 {count}개}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "모든 노트",
+  "notes_empty_all": "아직 노트가 없어요",
+  "celebration_none": "없음",
+  "quant_add_title": "양 추가",
+  "style_express": "익스프레스",
+  "style_express_desc": "둥근 모양, 통통 튀는 움직임, 넓은 서체로 표현해요.",
+  "average_short": "평균",
+  "pane_hint": "목록에서 무언가 열면 여기에 나타나요",
+  "habit_time": "시각",
+  "habit_time_none": "언제든",
+  "habit_duration": "기간",
+  "habit_duration_none": "기간 없음",
+  "start_view_last": "최근 사용",
+  "start_view": "실행 위치",
+  "notes_hint": "날짜를 길게 눌러 노트를 보거나 추가하세요",
+  "app_style_sub": "앱을 전체적으로 어떤 느낌으로 나타낼지 고르세요.",
+  "style_classic": "클래식",
+  "style_minimal": "미니멀",
+  "today_only": "오늘만",
+  "card_activity": "카드에 활동 표시",
+  "widget_todos_empty": "오늘은 더 할 일이 없어요",
+  "widget_done_today": "오늘 완료",
+  "widget_best_streak": "🔥 연속 최고 기록 {streak}",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_show_activity": "활동 표시 대상",
+  "day_timeline": "하루",
+  "day_timeline_free": "{span} 자유",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "day_timeline_anytime": "언제든",
+  "done_today": "오늘 완료",
+  "notes": "노트",
+  "notes_enable_sub": "습관의 아무 날짜에 노트 첨부",
+  "todos_enable_sub": "습관 옆에 있는 간편 목록",
+  "plan_day": "하루 계획",
+  "plan_day_sub": "습관에 시각을 지정하고 타임라인에서 확인하세요.",
+  "quant_preset_time": "시간",
+  "strength": "의지력",
+  "period_week_of": "{date}의 주",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "about_story": "이 앱은 기존 습관 추적 앱들에 대한 불만으로부터 탄생했어요. 대부분은 만들 수 있는 습관 개수에 제한을 두거나, 기본적인 기능을 유료로 제공하거나, 사용자를 추적하거나, 광고를 쏟아 부어요. 그래서 저는 Streak을 만들기로 했어요. 완전히 무료에 광고도, 결제도, 추적도 없죠. 모든 기능이 로컬에서 돌아가므로 데이터를 스스로 소유할 수 있어요. 오픈 소스이며, 제약은 없어요.",
+  "share_friends_message": "Streak는 가볍고, 무료인, 오프라인 습관 추적 앱으로 로그인과 광고 없이 이용할 수 있어요. 함께 습관을 만들고 유지해 봐요. https://inlitx.github.io/streak/",
+  "about_inline": "Streak는 습관을 추적할 수 있는 오픈 소스 앱이에요. 로그인도, 제한도, 결제도 없어요. 모든 데이터는 폰 안에만 가만히 있어요.\n\n누구나 코드를 보고, 개선하고, 자유롭게 쓸 수 있어요.",
+  "about_subtitle": "노력하기로 결심한 나날들을 위하여."
+}

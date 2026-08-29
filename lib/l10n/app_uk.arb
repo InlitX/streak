@@ -1021,5 +1021,36 @@
         "type": "String"
       }
     }
-  }
+  },
+  "period_this_week": "Цього тижня",
+  "period_last_week": "Минулого тижня",
+  "period_this_month": "Цього місяця",
+  "period_last_month": "Минулого місяця",
+  "period_this_year": "Цього року",
+  "period_last_year": "Минулого року",
+  "period_week_of": "Тиждень з {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_period_sessions": "{count, plural, =0{Жодного сеансу} =1{1 сеанс} one{{count} сеанс} few{{count} сеанси} many{{count} сеансів} other{{count} сеансів}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "Усі нотатки",
+  "notes_empty_all": "Поки немає нотаток",
+  "quant_preset_time": "Час",
+  "style_express_desc": "Закруглені форми, пружний рух і ширший шрифт.",
+  "style_express": "Експрес",
+  "celebration_none": "Немає",
+  "quant_add_title": "Додати кількість",
+  "pane_hint": "Відкрийте щось зі списку, щоби переглянути тут",
+  "average_short": "Сер."
 }
