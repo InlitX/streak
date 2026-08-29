@@ -11,9 +11,9 @@ class YearHeatmap extends StatefulWidget {
   const YearHeatmap({
     super.key,
     required this.year,
-    required this.dailyCounts,
-    required this.maxCount,
     required this.color,
+    this.dailyCounts = const {},
+    this.maxCount = 1,
     this.habit,
     this.express = false,
   });
@@ -44,13 +44,13 @@ class _YearHeatmapState extends State<YearHeatmap> {
   @override
   void initState() {
     super.initState();
-    _focusCurrentMonth();
+    _focusToday();
   }
 
   @override
   void didUpdateWidget(YearHeatmap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.year != oldWidget.year) _focusCurrentMonth();
+    if (widget.year != oldWidget.year) _focusToday();
   }
 
   @override
@@ -59,7 +59,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
     super.dispose();
   }
 
-  void _focusCurrentMonth() {
+  void _focusToday() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_scroll.hasClients) return;
       final position = _scroll.position;
@@ -80,7 +80,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
     final today = AppClock.now().atMidnight;
     final start = _start;
     final lastOfYear = DateTime(widget.year, 12, 31);
-    final columns = (lastOfYear.difference(start).inDays / 7).ceil() + 1;
+    final columns = lastOfYear.difference(start).inDays ~/ 7 + 1;
     final empty = context.colors.surfaceContainerHighest;
     final max = widget.maxCount <= 0 ? 1 : widget.maxCount;
     final locale = Localizations.localeOf(context).languageCode;

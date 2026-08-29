@@ -17,7 +17,6 @@ import 'package:streak/features/habits/pages/quant_stats_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
-import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
 import 'package:streak/features/statistics/pages/express_statistics_page.dart';
 import 'package:streak/features/statistics/pages/minimal_statistics_page.dart';
@@ -57,12 +56,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
     final settings = context.watch<SettingsController>();
     if (settings.isExpressStyle) return const ExpressStatisticsPage();
     if (settings.isMinimalStyle) return const MinimalStatisticsPage();
-    final minimal = settings.isMinimalStyle;
 
     return Scaffold(
-      appBar: minimal
-          ? AppBar(toolbarHeight: 52)
-          : AppBar(title: Text(context.l10n.statistics)),
+      appBar: AppBar(title: Text(context.l10n.statistics)),
       body: Consumer<HabitsController>(
         builder: (context, controller, _) {
           final all = controller.habits;
@@ -86,18 +82,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
           final currentYear = AppClock.now().year;
 
           return ListView(
-            padding: context.pagePadding(
-              16,
-              minimal ? 0 : 8,
-              16,
-              minimal ? 28 : 104,
-            ),
+            padding: context.pagePadding(16, 8, 16, 104),
             children: spanned(context, [
-              if (minimal)
-                Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: MinimalTitle(title: context.l10n.statistics),
-                ),
               HabitFilter(
                 habits: all,
                 selected: _habitId,
