@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -12,6 +13,7 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -64,11 +66,20 @@ class _CheckTile extends StatelessWidget {
     if (habit.kind == HabitKind.quantitative) {
       return _QuantTile(habit: habit, circle: circle, size: size);
     }
+    final negative = habit.kind == HabitKind.negative;
+    final relapsed = negative && isRelapse(habit, AppClock.now());
+    final marked = negative ? relapsed : done;
+    final tint = relapsed ? context.tokens.danger : habit.color;
+
     return Semantics(
       button: true,
-      label: done
-          ? context.l10n.a11y_mark_not_done(habit.name)
-          : context.l10n.a11y_mark_done(habit.name),
+      label: negative
+          ? (relapsed
+              ? context.l10n.a11y_clear_relapse(habit.name)
+              : context.l10n.a11y_log_relapse(habit.name))
+          : (done
+              ? context.l10n.a11y_mark_not_done(habit.name)
+              : context.l10n.a11y_mark_done(habit.name)),
       child: GestureDetector(
         onTap: () {
           HapticFeedback.lightImpact();
@@ -80,15 +91,15 @@ class _CheckTile extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: habit.color.withValues(alpha: done ? 1 : 0.16),
+            color: tint.withValues(alpha: marked ? 1 : 0.16),
             borderRadius: BorderRadius.circular(
               circle ? size / 2 : size * 0.28,
             ),
           ),
           child: Icon(
-            Icons.check_rounded,
+            negative ? LucideIcons.ban : Icons.check_rounded,
             size: size * 0.5,
-            color: done ? Colors.white : habit.color.withValues(alpha: 0.85),
+            color: marked ? Colors.white : tint.withValues(alpha: 0.85),
           ),
         ),
       ),
@@ -314,7 +325,10 @@ class _DayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final done = habit.isCompletedOn(date);
+    final negative = habit.kind == HabitKind.negative;
+    final relapsed = negative && isRelapse(habit, date);
+    final done = negative ? relapsed : habit.isCompletedOn(date);
+    final tint = relapsed ? context.tokens.danger : habit.color;
     final quant = habit.kind == HabitKind.quantitative;
     final today = date.atMidnight == AppClock.now().atMidnight;
 
@@ -363,9 +377,7 @@ class _DayCell extends StatelessWidget {
                           fit: StackFit.expand,
                           children: [
                             ColoredBox(
-                              color: habit.color.withValues(
-                                alpha: done ? 1 : 0.14,
-                              ),
+                              color: tint.withValues(alpha: done ? 1 : 0.14),
                             ),
                             if (!done && quant)
                               Align(

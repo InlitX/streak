@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
@@ -29,6 +30,7 @@ import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/express_habit_list.dart';
 import 'package:streak/features/habits/widgets/express_today_hero.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
+import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
@@ -381,9 +383,10 @@ class _HomePageState extends State<HomePage> {
               final active = all
                   .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
                   .toList();
+              final counted = active.where((h) => !h.tracking).toList();
               final done =
-                  active.where((h) => h.isCompletedOn(today)).length;
-              final total = active.length;
+                  counted.where((h) => h.isCompletedOn(today)).length;
+              final total = counted.length;
 
               final categories = _categoriesOf(all);
               if (_category != null && !categories.contains(_category)) {
@@ -441,6 +444,16 @@ class _HomePageState extends State<HomePage> {
                     );
 
               return RefreshIndicator(
+                color: minimal
+                    ? context.colors.onSurface
+                    : context.colors.primary,
+                backgroundColor: express
+                    ? expressSurface(context)
+                    : minimal
+                        ? context.colors.surfaceContainerHighest
+                        : null,
+                strokeWidth: express ? 3.4 : (minimal ? 2 : 2.5),
+                displacement: express ? 58 : (minimal ? 32 : 40),
                 onRefresh: () async {
                   await Future<void>.delayed(
                       const Duration(milliseconds: 300));
@@ -521,6 +534,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();
+    if (habit.kind == HabitKind.negative && !isRelapse(habit, date)) {
+      if (date.atMidnight.isBefore(habit.createdAt.atMidnight)) return;
+      if (!await confirmRelapse(context, habit)) return;
+      if (!mounted) return;
+      await controller.logRelapse(habit.id, date);
+      return;
+    }
     if (!await allowManualCheck(context, habit: habit, date: date)) return;
     if (!mounted) return;
     if (!await confirmUnscheduledDay(context, habit: habit, date: date)) return;
@@ -536,7 +556,10 @@ class _HomePageState extends State<HomePage> {
     if (!mounted) return;
 
     final updated = controller.byId(id);
-    if (today && !wasDone && (updated?.isCompletedOn(date) ?? false)) {
+    if (today &&
+        !wasDone &&
+        !habit.tracking &&
+        (updated?.isCompletedOn(date) ?? false)) {
       _celebrate();
     }
     if (!animate) return;
