@@ -118,87 +118,86 @@ class HabitCard extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              Row(
-                                children: [
-                                  if (habit.isPausedOn(AppClock.now())) ...[
-                                    Icon(
-                                      LucideIcons.palmtree,
-                                      size: 14,
-                                      color: context.tokens.info,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      context.l10n.paused,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
+                              ScrollingLine(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (habit.isPausedOn(AppClock.now())) ...[
+                                      Icon(
+                                        LucideIcons.palmtree,
+                                        size: 14,
                                         color: context.tokens.info,
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                  ],
-                                  Icon(
-                                    LucideIcons.flame,
-                                    size: 14,
-                                    color: habit.color,
-                                  ),
-                                  const SizedBox(width: 3),
-                                  Text(
-                                    '$streak',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
-                                      color: context.tokens.muted,
-                                    ),
-                                  ),
-                                  if (habit.isPlanned &&
-                                      settings.planningEnabled) ...[
-                                    const SizedBox(width: 8),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        context.l10n.paused,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                          color: context.tokens.info,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                    ],
                                     Icon(
-                                      LucideIcons.clock,
-                                      size: 13,
-                                      color: context.tokens.muted,
+                                      LucideIcons.flame,
+                                      size: 14,
+                                      color: habit.color,
                                     ),
                                     const SizedBox(width: 3),
                                     Text(
-                                      minuteLabel(habit.startMinute),
+                                      '$streak',
                                       style: TextStyle(
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w700,
                                         color: context.tokens.muted,
                                       ),
                                     ),
-                                  ],
-                                  if (habit.kind == HabitKind.quantitative) ...[
-                                    const SizedBox(width: 8),
-                                    _AmountLabel(habit: habit),
-                                  ],
-                                  if (habitHasExplicitFrequency(habit)) ...[
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '·  ${habitFrequencyLabel(context, habit)}',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                    if (habit.isPlanned &&
+                                        settings.planningEnabled) ...[
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        LucideIcons.clock,
+                                        size: 13,
                                         color: context.tokens.muted,
                                       ),
-                                    ),
-                                  ],
-                                  if (habit.category.isNotEmpty) ...[
-                                    const SizedBox(width: 8),
-                                    Flexible(
-                                      child: Text(
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        minuteLabel(habit.startMinute),
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: context.tokens.muted,
+                                        ),
+                                      ),
+                                    ],
+                                    if (habit.kind == HabitKind.quantitative) ...[
+                                      const SizedBox(width: 8),
+                                      _AmountLabel(habit: habit),
+                                    ],
+                                    if (habitHasExplicitFrequency(habit)) ...[
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        '·  ${habitFrequencyLabel(context, habit)}',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: context.tokens.muted,
+                                        ),
+                                      ),
+                                    ],
+                                    if (habit.category.isNotEmpty) ...[
+                                      const SizedBox(width: 8),
+                                      Text(
                                         '·  ${context.categoryLabel(habit.category)}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontSize: 13,
                                           color: context.tokens.muted,
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ],
-                                ],
+                                ),
                               ),
                               if (!compact) ...[
                                 const SizedBox(height: 8),
@@ -336,19 +335,15 @@ class _AmountLabel extends StatelessWidget {
     final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
         ? ''
         : ' ${habit.unitLabel}';
-    return Flexible(
-      child: Text(
-        '·  ${habit.amountText(count)}/'
-        '${habit.amountText(habit.perDayTarget)}$unit',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: progress.reachedGoal
-              ? progress.solidColor(habit.color)
-              : context.tokens.muted,
-        ),
+    return Text(
+      '·  ${habit.amountText(count)}/'
+      '${habit.amountText(habit.perDayTarget)}$unit',
+      style: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: progress.reachedGoal
+            ? progress.solidColor(habit.color)
+            : context.tokens.muted,
       ),
     );
   }

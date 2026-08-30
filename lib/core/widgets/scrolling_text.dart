@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ScrollingText extends StatefulWidget {
-  const ScrollingText(
-    this.text, {
+class ScrollingLine extends StatefulWidget {
+  const ScrollingLine({
     super.key,
-    required this.style,
+    required this.child,
     this.speed = 26,
     this.pause = const Duration(milliseconds: 1600),
   });
 
-  final String text;
-  final TextStyle style;
+  final Widget child;
   final double speed;
   final Duration pause;
 
   @override
-  State<ScrollingText> createState() => _ScrollingTextState();
+  State<ScrollingLine> createState() => _ScrollingLineState();
 }
 
-class _ScrollingTextState extends State<ScrollingText>
+class _ScrollingLineState extends State<ScrollingLine>
     with SingleTickerProviderStateMixin {
   static const _rounds = 3;
 
@@ -36,15 +34,6 @@ class _ScrollingTextState extends State<ScrollingText>
       ..addStatusListener(_nextRound)
       ..addListener(_follow);
     _scheduleTune();
-  }
-
-  @override
-  void didUpdateWidget(ScrollingText old) {
-    super.didUpdateWidget(old);
-    if (old.text != widget.text) {
-      _overflow = 0;
-      _scheduleTune();
-    }
   }
 
   @override
@@ -104,14 +93,13 @@ class _ScrollingTextState extends State<ScrollingText>
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.disableAnimationsOf(context)) {
-      return Text(
-        widget.text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: widget.style,
-      );
-    }
+    final line = SingleChildScrollView(
+      controller: _scroll,
+      scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      child: widget.child,
+    );
+    if (MediaQuery.disableAnimationsOf(context)) return line;
 
     _scheduleTune();
     return ShaderMask(
@@ -123,17 +111,39 @@ class _ScrollingTextState extends State<ScrollingText>
             Colors.transparent],
         stops: _overflow > 0 ? const [0, 0.04, 0.9, 1] : const [0, 0, 1, 1],
       ).createShader(bounds),
-      child: SingleChildScrollView(
-        controller: _scroll,
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        child: Text(
-          widget.text,
-          maxLines: 1,
-          softWrap: false,
-          style: widget.style,
-        ),
-      ),
+      child: line,
+    );
+  }
+}
+
+class ScrollingText extends StatelessWidget {
+  const ScrollingText(
+    this.text, {
+    super.key,
+    required this.style,
+    this.speed = 26,
+    this.pause = const Duration(milliseconds: 1600),
+  });
+
+  final String text;
+  final TextStyle style;
+  final double speed;
+  final Duration pause;
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) {
+      return Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      );
+    }
+    return ScrollingLine(
+      speed: speed,
+      pause: pause,
+      child: Text(text, maxLines: 1, softWrap: false, style: style),
     );
   }
 }
