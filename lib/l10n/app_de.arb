@@ -1051,5 +1051,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "refresh_now": "Aktualisieren"
 }
