@@ -145,9 +145,22 @@ class BackupService {
   static Future<bool> export(List<Habit> habits, {Rect? origin}) async {
     final content = _payloadFor(habits);
     final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+    final name = 'streak_backup_$stamp.json';
+
+    if (!isMobile) {
+      final path = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save your Streak backup',
+        fileName: name,
+        type: FileType.custom,
+        allowedExtensions: const ['json'],
+      );
+      if (path == null) return false;
+      await File(path).writeAsString(content);
+      return true;
+    }
 
     final dir = await Directory.systemTemp.createTemp('streak_backup');
-    final file = File('${dir.path}/streak_backup_$stamp.json');
+    final file = File('${dir.path}/$name');
     await file.writeAsString(content);
 
     final result = await Share.shareXFiles(

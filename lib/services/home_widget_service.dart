@@ -36,6 +36,7 @@ class HomeWidgetService {
     AppLocalizations l10n,
     Map<String, Habit> habits,
   ) async {
+    if (!hasHomeWidgets) return;
     if (_lastLocale == l10n.localeName) return;
     _lastLocale = l10n.localeName;
     _locale = l10n.localeName;
@@ -129,6 +130,7 @@ class HomeWidgetService {
     required int opacity,
     required bool border,
   }) async {
+    if (!hasHomeWidgets) return;
     try {
       await HomeWidget.saveWidgetData<String>(
         'widget_style',
