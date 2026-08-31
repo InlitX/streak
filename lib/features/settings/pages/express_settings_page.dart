@@ -539,6 +539,20 @@ List<Widget> _preferenceTiles(BuildContext context) {
           onChanged: settings.setViewSwitcher,
         ),
         _Toggle(
+          icon: LucideIcons.route,
+          title: context.l10n.heatmap_path,
+          subtitle: context.l10n.heatmap_path_sub,
+          value: settings.heatmapPath,
+          onChanged: settings.setHeatmapPath,
+        ),
+        _Toggle(
+          icon: LucideIcons.calendarRange,
+          title: context.l10n.heatmap_rolling,
+          subtitle: context.l10n.heatmap_rolling_sub,
+          value: settings.heatmapRolling,
+          onChanged: settings.setHeatmapRolling,
+        ),
+        _Toggle(
           icon: LucideIcons.arrowDownWideNarrow,
           title: context.l10n.sort_completed_last,
           subtitle: context.l10n.sort_completed_last_sub,
@@ -604,6 +618,13 @@ List<Widget> _preferenceTiles(BuildContext context) {
           subtitle: context.l10n.todos_enable_sub,
           value: settings.todosEnabled,
           onChanged: settings.setTodosEnabled,
+        ),
+        _Toggle(
+          icon: LucideIcons.palmtree,
+          title: context.l10n.gamification_beta,
+          subtitle: context.l10n.island_enable_sub,
+          value: settings.islandEnabled,
+          onChanged: settings.setIslandEnabled,
         ),
         _Toggle(
           icon: LucideIcons.calendarClock,

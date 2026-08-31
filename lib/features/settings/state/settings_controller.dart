@@ -59,6 +59,7 @@ class SettingsController extends ChangeNotifier {
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _heatmapPath = LocalStore.setting('heatmapPath', false);
+    _heatmapRolling = LocalStore.setting('heatmapRolling', false);
     _startView = LocalStore.setting('startView', 0);
     _planningEnabled = LocalStore.setting('planningEnabled', false);
     _cardActivity = LocalStore.setting('cardActivity', true);
@@ -69,6 +70,7 @@ class SettingsController extends ChangeNotifier {
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
     _trackingOption = LocalStore.setting('trackingOption', false);
+    _islandEnabled = LocalStore.setting('islandEnabled', true);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
         List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
@@ -126,6 +128,7 @@ class SettingsController extends ChangeNotifier {
   late int _accentColor;
   late int _heatmapMode;
   late bool _heatmapPath;
+  late bool _heatmapRolling;
   late int _startView;
   late bool _planningEnabled;
   late bool _cardActivity;
@@ -136,6 +139,7 @@ class SettingsController extends ChangeNotifier {
   late bool _sortCompletedLast;
   late bool _todayOnly;
   late bool _notesEnabled;
+  late bool _islandEnabled;
   late bool _trackingOption;
   late int _quoteSource;
   late List<String> _customQuotes;
@@ -214,6 +218,14 @@ class SettingsController extends ChangeNotifier {
   int get heatmapMode => _heatmapMode;
 
   bool get heatmapPath => _heatmapPath;
+
+  bool get heatmapRolling => _heatmapRolling;
+
+  Future<void> setHeatmapRolling(bool value) async {
+    _heatmapRolling = value;
+    await LocalStore.writeSetting('heatmapRolling', value);
+    notifyListeners();
+  }
 
   Future<void> setHeatmapPath(bool value) async {
     _heatmapPath = value;
@@ -515,6 +527,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setNotesEnabled(bool value) async {
     _notesEnabled = value;
     await LocalStore.writeSetting('notesEnabled', value);
+    notifyListeners();
+  }
+
+  bool get islandEnabled => _islandEnabled;
+
+  Future<void> setIslandEnabled(bool value) async {
+    _islandEnabled = value;
+    await LocalStore.writeSetting('islandEnabled', value);
     notifyListeners();
   }
 

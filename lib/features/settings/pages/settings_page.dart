@@ -383,6 +383,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.calendarRange,
+                    title: context.l10n.heatmap_rolling,
+                    subtitle: context.l10n.heatmap_rolling_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.heatmapRolling ? 1 : 0,
+                      onChanged: (i) => settings.setHeatmapRolling(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.arrowDownWideNarrow,
                     title: context.l10n.sort_completed_last,
                     subtitle: context.l10n.sort_completed_last_sub,
@@ -480,6 +491,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                       options: [context.l10n.off, context.l10n.on],
                       index: settings.todosEnabled ? 1 : 0,
                       onChanged: (i) => settings.setTodosEnabled(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.palmtree,
+                    title: context.l10n.gamification_beta,
+                    subtitle: context.l10n.island_enable_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.islandEnabled ? 1 : 0,
+                      onChanged: (i) => settings.setIslandEnabled(i == 1),
                     ),
                   ),
                   settingsDivider(context),

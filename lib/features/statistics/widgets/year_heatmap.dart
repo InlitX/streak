@@ -3,7 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 const _gap = 3.0;
 
@@ -36,7 +38,15 @@ class _YearHeatmapState extends State<YearHeatmap> {
 
   double get _step => _cell + _gap;
 
-  DateTime get _start {
+  bool _rollingFor(bool on) => on && widget.year == AppClock.now().year;
+
+  DateTime _startFrom(bool rolling) {
+    if (rolling) {
+      final today = AppClock.now().atMidnight;
+      return today
+          .subtract(Duration(days: today.weekday - 1))
+          .subtract(const Duration(days: 7 * 52));
+    }
     final firstOfYear = DateTime(widget.year, 1, 1);
     return firstOfYear.subtract(Duration(days: firstOfYear.weekday - 1));
   }
@@ -64,9 +74,12 @@ class _YearHeatmapState extends State<YearHeatmap> {
       if (!mounted || !_scroll.hasClients) return;
       final position = _scroll.position;
       final today = AppClock.now().atMidnight;
-      final target = today.year != widget.year
+      final rolling = _rollingFor(
+        context.read<SettingsController>().heatmapRolling,
+      );
+      final target = today.year != widget.year && !rolling
           ? 0.0
-          : (today.difference(_start).inDays ~/ 7) * _step +
+          : (today.difference(_startFrom(rolling)).inDays ~/ 7) * _step +
                 _cell / 2 -
                 position.viewportDimension / 2;
       position.jumpTo(
@@ -78,15 +91,18 @@ class _YearHeatmapState extends State<YearHeatmap> {
   @override
   Widget build(BuildContext context) {
     final today = AppClock.now().atMidnight;
-    final start = _start;
+    final rolling =
+        _rollingFor(context.watch<SettingsController>().heatmapRolling);
+    final start = _startFrom(rolling);
     final lastOfYear = DateTime(widget.year, 12, 31);
-    final columns = lastOfYear.difference(start).inDays ~/ 7 + 1;
+    final columns =
+        rolling ? 53 : lastOfYear.difference(start).inDays ~/ 7 + 1;
     final empty = context.colors.surfaceContainerHighest;
     final max = widget.maxCount <= 0 ? 1 : widget.maxCount;
     final locale = Localizations.localeOf(context).languageCode;
 
     Color cellColor(DateTime date) {
-      if (date.year != widget.year) return Colors.transparent;
+      if (!rolling && date.year != widget.year) return Colors.transparent;
       final habit = widget.habit;
       if (habit != null) return heatmapCellColor(context, habit, date);
       if (date.isAfter(today)) return empty.withValues(alpha: 0.4);
@@ -108,7 +124,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
             children: List.generate(columns, (col) {
               final colDate = start.add(Duration(days: col * 7));
               final prevDate = start.add(Duration(days: (col - 1) * 7));
-              final isNewMonth = colDate.year == widget.year &&
+                      final isNewMonth = (rolling || colDate.year == widget.year) &&
                   (col == 0 || colDate.month != prevDate.month);
               return Padding(
                 padding: const EdgeInsets.only(right: _gap),

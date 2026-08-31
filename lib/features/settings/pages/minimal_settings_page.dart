@@ -443,6 +443,15 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.calendarRange,
+              title: context.l10n.heatmap_rolling,
+              subtitle: context.l10n.heatmap_rolling_sub,
+              trailing: _SoftSwitch(
+                value: settings.heatmapRolling,
+                onChanged: settings.setHeatmapRolling,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.arrowDownWideNarrow,
               title: context.l10n.sort_completed_last,
               subtitle: context.l10n.sort_completed_last_sub,
@@ -500,6 +509,15 @@ class _PreferencesPage extends StatelessWidget {
               trailing: _SoftSwitch(
                 value: settings.todosEnabled,
                 onChanged: settings.setTodosEnabled,
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.palmtree,
+              title: context.l10n.gamification_beta,
+              subtitle: context.l10n.island_enable_sub,
+              trailing: _SoftSwitch(
+                value: settings.islandEnabled,
+                onChanged: settings.setIslandEnabled,
               ),
             ),
             SoftRow(
