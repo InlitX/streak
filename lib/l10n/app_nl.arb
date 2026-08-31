@@ -1,0 +1,645 @@
+{
+  "today": "Vandaag",
+  "stats": "Statistieken",
+  "settings": "Instellingen",
+  "new_label": "Nieuw",
+  "save": "Opslaan",
+  "cancel": "Annuleer",
+  "delete": "Verwijder",
+  "good_morning": "Goeiemorgen",
+  "good_afternoon": "Goeiemiddag",
+  "good_evening": "Goeieavond",
+  "no_habits_yet": "Nog geen gewoontes",
+  "all_done_today": "Helemaal klaar vandaag!",
+  "x_of_y_completed": "{done} van {total} voltooid",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Begin je eerste reeks",
+  "empty_body": "Creëer een gewoonte en klik per dag om het te registreren. Kleine stappen, elke dag.",
+  "add_habit": "Voeg gewoonte toe",
+  "all": "Alles",
+  "onb1_title": "Bouw een echte reeks",
+  "onb1_body": "Registreer een gewoonte in één klik en zie je voortgang groeien dag na dag.",
+  "onb2_title": "Blijf op koers",
+  "onb2_body": "Dagelijks, wekelijks of maandelijkse doelen met slimme herinneringen zodat niks over het hoofd wordt gezien.",
+  "onb3_title": "Bekijk je voortgang",
+  "onb3_body": "Rijke inzichten en een jaarlijks overzicht tonen exact hoever je bent gekomen.",
+  "skip": "Overslaan",
+  "next": "Volgende",
+  "get_started": "Aan de slag",
+  "statistics": "Statistieken",
+  "done_today": "Klaar vandaag",
+  "best_streak": "Beste reeks",
+  "active_habits": "Actieve gewoontes",
+  "total_logs": "Totale registraties",
+  "last_7_days": "Laatste 7 dagen",
+  "last_30_days": "Laatste 30 dagen",
+  "your_habits": "Jouw gewoontes",
+  "stats_empty": "Voeg gewoontes toe om je statistieken te zien",
+  "completion_rate_short": "Consistentie",
+  "completion_rate": "Voltooiingspercentage",
+  "appearance": "Uiterlijk",
+  "theme": "Thema",
+  "system": "Systeem",
+  "light": "Licht",
+  "dark": "Donker",
+  "week_starts_on": "Week begint op",
+  "mon": "Maa",
+  "sat": "Zat",
+  "sun": "Zon",
+  "language": "Taal",
+  "data": "Gegevens",
+  "export_backup": "Back-up exporteren",
+  "export_backup_sub": "Sla alle gewoontes op naar bestand",
+  "auto_backup": "Automatische back-up",
+  "auto_backup_sub": "Uit",
+  "auto_backup_off": "Uit",
+  "auto_backup_daily": "Elke dag",
+  "auto_backup_weekly": "Elke week",
+  "auto_backup_where": "Wanneer je de app opent, maakt Streak een back-up en een leesbare kopie van je gewoontes die je in elke teksteditor kunt openen. De laatste 5 back-ups worden bewaard.",
+  "auto_backup_folder": "Map",
+  "auto_backup_folder_default": "App map",
+  "auto_backup_folder_set": "Map opgeslagen",
+  "auto_backup_folder_failed": "Kan niet naar die map schrijven",
+  "auto_backup_no_permission": "Opslag permissies geweigerd",
+  "auto_backup_run_now": "Maak nu een back-up",
+  "refresh_now": "Vernieuw",
+  "app_tagline": "Gewoontetracker",
+  "refresh_now_sub": "Haal alles wat je andere apparaten in de map hebben achtergelaten binnen",
+  "refresh_brought": "Je gewoontes zijn up-to-date",
+  "refresh_nothing": "Niets nieuws in de map",
+  "import_backup": "Back-up importeren",
+  "import_backup_sub": "Gewoontes uit een bestand herstellen",
+  "import_from_app": "Importeer uit een andere app",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "{habits} gewoontes ({days} dagen) uit {source} geïmporteerd",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Bestand kon niet worden geïmporteerd",
+  "about": "Over",
+  "backup_saved": "Back-up opgeslagen",
+  "export_cancelled": "Export geannuleerd",
+  "habits_imported": "Gewoontes geïmporteerd",
+  "new_habit": "Nieuwe gewoonte",
+  "edit_habit": "Bewerk gewoonte",
+  "name": "Naam",
+  "name_hint": "bijv. Ochtendloop",
+  "description": "Beschrijving",
+  "description_hint": "Optionele opmerking",
+  "icon": "Icoon",
+  "color": "Kleur",
+  "category": "Categorie",
+  "category_health": "Gezondheid",
+  "category_fitness": "Fitness",
+  "category_mindfulness": "Mindfulness",
+  "category_productivity": "Productiviteit",
+  "category_learning": "Leren",
+  "category_finance": "Financieel",
+  "count_days": "{count, plural, =1{1 dag} other{{count} dagen}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 week} other{{count} weken}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 maand} other{{count} maanden}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "habit_kind": "Type gewoonte",
+  "kind_positive": "Normaal",
+  "kind_negative": "Vermijd",
+  "kind_quantitative": "Aantal",
+  "kind_locked_hint": "Type kan niet aangepast worden na creatie van gewoonte.",
+  "kind_negative_hint": "Elke dag wordt standaard als 'schoon' geteld — je reeks groeit vanzelf. Tik alleen op het vinkje als je een keer een misstap hebt; die dag wordt dan rood en kun je het ongedaan maken.",
+  "cost_per_day": "Kost per dag",
+  "cost_note": "Optioneel. Laat leeg als deze gewoonte geen geld kost.",
+  "currency": "Valuta",
+  "currency_custom": "Aangepast",
+  "currency_hint": "Symbool of code",
+  "money_saved": "Geld bespaard",
+  "clean_days": "Schone dagen",
+  "quant_preset_water": "Water",
+  "quant_preset_reading": "Lezen",
+  "quant_preset_generic": "Aangepast",
+  "quant_unit_hint": "Eenheid (bijv. ml, paginas, sets)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "paginas",
+  "quant_edit_title": "Aantal van vandaag",
+  "quant_daily_goal": "Dagelijks doel",
+  "quant_tap_amount": "Aantal per klik",
+  "quant_per_day": "Aantal per dag",
+  "quant_average": "Gemiddelde per dag",
+  "quant_logged_days": "Geregistreerde dagen",
+  "quant_best_day": "Beste dag",
+  "quant_goal_days": "Doel bereikt",
+  "quant_stats_empty": "Registreer een aantal en het telt hier op, zelfs op de dagen dat je het doel niet haalt.",
+  "frequency": "Frequentie",
+  "daily": "Dagelijks",
+  "weekly": "Wekelijks",
+  "monthly": "Maandelijks",
+  "sched_days": "Dagen",
+  "sched_interval": "Interval",
+  "times_per_week": "{n} keer per week",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} keer per maand",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}x/week",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/maand",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Herinneringen",
+  "add_reminder": "Herinnering toevoegen",
+  "delete_habit": "Gewoonte verwijderen",
+  "archive_habit": "Gewoonte archiveren",
+  "archive": "Archiveer",
+  "share_friends": "Deel met een vriend",
+  "share_friends_sub": "Stuur hen de app",
+  "share_friends_message": "Ik houd mijn reeksen in stand met Streak — een kleine, gratis, offline gewoontetracker zonder accounts en zonder advertenties. Kom en maak je eigen reeks: https://inlitx.github.io/streak/",
+  "copy_message": "Kopieer bericht",
+  "message_copied": "Bericht gekopieerd",
+  "app_lock": "Vergrendel app",
+  "app_lock_sub": "Vraag voor je vingerafdruk of gezicht om Streak te openen",
+  "app_lock_unavailable": "Op dit toestel zijn geen biometrische gegevens ingesteld",
+  "app_lock_failed": "Kon niet verifiëren als jij het was",
+  "app_lock_title": "Streak is vergrendeld",
+  "app_lock_unlock": "Ontgrendel",
+  "app_lock_delay": "Vergrendel na",
+  "app_lock_delay_instant": "Onmiddelijk",
+  "app_lock_delay_seconds": "{value} seconden",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Fotos",
+  "note_take_photo": "Camera",
+  "note_pick_photo": "Galerij",
+  "journey": "Reis",
+  "journey_sub": "{count, plural, =1{1 foto} other{{count} fotos}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Nog geen fotos",
+  "journey_empty_sub": "Voeg een foto toe aan een notitie en deze verschijnt hier.",
+  "archive_habit_body": "Verplaats \"{name}\" naar archief? De geschiedenis wordt bewaard en je kunt deze via Instellingen herstellen.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "Gearchiveerde gewoontes",
+  "archived_habits_sub": "Herstel ze of verwijder ze voor altijd",
+  "archived_empty": "Niets gearchiveerd",
+  "archived_empty_sub": "Gewoontes die je verwijdert belanden hier, met al hun geschiedenis.",
+  "restore": "Herstel",
+  "restored": "Gewoonte hersteld",
+  "delete_forever": "Verwijder voor altijd",
+  "delete_forever_body": "Verwijder \"{name}\" en de volledige geschiedenis ervan? Dit kan niet ongedaan worden gemaakt.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Gewoonte verwijderd",
+  "clear_progress": "Leeg voortgang",
+  "clear_progress_sub": "Geschiedenis, notities en focussessies",
+  "clear_progress_warning": "Hiermee worden alle geregistreerde dagen, notities en focussessies gewist, maar blijven je gewoontes, de bijbehorende schema’s en je instellingen behouden. Deze actie kan niet ongedaan worden gemaakt, tenzij je een back-upbestand hebt dat je achteraf kunt importeren.",
+  "clear_progress_confirm": "Leeg voortgang",
+  "clear_progress_done": "Voortgang geleegd",
+  "wipe_data": "Alle gegevens verwijderen",
+  "wipe_data_sub": "Gewoontes, notities, focussessies en instellingen",
+  "wipe_data_warning": "Hierdoor worden alle gewoontes, notities, focussessies en instellingen op dit toestel gewist. Dit kan niet ongedaan worden gemaakt, tenzij je een back-upbestand hebt dat je achteraf kunt importeren.",
+  "wipe_data_sure": "Wil je echt alles wissen?",
+  "wipe_data_sure_body": "Laatste kans. Zonder back-up zijn deze gegevens voorgoed verloren.",
+  "wipe_data_confirm": "Alles wissen",
+  "wipe_data_done": "Alle gegevens gewist",
+  "day_start": "Dag start om",
+  "day_start_sub": "Late avonden tellen nog steeds mee voor de dag ervoor",
+  "day_start_midnight": "Middernacht",
+  "day_start_hour": "{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "Foto",
+  "share_stats_short": "Statistieken",
+  "undo": "Ongedaan maken",
+  "habit_archived": "Gewoonte gearchiveerd",
+  "share_blur": "Vervaag",
+  "delete_habit_body": "Verwijder \"{name}\"? Dit kan niet ongedaan worden gemaakt.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Registreer een hervalling?",
+  "log_relapse_body": "Hiermee wordt de reeks \"{name}\" van vandaag onderbroken. Je kunt dit ongedaan maken door nogmaals te klikken.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Ja, registreer",
+  "permission_required": "Notificatie permissie is vereist",
+  "streaks": "Reeks",
+  "activity": "Activiteit",
+  "current": "Huidig",
+  "best": "Beste",
+  "total": "Totaal",
+  "relapses": "Hervallingen",
+  "strength": "Sterkte",
+  "week": "Week",
+  "month": "Maand",
+  "year": "Jaar",
+  "new_reminder": "Nieuwe herinnering",
+  "edit_reminder": "Bewerk herinnering",
+  "days": "Dagen",
+  "time": "Tijd",
+  "save_reminder": "Sla herinnering op",
+  "select_one_day": "Selecteer minstens één dag",
+  "every_day": "Elke dag",
+  "no_days": "Geen dagen",
+  "repeat_hours": "Herhaal tijdens de dag",
+  "every_n_hours": "Elke {n} u",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "Specifieke dagen",
+  "repeat_interval": "Elke N dagen",
+  "every_n_days": "Elke {n} dagen",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "Niet gecategoriseerd",
+  "more_icons": "Meer iconen",
+  "less_icons": "Minder iconen",
+  "completions": "Voltooiingen",
+  "completion_time": "Voltooitijd",
+  "current_streak": "Huidige reeks",
+  "days_active": "Dagen actief",
+  "completions_per_month": "Voltooiingen / Maand",
+  "overview": "Overzicht",
+  "preferences": "Voorkeuren",
+  "support": "Help",
+  "profile": "Profiel",
+  "about_app": "Over deze app",
+  "about_app_sub": "Versie, credits en broncode",
+  "my_heatmap": "Mijn heatmap",
+  "my_heatmap_sub": "Open het jaarlijkse activiteitenrooster",
+  "rate_github": "Volg op GitHub",
+  "rate_github_sub": "Steun het project met een ster",
+  "buy_coffee": "Koop een koffie voor mij",
+  "buy_coffee_sub": "Help mee om de app gratis te houden",
+  "view_source": "Bekijk broncode op GitHub",
+  "about_title": "Voor jou gemaakt. Gratis, voor altijd.",
+  "about_footer": "Gemaakt met ☕ en veel vrije tijd.",
+  "about_body": "Streak is ontstaan uit een eenvoudig idee: waarom zou je betalen om je eigen gewoontes bij te houden?\n\nDeze app is volledig open source. Iedereen kan precies zien hoe het werkt, verbeteringen voorstellen of zelfs een eigen versie bouwen. Geen ‘black boxes’. Geen verrassingen.\n\nJe privacy is volledig gewaarborgd — alles blijft op je toestel staan. Geen accounts, geen servers, geen advertenties. Er verlaat geen enkele byte je apparaat.\n\nGeen beperkingen. Creëer zoveel gewoontes als je wilt. Geen abonnementen, geen ‘pro-versie’, geen pop-ups waarin je wordt gevraagd om te betalen. Nooit.\n\nAls je iets aan de app hebt, kun je hem steunen door een ster te geven op GitHub of door een koffie voor me te trakteren. Maar dat is helemaal vrijblijvend — de app is hoe dan ook van jou.",
+  "close": "Sluit",
+  "no_data_yet": "Nog geen gegevens",
+  "import_question_body": "Vervang al je huidige gewoontes door de back-up, of ze samenvoegen?",
+  "import_replace": "Vervang alles",
+  "import_merge": "Samenvoegen",
+  "go": "Ga",
+  "quote_1": "Kleine stappen, elke dag.",
+  "quote_2": "Consistentie gaat boven intensiteit.",
+  "quote_3": "Kom voor jezelf op.",
+  "quote_4": "Dag voor dag.",
+  "quote_5": "Vooruitgang, geen perfectie.",
+  "quote_6": "Gedaan is beter dan perfect.",
+  "quote_7": "Houd de reeks in stand.",
+  "quote_8": "Kleine gewoontes, grote verandering.",
+  "quote_9": "Vertrouw op het proces.",
+  "quote_10": "Maak het beste van de ochtend.",
+  "quote_11": "Discipline staat gelijk aan vrijheid.",
+  "quote_12": "Vandaag telt.",
+  "just_tracking_option": "Alleen bijhouden aanbieden",
+  "just_tracking_option_sub": "Voegt de schakelaar toe wanneer je een gewoonte aanmaakt",
+  "just_tracking": "Enkel bijhouden",
+  "just_tracking_sub": "Behoud het eigen raster en de eigen getallen, maar laat het buiten Voortgang en de dagelijkse telling",
+  "quotes": "Citaten",
+  "quotes_which": "Welke citaten",
+  "quotes_app": "Van de app",
+  "quotes_mine": "Eigen",
+  "quotes_both": "Beide",
+  "quotes_off": "Uit",
+  "quotes_my_list": "Mijn citaten",
+  "quotes_add": "Voeg citaat toe",
+  "quotes_edit": "Bewerk citaat",
+  "quotes_hint": "Schrijf je citaat",
+  "quotes_empty": "Geen eigen citaten",
+  "quotes_empty_sub": "Schrijf je eigen en ze verschijnen op Vandaag.",
+  "motiv_start": "Start de dag sterk 💪",
+  "motiv_progress": "Je bent op de goede weg, ga zo door",
+  "motiv_almost": "Je bent er bijna! Nog een klein stukje",
+  "motiv_perfect": "Perfecte dag! 🔥",
+  "app_background": "Achtergrond",
+  "widgets": "Widgets",
+  "customize_widgets": "Bewerk widgets",
+  "customize_widgets_sub": "Achtergrond, doorzichtigheid, rand",
+  "widget_background": "Achtergrond kleur",
+  "widget_opacity": "Doorzichtigheid",
+  "widget_border": "Rand",
+  "widget_preview": "Voorbeeld",
+  "bg_solid": "Solide",
+  "bg_gradient": "Gradiënt",
+  "bg_dots": "Stippen",
+  "bg_oled": "OLED",
+  "weekdays": "Weekdagen",
+  "weekends": "Weekends",
+  "reminder_message": "Bericht (optioneel)",
+  "reminder_message_hint": "Laat leeg voor een motiverend citaat",
+  "new_category": "Nieuwe categorie",
+  "edit_category": "Bewerk categorie",
+  "add_category": "Nieuw",
+  "delete_category": "Verwijder categorie",
+  "edit": "Bewerk",
+  "cover_image": "Omslagafbeelding",
+  "book_cover": "Boekomslag",
+  "add_image": "Afbeelding toevoegen",
+  "when_best": "Wanneer ben je het meest consistent?",
+  "streak_evolution": "Reeks evolutie",
+  "consistency": "Consistentie",
+  "consistency_trend": "Trend in consistentie",
+  "by_habit": "Per gewoonte",
+  "ranking": "Ranglijst",
+  "active_days": "Actieve dagen",
+  "perfect_days": "Perfecte dagen",
+  "per_week": "Per week",
+  "best_month": "Beste maand",
+  "streak_on": "🔥 {n} dagen in een rij. Verbreek het niet!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 Vandaag kun je een nieuwe reeks beginnen",
+  "not_enough_data": "Nog niet genoeg gegevens",
+  "about_inline": "Streak is een open-source-app waarmee je je gewoontes kunt bijhouden. Geen accounts, geen beperkingen, geen kosten. Alles blijft op je toestel staan.\n\nIedereen kan de code inzien, verbeteren of vrij gebruiken.",
+  "about_subtitle": "Voor de dagen waarop je ervoor kiest om er te zijn.",
+  "about_story": "Deze app is ontstaan uit frustratie over de bestaande gewoontetrackers. De meeste stellen een limiet in op het aantal gewoontes dat je kunt aanmaken, verbergen basisfuncties achter een betaalmuur, houden je in de gaten of overspoelen je met advertenties. Daarom besloot ik Streak te ontwikkelen: volledig gratis, geen advertenties, geen betalingen, geen tracking. Alles draait lokaal — jouw gegevens blijven van jou. Open source, zonder addertjes onder het gras.",
+  "made_by": "Gemaakt met ❤️ door @InlitX",
+  "share": "Deel",
+  "share_progress": "Deel voortgang",
+  "share_failed": "Kon afbeelding niet creëeren",
+  "share_swipe_hint": "Veeg over de kaart om door de tijd te bewegen",
+  "share_background": "Achtergrond",
+  "share_size": "Grootte",
+  "share_size_large": "Groot",
+  "share_size_small": "Vierkant",
+  "share_show_stats": "Toon statistieken",
+  "share_save": "Opslaan",
+  "share_saved": "Opgeslagen naar je gallerij",
+  "share_save_failed": "Kon de afbeelding niet opslaan",
+  "about_developer": "De ontwikkelaar",
+  "about_credits": "Credits",
+  "about_credits_body": "Gemaakt met Flutter. Iconen door Lucide. Grafieken door fl_chart. Opgemaakt in Figtree & Playfair Display.",
+  "dev_handle": "@InlitX",
+  "dev_role": "Indie-ontwikkelaar · Streak",
+  "notes": "Notities",
+  "notes_enable_sub": "Voeg notities toe aan elke dag van een gewoonte",
+  "add_note": "Voeg notitie toe",
+  "edit_note": "Bewerkt notitie",
+  "view_notes": "Bekijk notities",
+  "edit_entry": "Invoer bewerken",
+  "note_type": "Type",
+  "note_kind_note": "Opmerking",
+  "note_kind_planned": "Gepland",
+  "note_kind_completed": "Voltooid",
+  "note_hint": "Schrijf je notitie...",
+  "note_time_optional": "Tijd (optioneel)",
+  "save_note": "Sla notitie op",
+  "notes_empty": "Nog geen notities voor deze dag",
+  "delete_note": "Verwijder notitie",
+  "legend_note_added": "Notitie toegevoegd",
+  "tomorrow": "Morgen",
+  "notes_count": "{count, plural, =1{1 notitie} other{{count} notities}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "To-Do",
+  "todos_enable_sub": "Een kort overzicht buiten je gewoontes",
+  "todo_new": "Nieuwe to-do",
+  "todo_hint": "Wat moet er gebeuren?",
+  "todo_empty_title": "Niks op de lijst",
+  "todo_empty_body": "Schrijf op wat je de komende dagen wilt doen.",
+  "todo_date": "Datum",
+  "todo_no_date": "Geen datum",
+  "todo_time": "Tijd",
+  "todo_priority": "Prioriteit",
+  "priority_none": "Geen prioriteit",
+  "priority_low": "Laag",
+  "priority_medium": "Gemiddeld",
+  "priority_high": "Hoog",
+  "todo_overdue": "Achterstallig",
+  "todo_upcoming": "Aankomend",
+  "todo_someday": "Op een dag",
+  "pick_a_date": "Kies een datum",
+  "todo_left": "{count, plural, =0{Helemaal klaar} =1{1 to do} other{{count} to do}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, =1{Voltooid (1)} other{({count}) voltooid}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "Doorzoek to-dos",
+  "todo_search_empty": "Niks dat overeenkomt",
+  "todo_clear_completed": "Voltooide legen",
+  "todo_clear_completed_body": "{count, plural, =1{Dit verwijdert de voltooide to-do.} other{Dit verwijdert de {count} voltooide to-dos.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "Algemeen",
+  "prefs_features": "Functies",
+  "prefs_privacy": "Privacy",
+  "collapse_cards": "Kaarten samenvouwen",
+  "expand_cards": "Kaarten uitvouwen",
+  "view_switcher": "Weergaveschakelaar",
+  "view_switcher_sub": "Toon de Week / Maand / Jaar knoppen op Vandaag",
+  "view_switcher_needs": "Zet activiteit op kaarten aan om te gebruiken",
+  "focus": "Focus",
+  "focus_enable_sub": "Een timer voor gewoontes die een nodig hebben",
+  "focus_free_session": "Vrije sessie",
+  "focus_duration": "Duur",
+  "focus_start": "Start sessie",
+  "focus_style": "Timer stijl",
+  "focus_style_digital": "Cirkel",
+  "focus_style_flip": "Omdraaien",
+  "focus_style_dots": "Stippen",
+  "focus_saved": "{time} opgenomen",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_total": "Focus tijd",
+  "focus_sessions": "Sessies",
+  "focus_stop_title": "Sessie beëindigen?",
+  "focus_stop_body": "Je minuten worden hoe dan ook opgeslagen. De gewoonte is pas voltooid als je het doel bereikt.",
+  "focus_end": "Einde",
+  "focus_pick_habit": "Waar focus je op?",
+  "focus_scene_custom": "Jouw afbeelding",
+  "unit_hours": "uren",
+  "unit_minutes": "minuten",
+  "unit_seconds": "seconden",
+  "focus_target_reached": "Doel bereikt",
+  "focus_pause": "Pauzeer",
+  "focus_resume": "Hervat",
+  "focus_sound": "Geluid",
+  "focus_pick_audio": "Kies een nummer op je telefoon",
+  "focus_no_sound": "Geen nummer gekozen",
+  "focus_tasks": "Subtaak weergeven",
+  "focus_custom_duration": "Aangepast",
+  "focus_end_short": "Je zit {time} tekort op het doel.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "{count} taken zijn nog niet afgevinkt.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "Doel bereikt. De gewoonte wordt gemarkeerd als voltooid.",
+  "focus_end_keep": "Ga door",
+  "focus_end_anyway": "Toch beëindigen",
+  "focus_end_complete": "Markeer als voltooid",
+  "focus_amount_added": "{amount} toegevoegd aan {habit}",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "Aangepast",
+  "focus_track_rain": "Regen",
+  "focus_track_brown": "Bruin geluid",
+  "focus_track_pad": "Warmtekussen",
+  "focus_add_track": "Voeg nummer toe",
+  "focus_shuffle": "Shuffle",
+  "focus_loop": "In volgorde",
+  "focus_track_too_long": "Nummer moet minder dan 20 minuten zijn",
+  "focus_track_limit": "Maximaal 10 nummers",
+  "focus_done_title": "Sessie voltooid",
+  "focus_your_tracks": "Jouw nummers",
+  "focus_built_in": "Inbegrepen",
+  "unit_hour_short": "u",
+  "unit_min_short": "min",
+  "focus_notif_body": "Je focussessie is afgelopen. Goed gedaan!",
+  "celebration": "Voltooiingseffect",
+  "celebration_confetti": "Confetti",
+  "celebration_fireworks": "Vuurwerk",
+  "celebration_surprise": "Verras me"
+}

@@ -1022,5 +1022,12 @@
         "type": "String"
       }
     }
-  }
+  },
+  "refresh_now": "Atualizar",
+  "refresh_now_sub": "Traga o que seus outros dispositivos deixaram na pasta",
+  "refresh_brought": "Seus hábitos estão atualizados",
+  "refresh_nothing": "Nada de novo na pasta",
+  "just_tracking_option": "Somente rastreamento",
+  "just_tracking_option_sub": "Adiciona a opção ao criar um hábito",
+  "just_tracking": "Somente rastreamento"
 }
