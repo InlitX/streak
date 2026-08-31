@@ -208,15 +208,16 @@ it installs Streak and keeps it updated for you. It's also on
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 and [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
-Streak is an Android app today, and the other platforms are on their way:
+Streak runs on Android and Windows today, and the other platforms are on
+their way:
 
 | Platform | Status |
 |----------|--------|
 | Android | ✅ Supported |
-| Windows | 🚧 In progress |
+| Windows | ✅ Supported |
+| iOS | 🚧 In progress |
 | Linux | 📅 Planned |
 | macOS | 📅 Planned |
-| iOS | 📅 Planned |
 
 <details>
 <summary><b>Install the APK yourself</b></summary>
@@ -293,6 +294,11 @@ Streak did not appear out of nowhere. These are the apps that shaped it:
   history looks as a coloured grid.
 - **[Habitica](https://github.com/habitRPG/habitica)**, for treating showing up as something
   worth celebrating.
+
+The island you build in the gamification tab is drawn with
+**[Mykonos Island Voxels](https://github.com/boona13/mykonos-island-voxels)** by
+boona13, an MIT licensed set of isometric voxel art. Thank you for putting it
+out there for anyone to use.
 
 Nothing here is copied from them. Their ideas were the starting point, and
 Streak went its own way from there.

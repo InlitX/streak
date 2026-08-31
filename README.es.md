@@ -223,10 +223,10 @@ Hoy Streak es una app de Android, y el resto de plataformas están en camino:
 | Plataforma | Estado |
 |------------|--------|
 | Android | ✅ Compatible |
-| Windows | 🚧 En curso |
+| Windows | ✅ Compatible |
+| iOS | 🚧 En curso |
 | Linux | 📅 Planeado |
 | macOS | 📅 Planeado |
-| iOS | 📅 Planeado |
 
 <details>
 <summary><b>Instalar el APK por tu cuenta</b></summary>
@@ -303,6 +303,11 @@ Streak no salió de la nada. Estas son las apps que la moldearon:
   de historial en una rejilla de colores.
 - **[Habitica](https://github.com/habitRPG/habitica)**, por tratar el aparecer cada día como
   algo que merece celebrarse.
+
+La isla que se construye en la pestaña de gamificación está dibujada con
+**[Mykonos Island Voxels](https://github.com/boona13/mykonos-island-voxels)** de
+boona13, un juego de arte isométrico de voxel con licencia MIT. Gracias por
+publicarlo para que cualquiera pueda usarlo.
 
 Aquí no hay nada copiado de ellas. Sus ideas fueron el punto de partida y Streak
 siguió su propio camino.

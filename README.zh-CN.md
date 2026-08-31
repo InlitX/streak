@@ -204,10 +204,10 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 | 平台 | 状态 |
 |------|------|
 | Android | ✅ 已支持 |
-| Windows | 🚧 开发中 |
+| Windows | ✅ 已支持 |
+| iOS | 🚧 开发中 |
 | Linux | 📅 计划中 |
 | macOS | 📅 计划中 |
-| iOS | 📅 计划中 |
 
 <details>
 <summary><b>自己安装 APK</b></summary>
@@ -278,6 +278,10 @@ Streak 并非凭空而来。以下这些应用塑造了它：
 - **[HabitKit](https://www.habitkit.app/)**，它让人看到一整年的记录做成彩色格子
   有多好看。
 - **[Habitica](https://github.com/habitRPG/habitica)**，它把每天坚持下来当成值得庆祝的事。
+
+游戏化标签页里建造的小岛，用的是 boona13 的
+**[Mykonos Island Voxels](https://github.com/boona13/mykonos-island-voxels)**，
+一套 MIT 许可的等距体素素材。谢谢你把它公开出来给大家用。
 
 这里没有任何东西是照搬它们的。它们的想法只是起点，之后 Streak 走了自己的路。
 
