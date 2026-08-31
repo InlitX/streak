@@ -34,6 +34,7 @@ import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/features/habits/widgets/minimal_detail_parts.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
+import 'package:streak/features/habits/widgets/check_history.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -138,9 +139,12 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
               break;
             case HabitKind.negative:
               final relapsed = habit.completions.containsKey(date.dayKey);
-              relapsed
-                  ? controller.clearRelapse(habit.id, date)
-                  : controller.logRelapse(habit.id, date);
+              if (relapsed) {
+                controller.clearRelapse(habit.id, date);
+              } else if (!date.atMidnight
+                  .isBefore(habit.createdAt.atMidnight)) {
+                controller.logRelapse(habit.id, date);
+              }
               break;
             case HabitKind.quantitative:
               unawaited(editAmount(date));
@@ -308,6 +312,8 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 if (notesOn && _mode != HeatmapMode.year) const NoteLegend(),
                 if (notesOn) _JourneyStrip(habit: habit),
                 const SizedBox(height: 20),
+                CheckHistoryTile(habit: habit),
+                const SizedBox(height: 12),
                 if (minimal)
                   MinimalVacationRow(habit: habit)
                 else
@@ -452,8 +458,6 @@ class _ActivityView extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
         child: YearHeatmap(
           year: AppClock.now().year,
-          dailyCounts: const {},
-          maxCount: 1,
           color: habit.color,
           habit: habit,
           express: true,

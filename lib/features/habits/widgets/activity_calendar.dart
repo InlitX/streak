@@ -179,7 +179,7 @@ class _CalendarCell extends StatelessWidget {
     final completed = habit.isCompletedOn(date);
     final relapsed = negative && !completed && !outOfScope;
     final paused = isCurrentMonth && !outOfScope && habit.isNeutralOn(date);
-    final tappable = isCurrentMonth && !future;
+    final tappable = isCurrentMonth && !future && !beforeCreation;
     final danger = context.tokens.danger;
     final count = habit.completions[date.dayKey]?.count ?? 0;
 

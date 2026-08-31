@@ -3,6 +3,11 @@ import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
+int _nowMinutes() {
+  final now = AppClock.now();
+  return now.hour * 60 + now.minute;
+}
+
 class CompletionOps {
   const CompletionOps._();
 
@@ -26,6 +31,8 @@ class CompletionOps {
             ? (habit.perDayTarget <= 0 ? 1 : habit.perDayTarget)
             : 1,
         hour: AppClock.now().hour,
+        minute: AppClock.now().minute,
+        marks: [_nowMinutes()],
       );
     }
     return completions;
@@ -54,7 +61,10 @@ class CompletionOps {
         date: date.dayKey,
         count: steps.length.toDouble(),
         steps: steps,
-        hour: entry?.hour ?? AppClock.now().hour,
+        hour: AppClock.now().hour,
+        minute: AppClock.now().minute,
+        marks: checked ? (entry?.plus(_nowMinutes()) ?? [_nowMinutes()])
+            : (entry?.marks ?? const []),
       );
     }
     return completions;
@@ -70,7 +80,10 @@ class CompletionOps {
         date: date.dayKey,
         count: all.length.toDouble(),
         steps: all,
-        hour: completions[date.dayKey]?.hour ?? AppClock.now().hour,
+        hour: AppClock.now().hour,
+        minute: AppClock.now().minute,
+        marks: completions[date.dayKey]?.plus(_nowMinutes()) ??
+            [_nowMinutes()],
       );
     }
     return completions;
@@ -78,8 +91,12 @@ class CompletionOps {
 
   static Map<String, Completion> logRelapse(Habit habit, DateTime date) {
     final completions = {...habit.completions};
-    completions[date.dayKey] =
-        Completion(date: date.dayKey, hour: AppClock.now().hour);
+    completions[date.dayKey] = Completion(
+      date: date.dayKey,
+      hour: AppClock.now().hour,
+      minute: AppClock.now().minute,
+      marks: [_nowMinutes()],
+    );
     return completions;
   }
 
@@ -103,6 +120,11 @@ class CompletionOps {
         date: date.dayKey,
         count: next,
         hour: AppClock.now().hour,
+        minute: AppClock.now().minute,
+        marks: delta > 0
+            ? (completions[date.dayKey]?.plus(_nowMinutes()) ??
+                [_nowMinutes()])
+            : (completions[date.dayKey]?.marks ?? const []),
       );
     }
     return completions;
