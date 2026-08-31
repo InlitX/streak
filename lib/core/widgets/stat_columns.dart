@@ -15,9 +15,15 @@ List<Widget> spanned(BuildContext context, List<Widget> items) {
     return isWideLayout(context) ? [StatColumns(cards: items)] : items;
   }
   if (!isWideLayout(context)) return [...items]..removeAt(cut);
+  final rest = items.skip(cut + 1).toList();
+  final lead = <Widget>[];
+  while (rest.isNotEmpty && rest.first is SizedBox) {
+    lead.add(rest.removeAt(0));
+  }
   return [
     ...items.take(cut),
-    StatColumns(cards: items.skip(cut + 1).toList()),
+    ...lead,
+    StatColumns(cards: rest),
   ];
 }
 
@@ -39,7 +45,13 @@ class StatColumns extends StatelessWidget {
         for (final card in cards) {
           group.add(card);
           if (card is SizedBox || card is SectionLabel) continue;
-          (left.length <= right.length ? left : right).addAll(group);
+          final column = left.length <= right.length ? left : right;
+          if (column.isEmpty) {
+            while (group.isNotEmpty && group.first is SizedBox) {
+              group.removeAt(0);
+            }
+          }
+          column.addAll(group);
           group = <Widget>[];
         }
         left.addAll(group);
