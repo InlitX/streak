@@ -1,0 +1,51 @@
+name: Windows zip
+
+# Builds the Windows app from whatever branch you launch this on and attaches the
+# zip to a release that already exists. Separate from build-apk.yml on purpose:
+# re-running that one rebuilds and replaces the APKs, and those have to keep
+# matching the commit the tag points at, or F-Droid's reproducible build breaks.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to attach the zip to, e.g. v1.8.0'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  FLUTTER_VERSION: '3.41.9'
+
+jobs:
+  windows:
+    name: Build and attach
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      - name: Zip the build
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath Streak-windows-x64.zip
+
+      - name: Add it to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: Streak-windows-x64.zip
