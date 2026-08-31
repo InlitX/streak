@@ -17,6 +17,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -58,6 +59,13 @@ class ExpressHabitCard extends StatelessWidget {
     final quantitative = habit.kind == HabitKind.quantitative;
     final corners = radius ?? BorderRadius.circular(Express.groupEdge);
     final compact = settings.compactCards;
+    final cover = CoverImage.exists(habit.coverPath);
+    final skin = done
+        ? Color.alphaBlend(
+            habit.color.withValues(alpha: 0.06),
+            expressSurface(context),
+          )
+        : expressSurface(context);
 
     return ExpressSquish(
       onTap: onOpen,
@@ -66,18 +74,23 @@ class ExpressHabitCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: Express.normal,
         curve: Express.emphasized,
-        padding: EdgeInsets.fromLTRB(14, 14, 14, compact ? 14 : 12),
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: done
-              ? Color.alphaBlend(
-                  habit.color.withValues(alpha: 0.06),
-                  expressSurface(context),
-                )
-              : expressSurface(context),
+          color: skin,
           borderRadius: corners,
           border: expressHairline(context),
         ),
-        child: Column(
+        child: Stack(
+          children: [
+            if (cover) ...[
+              Positioned.fill(child: CoverImage(path: habit.coverPath)),
+              Positioned.fill(
+                child: ColoredBox(color: skin.withValues(alpha: 0.82)),
+              ),
+            ],
+            Padding(
+              padding: EdgeInsets.fromLTRB(14, 14, 14, compact ? 14 : 12),
+              child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -136,6 +149,9 @@ class ExpressHabitCard extends StatelessWidget {
                   ),
               },
             ],
+          ],
+              ),
+            ),
           ],
         ),
       ),
