@@ -25,6 +25,8 @@ import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/island/data/island_ledger.dart';
+import 'package:streak/features/island/widgets/island_coins.dart';
 import 'package:streak/features/habits/widgets/classic_habit_list.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/express_habit_list.dart';
@@ -80,12 +82,24 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  final _coins = ValueNotifier<int>(0);
+  int _coinAmount = 0;
+
   void _changeMode(HeatmapMode mode) {
     setState(() => _mode = mode);
     context.read<SettingsController>().setHeatmapMode(mode.index);
   }
 
   void _celebrate() => _confetti.value++;
+
+  void _payout(HabitsController controller, DateTime date) {
+    final counted = controller.habits.where((h) => !h.tracking);
+    final due = counted.where((h) => h.isScheduledOn(date));
+    final perfect = due.isNotEmpty && due.every((h) => h.isCompletedOn(date));
+    _coinAmount = IslandLedger.perCheck +
+        (perfect ? IslandLedger.perPerfectDay : 0);
+    _coins.value++;
+  }
 
   void _showHabitActions(HabitsController controller, Habit habit) {
     showModalBottomSheet(
@@ -521,6 +535,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          Positioned.fill(
+            child: RepaintBoundary(
+              child: ValueListenableBuilder<int>(
+                valueListenable: _coins,
+                builder: (context, trigger, _) =>
+                    IslandCoins(trigger: trigger, amount: _coinAmount),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -561,6 +584,7 @@ class _HomePageState extends State<HomePage> {
         !habit.tracking &&
         (updated?.isCompletedOn(date) ?? false)) {
       _celebrate();
+      _payout(controller, date);
     }
     if (!animate) return;
 

@@ -18,6 +18,7 @@ import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/island/state/island_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
@@ -191,6 +192,7 @@ Future<void> pumpScreen(
         ChangeNotifierProvider(create: (_) => NotesController()),
         ChangeNotifierProvider(create: (_) => TodosController()),
         ChangeNotifierProvider(create: (_) => FocusController()),
+        ChangeNotifierProvider(create: (_) => IslandController()),
         ChangeNotifierProvider(create: (_) => HabitsController()),
       ],
       child: MaterialApp(

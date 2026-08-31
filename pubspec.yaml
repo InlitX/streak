@@ -3,7 +3,7 @@ description: "Streak: a minimal habit tracker that helps you build lasting strea
 
 publish_to: 'none'
 
-version: 1.7.0+8
+version: 1.8.0+9
 
 environment:
   sdk: ^3.9.2
@@ -67,6 +67,7 @@ flutter:
     - assets/icon.png
     - assets/sounds/
     - assets/backgrounds/
+    - assets/island/
 
   fonts:
     - family: Figtree

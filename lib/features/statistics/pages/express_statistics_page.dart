@@ -24,6 +24,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/quant_stats_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/island/widgets/island_entry.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
@@ -112,6 +113,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  const IslandEntry(),
                   _HabitScope(
                     habits: all,
                     selected: _habitId,
@@ -219,6 +221,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
     return [
       _ConsistencyHero(percent: stats.consistency, accent: accent),
       const SizedBox(height: 24),
+      const SpanEnd(),
       SectionLabel(context.l10n.streaks),
       ExpressGroup(
         children: [

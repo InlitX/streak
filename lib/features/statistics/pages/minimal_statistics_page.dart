@@ -17,6 +17,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/quant_stats_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/island/widgets/island_entry.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
@@ -96,6 +97,7 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                 padding: context.pagePadding(20, 0, 20, 40),
                 children: spanned(context, [
                   MinimalTitle(title: context.l10n.statistics),
+                  const IslandEntry(),
                   if (all.length > 1) ...[
                     MinimalChips(
                       children: [

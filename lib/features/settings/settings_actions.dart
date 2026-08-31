@@ -18,6 +18,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/island/state/island_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/notification_service.dart';
@@ -302,6 +303,7 @@ class SettingsActions {
     context.read<FocusController>().reload();
     context.read<TodosController>().reload();
     context.read<CategoriesController>().reload();
+    context.read<IslandController>().reload();
     await context.read<SettingsController>().reloadFromStore();
     if (!context.mounted) return;
     AppSnackbar.success(context, context.l10n.wipe_data_done);

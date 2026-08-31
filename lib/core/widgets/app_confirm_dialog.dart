@@ -63,12 +63,15 @@ Future<bool?> showAppConfirmDialog(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: Text(
-                        cancelLabel ?? dialogContext.l10n.cancel,
-                        textAlign: TextAlign.center,
-                        style: sheetActionStyle(
-                          dialogContext,
-                          color: scheme.onSurface,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          cancelLabel ?? dialogContext.l10n.cancel,
+                          maxLines: 1,
+                          style: sheetActionStyle(
+                            dialogContext,
+                            color: scheme.onSurface,
+                          ),
                         ),
                       ),
                     ),
@@ -87,10 +90,13 @@ Future<bool?> showAppConfirmDialog(
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: Text(
-                        confirmLabel,
-                        textAlign: TextAlign.center,
-                        style: sheetActionStyle(dialogContext),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          confirmLabel,
+                          maxLines: 1,
+                          style: sheetActionStyle(dialogContext),
+                        ),
                       ),
                     ),
                   ),

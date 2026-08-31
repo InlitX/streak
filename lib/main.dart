@@ -15,6 +15,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/island/state/island_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
@@ -100,6 +101,7 @@ Future<void> main() async {
           },
         ),
         ChangeNotifierProvider(create: (_) => FocusController()),
+        ChangeNotifierProvider(create: (_) => IslandController()),
         ChangeNotifierProvider(
           create: (_) {
             final controller = HabitsController();

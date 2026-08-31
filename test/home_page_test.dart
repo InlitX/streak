@@ -278,7 +278,7 @@ void main() {
 
     expect(find.text('Add amount'), findsOneWidget);
 
-    await tester.tap(find.text('3'));
+    await tester.tap(find.text('3').last);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
