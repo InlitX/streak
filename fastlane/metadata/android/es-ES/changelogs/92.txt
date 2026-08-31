@@ -1,0 +1,9 @@
+🚀 Nueva versión 1.8.0
+🪟 Streak para Windows: barra lateral, panel de detalle y tus datos en el PC
+🏝️ Beta: construye una isla mediterránea con los hábitos que cumples
+📈 Todas las gráficas llevan ya una escala legible
+👀 Hábitos de solo seguimiento, sin tocar tus rachas
+📁 Una copia legible de tus hábitos y una carpeta compartida
+⏰ La hora exacta a la que marcaste un hábito
+🇳🇱 Streak habla ya neerlandés
+🐛 Arreglado el botón de recaída, el foco y las importaciones

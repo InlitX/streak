@@ -1,0 +1,9 @@
+🚀 New version 1.8.0
+🪟 Streak for Windows: sidebar, detail panel and your data on the PC
+🏝️ Beta: build a Mediterranean island with the habits you keep
+📈 Every chart now has a scale on the left you can read
+👀 Habits you only want to track, without touching your streaks
+📁 A readable copy of your habits and a shared folder
+⏰ See the exact time you checked a habit off, day by day
+🇳🇱 Streak now speaks Dutch
+🐛 Fixed the relapse button, lost focus tracks and broken imports
