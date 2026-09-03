@@ -522,7 +522,7 @@
   "focus_history_empty": "Noch keine Sitzungen",
   "unit_seconds": "Sekunden",
   "focus_enable_sub": "Ein Timer für Gewohnheiten, die einen benötigen",
-  "focus_shuffle": "",
+  "focus_shuffle": "Mischen",
   "focus_goal_today": "",
   "@focus_goal_today": {
     "placeholders": {
@@ -1052,5 +1052,11 @@
       }
     }
   },
-  "refresh_now": "Aktualisieren"
+  "refresh_now": "Aktualisieren",
+  "just_tracking": "Nur tracken",
+  "quotes_off": "aus",
+  "view_switcher_needs": "Schalte Aktivitäts Karten ein um es zu nutzen",
+  "github_star_sub": "Gib dem Projekt ein Stern damit es mehr finden können",
+  "report_issue_sub": "Erzähl mir über ein Fehler oder frage nach einer Funktion",
+  "readable_copy": "Lesbare Kopie"
 }
