@@ -367,7 +367,7 @@
   "today_only": "Apenas de hoje",
   "per_week": "Por semana",
   "snooze_custom_hint": "Minutos",
-  "category_fitness": "Forma Física",
+  "category_fitness": "Bem-estar",
   "widget_done_today": "feito hoje",
   "book_cover": "Capa do livro",
   "widget_no_habits": "Sem hábitos ainda\nToque para abrir o Streak",
@@ -382,7 +382,7 @@
   "widget_cfg_color": "Cor",
   "widget_demo_read": "Ler",
   "category_health": "Saúde",
-  "category_mindfulness": "Atenção Plena",
+  "category_mindfulness": "",
   "widget_cfg_saturation": "Saturação",
   "category_learning": "Aprendizado",
   "count_weeks": "{count, plural, =1{1 semana} other{{count} semanas}}",
@@ -622,7 +622,7 @@
   },
   "focus": "Foco",
   "wipe_data_warning": "Isso apaga todos os hábitos, notas, sessões de foco e configurações deste telefone. A ação não pode ser desfeita, a menos que você tenha um arquivo de backup para importar posteriormente.",
-  "auto_backup_where": "Um backup completo é escrito quando você abre o app. Os últimos 5 são mantidos.",
+  "auto_backup_where": "Ao abrir o aplicativo, o Streak cria um backup e uma cópia legível dos seus hábitos, que você pode abrir em qualquer editor. Os últimos 5 backups são mantidos.",
   "archived_habits_sub": "Recuperar ou deletar para sempre",
   "note_kind_note": "Nota",
   "focus_pomodoro_sub": "Sequência focada com pausas curtas",
@@ -924,7 +924,7 @@
   "day_timeline_empty": "Nada planejado para este dia",
   "day_timeline_empty_sub": "Dê um horário específico ao seu hábito e ele aparecerá aqui.",
   "clear": "Limpar",
-  "start_view": "A semana começa em",
+  "start_view": "Tela de início abre em",
   "start_view_last": "Último uso",
   "focus_stats": "Estatísticas de foco",
   "focus_average": "Sessão média",
@@ -1029,5 +1029,58 @@
   "refresh_nothing": "Nada de novo na pasta",
   "just_tracking_option": "Somente rastreamento",
   "just_tracking_option_sub": "Adiciona a opção ao criar um hábito",
-  "just_tracking": "Somente rastreamento"
+  "just_tracking": "Somente rastreamento",
+  "just_tracking_sub": "Mantenha sua própria grade e números, mas deixe fora do Progresso e da contagem diária",
+  "quotes_off": "Desligado",
+  "view_switcher_needs": "Ligue as atividades nos cartões para usar",
+  "github_star_sub": "Dê ao projeto uma estrela para que mais pessoas o encontre",
+  "report_issue_sub": "Me informe sobre um bug ou peça uma funcionalidade",
+  "sort_completed_last_sub": "Envia o que voce já finalizou para o final da lista",
+  "today_only_sub": "Esconda os hábitos que nao estão agendados para hoje",
+  "card_activity_sub": "Mostra o último dia no cartao, pronto para marcar",
+  "readable_copy": "Copia legível",
+  "readable_copy_sub": "Também escreve seus hábitos como arquivos markdown",
+  "theme_sub": "Claro, escuro ou do sistema",
+  "accent_color_sub": "Usado nos botões e destaques",
+  "app_background_sub": "O que você ve atrás dos cartões",
+  "check_style_sub": "Caixas de seleção quadradas ou circulares",
+  "app_icon_sub": "O ícone na sua homescreen",
+  "language_sub": "O idioma de todo o aplicativo",
+  "week_start_sub": "A primeira coluna de toda a seção",
+  "celebration_sub": "O que você vê quando marca um hábito",
+  "start_view_sub": "Visualização padrão em semana, mês ou ano",
+  "quotes_sub": "Quais frases aparecem em Hoje",
+  "focus_daily_goal_sub": "Minutos de focos que você precisa para cada dia",
+  "app_lock_delay_sub": "Quanto tempo depois de você sair ele pergunta novamente?",
+  "period_this_week": "Essa semana",
+  "period_last_week": "Semana passada",
+  "period_this_month": "Este mês",
+  "period_last_month": "Mês passado",
+  "period_this_year": "Este ano",
+  "period_last_year": "Ano passado",
+  "period_week_of": "Semana de {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_period_sessions": "{conta, plural, =0{sem seção} =1{1 seção} other{{count} seções}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "Todas as notas",
+  "notes_empty_all": "Sem notas ainda",
+  "quant_preset_time": "Tempo",
+  "style_express": "Expresso",
+  "style_express_desc": "Formas arredondadas, movimento estático, e tipografia larga.",
+  "celebration_none": "Nenhuma",
+  "quant_add_title": "Adicionar quantidade",
+  "pane_hint": "Abre alguma coisa da lista para ver aqui",
+  "average_short": "Qtd"
 }
