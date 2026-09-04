@@ -13,6 +13,7 @@ import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
+import 'package:streak/features/habits/widgets/custom_emoji_field.dart';
 
 class HabitPreview extends StatelessWidget {
   const HabitPreview({
@@ -201,6 +202,13 @@ class _IconPickerState extends State<IconPicker> {
               rightActive: _emoji,
               onChanged: (v) => setState(() => _emoji = v),
             ),
+            if (_emoji) ...[
+              const SizedBox(height: 12),
+              CustomEmojiField(
+                color: widget.color,
+                onPicked: widget.onSelected,
+              ),
+            ],
             const SizedBox(height: 12),
             SizedBox(
               height: 32,

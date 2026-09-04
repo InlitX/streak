@@ -15,6 +15,7 @@ import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
+import 'package:streak/features/habits/widgets/custom_emoji_field.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 
 class CompactIconPicker extends StatefulWidget {
@@ -56,6 +57,13 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
             index: _emoji ? 1 : 0,
             onChanged: (i) => setState(() => _emoji = i == 1),
           ),
+          if (_emoji) ...[
+            const SizedBox(height: 10),
+            CustomEmojiField(
+              color: widget.color,
+              onPicked: widget.onSelected,
+            ),
+          ],
           const SizedBox(height: 12),
           SizedBox(
             height: 24,
