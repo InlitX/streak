@@ -1,0 +1,9 @@
+🚀 New version 1.9.0
+🎨 Any emoji can be your habit icon
+📊 Statistics: this week, this month, this year and all time
+🇩🇪 🇰🇷 German and Korean join the language list
+🏅 The streak badge says 1w or 1mo when that is the unit
+🔔 Reminders stay quiet on days a habit is not due
+📅 Days already covered by a weekly target look kept
+⚡ Statistics no longer slow down the rest of the app
+🐛 Fixed past days, the clock change, the widget and the check time

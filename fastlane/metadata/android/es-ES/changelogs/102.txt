@@ -1,0 +1,9 @@
+🚀 Nueva versión 1.9.0
+🎨 Cualquier emoji puede ser el icono de un hábito
+📊 Estadísticas: esta semana, este mes, este año y desde el principio
+🇩🇪 🇰🇷 Streak habla ya alemán y coreano
+🏅 La racha dice 1sem o 1mes cuando esa es la unidad
+🔔 Los avisos callan los días que no toca el hábito
+📅 Los días ya cubiertos por un objetivo semanal se ven cumplidos
+⚡ Las estadísticas ya no ralentizan la app
+🐛 Arreglados los días pasados, el cambio de hora, el widget y la hora de marcar
