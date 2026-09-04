@@ -1,0 +1,14 @@
+Desktop Focus scenes, Windows only. Not Flutter assets: windows/CMakeLists.txt
+copies this folder into data/scenes inside the build, so they never reach the
+Android APK.
+
+All four come from Pixabay under the Pixabay Content License, which allows
+commercial use and asks for no attribution.
+
+cabin_rain      https://pixabay.com/videos/live-wallpaper-cozy-cabin-rainy-day-270983/
+fireplace_room  https://pixabay.com/videos/ai-generated-living-room-fireplace-208812/
+girl_study      https://pixabay.com/videos/girl-study-anime-cartoon-drawing-276498/
+cat_fireplace   https://pixabay.com/videos/lofi-cat-fireplace-fire-sleeping-246242/
+
+Each was scaled to 1920 wide, H.264, no audio. The .jpg next to each .mp4 is a
+still used in the picker so four videos do not play at once.

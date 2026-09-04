@@ -3,7 +3,7 @@ description: "Streak: a minimal habit tracker that helps you build lasting strea
 
 publish_to: 'none'
 
-version: 1.8.0+9
+version: 1.9.0+10
 
 environment:
   sdk: ^3.9.2
@@ -37,6 +37,7 @@ dependencies:
   local_auth: ^2.3.0
   wakelock_plus: ^1.5.2
   flip_board: ^1.0.0
+  video_player_win: ^3.2.2
 
 dev_dependencies:
   flutter_test:

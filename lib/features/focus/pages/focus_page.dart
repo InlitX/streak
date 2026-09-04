@@ -24,6 +24,7 @@ import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/features/focus/widgets/focus_end_dialog.dart';
 import 'package:streak/features/focus/widgets/focus_task_lists.dart';
+import 'package:streak/features/focus/widgets/focus_video_scene.dart';
 import 'package:streak/features/focus/widgets/music_sheet.dart';
 import 'package:streak/features/focus/widgets/timer_clocks.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -485,7 +486,7 @@ class _TopBar extends StatelessWidget {
               runSpacing: gap,
               children: [
             for (var i = 0; i < focusSceneCount; i++)
-              if (!s.isSceneHidden(i))
+              if (!s.isSceneHidden(i) && (i == 0 || !hasVideoScenes))
                 SizedBox(
                   width: tile,
                   child: FocusScenePreview(
@@ -505,6 +506,27 @@ class _TopBar extends StatelessWidget {
                           },
                   ),
                 ),
+            if (hasVideoScenes)
+              for (var i = 0; i < focusVideoScenes.length; i++)
+                if (!s.isSceneHidden(kFirstVideoScene + i))
+                  SizedBox(
+                    width: tile,
+                    child: FocusScenePreview(
+                      scene: kFirstVideoScene + i,
+                      imagePath: '',
+                      selected: s.focusScene == kFirstVideoScene + i &&
+                          s.focusImage.isEmpty,
+                      onTap: () {
+                        s.setFocusScene(kFirstVideoScene + i);
+                        s.setFocusImage('');
+                      },
+                      onLongPress: () async {
+                        if (await showDeleteSheet(sheetContext)) {
+                          await s.hideScene(kFirstVideoScene + i);
+                        }
+                      },
+                    ),
+                  ),
             for (final path in s.focusImages)
               SizedBox(
                 width: tile,

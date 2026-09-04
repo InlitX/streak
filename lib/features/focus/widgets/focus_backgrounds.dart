@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/features/focus/widgets/focus_video_scene.dart';
 
 const focusSceneAssets = <String>[
   'assets/backgrounds/night_city.jpg',
@@ -14,6 +15,15 @@ const focusSceneAssets = <String>[
 
 const focusSceneCount = 7;
 const kCustomScene = focusSceneCount;
+const kFirstVideoScene = focusSceneCount + 1;
+
+int videoSceneIndex(int scene) {
+  final index = scene - kFirstVideoScene;
+  if (!hasVideoScenes || index < 0 || index >= focusVideoScenes.length) {
+    return -1;
+  }
+  return index;
+}
 
 class FocusBackground extends StatelessWidget {
   const FocusBackground({
@@ -39,6 +49,18 @@ class FocusBackground extends StatelessWidget {
         children: [
           Image.file(File(imagePath), fit: BoxFit.cover),
           ColoredBox(color: Colors.black.withValues(alpha: 0.55)),
+          child,
+        ],
+      );
+    }
+
+    final video = videoSceneIndex(scene);
+    if (video >= 0) {
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          FocusVideoScene(name: focusVideoScenes[video]),
+          ColoredBox(color: Colors.black.withValues(alpha: 0.32)),
           child,
         ],
       );
@@ -78,6 +100,7 @@ class FocusScenePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final video = videoSceneIndex(scene);
     return Semantics(
       button: true,
       selected: selected,
@@ -97,11 +120,19 @@ class FocusScenePreview extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(selected ? 12 : 14),
-              child: FocusBackground(
-                scene: scene,
-                imagePath: imagePath,
-                child: const SizedBox.expand(),
-              ),
+              child: video >= 0
+                  ? Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        FocusVideoPoster(name: focusVideoScenes[video]),
+                        ColoredBox(color: Colors.black.withValues(alpha: 0.32)),
+                      ],
+                    )
+                  : FocusBackground(
+                      scene: scene,
+                      imagePath: imagePath,
+                      child: const SizedBox.expand(),
+                    ),
             ),
           ),
         ),
