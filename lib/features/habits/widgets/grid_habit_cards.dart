@@ -292,8 +292,8 @@ class GridWeekCard extends StatelessWidget {
               for (var i = columns - 1; i >= 0; i--)
                 _DayCell(
                   habit: habit,
-                  date: today.subtract(Duration(days: i)),
-                  label: labels[today.subtract(Duration(days: i)).weekday - 1],
+                  date: today.addDays(-i),
+                  label: labels[today.addDays(-i).weekday - 1],
                   circle: circle,
                   size: _cell,
                   onTap: onToggleDay,
@@ -327,7 +327,8 @@ class _DayCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final negative = habit.kind == HabitKind.negative;
     final relapsed = negative && isRelapse(habit, date);
-    final done = negative ? relapsed : habit.isCompletedOn(date);
+    final done = relapsed || habit.isCompletedOn(date);
+    final covered = !done && habit.isCoveredOn(date);
     final tint = relapsed ? context.tokens.danger : habit.color;
     final quant = habit.kind == HabitKind.quantitative;
     final today = date.atMidnight == AppClock.now().atMidnight;
@@ -377,7 +378,9 @@ class _DayCell extends StatelessWidget {
                           fit: StackFit.expand,
                           children: [
                             ColoredBox(
-                              color: tint.withValues(alpha: done ? 1 : 0.14),
+                              color: tint.withValues(
+                                alpha: done ? 1 : (covered ? 0.4 : 0.14),
+                              ),
                             ),
                             if (!done && quant)
                               Align(
@@ -592,7 +595,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
   @override
   Widget build(BuildContext context) {
     final today = AppClock.now().atMidnight;
-    final monday = today.subtract(Duration(days: today.weekday - 1));
+    final monday = today.addDays(-(today.weekday - 1));
     final start = monday.subtract(const Duration(days: 7 * (_weeks - 1)));
     final months = DateFormat.MMM(Localizations.localeOf(context).languageCode);
     final path = heatmapPathOn(context);
@@ -616,7 +619,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
         gap: gap,
         top: 14,
         inkFor: (column, row) {
-          final date = start.add(Duration(days: column * 7 + row));
+          final date = start.addDays(column * 7 + row);
           return widget.habit.isCompletedOn(date)
               ? heatmapPathColor(context, widget.habit.color)
               : context.colors.surfaceContainerHighest;
@@ -624,7 +627,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
         child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(_weeks, (column) {
-          final first = start.add(Duration(days: column * 7));
+          final first = start.addDays(column * 7);
           final previous = start.add(Duration(days: (column - 1) * 7));
           final newMonth = column == 0 || first.month != previous.month;
 
@@ -654,7 +657,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
                 for (var row = 0; row < 7; row++)
                   Padding(
                     padding: EdgeInsets.only(bottom: gap),
-                    child: _yearCell(context, first.add(Duration(days: row))),
+                    child: _yearCell(context, first.addDays(row)),
                   ),
               ],
             ),
@@ -704,7 +707,7 @@ class _GridMonthCalendar extends StatelessWidget {
     final first = DateTime(today.year, today.month, 1).startOfWeek(weekStart);
     final lastDay = DateTime(today.year, today.month + 1, 0);
     final weeks =
-        (lastDay.startOfWeek(weekStart).difference(first).inDays / 7).round() +
+        ((lastDay.startOfWeek(weekStart).epochDay - first.epochDay) / 7).round() +
         1;
 
     return Column(
@@ -715,7 +718,7 @@ class _GridMonthCalendar extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 2),
             child: Row(
               children: List.generate(7, (d) {
-                final date = first.add(Duration(days: w * 7 + d));
+                final date = first.addDays(w * 7 + d);
                 final inMonth = date.month == today.month;
                 final future = date.isAfter(today);
                 return Expanded(
