@@ -78,7 +78,11 @@ class _FilterChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: active ? Colors.white : context.tokens.muted,
+                color: active
+                    ? (color.computeLuminance() > 0.55
+                        ? Colors.black
+                        : Colors.white)
+                    : context.tokens.muted,
               ),
             ),
           ),
