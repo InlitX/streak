@@ -29,6 +29,7 @@ import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/habits/widgets/streak_label.dart';
 
 class ExpressHabitCard extends StatelessWidget {
   const ExpressHabitCard({
@@ -209,7 +210,7 @@ class _MetaPills extends StatelessWidget {
           ),
         _Pill(
           icon: LucideIcons.flame,
-          text: '${habit.currentStreak}',
+          text: streakLabel(context, habit),
           tint: habit.color,
         ),
         if (habit.isPlanned && planning)

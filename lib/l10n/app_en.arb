@@ -121,6 +121,14 @@
   "@count_months": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": { "count": { "type": "String" } }
+  },
+  "streak_unit_month": "{count}mo",
+  "@streak_unit_month": {
+    "placeholders": { "count": { "type": "String" } }
+  },
   "habit_kind": "Habit type",
   "kind_positive": "Normal",
   "kind_negative": "Avoid",
@@ -662,6 +670,7 @@
   "github_star_sub": "Give the project a star so more people find it",
   "icons_tab": "Icons",
   "emojis_tab": "Emojis",
+  "emoji_own": "Type or paste any emoji",
   "report_issue": "Report an issue",
   "report_issue_sub": "Tell me about a bug or ask for a feature",
   "advanced_options": "Advanced options",
@@ -907,6 +916,8 @@
   "period_this_month": "This month",
   "period_last_month": "Last month",
   "period_this_year": "This year",
+  "period_all_time": "All time",
+  "times_completed": "Times completed",
   "period_last_year": "Last year",
   "period_week_of": "Week of {date}",
   "@period_week_of": {

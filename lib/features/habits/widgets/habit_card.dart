@@ -16,6 +16,7 @@ import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
+import 'package:streak/features/habits/widgets/streak_label.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_progress.dart';
@@ -52,7 +53,6 @@ class HabitCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = context.colors;
     final doneToday = habit.isCompletedOn(AppClock.now());
-    final streak = habit.currentStreak;
     final settings = context.watch<SettingsController>();
     final circleCheck = settings.isCircleCheck;
     final hasCover = CoverImage.exists(habit.coverPath);
@@ -146,7 +146,7 @@ class HabitCard extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 3),
                                     Text(
-                                      '$streak',
+                                      streakLabel(context, habit),
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
