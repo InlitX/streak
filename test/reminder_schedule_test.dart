@@ -1,7 +1,47 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/services/reminder_schedule.dart';
 
+Habit _habit({
+  HabitInterval interval = HabitInterval.daily,
+  List<int> weekdays = const [],
+  List<int> restDays = const [],
+}) =>
+    Habit(
+      id: 'h',
+      name: 'Test',
+      color: const Color(0xFF00FF00),
+      order: 0,
+      interval: interval,
+      scheduleWeekdays: weekdays,
+      restDays: restDays,
+    );
+
 void main() {
+  group('which weekdays a reminder may ring on', () {
+    test('a habit on Mon, Wed and Fri stays quiet the other days', () {
+      final habit = _habit(
+        interval: HabitInterval.weekdays,
+        weekdays: [1, 3, 5],
+      );
+      expect([for (var d = 1; d <= 7; d++) habit.ringsOnWeekday(d)],
+          [true, false, true, false, true, false, false]);
+    });
+
+    test('a daily habit rings any day, minus its rest days', () {
+      final habit = _habit(restDays: [6, 7]);
+      expect([for (var d = 1; d <= 7; d++) habit.ringsOnWeekday(d)],
+          [true, true, true, true, true, false, false]);
+    });
+
+    test('a habit with no chosen weekdays is not silenced', () {
+      final habit = _habit(interval: HabitInterval.weekdays);
+      expect([for (var d = 1; d <= 7; d++) habit.ringsOnWeekday(d)],
+          List.filled(7, true));
+    });
+  });
+
   group('notificationId', () {
     test('a habit keeps its ids when the reminder time changes', () {
       final monday = ReminderSchedule.notificationId('habit-1', 'rem-1', 1);

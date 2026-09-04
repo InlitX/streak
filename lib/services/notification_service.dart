@@ -219,7 +219,7 @@ class NotificationService {
     final now = tz.TZDateTime.now(tz.local);
 
     for (final day in reminder.days) {
-      if (habit.restDays.contains(day)) continue;
+      if (!habit.ringsOnWeekday(day)) continue;
       for (var slot = 0; slot < slots.length; slot++) {
         final id = ReminderSchedule.hourlyId(habit.id, reminder.id, day, slot);
         ids.add(id);
@@ -248,7 +248,7 @@ class NotificationService {
       AppLocalizations strings) async {
     final ids = <int>{};
     for (final day in reminder.days) {
-      if (habit.restDays.contains(day)) continue;
+      if (!habit.ringsOnWeekday(day)) continue;
       final id = _notificationId(habit.id, reminder.id, day);
       ids.add(id);
       final now = tz.TZDateTime.now(tz.local);
@@ -299,6 +299,7 @@ class NotificationService {
     final ids = <int>{};
     for (var i = 0; i < _intervalWindow; i++) {
       final when = first.add(Duration(days: every * i));
+      if (!habit.ringsOnWeekday(when.weekday)) continue;
       final id = _notificationId(habit.id, reminder.id, i);
       ids.add(id);
       await _plugin.zonedSchedule(
