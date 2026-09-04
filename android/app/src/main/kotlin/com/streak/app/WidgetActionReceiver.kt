@@ -28,6 +28,11 @@ class WidgetActionReceiver : BroadcastReceiver() {
             return
         }
 
+        if (data.kind == KIND_NEGATIVE) {
+            openHabit(context, habitId)
+            return
+        }
+
         val delta = if (data.kind == KIND_QUANTITATIVE) data.incrementAmount else 1.0
 
         if (WidgetOptimistic.apply(context, habitId, dayKey, delta)) {
@@ -61,6 +66,14 @@ class WidgetActionReceiver : BroadcastReceiver() {
         return WidgetPayload.TODAY
     }
 
+    private fun openHabit(context: Context, habitId: String) {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(EXTRA_OPEN_HABIT, habitId)
+        }
+        context.startActivity(intent)
+    }
+
     private fun startFocus(context: Context, habitId: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -89,6 +102,7 @@ class WidgetActionReceiver : BroadcastReceiver() {
         const val EXTRA_WIDGET_ID = "appWidgetId"
         const val EXTRA_DAY_KEY = "dayKey"
         const val EXTRA_START_FOCUS = "startFocusHabitId"
+        const val EXTRA_OPEN_HABIT = "openHabitId"
 
         private const val KIND_NEGATIVE = 1
         private const val KIND_QUANTITATIVE = 2
