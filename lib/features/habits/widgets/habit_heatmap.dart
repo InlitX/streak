@@ -25,7 +25,7 @@ Color heatmapCellColor(
 
   final scheme = context.colors;
   final today = AppClock.now().atMidnight;
-  final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
+  final beforeCreation = date.atMidnight.isBefore(habit.startedAt);
 
   if (!beforeCreation && !date.isAfter(today) && habit.isNeutralOn(date)) {
     return context.tokens.info.withValues(alpha: 0.5);
@@ -35,16 +35,18 @@ Color heatmapCellColor(
     if (beforeCreation) {
       return scheme.surfaceContainerHighest.withValues(alpha: 0.4);
     }
-    if (habit.completions.containsKey(date.dayKey)) return context.tokens.danger;
     final clean = habit.color.withValues(alpha: 0.4);
-    return date.isAfter(today) ? clean.withValues(alpha: 0.18) : clean;
+    if (date.isAfter(today)) return clean.withValues(alpha: 0.18);
+    if (habit.completions.containsKey(date.dayKey)) return context.tokens.danger;
+    return clean;
   }
 
   if (!beforeCreation && habit.isCoveredOn(date)) {
     return habit.color.withValues(alpha: 0.22);
   }
 
-  final count = habit.completions[date.dayKey]?.count ?? 0;
+  final logged = habit.completions[date.dayKey]?.count ?? 0;
+  final count = date.isAfter(today) ? 0.0 : logged;
   if (count <= 0) {
     final base = scheme.surfaceContainerHighest;
     final untouched = date.isAfter(today) || habit.isOffDay(date);
@@ -101,7 +103,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   DateTime get _today => AppClock.now().atMidnight;
 
   DateTime _mondayOf(DateTime d) =>
-      d.atMidnight.subtract(Duration(days: d.weekday - 1));
+      d.atMidnight.addDays(-(d.weekday - 1));
 
   Color _cell(BuildContext context, DateTime date, {bool inScope = true}) =>
       heatmapCellColor(context, widget.habit, date, inScope: inScope);
@@ -167,7 +169,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final height = compact ? 40.0 : 46.0;
     return Row(
       children: List.generate(7, (i) {
-        final date = start.add(Duration(days: i));
+        final date = start.addDays(i);
         final future = date.isAfter(_today);
         final fill = _cell(context, date);
         final ink = fill.a < 0.55
@@ -239,8 +241,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final first = DateTime(_today.year, _today.month, 1);
     final last = DateTime(_today.year, _today.month + 1, 0);
     final start = _mondayOf(first);
-    final end = _mondayOf(last).add(const Duration(days: 6));
-    return ((end.difference(start).inDays + 1) / 7).round();
+    final end = _mondayOf(last).addDays(6);
+    return ((end.epochDay - start.epochDay + 1) / 7).round();
   }
 
   Widget _tappable({
@@ -279,7 +281,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     if (monthScope) {
       start = _mondayOf(DateTime(_today.year, _today.month, 1));
     } else {
-      start = _mondayOf(_today).subtract(Duration(days: 7 * (columns - 1)));
+      start = _mondayOf(_today).addDays(-7 * (columns - 1));
     }
 
     final path = heatmapPathOn(context);
@@ -296,7 +298,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
           children: List.generate(columns, (col) {
             return Column(
               children: List.generate(7, (row) {
-                final date = start.add(Duration(days: col * 7 + row));
+                final date = start.addDays(col * 7 + row);
                 final inScope = monthScope
                     ? date.month == _today.month && !date.isAfter(_today)
                     : !date.isAfter(_today);
@@ -342,7 +344,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
           gap: gap,
           inkFor: (col, row) => _pathInk(
             context,
-            start.add(Duration(days: col * 7 + row)),
+            start.addDays(col * 7 + row),
             inMonth: monthScope,
           ),
           child: grid,
@@ -357,7 +359,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final first = monthStart.startOfWeek(weekStart);
     final lastDay = DateTime(_today.year, _today.month + 1, 0);
     final weeks =
-        (lastDay.startOfWeek(weekStart).difference(first).inDays / 7).round() +
+        ((lastDay.startOfWeek(weekStart).epochDay - first.epochDay) / 7).round() +
         1;
     final path = heatmapPathOn(context);
 
@@ -396,7 +398,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
           byRows: true,
           inkFor: (column, row) => _pathInk(
             context,
-            first.add(Duration(days: row * 7 + column)),
+            first.addDays(row * 7 + column),
             inMonth: true,
           ),
           child: Column(
@@ -407,7 +409,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(7, (d) {
-                final date = first.add(Duration(days: w * 7 + d));
+                final date = first.addDays(w * 7 + d);
                 final inMonth = date.month == _today.month;
                 final future = date.isAfter(_today);
                 final fill = !inMonth
@@ -478,9 +480,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
     final path = heatmapPathOn(context);
     final gap = path ? heatmapPathGap : 3.0;
     const cell = 13.0;
-    final start = _mondayOf(_today).subtract(
-      const Duration(days: 7 * (columns - 1)),
-    );
+    final start = _mondayOf(_today).addDays(-7 * (columns - 1));
     final months = DateFormat.MMM(Localizations.localeOf(context).languageCode);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -501,12 +501,12 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
         gap: gap,
         top: 14,
         inkFor: (col, row) =>
-            _pathInk(context, start.add(Duration(days: col * 7 + row))),
+            _pathInk(context, start.addDays(col * 7 + row)),
         child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(columns, (col) {
-          final colDate = start.add(Duration(days: col * 7));
-          final prevDate = start.add(Duration(days: (col - 1) * 7));
+          final colDate = start.addDays(col * 7);
+          final prevDate = start.addDays((col - 1) * 7);
           final isNewMonth = col == 0 || colDate.month != prevDate.month;
           return Padding(
             padding: EdgeInsets.only(right: gap),
@@ -536,7 +536,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                     padding: EdgeInsets.only(bottom: gap),
                     child: _yearCell(
                       context,
-                      start.add(Duration(days: col * 7 + row)),
+                      start.addDays(col * 7 + row),
                       cell,
                     ),
                   ),
