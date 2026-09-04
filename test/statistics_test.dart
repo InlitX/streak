@@ -138,4 +138,77 @@ void main() {
       expect(stats.total, 0);
     });
   });
+
+  group('totals per period', () {
+    final today = DateTime.now().atMidnight;
+    final weekStart = today.startOfWeek(DateTime.monday);
+
+    test('a positive habit counts the week, the month and everything', () {
+      final days = {
+        today,
+        weekStart,
+        DateTime(today.year, today.month, 1),
+        DateTime(today.year - 1, 6, 15),
+      }.toList();
+
+      final habit = _habit(
+        kind: HabitKind.positive,
+        createdAt: DateTime(today.year - 2),
+        completions: {
+          for (final day in days)
+            day.dayKey: Completion(date: day.dayKey, count: 1),
+        },
+      );
+
+      final stats = HabitStats.compute([habit], today.year);
+      final inWeek = days.where((d) => !d.isBefore(weekStart)).length;
+      final inMonth = days
+          .where((d) => d.year == today.year && d.month == today.month)
+          .length;
+      final inYear = days.where((d) => d.year == today.year).length;
+
+      expect(stats.weekDone, inWeek);
+      expect(stats.monthDone, inMonth);
+      expect(stats.total, inYear);
+      expect(stats.allDone, days.length);
+    });
+
+    test('the year row follows the year you are looking at', () {
+      final last = DateTime(today.year - 1, 6, 15);
+      final habit = _habit(
+        kind: HabitKind.positive,
+        createdAt: DateTime(today.year - 2),
+        completions: {
+          last.dayKey: Completion(date: last.dayKey, count: 1),
+        },
+      );
+
+      expect(HabitStats.compute([habit], today.year).total, 0);
+      expect(HabitStats.compute([habit], today.year - 1).total, 1);
+      expect(HabitStats.compute([habit], today.year).allDone, 1);
+    });
+
+    test('an avoid habit counts its clean days, not its relapses', () {
+      final habit = _habit(
+        kind: HabitKind.negative,
+        createdAt: today.addDays(-9),
+      );
+      final stats = HabitStats.compute([habit], today.year);
+
+      expect(stats.allDone, habit.cleanDays);
+      expect(stats.weekDone, today.epochDay - weekStart.epochDay + 1);
+      expect(stats.monthDone, today.day.clamp(0, 10));
+    });
+
+    test('nothing logged means zeros everywhere', () {
+      final habit = _habit(
+        kind: HabitKind.positive,
+        createdAt: today.addDays(-30),
+      );
+      final stats = HabitStats.compute([habit], today.year);
+      expect(stats.weekDone, 0);
+      expect(stats.monthDone, 0);
+      expect(stats.allDone, 0);
+    });
+  });
 }
