@@ -328,6 +328,23 @@ void main() {
     });
   });
 
+  group('the check time when the day does not start at midnight', () {
+    tearDown(() => AppClock.cutoffHour = 0);
+
+    test('the stamp is the real time, not the shifted one', () {
+      AppClock.cutoffHour = 3;
+      final wall = DateTime.now();
+      final habit = _base(createdAt: today);
+
+      final entry = CompletionOps.toggle(habit, AppClock.today())[
+          AppClock.today().dayKey]!;
+
+      final wallMinute = wall.hour * 60 + wall.minute;
+      expect((entry.marks.first - wallMinute).abs(), lessThanOrEqualTo(1));
+      expect(entry.hour, isNot(AppClock.now().hour));
+    });
+  });
+
   group('focus only', () {
     test('a manual check is blocked, a focus one is not', () {
       final habit = _base().copyWith(focusOnly: true);

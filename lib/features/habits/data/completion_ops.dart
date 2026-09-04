@@ -4,7 +4,7 @@ import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
 int _nowMinutes() {
-  final now = AppClock.now();
+  final now = AppClock.wallNow();
   return now.hour * 60 + now.minute;
 }
 
@@ -31,8 +31,8 @@ class CompletionOps {
         count: habit.kind == HabitKind.quantitative
             ? (habit.perDayTarget <= 0 ? 1 : habit.perDayTarget)
             : 1,
-        hour: AppClock.now().hour,
-        minute: AppClock.now().minute,
+        hour: AppClock.wallNow().hour,
+        minute: AppClock.wallNow().minute,
         marks: [_nowMinutes()],
       );
     }
@@ -63,8 +63,8 @@ class CompletionOps {
         date: date.dayKey,
         count: steps.length.toDouble(),
         steps: steps,
-        hour: AppClock.now().hour,
-        minute: AppClock.now().minute,
+        hour: AppClock.wallNow().hour,
+        minute: AppClock.wallNow().minute,
         marks: checked ? (entry?.plus(_nowMinutes()) ?? [_nowMinutes()])
             : (entry?.marks ?? const []),
       );
@@ -83,8 +83,8 @@ class CompletionOps {
         date: date.dayKey,
         count: all.length.toDouble(),
         steps: all,
-        hour: AppClock.now().hour,
-        minute: AppClock.now().minute,
+        hour: AppClock.wallNow().hour,
+        minute: AppClock.wallNow().minute,
         marks: completions[date.dayKey]?.plus(_nowMinutes()) ??
             [_nowMinutes()],
       );
@@ -97,8 +97,8 @@ class CompletionOps {
     final completions = {...habit.completions};
     completions[date.dayKey] = Completion(
       date: date.dayKey,
-      hour: AppClock.now().hour,
-      minute: AppClock.now().minute,
+      hour: AppClock.wallNow().hour,
+      minute: AppClock.wallNow().minute,
       marks: [_nowMinutes()],
     );
     return completions;
@@ -124,8 +124,8 @@ class CompletionOps {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
         count: next,
-        hour: AppClock.now().hour,
-        minute: AppClock.now().minute,
+        hour: AppClock.wallNow().hour,
+        minute: AppClock.wallNow().minute,
         marks: delta > 0
             ? (completions[date.dayKey]?.plus(_nowMinutes()) ??
                 [_nowMinutes()])

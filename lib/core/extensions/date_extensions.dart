@@ -7,6 +7,8 @@ class AppClock {
       ? DateTime.now()
       : DateTime.now().subtract(Duration(hours: cutoffHour));
 
+  static DateTime wallNow() => DateTime.now();
+
   static DateTime today() => now().atMidnight;
 
   static bool isLogicalToday(DateTime date) => date.isSameDay(now());
