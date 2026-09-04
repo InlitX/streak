@@ -139,12 +139,9 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
               break;
             case HabitKind.negative:
               final relapsed = habit.completions.containsKey(date.dayKey);
-              if (relapsed) {
-                controller.clearRelapse(habit.id, date);
-              } else if (!date.atMidnight
-                  .isBefore(habit.createdAt.atMidnight)) {
-                controller.logRelapse(habit.id, date);
-              }
+              relapsed
+                  ? controller.clearRelapse(habit.id, date)
+                  : controller.logRelapse(habit.id, date);
               break;
             case HabitKind.quantitative:
               unawaited(editAmount(date));

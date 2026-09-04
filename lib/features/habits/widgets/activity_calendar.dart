@@ -37,7 +37,7 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
 
   int _weeksFor(int weekStart) {
     final first = DateTime(_month.year, _month.month, 1);
-    final offset = first.difference(first.startOfWeek(weekStart)).inDays;
+    final offset = first.epochDay - first.startOfWeek(weekStart).epochDay;
     final length = DateTime(_month.year, _month.month + 1, 0).day;
     return ((offset + length) / 7).ceil();
   }
@@ -45,7 +45,7 @@ class _ActivityCalendarState extends State<ActivityCalendar> {
   List<DateTime> _daysFor(int weekStart, int weeks) {
     final first = DateTime(_month.year, _month.month, 1);
     final start = first.startOfWeek(weekStart);
-    return List.generate(weeks * 7, (i) => start.add(Duration(days: i)));
+    return List.generate(weeks * 7, (i) => start.addDays(i));
   }
 
   bool _isCurrentMonth(DateTime d) =>
@@ -174,14 +174,14 @@ class _CalendarCell extends StatelessWidget {
     final negative = habit.kind == HabitKind.negative;
     final ratioFill = habit.kind == HabitKind.quantitative || habit.hasSubsteps;
     final future = date.isAfter(AppClock.now());
-    final beforeCreation = date.atMidnight.isBefore(habit.createdAt.atMidnight);
+    final beforeCreation = date.atMidnight.isBefore(habit.startedAt);
     final outOfScope = future || beforeCreation;
     final completed = habit.isCompletedOn(date);
     final relapsed = negative && !completed && !outOfScope;
     final paused = isCurrentMonth && !outOfScope && habit.isNeutralOn(date);
-    final tappable = isCurrentMonth && !future && !beforeCreation;
+    final tappable = isCurrentMonth && !future;
     final danger = context.tokens.danger;
-    final count = habit.completions[date.dayKey]?.count ?? 0;
+    final count = future ? 0.0 : (habit.completions[date.dayKey]?.count ?? 0);
 
     final Color? fillColor;
     if (paused) {
@@ -200,6 +200,8 @@ class _CalendarCell extends StatelessWidget {
       );
     } else if (isCurrentMonth && !negative && !ratioFill && completed) {
       fillColor = habit.color;
+    } else if (isCurrentMonth && !outOfScope && habit.isCoveredOn(date)) {
+      fillColor = habit.color.withValues(alpha: 0.22);
     } else {
       fillColor = null;
     }

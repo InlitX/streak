@@ -398,8 +398,9 @@ class _HomePageState extends State<HomePage> {
                   .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
                   .toList();
               final counted = active.where((h) => !h.tracking).toList();
-              final done =
-                  counted.where((h) => h.isCompletedOn(today)).length;
+              final done = counted
+                  .where((h) => h.isCompletedOn(today) || h.isCoveredOn(today))
+                  .length;
               final total = counted.length;
 
               final categories = _categoriesOf(all);
@@ -558,7 +559,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();
     if (habit.kind == HabitKind.negative && !isRelapse(habit, date)) {
-      if (date.atMidnight.isBefore(habit.createdAt.atMidnight)) return;
+      if (date.atMidnight.isAfter(AppClock.now().atMidnight)) return;
       if (!await confirmRelapse(context, habit)) return;
       if (!mounted) return;
       await controller.logRelapse(habit.id, date);
