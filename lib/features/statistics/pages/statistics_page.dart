@@ -25,6 +25,7 @@ import 'package:streak/features/statistics/widgets/stat_charts.dart';
 import 'package:streak/features/statistics/widgets/statistics_filters.dart';
 import 'package:streak/features/statistics/widgets/stat_donut.dart';
 import 'package:streak/features/statistics/widgets/stat_gauge.dart';
+import 'package:streak/features/statistics/widgets/period_totals.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 import 'package:streak/features/statistics/widgets/year_heatmap.dart';
@@ -41,9 +42,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
   String? _habitId;
 
   ({List<Habit> habits, String? id, int year})? _statsKey;
-  late HabitStats _stats;
+  HabitStats _stats = HabitStats.empty;
+
+  @visibleForTesting
+  HabitStats get debugStats => _stats;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
+    if (!TickerMode.valuesOf(context).enabled) return _stats;
     final key = (habits: all, id: _habitId, year: _year);
     if (_statsKey != key) {
       _statsKey = key;
@@ -169,6 +174,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              StatReveal(
+                child: StatCard(
+                  title: context.l10n.times_completed,
+                  icon: LucideIcons.circleCheckBig,
+                  color: accent,
+                  child: PeriodTotals(
+                    stats: stats,
+                    year: _year,
+                    color: accent,
                   ),
                 ),
               ),

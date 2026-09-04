@@ -160,7 +160,10 @@ class _HomeShellState extends State<HomeShell>
           opacity: _fade,
           child: IndexedStack(
             index: tabs.indexOf(current),
-            children: [for (final tab in tabs) _pageOf(tab)],
+            children: [
+              for (final tab in tabs)
+                TickerMode(enabled: tab == current, child: _pageOf(tab)),
+            ],
           ),
         ),
       );
@@ -181,7 +184,10 @@ class _HomeShellState extends State<HomeShell>
                 ).animate(_ease),
                 child: IndexedStack(
                   index: tabs.indexOf(current),
-                  children: [for (final tab in tabs) _pageOf(tab)],
+                  children: [
+                    for (final tab in tabs)
+                      TickerMode(enabled: tab == current, child: _pageOf(tab)),
+                  ],
                 ),
               ),
             ),

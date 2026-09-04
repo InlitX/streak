@@ -21,6 +21,7 @@ import 'package:streak/features/island/widgets/island_entry.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
+import 'package:streak/features/statistics/widgets/period_totals.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
 import 'package:streak/features/statistics/widgets/year_heatmap.dart';
 
@@ -36,9 +37,10 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
   String? _habitId;
 
   ({List<Habit> habits, String? id, int year})? _key;
-  late HabitStats _stats;
+  HabitStats _stats = HabitStats.empty;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
+    if (!TickerMode.valuesOf(context).enabled) return _stats;
     final key = (habits: all, id: _habitId, year: _year);
     if (_key != key) {
       _key = key;
@@ -164,6 +166,19 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                     ),
                   ),
                   const SpanEnd(),
+                  MinimalSection(
+                    title: context.l10n.times_completed,
+                    child: MinimalList(
+                      children: [
+                        for (final row in periodRows(context, stats, _year))
+                          MinimalRow(
+                            label: row.label,
+                            value: '${row.value}',
+                            last: row.label == context.l10n.period_all_time,
+                          ),
+                      ],
+                    ),
+                  ),
                   MinimalSection(
                     title: context.l10n.when_best,
                     child: MinimalCard(

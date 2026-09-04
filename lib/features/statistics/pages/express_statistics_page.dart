@@ -28,6 +28,7 @@ import 'package:streak/features/island/widgets/island_entry.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
+import 'package:streak/features/statistics/widgets/period_totals.dart';
 import 'package:streak/features/statistics/widgets/express_line_chart.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
@@ -46,12 +47,13 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
   String? _habitId;
 
   ({List<Habit> habits, String? id, int year})? _statsKey;
-  late HabitStats _stats;
+  HabitStats _stats = HabitStats.empty;
 
   int get _lastMonth =>
       _year >= AppClock.now().year ? AppClock.now().month - 1 : 11;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
+    if (!TickerMode.valuesOf(context).enabled) return _stats;
     final key = (habits: all, id: _habitId, year: _year);
     if (_statsKey != key) {
       _statsKey = key;
@@ -222,6 +224,20 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
       _ConsistencyHero(percent: stats.consistency, accent: accent),
       const SizedBox(height: 24),
       const SpanEnd(),
+      SectionLabel(context.l10n.times_completed),
+      ExpressGroup(
+        children: [
+          for (final row in periodRows(context, stats, _year))
+            ExpressStatRow(
+              icon: LucideIcons.circleCheckBig,
+              label: row.label,
+              value: '${row.value}',
+              tint: accent,
+              shape: ExpressShape.cookie,
+            ),
+        ],
+      ),
+      const SizedBox(height: 24),
       SectionLabel(context.l10n.streaks),
       ExpressGroup(
         children: [

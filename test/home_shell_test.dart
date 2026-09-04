@@ -33,6 +33,24 @@ void main() {
     expect(find.byType(SettingsPage), findsOneWidget);
   });
 
+  testWidgets('the stats tab only does its counting once it is opened',
+      (tester) async {
+    await seedHabits(tester, [
+      testHabit(id: 'a', name: 'Read', done: lastDays(5)),
+    ]);
+    await pumpScreen(tester, const HomeShell());
+    await tester.pumpAndSettle();
+
+    final page = tester.state<State<StatisticsPage>>(
+      find.byType(StatisticsPage, skipOffstage: false),
+    ) as dynamic;
+    expect(page.debugStats.total, 0, reason: 'no cuenta nada escondida');
+
+    await tester.tap(find.byIcon(LucideIcons.chartColumn).last);
+    await tester.pumpAndSettle();
+    expect(page.debugStats.total, 5, reason: 'cuenta al abrirla');
+  });
+
   testWidgets('the to-do tab stays hidden while the setting is off',
       (tester) async {
     await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
