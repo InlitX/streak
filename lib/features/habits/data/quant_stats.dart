@@ -43,7 +43,7 @@ class QuantStats {
     switch (range) {
       case QuantRange.week:
         final first = today.startOfWeek(weekStart);
-        return [for (var i = 0; i < 7; i++) first.add(Duration(days: i))];
+        return [for (var i = 0; i < 7; i++) first.addDays(i)];
       case QuantRange.month:
         final days = DateTime(today.year, today.month + 1, 0).day;
         return [

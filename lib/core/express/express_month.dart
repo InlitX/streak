@@ -84,11 +84,11 @@ class _ExpressMonthCalendarState extends State<ExpressMonthCalendar>
     final locale = Localizations.localeOf(context);
     final weekStart = context.watch<SettingsController>().weekStart;
     final first = DateTime(_month.year, _month.month);
-    final offset = first.difference(first.startOfWeek(weekStart)).inDays;
+    final offset = first.epochDay - first.startOfWeek(weekStart).epochDay;
     final length = DateTime(_month.year, _month.month + 1, 0).day;
     final weeks = ((offset + length) / 7).ceil();
     final start = first.startOfWeek(weekStart);
-    final days = List.generate(weeks * 7, (i) => start.add(Duration(days: i)));
+    final days = List.generate(weeks * 7, (i) => start.addDays(i));
     final states = [for (final date in days) _stateOf(date)];
     _replay(states.map((s) => s.index).join());
 
@@ -203,7 +203,7 @@ class ExpressMonthStrip extends StatelessWidget {
     final weekStart = context.watch<SettingsController>().weekStart;
     final today = AppClock.now().atMidnight;
     final first = DateTime(today.year, today.month);
-    final offset = first.difference(first.startOfWeek(weekStart)).inDays;
+    final offset = first.epochDay - first.startOfWeek(weekStart).epochDay;
     final length = DateTime(today.year, today.month + 1, 0).day;
     final weeks = ((offset + length) / 7).ceil();
     final start = first.startOfWeek(weekStart);
@@ -230,7 +230,7 @@ class ExpressMonthStrip extends StatelessWidget {
               painter: _MonthRowPainter(
                 states: [
                   for (var day = 0; day < 7; day++)
-                    stateOf(start.add(Duration(days: week * 7 + day))),
+                    stateOf(start.addDays(week * 7 + day)),
                 ],
                 ink: ink,
                 progress: 1,

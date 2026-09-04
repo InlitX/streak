@@ -103,7 +103,7 @@ class ShareMonthPage extends StatelessWidget {
     final month = DateTime(today.year, today.month + offset, 1);
     final first = month.startOfWeek(weekStart);
     final length = DateTime(month.year, month.month + 1, 0).day;
-    final lead = month.difference(first).inDays;
+    final lead = month.epochDay - first.epochDay;
     final weeks = ((lead + length) / 7).ceil();
 
     return Column(

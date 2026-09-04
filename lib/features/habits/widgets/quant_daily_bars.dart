@@ -18,13 +18,13 @@ class QuantDailyBars extends StatelessWidget {
     final express = context.watch<SettingsController>().isExpressStyle;
     final span = express ? 30 : days;
     final today = AppClock.now().atMidnight;
-    final start = today.subtract(Duration(days: span - 1));
+    final start = today.addDays(-(span - 1));
     final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
         ? ''
         : ' ${habit.unitLabel}';
     final amounts = [
       for (var i = 0; i < span; i++)
-        habit.completions[start.add(Duration(days: i)).dayKey]?.count ?? 0,
+        habit.completions[start.addDays(i).dayKey]?.count ?? 0,
     ];
     String label(double value) => '${habit.amountText(value)}$unit';
     String axis(double value) => habit.amountText(value);
@@ -39,9 +39,9 @@ class QuantDailyBars extends StatelessWidget {
         goal: habit.perDayTarget,
         format: label,
         axisFormat: axis,
-        label: (index) => '${start.add(Duration(days: index)).day}',
+        label: (index) => '${start.addDays(index).day}',
         subLabel: (index) {
-          final day = start.add(Duration(days: index));
+          final day = start.addDays(index);
           return day.day == 1 || index == 0 ? month.format(day) : null;
         },
       );

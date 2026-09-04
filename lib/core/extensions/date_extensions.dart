@@ -24,9 +24,11 @@ extension DateOnly on DateTime {
   bool isSameDay(DateTime other) =>
       year == other.year && month == other.month && day == other.day;
 
+  DateTime addDays(int count) => DateTime(year, month, day + count);
+
   DateTime startOfWeek(int weekStart) {
     final diff = (weekday - weekStart + 7) % 7;
-    return atMidnight.subtract(Duration(days: diff));
+    return addDays(-diff);
   }
 }
 

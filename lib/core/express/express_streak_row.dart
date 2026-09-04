@@ -74,14 +74,14 @@ class _ExpressStreakRowState extends State<ExpressStreakRow>
     final today = AppClock.now().atMidnight;
     final start = widget.days == 7
         ? today.startOfWeek(weekStart)
-        : today.subtract(Duration(days: widget.days - 1));
+        : today.addDays(-(widget.days - 1));
     final labels = WeekdayLabels.shortFrom(
       Localizations.localeOf(context).languageCode,
       weekStart,
     );
 
     final dates = [
-      for (var i = 0; i < widget.days; i++) start.add(Duration(days: i)),
+      for (var i = 0; i < widget.days; i++) start.addDays(i),
     ];
     final states = [for (final date in dates) _stateOf(date, today)];
     _replay(states.map((s) => s.index).join());

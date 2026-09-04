@@ -32,7 +32,7 @@ String lastCheckLabel(BuildContext context, Habit habit) {
   final today = AppClock.today();
   final when = day.isAtSameMomentAs(today)
       ? context.l10n.today
-      : day.isAtSameMomentAs(today.subtract(const Duration(days: 1)))
+      : day.isAtSameMomentAs(today.addDays(-1))
           ? context.l10n.yesterday
           : DateFormat.MMMd(context.l10n.localeName).format(day);
   final time = entry.stamp;
