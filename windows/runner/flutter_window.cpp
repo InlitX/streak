@@ -4,6 +4,11 @@
 
 #include "flutter/generated_plugin_registrant.h"
 
+namespace {
+constexpr UINT_PTR kShowFallbackTimer = 1;
+constexpr UINT kShowFallbackMs = 4000;
+}  // namespace
+
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
 
@@ -28,8 +33,11 @@ bool FlutterWindow::OnCreate() {
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
+    KillTimer(this->GetHandle(), kShowFallbackTimer);
     this->Show();
   });
+
+  SetTimer(GetHandle(), kShowFallbackTimer, kShowFallbackMs, nullptr);
 
   // Flutter can complete the first frame before the "show window" callback is
   // registered. The following call ensures a frame is pending to ensure the
@@ -64,6 +72,12 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
   switch (message) {
     case WM_FONTCHANGE:
       flutter_controller_->engine()->ReloadSystemFonts();
+      break;
+    case WM_TIMER:
+      if (wparam == kShowFallbackTimer) {
+        KillTimer(hwnd, kShowFallbackTimer);
+        Show();
+      }
       break;
   }
 

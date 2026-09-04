@@ -144,8 +144,12 @@ bool Win32Window::Create(const std::wstring& title,
   if (GetMonitorInfo(monitor, &screen)) {
     const int room_x = screen.rcWork.right - screen.rcWork.left - left;
     const int room_y = screen.rcWork.bottom - screen.rcWork.top - top;
-    width = std::min(width, room_x);
-    height = std::min(height, room_y);
+    if (room_x > 0) {
+      width = std::min(width, room_x);
+    }
+    if (room_y > 0) {
+      height = std::min(height, room_y);
+    }
   }
 
   HWND window = CreateWindow(

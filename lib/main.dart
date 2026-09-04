@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/app/startup_failure.dart';
 import 'package:streak/app/streak_app.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
@@ -31,7 +33,32 @@ import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  try {
+    await _startup();
+  } catch (e, s) {
+    debugPrint('Streak could not start: $e');
+    debugPrintStack(stackTrace: s);
+    runApp(StartupFailure(error: '$e', logPath: _writeStartupLog(e, s)));
+    return;
+  }
+  _run();
+}
+
+String? _writeStartupLog(Object error, StackTrace stack) {
+  if (isMobile) return null;
+  try {
+    final file = File('${Directory.systemTemp.path}/streak_startup_error.txt');
+    file.writeAsStringSync('${DateTime.now()}\n$error\n\n$stack');
+    return file.path;
+  } catch (_) {
+    return null;
+  }
+}
+
+Future<void> _startup() async {
+  if (isMobile) {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
 
   await initializeDateFormatting();
   await LocalStore.init();
@@ -86,7 +113,9 @@ Future<void> main() async {
     }
     await drainFocusActions();
   });
+}
 
+void _run() {
   runApp(
     MultiProvider(
       providers: [

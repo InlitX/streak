@@ -12,7 +12,8 @@ bool get hasAppIcons => Platform.isAndroid;
 bool get hasHomeWidgets => defaultTargetPlatform == TargetPlatform.android;
 
 Future<Directory> appDataDir() async {
-  final root = await getApplicationDocumentsDirectory();
+  final root = await getApplicationDocumentsDirectory()
+      .timeout(const Duration(seconds: 15));
   if (isMobile) return root;
   final dir = Directory('${root.path}/$appDataFolder');
   if (!dir.existsSync()) dir.createSync(recursive: true);
