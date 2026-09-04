@@ -49,15 +49,15 @@ void main() {
     expect(habit.moneySaved, 64);
   });
 
-  test('relapses logged before the habit existed are left out', () {
+  test('a relapse older than the habit pulls its start back', () {
     final habit = _habit(
       kind: HabitKind.negative,
       daysOld: 3,
       relapses: [today.subtract(const Duration(days: 40))],
     );
 
-    expect(habit.cleanDays, 4);
-    expect(habit.moneySaved, 32);
+    expect(habit.cleanDays, 40);
+    expect(habit.moneySaved, 320);
   });
 
   test('without a cost there is nothing to show', () {

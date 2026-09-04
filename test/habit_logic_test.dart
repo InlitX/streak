@@ -236,18 +236,79 @@ void main() {
       expect(clean.containsKey(today.dayKey), isFalse);
     });
 
-    test('tapping a negative before it existed records nothing', () {
+    test('tapping a negative before it existed logs the relapse', () {
       final before = today.subtract(const Duration(days: 40));
       final habit = _base(kind: HabitKind.negative, createdAt: today);
 
       final tapped = CompletionOps.toggle(habit, before);
-      expect(tapped.containsKey(before.dayKey), isFalse);
+      expect(tapped.containsKey(before.dayKey), isTrue);
 
       final again = CompletionOps.toggle(
         habit.copyWith(completions: tapped),
         before,
       );
       expect(again.containsKey(before.dayKey), isFalse);
+    });
+
+    test('a negative reaches back to its oldest relapse', () {
+      final before = today.subtract(const Duration(days: 40));
+      final habit = _base(kind: HabitKind.negative, createdAt: today).copyWith(
+        completions: {
+          before.dayKey: Completion(date: before.dayKey, count: 1, hour: 9),
+        },
+      );
+
+      expect(habit.startedAt, before.atMidnight);
+      expect(habit.isCompletedOn(before), isFalse);
+      expect(habit.isCompletedOn(before.add(const Duration(days: 1))), isTrue);
+      expect(habit.isCompletedOn(before.subtract(const Duration(days: 1))),
+          isFalse);
+      expect(habit.currentStreak, 40);
+    });
+
+    test('no kind can be marked on a day that has not arrived', () {
+      final tomorrow = today.add(const Duration(days: 1));
+
+      for (final kind in HabitKind.values) {
+        final habit = _base(kind: kind, createdAt: today);
+        expect(CompletionOps.toggle(habit, tomorrow), isEmpty, reason: '$kind');
+        expect(
+          CompletionOps.addProgress(habit, tomorrow, 5),
+          isEmpty,
+          reason: '$kind',
+        );
+      }
+
+      final checklist = _base(substeps: steps, createdAt: today);
+      expect(CompletionOps.setStep(checklist, tomorrow, 's1', true), isEmpty);
+      expect(CompletionOps.toggleAllSteps(checklist, tomorrow), isEmpty);
+      expect(
+        CompletionOps.logRelapse(
+          _base(kind: HabitKind.negative, createdAt: today),
+          tomorrow,
+        ),
+        isEmpty,
+      );
+    });
+
+    test('back-filled days extend the streak past createdAt', () {
+      var habit = _base(createdAt: today);
+      for (var i = 0; i <= 5; i++) {
+        habit = habit.copyWith(
+          completions:
+              CompletionOps.toggle(habit, today.subtract(Duration(days: i))),
+        );
+      }
+      expect(habit.currentStreak, 6);
+      expect(habit.longestStreak, 6);
+
+      habit = habit.copyWith(
+        completions: CompletionOps.toggle(
+          habit,
+          today.subtract(const Duration(days: 5)),
+        ),
+      );
+      expect(habit.currentStreak, 5);
     });
 
     test('a relapse mistakenly stored before createdAt can be tapped away', () {

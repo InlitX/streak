@@ -97,7 +97,7 @@ class Habit {
         return scheduleWeekdays.contains(date.weekday);
       case HabitInterval.everyXDays:
         if (scheduleEvery <= 0) return false;
-        final diff = date.atMidnight.difference(createdAt.atMidnight).inDays;
+        final diff = date.atMidnight.epochDay - createdAt.atMidnight.epochDay;
         return diff >= 0 && diff % scheduleEvery == 0;
       case HabitInterval.daily:
       case HabitInterval.weekly:
@@ -162,6 +162,12 @@ class Habit {
 
   bool isRestDay(DateTime date) => restDays.contains(date.weekday);
 
+  bool ringsOnWeekday(int weekday) =>
+      !restDays.contains(weekday) &&
+      (interval != HabitInterval.weekdays ||
+          scheduleWeekdays.isEmpty ||
+          scheduleWeekdays.contains(weekday));
+
   bool isPausedOn(DateTime date) =>
       isRestDay(date) || vacations.any((v) => v.contains(date));
 
@@ -177,25 +183,51 @@ class Habit {
 
   bool _doneAheadOf(DateTime date) {
     if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
-    final floor = createdAt.atMidnight;
+    final floor = startedAt;
     var cursor = date.atMidnight;
     for (var step = 1; step < scheduleEvery; step++) {
-      cursor = cursor.subtract(const Duration(days: 1));
+      cursor = cursor.addDays(-1);
       if (cursor.isBefore(floor)) return false;
       if (isCompletedOn(cursor)) return true;
     }
     return false;
   }
 
+  int _periodOf(DateTime day) => interval == HabitInterval.weekly
+      ? day.startOfWeek(DateTime.monday).epochDay
+      : day.year * 12 + day.month;
+
+  late final Map<int, int> _periodDone = _countPeriods();
+
+  Map<int, int> _countPeriods() {
+    if (interval != HabitInterval.weekly && interval != HabitInterval.monthly) {
+      return const {};
+    }
+    final counts = <int, int>{};
+    for (final key in completions.keys) {
+      final day = parseDayKey(key);
+      if (!isCompletedOn(day)) continue;
+      final period = _periodOf(day);
+      counts[period] = (counts[period] ?? 0) + 1;
+    }
+    return counts;
+  }
+
   bool isCoveredOn(DateTime date) {
-    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
     var cursor = date.atMidnight;
-    if (isScheduledOn(cursor) || cursor.isAfter(AppClock.now().atMidnight)) {
+    if (cursor.isAfter(AppClock.now().atMidnight) || cursor.isBefore(startedAt)) {
       return false;
     }
-    final floor = createdAt.atMidnight;
+    if (interval == HabitInterval.weekly ||
+        interval == HabitInterval.monthly) {
+      if (isPausedOn(cursor) || isCompletedOn(cursor)) return false;
+      return (_periodDone[_periodOf(cursor)] ?? 0) >= targetFrequency;
+    }
+    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
+    if (isScheduledOn(cursor)) return false;
+    final floor = startedAt;
     for (var step = 1; step < scheduleEvery; step++) {
-      cursor = cursor.subtract(const Duration(days: 1));
+      cursor = cursor.addDays(-1);
       if (cursor.isBefore(floor)) return false;
       if (isCompletedOn(cursor)) return true;
       if (isScheduledOn(cursor)) return false;
@@ -203,12 +235,23 @@ class Habit {
     return false;
   }
 
+  late final DateTime startedAt = _startedAt();
+
+  DateTime _startedAt() {
+    var first = createdAt.atMidnight;
+    for (final key in completions.keys) {
+      final day = parseDayKey(key);
+      if (day.isBefore(first)) first = day;
+    }
+    return first;
+  }
+
   bool isCompletedOn(DateTime date) {
     final day = date.atMidnight;
     if (day.isAfter(AppClock.now().atMidnight)) return false;
     final entry = completions[date.dayKey];
     if (kind == HabitKind.negative) {
-      return day.isBefore(createdAt.atMidnight) ? false : entry == null;
+      return day.isBefore(startedAt) ? false : entry == null;
     }
     if (entry == null) return false;
     if (hasSubsteps) {
@@ -223,7 +266,7 @@ class Habit {
 
   int _cleanDays() {
     if (kind != HabitKind.negative) return 0;
-    final floor = createdAt.atMidnight;
+    final floor = startedAt;
     final span = AppClock.now().atMidnight.epochDay - floor.epochDay + 1;
     if (span <= 0) return 0;
     return span - _relapsesSince(floor);
@@ -254,13 +297,12 @@ class Habit {
   bool get isDoneForNow {
     if (kind == HabitKind.negative) return false;
     final now = AppClock.now();
-    return isOffDay(now) || isCompletedOn(now);
+    return isOffDay(now) || isCompletedOn(now) || isCoveredOn(now);
   }
 
   double _dayValue(DateTime date) {
     final day = date.atMidnight;
-    if (day.isBefore(createdAt.atMidnight) ||
-        day.isAfter(AppClock.now().atMidnight)) {
+    if (day.isBefore(startedAt) || day.isAfter(AppClock.now().atMidnight)) {
       return 0;
     }
     if (kind == HabitKind.negative) {
@@ -277,14 +319,17 @@ class Habit {
   double _strength() {
     if (completions.isEmpty && kind != HabitKind.negative) return 0;
     final now = AppClock.now().atMidnight;
-    final floor = createdAt.atMidnight;
+    final floor = startedAt;
     const halfLife = 12.0;
     const window = 90;
     var score = 0.0;
     var norm = 0.0;
     for (var i = 0; i < window; i++) {
-      final day = now.subtract(Duration(days: i));
-      if (day.isBefore(floor) || !isScheduledOn(day) || isNeutralOn(day)) {
+      final day = now.addDays(-i);
+      if (day.isBefore(floor) ||
+          !isScheduledOn(day) ||
+          isNeutralOn(day) ||
+          isCoveredOn(day)) {
         continue;
       }
       final weight = math.pow(0.5, i / halfLife).toDouble();
@@ -298,8 +343,8 @@ class Habit {
 
   int _countInRange(DateTime start, DateTime end) {
     var count = 0;
-    for (var i = 0; i <= end.difference(start).inDays; i++) {
-      if (isCompletedOn(start.add(Duration(days: i)))) count++;
+    for (var i = 0; i <= end.epochDay - start.epochDay; i++) {
+      if (isCompletedOn(start.addDays(i))) count++;
     }
     return count;
   }
@@ -307,7 +352,7 @@ class Habit {
   late final int currentStreak = _currentStreak();
 
   int _currentStreak() {
-    final floor = createdAt.atMidnight;
+    final floor = startedAt;
 
     if (kind == HabitKind.negative) {
       var cursor = AppClock.now().atMidnight;
@@ -319,7 +364,7 @@ class Habit {
         } else {
           break;
         }
-        cursor = cursor.subtract(const Duration(days: 1));
+        cursor = cursor.addDays(-1);
       }
       return streak;
     }
@@ -331,7 +376,7 @@ class Habit {
       case HabitInterval.daily:
         var cursor = now.atMidnight;
         if (!isCompletedOn(cursor) && !isNeutralOn(cursor)) {
-          cursor = cursor.subtract(const Duration(days: 1));
+          cursor = cursor.addDays(-1);
           if (!isCompletedOn(cursor) && !isNeutralOn(cursor)) return 0;
         }
         var streak = 0;
@@ -342,36 +387,36 @@ class Habit {
           } else {
             break;
           }
-          cursor = cursor.subtract(const Duration(days: 1));
+          cursor = cursor.addDays(-1);
         }
         return streak;
 
       case HabitInterval.weekly:
-        var weekStart = now.subtract(Duration(days: now.weekday - 1));
+        var weekStart = now.addDays(-(now.weekday - 1));
         var streak = 0;
-        if (_countInRange(weekStart, weekStart.add(const Duration(days: 6))) >=
+        if (_countInRange(weekStart, weekStart.addDays(6)) >=
             targetFrequency) {
           streak++;
         }
-        weekStart = weekStart.subtract(const Duration(days: 7));
+        weekStart = weekStart.addDays(-7);
         while (_countInRange(
-                weekStart, weekStart.add(const Duration(days: 6))) >=
+                weekStart, weekStart.addDays(6)) >=
             targetFrequency) {
           streak++;
-          weekStart = weekStart.subtract(const Duration(days: 7));
+          weekStart = weekStart.addDays(-7);
         }
         return streak;
 
       case HabitInterval.monthly:
         var monthStart = DateTime(now.year, now.month, 1);
         final monthEnd =
-            DateTime(now.year, now.month + 1, 1).subtract(const Duration(days: 1));
+            DateTime(now.year, now.month + 1, 1).addDays(-1);
         var streak = 0;
         if (_countInRange(monthStart, monthEnd) >= targetFrequency) streak++;
         monthStart = DateTime(monthStart.year, monthStart.month - 1, 1);
         while (true) {
           final end = DateTime(monthStart.year, monthStart.month + 1, 1)
-              .subtract(const Duration(days: 1));
+              .addDays(-1);
           if (_countInRange(monthStart, end) < targetFrequency) break;
           streak++;
           monthStart = DateTime(monthStart.year, monthStart.month - 1, 1);
@@ -385,13 +430,13 @@ class Habit {
   }
 
   int _daySpecificCurrentStreak() {
-    final floor = createdAt.atMidnight;
+    final floor = startedAt;
     final today = AppClock.now().atMidnight;
     var cursor = today;
     var streak = 0;
     while (!cursor.isBefore(floor)) {
       if (isNeutralOn(cursor) || !isScheduledOn(cursor)) {
-        cursor = cursor.subtract(const Duration(days: 1));
+        cursor = cursor.addDays(-1);
         continue;
       }
       if (isSatisfiedOn(cursor)) {
@@ -400,19 +445,19 @@ class Habit {
       } else {
         break;
       }
-      cursor = cursor.subtract(const Duration(days: 1));
+      cursor = cursor.addDays(-1);
     }
     return streak;
   }
 
   int _daySpecificLongestStreak() {
-    var cursor = createdAt.atMidnight;
+    var cursor = startedAt;
     final end = AppClock.now().atMidnight;
     var best = 0;
     var run = 0;
     while (!cursor.isAfter(end)) {
       if (isNeutralOn(cursor) || !isScheduledOn(cursor)) {
-        cursor = cursor.add(const Duration(days: 1));
+        cursor = cursor.addDays(1);
         continue;
       }
       if (isSatisfiedOn(cursor)) {
@@ -421,7 +466,7 @@ class Habit {
       } else {
         run = 0;
       }
-      cursor = cursor.add(const Duration(days: 1));
+      cursor = cursor.addDays(1);
     }
     return best;
   }
@@ -430,7 +475,7 @@ class Habit {
 
   int _longestStreak() {
     if (kind == HabitKind.negative) {
-      var cursor = createdAt.atMidnight;
+      var cursor = startedAt;
       final end = AppClock.now().atMidnight;
       var best = 0;
       var run = 0;
@@ -442,7 +487,7 @@ class Habit {
         } else {
           run = 0;
         }
-        cursor = cursor.add(const Duration(days: 1));
+        cursor = cursor.addDays(1);
       }
       return best;
     }
@@ -453,7 +498,7 @@ class Habit {
 
     switch (interval) {
       case HabitInterval.daily:
-        var cursor = createdAt.atMidnight;
+        var cursor = startedAt;
         final end = AppClock.now().atMidnight;
         var best = 0;
         var run = 0;
@@ -465,37 +510,37 @@ class Habit {
           } else {
             run = 0;
           }
-          cursor = cursor.add(const Duration(days: 1));
+          cursor = cursor.addDays(1);
         }
         return best;
 
       case HabitInterval.weekly:
-        var start = dates.first.subtract(Duration(days: dates.first.weekday - 1));
+        var start = dates.first.addDays(-(dates.first.weekday - 1));
         final end =
-            dates.last.add(Duration(days: 7 - dates.last.weekday));
+            dates.last.addDays(7 - dates.last.weekday);
         var best = 0;
         var run = 0;
         while (!start.isAfter(end)) {
-          if (_countInRange(start, start.add(const Duration(days: 6))) >=
+          if (_countInRange(start, start.addDays(6)) >=
               targetFrequency) {
             run++;
           } else {
             run = 0;
           }
           if (run > best) best = run;
-          start = start.add(const Duration(days: 7));
+          start = start.addDays(7);
         }
         return best;
 
       case HabitInterval.monthly:
         var start = DateTime(dates.first.year, dates.first.month, 1);
         final end = DateTime(dates.last.year, dates.last.month + 1, 1)
-            .subtract(const Duration(days: 1));
+            .addDays(-1);
         var best = 0;
         var run = 0;
         while (!start.isAfter(end)) {
           final mEnd = DateTime(start.year, start.month + 1, 1)
-              .subtract(const Duration(days: 1));
+              .addDays(-1);
           if (_countInRange(start, mEnd) >= targetFrequency) {
             run++;
           } else {

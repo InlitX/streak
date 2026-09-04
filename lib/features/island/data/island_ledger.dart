@@ -64,18 +64,19 @@ class IslandLedger {
         if (habit.longestStreak >= step.$1) milestones += step.$2;
       }
       if (habit.kind == HabitKind.negative) {
-        var cursor = habit.createdAt.atMidnight;
+        var cursor = habit.startedAt;
         while (!cursor.isAfter(today)) {
           if (habit.isCompletedOn(cursor)) {
             checks++;
             days.add(cursor.dayKey);
           }
-          cursor = cursor.add(const Duration(days: 1));
+          cursor = cursor.addDays(1);
         }
         continue;
       }
       for (final entry in habit.completions.values) {
         if (entry.count < habit.effectiveTarget) continue;
+        if (parseDayKey(entry.date).isAfter(today)) continue;
         checks++;
         days.add(entry.date);
       }

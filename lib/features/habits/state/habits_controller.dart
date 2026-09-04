@@ -159,13 +159,13 @@ class HabitsController extends ChangeNotifier {
     final habit = _habits[id];
     if (habit == null) return;
     if (habit.blocksManualCheck(date, fromFocus: fromFocus)) return;
-    await _apply(habit, CompletionOps.toggle(habit, date), day: date);
+    await _apply(habit, CompletionOps.toggle(habit, date));
   }
 
   Future<void> logRelapse(String id, DateTime date) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.logRelapse(habit, date), day: date);
+    await _apply(habit, CompletionOps.logRelapse(habit, date));
   }
 
   Future<void> clearRelapse(String id, DateTime date) async {
@@ -177,15 +177,14 @@ class HabitsController extends ChangeNotifier {
   Future<void> addProgress(String id, DateTime date, double delta) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.addProgress(habit, date, delta), day: date);
+    await _apply(habit, CompletionOps.addProgress(habit, date, delta));
   }
 
   Future<void> setProgress(String id, DateTime date, double value) async {
     final habit = _habits[id];
     if (habit == null) return;
     final current = habit.completions[date.dayKey]?.count ?? 0;
-    await _apply(habit, CompletionOps.addProgress(habit, date, value - current),
-        day: date);
+    await _apply(habit, CompletionOps.addProgress(habit, date, value - current));
   }
 
   Future<void> setStep(
@@ -196,8 +195,7 @@ class HabitsController extends ChangeNotifier {
   ) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.setStep(habit, date, stepId, checked),
-        day: date);
+    await _apply(habit, CompletionOps.setStep(habit, date, stepId, checked));
   }
 
   Future<void> setVacation(String id, bool on) async {
@@ -284,16 +282,9 @@ class HabitsController extends ChangeNotifier {
 
   Future<void> _apply(
     Habit habit,
-    Map<String, Completion> completions, {
-    DateTime? day,
-  }) async {
-    var updated = habit.copyWith(completions: completions);
-    if (day != null && completions.containsKey(day.dayKey)) {
-      final logged = day.atMidnight;
-      if (logged.isBefore(updated.createdAt.atMidnight)) {
-        updated = updated.copyWith(createdAt: logged);
-      }
-    }
+    Map<String, Completion> completions,
+  ) async {
+    final updated = habit.copyWith(completions: completions);
     _habits[habit.id] = updated;
     notifyListeners();
     HomeWidgetService.syncSoon(() => asMap);

@@ -8,17 +8,18 @@ int _nowMinutes() {
   return now.hour * 60 + now.minute;
 }
 
+bool _isFuture(DateTime date) =>
+    date.atMidnight.isAfter(AppClock.now().atMidnight);
+
 class CompletionOps {
   const CompletionOps._();
 
   static Map<String, Completion> toggle(Habit habit, DateTime date) {
+    if (_isFuture(date)) return habit.completions;
     if (habit.kind == HabitKind.negative) {
-      if (date.atMidnight.isBefore(habit.createdAt.atMidnight)) {
-        return {...habit.completions}..remove(date.dayKey);
-      }
-      return habit.isCompletedOn(date)
-          ? logRelapse(habit, date)
-          : clearRelapse(habit, date);
+      return habit.completions.containsKey(date.dayKey)
+          ? clearRelapse(habit, date)
+          : logRelapse(habit, date);
     }
     if (habit.hasSubsteps) return toggleAllSteps(habit, date);
     final completions = {...habit.completions};
@@ -44,6 +45,7 @@ class CompletionOps {
     String stepId,
     bool checked,
   ) {
+    if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
     final entry = completions[date.dayKey];
     final steps = {...?entry?.steps};
@@ -71,6 +73,7 @@ class CompletionOps {
   }
 
   static Map<String, Completion> toggleAllSteps(Habit habit, DateTime date) {
+    if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
     final all = habit.substeps.map((s) => s.id).toSet();
     if (habit.isCompletedOn(date)) {
@@ -90,6 +93,7 @@ class CompletionOps {
   }
 
   static Map<String, Completion> logRelapse(Habit habit, DateTime date) {
+    if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
     completions[date.dayKey] = Completion(
       date: date.dayKey,
@@ -111,6 +115,7 @@ class CompletionOps {
     DateTime date,
     double delta,
   ) {
+    if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
     final next = roundAmount((completions[date.dayKey]?.count ?? 0) + delta);
     if (next <= 0) {

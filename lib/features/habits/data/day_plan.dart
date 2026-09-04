@@ -30,7 +30,7 @@ class DayPlan {
   static bool isDueOn(Habit habit, DateTime day) =>
       !habit.isArchived &&
       habit.kind != HabitKind.negative &&
-      !day.atMidnight.isBefore(habit.createdAt.atMidnight) &&
+      !day.atMidnight.isBefore(habit.startedAt) &&
       habit.isScheduledOn(day) &&
       !habit.isPausedOn(day);
 

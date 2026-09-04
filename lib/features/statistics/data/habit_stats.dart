@@ -21,10 +21,35 @@ class HabitStats {
     required this.bestStreak,
     required this.monthRate,
     required this.consistency,
+    required this.weekDone,
+    required this.monthDone,
+    required this.allDone,
   });
 
   static const window = 90;
   static const perfectWindow = 1825;
+
+  static final empty = HabitStats(
+    dailyCounts: const {},
+    monthly: List<int>.filled(12, 0),
+    weekday: List<int>.filled(7, 0),
+    hours: List<int>.filled(24, 0),
+    hourSamples: 0,
+    streakSeries: List<double>.filled(window, 0),
+    perHabit: const {},
+    perfectDays: 0,
+    perfectStreak: 0,
+    bestPerfectStreak: 0,
+    total: 0,
+    activeDays: 0,
+    currentStreak: 0,
+    bestStreak: 0,
+    monthRate: 0,
+    consistency: 0,
+    weekDone: 0,
+    monthDone: 0,
+    allDone: 0,
+  );
 
   final Map<String, int> dailyCounts;
   final List<int> monthly;
@@ -41,6 +66,10 @@ class HabitStats {
   final int currentStreak;
   final int bestStreak;
   final int monthRate;
+
+  final int weekDone;
+  final int monthDone;
+  final int allDone;
   final int consistency;
 
   int get bestWeekday => _argMax(weekday);
@@ -60,27 +89,29 @@ class HabitStats {
       }
       return count;
     }
+    final today = AppClock.now().atMidnight;
     for (final entry in habit.completions.values) {
       if (entry.count < habit.effectiveTarget) continue;
-      if (parseDayKey(entry.date).year != year) continue;
+      final date = parseDayKey(entry.date);
+      if (date.year != year || date.isAfter(today)) continue;
       count++;
     }
     return count;
   }
 
   static List<double> _streakSeries(List<Habit> habits, DateTime today) {
-    final start = today.subtract(const Duration(days: window - 1));
+    final start = today.addDays(-(window - 1));
     final series = List<double>.filled(window, 0);
 
     for (final habit in habits) {
       var run = 0;
-      var cursor = start.subtract(const Duration(days: 1));
+      var cursor = start.addDays(-1);
       while (habit.isCompletedOn(cursor)) {
         run++;
-        cursor = cursor.subtract(const Duration(days: 1));
+        cursor = cursor.addDays(-1);
       }
       for (var i = 0; i < window; i++) {
-        final day = start.add(Duration(days: i));
+        final day = start.addDays(i);
         run = habit.isCompletedOn(day) ? run + 1 : 0;
         if (run > series[i]) series[i] = run.toDouble();
       }
@@ -89,7 +120,7 @@ class HabitStats {
   }
 
   static bool _isDue(Habit habit, DateTime day) =>
-      !day.isBefore(habit.createdAt.atMidnight) &&
+      !day.isBefore(habit.startedAt) &&
       habit.isScheduledOn(day) &&
       !habit.isNeutralOn(day);
 
@@ -100,10 +131,10 @@ class HabitStats {
     if (habits.isEmpty) return (current: 0, best: 0);
 
     var floor = habits
-        .map((h) => h.createdAt.atMidnight)
+        .map((h) => h.startedAt)
         .reduce((a, b) => a.isBefore(b) ? a : b);
     final limit =
-        today.subtract(const Duration(days: perfectWindow)).atMidnight;
+        today.addDays(-perfectWindow).atMidnight;
     if (floor.isBefore(limit)) floor = limit;
 
     final days = today.epochDay - floor.epochDay;
@@ -137,15 +168,31 @@ class HabitStats {
       habits.where((h) => !h.tracking).toList();
 
   static HabitStats compute(List<Habit> habits, int year) {
+    final today = AppClock.now().atMidnight;
     final daily = <String, int>{};
     final monthly = List<int>.filled(12, 0);
     final weekday = List<int>.filled(7, 0);
     final hours = List<int>.filled(24, 0);
     var total = 0;
     var hourSamples = 0;
+    var weekDone = 0;
+    var monthDone = 0;
+    var allDone = 0;
+    final weekFloor = today.startOfWeek(DateTime.monday);
 
     for (final habit in habits) {
       if (habit.kind == HabitKind.negative) {
+        allDone += habit.cleanDays;
+        for (var i = 0; i < today.day; i++) {
+          final day = today.addDays(-i);
+          if (day.isBefore(habit.startedAt)) break;
+          if (habit.isCompletedOn(day)) monthDone++;
+        }
+        for (var day = today;
+            !day.isBefore(weekFloor) && !day.isBefore(habit.startedAt);
+            day = day.addDays(-1)) {
+          if (habit.isCompletedOn(day)) weekDone++;
+        }
         for (var m = 1; m <= 12; m++) {
           final daysInMonth = DateTime(year, m + 1, 0).day;
           for (var d = 1; d <= daysInMonth; d++) {
@@ -162,6 +209,10 @@ class HabitStats {
       for (final entry in habit.completions.values) {
         if (entry.count < habit.effectiveTarget) continue;
         final date = parseDayKey(entry.date);
+        if (date.isAfter(today)) continue;
+        allDone++;
+        if (date.year == today.year && date.month == today.month) monthDone++;
+        if (!date.isBefore(weekFloor)) weekDone++;
         if (date.year != year) continue;
         daily[entry.date] = (daily[entry.date] ?? 0) + 1;
         monthly[date.month - 1]++;
@@ -173,8 +224,6 @@ class HabitStats {
         }
       }
     }
-
-    final today = AppClock.now().atMidnight;
 
     final streakSeries = _streakSeries(habits, today);
 
@@ -195,9 +244,9 @@ class HabitStats {
     var done = 0;
     var possible = 0;
     for (var i = 0; i < 30; i++) {
-      final date = today.subtract(Duration(days: i));
+      final date = today.addDays(-i);
       for (final habit in habits) {
-        if (date.isBefore(habit.createdAt.atMidnight)) continue;
+        if (date.isBefore(habit.startedAt)) continue;
         if (!habit.isScheduledOn(date) || habit.isNeutralOn(date)) continue;
         possible++;
         if (habit.isCompletedOn(date)) done++;
@@ -238,6 +287,9 @@ class HabitStats {
       bestStreak: bestStreak,
       monthRate: monthRate,
       consistency: consistency,
+      weekDone: weekDone,
+      monthDone: monthDone,
+      allDone: allDone,
     );
   }
 }

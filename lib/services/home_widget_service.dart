@@ -255,7 +255,7 @@ class HomeWidgetService {
     return _heatmapDays(midnight).map((day) {
       if (day.isAfter(midnight)) return -1;
       final active =
-          tracked.where((h) => !day.isBefore(h.createdAt.atMidnight)).toList();
+          tracked.where((h) => !day.isBefore(h.startedAt)).toList();
       if (active.isEmpty) return 0;
       final done = active.where((h) => h.isCompletedOn(day)).length;
       if (done == 0) return 0;
@@ -267,7 +267,7 @@ class HomeWidgetService {
     final midnight = today.atMidnight;
     return _heatmapDays(midnight).map((day) {
       if (day.isAfter(midnight)) return -1;
-      if (day.isBefore(habit.createdAt.atMidnight)) return 0;
+      if (day.isBefore(habit.startedAt)) return 0;
       if (habit.kind == HabitKind.negative) {
         return habit.completions.containsKey(day.dayKey) ? 0 : 4;
       }

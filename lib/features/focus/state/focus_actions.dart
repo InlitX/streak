@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -20,7 +21,7 @@ Future<void> applyFocusAction(FocusAction action) async {
   final habit = habits.byId(habitId);
   if (habit == null) return;
 
-  final today = DateTime.now();
+  final today = AppClock.now();
   if (habit.isTimeAmount) {
     await habits.addProgress(habit.id, today, session.seconds / 60);
     return;

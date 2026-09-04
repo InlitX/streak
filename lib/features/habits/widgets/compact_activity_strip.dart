@@ -16,7 +16,7 @@ class CompactActivityStrip extends StatelessWidget {
 
   List<Color> _monthCells(BuildContext context) {
     final today = AppClock.now().atMidnight;
-    final floor = habit.createdAt.atMidnight;
+    final floor = habit.startedAt;
     final base = context.colors.surfaceContainerHighest;
     final dim = base.withValues(alpha: 0.4);
     final negative = habit.kind == HabitKind.negative;
