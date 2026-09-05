@@ -382,7 +382,7 @@
   "widget_cfg_color": "Cor",
   "widget_demo_read": "Ler",
   "category_health": "Saúde",
-  "category_mindfulness": "",
+  "category_mindfulness": "Atenção Plena",
   "widget_cfg_saturation": "Saturação",
   "category_learning": "Aprendizado",
   "count_weeks": "{count, plural, =1{1 semana} other{{count} semanas}}",
@@ -1082,5 +1082,21 @@
   "celebration_none": "Nenhuma",
   "quant_add_title": "Adicionar quantidade",
   "pane_hint": "Abre alguma coisa da lista para ver aqui",
-  "average_short": "Qtd"
+  "average_short": "Qtd",
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "emoji_own": "Digite ou cole qualquer emoji",
+  "period_all_time": "Todo o período",
+  "island": "Ilha",
+  "island_enable_sub": "Transforme seus hábitos em um arquipélago Mediterrâneo que você constrói pouco a pouco",
+  "island_shop": "Loja",
+  "island_build": "Construir",
+  "island_done": "Construído",
+  "island_complete": "O arquipélago está pronto"
 }
