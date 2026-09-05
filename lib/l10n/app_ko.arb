@@ -1225,5 +1225,24 @@
         "type": "String"
       }
     }
-  }
+  },
+  "streak_unit_week": "{count}주",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}개월",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "emoji_own": "아무 이모지나 입력하거나 붙여넣으세요",
+  "period_all_time": "전체 기간",
+  "times_completed": "완료 횟수"
 }
