@@ -494,7 +494,7 @@
   "share_stats_short": "Statistiken",
   "share_save": "Speichern",
   "app_style_sub": "Aussehen und Gefühl der ganzen App anpassen.",
-  "app_lock_sub": "Nutze deinen Fingerabdruck oder Gesicht um Streak zu öffnen",
+  "app_lock_sub": "Nutze deinen Fingerabdruck oder Gesicht um Streak zu entsperren",
   "auto_backup_daily": "Täglich",
   "restore": "Wiederherstellen",
   "preferences_sub": "Sprache, Woche und Sortierung",
@@ -522,7 +522,7 @@
   "focus_history_empty": "Noch keine Sitzungen",
   "unit_seconds": "Sekunden",
   "focus_enable_sub": "Ein Timer für Gewohnheiten, die einen benötigen",
-  "focus_shuffle": "",
+  "focus_shuffle": "Mischen",
   "focus_goal_today": "",
   "@focus_goal_today": {
     "placeholders": {
@@ -596,7 +596,7 @@
   "widget_cfg_style_card": "Karte",
   "bg_gradient": "Übergang",
   "focus_target_reached": "Ziel erreicht",
-  "share_friends_message": "Ich verfolge meine Serien mit Streak — ein kleiner, kostenloser, offline Gewohnheits-Tracker ohne Werbung. Bau auch du deine Serien mit Streak: https://inlitx.github.io/streak/",
+  "share_friends_message": "Ich verfolge meine Serien mit Streak – einem kleinen, kostenlosen, offline Gewohnheits-Tracker ohne Werbung. Bau auch du deine Serien mit Streak: https://inlitx.github.io/streak/",
   "note_kind_completed": "Abgeschlossen",
   "focus_break": "Pause",
   "undo": "Rückgängig",
@@ -614,7 +614,7 @@
   },
   "focus": "Fokus",
   "wipe_data_warning": "Dadurch werden alle Gewohnheiten, Notizen, Fokus-Sitzungen und Einstellungen auf diesem Gerät gelöscht. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
-  "auto_backup_where": "Eine Sicherungskopie ist erstellt wenn du die App öffnest. Die letzten 5 werden behalten.",
+  "auto_backup_where": "Wenn du die App öffnest, erstellt Streak eine Sicherungskopie und eine lesbare Kopie deiner Angewohnheiten, die du in einem Editor deiner Wahl öffnen kannst. Die letzten 5 Sicherungskopien werden behalten.",
   "widget_demo_run": "Ausführen",
   "widget_cfg_style_classic": "Klassisch",
   "archived_habits_sub": "Stelle sie wieder her oder lösche sie endgültig",
@@ -991,7 +991,7 @@
   "view_switcher_sub": "Woche-/Monat-/Jahr-Buttons in „Heute“ einblenden",
   "todos": "Zu erledigen",
   "quotes_mine": "Meine",
-  "cost_note": "Optional. Leer lassen, wenn diese Gewohnheit kein Geld kostet.",
+  "cost_note": "Optional. Lass das Feld leer, wenn diese Gewohnheit kein Geld kostet.",
   "focus_only": "Nur mit einer Fokus-Sitzung",
   "priority_high": "Hoch",
   "focus_delete_sessions": "Sitzungen löschen?",
@@ -1052,5 +1052,14 @@
       }
     }
   },
-  "refresh_now": "Aktualisieren"
+  "refresh_now": "Aktualisieren",
+  "just_tracking": "Nur tracken",
+  "quotes_off": "aus",
+  "view_switcher_needs": "Schalte Aktivitäts Karten ein um es zu nutzen",
+  "github_star_sub": "Gib dem Projekt ein Stern damit es mehr finden können",
+  "report_issue_sub": "Erzähl mir über ein Fehler oder frage nach einer Funktion",
+  "readable_copy": "Lesbare Kopie",
+  "refresh_now_sub": "Importiere, was deine anderen Geräte in dem Ordner hinterlassen haben",
+  "refresh_brought": "Deine Gewohnheiten sind aktuell",
+  "refresh_nothing": "Nichts Neues im Ordner"
 }
