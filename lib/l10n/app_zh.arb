@@ -1028,5 +1028,7 @@
   "period_this_month": "本月",
   "period_last_month": "上月",
   "period_this_year": "本年",
-  "period_last_year": "去年"
+  "period_last_year": "去年",
+  "quotes_off": "关闭",
+  "refresh_now": "更新"
 }
