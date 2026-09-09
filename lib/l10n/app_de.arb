@@ -185,7 +185,7 @@
   "weekdays": "Wochentage",
   "data": "Daten",
   "best_streak": "Beste Serie",
-  "log_relapse_body": "Deine Serie für \"{name}\" wird unterbrochen. Du kannst es rückgängig machen indem du nochmal tippst.",
+  "log_relapse_body": "Deine Serie für \"{name}\" wird unterbrochen. Du kannst es rückgängig machen, indem du nochmal tippst.",
   "@log_relapse_body": {
     "placeholders": {
       "name": {
@@ -349,7 +349,7 @@
   "share": "Teilen",
   "sun": "So",
   "motiv_start": "Starte den Tag kräftig 💪",
-  "about_body": "Streak wurde von einer einfachen Idee geboren: warum zum tracken von seinen eigenen Gewohnheiten bezahlen?\n\nDiese App ist komplett open source. Jeder kann genau sehen wie sie funktioniert, Verbesserungen vorschlagen, oder sogar eine eigene Version bauen. Keine Black-Boxen. Keine Überraschungen.\n\nDeine Privatsphäre ist komplett — Alles bleibt auf deinem Gerät. Keine Account, keine Server, keine Werbung. Kein einziger Byte verlässt dein Handy.\n\nKeine EInschränkungen. Erstelle so viele Gewohnheiten wie du willst. Keine Abos, keine \"Pro Version\", keine Pop-Ups die nach Geld frage. Jemals.\n\nWenn die App dir hilft kannst du sie mit einem Stern auf GitHub oder indem du mir einen Kaffee kaufst unterstützen. Doch das ist komplett optional — die App bekommst du so oder so.",
+  "about_body": "Streak wurde aus einer einfachen Idee heraus geboren: warum bezahlen, um seine eigenen Gewohnheiten zu tracken?\n\nDiese App ist komplett Open Source. Jeder kann genau sehen wie sie funktioniert, Verbesserungen vorschlagen, oder sogar eine eigene Version bauen. Keine Black-Boxen. Keine Überraschungen.\n\nDeine Privatsphäre ist komplett — Alles bleibt auf deinem Gerät. Keine Accounts, keine Server, keine Werbung. Kein einziger Byte verlässt dein Handy.\n\nKeine Einschränkungen. Erstelle so viele Gewohnheiten wie du willst. Keine Abos, keine \"Pro-Version\", keine Pop-Ups die nach Geld fragen. Jemals.\n\nWenn die App dir hilft kannst du sie mit einem Stern auf GitHub oder indem du mir einen Kaffee kaufst unterstützen. Doch das ist komplett optional — die App bekommst du so oder so.",
   "done_today": "Alles erledigt für Heute",
   "widget_cfg_reset": "Zurücksetzen",
   "time": "Zeit",
@@ -388,7 +388,7 @@
   "reminders": "Erinnerungen",
   "focus_end_keep": "Mach weiter",
   "share_friends_sub": "Schicke ihnen die App",
-  "about_story": "Diese App wurde aus Frustration mit den existenten Gewohnheits-Tracken geboren. Die meisten beschränken wie viele Gewohnheiten du erstellen kannst, haben grundlegend Features hinter einer paywall, sammeln deine Daten oder bombardieren dich mit Werbung. Also erstellte ich Streak: komplett offen, keine Werbung, keine Zahlungen, kein Tracking. Alles läuft lokal — deine Daten sind deins. Open source, ohne Haken.",
+  "about_story": "Diese App wurde aus Frustration mit den existenten Gewohnheits-Trackern geboren. Die meisten beschränken wie viele Gewohnheiten du erstellen kannst, haben grundlegend Features hinter einer Paywall, sammeln deine Daten oder bombardieren dich mit Werbung. Also erstellte ich Streak: komplett offen, keine Werbung, keine Zahlungen, kein Tracking. Alles läuft lokal — deine Daten sind deins. Open Source, ohne Haken.",
   "focus_saved": "{time} aufgezeichnet",
   "@focus_saved": {
     "placeholders": {
@@ -399,7 +399,7 @@
   },
   "note_photos": "Bilder",
   "auto_backup_run_now": "Jetzt Sicherungskopie erstellen",
-  "about_subtitle": "Für die Tage an denen du da bist.",
+  "about_subtitle": "Für die Tage an denen du da sein willst.",
   "wipe_data_sub": "Gewohnheiten, Notizen, Fokus Sessions und Einstellungen",
   "focus_your_tracks": "Deine Titel",
   "completion_rate_short": "Konsequenz",
@@ -483,8 +483,8 @@
   "focus_end_complete": "Als erledigt markieren",
   "archived_empty": "Nichts archiviert",
   "focus_scene_black": "Schwarz",
-  "share_swipe_hint": "",
-  "focus_free_session": "Freie Sitzung",
+  "share_swipe_hint": "Wische die Karte um durch die Zeit zu reisen",
+  "focus_free_session": "Freie-Session",
   "day_start_midnight": "Mitternacht",
   "share_size": "Größe",
   "focus_track_too_long": "Titel müssen kürzer als 20 Minuten sein",
@@ -523,7 +523,7 @@
   "unit_seconds": "Sekunden",
   "focus_enable_sub": "Ein Timer für Gewohnheiten, die einen benötigen",
   "focus_shuffle": "Mischen",
-  "focus_goal_today": "",
+  "focus_goal_today": "{done} von {goal} heute",
   "@focus_goal_today": {
     "placeholders": {
       "done": {
@@ -562,7 +562,7 @@
   "focus_pick_habit": "Worauf fokussierst du dich?",
   "unit_min_short": "Min.",
   "widget_cfg_style": "Stil",
-  "day_start": "Tagesanfang",
+  "day_start": "Tag startet um",
   "notif_action_snooze": "Schlummern",
   "note_take_photo": "Kamera",
   "delete_forever": "Endgültig löschen",
@@ -619,7 +619,7 @@
   "widget_cfg_style_classic": "Klassisch",
   "archived_habits_sub": "Stelle sie wieder her oder lösche sie endgültig",
   "note_kind_note": "Notiz",
-  "focus_pomodoro_sub": "",
+  "focus_pomodoro_sub": "Fokusrunden mit kurzen Pausen ausstatten",
   "focus_duration": "Dauer",
   "focus_images_limit": "Bis zu 10 Bilder",
   "edit_note": "Notiz bearbeiten",
@@ -663,7 +663,7 @@
   "style_minimal": "Minimal",
   "vacation_day_on": "Markiere als Ferientag",
   "auto_backup": "Automatische Sicherheitskopie",
-  "day_start_sub": "Späte Stunden zählen noch zum Vortag.",
+  "day_start_sub": "Späte Stunden zählen noch zum Vortag",
   "focus_notif_body": "Deine Fokus-Sitzung ist vorbei. Gut gemacht!",
   "app_lock_unavailable": "Biometrie Sperre nicht Verfügbar",
   "auto_backup_folder_set": "Ordner gespeichert",
@@ -833,7 +833,7 @@
   },
   "view_switcher": "Ansichtenwechsler",
   "quote_2": "Kontinuität schlägt Intensität.",
-  "card_activity": "Kartenaktivität",
+  "card_activity": "Aktivität auf Karten",
   "clear": "Aufräumen",
   "pick_a_date": "Wähle ein Datum",
   "clear_progress_warning": "Dadurch werden alle protokollierten Tage, Notizen und Fokus-Sitzungen gelöscht, aber Ihre Gewohnheiten, deren Zeitpläne und Ihre Einstellungen bleiben erhalten. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
@@ -859,8 +859,8 @@
   "report_issue": "Fehler Melden",
   "widget_cfg_light_color": "Helles Thema",
   "focus_paused": "Pausiert",
-  "todos_enable_sub": "",
-  "focus_delete_sessions_body": "",
+  "todos_enable_sub": "A schnelle list neben deinen Gewohnheiten",
+  "focus_delete_sessions_body": "{count, plural, =1{1 Fokus-Session wird entfernt. Dies kann nicht rückgängig gemacht werden.} other{{count} Fokus-Sessions werden entfernt. Dies kann nicht rückgängig gemacht werden.}}",
   "@focus_delete_sessions_body": {
     "placeholders": {
       "count": {
@@ -869,7 +869,7 @@
     }
   },
   "plan_day": "Plane den Tag",
-  "celebration": "Vervollständigungseffekt",
+  "celebration": "Erledigungseffekt",
   "habit_time": "Uhrzeit",
   "todo_empty_title": "Nichts auf der Liste",
   "vacation_all": "Pausiere alle Gewohnheiten",
@@ -883,7 +883,7 @@
   "day_timeline": "Tag",
   "celebration_confetti": "Konfetti",
   "select_all": "Alle auswählen",
-  "widget_todos_empty": "Das war’s für heute.",
+  "widget_todos_empty": "Das war’s für heute",
   "quote_7": "Erhalte die Serie aufrecht.",
   "quotes_add": "Zitat hinzufügen",
   "unscheduled_confirm": "Trotzdem aufzeichnen",
@@ -920,7 +920,7 @@
       }
     }
   },
-  "focus_defaults": "Standart Sitzungseinstellungen",
+  "focus_defaults": "Standard Session-Einstellungen",
   "priority_medium": "Mittel",
   "prefs_features": "Merkmale",
   "todo_left": "{count, plural, =0{Alles erledigt} =1{1 zu erledigen} other{{count} zu erledigen}}",
@@ -931,7 +931,7 @@
       }
     }
   },
-  "unscheduled_body": "",
+  "unscheduled_body": "Diese Gewohnheit ist nicht geplant für {day}. Trotzdem protokollieren als Extra?",
   "@unscheduled_body": {
     "placeholders": {
       "day": {
@@ -939,7 +939,7 @@
       }
     }
   },
-  "widget_todos_open": "",
+  "widget_todos_open": "To-do  {count}",
   "@widget_todos_open": {
     "placeholders": {
       "count": {
@@ -964,7 +964,7 @@
   "focus_flowtime_hint": "Kein Ziel und kein Alarm. Die Uhr zählt hoch und du hörst auf wenn du fertig bist.",
   "focus_notif_channel": "Fokus-Sitzungen",
   "quotes": "Zitate",
-  "todo_clear_completed_body": "",
+  "todo_clear_completed_body": "{count, plural, =1{Dies löscht die erledigten To-Dos.} other{Dies löscht {count} erledigte To-Dos.}}",
   "@todo_clear_completed_body": {
     "placeholders": {
       "count": {
@@ -988,7 +988,7 @@
   "quote_8": "Kleine Gewohnheiten, große Auswirkung.",
   "collapse_cards": "Karten einklappen",
   "focus_only_hint": "Die Gewohnheit wird abgehakt, wenn du eine Sitzung beendest, nicht durch Antippen.",
-  "view_switcher_sub": "Woche-/Monat-/Jahr-Buttons in „Heute“ einblenden",
+  "view_switcher_sub": "Woche-/Monat-/Jahr-Tasten in „Heute“ anzeigen",
   "todos": "Zu erledigen",
   "quotes_mine": "Meine",
   "cost_note": "Optional. Lass das Feld leer, wenn diese Gewohnheit kein Geld kostet.",
@@ -1027,8 +1027,8 @@
   "period_this_week": "Diese Woche",
   "todo_search": "Durchsuche To-Dos",
   "heatmap_path": "Verbinde die Tage",
-  "heatmap_path_sub": "Zeichnet das Gitter in einem durchgehenden Pfad",
-  "focus_only_clear_body": "Nur eine Fokus-Sitzung kann „{name}“ wieder abhaken.",
+  "heatmap_path_sub": "Zeichnet das Raster als einen durchgehenden Pfad",
+  "focus_only_clear_body": "Nur eine Fokus-Session kann „{name}“ wieder abhaken.",
   "@focus_only_clear_body": {
     "placeholders": {
       "name": {
@@ -1055,11 +1055,194 @@
   "refresh_now": "Aktualisieren",
   "just_tracking": "Nur tracken",
   "quotes_off": "aus",
-  "view_switcher_needs": "Schalte Aktivitäts Karten ein um es zu nutzen",
-  "github_star_sub": "Gib dem Projekt ein Stern damit es mehr finden können",
-  "report_issue_sub": "Erzähl mir über ein Fehler oder frage nach einer Funktion",
+  "view_switcher_needs": "Schalte Aktivitäts-Karten ein um es zu nutzen",
+  "github_star_sub": "Gib dem Projekt ein Stern damit es mehr Leute finden können",
+  "report_issue_sub": "Melde mir einen Fehler oder frage nach einer Funktion",
   "readable_copy": "Lesbare Kopie",
   "refresh_now_sub": "Importiere, was deine anderen Geräte in dem Ordner hinterlassen haben",
   "refresh_brought": "Deine Gewohnheiten sind aktuell",
-  "refresh_nothing": "Nichts Neues im Ordner"
+  "refresh_nothing": "Nichts Neues im Ordner",
+  "streak_unit_week": "{count}W",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}Mon.",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "just_tracking_option": "Nur Zählen anbieten",
+  "just_tracking_option_sub": "Fügt den Schalter hinzu, wenn du eine Gewohnheit erstellst",
+  "just_tracking_sub": "Behalte das eigene Raster und Zahlen bei, aber schließe es aus dem Fortschritt und der Tageszählung aus",
+  "emoji_own": "Tippe oder füge ein beliebiges Emoji ein",
+  "sort_completed_last_sub": "Verschiebt erledigte Aufgaben ans Ende der Liste",
+  "today_only_sub": "Blendet Gewohnheiten aus, die nicht für heute geplant sind",
+  "heatmap_rolling": "Letzte 12 Monate",
+  "heatmap_rolling_sub": "Das jährliche Raster endet heut anstatt am 31. Dezember",
+  "card_activity_sub": "Zeigt die letzten Tage auf der Karte an, bereit zum Abhaken",
+  "readable_copy_sub": "Schreibt deine Gewohnheiten auch als Markdown-Dateien",
+  "theme_sub": "Hell, dunkel oder das System-Standard",
+  "accent_color_sub": "Verwendet für Tasten und Highlights",
+  "app_background_sub": "Was du hinter den Karten siehst",
+  "check_style_sub": "Quadratische oder runde Markierungen",
+  "app_icon_sub": "Das Icon auf deinem Startbildschirm",
+  "language_sub": "Die Sprache der ganzen App",
+  "week_start_sub": "Die erste Spalte von jedem Raster",
+  "celebration_sub": "Was du siehst, wenn du eine Gewohnheit abhakst",
+  "start_view_sub": "Die Ansicht „Heute“ öffnet auf",
+  "quotes_sub": "Welche Zitate in „Heute“ angezeigt werden",
+  "focus_daily_goal_sub": "Minuten an Fokus, die du dir für jeden Tag vornimmst",
+  "app_lock_delay_sub": "Wann es dich wieder fragt, nachdem du die App verlassen hast",
+  "focus_only_clear_title": "Diesen Haken löschen?",
+  "period_all_time": "Allzeit",
+  "times_completed": "Male erledigt",
+  "island": "Insel",
+  "island_enable_sub": "Verwandle deine Gewohnheiten in einen mediterranen Archipel, den du Stück für Stück aufbaust",
+  "island_open": "Öffne die Insel",
+  "island_shop": "Laden",
+  "island_build": "Bauen",
+  "island_done": "Gebaut",
+  "island_complete": "Der Archipel ist fertig",
+  "island_tap_hint": "Tippe auf eine Form, um zu sehen, was dort hinkommt",
+  "island_empty": "Hake eine Gewohnheit ab und die Insel fängt an zu wachsen",
+  "island_how": "Wie Punkte funktionieren",
+  "island_how_check": "10 für jede Gewohnheit, die du abhakst",
+  "island_how_focus": "1 pro Fokus-Minute, bis zu 60 am Tag",
+  "island_how_perfect": "25 weitere für einen perfekten Tag",
+  "island_how_note": "Münzen kommen von deinem Verlauf, also bringt ein Backup sie zurück",
+  "island_built": "{done} von {total} gebaut",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "{count} Punkte benötigt",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_placed": "{name} ist nun auf der Insel",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_agave": "Agave",
+  "island_p_altar": "Schrein",
+  "island_p_archway": "Torbogen",
+  "island_p_banner": "Banner",
+  "island_p_bench": "Bank",
+  "island_p_blue_railing": "Blaues Geländer",
+  "island_p_bougainvillea": "Bougainvillea",
+  "island_p_boulder": "Felsblock",
+  "island_p_crate": "Kiste",
+  "island_p_crop_patch": "Anbaufläche",
+  "island_p_cube_house": "Würfelhaus",
+  "island_p_cypress": "Zypresse",
+  "island_p_dry_grass": "Trockenes Gras",
+  "island_p_flat_stone": "Flacher Stein",
+  "island_p_flower_pot": "Blumentopf",
+  "island_p_garden_bed": "Gartenbett",
+  "island_p_hanging_lantern": "Hängende Laterne",
+  "island_p_hay_bale": "Heuballen",
+  "island_p_house": "Kleines Haus",
+  "island_p_lantern_post": "Laternenpfahl",
+  "island_p_large_rock": "Großer Stein",
+  "island_p_main_chapel": "Hauptkapelle",
+  "island_p_mossy_stone": "Moosiger Stein",
+  "island_p_olive": "Olivenbaum",
+  "island_p_pebbles": "Kieselsteine",
+  "island_p_pergola_house": "Pergolahaus",
+  "island_p_pottery_jar": "Töpferglas",
+  "island_p_rocks": "Steine",
+  "island_p_signpost": "Wegweiser",
+  "island_p_small_bridge": "Hölzerner Pier",
+  "island_p_stone_basin": "Steinbecken",
+  "island_p_stone_lantern": "Steinlaterne",
+  "island_p_stone_pile": "Steinhaufen",
+  "island_p_storage_box": "Aufbewahrungstruhe",
+  "island_p_terrace_house": "Reihenhaus",
+  "island_p_terracotta_pot": "Terrakottatopf",
+  "island_p_tower_chapel": "Glockenturm",
+  "island_p_two_story": "Zweistöckiges Haus",
+  "island_p_veg_garden": "Gemüsegarten",
+  "island_p_villa": "Villa",
+  "island_p_water_bucket": "Wassereimer",
+  "island_p_well": "Brunnen",
+  "island_p_windmill": "Windmühle",
+  "island_p_wood_pile": "Holzhaufen",
+  "island_reset": "Die Insel neu starten",
+  "island_reset_sub": "Alles wird abgerissen und jeder Punkt geht zurück auf dein Konto.",
+  "island_coins": "Münzen",
+  "island_g_pueblo": "Das Dorf",
+  "island_g_cala": "Die Bucht",
+  "island_g_terrazas": "Die Terrassen",
+  "island_g_puerto": "Der Hafen",
+  "island_g_molino": "Der Windmühlenrücken",
+  "island_how_todo": "4 für jede To-Do, die du erledigst",
+  "island_how_streak": "Ein Bonus, wenn eine Gewohnheit 7, 30, 100 und 365 Tage erreicht",
+  "island_zoom_hint": "Mit einem Finger ziehen, um dich zu bewegen. Mit zwei Fingern auseinander- oder zusammenziehen, um zu zoomen, und drehen, um die Insel zu drehen.",
+  "island_t_teal": "Türkis",
+  "island_t_clay": "Terrakotta",
+  "island_t_white": "Weiß",
+  "island_t_coral": "Koralle",
+  "island_t_lilac": "Lila",
+  "island_t_autumn": "Herbst",
+  "island_t_deep": "Dunkel",
+  "island_t_silver": "Silber",
+  "island_g_huerta": "Der Obstgarten",
+  "island_g_faro": "Die Stapel",
+  "island_turn": "Drehe die Ansicht",
+  "gamification": "Gamification",
+  "island_default_name": "Meine Insel",
+  "island_rename": "Benenne deine Insel",
+  "island_only_affordable": "Nur, was ich mir leisten kann",
+  "island_nothing_here": "Noch nichts hier",
+  "island_g_vega": "Die Wiese",
+  "island_g_mirador": "Die Aussicht",
+  "island_g_astillero": "Der Bootshof",
+  "island_g_ermita": "Die Kapelleninsel",
+  "island_g_caleta": "Die kleine Bucht",
+  "island_g_cabo": "Der Kap",
+  "island_goal": "So sieht es aus, wenn jedes Stück gebaut wurde.",
+  "island_reset_go": "Neu starten",
+  "island_beta": "Dies ist ein erster Versuch der Gamification und befindet sich noch in der Beta-Phase. Je nachdem, wie ihr es nutzt, kann es sich weiterentwickeln, verändern oder sogar komplett ersetzt werden.",
+  "gamification_beta": "Gamification (Beta)",
+  "last_check": "Letzter Aufruf",
+  "check_history": "Aufruf-Verlauf",
+  "check_history_sub": "{count} Tage abgehakt",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "check_never": "Nie",
+  "check_no_time": "Keine Zeit gespart",
+  "check_marks": "{count} Markierungen",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }
