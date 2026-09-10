@@ -221,7 +221,7 @@
   "step_hint": "Schritt Name",
   "skip": "Übersoringen",
   "buy_coffee_sub": "Hilf mit, die App kostenlos zu halten",
-  "bg_dots": "Ounkte",
+  "bg_dots": "Punkte",
   "kind_quantitative": "Menge",
   "widget_best_streak": "🔥 {streak} beste Serie",
   "@widget_best_streak": {
@@ -413,7 +413,7 @@
   },
   "message_copied": "Nachricht kopiert",
   "share_background": "Hintergrund",
-  "focus_sessions": "Sitzungen",
+  "focus_sessions": "Sessions",
   "focus_amount_added": "{amount} hinzugefügt zu {habit}",
   "@focus_amount_added": {
     "placeholders": {
@@ -465,7 +465,7 @@
   "focus_custom_duration": "Benutzerdefinierte",
   "focus_tasks": "Unteraufgabe auflisten",
   "style_classic": "Klassisch",
-  "focus_history_day": "{count, plural, =1{1 Sitzung} other{{count} Sitzungen}}",
+  "focus_history_day": "{count, plural, =1{1 Session} other{{count} Sessions}}",
   "@focus_history_day": {
     "placeholders": {
       "count": {
@@ -519,7 +519,7 @@
   "share_blur": "Unschärfe",
   "focus_end_reached": "Ziel erreicht. Die Gewohnheit wird als erledigt markiert.",
   "focus_personalize": "Benutzerdefiniert",
-  "focus_history_empty": "Noch keine Sitzungen",
+  "focus_history_empty": "Noch keine Sessions",
   "unit_seconds": "Sekunden",
   "focus_enable_sub": "Ein Timer für Gewohnheiten, die einen benötigen",
   "focus_shuffle": "Mischen",
@@ -613,7 +613,7 @@
     }
   },
   "focus": "Fokus",
-  "wipe_data_warning": "Dadurch werden alle Gewohnheiten, Notizen, Fokus-Sitzungen und Einstellungen auf diesem Gerät gelöscht. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
+  "wipe_data_warning": "Dadurch werden alle Gewohnheiten, Notizen, Fokus-Sessions und Einstellungen auf diesem Gerät gelöscht. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
   "auto_backup_where": "Wenn du die App öffnest, erstellt Streak eine Sicherungskopie und eine lesbare Kopie deiner Angewohnheiten, die du in einem Editor deiner Wahl öffnen kannst. Die letzten 5 Sicherungskopien werden behalten.",
   "widget_demo_run": "Ausführen",
   "widget_cfg_style_classic": "Klassisch",
@@ -642,12 +642,12 @@
   "focus_end": "Ende",
   "focus_pick_audio": "Wähle einen Titel von deinem Gerät",
   "notif_action_done": "Erledigt",
-  "focus_history_empty_sub": "Jede beendete Fokus-Sitzung wird hier angezeigt.",
+  "focus_history_empty_sub": "Jede beendete Fokus-Session wird hier angezeigt.",
   "auto_backup_sub": "Aus",
   "best_month": "Bester Monat",
   "share_save_failed": "Bild konnte nicht gespeichert werden",
   "consistency": "Konsistenz",
-  "focus_done_title": "Sitzung abgeschlossen",
+  "focus_done_title": "Session abgeschlossen",
   "note_pick_photo": "Gallerie",
   "notes_count": "{count, plural, =1{1 Notiz} other{{count} Notizen}}",
   "@notes_count": {
@@ -664,7 +664,7 @@
   "vacation_day_on": "Markiere als Ferientag",
   "auto_backup": "Automatische Sicherheitskopie",
   "day_start_sub": "Späte Stunden zählen noch zum Vortag",
-  "focus_notif_body": "Deine Fokus-Sitzung ist vorbei. Gut gemacht!",
+  "focus_notif_body": "Deine Fokus-Session ist vorbei. Gut gemacht!",
   "app_lock_unavailable": "Biometrie Sperre nicht Verfügbar",
   "auto_backup_folder_set": "Ordner gespeichert",
   "archive_habit": "Aktive Gewohnheit",
@@ -689,8 +689,8 @@
   "wipe_data_sure_body": "Bist du sicher? Ohne ein Backup werden die Daten für immer gelöscht.",
   "archive": "Archiv",
   "completions": "Abschluss",
-  "focus_start": "Sitzung beginnen",
-  "focus_stop_title": "Sitzung beenden?",
+  "focus_start": "Session beginnen",
+  "focus_stop_title": "Session beenden?",
   "vacation_day_off": "Entferne Ferientag",
   "app_lock": "App Sperre",
   "by_habit": "Pro Gewohnheit",
@@ -782,7 +782,7 @@
     }
   },
   "clear_progress": "Klarer Fortschritt",
-  "clear_progress_sub": "Verlauf, Notizen und Fokus Sitzungen",
+  "clear_progress_sub": "Verlauf, Notizen und Fokus-Sessions",
   "clear_progress_confirm": "Klarer Fortschritt",
   "clear_progress_done": "Fortschritt gelöscht",
   "widget_cfg_todos_scope": "Aufgaben",
@@ -800,8 +800,8 @@
   "habit_duration": "Dauer",
   "quotes_edit": "Zitat bearbeiten",
   "quotes_app": "Aus der App",
-  "focus_only_title": "Benötigt eine Fokus-Sitzung",
-  "focus_only_past": "„{name}“ wird nur durch eine Fokus-Sitzung abgeschlossen, daher können vergangene Tage nicht abgehakt werden.",
+  "focus_only_title": "Benötigt eine Fokus-Session",
+  "focus_only_past": "„{name}“ wird nur durch eine Fokus-Session abgeschlossen, daher können vergangene Tage nicht abgehakt werden.",
   "@focus_only_past": {
     "placeholders": {
       "name": {
@@ -811,9 +811,9 @@
   },
   "currency": "Währung",
   "quote_11": "Disziplin ist Freiheit.",
-  "focus_average": "Durchschnittliche Sitzung",
+  "focus_average": "Durchschnittliche Session",
   "quotes_empty_sub": "Schreib deine eigenen und sie erscheinen bei „Heute“.",
-  "focus_only_body": "\"{name}\" wird durch das beenden einer Fokus-Sitzung abgeschlossen.",
+  "focus_only_body": "\"{name}\" wird durch das beenden einer Fokus-Session abgeschlossen.",
   "@focus_only_body": {
     "placeholders": {
       "name": {
@@ -822,7 +822,7 @@
     }
   },
   "widget_cfg_dark_color": "Dunkles Design",
-  "focus_clear_today": "Heutige Sitzungen löschen",
+  "focus_clear_today": "Heutige Sessions löschen",
   "focus_end_flow": "Du hast dich {time} konzentriert.",
   "@focus_end_flow": {
     "placeholders": {
@@ -836,7 +836,7 @@
   "card_activity": "Aktivität auf Karten",
   "clear": "Aufräumen",
   "pick_a_date": "Wähle ein Datum",
-  "clear_progress_warning": "Dadurch werden alle protokollierten Tage, Notizen und Fokus-Sitzungen gelöscht, aber Ihre Gewohnheiten, deren Zeitpläne und Ihre Einstellungen bleiben erhalten. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
+  "clear_progress_warning": "Dadurch werden alle protokollierten Tage, Notizen und Fokus-Sessions gelöscht, aber Ihre Gewohnheiten, deren Zeitpläne und Ihre Einstellungen bleiben erhalten. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
   "celebration_surprise": "Überrasche mich",
   "quote_1": "Jeden Tag kleine Schritte.",
   "quote_6": "Fertig ist besser als perfekt.",
@@ -893,7 +893,7 @@
   "start_view_last": "Zuletzt benutzt",
   "todo_new": "Neue To-Do",
   "todo_priority": "Priorität",
-  "focus_sessions_deleted": "{count, plural, =1{1 Sitzung gelöscht} other{{count} Sitzungen gelöscht}}",
+  "focus_sessions_deleted": "{count, plural, =1{1 Session gelöscht} other{{count} Sessions gelöscht}}",
   "@focus_sessions_deleted": {
     "placeholders": {
       "count": {
@@ -911,7 +911,7 @@
   "quant_logged_days": "Aufgezeichnete Tage",
   "quote_3": "Steh für dich ein.",
   "widget_cfg_todos_hint": "Aus: nur heutige, überfällige und undatierte Aufgaben",
-  "focus_only_start": "Sitzung starten",
+  "focus_only_start": "Session starten",
   "selected_count": "{count, plural, =1{1 Ausgewählt} other{{count} Ausgewählt}}",
   "@selected_count": {
     "placeholders": {
@@ -949,7 +949,7 @@
   },
   "currency_custom": "Benutzerdefiniert",
   "quant_best_day": "Bester Tag",
-  "focus_log_saved": "Sitzung hinzugefügt",
+  "focus_log_saved": "Session hinzugefügt",
   "quant_stats_empty": "Trage einen Betrag ein und er wird hier zusammengerechnet – selbst an Tagen, an denen du dein Ziel nicht ganz erreichst.",
   "quant_goal_days": "Ziel erreicht",
   "widget_cfg_todos_all": "Alle Aufgaben anzeigen",
@@ -962,7 +962,7 @@
   "todo_clear_completed": "Erledigte löschen",
   "quote_10": "Meistere den Morgen.",
   "focus_flowtime_hint": "Kein Ziel und kein Alarm. Die Uhr zählt hoch und du hörst auf wenn du fertig bist.",
-  "focus_notif_channel": "Fokus-Sitzungen",
+  "focus_notif_channel": "Fokus-Sessions",
   "quotes": "Zitate",
   "todo_clear_completed_body": "{count, plural, =1{Dies löscht die erledigten To-Dos.} other{Dies löscht {count} erledigte To-Dos.}}",
   "@todo_clear_completed_body": {
@@ -984,17 +984,17 @@
   },
   "focus_stats": "Fokus-Statistiken",
   "app_lock_delay": "Anschließend Sperren",
-  "focus_log": "Sitzung eintragen",
+  "focus_log": "Session eintragen",
   "quote_8": "Kleine Gewohnheiten, große Auswirkung.",
   "collapse_cards": "Karten einklappen",
-  "focus_only_hint": "Die Gewohnheit wird abgehakt, wenn du eine Sitzung beendest, nicht durch Antippen.",
+  "focus_only_hint": "Die Gewohnheit wird abgehakt, wenn du eine Session beendest, nicht durch Antippen.",
   "view_switcher_sub": "Woche-/Monat-/Jahr-Tasten in „Heute“ anzeigen",
   "todos": "Zu erledigen",
   "quotes_mine": "Meine",
   "cost_note": "Optional. Lass das Feld leer, wenn diese Gewohnheit kein Geld kostet.",
-  "focus_only": "Nur mit einer Fokus-Sitzung",
+  "focus_only": "Nur mit einer Fokus-Session",
   "priority_high": "Hoch",
-  "focus_delete_sessions": "Sitzungen löschen?",
+  "focus_delete_sessions": "Sessions löschen?",
   "rest_days_desc": "An diesen Tagen jede Woche pausieren. Du kannst sie trotzdem eintragen und sie werden mitgezählt.",
   "day_timeline_free": "{span} frei",
   "@day_timeline_free": {
@@ -1044,7 +1044,7 @@
       }
     }
   },
-  "focus_period_sessions": "{count, plural, =0{Keine Sitzungen} =1{1 Sitzung} other{{count} Sitzungen}}",
+  "focus_period_sessions": "{count, plural, =0{Keine Sessions} =1{1 Session} other{{count} Sessions}}",
   "@focus_period_sessions": {
     "placeholders": {
       "count": {
