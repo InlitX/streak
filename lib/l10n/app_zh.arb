@@ -636,7 +636,7 @@
   },
   "focus": "专注",
   "wipe_data_warning": "此操作将删除此手机上的所有习惯、笔记、专注记录和设置。该操作无法撤销，除非您有可导入的备份文件。",
-  "auto_backup_where": "打开应用时会自动创建完整备份，仅保留最近 5 个备份。",
+  "auto_backup_where": "打开应用时会自动创建完整备份，并额外保存一份可用任意编辑器打开的习惯数据。仅保留最近 5 个备份。",
   "widget_demo_run": "跑步",
   "widget_cfg_style_classic": "经典",
   "archived_habits_sub": "可恢复或永久删除",
@@ -995,7 +995,7 @@
   "todo_search": "搜索待办",
   "todo_search_empty": "没有匹配项",
   "heatmap_path": "连接日期",
-  "heatmap_path_sub": "把日期连成一条连续路径",
+  "heatmap_path_sub": "把日期网格连成一条连续路径",
   "focus_only_clear_body": "只有完成一次专注才能再次打卡「{name}」。",
   "@focus_only_clear_body": {
     "placeholders": {
@@ -1030,5 +1030,197 @@
   "period_this_year": "本年",
   "period_last_year": "去年",
   "quotes_off": "关闭",
-  "refresh_now": "更新"
+  "refresh_now": "更新",
+  "island": "岛屿",
+  "island_beta": "这是游戏化功能的初版，目前仍处于测试阶段。后续可能会根据大家的使用情况继续扩展、调整。",
+  "gamification_beta": "游戏化（测试版）",
+  "refresh_now_sub": "从文件夹导入其他设备生成的数据",
+  "streak_unit_week": "{count}周",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}个月",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_enable_sub": "把习惯变成一座座地中海小岛，一点点建成你的群岛",
+  "island_open": "打开岛屿",
+  "island_shop": "商店",
+  "island_build": "建造",
+  "island_done": "已建造",
+  "island_complete": "群岛已全部建造完成",
+  "island_built": "已建造{done} / {total}",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_coins": "金币",
+  "island_g_pueblo": "村庄",
+  "island_g_cala": "海湾",
+  "island_g_terrazas": "梯田",
+  "island_g_puerto": "港口",
+  "island_g_molino": "风车山脊",
+  "island_how_todo": "每完成一个待办 +4",
+  "island_how_check": "每完成一个习惯 +10",
+  "island_how_focus": "每专注 1 分钟 +1，每天最多 60",
+  "island_how_note": "金币来自你的历史记录，恢复备份后也会一起回来。",
+  "island_how_perfect": "完美的一天额外 +25",
+  "island_how_streak": "习惯连续达到 7、30、100 和 365 天时获得奖励",
+  "island_need": "还差 {count} 点",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_nothing_here": "这里还没有东西",
+  "island_only_affordable": "只看可购买",
+  "island_goal": "全部建造完成后将呈现的效果。",
+  "island_default_name": "我的岛屿",
+  "island_rename": "给你的岛屿命名",
+  "gamification": "游戏化",
+  "island_empty": "完成一个习惯，开始建造岛屿",
+  "island_how": "如何获得点数",
+  "island_g_vega": "草地",
+  "island_g_astillero": "船坞",
+  "island_g_cabo": "海角",
+  "island_g_caleta": "小海湾",
+  "island_g_ermita": "礼拜堂岛",
+  "island_g_faro": "海蚀柱",
+  "island_g_huerta": "果园",
+  "island_g_mirador": "观景台",
+  "island_p_agave": "龙舌兰",
+  "island_p_altar": "神龛",
+  "island_p_archway": "拱门",
+  "island_p_banner": "旗帜",
+  "island_p_bench": "长椅",
+  "island_p_blue_railing": "蓝色栏杆",
+  "island_p_bougainvillea": "三角梅",
+  "island_p_boulder": "巨石",
+  "island_p_crate": "木箱",
+  "island_p_crop_patch": "小块农田",
+  "island_p_cube_house": "方形小屋",
+  "island_p_cypress": "柏树",
+  "island_p_dry_grass": "枯草",
+  "island_p_flat_stone": "扁石",
+  "island_p_flower_pot": "花盆",
+  "island_p_garden_bed": "花圃",
+  "island_p_hanging_lantern": "吊灯",
+  "island_p_hay_bale": "干草捆",
+  "island_p_house": "小屋",
+  "island_p_lantern_post": "路灯",
+  "island_p_large_rock": "大岩石",
+  "island_p_main_chapel": "主礼拜堂",
+  "island_p_mossy_stone": "苔石",
+  "island_p_olive": "橄榄树",
+  "island_p_pebbles": "卵石",
+  "island_p_pergola_house": "凉棚小屋",
+  "island_p_pottery_jar": "陶罐",
+  "island_p_rocks": "岩石",
+  "island_p_signpost": "路标",
+  "island_placed": "{name} 已建造在岛上",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_small_bridge": "木码头",
+  "island_p_stone_basin": "石盆",
+  "island_p_stone_lantern": "石灯",
+  "island_p_stone_pile": "石堆",
+  "island_p_storage_box": "储物箱",
+  "island_p_terrace_house": "露台小屋",
+  "island_p_terracotta_pot": "陶土花盆",
+  "island_p_tower_chapel": "钟楼",
+  "island_p_two_story": "双层小屋",
+  "island_p_veg_garden": "菜园",
+  "island_p_villa": "别墅",
+  "island_p_water_bucket": "水桶",
+  "island_p_well": "水井",
+  "island_p_windmill": "风车",
+  "island_p_wood_pile": "木柴堆",
+  "island_reset": "重新建造岛屿",
+  "island_reset_sub": "拆除所有建筑，已使用的点数将全部返还。",
+  "island_reset_go": "重新开始",
+  "island_tap_hint": "点击轮廓查看这里可以建造什么",
+  "island_t_autumn": "秋色",
+  "island_t_clay": "陶土色",
+  "island_t_coral": "珊瑚色",
+  "island_t_deep": "深色",
+  "island_t_lilac": "淡紫色",
+  "island_t_silver": "银色",
+  "island_t_teal": "蓝绿色",
+  "island_turn": "旋转视角",
+  "github_star_sub": "给项目点个 Star，让更多人发现它",
+  "just_tracking_option": "仅记录",
+  "just_tracking_option_sub": "创建习惯时添加此开关",
+  "just_tracking": "仅记录",
+  "just_tracking_sub": "保留记录的数据，但不计入目标和当天的完成数量",
+  "view_switcher_needs": "请先开启卡片上的打卡记录功能",
+  "accent_color_sub": "用于按钮和高亮显示",
+  "app_background_sub": "卡片后的背景",
+  "check_style_sub": "方形或圆形标记",
+  "app_icon_sub": "主屏幕上的应用图标",
+  "language_sub": "整个应用的语言",
+  "week_start_sub": "每个网格的第一列",
+  "celebration_sub": "完成习惯时显示的动画",
+  "start_view_sub": "「今天」的默认显示方式",
+  "quotes_sub": "「今天」显示的语录",
+  "focus_daily_goal_sub": "每天的专注目标",
+  "app_lock_delay_sub": "退出后多久再次询问",
+  "refresh_brought": "你的习惯已是最新状态",
+  "refresh_nothing": "文件夹中没有新内容",
+  "emoji_own": "输入或粘贴任意表情符号",
+  "report_issue_sub": "反馈问题或提出功能建议",
+  "sort_completed_last_sub": "将已完成的习惯移至列表底部",
+  "today_only_sub": "隐藏今天未安排的习惯",
+  "card_activity_sub": "在卡片上显示最近几天的打卡记录",
+  "readable_copy": "可读副本",
+  "readable_copy_sub": "同时将你的习惯保存为 Markdown 文件",
+  "theme_sub": "浅色、深色或跟随系统",
+  "period_all_time": "全部时间",
+  "times_completed": "完成次数",
+  "pane_hint": "从列表中打开一项在此查看",
+  "average_short": "平均",
+  "island_zoom_hint": "单指拖动可移动视角，双指捏合可缩放，双指旋转可转动岛屿。",
+  "island_t_white": "白色",
+  "last_check": "上次记录",
+  "check_history": "历史记录",
+  "check_history_sub": "已完成 {count} 天",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "check_never": "从不",
+  "check_no_time": "未记录时间",
+  "heatmap_rolling": "过去12个月",
+  "heatmap_rolling_sub": "年度网格显示至今天，而不是 12 月 31 日",
+  "check_marks": "{count} 个标记",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }
