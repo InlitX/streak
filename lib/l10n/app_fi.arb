@@ -1,0 +1,479 @@
+{
+  "app_tagline": "Tapaseuranta",
+  "today": "Tänään",
+  "stats": "Tilastot",
+  "settings": "Asetukset",
+  "new_label": "Uusi",
+  "save": "Tallenna",
+  "cancel": "Peruuta",
+  "delete": "Poista",
+  "good_morning": "Hyvää huomenta",
+  "good_afternoon": "Hyvää iltapäivää",
+  "good_evening": "Hyvää iltaa",
+  "no_habits_yet": "Ei vielä tapoja",
+  "x_of_y_completed": "{done}/{total} suoritettu",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "all_done_today": "Kaikki tehty tältä päivältä!",
+  "empty_title": "Aloita ensimmäinen putkesi",
+  "empty_body": "Luo tapa ja napauta päivää sen kirjaamiseksi. Pienin askelin, joka päivä.",
+  "add_habit": "Lisää tapa",
+  "all": "Kaikki",
+  "onb1_title": "Rakenna aitoja putkia",
+  "onb1_body": "Kirjaa tapa yhdellä napautuksella ja katso, kuinka vauhtisi kasvaa päivä päivältä.",
+  "onb2_title": "Pysy oikealla tiellä",
+  "onb2_body": "Päivittäiset, viikottaiset tai kuukausittaiset tavoitteet älykkäillä muistutuksilla, ettei mikään niistä karkaa.",
+  "onb3_title": "Näe edistyksesi",
+  "onb3_body": "Rikkaat tilastot ja vuosittainen taulukko näyttävät, kuinka pitkälle olet edennyt.",
+  "skip": "Ohita",
+  "next": "Seuraava",
+  "get_started": "Aloita",
+  "statistics": "Tilastot",
+  "done_today": "Tänään suoritettu",
+  "best_streak": "Paras putki",
+  "active_habits": "Aktiiviset tavat",
+  "total_logs": "Kirjauksia yhteensä",
+  "last_7_days": "Viimeiset 7 päivää",
+  "last_30_days": "Viimeiset 30 päivää",
+  "your_habits": "Tapasi",
+  "stats_empty": "Lisää tapoja nähdäksesi tilastoja",
+  "completion_rate_short": "Yhtenäisyys",
+  "completion_rate": "Suoritusprosentti",
+  "appearance": "Ulkonäkö",
+  "theme": "Teema",
+  "system": "Järjestelmä",
+  "light": "Vaalea",
+  "dark": "Tumma",
+  "week_starts_on": "Viikko alkaa",
+  "mon": "Ma",
+  "sat": "La",
+  "sun": "Su",
+  "language": "Kieli",
+  "data": "Data",
+  "export_backup": "Vie varmuuskopio",
+  "export_backup_sub": "Tallenna kaikki tavat tiedostoon",
+  "auto_backup": "Automaattinen varmuuskopiointi",
+  "auto_backup_sub": "Pois",
+  "auto_backup_off": "Pois",
+  "auto_backup_daily": "Joka päivä",
+  "auto_backup_weekly": "Joka viikko",
+  "auto_backup_where": "Kun avaat sovelluksen, Streak luo varmuuskopion sekä luettavan kopion tavoistasi, minkä voit avata millä vain tekstieditorilla. Varmuuskopioista 5 uusinta säilytetään.",
+  "auto_backup_folder": "Kansio",
+  "auto_backup_folder_default": "Sovelluksen kansio",
+  "auto_backup_folder_set": "Kansio tallennettu",
+  "auto_backup_folder_failed": "Tuohon kansioon ei voida kirjoittaa",
+  "auto_backup_no_permission": "Tallennustilan käyttö evätty",
+  "auto_backup_run_now": "Luo varmuuskopio nyt",
+  "refresh_now": "Päivitä",
+  "refresh_now_sub": "Tuo mitä muut laitteesi jättivät kansioon",
+  "refresh_brought": "Tapasi ovat ajan tasalla",
+  "refresh_nothing": "Kansiossa ei ole mitään uutta",
+  "import_backup": "Tuo varmuuskopio",
+  "import_backup_sub": "Palauta tavat tiedostosta",
+  "import_from_app": "Tuo toisesta sovelluksesta",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "Tuotu {habits} tapaa ({days} päivää) kohteesta {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Tiedostoa ei voitu tuoda",
+  "about": "Tietoja",
+  "backup_saved": "Varmuuskopio tallennettu",
+  "export_cancelled": "Vienti peruutettu",
+  "habits_imported": "Tavat tuotu",
+  "new_habit": "Uusi tapa",
+  "edit_habit": "Muokkaa tapaa",
+  "name": "Nimi",
+  "name_hint": "esim. Aamulenkki",
+  "description": "Kuvaus",
+  "description_hint": "Vaihtoehtoinen muistiinpano",
+  "icon": "Kuvake",
+  "color": "Väri",
+  "category": "Luokka",
+  "category_health": "Terveys",
+  "category_fitness": "Kunto",
+  "category_mindfulness": "Mindfulness",
+  "category_productivity": "Tuottavuus",
+  "category_learning": "Oppiminen",
+  "category_finance": "Talous",
+  "count_days": "{count, plural, =1{1 päivä} other{{count} päivää}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 viikko} other{{count} viikkoa}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 kuukausi} other{{count} kuukautta}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}vk",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}kk",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_kind": "Tavan tyyppi",
+  "kind_positive": "Tavallinen",
+  "kind_negative": "Vältettävä",
+  "kind_quantitative": "Määrällinen",
+  "kind_locked_hint": "Tavan tyyppiä ei voi muuttaa tavan luomisen jälkeen.",
+  "kind_negative_hint": "Jokainen päivä lasketaan oletuksena suoritetuksi – putkesi kasvaa itsestään. Napauta ruutua vain, jos lipsut tavoitteesta; se päivä muuttuu punaiseksi ja voit kumota sen.",
+  "cost_per_day": "Kustannukset päivässä",
+  "cost_note": "Vaihtoehtoinen. Jätä tyhjäksi, jos tällä tavalla ei ole kustannuksia.",
+  "currency": "Rahayksikkö",
+  "currency_custom": "Mukautettu",
+  "currency_hint": "Symboli tai koodi",
+  "money_saved": "Rahaa säästetty",
+  "clean_days": "Puhtaita päiviä",
+  "quant_preset_water": "Vesi",
+  "quant_preset_reading": "Lukeminen",
+  "quant_preset_generic": "Mukautettu",
+  "quant_unit_hint": "Yksikkö (esim. ml, sivua, toistoa)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "sivua",
+  "quant_edit_title": "Tänäinen määrä",
+  "quant_daily_goal": "Päivittäinen tavoite",
+  "quant_tap_amount": "Määrä napautusta kohden",
+  "quant_per_day": "Määrä päivässä",
+  "quant_average": "Keskiarvo päivässä",
+  "quant_logged_days": "Päiviä kirjattu",
+  "quant_best_day": "Paras päivä",
+  "quant_goal_days": "Tavoite saavutettu",
+  "quant_stats_empty": "Kirjaa määrä ja se kertyy tänne, myös päivinä, jolloin et saavuta tavoitetta.",
+  "frequency": "Toistuvuus",
+  "daily": "Päivittäin",
+  "weekly": "Viikoittain",
+  "monthly": "Kuukausittain",
+  "sched_days": "Päivät",
+  "sched_interval": "Aikaväli",
+  "times_per_week": "{n} kertaa viikossa",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} kertaa kuukaudessa",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/viikko",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/kuukausi",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Muistutukset",
+  "add_reminder": "Lisää muistutus",
+  "delete_habit": "Poista tapa",
+  "archive_habit": "Arkistoi tapa",
+  "archive": "Arkistoi",
+  "share_friends": "Jaa ystävälle",
+  "share_friends_sub": "Jaa sovellus",
+  "share_friends_message": "Pidän tavoistani kiinni Streakilla – pieni, ilmainen ja paikallinen tapojen seuranta ilman käyttäjätunnuksia ja mainoksia. Tutustu sinäkin: https://inlitx.github.io/streak/",
+  "copy_message": "Kopioi viesti",
+  "message_copied": "Viesti kopioitu",
+  "app_lock": "Sovelluksen lukitus",
+  "app_lock_sub": "Kysy sormenjälkeä tai kasvojentunnistusta Streakin avaamiseksi",
+  "app_lock_unavailable": "Laitteella ei ole asetettua biometriikkaa",
+  "app_lock_failed": "Ei voitu varmistaa, että se olit sinä",
+  "app_lock_title": "Streak on lukittu",
+  "app_lock_unlock": "Avaa lukitus",
+  "app_lock_delay": "Lukitse uudelleen",
+  "app_lock_delay_instant": "Välittömästi",
+  "app_lock_delay_seconds": "{value} sekuntia",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Kuvat",
+  "note_take_photo": "Kamera",
+  "note_pick_photo": "Galleria",
+  "journey": "Matka",
+  "journey_sub": "{count, plural, =1{1 kuva} other{{count} kuvaa}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Ei vielä kuvia",
+  "journey_empty_sub": "Lisää muistiinpanoon kuva ja se näkyy täällä.",
+  "archive_habit_body": "Siirretäänkö \"{name}\" arkistoon? Sen historia säilytetään ja voit palauttaa sen asetuksista.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "Arkistoidut tavat",
+  "archived_habits_sub": "Palauta tapoja tai poista ne lopullisesti",
+  "archived_empty": "Ei arkistoituja tapoja",
+  "archived_empty_sub": "Tavat, jotka arkistoit, siirtyvät tänne, säilyttäen kaiken historiansa.",
+  "restore": "Palauta",
+  "restored": "Tapa palautettu",
+  "delete_forever": "Poista lopullisesti",
+  "delete_forever_body": "Poistetaanko \"{name}\" ja sen koko historia? Tätä ei voi kumota.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Tapa poistettu",
+  "clear_progress": "Tyhjennä edistyminen",
+  "clear_progress_sub": "Historia, muistiinpanot ja keskittymissessiot",
+  "clear_progress_warning": "Tämä poistaa kaikki kirjatut päivät, muistiinpanot ja keskittymissessiot, mutta säilyttää tapasi, niiden aikataulut ja asetuksesi. Tätä ei voi kumota, jollei sinulla ole varmuuskopiota jälkikäteen tuotavaksi.",
+  "clear_progress_confirm": "Tyhjennä edistyminen",
+  "clear_progress_done": "Edistyminen tyhjennetty",
+  "wipe_data": "Poista kaikki data",
+  "wipe_data_sub": "Tavat, muistiinpanot, keskittymissessiot ja asetukset",
+  "wipe_data_warning": "Tämä poistaa kaikki tavat, muistiinpanot, keskittymissessiot ja asetukset tällä laitteella. Tätä ei voi kumota, jollei sinulla ole varmuuskopiota jälkikäteen tuotavaksi.",
+  "wipe_data_sure": "Poistetaanko todella kaikki?",
+  "wipe_data_sure_body": "Viimeinen varoitus. Ilman varmuuskopiota tämä data on lopullisesti mennyttä.",
+  "wipe_data_confirm": "Poista kaikki",
+  "wipe_data_done": "Kaikki data poistettu",
+  "day_start": "Päivä alkaa",
+  "day_start_sub": "Myöhäiset illat lasketaan vielä edelliseksi päiväksi",
+  "day_start_midnight": "Keskiyö",
+  "day_start_hour": "{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "Kuva",
+  "share_stats_short": "Tilastot",
+  "undo": "Kumoa",
+  "habit_archived": "Tapa arkistoitu",
+  "share_blur": "Sumennus",
+  "delete_habit_body": "Poistetaanko \"{name}\"? Tätä ei voi kumota.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Kirjataanko retkahdus?",
+  "log_relapse_body": "Tämä rikkoo tänäisen puhtaan putken tavalle \"{name}\". Voit kumota sen napauttamalla uudelleen.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Kyllä, kirjaa se",
+  "permission_required": "Lupa ilmoitusten käyttöön vaaditaan",
+  "streaks": "Putket",
+  "activity": "Toiminta",
+  "current": "Nykyinen",
+  "best": "Paras",
+  "total": "Yhteensä",
+  "relapses": "Retkahdukset",
+  "strength": "Voima",
+  "week": "Viikko",
+  "month": "Kuukausi",
+  "year": "Vuosi",
+  "new_reminder": "Uusi muistutus",
+  "edit_reminder": "Muokkaa muistutusta",
+  "days": "Päivää",
+  "time": "Aika",
+  "save_reminder": "Tallenna muistutus",
+  "select_one_day": "Valitse vähintään yksi päivä",
+  "every_day": "Joka päivä",
+  "no_days": "Ei päiviä",
+  "repeat_hours": "Toista päivän aikana",
+  "every_n_hours": "{n}t välein",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "Tiettyinä päivinä",
+  "repeat_interval": "N päivän välein",
+  "every_n_days": "{n} päivän välein",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "uncategorized": "Luokittelematon",
+  "more_icons": "Lisää kuvakkeita",
+  "less_icons": "Vähemmän kuvakkeita",
+  "completions": "Suoritukset",
+  "completion_time": "Suoritusaika",
+  "current_streak": "Nykyinen putki",
+  "days_active": "Päiviä aktiivisena",
+  "completions_per_month": "Suorituksia kuukaudessa",
+  "overview": "Yleiskatsaus",
+  "preferences": "Valinnat",
+  "support": "Tue",
+  "profile": "Profiili",
+  "about_app": "Tietoja sovelluksesta",
+  "about_app_sub": "Versio, tekijät ja lähdekoodi",
+  "my_heatmap": "Lämpökarttani",
+  "my_heatmap_sub": "Avaa vuotuinen aktiivisuustaulukko",
+  "rate_github": "Anna tähti GitHubissa",
+  "rate_github_sub": "Tue projektia antamalla tähti",
+  "buy_coffee": "Osta minulle kahvi",
+  "buy_coffee_sub": "Auta pitämään sovellus ilmaisena",
+  "view_source": "Katso lähdekoodi GitHubissa",
+  "about_title": "Luotu sinulle. Ilmaiseksi, ikuisesti.",
+  "about_footer": "Tehty ☕ ja paljolla vapaa-ajalla.",
+  "about_body": "Streak syntyi yksinkertaisesta ideasta: miksi maksaa omien tapojen seurannasta?\n\nTämä sovellus on myös täysin avointa lähdekoodia. Kuka vain voi nähdä miten se toimii, ehdottaa muutoksia, tai tehdä oman versionsa. Ei mustia laatikoita. Ei yllätyksiä.\n\nYksityisyytesi on totaalista – kaikki pysyy puhelimellasi. Ei käyttäjiä, ei palvelimia, ei mainoksia. Yksikään tavu ei poistu laitteeltasi.\n\nEi rajoituksia. Luo tapoja sydämesi kyllyydestä. Ei tilauksia, ei \"pro-versiota\", ei pop-up-ilmoituksia kysymässä maksuja. Ikinä.\n\nJos sovellus antaa sinulle jotain, voit tukea sitä tähdellä GitHubissa tai ostamalla minulle kahvin. Mutta se on täysin vaihtoehtoista – sovellus on sinun joka tapauksessa.",
+  "close": "Sulje",
+  "no_data_yet": "Ei vielä tietoja",
+  "import_question_body": "Korvataanko kaikki nykyiset tavat varmuuskopiolla vai yhdistetäänkö ne?",
+  "import_replace": "Korvaa kaikki",
+  "import_merge": "Yhdistä",
+  "go": "Mene",
+  "quote_1": "Pieniä askelia, joka päivä.",
+  "quote_2": "Johdonmukaisuus päihittää intensiteetin.",
+  "quote_3": "Pidä itsestäsi huolta.",
+  "quote_4": "Yksi päivä kerrallaan.",
+  "quote_5": "Edistys, ei täydellisyys.",
+  "quote_6": "Tehty on parempi kuin täydellinen.",
+  "quote_7": "Pidä putki yllä.",
+  "quote_8": "Pienet tavat, suuri muutos.",
+  "quote_9": "Luota prosessiin.",
+  "quote_10": "Ota aamu haltuun.",
+  "quote_11": "Rutiinit tuovat vapautta.",
+  "quote_12": "Tällä päivällä on väliä.",
+  "just_tracking_option": "Tarjoa vain seuranta",
+  "just_tracking_option_sub": "Lisää tämän vaihtoehdon kun luot tavan",
+  "just_tracking": "Vain seuranta",
+  "just_tracking_sub": "Pitää oman taulukon ja numerot, mutta pysyy ulkona Edistymisestä ja päivän määrästä",
+  "quotes": "Sitaatit",
+  "quotes_which": "Valitse sitaatit",
+  "quotes_app": "Sovelluksesta",
+  "quotes_mine": "Omani",
+  "quotes_both": "Molemmat",
+  "quotes_off": "Pois",
+  "quotes_my_list": "Minun sitaattini",
+  "quotes_add": "Lisää sitaatti",
+  "quotes_edit": "Muokkaa sitaattia",
+  "quotes_hint": "Kirjoita sitaattisi",
+  "quotes_empty": "Ei omia sitaatteja",
+  "quotes_empty_sub": "Kirjoita omasi ja ne näkyvät \"Tänään\" sivulla.",
+  "motiv_start": "Aloita päivä vahvasti 💪",
+  "motiv_progress": "Olet oikealla tiellä, jatka samaan malliin",
+  "motiv_almost": "Melkein valmista! Vielä vähän lisää",
+  "motiv_perfect": "Täydellinen päivä! 🔥",
+  "app_background": "Tausta",
+  "widgets": "Widgetit",
+  "customize_widgets": "Muokkaa widgettejä",
+  "customize_widgets_sub": "Tausta, peittävyys, reunus",
+  "widget_background": "Taustan väri",
+  "widget_opacity": "Peittävyys",
+  "widget_border": "Reunus",
+  "widget_preview": "Esikatselu",
+  "bg_solid": "Kiinteä",
+  "bg_gradient": "Liukuväri",
+  "bg_dots": "Pisteet",
+  "bg_oled": "OLED",
+  "weekdays": "Viikonpäivät",
+  "weekends": "Viikonloput",
+  "reminder_message": "Viesti (vaihtoehtoinen)",
+  "reminder_message_hint": "Jätä tyhjäksi motivoivaa sitaattia varten",
+  "new_category": "Uusi luokka",
+  "edit_category": "Muokkaa luokkaa",
+  "add_category": "Uusi",
+  "delete_category": "Poista luokka",
+  "edit": "Muokkaa",
+  "cover_image": "Kansikuva",
+  "book_cover": "Kirjan kansi",
+  "add_image": "Lisää kuva",
+  "when_best": "Milloin olet johdonmukaisin?",
+  "streak_evolution": "Putken kehitys",
+  "consistency": "Johdonmukaisuus",
+  "consistency_trend": "Johdomukaisuuden trendi",
+  "by_habit": "Tavan mukaan",
+  "ranking": "Sijoitukset",
+  "active_days": "Aktiivisia päiviä",
+  "perfect_days": "Täydellisiä päiviä",
+  "per_week": "Viikossa",
+  "best_month": "Paras kuukausi",
+  "streak_on": "🔥 {n} päivää peräkkäin. Älä riko sitä!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 Tänään voit aloittaa uuden putken",
+  "not_enough_data": "Ei vielä tarpeeksi tietoja",
+  "about_inline": "Streak on avoimen lähdekoodin sovellus tapojesi seurantaan. Ei käyttäjiä, ei rajoituksia, ei maksuja. Kaikki pysyy puhelimellasi.\n\nKuka vaan voi nähdä koodin, kehittää sitä, tai käyttää sitä vapaasti.",
+  "about_subtitle": "Niille päiville, kun päätät panostaa itseesi."
+}

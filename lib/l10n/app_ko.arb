@@ -1081,5 +1081,168 @@
   "just_tracking_option": "확인만 할 습관 제안",
   "just_tracking_option_sub": "습관을 만들 때 스위치 추가",
   "just_tracking": "확인만",
-  "just_tracking_sub": "이 습관의 표와 숫자는 유지하되, 진척이나 하루 목표에는 포함하지 않기"
+  "just_tracking_sub": "이 습관의 표와 숫자는 유지하되, 진척이나 하루 목표에는 포함하지 않기",
+  "island": "섬",
+  "island_enable_sub": "습관을 차곡차곡 쌓아 올려 지중해 군도로 만들어 보세요",
+  "island_open": "섬 열기",
+  "island_shop": "상점",
+  "island_complete": "군도를 완성했어요",
+  "island_tap_hint": "모양을 눌러 그곳으로 무엇이 가는지 확인하세요",
+  "island_empty": "습관을 체크하면 섬들이 자라나기 시작해요",
+  "island_how": "포인트 사용법",
+  "island_how_check": "습관 하나를 체크할 때마다 10",
+  "island_how_focus": "집중 시간 1분마다 1, 하루에 최대 60",
+  "island_how_perfect": "완벽한 날에는 25 추가",
+  "island_how_note": "코인은 기록에서 가져오므로, 백업을 통해 복구할 수 있어요.",
+  "island_need": "{count} 포인트 남음",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_agave": "용설란",
+  "island_p_altar": "성소",
+  "island_p_archway": "아치",
+  "island_p_banner": "현수막",
+  "island_p_bench": "벤치",
+  "island_p_blue_railing": "파란 울타리",
+  "island_p_bougainvillea": "부겐빌레아",
+  "island_p_boulder": "둥근 바위",
+  "island_p_crop_patch": "논밭",
+  "island_how_todo": "할 일을 끝낼 때마다 4",
+  "island_how_streak": "습관을 7, 30, 100, 365일 동안 유지하면 보너스",
+  "island_default_name": "내 섬",
+  "island_rename": "섬 이름을 지으세요",
+  "island_only_affordable": "살 수 있는 것만",
+  "island_nothing_here": "아직 아무것도 없어요",
+  "island_reset_go": "처음부터 재시작",
+  "island_beta": "게임화의 첫 시도이며 아직 베타 버전이에요. 여러분의 사용 방식에 따라 발전하거나, 모양이 바뀌거나, 완전히 새로운 것으로 바뀔 수도 있어요.",
+  "gamification": "게임화",
+  "gamification_beta": "게임화 (베타)",
+  "last_check": "최근 체크",
+  "check_history": "체크 기록",
+  "check_history_sub": "{count}일 체크함",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "heatmap_rolling": "최근 12개월",
+  "heatmap_rolling_sub": "이 연간 표는 12월 31일 대신 오늘 끝나요",
+  "check_never": "체크 안 함",
+  "check_no_time": "아낀 시간 없음",
+  "check_marks": "{count}회",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_g_pueblo": "마을",
+  "island_g_cala": "만",
+  "island_g_terrazas": "테라스",
+  "island_g_puerto": "부두",
+  "island_g_molino": "풍차 언덕",
+  "island_g_huerta": "과수원",
+  "island_g_vega": "목초지",
+  "island_g_caleta": "작은 만",
+  "island_g_faro": "해식기둥",
+  "island_g_astillero": "선창",
+  "island_g_mirador": "조망대",
+  "island_g_cabo": "곶",
+  "island_g_ermita": "예배 섬",
+  "island_build": "짓기",
+  "island_done": "지음",
+  "island_built": "{done} / {total} 지음",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_turn": "시점 돌리기",
+  "island_goal": "모든 조각을 완성하면 이렇게 보여요.",
+  "island_reset": "섬을 처음부터 다시 시작",
+  "island_reset_sub": "모두 사라지고 모든 포인트가 잔액으로 되돌아가요.",
+  "island_coins": "코인",
+  "island_zoom_hint": "한 손가락으로 드래그해 이동하세요. 두 손가락을 오므리거나 펴 확대하거나 축소하고, 꼬아서 섬을 돌리세요.",
+  "island_t_teal": "청록",
+  "island_t_white": "하양",
+  "island_t_lilac": "라일락",
+  "island_t_autumn": "가을",
+  "island_t_silver": "은색",
+  "island_t_deep": "어두움",
+  "island_t_clay": "테라코타",
+  "island_t_coral": "산호색",
+  "island_p_crate": "나무상자",
+  "island_p_cube_house": "큐브 집",
+  "island_p_cypress": "사이프러스",
+  "island_p_dry_grass": "마른 풀",
+  "island_p_flat_stone": "판석",
+  "island_p_flower_pot": "화분",
+  "island_p_garden_bed": "화단",
+  "island_p_hay_bale": "건초",
+  "island_p_house": "작은 집",
+  "island_p_hanging_lantern": "매달린 랜턴",
+  "island_p_lantern_post": "가로등",
+  "island_p_large_rock": "큰 바위",
+  "island_p_main_chapel": "대예배실",
+  "island_p_mossy_stone": "이끼 낀 돌",
+  "island_p_olive": "올리브나무",
+  "island_p_pebbles": "조약돌",
+  "island_p_pergola_house": "그늘막 집",
+  "island_p_pottery_jar": "도자기 항아리",
+  "island_p_rocks": "바위",
+  "island_p_veg_garden": "텃밭",
+  "island_p_villa": "저택",
+  "island_p_water_bucket": "물통",
+  "island_p_well": "우물",
+  "island_p_windmill": "풍차",
+  "island_p_wood_pile": "나뭇더미",
+  "island_p_two_story": "복층 집",
+  "island_p_tower_chapel": "종탑",
+  "island_p_terracotta_pot": "도자기 화분",
+  "island_p_terrace_house": "테라스 집",
+  "island_p_storage_box": "수납 상자",
+  "island_p_stone_pile": "돌무더기",
+  "island_p_stone_lantern": "석등",
+  "island_p_small_bridge": "나무 부두",
+  "island_p_stone_basin": "석조",
+  "island_p_signpost": "푯말",
+  "island_placed": "{name} 건설 완료",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_week": "{count}주",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}개월",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "emoji_own": "아무 이모지나 입력하거나 붙여넣으세요",
+  "period_all_time": "전체 기간",
+  "times_completed": "완료 횟수"
 }
