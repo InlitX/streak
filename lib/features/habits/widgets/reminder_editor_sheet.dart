@@ -24,7 +24,7 @@ class ReminderEditorSheet extends StatefulWidget {
 }
 
 class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
-  static const _maxEvery = 30;
+  static const _maxEvery = 90;
 
   late TimeOfDay _time;
   late final Set<int> _days;

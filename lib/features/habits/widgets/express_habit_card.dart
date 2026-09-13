@@ -84,9 +84,16 @@ class ExpressHabitCard extends StatelessWidget {
         child: Stack(
           children: [
             if (cover) ...[
-              Positioned.fill(child: CoverImage(path: habit.coverPath)),
               Positioned.fill(
-                child: ColoredBox(color: skin.withValues(alpha: 0.82)),
+                child: CoverImage(
+                  path: habit.coverPath,
+                  clarity: habit.coverClarity,
+                ),
+              ),
+              Positioned.fill(
+                child: ColoredBox(
+                  color: skin.withValues(alpha: 0.82),
+                ),
               ),
             ],
             Padding(

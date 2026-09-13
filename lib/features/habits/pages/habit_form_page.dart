@@ -64,7 +64,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
   int _frequency = 1;
   List<int> _scheduleWeekdays = const [1, 3, 5];
   int _scheduleEvery = 2;
+  ScheduleUnit _scheduleUnit = ScheduleUnit.days;
   String _cover = '';
+  int _coverClarity = 100;
   late List<Reminder> _reminders;
 
   HabitKind _kind = HabitKind.positive;
@@ -74,6 +76,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   String _bookCover = '';
   bool _focusOnly = false;
   bool _tracking = false;
+  int _difficulty = 0;
   int _focusMinutes = 25;
   bool _pomodoro = false;
   int _breakMinutes = 5;
@@ -87,6 +90,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   bool get _offersTracking =>
       _tracking || context.watch<SettingsController>().trackingOption;
+
+  bool get _offersDifficulty =>
+      _difficulty > 0 || context.watch<SettingsController>().difficultyOption;
 
   bool get _canSave {
     if (_name.text.trim().isEmpty) return false;
@@ -123,7 +129,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _scheduleWeekdays = List.of(habit.scheduleWeekdays);
       }
       _scheduleEvery = habit.scheduleEvery;
+      _scheduleUnit = habit.scheduleUnit;
       _cover = habit.coverPath;
+      _coverClarity = habit.coverClarity;
       _reminders = List.of(habit.reminders);
       _kind = habit.kind;
       _quantKind = habit.quantKind;
@@ -132,6 +140,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _bookCover = habit.bookCoverPath;
       _focusOnly = habit.focusOnly;
       _tracking = habit.tracking;
+      _difficulty = habit.difficulty;
       _focusMinutes = habit.focusMinutes;
       _pomodoro = habit.focusBreakMinutes > 0;
       if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
@@ -152,6 +161,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
     _dailyCost.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  void _pickUnit(ScheduleUnit unit) {
+    setState(() {
+      _scheduleUnit = unit;
+      final max = scheduleEveryMax(unit);
+      if (_scheduleEvery > max) _scheduleEvery = max;
+    });
   }
 
   void _applyQuantPreset(QuantKind preset) {
@@ -207,8 +224,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
           targetFrequency: frequency,
           scheduleWeekdays: negative ? const [] : _scheduleWeekdays,
           scheduleEvery: negative ? 2 : _scheduleEvery,
+          scheduleUnit: negative ? ScheduleUnit.days : _scheduleUnit,
           reminders: _reminders,
           coverPath: _cover,
+          coverClarity: _coverClarity,
           dailyCost: dailyCost,
           perDayTarget: quantitative ? _quantTarget : widget.habit!.perDayTarget,
           unitLabel: quantitative ? _quantUnit : widget.habit!.unitLabel,
@@ -218,6 +237,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
           focusOnly: focusOnly,
           tracking: _tracking,
+          difficulty: _difficulty,
           focusMinutes: _focusMinutes,
           focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
           startMinute: negative ? -1 : _startMinute,
@@ -236,8 +256,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
         targetFrequency: frequency,
         scheduleWeekdays: negative ? const [] : _scheduleWeekdays,
         scheduleEvery: negative ? 2 : _scheduleEvery,
+        scheduleUnit: negative ? ScheduleUnit.days : _scheduleUnit,
         reminders: _reminders,
         coverPath: _cover,
+        coverClarity: _coverClarity,
         kind: _kind,
         dailyCost: dailyCost,
         perDayTarget: quantitative ? _quantTarget : 1,
@@ -247,6 +269,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         bookCoverPath: quantitative ? _bookCover : '',
         focusOnly: focusOnly,
         tracking: _tracking,
+        difficulty: _difficulty,
         focusMinutes: _focusMinutes,
         focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
         startMinute: negative ? -1 : _startMinute,
@@ -395,6 +418,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         icon: _icon,
         color: _color,
         cover: _cover,
+        clarity: _coverClarity,
         controller: _name,
         onChanged: () => setState(() {}),
         onShuffleIcon: _revealLook,
@@ -479,6 +503,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onChanged: (v) => setState(() => _tracking = v),
         ),
       ],
+      if (_offersDifficulty) ...[
+        const SizedBox(height: 12),
+        DifficultyPicker(
+          value: _difficulty,
+          color: _color,
+          onChanged: (v) => setState(() => _difficulty = v),
+        ),
+      ],
       const SizedBox(height: 26),
       SectionLabel(context.l10n.description),
       AppTextField(
@@ -515,6 +547,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           frequency: _frequency,
           weekdays: _scheduleWeekdays,
           every: _scheduleEvery,
+          unit: _scheduleUnit,
           onIntervalChanged: (interval) => setState(() {
             _interval = interval;
             _frequency = switch (interval) {
@@ -526,6 +559,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onFrequencyChanged: (value) => setState(() => _frequency = value),
           onWeekdaysChanged: (days) => setState(() => _scheduleWeekdays = days),
           onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+          onUnitChanged: _pickUnit,
         ),
       ],
       if (_kind != HabitKind.negative && _planning) ...[
@@ -558,9 +592,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
       CoverPicker(
         path: _cover,
         color: _color,
+        clarity: _coverClarity,
         onPick: _pickCover,
         onRemove: () => setState(() => _cover = ''),
       ),
+      if (_cover.isNotEmpty)
+        CoverClarity(
+          value: _coverClarity,
+          color: _color,
+          onChanged: (value) => setState(() => _coverClarity = value),
+        ),
     ];
   }
 
@@ -754,6 +795,15 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onChanged: (v) => setState(() => _tracking = v),
         ),
       ],
+      if (_offersDifficulty) ...[
+        const SizedBox(height: 16),
+        DifficultyPicker(
+          value: _difficulty,
+          color: _color,
+          compact: true,
+          onChanged: (v) => setState(() => _difficulty = v),
+        ),
+      ],
       const SizedBox(height: 16),
       SectionLabel(context.l10n.icon),
       CompactIconPicker(
@@ -771,9 +821,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
       SectionLabel(context.l10n.cover_image),
       CompactCover(
         path: _cover,
+        clarity: _coverClarity,
         onPick: _pickCover,
         onRemove: () => setState(() => _cover = ''),
       ),
+      if (_cover.isNotEmpty)
+        CoverClarity(
+          value: _coverClarity,
+          color: _color,
+          onChanged: (value) => setState(() => _coverClarity = value),
+        ),
       const SizedBox(height: 16),
       SectionLabel(context.l10n.category),
       CompactCategoryPicker(
@@ -816,11 +873,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ),
         ] else if (_interval == HabitInterval.everyXDays) ...[
           const SizedBox(height: 10),
+          ScheduleUnitRow(selected: _scheduleUnit, onChanged: _pickUnit),
+          const SizedBox(height: 8),
           CompactStepperRow(
-            label: context.l10n.every_n_days(_scheduleEvery),
+            label: scheduleEveryLabel(context, _scheduleEvery, _scheduleUnit),
             value: _scheduleEvery.toDouble(),
             min: 2,
-            max: 30,
+            max: scheduleEveryMax(_scheduleUnit).toDouble(),
             onChanged: (v) => setState(() => _scheduleEvery = v.round()),
           ),
         ] else if (_interval == HabitInterval.weekdays) ...[
@@ -1005,6 +1064,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 onChanged: (v) => setState(() => _tracking = v),
               ),
             ],
+            if (_offersDifficulty) ...[
+              const SizedBox(height: 20),
+              DifficultyPicker(
+                value: _difficulty,
+                color: _color,
+                onChanged: (v) => setState(() => _difficulty = v),
+              ),
+            ],
             const SizedBox(height: 20),
             SectionLabel(context.l10n.icon),
             IconPicker(
@@ -1028,9 +1095,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
             CoverPicker(
               path: _cover,
               color: _color,
+              clarity: _coverClarity,
               onPick: _pickCover,
               onRemove: () => setState(() => _cover = ''),
             ),
+            if (_cover.isNotEmpty)
+              CoverClarity(
+                value: _coverClarity,
+                color: _color,
+                onChanged: (value) => setState(() => _coverClarity = value),
+              ),
             const SizedBox(height: 20),
             SectionLabel(context.l10n.category),
             CategoryPicker(
@@ -1045,6 +1119,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 frequency: _frequency,
                 weekdays: _scheduleWeekdays,
                 every: _scheduleEvery,
+                unit: _scheduleUnit,
                 onIntervalChanged: (interval) => setState(() {
                   _interval = interval;
                   _frequency = switch (interval) {
@@ -1058,6 +1133,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 onWeekdaysChanged: (days) =>
                     setState(() => _scheduleWeekdays = days),
                 onEveryChanged: (v) => setState(() => _scheduleEvery = v),
+                onUnitChanged: _pickUnit,
               ),
             ],
             if (_kind != HabitKind.negative && _planning) ...[

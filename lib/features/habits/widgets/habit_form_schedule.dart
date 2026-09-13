@@ -13,22 +13,24 @@ class IntervalSelector extends StatelessWidget {
     required this.frequency,
     required this.weekdays,
     required this.every,
+    required this.unit,
     required this.onIntervalChanged,
     required this.onFrequencyChanged,
     required this.onWeekdaysChanged,
     required this.onEveryChanged,
+    required this.onUnitChanged,
   });
 
   final HabitInterval interval;
   final int frequency;
   final List<int> weekdays;
   final int every;
+  final ScheduleUnit unit;
   final ValueChanged<HabitInterval> onIntervalChanged;
   final ValueChanged<int> onFrequencyChanged;
   final ValueChanged<List<int>> onWeekdaysChanged;
   final ValueChanged<int> onEveryChanged;
-
-  static const _everyMax = 30;
+  final ValueChanged<ScheduleUnit> onUnitChanged;
 
   int get _max => interval == HabitInterval.weekly ? 6 : 25;
 
@@ -96,12 +98,14 @@ class IntervalSelector extends StatelessWidget {
           ),
         ] else if (interval == HabitInterval.everyXDays) ...[
           const SizedBox(height: 10),
+          ScheduleUnitRow(selected: unit, onChanged: onUnitChanged),
+          const SizedBox(height: 8),
           _stepperRow(
             context,
-            label: context.l10n.every_n_days(every),
+            label: scheduleEveryLabel(context, every, unit),
             value: every,
             min: 2,
-            max: _everyMax,
+            max: scheduleEveryMax(unit),
             onChanged: onEveryChanged,
           ),
         ] else if (interval == HabitInterval.weekdays) ...[
@@ -208,6 +212,87 @@ label: context.l10n.a11y_increase,
           ),
         ],
       ),
+    );
+  }
+}
+
+int scheduleEveryMax(ScheduleUnit unit) => switch (unit) {
+      ScheduleUnit.days => 90,
+      ScheduleUnit.weeks => 26,
+      ScheduleUnit.months => 24,
+    };
+
+String scheduleEveryLabel(BuildContext context, int every, ScheduleUnit unit) =>
+    switch (unit) {
+      ScheduleUnit.days => context.l10n.every_n_days(every),
+      ScheduleUnit.weeks => context.l10n.every_n_weeks(every),
+      ScheduleUnit.months => context.l10n.every_n_months(every),
+    };
+
+String scheduleUnitLabel(BuildContext context, ScheduleUnit unit) =>
+    switch (unit) {
+      ScheduleUnit.days => context.l10n.sched_unit_days,
+      ScheduleUnit.weeks => context.l10n.sched_unit_weeks,
+      ScheduleUnit.months => context.l10n.sched_unit_months,
+    };
+
+class ScheduleUnitRow extends StatelessWidget {
+  const ScheduleUnitRow({
+    super.key,
+    required this.selected,
+    required this.onChanged,
+  });
+
+  final ScheduleUnit selected;
+  final ValueChanged<ScheduleUnit> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.colors;
+    return Row(
+      children: [
+        for (final unit in ScheduleUnit.values) ...[
+          if (unit != ScheduleUnit.days) const SizedBox(width: 8),
+          Expanded(
+            child: Semantics(
+              button: true,
+              selected: unit == selected,
+              child: GestureDetector(
+                onTap: () => onChanged(unit),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: unit == selected
+                        ? scheme.primary.withValues(alpha: 0.16)
+                        : scheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: unit == selected
+                          ? scheme.primary
+                          : Colors.transparent,
+                      width: 1.3,
+                    ),
+                  ),
+                  child: Text(
+                    scheduleUnitLabel(context, unit),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: unit == selected
+                          ? scheme.primary
+                          : context.tokens.muted,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

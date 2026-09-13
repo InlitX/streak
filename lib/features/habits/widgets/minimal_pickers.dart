@@ -9,6 +9,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/cover_action_button.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/icons/habit_emojis.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/icons/habit_icons.dart';
@@ -243,11 +244,13 @@ class CompactCover extends StatelessWidget {
   const CompactCover({
     super.key,
     required this.path,
+    this.clarity = 100,
     required this.onPick,
     required this.onRemove,
   });
 
   final String path;
+  final int clarity;
   final VoidCallback onPick;
   final VoidCallback onRemove;
 
@@ -292,11 +295,14 @@ class CompactCover extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       child: Stack(
         children: [
-          Image.file(
-            File(path),
-            height: 110,
-            width: double.infinity,
-            fit: BoxFit.cover,
+          CoverBlur(
+            clarity: clarity,
+            child: Image.file(
+              File(path),
+              height: 110,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned(
             top: 6,

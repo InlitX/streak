@@ -76,9 +76,16 @@ class HabitCard extends StatelessWidget {
           child: Stack(
             children: [
               if (hasCover) ...[
-                Positioned.fill(child: CoverImage(path: habit.coverPath)),
                 Positioned.fill(
-                  child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
+                  child: CoverImage(
+                    path: habit.coverPath,
+                    clarity: habit.coverClarity,
+                  ),
+                ),
+                Positioned.fill(
+                  child: ColoredBox(
+                    color: Colors.black.withValues(alpha: 0.7),
+                  ),
                 ),
               ],
               AnimatedSize(
@@ -199,7 +206,7 @@ class HabitCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              if (!compact) ...[
+                              if (!compact && settings.showTodayProgress) ...[
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [

@@ -20,6 +20,7 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_daily_bars.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_defaults_sheet.dart';
 import 'package:streak/features/focus/widgets/focus_habit_sheet.dart';
@@ -197,6 +198,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           ),
           body: _DetailBackground(
             coverPath: habit.coverPath,
+            clarity: habit.coverClarity,
             child: ListView(
               padding: context.pagePadding(16, 16, 16, 16),
               children: [
@@ -408,9 +410,14 @@ class _JourneyStrip extends StatelessWidget {
 }
 
 class _DetailBackground extends StatelessWidget {
-  const _DetailBackground({required this.coverPath, required this.child});
+  const _DetailBackground({
+    required this.coverPath,
+    required this.clarity,
+    required this.child,
+  });
 
   final String coverPath;
+  final int clarity;
   final Widget child;
 
   @override
@@ -420,7 +427,7 @@ class _DetailBackground extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: CoverImage(path: coverPath),
+          child: CoverImage(path: coverPath, clarity: clarity),
         ),
         Positioned.fill(
           child: ColoredBox(color: Colors.black.withValues(alpha: 0.78)),
@@ -706,6 +713,10 @@ class _FocusTile extends StatelessWidget {
     );
     if (confirmed != true || !context.mounted) return;
 
+    final habits = context.read<HabitsController>();
+    for (final session in focus.sessions.where((s) => ids.contains(s.id))) {
+      await countFocusTime(habits, focus, session, undo: true);
+    }
     await focus.removeSessions(ids);
     if (!context.mounted) return;
     AppSnackbar.success(context, context.l10n.focus_sessions_deleted(ids.length));

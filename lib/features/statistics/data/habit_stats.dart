@@ -248,16 +248,20 @@ class HabitStats {
       for (final habit in habits) {
         if (date.isBefore(habit.startedAt)) continue;
         if (!habit.isScheduledOn(date) || habit.isNeutralOn(date)) continue;
-        possible++;
-        if (habit.isCompletedOn(date)) done++;
+        possible += habit.difficultyWeight;
+        if (habit.isCompletedOn(date)) done += habit.difficultyWeight;
       }
     }
     final monthRate = possible == 0 ? 0 : (done / possible * 100).round();
 
-    final consistency = habits.isEmpty
+    final weight = habits.fold<int>(0, (sum, h) => sum + h.difficultyWeight);
+    final consistency = weight == 0
         ? 0
-        : (habits.map((h) => h.strength).reduce((a, b) => a + b) /
-                habits.length *
+        : (habits.fold<double>(
+                  0,
+                  (sum, h) => sum + h.strength * h.difficultyWeight,
+                ) /
+                weight *
                 100)
             .round();
 

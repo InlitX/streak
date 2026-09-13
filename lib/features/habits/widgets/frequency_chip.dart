@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 
 String habitFrequencyLabel(BuildContext context, Habit habit) {
   return switch (habit.interval) {
@@ -12,7 +13,8 @@ String habitFrequencyLabel(BuildContext context, Habit habit) {
     HabitInterval.monthly =>
       context.l10n.freq_per_month_short('${habit.targetFrequency}'),
     HabitInterval.weekdays => _weekdaysLabel(context, habit),
-    HabitInterval.everyXDays => context.l10n.every_n_days(habit.scheduleEvery),
+    HabitInterval.everyXDays =>
+      scheduleEveryLabel(context, habit.scheduleEvery, habit.scheduleUnit),
   };
 }
 

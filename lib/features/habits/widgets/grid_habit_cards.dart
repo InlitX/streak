@@ -219,9 +219,16 @@ Widget _shell(
     child: Stack(
       children: [
         if (cover) ...[
-          Positioned.fill(child: CoverImage(path: habit.coverPath)),
           Positioned.fill(
-            child: ColoredBox(color: Colors.black.withValues(alpha: 0.7)),
+            child: CoverImage(
+              path: habit.coverPath,
+              clarity: habit.coverClarity,
+            ),
+          ),
+          Positioned.fill(
+            child: ColoredBox(
+              color: Colors.black.withValues(alpha: 0.7),
+            ),
           ),
         ],
         Padding(

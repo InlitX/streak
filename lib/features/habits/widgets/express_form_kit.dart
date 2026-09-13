@@ -20,6 +20,7 @@ class ExpressFormHero extends StatelessWidget {
     required this.onChanged,
     required this.onShuffleIcon,
     this.cover = '',
+    this.clarity = 100,
   });
 
   final String icon;
@@ -28,6 +29,7 @@ class ExpressFormHero extends StatelessWidget {
   final VoidCallback onChanged;
   final VoidCallback onShuffleIcon;
   final String cover;
+  final int clarity;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class ExpressFormHero extends StatelessWidget {
       child: Stack(
         children: [
           if (hasCover) ...[
-            Positioned.fill(child: CoverImage(path: cover)),
+            Positioned.fill(child: CoverImage(path: cover, clarity: clarity)),
             Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(

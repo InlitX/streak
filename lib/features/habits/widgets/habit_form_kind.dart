@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
@@ -264,6 +266,80 @@ class TrackingToggle extends StatelessWidget {
         onChanged: onChanged,
         compact: compact,
       );
+}
+
+class DifficultyPicker extends StatelessWidget {
+  const DifficultyPicker({
+    super.key,
+    required this.value,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final int value;
+  final Color color;
+  final ValueChanged<int> onChanged;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+    final options = [
+      (context.l10n.difficulty_easy, LucideIcons.feather),
+      (context.l10n.difficulty_medium, LucideIcons.gauge),
+      (context.l10n.difficulty_hard, LucideIcons.mountain),
+    ];
+    final labels = [for (final option in options) option.$1];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HabitFlagToggle(
+          icon: LucideIcons.mountain,
+          title: context.l10n.difficulty,
+          hint: context.l10n.difficulty_hint,
+          value: value > 0,
+          color: color,
+          compact: compact,
+          onChanged: (on) => onChanged(on ? 2 : 0),
+        ),
+        if (value > 0) ...[
+          const SizedBox(height: 10),
+          if (settings.isMinimalStyle)
+            MinimalSegmented(
+              expand: true,
+              index: value - 1,
+              options: labels,
+              onChanged: (i) => onChanged(i + 1),
+            )
+          else if (settings.isExpressStyle)
+            ExpressTabs(
+              labels: labels,
+              index: value - 1,
+              onChanged: (i) => onChanged(i + 1),
+            )
+          else
+            Row(
+              children: [
+                for (var i = 0; i < options.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(
+                    child: _KindOption(
+                      active: value == i + 1,
+                      dimmed: false,
+                      label: options[i].$1,
+                      icon: options[i].$2,
+                      onTap: () => onChanged(i + 1),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+        ],
+      ],
+    );
+  }
 }
 
 class HabitFlagToggle extends StatelessWidget {

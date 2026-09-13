@@ -7,6 +7,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/cover_action_button.dart';
+import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/icons/habit_emojis.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/icons/habit_icons.dart';
@@ -63,17 +64,73 @@ class HabitPreview extends StatelessWidget {
   }
 }
 
+class CoverClarity extends StatelessWidget {
+  const CoverClarity({
+    super.key,
+    required this.value,
+    required this.color,
+    required this.onChanged,
+  });
+
+  final int value;
+  final Color color;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Row(
+        children: [
+          Icon(LucideIcons.focus, size: 16, color: context.tokens.muted),
+          const SizedBox(width: 10),
+          Expanded(
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: 3,
+                activeTrackColor: color,
+                thumbColor: color,
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+              ),
+              child: Slider(
+                value: value.toDouble(),
+                min: 10,
+                max: 100,
+                onChanged: (picked) => onChanged(picked.round()),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 38,
+            child: Text(
+              '$value%',
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700,
+                color: context.tokens.muted,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CoverPicker extends StatelessWidget {
   const CoverPicker({
     super.key,
     required this.path,
     required this.color,
+    this.clarity = 100,
     required this.onPick,
     required this.onRemove,
   });
 
   final String path;
   final Color color;
+  final int clarity;
   final VoidCallback onPick;
   final VoidCallback onRemove;
 
@@ -120,11 +177,14 @@ class CoverPicker extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Stack(
         children: [
-          Image.file(
-            File(path),
-            height: 190,
-            width: double.infinity,
-            fit: BoxFit.cover,
+          CoverBlur(
+            clarity: clarity,
+            child: Image.file(
+              File(path),
+              height: 190,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned.fill(
             child: DecoratedBox(
