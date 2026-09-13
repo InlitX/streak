@@ -3,7 +3,16 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 
-enum ExpressDayState { done, covered, neutral, off, empty, future, blank }
+enum ExpressDayState {
+  done,
+  relapse,
+  covered,
+  neutral,
+  off,
+  empty,
+  future,
+  blank,
+}
 
 class ExpressStreakInk {
   const ExpressStreakInk({
@@ -11,14 +20,17 @@ class ExpressStreakInk {
     required this.track,
     required this.faded,
     required this.neutral,
+    required this.danger,
   });
 
   final Color color;
   final Color track;
   final Color faded;
   final Color neutral;
+  final Color danger;
 
   Color fillFor(ExpressDayState state) => switch (state) {
+    ExpressDayState.relapse => danger,
     ExpressDayState.neutral => neutral,
     ExpressDayState.covered => color.withValues(alpha: 0.22),
     ExpressDayState.off || ExpressDayState.future => faded,
@@ -33,6 +45,7 @@ ExpressStreakInk expressInk(BuildContext context, Color color) {
     track: muted.withValues(alpha: 0.3),
     faded: muted.withValues(alpha: 0.14),
     neutral: context.tokens.info.withValues(alpha: 0.4),
+    danger: context.tokens.danger,
   );
 }
 

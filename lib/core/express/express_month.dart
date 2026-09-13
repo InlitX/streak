@@ -71,6 +71,7 @@ class _ExpressMonthCalendarState extends State<ExpressMonthCalendar>
   ExpressDayState _stateOf(DateTime date) {
     if (date.month != _month.month) return ExpressDayState.blank;
     if (date.isAfter(_today)) return ExpressDayState.future;
+    if (widget.habit.isRelapseOn(date)) return ExpressDayState.relapse;
     if (widget.habit.isCompletedOn(date)) return ExpressDayState.done;
     if (widget.habit.isCoveredOn(date)) return ExpressDayState.covered;
     if (widget.habit.isNeutralOn(date)) return ExpressDayState.neutral;
@@ -211,6 +212,7 @@ class ExpressMonthStrip extends StatelessWidget {
     ExpressDayState stateOf(DateTime date) {
       if (date.month != today.month) return ExpressDayState.blank;
       if (date.isAfter(today)) return ExpressDayState.future;
+      if (habit.isRelapseOn(date)) return ExpressDayState.relapse;
       if (habit.isCompletedOn(date)) return ExpressDayState.done;
       if (habit.isCoveredOn(date)) return ExpressDayState.covered;
       if (habit.isNeutralOn(date)) return ExpressDayState.neutral;
@@ -266,9 +268,12 @@ class _MonthCell extends StatelessWidget {
     if (state == ExpressDayState.blank) return const SizedBox.shrink();
 
     final done = state == ExpressDayState.done;
+    final relapse = state == ExpressDayState.relapse;
     final future = state == ExpressDayState.future;
     final ink = done
         ? (habit.color.computeLuminance() > 0.55 ? Colors.black : Colors.white)
+        : relapse
+        ? Colors.white
         : future
         ? context.tokens.muted.withValues(alpha: 0.45)
         : context.colors.onSurface;
@@ -293,8 +298,10 @@ class _MonthCell extends StatelessWidget {
                 '${date.day}',
                 style: ExpressType.rounded.at(
                   14,
-                  weight: done || isToday ? 850 : 650,
-                  color: isToday && !done ? context.colors.primary : ink,
+                  weight: done || relapse || isToday ? 850 : 650,
+                  color: isToday && !done && !relapse
+                      ? context.colors.primary
+                      : ink,
                   tabular: true,
                 ),
               ),

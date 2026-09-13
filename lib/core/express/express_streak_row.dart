@@ -61,6 +61,7 @@ class _ExpressStreakRowState extends State<ExpressStreakRow>
 
   ExpressDayState _stateOf(DateTime date, DateTime today) {
     if (date.isAfter(today)) return ExpressDayState.future;
+    if (widget.habit.isRelapseOn(date)) return ExpressDayState.relapse;
     if (widget.habit.isCompletedOn(date)) return ExpressDayState.done;
     if (widget.habit.isCoveredOn(date)) return ExpressDayState.covered;
     if (widget.habit.isNeutralOn(date)) return ExpressDayState.neutral;
@@ -151,9 +152,12 @@ class _DayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final done = state == ExpressDayState.done;
+    final relapse = state == ExpressDayState.relapse;
     final future = state == ExpressDayState.future;
     final text = done
         ? ink
+        : relapse
+        ? Colors.white
         : future
         ? context.tokens.muted.withValues(alpha: 0.45)
         : context.tokens.muted;
@@ -180,7 +184,7 @@ class _DayCell extends StatelessWidget {
                   '${date.day}',
                   style: ExpressType.rounded.at(
                     14,
-                    weight: done ? 850 : 700,
+                    weight: done || relapse ? 850 : 700,
                     color: text,
                     tabular: true,
                   ),
@@ -193,7 +197,7 @@ class _DayCell extends StatelessWidget {
                       9.5,
                       weight: isToday ? 850 : 600,
                       spacing: 0.4,
-                      color: isToday && !done
+                      color: isToday && !done && !relapse
                           ? context.colors.primary
                           : text.withValues(alpha: 0.75),
                     ),
