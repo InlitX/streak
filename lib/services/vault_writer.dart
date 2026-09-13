@@ -283,6 +283,9 @@ the markdown here does not change anything in the app.
             ? ''
             : ' (${_day(parseDayKey(todo.date))})';
         out.writeln('- $box ${todo.text}$when');
+        for (final step in todo.steps) {
+          out.writeln('  - ${step.done ? '[x]' : '[ ]'} ${step.text}');
+        }
       }
     }
 
@@ -352,7 +355,8 @@ the markdown here does not change anything in the app.
             : (habit.scheduleWeekdays.toList()..sort())
                 .map((d) => _weekdays[d - 1])
                 .join(', '),
-        HabitInterval.everyXDays => 'every ${habit.scheduleEvery} days',
+        HabitInterval.everyXDays =>
+          'every ${habit.scheduleEvery} ${habit.scheduleUnit.name}',
       };
 
   static String _slug(String name) {

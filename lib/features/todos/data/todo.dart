@@ -14,6 +14,9 @@ class Todo {
     this.minutes,
     this.priority = TodoPriority.none,
     this.photos = const [],
+    this.tags = const [],
+    this.project = '',
+    this.steps = const [],
     this.doneAt,
   });
 
@@ -24,6 +27,9 @@ class Todo {
   final int? minutes;
   final TodoPriority priority;
   final List<String> photos;
+  final List<String> tags;
+  final String project;
+  final List<TodoStep> steps;
   final DateTime createdAt;
   final DateTime? doneAt;
 
@@ -53,6 +59,9 @@ class Todo {
     int? minutes,
     TodoPriority? priority,
     List<String>? photos,
+    List<String>? tags,
+    String? project,
+    List<TodoStep>? steps,
     DateTime? doneAt,
     bool clearDoneAt = false,
     bool clearMinutes = false,
@@ -65,6 +74,9 @@ class Todo {
         minutes: clearMinutes ? null : (minutes ?? this.minutes),
         priority: priority ?? this.priority,
         photos: photos ?? this.photos,
+        tags: tags ?? this.tags,
+        project: project ?? this.project,
+        steps: steps ?? this.steps,
         createdAt: createdAt,
         doneAt: clearDoneAt ? null : (doneAt ?? this.doneAt),
       );
@@ -77,6 +89,9 @@ class Todo {
         'minutes': minutes,
         'priority': priority.index,
         'photos': photos,
+        'tags': tags,
+        'project': project,
+        'steps': [for (final step in steps) step.toMap()],
         'createdAt': createdAt.toIso8601String(),
         'doneAt': doneAt?.toIso8601String(),
       };
@@ -92,9 +107,35 @@ class Todo {
             .clamp(0, TodoPriority.values.length - 1)],
         photos:
             (map['photos'] as List?)?.map((p) => p as String).toList() ?? const [],
+        tags:
+            (map['tags'] as List?)?.map((t) => t as String).toList() ?? const [],
+        project: (map['project'] ?? '') as String,
+        steps: (map['steps'] as List?)
+                ?.map((s) => TodoStep.fromMap(Map<String, dynamic>.from(s as Map)))
+                .toList() ??
+            const [],
         createdAt: DateTime.tryParse((map['createdAt'] ?? '') as String) ??
             DateTime.now(),
         doneAt: DateTime.tryParse((map['doneAt'] ?? '') as String),
+      );
+}
+
+class TodoStep {
+  const TodoStep({required this.id, required this.text, this.done = false});
+
+  final String id;
+  final String text;
+  final bool done;
+
+  TodoStep copyWith({bool? done}) =>
+      TodoStep(id: id, text: text, done: done ?? this.done);
+
+  Map<String, dynamic> toMap() => {'id': id, 'text': text, 'done': done};
+
+  factory TodoStep.fromMap(Map<String, dynamic> map) => TodoStep(
+        id: map['id'] as String,
+        text: (map['text'] ?? '') as String,
+        done: (map['done'] ?? false) as bool,
       );
 }
 

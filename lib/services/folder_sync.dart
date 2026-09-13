@@ -90,6 +90,9 @@ class FolderSync {
     for (final todo in data.todos) {
       await LocalStore.writeTodo(todo);
     }
+    for (final tag in data.todoTags) {
+      await LocalStore.writeTodoTag(tag);
+    }
     return brought;
   }
 

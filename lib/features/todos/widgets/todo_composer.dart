@@ -14,28 +14,40 @@ import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/core/widgets/photo_viewer.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/habits/data/category.dart';
+import 'package:streak/features/habits/widgets/substep_draft.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
+import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 
-Future<void> showTodoComposer(BuildContext context, {Todo? todo}) async {
+Future<void> showTodoComposer(
+  BuildContext context, {
+  Todo? todo,
+  String project = '',
+}) async {
   if (isWideLayout(context)) {
     AppNavigator.clearPane();
-    await AppNavigator.push<void>(_ComposerPage(todo: todo), fade: true);
+    await AppNavigator.push<void>(
+      _ComposerPage(todo: todo, project: project),
+      fade: true,
+    );
     return;
   }
   await showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => _TodoComposer(todo: todo),
+    builder: (_) => _TodoComposer(todo: todo, project: project),
   );
 }
 
 class _ComposerPage extends StatelessWidget {
-  const _ComposerPage({this.todo});
+  const _ComposerPage({this.todo, this.project = ''});
 
   final Todo? todo;
+  final String project;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +64,7 @@ class _ComposerPage extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: phoneWidth),
-            child: _TodoComposer(todo: todo),
+            child: _TodoComposer(todo: todo, project: project),
           ),
         ),
       ),
@@ -61,9 +73,10 @@ class _ComposerPage extends StatelessWidget {
 }
 
 class _TodoComposer extends StatefulWidget {
-  const _TodoComposer({this.todo});
+  const _TodoComposer({this.todo, this.project = ''});
 
   final Todo? todo;
+  final String project;
 
   @override
   State<_TodoComposer> createState() => _TodoComposerState();
@@ -71,16 +84,32 @@ class _TodoComposer extends StatefulWidget {
 
 class _TodoComposerState extends State<_TodoComposer> {
   late final _text = TextEditingController(text: widget.todo?.text ?? '');
+  final _textFocus = FocusNode();
   late String _date = widget.todo?.date ?? '';
   late int? _minutes = widget.todo?.minutes;
   late TodoPriority _priority = widget.todo?.priority ?? TodoPriority.none;
   late final List<String> _photos = [...?widget.todo?.photos];
+  late List<String> _tags = [...?widget.todo?.tags];
+  late String _project = widget.todo?.project ?? widget.project;
+  late final List<SubstepDraft> _steps = [
+    for (final step in widget.todo?.steps ?? const <TodoStep>[])
+      SubstepDraft(step.id, TextEditingController(text: step.text)),
+  ];
+  late final Set<String> _doneSteps = {
+    for (final step in widget.todo?.steps ?? const <TodoStep>[])
+      if (step.done) step.id,
+  };
+  final Set<String> _freshSteps = {};
 
   bool get _canSave => _text.text.trim().isNotEmpty;
 
   @override
   void dispose() {
     _text.dispose();
+    _textFocus.dispose();
+    for (final step in _steps) {
+      step.controller.dispose();
+    }
     super.dispose();
   }
 
@@ -151,6 +180,18 @@ class _TodoComposerState extends State<_TodoComposer> {
             setState(() => _priority = TodoPriority.values[index]),
       );
 
+  Future<void> _pickProject() => showTodoProjectPicker(
+        context,
+        selected: _project,
+        onChanged: (picked) => setState(() => _project = picked),
+      );
+
+  Future<void> _pickTags() => showTodoTagPicker(
+        context,
+        selected: _tags,
+        onChanged: (picked) => setState(() => _tags = picked),
+      );
+
   Future<void> _addPhoto({bool fromCamera = false}) async {
     final path = await CoverStorage.store(
       folder: 'todos',
@@ -159,7 +200,31 @@ class _TodoComposerState extends State<_TodoComposer> {
     if (path != null && mounted) setState(() => _photos.add(path));
   }
 
-  void _save() {
+  void _addStep() {
+    final id = DateTime.now().microsecondsSinceEpoch.toString();
+    setState(() {
+      _freshSteps.add(id);
+      _steps.add(SubstepDraft(id, TextEditingController()));
+    });
+  }
+
+  void _removeStep(SubstepDraft step) {
+    setState(() => _steps.remove(step));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => step.controller.dispose());
+  }
+
+  List<TodoStep> get _savedSteps => [
+        for (final step in _steps)
+          if (step.controller.text.trim().isNotEmpty)
+            TodoStep(
+              id: step.id,
+              text: step.controller.text.trim(),
+              done: _doneSteps.contains(step.id),
+            ),
+      ];
+
+  void _save({bool another = false}) {
     if (!_canSave) return;
     HapticFeedback.selectionClick();
     final todos = context.read<TodosController>();
@@ -171,7 +236,10 @@ class _TodoComposerState extends State<_TodoComposer> {
               date: _date,
               minutes: _minutes,
               priority: _priority,
-              photos: _photos,
+              photos: [..._photos],
+              tags: _tags,
+              project: _project,
+              steps: _savedSteps,
             )
           : todos.update(
               existing.copyWith(
@@ -181,10 +249,29 @@ class _TodoComposerState extends State<_TodoComposer> {
                 clearMinutes: _minutes == null,
                 priority: _priority,
                 photos: _photos,
+                tags: _tags,
+                project: _project,
+                steps: _savedSteps,
               ),
             ),
     );
-    Navigator.of(context).pop();
+    if (!another) {
+      Navigator.of(context).pop();
+      return;
+    }
+    for (final step in _steps) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => step.controller.dispose());
+    }
+    setState(() {
+      _text.clear();
+      _photos.clear();
+      _priority = TodoPriority.none;
+      _steps.clear();
+      _doneSteps.clear();
+      _freshSteps.clear();
+    });
+    _textFocus.requestFocus();
   }
 
   @override
@@ -206,7 +293,10 @@ class _TodoComposerState extends State<_TodoComposer> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_date.isNotEmpty || _priority != TodoPriority.none) ...[
+            if (_date.isNotEmpty ||
+                _priority != TodoPriority.none ||
+                _project.isNotEmpty ||
+                _tags.isNotEmpty) ...[
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -239,12 +329,31 @@ class _TodoComposerState extends State<_TodoComposer> {
                       onRemove: () =>
                           setState(() => _priority = TodoPriority.none),
                     ),
+                  if (context.watch<TodoTagsController>().byId(_project)
+                      case final project?)
+                    _Tag(
+                      icon: CategoryIcons.resolve(project.icon),
+                      label: project.name,
+                      color: project.color,
+                      onRemove: () => setState(() => _project = ''),
+                    ),
+                  for (final tag in context
+                      .watch<TodoTagsController>()
+                      .resolve(_tags))
+                    _Tag(
+                      icon: CategoryIcons.resolve(tag.icon),
+                      label: tag.name,
+                      color: tag.color,
+                      onRemove: () =>
+                          setState(() => _tags = [..._tags]..remove(tag.id)),
+                    ),
                 ],
               ),
               const SizedBox(height: 12),
             ],
             TextField(
               controller: _text,
+              focusNode: _textFocus,
               autofocus: true,
               minLines: 1,
               maxLines: 6,
@@ -268,6 +377,92 @@ class _TodoComposerState extends State<_TodoComposer> {
                 hintStyle: TextStyle(color: muted, fontSize: 16),
               ),
             ),
+            if (_steps.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.3,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (final step in _steps)
+                        Padding(
+                          key: ValueKey(step.id),
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            children: [
+                              Icon(
+                                _doneSteps.contains(step.id)
+                                    ? LucideIcons.circleCheck
+                                    : LucideIcons.circle,
+                                size: 18,
+                                color: muted,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: TextField(
+                                  controller: step.controller,
+                                  autofocus: _freshSteps.contains(step.id),
+                                  minLines: 1,
+                                  maxLines: 3,
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
+                                  textInputAction: TextInputAction.next,
+                                  onSubmitted: (value) {
+                                    if (value.trim().isNotEmpty) _addStep();
+                                  },
+                                  style: TextStyle(
+                                    fontSize: 15.5,
+                                    height: 1.35,
+                                    color: scheme.onSurface,
+                                  ),
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    hintText: context.l10n.todo_subtask_hint,
+                                    hintStyle:
+                                        TextStyle(color: muted, fontSize: 15.5),
+                                  ),
+                                ),
+                              ),
+                              Semantics(
+                                button: true,
+                                label: context.l10n.delete,
+                                child: GestureDetector(
+                                  onTap: () => _removeStep(step),
+                                  behavior: HitTestBehavior.opaque,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Icon(
+                                      LucideIcons.x,
+                                      size: 16,
+                                      color: muted,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  onPressed: _addStep,
+                  icon: const Icon(LucideIcons.plus, size: 16),
+                  label: Text(
+                    context.l10n.todo_add_subtask,
+                    style: sheetActionStyle(context, size: 14),
+                  ),
+                ),
+              ),
+            ],
             if (_photos.isNotEmpty) ...[
               const SizedBox(height: 12),
               PhotoDeck(
@@ -304,6 +499,24 @@ class _TodoComposerState extends State<_TodoComposer> {
                           onTap: _pickPriority,
                         ),
                         _Action(
+                          icon: LucideIcons.folder,
+                          label: context.l10n.todo_project,
+                          active: _project.isNotEmpty,
+                          onTap: _pickProject,
+                        ),
+                        _Action(
+                          icon: LucideIcons.tag,
+                          label: context.l10n.todo_tags,
+                          active: _tags.isNotEmpty,
+                          onTap: _pickTags,
+                        ),
+                        _Action(
+                          icon: LucideIcons.listChecks,
+                          label: context.l10n.todo_subtasks,
+                          active: _steps.isNotEmpty,
+                          onTap: _addStep,
+                        ),
+                        _Action(
                           icon: LucideIcons.image,
                           label: context.l10n.note_pick_photo,
                           active: _photos.isNotEmpty,
@@ -318,6 +531,29 @@ class _TodoComposerState extends State<_TodoComposer> {
                     ),
                   ),
                 ),
+                if (widget.todo == null) ...[
+                  const SizedBox(width: 6),
+                  Semantics(
+                    button: true,
+                    label: context.l10n.todo_save_another,
+                    child: GestureDetector(
+                      onTap: () => _save(another: true),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: scheme.surfaceContainerHighest,
+                        ),
+                        child: Icon(
+                          LucideIcons.listPlus,
+                          size: 20,
+                          color: _canSave ? scheme.primary : muted,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(width: 6),
                 Semantics(
                   button: true,

@@ -48,6 +48,9 @@ class TodosController extends ChangeNotifier {
     int? minutes,
     TodoPriority priority = TodoPriority.none,
     List<String> photos = const [],
+    List<String> tags = const [],
+    String project = '',
+    List<TodoStep> steps = const [],
   }) async {
     final todo = Todo(
       id: const Uuid().v4(),
@@ -56,6 +59,9 @@ class TodosController extends ChangeNotifier {
       minutes: minutes,
       priority: priority,
       photos: photos,
+      tags: tags,
+      project: project,
+      steps: steps,
       createdAt: DateTime.now(),
     );
     _todos.add(todo);
@@ -95,6 +101,19 @@ class TodosController extends ChangeNotifier {
     await _notifications.scheduleTodo(updated);
   }
 
+  Future<void> toggleStep(String id, String stepId) async {
+    final todo = _todos.where((t) => t.id == id).firstOrNull;
+    if (todo == null) return;
+    await update(
+      todo.copyWith(
+        steps: [
+          for (final step in todo.steps)
+            step.id == stepId ? step.copyWith(done: !step.done) : step,
+        ],
+      ),
+    );
+  }
+
   Future<void> remove(String id) async {
     final photos = [
       for (final todo in _todos.where((t) => t.id == id)) ...todo.photos,
@@ -106,6 +125,49 @@ class TodosController extends ChangeNotifier {
     await LocalStore.removeTodo(id);
     await CoverStorage.forgetAll(photos);
   }
+
+  Future<void> forgetTag(String tagId) async {
+    final touched = _todos.where((t) => t.tags.contains(tagId)).toList();
+    if (touched.isEmpty) return;
+    for (final todo in touched) {
+      final updated = todo.copyWith(
+        tags: [...todo.tags]..remove(tagId),
+      );
+      _todos[_todos.indexWhere((t) => t.id == todo.id)] = updated;
+      await LocalStore.writeTodo(updated);
+    }
+    notifyListeners();
+  }
+
+  Future<void> forgetProject(String projectId) async {
+    final touched = _todos.where((t) => t.project == projectId).toList();
+    if (touched.isEmpty) return;
+    for (final todo in touched) {
+      final updated = todo.copyWith(project: '');
+      _todos[_todos.indexWhere((t) => t.id == todo.id)] = updated;
+      await LocalStore.writeTodo(updated);
+    }
+    notifyListeners();
+  }
+
+  bool _inProject(Todo todo, String? project) => switch (project) {
+        null => true,
+        '' => todo.project.isEmpty,
+        final id => todo.project == id,
+      };
+
+  int countFor(String tagId, {String? project}) => _todos
+      .where((t) => !t.done && t.tags.contains(tagId) && _inProject(t, project))
+      .length;
+
+  int untaggedCount({String? project}) => _todos
+      .where((t) => !t.done && t.tags.isEmpty && _inProject(t, project))
+      .length;
+
+  int projectCount(String projectId) =>
+      _todos.where((t) => !t.done && t.project == projectId).length;
+
+  int get looseCount => _todos.where((t) => !t.done && t.project.isEmpty).length;
 
   Future<void> clearCompleted() async {
     final done = _todos.where((t) => t.done).toList();

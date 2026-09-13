@@ -6,7 +6,10 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/photo_deck.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/data/todo_tag.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
 
 class TodoTile extends StatelessWidget {
@@ -17,6 +20,7 @@ class TodoTile extends StatelessWidget {
     required this.onEdit,
     required this.overdue,
     this.corners,
+    this.showProject = false,
   });
 
   final Todo todo;
@@ -24,6 +28,7 @@ class TodoTile extends StatelessWidget {
   final VoidCallback onEdit;
   final bool overdue;
   final BorderRadius? corners;
+  final bool showProject;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,9 @@ class TodoTile extends StatelessWidget {
     final muted = context.tokens.muted;
     final accent = todoPriorityColor(context, todo.priority);
     final due = todo.due;
+    final project = showProject && todo.project.isNotEmpty
+        ? context.watch<TodoTagsController>().byId(todo.project)
+        : null;
 
     return GestureDetector(
       onTap: onEdit,
@@ -78,12 +86,17 @@ class TodoTile extends StatelessWidget {
                   ],
                   if (!todo.done &&
                       (due != null ||
+                          project != null ||
+                          todo.tags.isNotEmpty ||
+                          todo.steps.isNotEmpty ||
                           todo.priority != TodoPriority.none)) ...[
                     const SizedBox(height: 7),
                     Wrap(
                       spacing: 12,
                       runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
+                        if (project != null) _ProjectMark(project: project),
                         if (due != null)
                           _MetaLabel(
                             icon: todo.time == null
@@ -98,6 +111,21 @@ class TodoTile extends StatelessWidget {
                             label:
                                 todoPriorityLabels(context)[todo.priority.index],
                             color: accent,
+                          ),
+                        if (todo.steps.isNotEmpty)
+                          _MetaLabel(
+                            icon: LucideIcons.listChecks,
+                            label:
+                                '${todo.steps.where((s) => s.done).length}/${todo.steps.length}',
+                            color: muted,
+                          ),
+                        for (final tag in context
+                            .watch<TodoTagsController>()
+                            .resolve(todo.tags))
+                          _MetaLabel(
+                            icon: CategoryIcons.resolve(tag.icon),
+                            label: tag.name,
+                            color: tag.color,
                           ),
                       ],
                     ),
@@ -117,6 +145,42 @@ class TodoTile extends StatelessWidget {
             _CheckButton(todo: todo, onToggle: onToggle),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ProjectMark extends StatelessWidget {
+  const _ProjectMark({required this.project});
+
+  final TodoTag project;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(7, 3, 9, 3),
+      decoration: BoxDecoration(
+        color: project.color.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            CategoryIcons.resolve(project.icon),
+            size: 11.5,
+            color: project.color,
+          ),
+          const SizedBox(width: 5),
+          Text(
+            project.name,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w800,
+              color: project.color,
+            ),
+          ),
+        ],
       ),
     );
   }
