@@ -93,8 +93,10 @@ class HabitsController extends ChangeNotifier {
     required int targetFrequency,
     List<int> scheduleWeekdays = const [],
     int scheduleEvery = 2,
+    ScheduleUnit scheduleUnit = ScheduleUnit.days,
     required List<Reminder> reminders,
     String coverPath = '',
+    int coverClarity = 100,
     HabitKind kind = HabitKind.positive,
     double dailyCost = 0,
     double perDayTarget = 1,
@@ -104,6 +106,7 @@ class HabitsController extends ChangeNotifier {
     String bookCoverPath = '',
     bool focusOnly = false,
     bool tracking = false,
+    int difficulty = 0,
     int focusMinutes = 25,
     int focusBreakMinutes = 0,
     int startMinute = -1,
@@ -123,8 +126,10 @@ class HabitsController extends ChangeNotifier {
       targetFrequency: targetFrequency,
       scheduleWeekdays: scheduleWeekdays,
       scheduleEvery: scheduleEvery,
+      scheduleUnit: scheduleUnit,
       reminders: reminders,
       coverPath: coverPath,
+      coverClarity: coverClarity,
       kind: kind,
       dailyCost: dailyCost,
       perDayTarget: perDayTarget,
@@ -134,6 +139,7 @@ class HabitsController extends ChangeNotifier {
       bookCoverPath: bookCoverPath,
       focusOnly: focusOnly,
       tracking: tracking,
+      difficulty: difficulty,
       focusMinutes: focusMinutes,
       focusBreakMinutes: focusBreakMinutes,
       startMinute: startMinute,
@@ -198,13 +204,13 @@ class HabitsController extends ChangeNotifier {
     await _apply(habit, CompletionOps.setStep(habit, date, stepId, checked));
   }
 
-  Future<void> setVacation(String id, bool on) async {
+  Future<void> setVacation(String id, bool on, {bool bulk = false}) async {
     final habit = _habits[id];
     if (habit == null) return;
     final periods = [...habit.vacations];
     if (on) {
       if (!periods.any((p) => p.isOngoing)) {
-        periods.add(VacationPeriod(start: AppClock.now()));
+        periods.add(VacationPeriod(start: AppClock.now(), bulk: bulk));
       }
     } else {
       final yesterday =
@@ -229,14 +235,17 @@ class HabitsController extends ChangeNotifier {
     for (final habit in habits) {
       if (habit.isArchived || habit.isOnVacation) continue;
       paused.add(habit.id);
-      await setVacation(habit.id, true);
+      await setVacation(habit.id, true, bulk: true);
     }
     return paused;
   }
 
   Future<void> resumeAll(List<String> ids) async {
-    for (final id in ids) {
-      await setVacation(id, false);
+    for (final habit in [..._habits.values]) {
+      if (habit.vacations.any((p) => p.isOngoing && p.bulk) ||
+          ids.contains(habit.id)) {
+        await setVacation(habit.id, false);
+      }
     }
   }
 
@@ -289,6 +298,34 @@ class HabitsController extends ChangeNotifier {
     notifyListeners();
     HomeWidgetService.syncSoon(() => asMap);
     await LocalStore.guardWrites(() => LocalStore.writeHabit(updated));
+    final today = AppClock.now();
+    if (habit.reminders.isNotEmpty &&
+        habit.silencesRemindersOn(today) != updated.silencesRemindersOn(today)) {
+      _refreshReminders(habit.id);
+    }
+  }
+
+  Future<void> _reminderQueue = Future.value();
+
+  void _refreshReminders(String id) {
+    _reminderQueue = _reminderQueue.then((_) async {
+      final habit = _habits[id];
+      if (habit == null) return;
+      try {
+        await _notifications.scheduleFor(habit);
+        await _notifications.dismissShown(habit);
+      } catch (e) {
+        debugPrint('Could not refresh the reminders of $id: $e');
+      }
+    });
+  }
+
+  void refreshDoneReminders() {
+    final today = AppClock.now();
+    for (final habit in _habits.values) {
+      if (habit.isArchived || habit.reminders.isEmpty) continue;
+      if (habit.silencesRemindersOn(today)) _refreshReminders(habit.id);
+    }
   }
 
   Future<void> reorder(List<Habit> visible, int oldIndex, int newIndex) async {
@@ -433,6 +470,9 @@ class HabitsController extends ChangeNotifier {
     }
     for (final todo in data.todos) {
       await LocalStore.writeTodo(todo);
+    }
+    for (final tag in data.todoTags) {
+      await LocalStore.writeTodoTag(tag);
     }
     for (final habit in data.habits) {
       if (habit.reminders.isNotEmpty) await _notifications.scheduleFor(habit);

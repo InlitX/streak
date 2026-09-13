@@ -6,6 +6,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/data/todo_tag.dart';
 
 class LocalStore {
   const LocalStore._();
@@ -16,6 +17,7 @@ class LocalStore {
   static const _notesBox = 'notes';
   static const _focusBox = 'focus';
   static const _todosBox = 'todos';
+  static const _todoTagsBox = 'todo_tags';
 
   static late Box _habits;
   static late Box _settings;
@@ -23,6 +25,7 @@ class LocalStore {
   static late Box _notes;
   static late Box _focus;
   static late Box _todos;
+  static late Box _todoTags;
 
   static int _writing = 0;
 
@@ -45,6 +48,7 @@ class LocalStore {
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
     _todos = await Hive.openBox(_todosBox);
+    _todoTags = await Hive.openBox(_todoTagsBox);
   }
 
   static List<Todo> readTodos() {
@@ -68,6 +72,23 @@ class LocalStore {
       await _todos.delete(id);
     }
   }
+
+  static List<TodoTag> readTodoTags() {
+    final result = <TodoTag>[];
+    for (final raw in _todoTags.values) {
+      try {
+        result.add(TodoTag.fromJson(raw as String));
+      } catch (e) {
+        debugPrint('Skipped an unreadable tag: $e');
+      }
+    }
+    return result;
+  }
+
+  static Future<void> writeTodoTag(TodoTag tag) =>
+      _todoTags.put(tag.id, tag.toJson());
+
+  static Future<void> removeTodoTag(String id) => _todoTags.delete(id);
 
   static List<FocusSession> readFocusSessions() {
     final result = <FocusSession>[];
@@ -188,6 +209,7 @@ class LocalStore {
     await _notes.clear();
     await _focus.clear();
     await _todos.clear();
+    await _todoTags.clear();
     await _categories.clear();
   }
 
@@ -196,6 +218,7 @@ class LocalStore {
     await _notes.clear();
     await _focus.clear();
     await _todos.clear();
+    await _todoTags.clear();
     await _categories.clear();
     await _settings.clear();
   }

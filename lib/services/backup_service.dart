@@ -16,6 +16,7 @@ import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/data/todo_tag.dart';
 import 'package:streak/services/vault_writer.dart';
 
 const _kBackupVersion = 1;
@@ -27,6 +28,7 @@ class BackupData {
     required this.notes,
     required this.focus,
     required this.todos,
+    required this.todoTags,
     required this.categories,
     required this.skipped,
     this.exportedAt,
@@ -36,6 +38,7 @@ class BackupData {
   final List<HabitNote> notes;
   final List<FocusSession> focus;
   final List<Todo> todos;
+  final List<TodoTag> todoTags;
   final List<Category> categories;
   final int skipped;
   final DateTime? exportedAt;
@@ -57,6 +60,7 @@ class BackupService {
       'focus':
           LocalStore.readFocusSessions().map((f) => f.toMap()).toList(),
       'todos': LocalStore.readTodos().map((t) => t.toMap()).toList(),
+      'todoTags': LocalStore.readTodoTags().map((t) => t.toMap()).toList(),
       'categories':
           LocalStore.readCategories().map((c) => c.toMap()).toList(),
     };
@@ -250,6 +254,7 @@ class BackupService {
       notes: collect(root['notes'], HabitNote.fromMap),
       focus: collect(root['focus'], FocusSession.fromMap),
       todos: collect(root['todos'], Todo.fromMap),
+      todoTags: collect(root['todoTags'], TodoTag.fromMap),
       categories: collect(root['categories'], Category.fromMap),
       skipped: skipped,
       exportedAt: DateTime.tryParse((root['exportedAt'] ?? '') as String),

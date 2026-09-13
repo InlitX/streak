@@ -50,11 +50,14 @@ class _ScrollingLineState extends State<ScrollingLine>
 
   void _tune(double overflow) {
     if (overflow == _overflow) return;
+    final wasMasked = _overflow > 0;
     _overflow = overflow;
     if (overflow <= 0) {
       _controller.stop();
+      if (wasMasked) setState(() {});
       return;
     }
+    if (!wasMasked) setState(() {});
 
     final crossing = (overflow / widget.speed * 1000).round().clamp(400, 20000);
     final pause = widget.pause.inMilliseconds;
@@ -102,6 +105,7 @@ class _ScrollingLineState extends State<ScrollingLine>
     if (MediaQuery.disableAnimationsOf(context)) return line;
 
     _scheduleTune();
+    if (_overflow <= 0) return line;
     return ShaderMask(
       blendMode: BlendMode.dstIn,
       shaderCallback: (bounds) => LinearGradient(
@@ -109,7 +113,7 @@ class _ScrollingLineState extends State<ScrollingLine>
         end: Alignment.centerRight,
         colors: const [Colors.transparent, Colors.white, Colors.white,
             Colors.transparent],
-        stops: _overflow > 0 ? const [0, 0.04, 0.9, 1] : const [0, 0, 1, 1],
+        stops: const [0, 0.04, 0.9, 1],
       ).createShader(bounds),
       child: line,
     );
