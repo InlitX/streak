@@ -1,5 +1,6 @@
 package com.streak.app
 
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -39,6 +40,12 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                     "setSecure" -> {
                         setSecure(call.argument<Boolean>("secure") ?: false)
+                        result.success(true)
+                    }
+                    "dismissNotifications" -> {
+                        val manager =
+                            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                        call.argument<List<Int>>("ids")?.forEach { manager.cancel(it) }
                         result.success(true)
                     }
                     "consumeLaunchHabit" -> result.success(takeHabitId(intent))

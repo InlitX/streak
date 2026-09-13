@@ -239,10 +239,10 @@ class NotificationService {
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
           ?.getActiveNotifications();
+      final mine = _idsOf(habit);
       final ids = [
         for (final notification in shown ?? const <ActiveNotification>[])
-          if (notification.id != null && notification.payload == habit.id)
-            notification.id!,
+          if (mine.contains(notification.id)) notification.id!,
       ];
       if (ids.isEmpty) return;
       await const MethodChannel('streak/app_icon')
@@ -252,6 +252,18 @@ class NotificationService {
     }
   }
 
+  Set<int> _idsOf(Habit habit) => {
+        for (final reminder in habit.reminders) ...{
+          for (var slot = 0; slot < ReminderSchedule.slotsPerReminder; slot++)
+            for (var week = 1; week <= ReminderSchedule.quietWeeks; week++)
+              ReminderSchedule.quietId(
+                _notificationId(habit.id, reminder.id, slot),
+                week,
+              ),
+        },
+        _snoozeId(habit.id),
+      };
+
   Future<Set<int>> _scheduleHourly(Habit habit, Reminder reminder, String body,
       AppLocalizations strings) async {
     final ids = <int>{};
@@ -260,29 +272,26 @@ class NotificationService {
       minute: reminder.minute,
       everyHours: reminder.everyHours,
     );
+    final now = tz.TZDateTime.now(tz.local);
     final from = _firstMoment(habit);
 
     for (final day in reminder.days) {
       if (!habit.ringsOnWeekday(day)) continue;
       for (var slot = 0; slot < slots.length; slot++) {
-        final id = ReminderSchedule.hourlyId(habit.id, reminder.id, day, slot);
-        ids.add(id);
         final next = ReminderSchedule.nextWeekly(
-          now: from,
+          now: now,
           weekday: day,
           hour: slots[slot] ~/ 60,
           minute: slots[slot] % 60,
         );
-        await _plugin.zonedSchedule(
-          id,
-          habit.name,
+        ids.addAll(await _scheduleRepeating(
+          ReminderSchedule.hourlyId(habit.id, reminder.id, day, slot),
+          habit,
           body,
-          tz.TZDateTime.from(next, tz.local),
-          _details(habit, body, strings),
-          payload: habit.id,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        );
+          strings,
+          next,
+          from,
+        ));
       }
     }
     return ids;
@@ -291,18 +300,38 @@ class NotificationService {
   Future<Set<int>> _scheduleWeekly(Habit habit, Reminder reminder, String body,
       AppLocalizations strings) async {
     final ids = <int>{};
+    final now = tz.TZDateTime.now(tz.local);
+    final from = _firstMoment(habit);
     for (final day in reminder.days) {
       if (!habit.ringsOnWeekday(day)) continue;
-      final id = _notificationId(habit.id, reminder.id, day);
-      ids.add(id);
       final next = ReminderSchedule.nextWeekly(
-        now: _firstMoment(habit),
+        now: now,
         weekday: day,
         hour: reminder.hour,
         minute: reminder.minute,
       );
-      final when = tz.TZDateTime.from(next, tz.local);
+      ids.addAll(await _scheduleRepeating(
+        _notificationId(habit.id, reminder.id, day),
+        habit,
+        body,
+        strings,
+        next,
+        from,
+      ));
+    }
+    return ids;
+  }
 
+  Future<Set<int>> _scheduleRepeating(
+    int id,
+    Habit habit,
+    String body,
+    AppLocalizations strings,
+    DateTime next,
+    tz.TZDateTime from,
+  ) async {
+    final when = tz.TZDateTime.from(next, tz.local);
+    if (!when.isBefore(from)) {
       await _plugin.zonedSchedule(
         id,
         habit.name,
@@ -312,6 +341,30 @@ class NotificationService {
         payload: habit.id,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+      return {id};
+    }
+    final ids = <int>{};
+    for (var week = 1; week <= ReminderSchedule.quietWeeks; week++) {
+      final quietId = ReminderSchedule.quietId(id, week);
+      ids.add(quietId);
+      await _plugin.zonedSchedule(
+        quietId,
+        habit.name,
+        body,
+        tz.TZDateTime.from(
+          DateTime(
+            next.year,
+            next.month,
+            next.day + 7 * week,
+            next.hour,
+            next.minute,
+          ),
+          tz.local,
+        ),
+        _details(habit, body, strings),
+        payload: habit.id,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
     }
     return ids;

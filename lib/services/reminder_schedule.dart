@@ -3,6 +3,13 @@ class ReminderSchedule {
 
   static const slotsPerReminder = 64;
 
+  static const quietWeeks = 4;
+
+  static const _quietIdBase = 100000000;
+
+  static int quietId(int id, int week) =>
+      week <= 1 ? id : id + _quietIdBase * (week - 1);
+
   static int notificationId(String habitId, String reminderId, int slot) {
     final habit = habitId.hashCode.abs() % 10000;
     final reminder = reminderId.hashCode.abs() % 100;

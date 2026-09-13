@@ -7,6 +7,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/services/notification_service.dart';
 
 class WidgetActionService {
   const WidgetActionService._();
@@ -20,6 +21,12 @@ class WidgetActionService {
     final pending = await _read();
     if (pending.isEmpty) return false;
 
+    final today = AppClock.now();
+    final quiet = {
+      for (final habit in habits.values)
+        if (habit.reminders.isNotEmpty)
+          habit.id: habit.silencesRemindersOn(today),
+    };
     final touched = <String>{};
     final ticked = <Todo>[];
     for (final raw in pending) {
@@ -39,7 +46,15 @@ class WidgetActionService {
 
     for (final id in touched) {
       final habit = habits[id];
-      if (habit != null) await LocalStore.writeHabit(habit);
+      if (habit == null) continue;
+      await LocalStore.writeHabit(habit);
+      final before = quiet[id];
+      if (before == null || before == habit.silencesRemindersOn(today)) continue;
+      try {
+        await NotificationService().scheduleFor(habit);
+      } catch (e) {
+        debugPrint('Widget reminder refresh skipped ($id): $e');
+      }
     }
     for (final todo in ticked) {
       await LocalStore.writeTodo(todo);
