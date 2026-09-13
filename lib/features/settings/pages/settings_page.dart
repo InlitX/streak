@@ -527,6 +527,40 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     ),
                   ),
                   settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.mountain,
+                    title: context.l10n.difficulty_option,
+                    subtitle: context.l10n.difficulty_option_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.difficultyOption ? 1 : 0,
+                      onChanged: (i) => settings.setDifficultyOption(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.chartPie,
+                    title: context.l10n.today_progress_option,
+                    subtitle: context.l10n.today_progress_option_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.showTodayProgress ? 1 : 0,
+                      onChanged: (i) => settings.setShowTodayProgress(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.bellOff,
+                    title: context.l10n.quiet_when_done,
+                    subtitle: context.l10n.quiet_when_done_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.quietWhenDone ? 1 : 0,
+                      onChanged: (i) =>
+                          SettingsActions.toggleQuietWhenDone(context, i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
                   NavRow(
                     icon: LucideIcons.quote,
                     title: context.l10n.quotes,
@@ -576,6 +610,24 @@ class _ClassicPreferencesPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    settingsDivider(context),
+                    NavRow(
+                      icon: LucideIcons.keyRound,
+                      title: context.l10n.app_lock_method,
+                      value: settings.appLockMode == 1
+                          ? context.l10n.pin_lock
+                          : context.l10n.app_lock_biometric,
+                      onTap: () => SettingsActions.chooseLockMethod(context),
+                    ),
+                    if (settings.appLockMode == 1) ...[
+                      settingsDivider(context),
+                      NavRow(
+                        icon: LucideIcons.pencil,
+                        title: context.l10n.pin_change,
+                        subtitle: context.l10n.pin_lock_sub,
+                        onTap: SettingsActions.changePin,
+                      ),
+                    ],
                   ],
                 ],
               ),

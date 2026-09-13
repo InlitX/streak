@@ -640,6 +640,27 @@ List<Widget> _preferenceTiles(BuildContext context) {
           value: settings.trackingOption,
           onChanged: settings.setTrackingOption,
         ),
+        _Toggle(
+          icon: LucideIcons.mountain,
+          title: context.l10n.difficulty_option,
+          subtitle: context.l10n.difficulty_option_sub,
+          value: settings.difficultyOption,
+          onChanged: settings.setDifficultyOption,
+        ),
+        _Toggle(
+          icon: LucideIcons.chartPie,
+          title: context.l10n.today_progress_option,
+          subtitle: context.l10n.today_progress_option_sub,
+          value: settings.showTodayProgress,
+          onChanged: settings.setShowTodayProgress,
+        ),
+        _Toggle(
+          icon: LucideIcons.bellOff,
+          title: context.l10n.quiet_when_done,
+          subtitle: context.l10n.quiet_when_done_sub,
+          value: settings.quietWhenDone,
+          onChanged: (v) => SettingsActions.toggleQuietWhenDone(context, v),
+        ),
         ExpressTile(
           icon: LucideIcons.quote,
           title: context.l10n.quotes,
@@ -676,6 +697,22 @@ List<Widget> _preferenceTiles(BuildContext context) {
                 SettingsActions.appLockDelays[i],
               ),
             ),
+          ),
+        if (settings.appLock)
+          ExpressTile(
+            icon: LucideIcons.keyRound,
+            title: context.l10n.app_lock_method,
+            value: settings.appLockMode == 1
+                ? context.l10n.pin_lock
+                : context.l10n.app_lock_biometric,
+            onTap: () => SettingsActions.chooseLockMethod(context),
+          ),
+        if (settings.appLock && settings.appLockMode == 1)
+          ExpressTile(
+            icon: LucideIcons.pencil,
+            title: context.l10n.pin_change,
+            subtitle: context.l10n.pin_lock_sub,
+            onTap: SettingsActions.changePin,
           ),
       ],
     ),

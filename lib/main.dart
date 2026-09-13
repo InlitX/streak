@@ -22,6 +22,7 @@ import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/folder_sync.dart';
@@ -121,6 +122,7 @@ void _run() {
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsController()),
         ChangeNotifierProvider(create: (_) => CategoriesController()),
+        ChangeNotifierProvider(create: (_) => TodoTagsController()),
         ChangeNotifierProvider(create: (_) => NotesController()),
         ChangeNotifierProvider(
           create: (_) {

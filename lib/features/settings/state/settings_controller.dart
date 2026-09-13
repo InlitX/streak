@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/app_lock_pin.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -73,13 +74,16 @@ class SettingsController extends ChangeNotifier {
     _trackingOption = LocalStore.setting('trackingOption', false);
     _showTodayProgress = LocalStore.setting('showTodayProgress', true);
     _quietWhenDone = LocalStore.setting('quietWhenDone', true);
+    _difficultyOption = LocalStore.setting('difficultyOption', false);
+    Habit.weighDifficulty = _difficultyOption;
+    _appLockMode = LocalStore.setting('appLockMode', 0);
     _islandEnabled = LocalStore.setting('islandEnabled', true);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
         List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
     _focusEnabled = LocalStore.setting('focusEnabled', true);
-    _focusClockStyle = LocalStore.setting('focusClockStyle', 0);
-    _focusScene = LocalStore.setting('focusScene', 0);
+    _focusClockStyle = LocalStore.setting('focusClockStyle', 2);
+    _focusScene = LocalStore.setting('focusScene', 3);
     _focusImage = LocalStore.setting('focusImage', '');
     _focusTracks =
         List<String>.from(LocalStore.setting('focusTracks', const <String>[]));
@@ -147,6 +151,8 @@ class SettingsController extends ChangeNotifier {
   late bool _trackingOption;
   late bool _showTodayProgress;
   late bool _quietWhenDone;
+  late bool _difficultyOption;
+  late int _appLockMode;
   late int _quoteSource;
   late List<String> _customQuotes;
   late bool _focusEnabled;
@@ -572,6 +578,23 @@ class SettingsController extends ChangeNotifier {
   Future<void> setQuietWhenDone(bool value) async {
     _quietWhenDone = value;
     await LocalStore.writeSetting('quietWhenDone', value);
+    notifyListeners();
+  }
+
+  bool get difficultyOption => _difficultyOption;
+
+  Future<void> setDifficultyOption(bool value) async {
+    _difficultyOption = value;
+    Habit.weighDifficulty = value;
+    await LocalStore.writeSetting('difficultyOption', value);
+    notifyListeners();
+  }
+
+  int get appLockMode => _appLockMode;
+
+  Future<void> setAppLockMode(int mode) async {
+    _appLockMode = mode;
+    await LocalStore.writeSetting('appLockMode', mode);
     notifyListeners();
   }
 

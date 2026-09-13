@@ -21,6 +21,7 @@ import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/island/state/island_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/l10n/app_localizations.dart';
 
@@ -191,6 +192,7 @@ Future<void> pumpScreen(
         ChangeNotifierProvider(create: (_) => CategoriesController()),
         ChangeNotifierProvider(create: (_) => NotesController()),
         ChangeNotifierProvider(create: (_) => TodosController()),
+        ChangeNotifierProvider(create: (_) => TodoTagsController()),
         ChangeNotifierProvider(create: (_) => FocusController()),
         ChangeNotifierProvider(create: (_) => IslandController()),
         ChangeNotifierProvider(create: (_) => HabitsController()),

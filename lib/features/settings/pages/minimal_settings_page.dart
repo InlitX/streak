@@ -538,6 +538,34 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: settings.setTrackingOption,
               ),
             ),
+            SoftRow(
+              icon: LucideIcons.mountain,
+              title: context.l10n.difficulty_option,
+              subtitle: context.l10n.difficulty_option_sub,
+              trailing: _SoftSwitch(
+                value: settings.difficultyOption,
+                onChanged: settings.setDifficultyOption,
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.chartPie,
+              title: context.l10n.today_progress_option,
+              subtitle: context.l10n.today_progress_option_sub,
+              trailing: _SoftSwitch(
+                value: settings.showTodayProgress,
+                onChanged: settings.setShowTodayProgress,
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.bellOff,
+              title: context.l10n.quiet_when_done,
+              subtitle: context.l10n.quiet_when_done_sub,
+              trailing: _SoftSwitch(
+                value: settings.quietWhenDone,
+                onChanged: (v) =>
+                    SettingsActions.toggleQuietWhenDone(context, v),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 22),
@@ -568,6 +596,22 @@ class _PreferencesPage extends StatelessWidget {
                   onSelected: (i) =>
                       settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
                 ),
+              ),
+            if (settings.appLock)
+              SoftRow(
+                icon: LucideIcons.keyRound,
+                title: context.l10n.app_lock_method,
+                value: settings.appLockMode == 1
+                    ? context.l10n.pin_lock
+                    : context.l10n.app_lock_biometric,
+                onTap: () => SettingsActions.chooseLockMethod(context),
+              ),
+            if (settings.appLock && settings.appLockMode == 1)
+              SoftRow(
+                icon: LucideIcons.pencil,
+                title: context.l10n.pin_change,
+                subtitle: context.l10n.pin_lock_sub,
+                onTap: SettingsActions.changePin,
               ),
           ],
         ),

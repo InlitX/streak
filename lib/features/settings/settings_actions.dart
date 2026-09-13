@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_lock.dart';
+import 'package:streak/app/pin_setup_page.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -20,9 +21,11 @@ import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/island/state/island_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/import_service.dart';
@@ -63,6 +66,7 @@ class SettingsActions {
       context.read<NotesController>().reload();
       context.read<FocusController>().reload();
       context.read<TodosController>().reload();
+      context.read<TodoTagsController>().reload();
       context.read<CategoriesController>().reload();
       AppSnackbar.success(context, context.l10n.habits_imported);
     } else {
@@ -86,6 +90,7 @@ class SettingsActions {
       context.read<NotesController>().reload();
       context.read<FocusController>().reload();
       context.read<TodosController>().reload();
+      context.read<TodoTagsController>().reload();
       context.read<CategoriesController>().reload();
     }
     await settings.runAutoBackup(force: true);
@@ -302,6 +307,7 @@ class SettingsActions {
     context.read<NotesController>().reload();
     context.read<FocusController>().reload();
     context.read<TodosController>().reload();
+    context.read<TodoTagsController>().reload();
     context.read<CategoriesController>().reload();
     context.read<IslandController>().reload();
     await context.read<SettingsController>().reloadFromStore();
@@ -313,14 +319,24 @@ class SettingsActions {
   static Future<void> toggleAppLock(BuildContext context, bool value) async {
     final settings = context.read<SettingsController>();
     if (!value) {
+      if (settings.appLockMode == 1 &&
+          settings.hasAppLockPin &&
+          !await showPinCheck()) {
+        return;
+      }
       await AppLockService.setSecure(false);
       await settings.setAppLock(false);
       return;
     }
+    if (settings.appLockMode == 1 && settings.hasAppLockPin) {
+      await AppLockService.setSecure(true);
+      await settings.setAppLock(true);
+      return;
+    }
     if (!await AppLockService.isAvailable()) {
-      if (context.mounted) {
-        AppSnackbar.warning(context, context.l10n.app_lock_unavailable);
-      }
+      if (!await _usePin(settings)) return;
+      await AppLockService.setSecure(true);
+      await settings.setAppLock(true);
       return;
     }
     if (!context.mounted) return;
@@ -330,8 +346,56 @@ class SettingsActions {
       AppSnackbar.error(context, context.l10n.app_lock_failed);
       return;
     }
+    await settings.setAppLockMode(0);
     await AppLockService.setSecure(true);
     await settings.setAppLock(true);
+  }
+
+  static Future<bool> _usePin(SettingsController settings) async {
+    if (!settings.hasAppLockPin && !await showPinSetup()) return false;
+    await settings.setAppLockMode(1);
+    return true;
+  }
+
+  static Future<void> chooseLockMethod(BuildContext context) async {
+    final settings = context.read<SettingsController>();
+    final reason = context.l10n.app_lock_sub;
+    await showOptionSheet(
+      context,
+      title: context.l10n.app_lock_method,
+      options: [context.l10n.app_lock_biometric, context.l10n.pin_lock],
+      index: settings.appLockMode,
+      onSelected: (i) async {
+        if (i == settings.appLockMode) return;
+        if (i == 1) {
+          await _usePin(settings);
+          return;
+        }
+        if (settings.hasAppLockPin && !await showPinCheck()) return;
+        if (!await AppLockService.isAvailable()) {
+          if (context.mounted) {
+            AppSnackbar.warning(context, context.l10n.app_lock_unavailable);
+          }
+          return;
+        }
+        if (!await AppLockService.authenticate(reason)) return;
+        await settings.setAppLockMode(0);
+      },
+    );
+  }
+
+  static Future<void> changePin() async {
+    if (!await showPinCheck()) return;
+    await showPinSetup();
+  }
+
+  static Future<void> toggleQuietWhenDone(
+    BuildContext context,
+    bool value,
+  ) async {
+    final habits = context.read<HabitsController>();
+    await context.read<SettingsController>().setQuietWhenDone(value);
+    habits.refreshDoneReminders();
   }
 
   static Future<void> shareWithFriend(BuildContext context) async {
@@ -413,6 +477,7 @@ class SettingsActions {
   static Future<void> setVacationAll(BuildContext context, bool on) async {
     final settings = context.read<SettingsController>();
     final habits = context.read<HabitsController>();
+    if (on == settings.vacationAll) return;
     if (!on) {
       await habits.resumeAll(settings.vacationAllIds);
       await settings.setVacationAll(false, const []);

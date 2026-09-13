@@ -149,11 +149,15 @@ class Habit {
 
   final int difficulty;
 
-  int get difficultyWeight => switch (difficulty) {
-        1 => 1,
-        3 => 3,
-        _ => 2,
-      };
+  static bool weighDifficulty = false;
+
+  int get difficultyWeight => !weighDifficulty
+      ? 2
+      : switch (difficulty) {
+          1 => 1,
+          3 => 3,
+          _ => 2,
+        };
 
   bool silencesRemindersOn(DateTime date) =>
       kind != HabitKind.negative && isCompletedOn(date);
