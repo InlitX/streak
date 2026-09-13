@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
@@ -69,6 +70,7 @@ class FocusController extends ChangeNotifier {
   int _focusMinutes = 25;
   int _breakMinutes = 0;
   bool _isBreak = false;
+  bool _soundOnBreak = false;
   int _round = 1;
   bool _open = false;
   int _accumulated = 0;
@@ -245,6 +247,7 @@ class FocusController extends ChangeNotifier {
     _tasks.clear();
     _celebrated = false;
     _isBreak = false;
+    _soundOnBreak = false;
     _breakMinutes = 0;
     _round = 1;
     _open = false;
@@ -297,6 +300,17 @@ class FocusController extends ChangeNotifier {
     _persist();
     _sync();
     notifyListeners();
+    await _holdSound();
+  }
+
+  Future<void> _holdSound() async {
+    if (_isBreak) {
+      _soundOnBreak = FocusAudio.playing.value;
+      if (_soundOnBreak) await FocusAudio.pause();
+    } else if (_soundOnBreak) {
+      _soundOnBreak = false;
+      await FocusAudio.resume();
+    }
   }
 
   void _startTicker() {

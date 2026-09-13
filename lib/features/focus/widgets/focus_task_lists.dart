@@ -90,7 +90,7 @@ class _FocusTaskListState extends State<FocusTaskList> {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
+    final today = AppClock.now();
     final checked =
         widget.habit.completions[today.dayKey]?.steps ?? const <String>{};
     final habits = context.read<HabitsController>();

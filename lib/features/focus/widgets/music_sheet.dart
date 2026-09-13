@@ -85,12 +85,20 @@ class _MusicSheet extends StatelessWidget {
                   ),
                 ),
                 _ModeToggle(
-                  shuffle: settings.focusShuffle,
-                  onChanged: (value) async {
-                    await settings.setFocusShuffle(value);
-                    if (FocusAudio.playing.value) {
-                      await FocusAudio.playQueue(tracks, shuffle: value);
-                    }
+                  mode: settings.focusShuffle
+                      ? 2
+                      : settings.focusRepeatOne
+                          ? 1
+                          : 0,
+                  onChanged: (mode) async {
+                    await settings.setFocusMode(
+                      shuffle: mode == 2,
+                      repeatOne: mode == 1,
+                    );
+                    await FocusAudio.setMode(
+                      shuffle: mode == 2,
+                      repeatOne: mode == 1,
+                    );
                   },
                 ),
               ],
@@ -105,6 +113,7 @@ class _MusicSheet extends StatelessWidget {
                       track: track,
                       tracks: tracks,
                       shuffle: settings.focusShuffle,
+                      repeatOne: settings.focusRepeatOne,
                       onDelete: track.asset
                           ? () => settings.hideTrack(track.id)
                           : () => settings.removeFocusTrack(
@@ -151,18 +160,23 @@ class _MusicSheet extends StatelessWidget {
 }
 
 class _ModeToggle extends StatelessWidget {
-  const _ModeToggle({required this.shuffle, required this.onChanged});
+  const _ModeToggle({required this.mode, required this.onChanged});
 
-  final bool shuffle;
-  final ValueChanged<bool> onChanged;
+  final int mode;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final (icon, label) = switch (mode) {
+      1 => (LucideIcons.repeat1, context.l10n.focus_repeat_one),
+      2 => (LucideIcons.shuffle, context.l10n.focus_shuffle),
+      _ => (LucideIcons.repeat, context.l10n.focus_loop),
+    };
+
     return Semantics(
       button: true,
-      selected: shuffle,
       child: GestureDetector(
-        onTap: () => onChanged(!shuffle),
+        onTap: () => onChanged((mode + 1) % 3),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
@@ -172,14 +186,10 @@ class _ModeToggle extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                shuffle ? LucideIcons.shuffle : LucideIcons.repeat,
-                size: 15,
-                color: context.colors.primary,
-              ),
+              Icon(icon, size: 15, color: context.colors.primary),
               const SizedBox(width: 7),
               Text(
-                shuffle ? context.l10n.focus_shuffle : context.l10n.focus_loop,
+                label,
                 style: sheetLabelStyle(
                   context,
                   size: 12.5,
@@ -199,12 +209,14 @@ class _TrackRow extends StatelessWidget {
     required this.track,
     required this.tracks,
     required this.shuffle,
+    required this.repeatOne,
     required this.onDelete,
   });
 
   final FocusTrack track;
   final List<FocusTrack> tracks;
   final bool shuffle;
+  final bool repeatOne;
   final VoidCallback? onDelete;
 
   @override
@@ -238,6 +250,7 @@ class _TrackRow extends StatelessWidget {
                     await FocusAudio.playQueue(
                       tracks,
                       shuffle: shuffle,
+                      repeatOne: repeatOne,
                       from: track,
                     );
                     await settings.setFocusTrack(track.id);

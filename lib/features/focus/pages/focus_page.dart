@@ -100,6 +100,7 @@ class _FocusPageState extends State<FocusPage> {
       await FocusAudio.playQueue(
         tracks,
         shuffle: settings.focusShuffle,
+        repeatOne: settings.focusRepeatOne,
         from: tracks[index],
       );
     } catch (e) {
@@ -159,7 +160,7 @@ class _FocusPageState extends State<FocusPage> {
     final habit = focus.habitId.isEmpty ? null : habits.byId(focus.habitId);
     final reached = focus.reachedTarget || focus.isFlow;
     final checked =
-        habit?.completions[DateTime.now().dayKey]?.steps ?? const <String>{};
+        habit?.completions[AppClock.now().dayKey]?.steps ?? const <String>{};
     final pending = habit == null
         ? focus.pendingTasks
         : habit.substeps.where((step) => !checked.contains(step.id)).length;
@@ -178,6 +179,7 @@ class _FocusPageState extends State<FocusPage> {
       context: context,
       builder: (dialog) => FocusEndDialog(
         reached: reached,
+        addsTime: habit?.isTimeAmount ?? false,
         lines: lines,
         accent: habit?.color ?? Theme.of(dialog).colorScheme.primary,
       ),
@@ -192,21 +194,21 @@ class _FocusPageState extends State<FocusPage> {
     await NotificationService().cancelFocusEnd();
     if (!mounted) return;
 
-    if (session != null) {
-      final target = habitId.isEmpty ? null : habits.byId(habitId);
-      if (target != null && target.isTimeAmount) {
-        await habits.addProgress(
-          target.id,
-          DateTime.now(),
-          session.seconds / 60,
-        );
-      } else if (completed &&
-          target != null &&
-          target.kind == HabitKind.positive &&
-          !target.isCompletedOn(DateTime.now())) {
-        habits.toggle(target.id, DateTime.now(), fromFocus: true);
+    final target = habitId.isEmpty ? null : habits.byId(habitId);
+    final today = AppClock.now();
+    if (target != null && target.isTimeAmount) {
+      if (session != null) {
+        await habits.addProgress(target.id, today, session.seconds / 60);
       }
-      if (!mounted) return;
+    } else if (completed &&
+        target != null &&
+        target.kind == HabitKind.positive &&
+        !target.isCompletedOn(today)) {
+      habits.toggle(target.id, today, fromFocus: true);
+    }
+    if (!mounted) return;
+
+    if (session != null) {
       AppSnackbar.success(
         context,
         context.l10n.focus_saved(formatHoursShort(session.seconds)),

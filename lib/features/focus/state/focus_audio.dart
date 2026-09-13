@@ -75,6 +75,7 @@ class FocusAudio {
 
   static List<FocusTrack> _queue = const [];
   static bool _shuffle = false;
+  static bool _repeatOne = false;
   static bool _wired = false;
 
   static const maxTracks = 10;
@@ -99,11 +100,11 @@ class FocusAudio {
 
   static Future<void> _advance() async {
     if (_queue.isEmpty) return;
-    if (_queue.length == 1) {
-      await _start(_queue.first);
+    final index = _queue.indexWhere((t) => t.id == current.value);
+    if (_repeatOne || _queue.length == 1) {
+      await _start(_queue[index < 0 ? 0 : index]);
       return;
     }
-    final index = _queue.indexWhere((t) => t.id == current.value);
     final next = _shuffle
         ? _pickRandom(index)
         : (index + 1) % _queue.length;
@@ -121,7 +122,9 @@ class FocusAudio {
 
   static Future<void> _start(FocusTrack track) async {
     _wire();
-    await _player.setReleaseMode(ReleaseMode.stop);
+    await _player.setReleaseMode(
+      _repeatOne ? ReleaseMode.loop : ReleaseMode.stop,
+    );
     await _player.play(track.source);
     current.value = track.id;
     playing.value = true;
@@ -130,14 +133,28 @@ class FocusAudio {
   static Future<void> playQueue(
     List<FocusTrack> tracks, {
     required bool shuffle,
+    required bool repeatOne,
     FocusTrack? from,
   }) async {
     if (tracks.isEmpty) return;
     _queue = tracks;
     _shuffle = shuffle;
+    _repeatOne = repeatOne;
     final start = from ??
         (shuffle ? tracks[_random.nextInt(tracks.length)] : tracks.first);
     await _start(start);
+  }
+
+  static Future<void> setMode({
+    required bool shuffle,
+    required bool repeatOne,
+  }) async {
+    _shuffle = shuffle;
+    _repeatOne = repeatOne;
+    if (current.value.isEmpty) return;
+    await _player.setReleaseMode(
+      repeatOne ? ReleaseMode.loop : ReleaseMode.stop,
+    );
   }
 
   static Future<void> pause() async {

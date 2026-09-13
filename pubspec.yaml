@@ -14,6 +14,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   archive: ^3.6.1
+  crypto: ^3.0.7
   file_picker: ^10.3.7
   fl_chart: ^0.69.2
   flutter_colorpicker: ^1.1.0

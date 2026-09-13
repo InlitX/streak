@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/app/app_lock_pin.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -70,6 +71,8 @@ class SettingsController extends ChangeNotifier {
     _todayOnly = LocalStore.setting('todayOnly', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
     _trackingOption = LocalStore.setting('trackingOption', false);
+    _showTodayProgress = LocalStore.setting('showTodayProgress', true);
+    _quietWhenDone = LocalStore.setting('quietWhenDone', true);
     _islandEnabled = LocalStore.setting('islandEnabled', true);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
@@ -81,6 +84,7 @@ class SettingsController extends ChangeNotifier {
     _focusTracks =
         List<String>.from(LocalStore.setting('focusTracks', const <String>[]));
     _focusShuffle = LocalStore.setting('focusShuffle', false);
+    _focusRepeatOne = LocalStore.setting('focusRepeatOne', false);
     _focusMinutes = LocalStore.setting('focusMinutes', 25);
     _focusBreakMinutes = LocalStore.setting('focusBreakMinutes', 0);
     _focusTrack = LocalStore.setting('focusTrack', '');
@@ -141,6 +145,8 @@ class SettingsController extends ChangeNotifier {
   late bool _notesEnabled;
   late bool _islandEnabled;
   late bool _trackingOption;
+  late bool _showTodayProgress;
+  late bool _quietWhenDone;
   late int _quoteSource;
   late List<String> _customQuotes;
   late bool _focusEnabled;
@@ -149,6 +155,7 @@ class SettingsController extends ChangeNotifier {
   late String _focusImage;
   late List<String> _focusTracks;
   late bool _focusShuffle;
+  late bool _focusRepeatOne;
   late int _focusMinutes;
   late int _focusBreakMinutes;
   late String _focusTrack;
@@ -323,6 +330,7 @@ class SettingsController extends ChangeNotifier {
   }
   List<String> get focusTracks => List.unmodifiable(_focusTracks);
   bool get focusShuffle => _focusShuffle;
+  bool get focusRepeatOne => _focusRepeatOne;
   int get focusMinutes => _focusMinutes;
   int get focusBreakMinutes => _focusBreakMinutes;
   String get focusTrack => _focusTrack;
@@ -518,9 +526,14 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setFocusShuffle(bool value) async {
-    _focusShuffle = value;
-    await LocalStore.writeSetting('focusShuffle', value);
+  Future<void> setFocusMode({
+    required bool shuffle,
+    required bool repeatOne,
+  }) async {
+    _focusShuffle = shuffle;
+    _focusRepeatOne = repeatOne;
+    await LocalStore.writeSetting('focusShuffle', shuffle);
+    await LocalStore.writeSetting('focusRepeatOne', repeatOne);
     notifyListeners();
   }
 
@@ -543,6 +556,35 @@ class SettingsController extends ChangeNotifier {
   Future<void> setTrackingOption(bool value) async {
     _trackingOption = value;
     await LocalStore.writeSetting('trackingOption', value);
+    notifyListeners();
+  }
+
+  bool get showTodayProgress => _showTodayProgress;
+
+  Future<void> setShowTodayProgress(bool value) async {
+    _showTodayProgress = value;
+    await LocalStore.writeSetting('showTodayProgress', value);
+    notifyListeners();
+  }
+
+  bool get quietWhenDone => _quietWhenDone;
+
+  Future<void> setQuietWhenDone(bool value) async {
+    _quietWhenDone = value;
+    await LocalStore.writeSetting('quietWhenDone', value);
+    notifyListeners();
+  }
+
+  bool get hasAppLockPin => AppLockPin.isSet;
+
+  Future<String> saveAppLockPin(String pin) async {
+    final code = await AppLockPin.save(pin);
+    notifyListeners();
+    return code;
+  }
+
+  Future<void> clearAppLockPin() async {
+    await AppLockPin.clear();
     notifyListeners();
   }
 

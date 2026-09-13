@@ -10,9 +10,11 @@ class FocusEndDialog extends StatelessWidget {
     required this.reached,
     required this.lines,
     required this.accent,
+    this.addsTime = false,
   });
 
   final bool reached;
+  final bool addsTime;
   final List<String> lines;
   final Color accent;
 
@@ -57,7 +59,9 @@ class FocusEndDialog extends StatelessWidget {
             if (!reached) ...[
               _FocusDialogButton(
                 icon: LucideIcons.circleCheck,
-                label: context.l10n.focus_end_complete,
+                label: addsTime
+                    ? context.l10n.focus_end_add_time
+                    : context.l10n.focus_end_complete,
                 background: color,
                 foreground: color.computeLuminance() > 0.6
                     ? Colors.black
