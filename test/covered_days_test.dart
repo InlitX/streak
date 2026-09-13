@@ -131,10 +131,11 @@ void main() {
     });
 
     test('the streak still only counts weeks that met the target', () {
+      final last = monday.addDays(-7);
       final habit = _habit(
         interval: HabitInterval.weekly,
         frequency: 3,
-        done: [monday, monday.addDays(1), monday.addDays(2)],
+        done: [last, last.addDays(1), last.addDays(2)],
       );
       expect(habit.currentStreak, 1);
     });
