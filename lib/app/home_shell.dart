@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -12,8 +14,11 @@ import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/minimal/minimal_nav.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/today_intro.dart';
@@ -31,7 +36,7 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
-enum _Tab { today, todos, stats, settings }
+enum _Tab { today, todos, plan, stats, settings }
 
 final _paneTab = ValueNotifier(_Tab.today);
 
@@ -61,6 +66,10 @@ class _HomeShellState extends State<HomeShell>
       value: 1,
     );
     WidgetsBinding.instance.addObserver(this);
+    final focus = context.read<FocusController>();
+    final habits = context.read<HabitsController>();
+    focus.onRoundSaved =
+        (session) => unawaited(countFocusTime(habits, focus, session));
   }
 
   @override
@@ -125,6 +134,23 @@ class _HomeShellState extends State<HomeShell>
     _select(tabs, tabs[next]);
   }
 
+  void _back(List<_Tab> tabs, _Tab current) {
+    if (BackHandlers.handle()) return;
+    if (current != _Tab.today) {
+      _select(tabs, _Tab.today);
+      return;
+    }
+    SystemNavigator.pop();
+  }
+
+  Widget _guard(List<_Tab> tabs, _Tab current, Widget child) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _back(tabs, current);
+        },
+        child: child,
+      );
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -141,19 +167,29 @@ class _HomeShellState extends State<HomeShell>
     final settings = context.watch<SettingsController>();
     final wide = isWideLayout(context);
     final minimal = settings.isMinimalStyle;
-    if (minimal && !wide) return const Scaffold(body: HomePage());
+    if (minimal && !wide) {
+      return _guard(
+        const [_Tab.today],
+        _Tab.today,
+        const Scaffold(body: HomePage()),
+      );
+    }
     final scheme = Theme.of(context).colorScheme;
     final express = settings.isExpressStyle;
     final tabs = [
       _Tab.today,
       if (settings.todosEnabled) _Tab.todos,
+      if (settings.planningEnabled) _Tab.plan,
       _Tab.stats,
       _Tab.settings,
     ];
     final current = tabs.contains(_tab) ? _tab : _Tab.today;
 
     if (wide) {
-      return _SplitScaffold(
+      return _guard(
+        tabs,
+        current,
+        _SplitScaffold(
         full: current == _Tab.stats,
         rail: _rail(context, tabs, current, settings.appStyle),
         page: FadeTransition(
@@ -166,10 +202,14 @@ class _HomeShellState extends State<HomeShell>
             ],
           ),
         ),
+      ),
       );
     }
 
-    return Scaffold(
+    return _guard(
+      tabs,
+      current,
+      Scaffold(
       body: Stack(
         children: [
           GestureDetector(
@@ -233,6 +273,7 @@ class _HomeShellState extends State<HomeShell>
                         icon: _iconOf(tab),
                         label: _labelOf(context, tab),
                         selected: tab == current,
+                        dense: tabs.length > 4,
                         onTap: () => _select(tabs, tab),
                       ),
                   ],
@@ -242,6 +283,7 @@ class _HomeShellState extends State<HomeShell>
           ),
         ],
       ),
+    ),
     );
   }
 }
@@ -249,6 +291,7 @@ class _HomeShellState extends State<HomeShell>
 Widget _pageOf(_Tab tab) => switch (tab) {
       _Tab.today => const HomePage(),
       _Tab.todos => const TodosPage(),
+      _Tab.plan => const DayTimelinePage(),
       _Tab.stats => const StatisticsPage(),
       _Tab.settings => const SettingsPage(),
     };
@@ -256,6 +299,7 @@ Widget _pageOf(_Tab tab) => switch (tab) {
 IconData _iconOf(_Tab tab) => switch (tab) {
       _Tab.today => LucideIcons.house,
       _Tab.todos => LucideIcons.listChecks,
+      _Tab.plan => LucideIcons.calendarClock,
       _Tab.stats => LucideIcons.chartColumn,
       _Tab.settings => LucideIcons.settings,
     };
@@ -263,6 +307,7 @@ IconData _iconOf(_Tab tab) => switch (tab) {
 String _labelOf(BuildContext context, _Tab tab) => switch (tab) {
       _Tab.today => context.l10n.today,
       _Tab.todos => context.l10n.todos,
+      _Tab.plan => context.l10n.plan_tab,
       _Tab.stats => context.l10n.stats,
       _Tab.settings => context.l10n.settings,
     };
@@ -273,12 +318,14 @@ class _NavItem extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.dense = false,
   });
 
   final IconData icon;
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final bool dense;
 
   @override
   Widget build(BuildContext context) {
@@ -295,13 +342,13 @@ class _NavItem extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: EdgeInsets.symmetric(horizontal: dense ? 2 : 4),
           child: Center(
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 320),
               curve: Curves.easeOutCubic,
               padding: EdgeInsets.symmetric(
-                horizontal: selected ? 18 : 16,
+                horizontal: dense ? (selected ? 13 : 11) : (selected ? 18 : 16),
                 vertical: 10,
               ),
               decoration: BoxDecoration(
@@ -325,7 +372,8 @@ class _NavItem extends StatelessWidget {
                           ? Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 88),
+                                constraints:
+                                    BoxConstraints(maxWidth: dense ? 72 : 88),
                                 child: Text(
                                   label,
                                   maxLines: 1,

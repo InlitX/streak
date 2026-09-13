@@ -20,11 +20,15 @@ class ExpressTodayHero extends StatelessWidget {
     required this.habits,
     required this.done,
     required this.total,
+    required this.ratio,
+    required this.showProgress,
   });
 
   final List<Habit> habits;
   final int done;
   final int total;
+  final double ratio;
+  final bool showProgress;
 
   String _greeting(BuildContext context) {
     final hour = AppClock.now().hour;
@@ -42,7 +46,6 @@ class ExpressTodayHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = context.colors;
-    final ratio = total == 0 ? 0.0 : done / total;
     final allDone = total > 0 && done == total;
 
     var streak = 0;
@@ -87,10 +90,13 @@ class ExpressTodayHero extends StatelessWidget {
                 ],
               ),
             ),
+            if (showProgress) ...[
             const SizedBox(width: 12),
             _CountLine(done: done, total: total),
+            ],
           ],
         ),
+        if (showProgress) ...[
         const SizedBox(height: 12),
         ExpressCard(
           radius: 26,
@@ -140,6 +146,7 @@ class ExpressTodayHero extends StatelessWidget {
             ],
           ),
         ),
+        ],
         const SizedBox(height: 10),
         const DailyQuote(),
       ],
@@ -300,6 +307,8 @@ class ExpressTodayHeader extends StatelessWidget {
     required this.habits,
     required this.done,
     required this.total,
+    required this.ratio,
+    required this.showProgress,
     required this.mode,
     required this.onMode,
     required this.showModes,
@@ -311,6 +320,8 @@ class ExpressTodayHeader extends StatelessWidget {
   final List<Habit> habits;
   final int done;
   final int total;
+  final double ratio;
+  final bool showProgress;
   final HeatmapMode mode;
   final ValueChanged<HeatmapMode> onMode;
   final bool showModes;
@@ -323,7 +334,13 @@ class ExpressTodayHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ExpressTodayHero(habits: habits, done: done, total: total),
+        ExpressTodayHero(
+          habits: habits,
+          done: done,
+          total: total,
+          ratio: ratio,
+          showProgress: showProgress,
+        ),
         if (showModes) ...[
           const SizedBox(height: 18),
           ExpressTabs(

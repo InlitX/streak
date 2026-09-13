@@ -12,12 +12,12 @@ class TodayProgress extends StatefulWidget {
     super.key,
     required this.done,
     required this.total,
+    required this.ratio,
   });
 
   final int done;
   final int total;
-
-  double get _ratio => total == 0 ? 0 : done / total;
+  final double ratio;
 
   @override
   State<TodayProgress> createState() => _TodayProgressState();
@@ -43,9 +43,9 @@ class _TodayProgressState extends State<TodayProgress>
     super.initState();
     TodayIntro.tick.addListener(_replay);
     if (TodayIntro.claim(TodayProgress)) {
-      _animateTo(widget._ratio, from: 0, ms: _introMs);
+      _animateTo(widget.ratio, from: 0, ms: _introMs);
     } else {
-      _tween = Tween(begin: widget._ratio, end: widget._ratio);
+      _tween = Tween(begin: widget.ratio, end: widget.ratio);
       _controller.value = 1;
     }
   }
@@ -53,8 +53,8 @@ class _TodayProgressState extends State<TodayProgress>
   @override
   void didUpdateWidget(TodayProgress oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget._ratio != oldWidget._ratio) {
-      _animateTo(widget._ratio, from: _shown, ms: _updateMs);
+    if (widget.ratio != oldWidget.ratio) {
+      _animateTo(widget.ratio, from: _shown, ms: _updateMs);
     }
   }
 
@@ -68,7 +68,7 @@ class _TodayProgressState extends State<TodayProgress>
 
   void _replay() {
     if (!mounted || !TodayIntro.claim(TodayProgress)) return;
-    _animateTo(widget._ratio, from: 0, ms: _introMs);
+    _animateTo(widget.ratio, from: 0, ms: _introMs);
   }
 
   void _animateTo(double value, {required double from, required int ms}) {

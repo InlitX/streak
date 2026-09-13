@@ -159,12 +159,15 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     final style = context.watch<SettingsController>();
     final express = style.isExpressStyle;
     final minimal = style.isMinimalStyle;
+    final pushed = ModalRoute.of(context)?.canPop ?? false;
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: express ? 60 : null,
-        leadingWidth: express ? 68 : null,
-        leading: express
+        leadingWidth: express && pushed ? 68 : null,
+        leading: !pushed
+            ? null
+            : express
             ? Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Center(child: ExpressIconButton(
@@ -232,7 +235,8 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                         message: context.l10n.day_timeline_empty_sub,
                       )
                     : ListView(
-                        padding: context.pagePadding(16, 8, 16, 28),
+                        padding:
+                            context.pagePadding(16, 8, 16, pushed ? 28 : 148),
                         children: _rows(context, plan),
                       ),
               ),

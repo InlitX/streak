@@ -12,6 +12,7 @@ import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/widgets/sheet_action.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
@@ -71,15 +72,23 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final saved = context.read<SettingsController>().openingMode;
     _mode = HeatmapMode.values[saved.clamp(0, 2)];
+    BackHandlers.add(_backOut);
   }
 
   @override
   void dispose() {
+    BackHandlers.remove(_backOut);
     for (final timer in _timers.values) {
       timer.cancel();
     }
     _confetti.dispose();
     super.dispose();
+  }
+
+  bool _backOut() {
+    if (!_reordering || !BackHandlers.isVisible(context)) return false;
+    setState(() => _reordering = false);
+    return true;
   }
 
   final _coins = ValueNotifier<int>(0);
@@ -256,7 +265,6 @@ class _HomePageState extends State<HomePage> {
     final express = settings.isExpressStyle;
     final wide = isWideLayout(context);
     final railed = minimal && wide;
-    final tight = !minimal && !express && settings.planningEnabled;
     final bigText = MediaQuery.textScalerOf(context).scale(14) > 20;
     return Scaffold(
       floatingActionButton: express && !_reordering
@@ -290,7 +298,7 @@ class _HomePageState extends State<HomePage> {
               )
             : null,
         actions: [
-          if (!_reordering && settings.planningEnabled)
+          if (minimal && !railed && !_reordering && settings.planningEnabled)
             IconButton(
               tooltip: context.l10n.day_timeline,
               icon: const Icon(LucideIcons.calendarClock, size: 22),
@@ -319,7 +327,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           if (!_reordering)
-            FocusPill(compact: minimal || express, dense: tight),
+            FocusPill(compact: minimal || express),
           if (minimal && !railed && !_reordering && settings.todosEnabled)
             IconButton(
               tooltip: context.l10n.todos,
@@ -363,18 +371,18 @@ class _HomePageState extends State<HomePage> {
                           const HabitFormPage(),
                           fullscreenDialog: true,
                         ),
-                        icon: Icon(LucideIcons.plus, size: tight ? 15 : 16),
+                        icon: const Icon(LucideIcons.plus, size: 16),
                         label: Text(
                           context.l10n.new_label,
-                          style: TextStyle(
-                            fontSize: tight ? 12.5 : 13.5,
+                          style: const TextStyle(
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         style: FilledButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: tight ? 9 : 12,
-                            vertical: tight ? 7 : 8,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
                           ),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -398,10 +406,17 @@ class _HomePageState extends State<HomePage> {
                   .where((h) => !h.isPausedOn(today) && h.isScheduledOn(today))
                   .toList();
               final counted = active.where((h) => !h.tracking).toList();
-              final done = counted
+              final finished = counted
                   .where((h) => h.isCompletedOn(today) || h.isCoveredOn(today))
-                  .length;
+                  .toList();
+              final done = finished.length;
               final total = counted.length;
+              final weight =
+                  counted.fold<int>(0, (sum, h) => sum + h.difficultyWeight);
+              final ratio = weight == 0
+                  ? 0.0
+                  : finished.fold<int>(0, (sum, h) => sum + h.difficultyWeight) /
+                      weight;
 
               final categories = _categoriesOf(all);
               if (_category != null && !categories.contains(_category)) {
@@ -426,6 +441,8 @@ class _HomePageState extends State<HomePage> {
                       habits: active,
                       done: done,
                       total: total,
+                      ratio: ratio,
+                      showProgress: settings.showTodayProgress,
                       mode: _mode,
                       onMode: _changeMode,
                       showModes:
@@ -439,11 +456,12 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         if (!minimal) const DailyQuote(),
                         if (!minimal) const SizedBox(height: 8),
-                        if (!minimal) TodayProgress(done: done, total: total),
+                        if (!minimal && settings.showTodayProgress)
+                          TodayProgress(done: done, total: total, ratio: ratio),
                         if (!minimal &&
                             settings.cardActivity &&
                             settings.viewSwitcher) ...[
-                          const SizedBox(height: 20),
+                          SizedBox(height: settings.showTodayProgress ? 20 : 6),
                           _ViewSelector(mode: _mode, onChanged: _changeMode),
                         ],
                         if (categories.isNotEmpty) ...[

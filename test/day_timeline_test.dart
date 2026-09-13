@@ -123,13 +123,13 @@ void main() {
     expect(find.byIcon(LucideIcons.calendarClock), findsNothing);
   });
 
-  testWidgets('Today shows the day button once planning is on',
+  testWidgets('Minimal shows the day button on Today once planning is on',
       (tester) async {
     await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
     await pumpScreen(
       tester,
       const HomePage(),
-      settings: {'planningEnabled': true},
+      settings: {'planningEnabled': true, 'appStyle': 1},
     );
 
     expect(find.byIcon(LucideIcons.calendarClock), findsOneWidget);
