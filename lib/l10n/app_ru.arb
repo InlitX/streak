@@ -1081,5 +1081,12 @@
   "pin_recovered": "Блокировка снята. Новый PIN можно задать в настройках.",
   "pin_change": "Сменить PIN",
   "pin_remove": "Удалить PIN",
-  "pin_fingerprint": "Отпечаток пальца"
+  "pin_fingerprint": "Отпечаток пальца",
+  "app_lock_method": "Разблокировка",
+  "app_lock_biometric": "Отпечаток или лицо",
+  "difficulty_option": "Сложность привычек",
+  "difficulty_option_sub": "Сложные привычки весят больше в прогрессе дня",
+  "todo_save_another": "Сохранить и добавить ещё",
+  "todo_add_subtask": "Добавить подзадачу",
+  "pin_paste": "Вставить код"
 }

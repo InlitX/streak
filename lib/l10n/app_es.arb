@@ -971,5 +971,12 @@
   "pin_recovered": "Bloqueo quitado. Puedes poner otro PIN en Ajustes.",
   "pin_change": "Cambiar PIN",
   "pin_remove": "Quitar PIN",
-  "pin_fingerprint": "Usar huella"
+  "pin_fingerprint": "Usar huella",
+  "app_lock_method": "Desbloquear con",
+  "app_lock_biometric": "Huella o cara",
+  "difficulty_option": "Dificultad de los hábitos",
+  "difficulty_option_sub": "Que los hábitos difíciles cuenten más en el progreso del día",
+  "todo_save_another": "Guardar y crear otra",
+  "todo_add_subtask": "Añadir subtarea",
+  "pin_paste": "Pegar código"
 }

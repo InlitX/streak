@@ -1150,5 +1150,12 @@
   "pin_recovered": "Lock turned off. You can set a new PIN in Settings.",
   "pin_change": "Change PIN",
   "pin_remove": "Remove PIN",
-  "pin_fingerprint": "Use fingerprint"
+  "pin_fingerprint": "Use fingerprint",
+  "app_lock_method": "Unlock with",
+  "app_lock_biometric": "Fingerprint or face",
+  "difficulty_option": "Habit difficulty",
+  "difficulty_option_sub": "Let harder habits count for more in the day's progress",
+  "todo_save_another": "Save and add another",
+  "todo_add_subtask": "Add subtask",
+  "pin_paste": "Paste code"
 }

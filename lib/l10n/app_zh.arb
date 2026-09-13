@@ -1100,5 +1100,12 @@
   "pin_recovered": "已关闭锁定。可在设置中重新设置 PIN。",
   "pin_change": "修改 PIN",
   "pin_remove": "移除 PIN",
-  "pin_fingerprint": "使用指纹"
+  "pin_fingerprint": "使用指纹",
+  "app_lock_method": "解锁方式",
+  "app_lock_biometric": "指纹或面部",
+  "difficulty_option": "习惯难度",
+  "difficulty_option_sub": "让更难的习惯在当天进度中占比更高",
+  "todo_save_another": "保存并继续添加",
+  "todo_add_subtask": "添加子任务",
+  "pin_paste": "粘贴恢复码"
 }
