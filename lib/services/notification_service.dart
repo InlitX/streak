@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -203,9 +204,52 @@ class NotificationService {
     }
     final streak = habit.currentStreak;
     if (streak > 0) {
-      body = '$body\n${strings.notif_streak('$streak')}';
+      final line = switch (habit.interval) {
+        HabitInterval.weekly => strings.notif_streak_week('$streak'),
+        HabitInterval.monthly => strings.notif_streak_month('$streak'),
+        _ => strings.notif_streak('$streak'),
+      };
+      body = '$body\n$line';
     }
     return body;
+  }
+
+  bool _quietToday(Habit habit) =>
+      LocalStore.setting('quietWhenDone', true) &&
+      habit.silencesRemindersOn(AppClock.now());
+
+  tz.TZDateTime _firstMoment(Habit habit) {
+    final now = tz.TZDateTime.now(tz.local);
+    if (!_quietToday(habit)) return now;
+    final today = AppClock.today();
+    final tomorrow = tz.TZDateTime(
+      tz.local,
+      today.year,
+      today.month,
+      today.day + 1,
+      AppClock.cutoffHour,
+    );
+    return tomorrow.isAfter(now) ? tomorrow : now;
+  }
+
+  Future<void> dismissShown(Habit habit) async {
+    if (!Platform.isAndroid || !_quietToday(habit)) return;
+    try {
+      final shown = await _plugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.getActiveNotifications();
+      final ids = [
+        for (final notification in shown ?? const <ActiveNotification>[])
+          if (notification.id != null && notification.payload == habit.id)
+            notification.id!,
+      ];
+      if (ids.isEmpty) return;
+      await const MethodChannel('streak/app_icon')
+          .invokeMethod('dismissNotifications', {'ids': ids});
+    } catch (e) {
+      debugPrint('Could not dismiss the reminders of ${habit.name}: $e');
+    }
   }
 
   Future<Set<int>> _scheduleHourly(Habit habit, Reminder reminder, String body,
@@ -216,7 +260,7 @@ class NotificationService {
       minute: reminder.minute,
       everyHours: reminder.everyHours,
     );
-    final now = tz.TZDateTime.now(tz.local);
+    final from = _firstMoment(habit);
 
     for (final day in reminder.days) {
       if (!habit.ringsOnWeekday(day)) continue;
@@ -224,7 +268,7 @@ class NotificationService {
         final id = ReminderSchedule.hourlyId(habit.id, reminder.id, day, slot);
         ids.add(id);
         final next = ReminderSchedule.nextWeekly(
-          now: now,
+          now: from,
           weekday: day,
           hour: slots[slot] ~/ 60,
           minute: slots[slot] % 60,
@@ -251,9 +295,8 @@ class NotificationService {
       if (!habit.ringsOnWeekday(day)) continue;
       final id = _notificationId(habit.id, reminder.id, day);
       ids.add(id);
-      final now = tz.TZDateTime.now(tz.local);
       final next = ReminderSchedule.nextWeekly(
-        now: now,
+        now: _firstMoment(habit),
         weekday: day,
         hour: reminder.hour,
         minute: reminder.minute,
@@ -296,9 +339,11 @@ class NotificationService {
       first = first.add(Duration(days: every));
     }
 
+    final from = _firstMoment(habit);
     final ids = <int>{};
     for (var i = 0; i < _intervalWindow; i++) {
       final when = first.add(Duration(days: every * i));
+      if (when.isBefore(from)) continue;
       if (!habit.ringsOnWeekday(when.weekday)) continue;
       final id = _notificationId(habit.id, reminder.id, i);
       ids.add(id);
@@ -572,6 +617,10 @@ class NotificationActions {
 
       await LocalStore.writeHabit(updated);
       habits[habitId] = updated;
+      if (habit.silencesRemindersOn(today) !=
+          updated.silencesRemindersOn(today)) {
+        await NotificationService().scheduleFor(updated);
+      }
       await HomeWidgetService.sync(habits, renderIcons: false);
     } catch (e) {
       debugPrint('Notification action failed: $e');

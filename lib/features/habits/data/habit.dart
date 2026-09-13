@@ -32,6 +32,8 @@ extension HabitIntervalLabel on HabitInterval {
       this == HabitInterval.weekdays || this == HabitInterval.everyXDays;
 }
 
+enum ScheduleUnit { days, weeks, months }
+
 enum HabitKind { positive, negative, quantitative }
 
 enum QuantKind { generic, water, reading, time }
@@ -51,8 +53,10 @@ class Habit {
     this.targetFrequency = 1,
     this.scheduleWeekdays = const [],
     this.scheduleEvery = 2,
+    this.scheduleUnit = ScheduleUnit.days,
     this.reminders = const [],
     this.coverPath = '',
+    this.coverClarity = 100,
     this.kind = HabitKind.positive,
     this.dailyCost = 0,
     this.unitLabel = '',
@@ -63,6 +67,7 @@ class Habit {
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
     this.tracking = false,
+    this.difficulty = 0,
     this.startMinute = -1,
     this.durationMinutes = 0,
     this.substeps = const [],
@@ -89,6 +94,14 @@ class Habit {
 
   final int scheduleEvery;
 
+  final ScheduleUnit scheduleUnit;
+
+  int get scheduleSpanDays => switch (scheduleUnit) {
+        ScheduleUnit.days => scheduleEvery,
+        ScheduleUnit.weeks => scheduleEvery * 7,
+        ScheduleUnit.months => scheduleEvery * 31,
+      };
+
   final List<Reminder> reminders;
 
   bool isScheduledOn(DateTime date) {
@@ -97,8 +110,18 @@ class Habit {
         return scheduleWeekdays.contains(date.weekday);
       case HabitInterval.everyXDays:
         if (scheduleEvery <= 0) return false;
-        final diff = date.atMidnight.epochDay - createdAt.atMidnight.epochDay;
-        return diff >= 0 && diff % scheduleEvery == 0;
+        final day = date.atMidnight;
+        final start = createdAt.atMidnight;
+        if (day.isBefore(start)) return false;
+        if (scheduleUnit == ScheduleUnit.months) {
+          final months =
+              (day.year - start.year) * 12 + day.month - start.month;
+          if (months < 0 || months % scheduleEvery != 0) return false;
+          final last = DateTime(day.year, day.month + 1, 0).day;
+          return day.day == (start.day <= last ? start.day : last);
+        }
+        final diff = day.epochDay - start.epochDay;
+        return diff % scheduleSpanDays == 0;
       case HabitInterval.daily:
       case HabitInterval.weekly:
       case HabitInterval.monthly:
@@ -107,6 +130,7 @@ class Habit {
   }
 
   final String coverPath;
+  final int coverClarity;
   final DateTime createdAt;
 
   final HabitKind kind;
@@ -122,6 +146,17 @@ class Habit {
   final bool focusOnly;
 
   final bool tracking;
+
+  final int difficulty;
+
+  int get difficultyWeight => switch (difficulty) {
+        1 => 1,
+        3 => 3,
+        _ => 2,
+      };
+
+  bool silencesRemindersOn(DateTime date) =>
+      kind != HabitKind.negative && isCompletedOn(date);
 
   final int startMinute;
   final int durationMinutes;
@@ -182,13 +217,15 @@ class Habit {
       isCompletedOn(date) || _doneAheadOf(date);
 
   bool _doneAheadOf(DateTime date) {
-    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
+    final span = scheduleSpanDays;
+    if (interval != HabitInterval.everyXDays || span <= 1) return false;
     final floor = startedAt;
     var cursor = date.atMidnight;
-    for (var step = 1; step < scheduleEvery; step++) {
+    for (var step = 1; step < span; step++) {
       cursor = cursor.addDays(-1);
       if (cursor.isBefore(floor)) return false;
       if (isCompletedOn(cursor)) return true;
+      if (isScheduledOn(cursor)) return false;
     }
     return false;
   }
@@ -223,10 +260,11 @@ class Habit {
       if (isPausedOn(cursor) || isCompletedOn(cursor)) return false;
       return (_periodDone[_periodOf(cursor)] ?? 0) >= targetFrequency;
     }
-    if (interval != HabitInterval.everyXDays || scheduleEvery <= 1) return false;
+    final span = scheduleSpanDays;
+    if (interval != HabitInterval.everyXDays || span <= 1) return false;
     if (isScheduledOn(cursor)) return false;
     final floor = startedAt;
-    for (var step = 1; step < scheduleEvery; step++) {
+    for (var step = 1; step < span; step++) {
       cursor = cursor.addDays(-1);
       if (cursor.isBefore(floor)) return false;
       if (isCompletedOn(cursor)) return true;
@@ -259,6 +297,9 @@ class Habit {
     }
     return entry.count >= perDayTarget;
   }
+
+  bool isRelapseOn(DateTime date) =>
+      kind == HabitKind.negative && completions.containsKey(date.dayKey);
 
   bool get hasCost => kind == HabitKind.negative && dailyCost > 0;
 
@@ -570,8 +611,10 @@ class Habit {
     int? targetFrequency,
     List<int>? scheduleWeekdays,
     int? scheduleEvery,
+    ScheduleUnit? scheduleUnit,
     List<Reminder>? reminders,
     String? coverPath,
+    int? coverClarity,
     HabitKind? kind,
     double? dailyCost,
     String? unitLabel,
@@ -582,6 +625,7 @@ class Habit {
     int? focusBreakMinutes,
     bool? focusOnly,
     bool? tracking,
+    int? difficulty,
     int? startMinute,
     int? durationMinutes,
     List<Substep>? substeps,
@@ -605,8 +649,10 @@ class Habit {
       targetFrequency: targetFrequency ?? this.targetFrequency,
       scheduleWeekdays: scheduleWeekdays ?? this.scheduleWeekdays,
       scheduleEvery: scheduleEvery ?? this.scheduleEvery,
+      scheduleUnit: scheduleUnit ?? this.scheduleUnit,
       reminders: reminders ?? this.reminders,
       coverPath: coverPath ?? this.coverPath,
+      coverClarity: coverClarity ?? this.coverClarity,
       kind: kind ?? this.kind,
       dailyCost: dailyCost ?? this.dailyCost,
       unitLabel: unitLabel ?? this.unitLabel,
@@ -616,6 +662,7 @@ class Habit {
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
       tracking: tracking ?? this.tracking,
+      difficulty: difficulty ?? this.difficulty,
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       startMinute: startMinute ?? this.startMinute,
       durationMinutes: durationMinutes ?? this.durationMinutes,
@@ -642,8 +689,10 @@ class Habit {
         'targetFrequency': targetFrequency,
         'scheduleWeekdays': scheduleWeekdays,
         'scheduleEvery': scheduleEvery,
+        'scheduleUnit': scheduleUnit.index,
         'reminders': reminders.map((r) => r.toMap()).toList(),
         'coverPath': coverPath,
+        'coverClarity': coverClarity,
         'createdAt': createdAt.toIso8601String(),
         'kind': kind.index,
         'dailyCost': dailyCost,
@@ -655,6 +704,7 @@ class Habit {
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
         'tracking': tracking,
+        'difficulty': difficulty,
         'startMinute': startMinute,
         'durationMinutes': durationMinutes,
         'substeps': substeps.map((s) => s.toMap()).toList(),
@@ -687,12 +737,16 @@ class Habit {
                 .toList() ??
             const [],
         scheduleEvery: (map['scheduleEvery'] ?? 2) as int,
+        scheduleUnit: ScheduleUnit.values[((map['scheduleUnit'] ?? 0) as num)
+            .toInt()
+            .clamp(0, ScheduleUnit.values.length - 1)],
         reminders: map['reminders'] == null
             ? const []
             : (map['reminders'] as List)
                 .map((r) => Reminder.fromMap(Map<String, dynamic>.from(r as Map)))
                 .toList(),
         coverPath: (map['coverPath'] ?? '') as String,
+        coverClarity: ((map['coverClarity'] ?? 100) as num).toInt(),
         createdAt: map['createdAt'] != null
             ? DateTime.tryParse(map['createdAt'] as String)
             : null,
@@ -707,6 +761,7 @@ class Habit {
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
         focusOnly: (map['focusOnly'] ?? false) as bool,
         tracking: (map['tracking'] ?? false) as bool,
+        difficulty: ((map['difficulty'] ?? 0) as num).toInt().clamp(0, 3),
         startMinute: ((map['startMinute'] ?? -1) as num).toInt(),
         durationMinutes: ((map['durationMinutes'] ?? 0) as num).toInt(),
         substeps: map['substeps'] == null

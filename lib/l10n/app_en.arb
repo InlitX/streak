@@ -321,6 +321,42 @@
       }
     }
   },
+  "every_n_weeks": "Every {n} weeks",
+  "@every_n_weeks": {"placeholders": {"n": {"type": "int"}}},
+  "every_n_months": "Every {n} months",
+  "@every_n_months": {"placeholders": {"n": {"type": "int"}}},
+  "sched_unit_days": "Days",
+  "sched_unit_weeks": "Weeks",
+  "sched_unit_months": "Months",
+  "todo_tags": "Tags",
+  "todo_projects": "Projects",
+  "todo_project": "Project",
+  "todo_project_new": "New project",
+  "todo_project_name": "Project name",
+  "todo_project_edit": "Edit project",
+  "todo_project_arrange": "Rearrange",
+  "todo_project_arrange_hint": "Drag the folders where you want them.",
+  "todo_project_pick": "Pick a project",
+  "todo_project_none": "No project",
+  "todo_project_delete_body": "The project goes away. The tasks stay.",
+  "todo_tag": "Tag",
+  "todo_tag_new": "New tag",
+  "todo_tag_name": "Tag name",
+  "todo_tag_edit": "Edit tag",
+  "todo_tag_delete_body": "The tag goes away. The tasks stay.",
+  "todo_tag_none": "No tag",
+  "todo_tag_all": "All",
+  "todo_tag_manage": "Manage tags",
+  "todo_tag_empty_title": "No tags yet",
+  "todo_tag_empty_body": "Group tasks by project, place or whatever you like.",
+  "todo_tag_folders": "Folders",
+  "todo_tag_list": "List",
+  "todo_tag_count": "{n} open",
+  "@todo_tag_count": {"placeholders": {"n": {"type": "int"}}},
+  "todo_tag_icon": "Icon",
+  "todo_tag_pick": "Pick tags",
+  "todo_tag_filtered": "Filtered by {name}",
+  "@todo_tag_filtered": {"placeholders": {"name": {"type": "String"}}},
   "uncategorized": "Uncategorized",
   "more_icons": "More icons",
   "less_icons": "Fewer icons",
@@ -474,6 +510,8 @@
   "todos_enable_sub": "A quick list beside your habits",
   "todo_new": "New to-do",
   "todo_hint": "What needs doing?",
+  "todo_subtasks": "Subtasks",
+  "todo_subtask_hint": "Subtask",
   "todo_empty_title": "Nothing on the list",
   "todo_empty_body": "Jot down what you want to get done over the next few days.",
   "todo_date": "Date",
@@ -548,6 +586,7 @@
   "focus_end_keep": "Keep going",
   "focus_end_anyway": "End anyway",
   "focus_end_complete": "Mark as done",
+  "focus_end_add_time": "Add focused time",
   "focus_amount_added": "{amount} added to {habit}",
   "@focus_end_short": {
     "placeholders": { "time": { "type": "String" } }
@@ -565,6 +604,7 @@
   "focus_add_track": "Add track",
   "focus_shuffle": "Shuffle",
   "focus_loop": "In order",
+  "focus_repeat_one": "Repeat one",
   "focus_track_too_long": "Tracks must be under 20 minutes",
   "focus_track_limit": "Up to 10 tracks",
   "focus_done_title": "Session complete",
@@ -651,7 +691,7 @@
   "@focus_goal_today": {
     "placeholders": { "done": { "type": "String" }, "goal": { "type": "String" } }
   },
-  "notes_hint": "Long-press a day to see or add notes",
+  "notes_hint": "Open a habit and long-press a day on its calendar to see or add notes",
   "app_style": "App style",
   "app_style_sub": "Choose how the whole app looks and feels.",
   "style_classic": "Classic",
@@ -841,6 +881,18 @@
   "widget_demo_water": "Water",
   "notif_streak": "🔥 {streak} day streak",
   "@notif_streak": {
+    "placeholders": {
+      "streak": { "type": "String" }
+    }
+  },
+  "notif_streak_week": "🔥 {streak} week streak",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": { "type": "String" }
+    }
+  },
+  "notif_streak_month": "🔥 {streak} month streak",
+  "@notif_streak_month": {
     "placeholders": {
       "streak": { "type": "String" }
     }
@@ -1067,5 +1119,36 @@
   "heatmap_rolling": "Last 12 months",
   "heatmap_rolling_sub": "The yearly grid ends today instead of on 31 December",
   "check_marks": "{count} marks",
-  "@check_marks": {"placeholders": {"count": {"type": "String"}}}
+  "@check_marks": {"placeholders": {"count": {"type": "String"}}},
+  "today_progress_option": "Progress on Today",
+  "today_progress_option_sub": "The day's ring and the strength bar on each habit",
+  "quiet_when_done": "Quiet once done",
+  "quiet_when_done_sub": "No more reminders today for a habit you already completed",
+  "plan_tab": "Plan",
+  "difficulty": "Difficulty",
+  "difficulty_hint": "Harder habits count for more in the day's progress",
+  "difficulty_easy": "Easy",
+  "difficulty_medium": "Medium",
+  "difficulty_hard": "Hard",
+  "pin_lock": "PIN code",
+  "pin_lock_sub": "Your own code, separate from the phone's lock",
+  "pin_choose": "Choose a PIN",
+  "pin_choose_sub": "4 to 8 digits",
+  "pin_repeat": "Enter it again",
+  "pin_mismatch": "They don't match. Start again.",
+  "pin_enter": "Enter your PIN",
+  "pin_wrong": "Wrong PIN",
+  "pin_wait": "Too many tries. Wait {seconds} s",
+  "@pin_wait": {"placeholders": {"seconds": {"type": "String"}}},
+  "pin_recovery_title": "Your recovery code",
+  "pin_recovery_body": "If you forget the PIN, this code opens Streak and turns the lock off. Keep it somewhere safe: it won't be shown again.",
+  "pin_copy": "Copy code",
+  "pin_copied": "Code copied",
+  "pin_forgot": "Forgot your PIN?",
+  "pin_recovery_hint": "Recovery code",
+  "pin_recovery_wrong": "That code isn't right",
+  "pin_recovered": "Lock turned off. You can set a new PIN in Settings.",
+  "pin_change": "Change PIN",
+  "pin_remove": "Remove PIN",
+  "pin_fingerprint": "Use fingerprint"
 }
