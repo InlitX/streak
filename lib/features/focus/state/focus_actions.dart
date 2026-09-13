@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -21,15 +22,33 @@ Future<void> applyFocusAction(FocusAction action) async {
   final habit = habits.byId(habitId);
   if (habit == null) return;
 
-  final today = AppClock.now();
   if (habit.isTimeAmount) {
-    await habits.addProgress(habit.id, today, session.seconds / 60);
+    await countFocusTime(habits, focus, session);
     return;
   }
 
+  final today = AppClock.now();
   if (!session.completed || habit.kind != HabitKind.positive) return;
   if (habit.isCompletedOn(today)) return;
   habits.toggle(habit.id, today, fromFocus: true);
+}
+
+Future<void> countFocusTime(
+  HabitsController habits,
+  FocusController focus,
+  FocusSession session, {
+  bool undo = false,
+}) async {
+  final habit = habits.byId(session.habitId);
+  if (habit == null || !habit.isTimeAmount) return;
+  if (undo && !session.counted) return;
+  final minutes = session.seconds / 60;
+  await habits.addProgress(
+    habit.id,
+    session.countedOn,
+    undo ? -minutes : minutes,
+  );
+  if (!undo) await focus.markCounted(session.id);
 }
 
 Future<void> drainFocusActions() async {

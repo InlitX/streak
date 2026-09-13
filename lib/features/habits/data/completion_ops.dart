@@ -117,19 +117,27 @@ class CompletionOps {
   ) {
     if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
-    final next = roundAmount((completions[date.dayKey]?.count ?? 0) + delta);
+    final previous = completions[date.dayKey];
+    final next = roundAmount((previous?.count ?? 0) + delta);
     if (next <= 0) {
       completions.remove(date.dayKey);
-    } else {
+    } else if (delta > 0) {
       completions[date.dayKey] = Completion(
         date: date.dayKey,
         count: next,
         hour: AppClock.wallNow().hour,
         minute: AppClock.wallNow().minute,
-        marks: delta > 0
-            ? (completions[date.dayKey]?.plus(_nowMinutes()) ??
-                [_nowMinutes()])
-            : (completions[date.dayKey]?.marks ?? const []),
+        marks: previous?.plus(_nowMinutes()) ?? [_nowMinutes()],
+      );
+    } else {
+      final marks = [...?previous?.marks];
+      if (marks.isNotEmpty) marks.removeLast();
+      completions[date.dayKey] = Completion(
+        date: date.dayKey,
+        count: next,
+        hour: marks.isEmpty ? previous?.hour : marks.last ~/ 60,
+        minute: marks.isEmpty ? previous?.minute : marks.last % 60,
+        marks: marks,
       );
     }
     return completions;

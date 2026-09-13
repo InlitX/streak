@@ -152,54 +152,56 @@ class FocusPomodoroCard extends StatelessWidget {
           if (enabled)
             Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 4, right: 6),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      context.l10n.focus_break,
-                      style: express
-                          ? ExpressType.body.at(
-                              13.5,
-                              weight: 700,
-                              color: context.tokens.muted,
-                            )
-                          : TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: context.tokens.muted,
-                            ),
-                    ),
+                  Text(
+                    context.l10n.focus_break,
+                    style: express
+                        ? ExpressType.body.at(
+                            13.5,
+                            weight: 700,
+                            color: context.tokens.muted,
+                          )
+                        : TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: context.tokens.muted,
+                          ),
                   ),
-                  for (final value in focusBreakPresets) ...[
-                    const SizedBox(width: 8),
-                    FocusChip(
-                      label: context.l10n.minutes_short('$value'),
-                      selected: breakMinutes == value,
-                      onTap: () => onBreakChanged(value),
-                    ),
-                  ],
-                  if (!focusBreakPresets.contains(breakMinutes)) ...[
-                    const SizedBox(width: 8),
-                    FocusChip(
-                      label: context.l10n.minutes_short('$breakMinutes'),
-                      selected: true,
-                      onTap: () {},
-                    ),
-                  ],
-                  const SizedBox(width: 8),
-                  _PencilButton(
-                    onTap: () async {
-                      final value = await showNumberKeypadDialog(
-                        context,
-                        title: context.l10n.focus_break,
-                        value: breakMinutes.toDouble(),
-                        unit: context.l10n.unit_min_short,
-                        min: 1,
-                      );
-                      if (value != null) {
-                        onBreakChanged(value.round().clamp(1, 120));
-                      }
-                    },
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      for (final value in focusBreakPresets)
+                        FocusChip(
+                          label: context.l10n.minutes_short('$value'),
+                          selected: breakMinutes == value,
+                          onTap: () => onBreakChanged(value),
+                        ),
+                      if (!focusBreakPresets.contains(breakMinutes))
+                        FocusChip(
+                          label: context.l10n.minutes_short('$breakMinutes'),
+                          selected: true,
+                          onTap: () {},
+                        ),
+                      _PencilButton(
+                        onTap: () async {
+                          final value = await showNumberKeypadDialog(
+                            context,
+                            title: context.l10n.focus_break,
+                            value: breakMinutes.toDouble(),
+                            unit: context.l10n.unit_min_short,
+                            min: 1,
+                          );
+                          if (value != null) {
+                            onBreakChanged(value.round().clamp(1, 120));
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

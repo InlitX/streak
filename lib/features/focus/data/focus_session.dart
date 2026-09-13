@@ -1,3 +1,5 @@
+import 'package:streak/core/extensions/date_extensions.dart';
+
 class FocusSession {
   const FocusSession({
     required this.id,
@@ -6,6 +8,7 @@ class FocusSession {
     required this.seconds,
     required this.completed,
     required this.startedAt,
+    this.counted = false,
   });
 
   final String id;
@@ -14,8 +17,23 @@ class FocusSession {
   final int seconds;
   final bool completed;
   final DateTime startedAt;
+  final bool counted;
 
   int get minutes => seconds ~/ 60;
+
+  DateTime get countedOn => startedAt
+      .add(Duration(seconds: seconds))
+      .subtract(Duration(hours: AppClock.cutoffHour));
+
+  FocusSession get asCounted => FocusSession(
+        id: id,
+        habitId: habitId,
+        targetMinutes: targetMinutes,
+        seconds: seconds,
+        completed: completed,
+        startedAt: startedAt,
+        counted: true,
+      );
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -24,6 +42,7 @@ class FocusSession {
         'seconds': seconds,
         'completed': completed,
         'startedAt': startedAt.toIso8601String(),
+        if (counted) 'counted': true,
       };
 
   factory FocusSession.fromMap(Map<String, dynamic> map) => FocusSession(
@@ -34,6 +53,7 @@ class FocusSession {
         completed: (map['completed'] ?? false) as bool,
         startedAt: DateTime.tryParse((map['startedAt'] ?? '') as String) ??
             DateTime.now(),
+        counted: map['counted'] == true,
       );
 }
 

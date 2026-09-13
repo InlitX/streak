@@ -19,6 +19,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_log_sheet.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -67,7 +68,14 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
     );
     if (confirmed != true || !mounted) return;
 
-    await context.read<FocusController>().removeSessions({..._selected});
+    final focus = context.read<FocusController>();
+    final habits = context.read<HabitsController>();
+    final chosen =
+        focus.sessions.where((s) => _selected.contains(s.id)).toList();
+    for (final session in chosen) {
+      await countFocusTime(habits, focus, session, undo: true);
+    }
+    await focus.removeSessions({..._selected});
     if (!mounted) return;
     setState(_selected.clear);
     AppSnackbar.success(context, context.l10n.focus_sessions_deleted(count));

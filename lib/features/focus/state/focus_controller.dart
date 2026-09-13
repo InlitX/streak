@@ -71,6 +71,8 @@ class FocusController extends ChangeNotifier {
   int _breakMinutes = 0;
   bool _isBreak = false;
   bool _soundOnBreak = false;
+  bool _soundOnPause = false;
+  void Function(FocusSession session)? onRoundSaved;
   int _round = 1;
   bool _open = false;
   int _accumulated = 0;
@@ -89,6 +91,14 @@ class FocusController extends ChangeNotifier {
     await LocalStore.removeFocusSessions(ids);
     _sessions = _sessions.where((s) => !ids.contains(s.id)).toList();
     notifyListeners();
+  }
+
+  Future<void> markCounted(String id) async {
+    final index = _sessions.indexWhere((s) => s.id == id);
+    if (index == -1) return;
+    final counted = _sessions[index].asCounted;
+    _sessions[index] = counted;
+    await LocalStore.writeFocusSession(counted);
   }
 
   Future<FocusSession> addSession({
@@ -178,6 +188,8 @@ class FocusController extends ChangeNotifier {
     _persist();
     _sync();
     notifyListeners();
+    _soundOnPause = FocusAudio.playing.value;
+    if (_soundOnPause) unawaited(FocusAudio.pause());
   }
 
   void resume({DateTime? at}) {
@@ -187,6 +199,9 @@ class FocusController extends ChangeNotifier {
     _persist();
     _sync();
     notifyListeners();
+    if (!_soundOnPause) return;
+    _soundOnPause = false;
+    unawaited(FocusAudio.resume());
   }
 
   void reset() {
@@ -248,6 +263,7 @@ class FocusController extends ChangeNotifier {
     _celebrated = false;
     _isBreak = false;
     _soundOnBreak = false;
+    _soundOnPause = false;
     _breakMinutes = 0;
     _round = 1;
     _open = false;
@@ -288,6 +304,7 @@ class FocusController extends ChangeNotifier {
         );
         _sessions.add(session);
         await LocalStore.writeFocusSession(session);
+        onRoundSaved?.call(session);
       }
     } else {
       _round++;
@@ -409,7 +426,7 @@ class FocusController extends ChangeNotifier {
 
   List<FocusSession> sessionsForHabitOnDay(String habitId, DateTime day) =>
       _sessions
-          .where((s) => s.habitId == habitId && s.startedAt.dayKey == day.dayKey)
+          .where((s) => s.habitId == habitId && s.countedOn.dayKey == day.dayKey)
           .toList();
 
   int secondsForHabitOnDay(String habitId, DateTime day) =>

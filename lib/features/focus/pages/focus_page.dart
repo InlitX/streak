@@ -19,6 +19,7 @@ import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/delete_sheet.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
@@ -197,9 +198,7 @@ class _FocusPageState extends State<FocusPage> {
     final target = habitId.isEmpty ? null : habits.byId(habitId);
     final today = AppClock.now();
     if (target != null && target.isTimeAmount) {
-      if (session != null) {
-        await habits.addProgress(target.id, today, session.seconds / 60);
-      }
+      if (session != null) await countFocusTime(habits, focus, session);
     } else if (completed &&
         target != null &&
         target.kind == HabitKind.positive &&
