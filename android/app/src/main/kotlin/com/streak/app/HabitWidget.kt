@@ -27,6 +27,7 @@ import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.unit.ColorProvider
 import androidx.glance.Image
+import androidx.glance.ColorFilter
 import androidx.glance.ImageProvider
 import androidx.glance.layout.ContentScale
 import android.graphics.Bitmap
@@ -45,6 +46,14 @@ private const val KIND_QUANTITATIVE = 2
 
 private const val LABEL_WIDTH_DP = 104
 private const val RATE_BAR_DP = 44
+private const val TODAY_INDEX = 6
+
+private fun flameFor(streak: Int): Int = when {
+    streak >= 365 -> R.drawable.ic_widget_flame_365
+    streak >= 100 -> R.drawable.ic_widget_flame_100
+    streak >= 50 -> R.drawable.ic_widget_flame_50
+    else -> 0
+}
 
 class HabitWidget : GlanceAppWidget() {
 
@@ -82,6 +91,9 @@ class HabitWidget : GlanceAppWidget() {
                 val habits = data.optJSONArray("habits")
                 val days = data.optJSONArray("days")
 
+                val weekOffset = data.optInt("weekOffset", 0)
+                    .coerceIn(0, maxOf(0, (days?.length() ?: 7) - 7))
+
                 if (habits != null && days != null) {
                     Row(
                         modifier = GlanceModifier
@@ -99,7 +111,7 @@ class HabitWidget : GlanceAppWidget() {
                             modifier = GlanceModifier.defaultWeight(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            for (i in 0 until 7) {
+                            for (i in weekOffset until weekOffset + 7) {
                                 val day = days.optJSONObject(i)
                                 if (day != null) {
                                     val label = day.optString("label")
@@ -133,7 +145,7 @@ class HabitWidget : GlanceAppWidget() {
                     ) {
                         items(habits.length()) { habitIndex ->
                             habits.optJSONObject(habitIndex)?.let {
-                                HabitRow(style, it, keys)
+                                HabitRow(style, it, keys, weekOffset)
                             }
                         }
                     }
@@ -187,7 +199,12 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun HabitRow(style: WidgetStyle, habit: JSONObject, dayKeys: List<String>) {
+    private fun HabitRow(
+        style: WidgetStyle,
+        habit: JSONObject,
+        dayKeys: List<String>,
+        weekOffset: Int,
+    ) {
         val context = androidx.glance.LocalContext.current
         val habitId = habit.optString("id")
         val name = habit.optString("name")
@@ -230,10 +247,11 @@ class HabitWidget : GlanceAppWidget() {
                 horizontalAlignment = Alignment.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                for (i in 0 until 7) {
+                for (i in weekOffset until weekOffset + 7) {
                     val isCompleted = if (i < completions.length()) completions.getBoolean(i) else false
                     val count =
                         if (counts != null && i < counts.length()) counts.optDouble(i, 0.0) else 0.0
+                    val future = i > TODAY_INDEX
                     Box(
                         modifier = GlanceModifier
                             .defaultWeight()
@@ -244,29 +262,33 @@ class HabitWidget : GlanceAppWidget() {
                             modifier = GlanceModifier
                                 .size(24.dp)
                                 .cornerRadius(12.dp)
-                                .clickable(
-                                    onClick = actionSendBroadcast(
-                                        WidgetActionReceiver.intent(
-                                            context,
-                                            habitId,
-                                            dayKeys.getOrElse(i) { WidgetPayload.todayKey(context) },
+                                .let { slot ->
+                                    if (future) slot else slot.clickable(
+                                        onClick = actionSendBroadcast(
+                                            WidgetActionReceiver.intent(
+                                                context,
+                                                habitId,
+                                                dayKeys.getOrElse(i) { WidgetPayload.todayKey(context) },
+                                            )
                                         )
                                     )
-                                ),
+                                },
                             contentAlignment = Alignment.Center
                         ) {
                             when {
+                                future -> PendingFlame(color, faint = true)
                                 kind == KIND_NEGATIVE -> if (count > 0) {
                                     BreachMark(style)
                                 } else {
-                                    CompletionIndicator(isCompleted = isCompleted, color = color)
+                                    CompletionIndicator(isCompleted, color, streak)
                                 }
                                 quantified -> ValueIndicator(
                                     count = count,
                                     ratio = (count / perDayTarget).toFloat(),
-                                    color = color
+                                    color = color,
+                                    streak = streak
                                 )
-                                else -> CompletionIndicator(isCompleted = isCompleted, color = color)
+                                else -> CompletionIndicator(isCompleted, color, streak)
                             }
                         }
                     }
@@ -276,16 +298,35 @@ class HabitWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun CompletionIndicator(isCompleted: Boolean, color: androidx.compose.ui.graphics.Color) {
-        val size = if (isCompleted) 18.dp else 8.dp
-        val radius = if (isCompleted) 6.dp else 10.dp
-        val alpha = if (isCompleted) 1f else 0.35f
-        Box(
-            modifier = GlanceModifier
-                .size(size)
-                .background(ColorProvider(color.copy(alpha = alpha)))
-                .cornerRadius(radius),
-            content = {}
+    private fun CompletionIndicator(
+        isCompleted: Boolean,
+        color: androidx.compose.ui.graphics.Color,
+        streak: Int,
+    ) {
+        if (!isCompleted) {
+            PendingFlame(color, faint = false)
+            return
+        }
+        val tier = flameFor(streak)
+        Image(
+            provider = ImageProvider(
+                if (tier == 0) R.drawable.ic_widget_flame_solid else tier
+            ),
+            contentDescription = null,
+            colorFilter = if (tier == 0) ColorFilter.tint(ColorProvider(color)) else null,
+            modifier = GlanceModifier.size(20.dp)
+        )
+    }
+
+    @Composable
+    private fun PendingFlame(color: androidx.compose.ui.graphics.Color, faint: Boolean) {
+        Image(
+            provider = ImageProvider(R.drawable.ic_widget_flame),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(
+                ColorProvider(color.copy(alpha = if (faint) 0.16f else 0.3f))
+            ),
+            modifier = GlanceModifier.size(16.dp)
         )
     }
 
@@ -305,10 +346,11 @@ class HabitWidget : GlanceAppWidget() {
     private fun ValueIndicator(
         count: Double,
         ratio: Float,
-        color: androidx.compose.ui.graphics.Color
+        color: androidx.compose.ui.graphics.Color,
+        streak: Int
     ) {
         if (count <= 0) {
-            CompletionIndicator(isCompleted = false, color = color)
+            CompletionIndicator(false, color, streak)
             return
         }
         val clamped = ratio.coerceIn(0f, 1f)

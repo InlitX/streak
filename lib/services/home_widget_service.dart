@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/utils/app_dirs.dart';
@@ -163,8 +164,10 @@ class HomeWidgetService {
     final today = AppClock.now();
     final window = List.generate(
       _windowDays,
-      (i) => today.subtract(Duration(days: _weekDays - 1 - i)),
+      (i) => today.addDays(i - (_weekDays - 1)),
     );
+    final weekStart = LocalStore.setting('weekStart', 1);
+    final weekOffset = _weekDays - 1 - (today.weekday - weekStart + 7) % 7;
     final dates = window.take(_weekDays).toList();
     final listed = _ordered(habits);
 
@@ -222,6 +225,7 @@ class HomeWidgetService {
     return json.encode({
       'habits': widgetHabits,
       'days': days,
+      'weekOffset': weekOffset,
       'todayKey': today.dayKey,
       'dayCutoff': AppClock.cutoffHour,
       'heatmap': _heatmapLevels(listed, today),
