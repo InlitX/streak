@@ -73,11 +73,7 @@ class SharePanelHeader extends StatelessWidget {
 Color shareDayFill(Habit habit, DateTime date, Color accent) {
   if (date.isAfter(AppClock.now())) return Colors.transparent;
   if (habit.isNeutralOn(date)) return const Color(0xFF3F6CA8);
-  if (habit.kind == HabitKind.negative) {
-    return habit.completions.containsKey(date.dayKey)
-        ? const Color(0xFF9E3B3B)
-        : accent;
-  }
+  if (habit.isRelapseOn(date)) return const Color(0xFF9E3B3B);
   return habit.isCompletedOn(date) ? accent : Colors.transparent;
 }
 
