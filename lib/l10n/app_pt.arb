@@ -1229,5 +1229,21 @@
   "island_p_pergola_house": "",
   "island_p_cypress": "",
   "island_g_caleta": "",
-  "island_how_note": ""
+  "island_how_note": "",
+  "island_enable_sub": "Transforme seus hábitos em um arquipélago Mediterrâneo que você constrói pouco a pouco",
+  "island_build": "Construir",
+  "island_complete": "O arquipélago está pronto",
+  "emoji_own": "Digite ou cole qualquer emoji",
+  "island_done": "Construído",
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island": "Ilha",
+  "island_shop": "Loja",
+  "period_all_time": "Todo o período"
 }
