@@ -1007,5 +1007,242 @@
     }
   },
   "widget_cfg_save": "",
-  "start_vacation": ""
+  "start_vacation": "",
+  "focus_flowtime": "Flowtijd",
+  "focus_notif_running": "Focussen",
+  "rest_days_none": "Geen",
+  "report_issue_sub": "Vertel me over een bug of vraag om een functie",
+  "focus_daily_goal_sub": "Minuten van focus waar je naar streeft elke dag",
+  "app_icon_sub": "Het icoon op je startscherm",
+  "habit_duration": "Duur",
+  "quotes_sub": "Welke citaten op Vandaag verschijnen",
+  "remove_photo": "Verwijder foto",
+  "focus_only_title": "Heeft een focussessie nodig",
+  "accent_color": "Accentkleur",
+  "today_only": "Alleen vandaag",
+  "focus_only_past": "\"{name}' wordt alleen voltooid door een focussessie, dus de afgelopen dagen kunnen niet afgevinkt worden.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "style_classic": "Klassiek",
+  "your_name": "Jouw naam",
+  "focus_history_day": "{count, plural, =1{1 sessie} other{{count} sessies}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "Pomodoro",
+  "about_sub": "Versie, broncode en ondersteuning",
+  "focus_average": "Gemiddelde sessie",
+  "focus_only_body": "\"{name}' wordt voltooid door een focussessie af te ronden.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "style_classic_desc": "Gewoontelijst, onderste balk en elke instelling op één scherm.",
+  "focus_history": "Geschiedenis",
+  "focus_clear_today": "Leeg sessies van vandaag",
+  "focus_end_flow": "Je focuste je voor {time}.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "readable_copy": "Leesbare kopie",
+  "focus_scene_black": "Zwart",
+  "checklist_hint": "Breek de gewoonte op in stappen. Het is voltooid als elke stap afgevinkt wordt.",
+  "streak_unit_month": "{count}ma",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "card_activity": "Activiteit op kaarten",
+  "clear": "Leeg",
+  "app_style_sub": "Kies hoe de hele app eruit ziet en voelt.",
+  "heatmap_path": "Verbind de dagen",
+  "on": "Aan",
+  "day_timeline_empty_sub": "Geef een gewoonte een tijd van de dag en het zal hier verschijnen.",
+  "preferences_sub": "Taal, week en sortering",
+  "habit_duration_none": "Geen duur",
+  "celebration_sub": "Wat je ziet als je een gewoonte afvinkt",
+  "default_user": "Inlitx",
+  "report_issue": "Rapporteer een probleem",
+  "readable_copy_sub": "Schrijft ook je gewoonten als markdown bestanden",
+  "circle": "Cirkel",
+  "sort_completed_last": "Laatst voltooid",
+  "focus_only_clear_body": "Alleen een focussessie kan \"{name}' opnieuw afvinken.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "App icoon",
+  "icon_neutral": "Groen",
+  "focus_paused": "Gepauzeerd",
+  "focus_history_empty": "Nog geen sessies",
+  "off": "Uit",
+  "square": "Vierkant",
+  "focus_goal_today": "{done} van {goal} vandaag",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "icon_default": "Standaard",
+  "check_style_sub": "Vierkante of ronde markeringen",
+  "theme_sub": "Licht, donker of die van systeem",
+  "focus_delete_sessions_body": "{count, plural, =1{1 focussessie wordt verwijderd. Dit kan niet ongedaan worden gemaakt.} other{{count} focussessies worden verwijderd. Dit kan niet ongedaan worden gemaakt..}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plan_day": "Plan de dag",
+  "habit_time": "Tijd van de dag",
+  "github_star_sub": "Geef het project een ster zodat meer mensen het vinden",
+  "emoji_own": "Type of plak elke emoji",
+  "language_sub": "De taal van de hele app",
+  "notif_greeting": "Hi {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_style": "App stijl",
+  "start_view": "Vandaag opent op",
+  "last_90_days": "Laatste 90 dagen",
+  "day_timeline": "Dag",
+  "app_background_sub": "Wat je ziet achter de kaarten",
+  "select_all": "Alles selecteren",
+  "focus_round": "Ronde {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_confirm": "Toch registreren",
+  "focus_break": "Pauze",
+  "see_more": "Bekijk meer",
+  "accent_color_sub": "Gebruikt op knoppen en highlights",
+  "support_sub": "Rapporteer een fout of vraag om een functie",
+  "unscheduled_title": "Dag niet gepland",
+  "sort_completed_last_sub": "Stuurt wat je voltooid naar de onderkant van de lijst",
+  "week_start_sub": "De eerste kolom van elk raster",
+  "start_view_last": "Laatst gebruikt",
+  "focus_only_clear_title": "Leeg deze voltooiing?",
+  "focus_sessions_deleted": "{count, plural, =1{1 sessie verwijderd} other{{count} sessies verwijderd}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro_sub": "Ketting focus rondes met korte pauzes",
+  "advanced_options": "Geanvanceerde opties",
+  "reorder": "Herschik",
+  "plan_day_sub": "Geef gewoonten een tijd van de dag en zie ze op een tijdlijn.",
+  "focus_images_limit": "Maximum 10 afbeeldingen",
+  "day_timeline_anytime": "Elke tijd",
+  "notes_hint": "Druk lang op een dag om notities te bekijken of toe te voegen",
+  "yesterday": "Gisteren",
+  "app_lock_delay_sub": "Hoe snel het weer vraagt nadat je weg bent",
+  "focus_only_start": "Start sessie",
+  "selected_count": "{count, plural, =1{1 geselecteerd} other{{count} geselecteerd}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "see_less": "Bekijk minder",
+  "icons_tab": "Iconen",
+  "focus_defaults": "Sessiestandaarden",
+  "github_star_row": "Bekijk bron & geef een ster",
+  "reorder_hint": "Versleep de gewoontes om ze te herschikken",
+  "edit_name": "Bewerk naam",
+  "unscheduled_body": "Deze gewoonte is niet gepland op {day}. Toch registreren als een extra?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "checklist": "Checklist",
+  "focus_log_saved": "Sessie toegevoegd",
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_history_empty_sub": "Elke focussessie die je voltooid verschijnt hier.",
+  "heatmap_path_sub": "Tekent het raster als een lange wandeling",
+  "focus_log_date": "Datum",
+  "icon_accent": "Driekleurig",
+  "card_activity_sub": "Toont de laatste dagen op de kaart, klaar om aan te vinken",
+  "today_only_sub": "Verbergt de gewoonten die niet gepland zijn voor vandaag",
+  "style_minimal": "Minimaal",
+  "day_timeline_empty": "Niets gepland voor deze dag",
+  "check_style": "Voltooid stijl",
+  "style_minimal_desc": "Gewoonterooster en instellingen gegroepeerd in vier secties.",
+  "focus_flowtime_hint": "Geen doel en geen alarm. De klok telt en je stopt als je klaar bent.",
+  "focus_keep_awake": "Houd scherm aan",
+  "data_sub": "Back-ups en importeren",
+  "focus_notif_channel": "Focussessies",
+  "colors_tab": "Kleuren",
+  "focus_daily_goal": "Focus doel",
+  "focus_stats": "Focus statistieken",
+  "focus_log": "Registreer een sessie",
+  "custom": "Aangepast",
+  "focus_only_hint": "De gewoonte wordt afgevinkt wanneer je een sessie afmaakt, niet door erop te tikken.",
+  "emojis_tab": "Emojis",
+  "focus_only": "Alleen met een focussessie",
+  "change_photo": "Verander foto",
+  "appearance_sub": "Thema, accent en achtergrond",
+  "focus_delete_sessions": "Sessies verwijderen?",
+  "day_timeline_free": "{span} vrij",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_time_none": "Elke tijd",
+  "done": "Klaar",
+  "start_view_sub": "Het scherm waar Vandaag in opent",
+  "perfect_streak": "Perfecte dagreeks"
 }
