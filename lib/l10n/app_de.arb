@@ -522,7 +522,7 @@
   "focus_history_empty": "Noch keine Sessions",
   "unit_seconds": "Sekunden",
   "focus_enable_sub": "Ein Timer für Gewohnheiten, die einen benötigen",
-  "focus_shuffle": "",
+  "focus_shuffle": "Mischen",
   "focus_goal_today": "{done} von {goal} heute",
   "@focus_goal_today": {
     "placeholders": {
@@ -1238,5 +1238,8 @@
   "island_how_note": "Münzen kommen von deinem Verlauf, also bringt ein Backup sie zurück",
   "period_all_time": "Allzeit",
   "just_tracking_option": "Nur Zählen anbieten",
-  "start_view_sub": "Die Ansicht „Heute“ öffnet auf"
+  "start_view_sub": "Die Ansicht „Heute“ öffnet auf",
+  "readable_copy": "Lesbare Kopie",
+  "quotes_off": "aus",
+  "just_tracking": "Nur tracken"
 }
