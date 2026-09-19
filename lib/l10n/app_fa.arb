@@ -1243,5 +1243,6 @@
   "active_days": "",
   "start_view_sub": "",
   "perfect_streak": "",
-  "refresh_nothing": ""
+  "refresh_nothing": "",
+  "focus": ""
 }
