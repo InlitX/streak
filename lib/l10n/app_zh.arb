@@ -1325,5 +1325,6 @@
   "period_all_time": "全部时间",
   "just_tracking_option": "仅记录",
   "start_view_sub": "「今天」的默认显示方式",
-  "refresh_nothing": "文件夹中没有新内容"
+  "refresh_nothing": "文件夹中没有新内容",
+  "quant_add_title": ""
 }
