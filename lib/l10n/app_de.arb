@@ -596,7 +596,7 @@
   "widget_cfg_style_card": "Karte",
   "bg_gradient": "Übergang",
   "focus_target_reached": "Ziel erreicht",
-  "share_friends_message": "Ich verfolge meine Serien mit Streak — ein kleiner, kostenloser, offline Gewohnheits-Tracker ohne Werbung. Bau auch du deine Serien mit Streak: https://inlitx.github.io/streak/",
+  "share_friends_message": "Ich verfolge meine Serien mit Streak – einem kleinen, kostenlosen, offline Gewohnheits-Tracker ohne Werbung. Bau auch du deine Serien mit Streak: https://inlitx.github.io/streak/",
   "note_kind_completed": "Abgeschlossen",
   "focus_break": "Pause",
   "undo": "Rückgängig",
@@ -614,7 +614,7 @@
   },
   "focus": "Fokus",
   "wipe_data_warning": "Dadurch werden alle Gewohnheiten, Notizen, Fokus-Sessions und Einstellungen auf diesem Gerät gelöscht. Dies kann nicht rückgängig gemacht werden, es sei denn, Sie haben eine Backup-Datei, die Sie anschließend importieren können.",
-  "auto_backup_where": "Eine Sicherungskopie ist erstellt wenn du die App öffnest. Die letzten 5 werden behalten.",
+  "auto_backup_where": "Wenn du die App öffnest, erstellt Streak eine Sicherungskopie und eine lesbare Kopie deiner Angewohnheiten, die du in einem Editor deiner Wahl öffnen kannst. Die letzten 5 Sicherungskopien werden behalten.",
   "widget_demo_run": "Ausführen",
   "widget_cfg_style_classic": "Klassisch",
   "archived_habits_sub": "Stelle sie wieder her oder lösche sie endgültig",
@@ -991,7 +991,7 @@
   "view_switcher_sub": "Woche-/Monat-/Jahr-Tasten in „Heute“ anzeigen",
   "todos": "Zu erledigen",
   "quotes_mine": "Meine",
-  "cost_note": "Optional. Leer lassen, wenn diese Gewohnheit kein Geld kostet.",
+  "cost_note": "Optional. Lass das Feld leer, wenn diese Gewohnheit kein Geld kostet.",
   "focus_only": "Nur mit einer Fokus-Session",
   "priority_high": "Hoch",
   "focus_delete_sessions": "Sessions löschen?",
@@ -1241,5 +1241,8 @@
   "start_view_sub": "Die Ansicht „Heute“ öffnet auf",
   "readable_copy": "Lesbare Kopie",
   "quotes_off": "aus",
-  "just_tracking": "Nur tracken"
+  "just_tracking": "Nur tracken",
+  "refresh_brought": "Deine Gewohnheiten sind aktuell",
+  "refresh_now_sub": "Importiere, was deine anderen Geräte in dem Ordner hinterlassen haben",
+  "refresh_nothing": "Nichts Neues im Ordner"
 }
