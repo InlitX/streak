@@ -777,7 +777,7 @@
   "focus_log_saved": "已添加记录",
   "perfect_streak": "完美天数连胜",
   "edit_note": "编辑笔记",
-  "notes_hint": "打开一个习惯，长按其日历中的某一天即可查看或添加笔记",
+  "notes_hint": "长按某一天即可查看或添加笔记",
   "focus_total": "专注时间",
   "widget_cfg_opacity": "不透明度  {value}%",
   "@widget_cfg_opacity": {
