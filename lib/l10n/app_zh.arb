@@ -1032,7 +1032,7 @@
   "repeat_hours": "重复",
   "quant_logged_days": "记录天数",
   "widget_cfg_todos_hint": "关闭仅显示今天、逾期和无日期的任务",
-  "widget_todos_open": "",
+  "widget_todos_open": "待办  {count}",
   "@widget_todos_open": {
     "placeholders": {
       "count": {
