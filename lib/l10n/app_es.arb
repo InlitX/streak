@@ -285,9 +285,21 @@
     }
   },
   "every_n_weeks": "Cada {n} semanas",
-  "@every_n_weeks": {"placeholders": {"n": {"type": "int"}}},
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "every_n_months": "Cada {n} meses",
-  "@every_n_months": {"placeholders": {"n": {"type": "int"}}},
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "sched_unit_days": "Dias",
   "sched_unit_weeks": "Semanas",
   "sched_unit_months": "Meses",
@@ -315,11 +327,23 @@
   "todo_tag_folders": "Carpetas",
   "todo_tag_list": "Lista",
   "todo_tag_count": "{n} pendientes",
-  "@todo_tag_count": {"placeholders": {"n": {"type": "int"}}},
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "todo_tag_icon": "Icono",
   "todo_tag_pick": "Elegir etiquetas",
   "todo_tag_filtered": "Filtrado por {name}",
-  "@todo_tag_filtered": {"placeholders": {"name": {"type": "String"}}},
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "uncategorized": "Sin categoría",
   "more_icons": "Más iconos",
   "less_icons": "Menos iconos",
@@ -623,7 +647,7 @@
     }
   },
   "yesterday": "Ayer",
-  "notes_hint": "Abre un hábito y mantén pulsado un día de su calendario para ver o añadir notas",
+  "notes_hint": "Mantén pulsado un día para ver o añadir notas",
   "app_style": "Estilo de la app",
   "app_style_sub": "Elige cómo se ve y se siente toda la app.",
   "style_classic": "Clásico",
@@ -798,8 +822,6 @@
   "widget_demo_run": "Correr",
   "widget_demo_water": "Agua",
   "notif_streak": "🔥 racha de {streak} días",
-  "notif_streak_week": "🔥 racha de {streak} semanas",
-  "notif_streak_month": "🔥 racha de {streak} meses",
   "@notif_streak": {
     "placeholders": {
       "streak": {
@@ -807,6 +829,8 @@
       }
     }
   },
+  "notif_streak_week": "🔥 racha de {streak} semanas",
+  "notif_streak_month": "🔥 racha de {streak} meses",
   "notif_action_done": "Hecho",
   "notif_action_snooze": "Posponer",
   "notif_action_add": "Añadir cantidad",
@@ -843,11 +867,19 @@
   "period_last_year": "El año pasado",
   "period_week_of": "Semana del {date}",
   "@period_week_of": {
-    "placeholders": { "date": { "type": "String" } }
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   },
   "focus_period_sessions": "{count, plural, =0{Sin sesiones} =1{1 sesión} other{{count} sesiones}}",
   "@focus_period_sessions": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "notes_all": "Todas las notas",
   "notes_empty_all": "Todavía no hay notas",
@@ -959,13 +991,25 @@
   "last_check": "Última marca",
   "check_history": "Historial de marcas",
   "check_history_sub": "{count} días marcados",
-  "@check_history_sub": {"placeholders": {"count": {"type": "String"}}},
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "check_never": "Nunca",
   "check_no_time": "sin hora guardada",
   "heatmap_rolling": "Últimos 12 meses",
   "heatmap_rolling_sub": "La rejilla anual acaba hoy en vez del 31 de diciembre",
   "check_marks": "{count} marcas",
-  "@check_marks": {"placeholders": {"count": {"type": "String"}}},
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "today_progress_option": "Progreso en Hoy",
   "today_progress_option_sub": "El anillo del día y la barra de fuerza de cada hábito",
   "quiet_when_done": "Silencio al cumplir",
