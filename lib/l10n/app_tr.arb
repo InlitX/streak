@@ -1,1 +1,13 @@
-{}
+{
+  "today": "Bugün",
+  "stats": "İstatistikler",
+  "settings": "Ayarlar",
+  "good_morning": "Günaydın",
+  "good_afternoon": "Tünaydın",
+  "select_all": "Tümünü seç",
+  "last_90_days": "Son 90 gün",
+  "clear": "Temizle",
+  "focus_history": "Geçmiş",
+  "focus_stats": "Odaklanma istatistikleri",
+  "save": "Kaydet"
+}
