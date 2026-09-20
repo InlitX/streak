@@ -22,15 +22,15 @@ required, and nothing to download.
 
 > [!TIP]
 > **You don't have to finish.** Anything left untranslated simply shows in
-> English, so nothing ever breaks. Ten strings today, more whenever you feel
-> like it.
+>English, so nothing ever breaks. Ten strings today, more whenever you feel
+>like it.
 
 > [!IMPORTANT]
 > **Adding a new language? Pick the plain language** — "German", "Portuguese",
 > "Ukrainian" — not a country-specific variant like "Portuguese (Brazil)".
-> The plain form covers everyone who speaks it and keeps the app tidy. Only
-> reach for a variant when the split is real and unavoidable — Chinese, for
-> example, genuinely divides into Simplified and Traditional.
+>The plain form covers everyone who speaks it and keeps the app tidy. Only
+>reach for a variant when the split is real and unavoidable — Chinese, for
+>example, genuinely divides into Simplified and Traditional.
 
 ## Style
 

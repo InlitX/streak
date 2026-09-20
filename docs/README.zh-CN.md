@@ -1,20 +1,20 @@
 <div align="center">
 
-<img src="assets/banner.png" alt="Streak：极简、私密、无广告的习惯追踪应用" width="100%" />
+<img src="../assets/banner.png" alt="Streak：极简、私密、无广告的习惯追踪应用" width="100%" />
 
 </div>
 
 ---
 
 <div align="right">
-  <sub><a href="README.md">English</a> · <a href="README.es.md">Español</a> · <b>中文</b> · <a href="README.ru.md">Русский</a></sub>
+  <sub><a href="../README.md">English</a> · <a href="README.es.md">Español</a> · <b>中文</b> · <a href="README.ru.md">Русский</a></sub>
 </div>
 
 <div align="center">
 
 ### Streak
 
-<img src="assets/icon.svg" width="72" alt="Streak 标志" />
+<img src="../assets/icon.svg" width="72" alt="Streak 标志" />
 
 ### 极简、私密、无广告的习惯追踪应用
 
@@ -34,25 +34,25 @@
 
 <br/>
 
-<a href="https://f-droid.org/packages/com.streak.app/"><img alt="在 F-Droid 上获取" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
+<a href="https://f-droid.org/packages/com.streak.app/"><img alt="在 F-Droid 上获取" src="../assets/badges/get-it-on-fdroid.png" height="60" /></a>
 &nbsp;
-<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="在 IzzyOnDroid 上获取" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="在 IzzyOnDroid 上获取" src="../assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
 &nbsp;
-<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="在 OpenAPK 上获取" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
+<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="在 OpenAPK 上获取" src="../assets/badges/get-it-on-openapk.png" height="60" /></a>
 &nbsp;
-<a href="https://github.com/InlitX/streak/releases"><img alt="在 GitHub 上获取" src="assets/badges/get-it-on-github.png" height="60" /></a>
+<a href="https://github.com/InlitX/streak/releases"><img alt="在 GitHub 上获取" src="../assets/badges/get-it-on-github.png" height="60" /></a>
 &nbsp;
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.streak.app%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FInlitX%2Fstreak%22%2C%22author%22%3A%22InlitX%22%2C%22name%22%3A%22Streak%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Afalse%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22filterReleaseNotesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22verifyLatestTag%5C%22%3Afalse%2C%5C%22dontSortReleasesList%5C%22%3Afalse%2C%5C%22useLatestAssetDateAsReleaseDate%5C%22%3Afalse%2C%5C%22trackOnly%5C%22%3Afalse%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22matchGroupToUse%5C%22%3A%5C%22%5C%22%2C%5C%22versionDetection%5C%22%3Atrue%2C%5C%22releaseDateAsVersion%5C%22%3Afalse%2C%5C%22useVersionCodeAsOSVersion%5C%22%3Afalse%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22invertAPKFilter%5C%22%3Afalse%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22%5C%22%2C%5C%22shizukuPretendToBeGooglePlay%5C%22%3Afalse%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22exemptFromBackgroundUpdates%5C%22%3Afalse%2C%5C%22skipUpdateNotifications%5C%22%3Afalse%2C%5C%22about%5C%22%3A%5C%22Streak%20is%20an%20open%20source%20habit%20tracker%20for%20Android.%20Build%20habits%20with%20one%20tap%2C%20watch%20your%20progress%20grow%2C%20and%20keep%20everything%20on%20your%20device.%20No%20accounts%2C%20no%20ads%2C%20no%20tracking.%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img alt="在 Obtainium 上获取" src="assets/badges/get-it-on-obtainium.png" height="60" /></a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.streak.app%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FInlitX%2Fstreak%22%2C%22author%22%3A%22InlitX%22%2C%22name%22%3A%22Streak%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Afalse%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22filterReleaseNotesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22verifyLatestTag%5C%22%3Afalse%2C%5C%22dontSortReleasesList%5C%22%3Afalse%2C%5C%22useLatestAssetDateAsReleaseDate%5C%22%3Afalse%2C%5C%22trackOnly%5C%22%3Afalse%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22matchGroupToUse%5C%22%3A%5C%22%5C%22%2C%5C%22versionDetection%5C%22%3Atrue%2C%5C%22releaseDateAsVersion%5C%22%3Afalse%2C%5C%22useVersionCodeAsOSVersion%5C%22%3Afalse%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22invertAPKFilter%5C%22%3Afalse%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22%5C%22%2C%5C%22shizukuPretendToBeGooglePlay%5C%22%3Afalse%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22exemptFromBackgroundUpdates%5C%22%3Afalse%2C%5C%22skipUpdateNotifications%5C%22%3Afalse%2C%5C%22about%5C%22%3A%5C%22Streak%20is%20an%20open%20source%20habit%20tracker%20for%20Android.%20Build%20habits%20with%20one%20tap%2C%20watch%20your%20progress%20grow%2C%20and%20keep%20everything%20on%20your%20device.%20No%20accounts%2C%20no%20ads%2C%20no%20tracking.%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img alt="在 Obtainium 上获取" src="../assets/badges/get-it-on-obtainium.png" height="60" /></a>
 
 <br/>
 
 <sub>
-  <a href="#-功能">✨ 功能</a> ·
-  <a href="#-从其他应用迁移">📦 导入</a> ·
-  <a href="#-下载">⬇️ 下载</a> ·
-  <a href="#-隐私">🔒 隐私</a> ·
-  <a href="#-翻译">🌍 翻译</a> ·
-  <a href="#-支持">❤️ 支持</a>
+  <a href="#功能">功能</a> ·
+  <a href="#从其他应用迁移">导入</a> ·
+  <a href="#下载">下载</a> ·
+  <a href="#隐私">隐私</a> ·
+  <a href="#翻译">翻译</a> ·
+  <a href="#支持">支持</a>
 </sub>
 
 </div>
@@ -61,15 +61,15 @@
 
 <div align="center">
 
-<img src="screenshots/01-today.png" alt="今天" width="145" />
-<img src="screenshots/02-focus.png" alt="专注" width="145" />
-<img src="screenshots/03-stats.png" alt="统计" width="145" />
-<img src="screenshots/04-insights.png" alt="洞察" width="145" />
+<img src="../screenshots/01-today.png" alt="今天" width="145" />
+<img src="../screenshots/02-focus.png" alt="专注" width="145" />
+<img src="../screenshots/03-stats.png" alt="统计" width="145" />
+<img src="../screenshots/04-insights.png" alt="洞察" width="145" />
 
-<img src="screenshots/05-amount.png" alt="数量型习惯" width="145" />
-<img src="screenshots/06-notes.png" alt="每日笔记" width="145" />
-<img src="screenshots/07-customize.png" alt="个性化" width="145" />
-<img src="screenshots/08-private.png" alt="免费且私密" width="145" />
+<img src="../screenshots/05-amount.png" alt="数量型习惯" width="145" />
+<img src="../screenshots/06-notes.png" alt="每日笔记" width="145" />
+<img src="../screenshots/07-customize.png" alt="个性化" width="145" />
+<img src="../screenshots/08-private.png" alt="免费且私密" width="145" />
 
 <sub><b>今天</b> · <b>专注</b> · <b>统计</b> · <b>洞察</b> · <b>数量</b> · <b>笔记</b> · <b>个性化</b> · <b>免费且私密</b></sub>
 
@@ -77,7 +77,7 @@
 
 ---
 
-## 👋 概览
+## 概览
 
 Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建任意多个习惯，一键记录，
 并通过类似 GitHub 的活动网格、连续记录计数器和统计面板来跟踪进度。
@@ -86,13 +86,13 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ---
 
-## ✨ 功能
+## 功能
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### ✅ 追踪
+### 追踪
 
 - 在主屏幕、小组件或通知中一键记录
 - 三种习惯类型：**普通**、**戒除**（可记录复发）和**数量**，可自定义单位与每日目标
@@ -105,7 +105,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 </td>
 <td width="50%" valign="top">
 
-### 📊 查看进度
+### 查看进度
 
 - 类似 GitHub 的**活动网格**，可按周、月或年查看
 - **月历**，一周可从周一、周六或周日开始
@@ -120,7 +120,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 <tr>
 <td width="50%" valign="top">
 
-### 🧘 专注时段
+### 专注时段
 
 - 为需要计时的习惯准备的计时器，可自由计时或绑定某个习惯及其目标
 - **番茄钟轮次**搭配短暂休息，也可以一口气专注到底
@@ -133,7 +133,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 </td>
 <td width="50%" valign="top">
 
-### 🎨 个性化
+### 个性化
 
 - **经典、极简或 Express**：三套完整的设计，各有自己的字体、形状和动效
 - 极简图标包，或任意你喜欢的表情符号
@@ -148,7 +148,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 <tr>
 <td width="50%" valign="top">
 
-### 🔔 提醒与小组件
+### 提醒与小组件
 
 - 按习惯设置提醒，可选具体星期几或每 N 天，每条都带一句鼓励语
 - 通知中直接提供**完成**、**稍后**和**添加数量**按钮
@@ -161,7 +161,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 </td>
 <td width="50%" valign="top">
 
-### 💾 你的数据
+### 你的数据
 
 - 从 Loop Habit Tracker、HabitKit、Habitica 和 HabitBull **导入**，历史与连续记录一并带走
 - 备份与恢复只用一个由你自己保管的文件
@@ -177,7 +177,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ---
 
-## 📦 从其他应用迁移
+## 从其他应用迁移
 
 <details>
 <summary><b>导入是怎么运作的</b></summary>
@@ -192,7 +192,7 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 
 ---
 
-## ⬇️ 下载
+## 下载
 
 最简单的方式是 [**F-Droid**](https://f-droid.org/packages/com.streak.app/)，
 它会安装 Streak 并自动保持更新。也可以在
@@ -205,9 +205,23 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 |------|------|
 | Android | ✅ 已支持 |
 | Windows | ✅ 已支持 |
+| Linux | ✅ 已支持 |
 | iOS | 🚧 开发中 |
-| Linux | 📅 计划中 |
 | macOS | 📅 计划中 |
+
+<details>
+<summary><b>Linux</b></summary>
+
+[**Releases**](https://github.com/InlitX/streak/releases) 页面有两个文件，都是 64 位 x86：
+
+| 文件 | 说明 |
+|------|------|
+| `Streak-x86_64.AppImage` | 任何发行版：加上可执行权限后直接运行 |
+| `Streak-linux-x64.tar.gz` | 解压到任意目录，运行 `Streak` |
+
+Linux 版本刚刚发布，可能还有一些问题。提醒只在 Streak 打开时才会响。遇到问题请提一个 issue，我会陆续修复。
+
+</details>
 
 <details>
 <summary><b>自己安装 APK</b></summary>
@@ -228,22 +242,22 @@ Streak 是一款尊重你的开源 Android 习惯追踪应用。你可以创建�
 页面，在有新版本时通知你，并为你的手机选择合适的 APK。
 
 > [!NOTE]
-> Streak 未上架 Play 商店。由于该 APK 不是来自应用商店，Android 在首次安装时
-> 可能会要求你允许从浏览器或文件管理器安装。
+>Streak 未上架 Play 商店。由于该 APK 不是来自应用商店，Android 在首次安装时
+>可能会要求你允许从浏览器或文件管理器安装。
 
 </details>
 
 ---
 
-## 🔒 隐私
+## 隐私
 
 > [!IMPORTANT]
-> Streak **没有分析统计、没有广告 SDK、没有网络后端**。应用绝不会把你的数据
-> 发送到任何地方，它们只留在你的设备上。唯一的对外动作是你自己选择打开的链接。
+>Streak **没有分析统计、没有广告 SDK、没有网络后端**。应用绝不会把你的数据
+>发送到任何地方，它们只留在你的设备上。唯一的对外动作是你自己选择打开的链接。
 
 ---
 
-## 🌍 翻译
+## 翻译
 
 Streak 已完整支持**英语、西班牙语、法语、葡萄牙语、俄语、乌克兰语和中文**，
 **德语、波兰语、希伯来语、印尼语和波斯语**也在路上，非常欢迎更多语言。翻译工作在
@@ -252,19 +266,19 @@ Streak 已完整支持**英语、西班牙语、法语、葡萄牙语、俄语�
 
 [![各语言翻译状态](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-了解详情 → [**TRANSLATING.md**](TRANSLATING.md)
+了解详情 → [**TRANSLATING.md**](../TRANSLATING.md)
 
 ---
 
-## 🛠️ 参与贡献
+## 参与贡献
 
 欢迎问题反馈、想法和 pull request，请看
-[**CONTRIBUTING.md**](CONTRIBUTING.md)。如果不只是小修小补，请先开一个 issue，
+[**CONTRIBUTING.md**](../CONTRIBUTING.md)。如果不只是小修小补，请先开一个 issue，
 我们先就方向达成一致。
 
 ---
 
-## 🙏 灵感来源
+## 灵感来源
 
 <details>
 <summary><b>影响了 Streak 的应用</b></summary>
@@ -289,7 +303,7 @@ Streak 并非凭空而来。以下这些应用塑造了它：
 
 ---
 
-## ❤️ 支持
+## 支持
 
 <div align="center">
 
@@ -304,19 +318,19 @@ Streak 免费、开源、没有广告，以后也一样。
 
 <table align="center">
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
     <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
     <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
     <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
     <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
   </tr>
 </table>
@@ -335,6 +349,6 @@ Streak 免费、开源、没有广告，以后也一样。
 <br/>
 <br/>
 
-基于 <a href="LICENSE"><b>GNU GPLv3 许可证</b></a> 发布。
+基于 <a href="../LICENSE"><b>GNU GPLv3 许可证</b></a>发布。
 
 </div>

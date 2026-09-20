@@ -7,7 +7,7 @@
 ---
 
 <div align="right">
-  <sub><b>English</b> · <a href="README.es.md">Español</a> · <a href="README.zh-CN.md">中文</a> · <a href="README.ru.md">Русский</a></sub>
+  <sub><b>English</b> · <a href="docs/README.es.md">Español</a> · <a href="docs/README.zh-CN.md">中文</a> · <a href="docs/README.ru.md">Русский</a></sub>
 </div>
 
 <div align="center">
@@ -47,12 +47,12 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 <br/>
 
 <sub>
-  <a href="#-features">✨ Features</a> ·
-  <a href="#-coming-from-another-app">📦 Import</a> ·
-  <a href="#-download">⬇️ Download</a> ·
-  <a href="#-privacy">🔒 Privacy</a> ·
-  <a href="#-translations">🌍 Translations</a> ·
-  <a href="#-support">❤️ Support</a>
+  <a href="#features">Features</a> ·
+  <a href="#coming-from-another-app">Import</a> ·
+  <a href="#download">Download</a> ·
+  <a href="#privacy">Privacy</a> ·
+  <a href="#translations">Translations</a> ·
+  <a href="#support">Support</a>
 </sub>
 
 </div>
@@ -77,23 +77,23 @@ Log a habit in a single tap, keep your momentum, and watch your streaks grow.
 
 ---
 
-## 👋 Overview
+## Overview
 
-Streak is an open-source habit tracker for Android that respects you. Create as
-many habits as you like, log them with one tap, and watch your progress build up
-in a GitHub-style activity grid, streak counters and a statistics dashboard.
+Streak is an open source habit tracker for Android, Windows and Linux. Make as
+many habits as you want, log them with one tap, and watch the grid, the streak
+counters and the statistics fill up.
 
-It is fast, offline, and built to feel calm rather than demanding.
+Everything stays on your device. No account, no ads, nothing to sync.
 
 ---
 
-## ✨ Features
+## Features
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### ✅ Tracking
+### Tracking
 
 - One-tap logging from the home screen, a widget or the notification
 - Three kinds of habit: **normal**, **avoid** (with relapses) and **amount**,
@@ -108,7 +108,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 </td>
 <td width="50%" valign="top">
 
-### 📊 Seeing your progress
+### Seeing your progress
 
 - GitHub-style **activity grid**, by week, month or the whole year
 - **Month calendar**, with your week starting on Monday, Saturday or Sunday
@@ -124,7 +124,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 <tr>
 <td width="50%" valign="top">
 
-### 🧘 Focus sessions
+### Focus sessions
 
 - A timer for the habits that need one, free or tied to a habit and its goal
 - **Pomodoro rounds** with short breaks, or one long stretch
@@ -138,7 +138,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 </td>
 <td width="50%" valign="top">
 
-### 🎨 Making it yours
+### Making it yours
 
 - **Classic, Minimal or Express**: three complete designs, each with its own
   typography, shapes and motion
@@ -155,7 +155,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 <tr>
 <td width="50%" valign="top">
 
-### 🔔 Reminders and widgets
+### Reminders and widgets
 
 - Reminders per habit, on the days you choose or every N days, each with a
   short encouraging line
@@ -169,7 +169,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 </td>
 <td width="50%" valign="top">
 
-### 💾 Your data
+### Your data
 
 - **Import** from Loop Habit Tracker, HabitKit, Habitica and HabitBull,
   history and streaks included, or any CSV with a habit and a date
@@ -186,7 +186,7 @@ It is fast, offline, and built to feel calm rather than demanding.
 
 ---
 
-## 📦 Coming from another app?
+## Coming from another app?
 
 <details>
 <summary><b>How the import works</b></summary>
@@ -201,15 +201,14 @@ survive the move. Any other CSV works too, as long as it has a habit and a date.
 
 ---
 
-## ⬇️ Download
+## Download
 
 [**F-Droid**](https://f-droid.org/packages/com.streak.app/) is the easiest way:
 it installs Streak and keeps it updated for you. It's also on
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 and [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
-Streak runs on Android, Windows and Linux today, and the other platforms are
-on their way:
+Streak runs on Android, Windows and Linux:
 
 | Platform | Status |
 |----------|--------|
@@ -222,25 +221,17 @@ on their way:
 <details>
 <summary><b>Linux</b></summary>
 
-Two files on the [**Releases**](https://github.com/InlitX/streak/releases)
-page, both for 64-bit x86:
+Two files on the [**Releases**](https://github.com/InlitX/streak/releases) page,
+both for 64-bit x86:
 
 | File | For |
 |------|-----|
 | `Streak-x86_64.AppImage` | Any distribution: make it executable and run it |
-| `Streak-linux-x64.tar.gz` | Unpack anywhere and run `Streak`; the `.desktop` file and the icon are inside |
+| `Streak-linux-x64.tar.gz` | Unpack anywhere and run `Streak` |
 
-Built on Ubuntu 22.04, so it runs on anything with glibc 2.35 or newer. It
-needs GTK 3, GStreamer for the Focus sounds and scenes, and the desktop
-portals for the file dialogs; every mainstream desktop already has them. On a
-minimal system: `libgtk-3-0 gstreamer1.0-plugins-base
-gstreamer1.0-plugins-good gstreamer1.0-libav xdg-desktop-portal` plus the
-portal backend of your desktop
-(`xdg-desktop-portal-gtk` on GNOME and most others, `xdg-desktop-portal-kde`
-on KDE). If the AppImage does not start, install `libfuse2`.
-
-Reminders on Linux ring while Streak is open: the system cannot wake the app
-on its own, so keep it running if you rely on them.
+The Linux build has only just landed, so expect some rough edges. Reminders ring
+while Streak is open. If something does not work, open an issue and I will fix
+them as they come.
 
 </details>
 
@@ -265,24 +256,24 @@ Releases page, tell you when a new version is out and pick the right APK for
 your phone.
 
 > [!NOTE]
-> Streak isn't on the Play Store. Since the APK doesn't come from a store,
-> Android may ask you to allow installs from your browser or file manager the
-> first time.
+>Streak isn't on the Play Store. Since the APK doesn't come from a store,
+>Android may ask you to allow installs from your browser or file manager the
+>first time.
 
 </details>
 
 ---
 
-## 🔒 Privacy
+## Privacy
 
 > [!IMPORTANT]
-> Streak has **no analytics, no advertising SDK and no network backend**. The
-> app never sends your data anywhere; it stays on your device. The only
-> outbound actions are links you choose to open yourself.
+>Streak has **no analytics, no advertising SDK and no network backend**. The
+>app never sends your data anywhere; it stays on your device. The only
+>outbound actions are links you choose to open yourself.
 
 ---
 
-## 🌍 Translations
+## Translations
 
 Streak speaks **English, Spanish, French, Portuguese, Russian, Ukrainian and
 Chinese** in full, with **German, Polish, Hebrew, Indonesian and Persian** on
@@ -296,7 +287,7 @@ How it works → [**TRANSLATING.md**](TRANSLATING.md)
 
 ---
 
-## 🛠️ Contributing
+## Contributing
 
 Bug reports, ideas and pull requests are all welcome, see
 [**CONTRIBUTING.md**](CONTRIBUTING.md). For anything larger than a fix, open an
@@ -304,43 +295,39 @@ issue first so we can agree on the direction.
 
 ---
 
-## 🙏 Inspiration
+## Inspiration
 
 <details>
 <summary><b>The apps that shaped Streak</b></summary>
 
-Streak did not appear out of nowhere. These are the apps that shaped it:
+These are the apps Streak learned from:
 
 - **[Loop Habit Tracker](https://github.com/iSoron/uhabits)**, for proving a
-  habit tracker can be free, offline and quietly excellent.
-- **[Grit](https://github.com/shub39/Grit)**, for the polish: the small motions
-  and the way a list can feel alive.
-- **[HabitKit](https://www.habitkit.app/)**, for showing how good a year of
-  history looks as a coloured grid.
-- **[Habitica](https://github.com/habitRPG/habitica)**, for treating showing up as something
-  worth celebrating.
+  habit tracker can be free, offline and still excellent.
+- **[Grit](https://github.com/shub39/Grit)**, for the small motions that make a
+  list feel alive.
+- **[HabitKit](https://www.habitkit.app/)**, for how good a year of history
+  looks as a coloured grid.
+- **[Habitica](https://github.com/habitRPG/habitica)**, for treating showing up
+  as something worth celebrating.
 
 The island you build in the gamification tab is drawn with
 **[Mykonos Island Voxels](https://github.com/boona13/mykonos-island-voxels)** by
 boona13, an MIT licensed set of isometric voxel art. Thank you for putting it
 out there for anyone to use.
 
-Nothing here is copied from them. Their ideas were the starting point, and
-Streak went its own way from there.
-
 </details>
 
 ---
 
-## ❤️ Support
+## Support
 
 <div align="center">
 
 Streak is free, open source and free of ads, and it stays that way.
 
-If it helps you show up more often, that is already enough. If you also feel
-like giving something back, a star, a translation or a clear bug report help as
-much as a coffee does.
+If you want to give something back, a star, a translation or a clear bug report
+help as much as a coffee does.
 
 <a href="https://ko-fi.com/inlitx"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support me on Ko-fi" height="38" /></a>
 

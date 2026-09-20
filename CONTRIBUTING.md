@@ -8,7 +8,7 @@ Bug fixes, features or a well-written issue — all of it helps.
 
 > [!NOTE]
 > **Only here to translate?** You don't need any of this.
-> Head to [**TRANSLATING.md**](TRANSLATING.md) — no code required.
+>Head to [**TRANSLATING.md**](TRANSLATING.md) — no code required.
 
 ---
 
@@ -113,8 +113,8 @@ languages to [Weblate](https://hosted.weblate.org/engage/streak/), and never
 rename an existing key or its translations are lost everywhere.
 
 > [!NOTE]
-> Versions, tags, signing and publishing are handled by the maintainer — never
-> bump a version or push a tag in a pull request. CI builds every PR as a check.
+>Versions, tags, signing and publishing are handled by the maintainer — never
+>bump a version or push a tag in a pull request. CI builds every PR as a check.
 
 ---
 

@@ -1,20 +1,20 @@
 <div align="center">
 
-<img src="assets/banner.png" alt="Streak, un rastreador de hábitos minimalista, privado y sin anuncios" width="100%" />
+<img src="../assets/banner.png" alt="Streak, un rastreador de hábitos minimalista, privado y sin anuncios" width="100%" />
 
 </div>
 
 ---
 
 <div align="right">
-  <sub><a href="README.md">English</a> · <b>Español</b> · <a href="README.zh-CN.md">中文</a> · <a href="README.ru.md">Русский</a></sub>
+  <sub><a href="../README.md">English</a> · <b>Español</b> · <a href="README.zh-CN.md">中文</a> · <a href="README.ru.md">Русский</a></sub>
 </div>
 
 <div align="center">
 
 ### Streak
 
-<img src="assets/icon.svg" width="72" alt="Logo de Streak" />
+<img src="../assets/icon.svg" width="72" alt="Logo de Streak" />
 
 ### Un rastreador de hábitos minimalista, privado y sin anuncios
 
@@ -34,25 +34,25 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <br/>
 
-<a href="https://f-droid.org/packages/com.streak.app/"><img alt="Disponible en F-Droid" src="assets/badges/get-it-on-fdroid.png" height="60" /></a>
+<a href="https://f-droid.org/packages/com.streak.app/"><img alt="Disponible en F-Droid" src="../assets/badges/get-it-on-fdroid.png" height="60" /></a>
 &nbsp;
-<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Disponible en IzzyOnDroid" src="assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main"><img alt="Disponible en IzzyOnDroid" src="../assets/badges/get-it-on-izzyondroid.png" height="60" /></a>
 &nbsp;
-<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Disponible en OpenAPK" src="assets/badges/get-it-on-openapk.png" height="60" /></a>
+<a href="https://www.openapk.net/streak/com.streak.app/"><img alt="Disponible en OpenAPK" src="../assets/badges/get-it-on-openapk.png" height="60" /></a>
 &nbsp;
-<a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="assets/badges/get-it-on-github.png" height="60" /></a>
+<a href="https://github.com/InlitX/streak/releases"><img alt="Disponible en GitHub" src="../assets/badges/get-it-on-github.png" height="60" /></a>
 &nbsp;
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.streak.app%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FInlitX%2Fstreak%22%2C%22author%22%3A%22InlitX%22%2C%22name%22%3A%22Streak%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Afalse%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22filterReleaseNotesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22verifyLatestTag%5C%22%3Afalse%2C%5C%22dontSortReleasesList%5C%22%3Afalse%2C%5C%22useLatestAssetDateAsReleaseDate%5C%22%3Afalse%2C%5C%22trackOnly%5C%22%3Afalse%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22matchGroupToUse%5C%22%3A%5C%22%5C%22%2C%5C%22versionDetection%5C%22%3Atrue%2C%5C%22releaseDateAsVersion%5C%22%3Afalse%2C%5C%22useVersionCodeAsOSVersion%5C%22%3Afalse%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22invertAPKFilter%5C%22%3Afalse%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22%5C%22%2C%5C%22shizukuPretendToBeGooglePlay%5C%22%3Afalse%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22exemptFromBackgroundUpdates%5C%22%3Afalse%2C%5C%22skipUpdateNotifications%5C%22%3Afalse%2C%5C%22about%5C%22%3A%5C%22Streak%20is%20an%20open%20source%20habit%20tracker%20for%20Android.%20Build%20habits%20with%20one%20tap%2C%20watch%20your%20progress%20grow%2C%20and%20keep%20everything%20on%20your%20device.%20No%20accounts%2C%20no%20ads%2C%20no%20tracking.%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img alt="Disponible en Obtainium" src="assets/badges/get-it-on-obtainium.png" height="60" /></a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22com.streak.app%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FInlitX%2Fstreak%22%2C%22author%22%3A%22InlitX%22%2C%22name%22%3A%22Streak%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Afalse%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22filterReleaseNotesByRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22verifyLatestTag%5C%22%3Afalse%2C%5C%22dontSortReleasesList%5C%22%3Afalse%2C%5C%22useLatestAssetDateAsReleaseDate%5C%22%3Afalse%2C%5C%22trackOnly%5C%22%3Afalse%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22matchGroupToUse%5C%22%3A%5C%22%5C%22%2C%5C%22versionDetection%5C%22%3Atrue%2C%5C%22releaseDateAsVersion%5C%22%3Afalse%2C%5C%22useVersionCodeAsOSVersion%5C%22%3Afalse%2C%5C%22apkFilterRegEx%5C%22%3A%5C%22%5C%22%2C%5C%22invertAPKFilter%5C%22%3Afalse%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22%5C%22%2C%5C%22shizukuPretendToBeGooglePlay%5C%22%3Afalse%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22exemptFromBackgroundUpdates%5C%22%3Afalse%2C%5C%22skipUpdateNotifications%5C%22%3Afalse%2C%5C%22about%5C%22%3A%5C%22Streak%20is%20an%20open%20source%20habit%20tracker%20for%20Android.%20Build%20habits%20with%20one%20tap%2C%20watch%20your%20progress%20grow%2C%20and%20keep%20everything%20on%20your%20device.%20No%20accounts%2C%20no%20ads%2C%20no%20tracking.%5C%22%7D%22%2C%22overrideSource%22%3Anull%7D"><img alt="Disponible en Obtainium" src="../assets/badges/get-it-on-obtainium.png" height="60" /></a>
 
 <br/>
 
 <sub>
-  <a href="#-características">✨ Características</a> ·
-  <a href="#-vienes-de-otra-app">📦 Importar</a> ·
-  <a href="#-descarga">⬇️ Descarga</a> ·
-  <a href="#-privacidad">🔒 Privacidad</a> ·
-  <a href="#-traducciones">🌍 Traducciones</a> ·
-  <a href="#-apoyo">❤️ Apoyo</a>
+  <a href="#características">Características</a> ·
+  <a href="#vienes-de-otra-app">Importar</a> ·
+  <a href="#descarga">Descarga</a> ·
+  <a href="#privacidad">Privacidad</a> ·
+  <a href="#traducciones">Traducciones</a> ·
+  <a href="#apoyo">Apoyo</a>
 </sub>
 
 </div>
@@ -61,15 +61,15 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 <div align="center">
 
-<img src="screenshots/01-today.png" alt="Hoy" width="145" />
-<img src="screenshots/02-focus.png" alt="Concentración" width="145" />
-<img src="screenshots/03-stats.png" alt="Estadísticas" width="145" />
-<img src="screenshots/04-insights.png" alt="Análisis" width="145" />
+<img src="../screenshots/01-today.png" alt="Hoy" width="145" />
+<img src="../screenshots/02-focus.png" alt="Concentración" width="145" />
+<img src="../screenshots/03-stats.png" alt="Estadísticas" width="145" />
+<img src="../screenshots/04-insights.png" alt="Análisis" width="145" />
 
-<img src="screenshots/05-amount.png" alt="Hábitos de cantidad" width="145" />
-<img src="screenshots/06-notes.png" alt="Notas del día" width="145" />
-<img src="screenshots/07-customize.png" alt="Personaliza" width="145" />
-<img src="screenshots/08-private.png" alt="Libre y privada" width="145" />
+<img src="../screenshots/05-amount.png" alt="Hábitos de cantidad" width="145" />
+<img src="../screenshots/06-notes.png" alt="Notas del día" width="145" />
+<img src="../screenshots/07-customize.png" alt="Personaliza" width="145" />
+<img src="../screenshots/08-private.png" alt="Libre y privada" width="145" />
 
 <sub><b>Hoy</b> · <b>Concentración</b> · <b>Estadísticas</b> · <b>Análisis</b> · <b>Cantidades</b> · <b>Notas</b> · <b>Personaliza</b> · <b>Libre y privada</b></sub>
 
@@ -77,7 +77,7 @@ Registra un hábito con un solo toque, mantén tu constancia y mira crecer tus r
 
 ---
 
-## 👋 Resumen
+## Resumen
 
 Streak es un rastreador de hábitos de código abierto para Android que te respeta.
 Crea todos los hábitos que quieras, regístralos con un toque y mira tu progreso
@@ -89,13 +89,13 @@ exigir.
 
 ---
 
-## ✨ Características
+## Características
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### ✅ Seguimiento
+### Seguimiento
 
 - Registro con un toque desde la pantalla de inicio, un widget o la
   notificación
@@ -112,7 +112,7 @@ exigir.
 </td>
 <td width="50%" valign="top">
 
-### 📊 Ver tu progreso
+### Ver tu progreso
 
 - **Cuadrícula de actividad** al estilo de GitHub, por semana, mes o año entero
 - **Calendario mensual**, con la semana empezando en lunes, sábado o domingo
@@ -130,7 +130,7 @@ exigir.
 <tr>
 <td width="50%" valign="top">
 
-### 🧘 Sesiones de concentración
+### Sesiones de concentración
 
 - Un temporizador para los hábitos que lo piden, libre o atado a un hábito y
   su meta
@@ -145,7 +145,7 @@ exigir.
 </td>
 <td width="50%" valign="top">
 
-### 🎨 Hacerla tuya
+### Hacerla tuya
 
 - **Clásico, Minimal o Express**: tres diseños completos, cada uno con su
   cuadrícula con todo agrupado en cuatro secciones
@@ -162,7 +162,7 @@ exigir.
 <tr>
 <td width="50%" valign="top">
 
-### 🔔 Recordatorios y widgets
+### Recordatorios y widgets
 
 - Recordatorios por hábito, los días que elijas o cada N días, cada uno con
   una frase de ánimo
@@ -178,7 +178,7 @@ exigir.
 </td>
 <td width="50%" valign="top">
 
-### 💾 Tus datos
+### Tus datos
 
 - **Importa** desde Loop Habit Tracker, HabitKit, Habitica y HabitBull, con
   historial y rachas, o desde cualquier CSV con un hábito y una fecha
@@ -195,7 +195,7 @@ exigir.
 
 ---
 
-## 📦 ¿Vienes de otra app?
+## ¿Vienes de otra app?
 
 <details>
 <summary><b>Cómo funciona la importación</b></summary>
@@ -211,22 +211,39 @@ un hábito y una fecha.
 
 ---
 
-## ⬇️ Descarga
+## Descarga
 
 [**F-Droid**](https://f-droid.org/packages/com.streak.app/) es lo más cómodo:
 instala Streak y lo mantiene actualizado por ti. También está en
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 y [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
-Hoy Streak es una app de Android, y el resto de plataformas están en camino:
+Streak funciona en Android, Windows y Linux:
 
 | Plataforma | Estado |
 |------------|--------|
 | Android | ✅ Compatible |
 | Windows | ✅ Compatible |
+| Linux | ✅ Compatible |
 | iOS | 🚧 En curso |
-| Linux | 📅 Planeado |
 | macOS | 📅 Planeado |
+
+<details>
+<summary><b>Linux</b></summary>
+
+Dos ficheros en la página de [**Releases**](https://github.com/InlitX/streak/releases),
+los dos para x86 de 64 bits:
+
+| Fichero | Para |
+|---------|------|
+| `Streak-x86_64.AppImage` | Cualquier distribución: dale permiso de ejecución y ábrelo |
+| `Streak-linux-x64.tar.gz` | Descomprímelo donde quieras y ejecuta `Streak` |
+
+La versión de Linux acaba de salir, así que es normal que tenga algún fallo. Los
+recordatorios suenan mientras Streak esté abierto. Si algo no va, abre un issue y
+lo iré arreglando.
+
+</details>
 
 <details>
 <summary><b>Instalar el APK por tu cuenta</b></summary>
@@ -249,24 +266,24 @@ página de Releases, te avisará cuando salga una versión nueva y elegirá el A
 que le toca a tu teléfono.
 
 > [!NOTE]
-> Streak no está en la Play Store. Como el APK no viene de una tienda, puede que
-> Android te pida permitir instalaciones desde tu navegador o gestor de archivos
-> la primera vez.
+>Streak no está en la Play Store. Como el APK no viene de una tienda, puede que
+>Android te pida permitir instalaciones desde tu navegador o gestor de archivos
+>la primera vez.
 
 </details>
 
 ---
 
-## 🔒 Privacidad
+## Privacidad
 
 > [!IMPORTANT]
-> Streak **no tiene analíticas, ni SDK de publicidad, ni backend de red**. La app
-> nunca envía tus datos a ningún sitio: se quedan en tu dispositivo. Las únicas
-> acciones salientes son los enlaces que tú decides abrir.
+>Streak **no tiene analíticas, ni SDK de publicidad, ni backend de red**. La app
+>nunca envía tus datos a ningún sitio: se quedan en tu dispositivo. Las únicas
+>acciones salientes son los enlaces que tú decides abrir.
 
 ---
 
-## 🌍 Traducciones
+## Traducciones
 
 Streak habla **inglés, español, francés, portugués, ruso, ucraniano y chino**
 por completo, y **alemán, polaco, hebreo, indonesio y persa** están en camino;
@@ -276,19 +293,19 @@ no hace falta programar, solo son frases cortas que traduces en el navegador.
 
 [![Estado de la traducción por idioma](https://hosted.weblate.org/widget/streak/app-strings/multi-auto.svg)](https://hosted.weblate.org/engage/streak/)
 
-Cómo funciona → [**TRANSLATING.md**](TRANSLATING.md)
+Cómo funciona → [**TRANSLATING.md**](../TRANSLATING.md)
 
 ---
 
-## 🛠️ Contribuir
+## Contribuir
 
 Los informes de fallos, las ideas y los pull requests son bienvenidos, mira
-[**CONTRIBUTING.md**](CONTRIBUTING.md). Para algo más grande que un arreglo, abre
+[**CONTRIBUTING.md**](../CONTRIBUTING.md). Para algo más grande que un arreglo, abre
 antes una incidencia y acordamos la dirección.
 
 ---
 
-## 🙏 Inspiración
+## Inspiración
 
 <details>
 <summary><b>Las apps que la moldearon</b></summary>
@@ -316,7 +333,7 @@ siguió su propio camino.
 
 ---
 
-## ❤️ Apoyo
+## Apoyo
 
 <div align="center">
 
@@ -332,19 +349,19 @@ ayudan tanto como un café.
 
 <table align="center">
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/bitcoin.svg" width="22" alt="Bitcoin" /><br/><sub><b>Bitcoin</b></sub></td>
     <td><code>bc1qm0r4pg8nknnjh3a7n2t63ckafhsz8jdd6qer29</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/ethereum.svg" width="22" alt="Ethereum" /><br/><sub><b>Ethereum</b></sub></td>
     <td><code>0x34b7A5552132cBca150Ae29c1E632faA49430e1a</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/solana.svg" width="22" alt="Solana" /><br/><sub><b>Solana</b></sub></td>
     <td><code>DC8dNEUNJhWdtBHBZAn4FTheVC3W4PtkGhbazvtk17Jo</code></td>
   </tr>
   <tr>
-    <td align="center" width="130"><img src="assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
+    <td align="center" width="130"><img src="../assets/crypto/monero.svg" width="22" alt="Monero" /><br/><sub><b>Monero</b></sub></td>
     <td><code>44SECMEf3rfV228kpy3Gs48wLmLXnq231gAMG7ULYoCWBWLYLHdwYV7YFkhMk31DR5P7SRAyRPyhkYaehtgEoajASz7qubq</code></td>
   </tr>
 </table>
@@ -363,6 +380,6 @@ ayudan tanto como un café.
 <br/>
 <br/>
 
-Publicado bajo la <a href="LICENSE"><b>Licencia GNU GPLv3</b></a>.
+Publicado bajo la <a href="../LICENSE"><b>Licencia GNU GPLv3</b></a>.
 
 </div>
