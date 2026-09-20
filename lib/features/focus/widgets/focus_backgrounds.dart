@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/focus/widgets/focus_video_scene.dart';
+import 'package:streak/features/focus/widgets/linux_video_scene.dart';
 
 const focusSceneAssets = <String>[
   'assets/backgrounds/night_city.jpg',
@@ -59,7 +60,10 @@ class FocusBackground extends StatelessWidget {
       return Stack(
         fit: StackFit.expand,
         children: [
-          FocusVideoScene(name: focusVideoScenes[video]),
+          if (Platform.isLinux)
+            LinuxVideoScene(name: focusVideoScenes[video])
+          else
+            FocusVideoScene(name: focusVideoScenes[video]),
           ColoredBox(color: Colors.black.withValues(alpha: 0.32)),
           child,
         ],

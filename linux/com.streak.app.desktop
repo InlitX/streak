@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Streak
+Comment=A minimal habit tracker that helps you build lasting streaks
+Exec=Streak
+Icon=com.streak.app
+Terminal=false
+Categories=Utility;
+Keywords=habit;habits;streak;tracker;
+StartupWMClass=com.streak.app

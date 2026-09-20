@@ -10,7 +10,7 @@ const focusVideoScenes = <String>[
   'cat_fireplace',
 ];
 
-bool get hasVideoScenes => Platform.isWindows;
+bool get hasVideoScenes => Platform.isWindows || Platform.isLinux;
 
 String get _scenesDir =>
     '${File(Platform.resolvedExecutable).parent.path}/data/scenes';

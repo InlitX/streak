@@ -208,16 +208,41 @@ it installs Streak and keeps it updated for you. It's also on
 [**IzzyOnDroid**](https://apt.izzysoft.de/fdroid/index/apk/com.streak.app?repo=main)
 and [**OpenAPK**](https://www.openapk.net/streak/com.streak.app/).
 
-Streak runs on Android and Windows today, and the other platforms are on
-their way:
+Streak runs on Android, Windows and Linux today, and the other platforms are
+on their way:
 
 | Platform | Status |
 |----------|--------|
 | Android | ✅ Supported |
 | Windows | ✅ Supported |
+| Linux | ✅ Supported |
 | iOS | 🚧 In progress |
-| Linux | 📅 Planned |
 | macOS | 📅 Planned |
+
+<details>
+<summary><b>Linux</b></summary>
+
+Two files on the [**Releases**](https://github.com/InlitX/streak/releases)
+page, both for 64-bit x86:
+
+| File | For |
+|------|-----|
+| `Streak-x86_64.AppImage` | Any distribution: make it executable and run it |
+| `Streak-linux-x64.tar.gz` | Unpack anywhere and run `Streak`; the `.desktop` file and the icon are inside |
+
+Built on Ubuntu 22.04, so it runs on anything with glibc 2.35 or newer. It
+needs GTK 3, GStreamer for the Focus sounds and scenes, and the desktop
+portals for the file dialogs; every mainstream desktop already has them. On a
+minimal system: `libgtk-3-0 gstreamer1.0-plugins-base
+gstreamer1.0-plugins-good gstreamer1.0-libav xdg-desktop-portal` plus the
+portal backend of your desktop
+(`xdg-desktop-portal-gtk` on GNOME and most others, `xdg-desktop-portal-kde`
+on KDE). If the AppImage does not start, install `libfuse2`.
+
+Reminders on Linux ring while Streak is open: the system cannot wake the app
+on its own, so keep it running if you rely on them.
+
+</details>
 
 <details>
 <summary><b>Install the APK yourself</b></summary>
