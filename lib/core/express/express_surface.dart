@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_type.dart';
@@ -40,14 +39,12 @@ class ExpressSquish extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.scale = 0.965,
-    this.haptic = true,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final double scale;
-  final bool haptic;
 
   @override
   State<ExpressSquish> createState() => _ExpressSquishState();
@@ -68,18 +65,8 @@ class _ExpressSquishState extends State<ExpressSquish> {
       onTapDown: enabled ? (_) => _set(true) : null,
       onTapUp: enabled ? (_) => _set(false) : null,
       onTapCancel: enabled ? () => _set(false) : null,
-      onTap: widget.onTap == null
-          ? null
-          : () {
-              if (widget.haptic) HapticFeedback.selectionClick();
-              widget.onTap!();
-            },
-      onLongPress: widget.onLongPress == null
-          ? null
-          : () {
-              HapticFeedback.heavyImpact();
-              widget.onLongPress!();
-            },
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       child: AnimatedScale(
         scale: _down && enabled ? widget.scale : 1,
         duration: _down ? Express.fast : Express.quick,

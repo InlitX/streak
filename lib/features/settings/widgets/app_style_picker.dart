@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -17,7 +16,6 @@ class AppStylePicker extends StatelessWidget {
 
     void choose(int value) {
       if (settings.appStyle == value) return;
-      HapticFeedback.selectionClick();
       settings.setAppStyle(value);
     }
 
@@ -170,7 +168,6 @@ class AppStyleLegend extends StatelessWidget {
               selected: settings.appStyle == i,
               onTap: () {
                 if (settings.appStyle == i) return;
-                HapticFeedback.selectionClick();
                 settings.setAppStyle(i);
               },
             ),

@@ -17,7 +17,7 @@ class QuantDailyBars extends StatelessWidget {
   Widget build(BuildContext context) {
     final express = context.watch<SettingsController>().isExpressStyle;
     final span = express ? 30 : days;
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final start = today.addDays(-(span - 1));
     final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
         ? ''

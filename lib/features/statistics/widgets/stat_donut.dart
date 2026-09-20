@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 
@@ -59,7 +58,6 @@ class _HabitDonutState extends State<HabitDonut> with TickerProviderStateMixin {
 
   void _tap(int? index) {
     if (index == _selected) return;
-    HapticFeedback.selectionClick();
     setState(() {
       _from = _expansion;
       _to = [

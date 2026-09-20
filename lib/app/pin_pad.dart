@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/app_lock_pin.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -48,14 +47,12 @@ class _PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
 
   void _type(String digit) {
     if (!widget.enabled || _busy || _pin.length >= _max) return;
-    HapticFeedback.selectionClick();
     setState(() => _pin += digit);
     if (widget.length != null && _pin.length == widget.length) _submit();
   }
 
   void _erase() {
     if (_pin.isEmpty || _busy) return;
-    HapticFeedback.selectionClick();
     setState(() => _pin = _pin.substring(0, _pin.length - 1));
   }
 
@@ -66,7 +63,6 @@ class _PinPadState extends State<PinPad> with SingleTickerProviderStateMixin {
     _busy = false;
     if (!mounted) return;
     if (!ok) {
-      HapticFeedback.heavyImpact();
       _shake.forward(from: 0);
     }
     setState(() => _pin = '');

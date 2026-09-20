@@ -15,7 +15,7 @@ class CompactActivityStrip extends StatelessWidget {
   final HeatmapMode mode;
 
   List<Color> _monthCells(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final floor = habit.startedAt;
     final base = context.colors.surfaceContainerHighest;
     final dim = base.withValues(alpha: 0.4);
@@ -50,7 +50,7 @@ class CompactActivityStrip extends StatelessWidget {
   }
 
   List<Color> _dayCells(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final days = DateTime(today.year, today.month + 1, 0).day;
     return [
       for (var day = 1; day <= days; day++)

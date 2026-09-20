@@ -17,6 +17,7 @@ Future<int?> showDurationSheet(
   return showModalBottomSheet<int>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
     builder: (_) => _DurationSheet(minutes: minutes),
   );
 }

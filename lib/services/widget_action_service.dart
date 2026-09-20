@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:streak/core/database/local_store.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
 
 class WidgetActionService {
@@ -18,6 +20,7 @@ class WidgetActionService {
     Map<String, Habit> habits, {
     List<Todo> todos = const [],
   }) async {
+    await HomeWidgetService.prepare();
     final pending = await _read();
     if (pending.isEmpty) return false;
 
@@ -80,6 +83,7 @@ class WidgetActionService {
   }
 
   static Future<List<String>> _read() async {
+    if (!hasHomeWidgets) return const [];
     try {
       final raw = await HomeWidget.getWidgetData<String>(_queueKey);
       if (raw == null || raw.isEmpty) return const [];

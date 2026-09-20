@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -19,12 +18,15 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
+import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/all_notes_page.dart';
 import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/focus/widgets/focus_pill.dart';
+import 'package:streak/features/habits/state/categories_controller.dart';
+import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/island/data/island_ledger.dart';
 import 'package:streak/features/island/widgets/island_coins.dart';
@@ -245,7 +247,6 @@ class _HomePageState extends State<HomePage> {
       icon: LucideIcons.archive,
     );
     if (confirmed == true) {
-      HapticFeedback.heavyImpact();
       await controller.archive(habit.id);
       if (!mounted) return;
       AppSnackbar.action(
@@ -260,6 +261,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final order = context.watch<CategoriesController>().categories;
     final sortCompletedLast = settings.sortCompletedLast;
     final minimal = settings.isMinimalStyle;
     final express = settings.isExpressStyle;
@@ -418,7 +420,7 @@ class _HomePageState extends State<HomePage> {
                   : finished.fold<int>(0, (sum, h) => sum + h.difficultyWeight) /
                       weight;
 
-              final categories = _categoriesOf(all);
+              final categories = _categoriesOf(all, order);
               if (_category != null && !categories.contains(_category)) {
                 _category = null;
               }
@@ -577,7 +579,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _toggle(Habit habit, DateTime date) async {
     final controller = context.read<HabitsController>();
     if (habit.kind == HabitKind.negative && !isRelapse(habit, date)) {
-      if (date.atMidnight.isAfter(AppClock.now().atMidnight)) return;
+      if (date.atMidnight.isAfter(AppClock.today())) return;
       if (!await confirmRelapse(context, habit)) return;
       if (!mounted) return;
       await controller.logRelapse(habit.id, date);
@@ -655,12 +657,16 @@ class _HomePageState extends State<HomePage> {
         after.indexWhere((h) => h.id == id);
   }
 
-  List<String> _categoriesOf(List<Habit> habits) {
+  List<String> _categoriesOf(List<Habit> habits, List<Category> order) {
     final set = <String>{};
     for (final h in habits) {
       if (h.category.isNotEmpty) set.add(h.category);
     }
-    return set.toList()..sort();
+    final ranked = [for (final category in order) category.name];
+    return [
+      ...ranked.where(set.contains),
+      ...set.where((name) => !ranked.contains(name)).toList()..sort(),
+    ];
   }
 }
 
@@ -753,7 +759,6 @@ class _ViewSelector extends StatelessWidget {
                 selected: value == mode,
                 child: GestureDetector(
                   onTap: () {
-                    HapticFeedback.selectionClick();
                     onChanged(value);
                   },
                   child: AnimatedScale(
@@ -814,12 +819,14 @@ class _CategoryBar extends StatelessWidget {
             label: context.l10n.all,
             active: selected == null,
             onTap: () => onSelected(null),
+            onLongPress: () => showCategoryOrderSheet(context),
           ),
           for (final category in categories)
             _Chip(
               label: context.categoryLabel(category),
               active: selected == category,
               onTap: () => onSelected(category),
+              onLongPress: () => showCategoryOrderSheet(context),
             ),
         ],
       ),
@@ -832,11 +839,13 @@ class _Chip extends StatelessWidget {
     required this.label,
     required this.active,
     required this.onTap,
+    this.onLongPress,
   });
 
   final String label;
   final bool active;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -847,10 +856,8 @@ class _Chip extends StatelessWidget {
         button: true,
         selected: active,
         child: GestureDetector(
-          onTap: () {
-            HapticFeedback.selectionClick();
-            onTap();
-          },
+          onTap: onTap,
+          onLongPress: onLongPress,
           child: AnimatedScale(
             scale: active ? 1 : 0.95,
             duration: const Duration(milliseconds: 260),

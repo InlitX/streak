@@ -76,10 +76,11 @@ double axisWidth(
   final scaler = MediaQuery.textScalerOf(
     context,
   ).clamp(maxScaleFactor: _maxAxisScale);
+  final rendered = DefaultTextStyle.of(context).style.merge(style);
   var width = 0.0;
   for (final sample in samples) {
     final painter = TextPainter(
-      text: TextSpan(text: sample, style: style),
+      text: TextSpan(text: sample, style: rendered),
       textDirection: TextDirection.ltr,
       textScaler: scaler,
     )..layout();

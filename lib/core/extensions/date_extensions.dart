@@ -1,15 +1,36 @@
 class AppClock {
   const AppClock._();
 
-  static int cutoffHour = 0;
+  static int _cutoffHour = 0;
+  static DateTime? _today;
+  static int _todayUntil = 0;
 
-  static DateTime now() => cutoffHour == 0
+  static int get cutoffHour => _cutoffHour;
+
+  static set cutoffHour(int value) {
+    if (_cutoffHour == value) return;
+    _cutoffHour = value;
+    _today = null;
+  }
+
+  static DateTime now() => _cutoffHour == 0
       ? DateTime.now()
-      : DateTime.now().subtract(Duration(hours: cutoffHour));
+      : DateTime.now().subtract(Duration(hours: _cutoffHour));
 
   static DateTime wallNow() => DateTime.now();
 
-  static DateTime today() => now().atMidnight;
+  static DateTime today() {
+    final cached = _today;
+    if (cached != null &&
+        DateTime.now().millisecondsSinceEpoch < _todayUntil) {
+      return cached;
+    }
+    final midnight = now().atMidnight;
+    _today = midnight;
+    _todayUntil = midnight.addDays(1).millisecondsSinceEpoch +
+        _cutoffHour * Duration.millisecondsPerHour;
+    return midnight;
+  }
 
   static bool isLogicalToday(DateTime date) => date.isSameDay(now());
 }

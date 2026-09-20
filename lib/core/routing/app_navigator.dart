@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:streak/app/app_background.dart';
+import 'package:streak/core/widgets/page_motion.dart';
 
 abstract interface class FullWidthPage {}
 
@@ -70,53 +73,45 @@ class AppNavigator {
       settings: RouteSettings(name: name),
       fullscreenDialog: fullscreenDialog,
       transitionDuration: const Duration(milliseconds: 300),
-      reverseTransitionDuration: const Duration(milliseconds: 260),
+      reverseTransitionDuration: const Duration(milliseconds: 250),
       opaque: true,
       pageBuilder: (_, __, ___) => AppBackground(child: page),
-      transitionsBuilder: (_, animation, secondaryAnimation, child) {
-        final incoming = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-          reverseCurve: Curves.easeInCubic,
-        );
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final route = ModalRoute.of(context)! as PageRoute<T>;
+        if (Platform.isIOS && !fade && !fullscreenDialog) {
+          return const CupertinoPageTransitionsBuilder().buildTransitions(
+            route,
+            context,
+            animation,
+            secondaryAnimation,
+            child,
+          );
+        }
 
         if (fullscreenDialog) {
           return SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(0, 1),
               end: Offset.zero,
-            ).animate(incoming),
-            child: child,
-          );
-        }
-
-        if (fade) {
-          return FadeTransition(
-            opacity: incoming,
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.94, end: 1).animate(incoming),
-              child: child,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutCubic,
+                reverseCurve: Curves.easeInCubic,
+              ),
             ),
+            child: child,
           );
         }
 
-        final outgoing = CurvedAnimation(
-          parent: secondaryAnimation,
-          curve: Curves.easeOutCubic,
-          reverseCurve: Curves.easeInCubic,
-        );
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(-0.22, 0),
-          ).animate(outgoing),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: Offset.zero,
-            ).animate(incoming),
-            child: child,
-          ),
+        if (fade) return FadeThrough(animation: animation, child: child);
+
+        return const ZoomPageTransitionsBuilder().buildTransitions(
+          route,
+          context,
+          animation,
+          secondaryAnimation,
+          child,
         );
       },
     );

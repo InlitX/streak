@@ -80,6 +80,7 @@ class CoverStorage {
       path.split('?').first.replaceAll(r'\', '/');
 
   static Future<void> clearPickerCache() async {
+    if (!isMobile) return;
     try {
       await FilePicker.platform.clearTemporaryFiles();
     } catch (e) {

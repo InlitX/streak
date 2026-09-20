@@ -256,7 +256,7 @@ class Habit {
 
   bool isCoveredOn(DateTime date) {
     var cursor = date.atMidnight;
-    if (cursor.isAfter(AppClock.now().atMidnight) || cursor.isBefore(startedAt)) {
+    if (cursor.isAfter(AppClock.today()) || cursor.isBefore(startedAt)) {
       return false;
     }
     if (interval == HabitInterval.weekly ||
@@ -289,17 +289,18 @@ class Habit {
   }
 
   bool isCompletedOn(DateTime date) {
-    final day = date.atMidnight;
-    if (day.isAfter(AppClock.now().atMidnight)) return false;
     final entry = completions[date.dayKey];
-    if (kind == HabitKind.negative) {
+    final negative = kind == HabitKind.negative;
+    if (entry == null && !negative) return false;
+    final day = date.atMidnight;
+    if (day.isAfter(AppClock.today())) return false;
+    if (negative) {
       return day.isBefore(startedAt) ? false : entry == null;
     }
-    if (entry == null) return false;
     if (hasSubsteps) {
-      return substeps.every((s) => entry.steps.contains(s.id));
+      return substeps.every((s) => entry!.steps.contains(s.id));
     }
-    return entry.count >= perDayTarget;
+    return entry!.count >= perDayTarget;
   }
 
   bool isRelapseOn(DateTime date) =>
@@ -312,13 +313,13 @@ class Habit {
   int _cleanDays() {
     if (kind != HabitKind.negative) return 0;
     final floor = startedAt;
-    final span = AppClock.now().atMidnight.epochDay - floor.epochDay + 1;
+    final span = AppClock.today().epochDay - floor.epochDay + 1;
     if (span <= 0) return 0;
     return span - _relapsesSince(floor);
   }
 
   int _relapsesSince(DateTime floor) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     var relapses = 0;
     for (final entry in completions.values) {
       final day = parseDayKey(entry.date);
@@ -347,7 +348,7 @@ class Habit {
 
   double _dayValue(DateTime date) {
     final day = date.atMidnight;
-    if (day.isBefore(startedAt) || day.isAfter(AppClock.now().atMidnight)) {
+    if (day.isBefore(startedAt) || day.isAfter(AppClock.today())) {
       return 0;
     }
     if (kind == HabitKind.negative) {
@@ -363,7 +364,7 @@ class Habit {
 
   double _strength() {
     if (completions.isEmpty && kind != HabitKind.negative) return 0;
-    final now = AppClock.now().atMidnight;
+    final now = AppClock.today();
     final floor = startedAt;
     const halfLife = 12.0;
     const window = 90;
@@ -400,7 +401,7 @@ class Habit {
     final floor = startedAt;
 
     if (kind == HabitKind.negative) {
-      var cursor = AppClock.now().atMidnight;
+      var cursor = AppClock.today();
       var streak = 0;
       while (!cursor.isBefore(floor)) {
         if (isNeutralOn(cursor)) {
@@ -476,7 +477,7 @@ class Habit {
 
   int _daySpecificCurrentStreak() {
     final floor = startedAt;
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     var cursor = today;
     var streak = 0;
     while (!cursor.isBefore(floor)) {
@@ -497,7 +498,7 @@ class Habit {
 
   int _daySpecificLongestStreak() {
     var cursor = startedAt;
-    final end = AppClock.now().atMidnight;
+    final end = AppClock.today();
     var best = 0;
     var run = 0;
     while (!cursor.isAfter(end)) {
@@ -521,7 +522,7 @@ class Habit {
   int _longestStreak() {
     if (kind == HabitKind.negative) {
       var cursor = startedAt;
-      final end = AppClock.now().atMidnight;
+      final end = AppClock.today();
       var best = 0;
       var run = 0;
       while (!cursor.isAfter(end)) {
@@ -544,7 +545,7 @@ class Habit {
     switch (interval) {
       case HabitInterval.daily:
         var cursor = startedAt;
-        final end = AppClock.now().atMidnight;
+        final end = AppClock.today();
         var best = 0;
         var run = 0;
         while (!cursor.isAfter(end)) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -120,7 +121,6 @@ class _SharePageState extends State<SharePage> {
     setState(() => _busy = true);
     final origin = shareOrigin(context);
     try {
-      HapticFeedback.mediumImpact();
       final bytes = await _render();
       if (bytes == null) throw Exception('encode failed');
       final dir = await Directory.systemTemp.createTemp('streak_share');
@@ -142,19 +142,33 @@ class _SharePageState extends State<SharePage> {
     if (_busy) return;
     setState(() => _busy = true);
     try {
-      HapticFeedback.mediumImpact();
       final bytes = await _render();
       if (bytes == null) throw Exception('encode failed');
-      if (!await Gal.hasAccess(toAlbum: true)) {
-        await Gal.requestAccess(toAlbum: true);
-      }
-      await Gal.putImageBytes(bytes, album: 'Streak');
+      if (!await _store(bytes)) return;
       if (mounted) AppSnackbar.success(context, context.l10n.share_saved);
     } catch (_) {
       if (mounted) AppSnackbar.error(context, context.l10n.share_save_failed);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  Future<bool> _store(Uint8List bytes) async {
+    if (!Platform.isLinux) {
+      if (!await Gal.hasAccess(toAlbum: true)) {
+        await Gal.requestAccess(toAlbum: true);
+      }
+      await Gal.putImageBytes(bytes, album: 'Streak');
+      return true;
+    }
+    final path = await FilePicker.platform.saveFile(
+      fileName: 'streak_${widget.habit.id}.png',
+      type: FileType.custom,
+      allowedExtensions: const ['png'],
+    );
+    if (path == null) return false;
+    await File(path).writeAsBytes(bytes);
+    return true;
   }
 
   @override
@@ -259,13 +273,14 @@ class _SharePageState extends State<SharePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      if (!Platform.isLinux)
                       _CircleAction(
                         style: style,
                         icon: LucideIcons.share2,
                         label: context.l10n.share,
                         onTap: _busy ? null : _share,
                       ),
-                      const SizedBox(width: 40),
+                      if (!Platform.isLinux) const SizedBox(width: 40),
                       _CircleAction(
                         style: style,
                         shapeIndex: 3,
@@ -313,7 +328,6 @@ class _RangeTabs extends StatelessWidget {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
-                  HapticFeedback.selectionClick();
                   onChanged(entry.key);
                 },
                 child: AnimatedContainer(
@@ -371,7 +385,6 @@ class _RangeTabs extends StatelessWidget {
             selected: range == entry.key,
             child: GestureDetector(
               onTap: () {
-                HapticFeedback.selectionClick();
                 onChanged(entry.key);
               },
               behavior: HitTestBehavior.opaque,
@@ -552,7 +565,6 @@ class _Toggle extends StatelessWidget {
         selected: selected,
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.selectionClick();
             onTap();
           },
           child: AnimatedScale(

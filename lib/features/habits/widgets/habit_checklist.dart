@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -35,7 +34,6 @@ Future<void> setHabitStep(
     );
     if (!allowed) return;
   }
-  HapticFeedback.selectionClick();
   await controller.setStep(habit.id, day, stepId, value);
 }
 

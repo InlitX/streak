@@ -201,6 +201,7 @@ class SettingsActions {
                     onTap: () => settings.setAutoBackup(i),
                   ),
                 const Divider(height: 20),
+                if (!Platform.isIOS)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(LucideIcons.folder, color: context.tokens.muted),
@@ -313,7 +314,7 @@ class SettingsActions {
     await context.read<SettingsController>().reloadFromStore();
     if (!context.mounted) return;
     AppSnackbar.success(context, context.l10n.wipe_data_done);
-    await openAppSettings();
+    if (!Platform.isLinux) await openAppSettings();
   }
 
   static Future<void> toggleAppLock(BuildContext context, bool value) async {
@@ -399,10 +400,14 @@ class SettingsActions {
   }
 
   static Future<void> shareWithFriend(BuildContext context) async {
-    await Share.share(
-      context.l10n.share_friends_message,
-      sharePositionOrigin: shareOrigin(context),
-    );
+    try {
+      await Share.share(
+        context.l10n.share_friends_message,
+        sharePositionOrigin: shareOrigin(context),
+      );
+    } catch (_) {
+      if (context.mounted) AppSnackbar.error(context, context.l10n.share_failed);
+    }
   }
 
   static Future<bool?> _askImportMode(BuildContext context) {

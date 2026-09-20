@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -69,7 +68,6 @@ class HabitCard extends StatelessWidget {
           onLongPress: onLongPress == null
               ? null
               : () {
-                  HapticFeedback.heavyImpact();
                   onLongPress!();
                 },
           borderRadius: corners,
@@ -147,13 +145,13 @@ class HabitCard extends StatelessWidget {
                                       const SizedBox(width: 8),
                                     ],
                                     Icon(
-                                      LucideIcons.flame,
+                                      habitMarkIcon(habit),
                                       size: 14,
                                       color: habit.color,
                                     ),
                                     const SizedBox(width: 3),
                                     Text(
-                                      streakLabel(context, habit),
+                                      habitMarkLabel(context, habit),
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w700,
@@ -373,7 +371,6 @@ class _ActionButton extends StatelessWidget {
     final controller = context.read<HabitsController>();
     final today = AppClock.now();
     if (relapsed) {
-      HapticFeedback.mediumImpact();
       await controller.clearRelapse(habit.id, today);
       return;
     }
@@ -385,7 +382,6 @@ class _ActionButton extends StatelessWidget {
       icon: LucideIcons.ban,
     );
     if (confirmed == true) {
-      HapticFeedback.heavyImpact();
       await controller.logRelapse(habit.id, today);
     }
   }
@@ -422,7 +418,6 @@ class _ActionButton extends StatelessWidget {
           done: doneToday,
           circle: circle,
           onTap: () {
-            HapticFeedback.mediumImpact();
             onToggleToday();
           },
         );
@@ -445,7 +440,6 @@ class _ActionButton extends StatelessWidget {
           final allowed =
               await confirmUnscheduledDay(context, habit: habit, date: today);
           if (!allowed) return;
-          HapticFeedback.mediumImpact();
           await controller.addProgress(habit.id, today, habit.incrementAmount);
         }
 

@@ -41,7 +41,11 @@ class LocalStore {
   }
 
   static Future<void> init() async {
-    await Hive.initFlutter(isMobile ? null : appDataFolder);
+    if (isMobile) {
+      await Hive.initFlutter();
+    } else {
+      Hive.init((await appDataDir()).path);
+    }
     _habits = await Hive.openBox(_habitsBox);
     _settings = await Hive.openBox(_settingsBox);
     _categories = await Hive.openBox(_categoriesBox);

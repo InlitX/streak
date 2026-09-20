@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
-import 'package:streak/core/utils/app_dirs.dart';
 
 const phoneWidth = 560.0;
 
@@ -12,4 +13,4 @@ const detailWidth = 900.0;
 const columnsWidth = 1000.0;
 
 bool isWideLayout(BuildContext context) =>
-    !isMobile && MediaQuery.sizeOf(context).width >= wideWidth;
+    !Platform.isAndroid && MediaQuery.sizeOf(context).width >= wideWidth;

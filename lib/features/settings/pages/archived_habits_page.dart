@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +32,6 @@ class ArchivedHabitsPage extends StatelessWidget {
       confirmLabel: context.l10n.delete,
     );
     if (confirmed != true || !context.mounted) return;
-    HapticFeedback.heavyImpact();
     context.read<HabitsController>().remove(habit.id);
     context.read<NotesController>().reload();
     context.read<FocusController>().reload();

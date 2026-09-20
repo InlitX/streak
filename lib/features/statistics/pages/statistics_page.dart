@@ -395,7 +395,7 @@ class _TrendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final start = AppClock.now().atMidnight.subtract(
+    final start = AppClock.today().subtract(
           const Duration(days: HabitStats.window - 1),
         );
     return StatCard(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +41,7 @@ class _ExpressMonthCalendarState extends State<ExpressMonthCalendar>
     duration: Express.morph,
     value: 1,
   );
-  final _today = AppClock.now().atMidnight;
+  final _today = AppClock.today();
   late DateTime _month = DateTime(_today.year, _today.month);
   String _signature = '';
 
@@ -64,7 +63,6 @@ class _ExpressMonthCalendarState extends State<ExpressMonthCalendar>
   }
 
   void _shift(int by) {
-    HapticFeedback.selectionClick();
     setState(() => _month = DateTime(_month.year, _month.month + by));
   }
 
@@ -202,7 +200,7 @@ class ExpressMonthStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weekStart = context.watch<SettingsController>().weekStart;
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final first = DateTime(today.year, today.month);
     final offset = first.epochDay - first.startOfWeek(weekStart).epochDay;
     final length = DateTime(today.year, today.month + 1, 0).day;
@@ -286,7 +284,6 @@ class _MonthCell extends StatelessWidget {
         onTap: future
             ? null
             : () {
-                HapticFeedback.selectionClick();
                 onToggle(date);
               },
         onLongPress: onLongPress == null ? null : () => onLongPress!(date),

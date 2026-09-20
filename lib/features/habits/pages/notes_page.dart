@@ -278,7 +278,7 @@ class NoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = noteTypeColor(context, note.type);
     final time = note.time;
-    final future = date.atMidnight.isAfter(AppClock.now().atMidnight);
+    final future = date.atMidnight.isAfter(AppClock.today());
     final label = time != null
         ? time.format(context)
         : (future ? context.l10n.tomorrow : '');

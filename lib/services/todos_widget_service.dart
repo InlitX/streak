@@ -7,6 +7,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
+import 'package:streak/services/home_widget_service.dart';
 
 class TodosWidgetService {
   const TodosWidgetService._();
@@ -32,8 +33,9 @@ class TodosWidgetService {
     _pendingSync = null;
     if (!hasHomeWidgets) return;
     try {
+      await HomeWidgetService.prepare();
       await HomeWidget.saveWidgetData<String>('todos_data', _encode(todos));
-      await HomeWidget.updateWidget(androidName: _provider);
+      await HomeWidget.updateWidget(androidName: _provider, iOSName: _provider);
     } catch (e) {
       debugPrint('To-do widget sync failed: $e');
     }

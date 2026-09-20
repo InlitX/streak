@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -71,7 +70,6 @@ class ExpressHabitCard extends StatelessWidget {
     return ExpressSquish(
       onTap: onOpen,
       onLongPress: onLongPress,
-      haptic: false,
       child: AnimatedContainer(
         duration: Express.normal,
         curve: Express.emphasized,
@@ -216,8 +214,8 @@ class _MetaPills extends StatelessWidget {
             tint: context.tokens.info,
           ),
         _Pill(
-          icon: LucideIcons.flame,
-          text: streakLabel(context, habit),
+          icon: habitMarkIcon(habit),
+          text: habitMarkLabel(context, habit),
           tint: habit.color,
         ),
         if (habit.isPlanned && planning)
@@ -326,7 +324,6 @@ class ExpressAction extends StatelessWidget {
     final controller = context.read<HabitsController>();
     final today = AppClock.now();
     if (relapsed) {
-      HapticFeedback.mediumImpact();
       await controller.clearRelapse(habit.id, today);
       return;
     }

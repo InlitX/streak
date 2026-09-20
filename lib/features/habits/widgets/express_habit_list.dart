@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
@@ -46,7 +45,6 @@ class ExpressHabitList extends StatelessWidget {
       buildDefaultDragHandles: false,
       header: header,
       onReorder: (oldIndex, newIndex) {
-        HapticFeedback.mediumImpact();
         onReorder(oldIndex, newIndex);
       },
       proxyDecorator: (child, index, animation) => AnimatedBuilder(

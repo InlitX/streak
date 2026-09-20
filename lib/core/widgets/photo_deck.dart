@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -43,7 +42,6 @@ class _PhotoDeckState extends State<PhotoDeck> {
       (index - _top + widget.shots.length) % widget.shots.length;
 
   void _bringToFront(int index) {
-    HapticFeedback.selectionClick();
     setState(() => _top = index);
   }
 

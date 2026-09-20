@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -112,7 +111,6 @@ class YearNavigator extends StatelessWidget {
         _ArrowButton(
           icon: LucideIcons.chevronLeft,
           onTap: () {
-            HapticFeedback.selectionClick();
             onChanged(-1);
           },
         ),
@@ -132,7 +130,6 @@ class YearNavigator extends StatelessWidget {
           icon: LucideIcons.chevronRight,
           onTap: canGoForward
               ? () {
-                  HapticFeedback.selectionClick();
                   onChanged(1);
                 }
               : null,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
@@ -18,6 +17,5 @@ Future<bool> confirmRelapse(BuildContext context, Habit habit) async {
     icon: LucideIcons.ban,
   );
   if (confirmed != true) return false;
-  HapticFeedback.heavyImpact();
   return true;
 }

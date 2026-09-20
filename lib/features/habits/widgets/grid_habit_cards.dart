@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +81,6 @@ class _CheckTile extends StatelessWidget {
               : context.l10n.a11y_mark_done(habit.name)),
       child: GestureDetector(
         onTap: () {
-          HapticFeedback.lightImpact();
           onTap();
         },
         child: AnimatedContainer(
@@ -125,7 +123,6 @@ class _QuantTile extends StatelessWidget {
     final allowed =
         await confirmUnscheduledDay(context, habit: habit, date: today);
     if (!allowed) return;
-    HapticFeedback.lightImpact();
     await controller.addProgress(habit.id, today, habit.incrementAmount);
   }
 
@@ -265,7 +262,7 @@ class GridWeekCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final circle = context.watch<SettingsController>().isCircleCheck;
     final labels = WeekdayLabels.shortMonFirst(
       Localizations.localeOf(context).languageCode,
@@ -338,7 +335,7 @@ class _DayCell extends StatelessWidget {
     final covered = !done && habit.isCoveredOn(date);
     final tint = relapsed ? context.tokens.danger : habit.color;
     final quant = habit.kind == HabitKind.quantitative;
-    final today = date.atMidnight == AppClock.now().atMidnight;
+    final today = date.atMidnight == AppClock.today();
 
     return Padding(
       padding: const EdgeInsets.only(left: 6),
@@ -371,7 +368,6 @@ class _DayCell extends StatelessWidget {
                   label: heatmapDayLabel(context, habit, date),
                   child: GestureDetector(
                     onTap: () {
-                      HapticFeedback.selectionClick();
                       onTap(date);
                     },
                     child: SizedBox(
@@ -433,7 +429,7 @@ class GridYearCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final circle = context.watch<SettingsController>().isCircleCheck;
 
     return Semantics(
@@ -502,7 +498,7 @@ class GridMonthCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final circle = context.watch<SettingsController>().isCircleCheck;
     final month = DateFormat.yMMM(
       Localizations.localeOf(context).toString(),
@@ -601,7 +597,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final monday = today.addDays(-(today.weekday - 1));
     final start = monday.subtract(const Duration(days: 7 * (_weeks - 1)));
     final months = DateFormat.MMM(Localizations.localeOf(context).languageCode);
@@ -678,7 +674,7 @@ class _GridYearStripState extends State<_GridYearStrip> {
   Widget _yearCell(BuildContext context, DateTime date) {
     return ExcludeSemantics(
       child: GestureDetector(
-        onTap: date.isAfter(AppClock.now().atMidnight)
+        onTap: date.isAfter(AppClock.today())
             ? null
             : () => widget.onToggle(date),
         child: SizedBox(
@@ -709,7 +705,7 @@ class _GridMonthCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final weekStart = context.watch<SettingsController>().weekStart;
     final first = DateTime(today.year, today.month, 1).startOfWeek(weekStart);
     final lastDay = DateTime(today.year, today.month + 1, 0);
@@ -768,7 +764,7 @@ class _GridMonthCalendar extends StatelessWidget {
   }
 }
 
-class GridViewSwitcher extends StatelessWidget {
+class GridViewSwitcher extends StatefulWidget {
   const GridViewSwitcher({
     super.key,
     required this.mode,
@@ -778,15 +774,45 @@ class GridViewSwitcher extends StatelessWidget {
   final HeatmapMode mode;
   final ValueChanged<HeatmapMode> onChanged;
 
+  @override
+  State<GridViewSwitcher> createState() => _GridViewSwitcherState();
+}
+
+class _GridViewSwitcherState extends State<GridViewSwitcher> {
   static const _options = [
     (HeatmapMode.week, Icons.checklist_rounded),
     (HeatmapMode.month, Icons.grid_view_rounded),
     (HeatmapMode.year, Icons.view_agenda_outlined),
   ];
+  static const _slot = 60.0;
+  static const _inset = 8.0;
 
-  double _slot(HeatmapMode value) {
-    final index = _options.indexWhere((option) => option.$1 == value);
-    return index <= 0 ? -1 : (index == 1 ? 0 : 1);
+  double? _finger;
+
+  int get _selected =>
+      _options.indexWhere((option) => option.$1 == widget.mode).clamp(0, 2);
+
+  int _under(double x) => (x / _slot).floor().clamp(0, _options.length - 1);
+
+  double _centerOf(int index) => (index + 0.5) * _slot;
+
+  void _press(Offset local) =>
+      setState(() => _finger = _centerOf(_under(local.dx - _inset)));
+
+  void _move(Offset local) {
+    final finger = _finger;
+    if (finger == null) return;
+    final x = (local.dx - _inset)
+        .clamp(_centerOf(0), _centerOf(_options.length - 1));
+    setState(() => _finger = x);
+  }
+
+  void _release({required bool commit}) {
+    final finger = _finger;
+    if (finger == null) return;
+    setState(() => _finger = null);
+    final picked = _options[_under(finger)].$1;
+    if (commit && picked != widget.mode) widget.onChanged(picked);
   }
 
   String _label(BuildContext context, HeatmapMode value) => switch (value) {
@@ -797,8 +823,11 @@ class GridViewSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+    final finger = _finger;
+    final held = finger != null;
+    final active = held ? _under(finger) : _selected;
+    final bar = Container(
+      padding: const EdgeInsets.symmetric(horizontal: _inset, vertical: 6),
       decoration: BoxDecoration(
         color: context.colors.surfaceContainerHighest.withValues(alpha: 0.96),
         borderRadius: BorderRadius.circular(30),
@@ -815,17 +844,30 @@ class GridViewSwitcher extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned.fill(
-            child: AnimatedAlign(
-              alignment: Alignment(_slot(mode), 0),
-              duration: const Duration(milliseconds: 380),
+          AnimatedPositioned(
+            left: (finger ?? _centerOf(_selected)) - _slot / 2,
+            top: 0,
+            bottom: 0,
+            width: _slot,
+            duration: Duration(milliseconds: held ? 90 : 380),
+            curve: held ? Curves.linear : Curves.easeOutBack,
+            child: AnimatedScale(
+              scale: held ? 1.18 : 1,
+              duration: const Duration(milliseconds: 240),
               curve: Curves.easeOutBack,
-              child: Container(
-                width: 60,
-                height: 40,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 240),
                 decoration: BoxDecoration(
-                  color: context.colors.primary.withValues(alpha: 0.16),
+                  color: context.colors.primary
+                      .withValues(alpha: held ? 0.22 : 0.16),
                   borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: held ? 0.2 : 0),
+                      blurRadius: 14,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -833,15 +875,14 @@ class GridViewSwitcher extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (final (value, icon) in _options)
+              for (final (index, (value, icon)) in _options.indexed)
                 Semantics(
                   button: true,
-                  selected: value == mode,
+                  selected: value == widget.mode,
                   label: _label(context, value),
                   child: GestureDetector(
                     onTap: () {
-                      HapticFeedback.selectionClick();
-                      onChanged(value);
+                      widget.onChanged(value);
                     },
                     behavior: HitTestBehavior.opaque,
                     child: Padding(
@@ -850,12 +891,12 @@ class GridViewSwitcher extends StatelessWidget {
                         vertical: 8,
                       ),
                       child: AnimatedScale(
-                        scale: value == mode ? 1.12 : 1,
+                        scale: index == active ? 1.12 : 1,
                         duration: const Duration(milliseconds: 380),
                         curve: Curves.easeOutBack,
                         child: TweenAnimationBuilder<Color?>(
                           tween: ColorTween(
-                            end: value == mode
+                            end: index == active
                                 ? context.colors.primary
                                 : context.tokens.muted,
                           ),
@@ -871,6 +912,15 @@ class GridViewSwitcher extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragDown: (details) => _press(details.localPosition),
+      onHorizontalDragUpdate: (details) => _move(details.localPosition),
+      onHorizontalDragEnd: (_) => _release(commit: true),
+      onHorizontalDragCancel: () => _release(commit: false),
+      child: bar,
     );
   }
 }

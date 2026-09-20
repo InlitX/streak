@@ -59,6 +59,7 @@ class HabitsController extends ChangeNotifier {
   Habit? byId(String id) => _habits[id];
 
   Future<void> rescheduleReminders() async {
+    if (NotificationService.armedToday('habitRemindersArmedOn')) return;
     for (final habit in _habits.values) {
       if (habit.isArchived || habit.reminders.isEmpty) continue;
       await _notifications.scheduleFor(habit);
@@ -214,7 +215,7 @@ class HabitsController extends ChangeNotifier {
       }
     } else {
       final yesterday =
-          AppClock.now().atMidnight.subtract(const Duration(days: 1));
+          AppClock.today().subtract(const Duration(days: 1));
       final next = <VacationPeriod>[];
       for (final p in periods) {
         if (!p.isOngoing) {

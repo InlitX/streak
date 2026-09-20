@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -64,7 +63,6 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
 
   void _type(String digit) {
     if (_text.length >= 8) return;
-    HapticFeedback.selectionClick();
     setState(() {
       final next = _text + digit;
       _text = next.replaceFirst(RegExp(r'^0+(?=\d)'), '');
@@ -73,19 +71,16 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
 
   void _dot() {
     if (_text.contains('.')) return;
-    HapticFeedback.selectionClick();
     setState(() => _text = _text.isEmpty ? '0.' : '$_text.');
   }
 
   void _backspace() {
     if (_text.isEmpty) return;
-    HapticFeedback.selectionClick();
     setState(() => _text = _text.substring(0, _text.length - 1));
   }
 
   void _clear() {
     if (_text.isEmpty) return;
-    HapticFeedback.mediumImpact();
     setState(() => _text = '');
   }
 

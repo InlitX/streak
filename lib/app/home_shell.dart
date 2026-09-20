@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +15,10 @@ import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/minimal/minimal_nav.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/widgets/page_motion.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/day_timeline_page.dart';
@@ -28,6 +31,7 @@ import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/home_widget_service.dart';
+import 'package:streak/services/widget_action_service.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -44,17 +48,9 @@ class _HomeShellState extends State<HomeShell>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   _Tab _tab = _Tab.today;
 
-  double _direction = 1;
+  final _visited = <_Tab>{_Tab.today};
 
   late final AnimationController _swap;
-  late final Animation<double> _fade = CurvedAnimation(
-    parent: _swap,
-    curve: const Interval(0, 0.55, curve: Curves.easeOut),
-  );
-  late final Animation<double> _ease = CurvedAnimation(
-    parent: _swap,
-    curve: Curves.easeOutCubic,
-  );
 
   @override
   void initState() {
@@ -62,7 +58,7 @@ class _HomeShellState extends State<HomeShell>
     _paneTab.value = _tab;
     _swap = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 380),
+      duration: const Duration(milliseconds: 300),
       value: 1,
     );
     WidgetsBinding.instance.addObserver(this);
@@ -81,10 +77,9 @@ class _HomeShellState extends State<HomeShell>
 
   void _select(List<_Tab> tabs, _Tab tab) {
     if (tab == _tab) return;
-    HapticFeedback.selectionClick();
     if (tab == _Tab.today) TodayIntro.replay();
     setState(() {
-      _direction = tabs.indexOf(tab) > tabs.indexOf(_tab) ? 1 : -1;
+      _visited.add(tab);
       _tab = tab;
     });
     _paneTab.value = tab;
@@ -128,12 +123,6 @@ class _HomeShellState extends State<HomeShell>
     );
   }
 
-  void _swipe(List<_Tab> tabs, double velocity) {
-    final next = tabs.indexOf(_tab) + (velocity < 0 ? 1 : -1);
-    if (next < 0 || next >= tabs.length) return;
-    _select(tabs, tabs[next]);
-  }
-
   void _back(List<_Tab> tabs, _Tab current) {
     if (BackHandlers.handle()) return;
     if (current != _Tab.today) {
@@ -155,11 +144,24 @@ class _HomeShellState extends State<HomeShell>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       final habits = context.read<HabitsController>();
+      if (Platform.isIOS) _applyWidgetActions(habits);
       habits.reload().then((_) => HomeWidgetService.sync(habits.asMap));
       context.read<TodosController>().reload();
       TodayIntro.replay();
       drainFocusActions();
     }
+  }
+
+  Future<void> _applyWidgetActions(HabitsController habits) async {
+    final todos = context.read<TodosController>();
+    final changed = await WidgetActionService.drain(
+      LocalStore.readHabits(),
+      todos: LocalStore.readTodos(),
+    );
+    if (!changed) return;
+    await habits.reload();
+    todos.reload();
+    await HomeWidgetService.sync(habits.asMap);
   }
 
   @override
@@ -192,13 +194,18 @@ class _HomeShellState extends State<HomeShell>
         _SplitScaffold(
         full: current == _Tab.stats,
         rail: _rail(context, tabs, current, settings.appStyle),
-        page: FadeTransition(
-          opacity: _fade,
+        page: FadeThrough(
+          animation: _swap,
           child: IndexedStack(
             index: tabs.indexOf(current),
             children: [
               for (final tab in tabs)
-                TickerMode(enabled: tab == current, child: _pageOf(tab)),
+                TickerMode(
+                  enabled: tab == current,
+                  child: _visited.contains(tab)
+                      ? _pageOf(tab)
+                      : const SizedBox.shrink(),
+                ),
             ],
           ),
         ),
@@ -212,24 +219,19 @@ class _HomeShellState extends State<HomeShell>
       Scaffold(
       body: Stack(
         children: [
-          GestureDetector(
-            onHorizontalDragEnd: (details) =>
-                _swipe(tabs, details.primaryVelocity ?? 0),
-            child: FadeTransition(
-              opacity: _fade,
-              child: SlideTransition(
-                position: Tween(
-                  begin: Offset(0.07 * _direction, 0),
-                  end: Offset.zero,
-                ).animate(_ease),
-                child: IndexedStack(
-                  index: tabs.indexOf(current),
-                  children: [
-                    for (final tab in tabs)
-                      TickerMode(enabled: tab == current, child: _pageOf(tab)),
-                  ],
-                ),
-              ),
+          FadeThrough(
+            animation: _swap,
+            child: IndexedStack(
+              index: tabs.indexOf(current),
+              children: [
+                for (final tab in tabs)
+                  TickerMode(
+                    enabled: tab == current,
+                    child: _visited.contains(tab)
+                        ? _pageOf(tab)
+                        : const SizedBox.shrink(),
+                  ),
+              ],
             ),
           ),
           Positioned(

@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
@@ -67,7 +66,6 @@ class _ExpressButtonState extends State<ExpressButton> {
         onTapCancel: enabled ? () => _set(false) : null,
         onTap: enabled
             ? () {
-                HapticFeedback.lightImpact();
                 widget.onPressed!();
               }
             : null,
@@ -160,7 +158,6 @@ class _ExpressIconButtonState extends State<ExpressIconButton> {
       onTapCancel: enabled ? () => _set(false) : null,
       onTap: enabled
           ? () {
-              HapticFeedback.selectionClick();
               widget.onPressed!();
             }
           : null,
@@ -228,7 +225,6 @@ class _ExpressFabState extends State<ExpressFab>
   }
 
   void _tap() {
-    HapticFeedback.mediumImpact();
     _spin.forward(from: 0);
     widget.onPressed();
   }

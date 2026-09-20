@@ -9,7 +9,7 @@ int _nowMinutes() {
 }
 
 bool _isFuture(DateTime date) =>
-    date.atMidnight.isAfter(AppClock.now().atMidnight);
+    date.atMidnight.isAfter(AppClock.today());
 
 class CompletionOps {
   const CompletionOps._();

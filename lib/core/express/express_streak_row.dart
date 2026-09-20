@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
@@ -72,7 +71,7 @@ class _ExpressStreakRowState extends State<ExpressStreakRow>
   @override
   Widget build(BuildContext context) {
     final weekStart = context.watch<SettingsController>().weekStart;
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final start = widget.days == 7
         ? today.startOfWeek(weekStart)
         : today.addDays(-(widget.days - 1));
@@ -170,7 +169,6 @@ class _DayCell extends StatelessWidget {
         onTap: future || onToggle == null
             ? null
             : () {
-                HapticFeedback.selectionClick();
                 onToggle!(date);
               },
         onLongPress: onLongPress == null ? null : () => onLongPress!(date),

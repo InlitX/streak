@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,8 +10,8 @@ import 'package:streak/app/home_shell.dart';
 import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/features/focus/widgets/focus_island.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/onboarding/pages/onboarding_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
@@ -33,7 +35,7 @@ class StreakApp extends StatelessWidget {
       builder: (context, child) {
         HomeWidgetService.localize(
           AppLocalizations.of(context),
-          context.read<HabitsController>().asMap,
+          () => context.read<HabitsController>().asMap,
         );
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: AppTheme.systemBars(Theme.of(context).brightness),
@@ -41,7 +43,7 @@ class StreakApp extends StatelessWidget {
             child: AppBackground(
               child: _DesktopFrame(
                 shell: settings.onboardingDone,
-                child: child ?? const SizedBox.shrink(),
+                child: FocusIsland(child: child ?? const SizedBox.shrink()),
               ),
             ),
           ),
@@ -70,7 +72,7 @@ class _DesktopFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isMobile || (shell && isWideLayout(context))) return child;
+    if (Platform.isAndroid || (shell && isWideLayout(context))) return child;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: phoneWidth),

@@ -10,6 +10,8 @@ Future<bool?> showAppConfirmDialog(
   required String message,
   required String confirmLabel,
   String? cancelLabel,
+  String? extraLabel,
+  VoidCallback? onExtra,
   IconData icon = LucideIcons.trash2,
   bool danger = true,
 }) {
@@ -102,6 +104,21 @@ Future<bool?> showAppConfirmDialog(
                   ),
                 ],
               ),
+              if (extraLabel != null)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(false);
+                    onExtra?.call();
+                  },
+                  child: Text(
+                    extraLabel,
+                    style: sheetActionStyle(
+                      dialogContext,
+                      size: 14,
+                      color: dialogContext.tokens.muted,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

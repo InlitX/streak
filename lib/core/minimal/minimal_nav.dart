@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
@@ -96,7 +95,6 @@ class _RailTileState extends State<_RailTile> {
         onExit: (_) => setState(() => _hover = false),
         child: MinimalPress(
           onTap: () {
-            HapticFeedback.selectionClick();
             widget.onTap();
           },
           child: AnimatedContainer(

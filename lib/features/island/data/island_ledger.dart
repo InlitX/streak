@@ -16,7 +16,6 @@ class IslandLedger {
 
   static const int perCheck = 10;
   static const int perFocusMinute = 1;
-  static const int focusCapPerDay = 60;
   static const int perPerfectDay = 25;
   static const int perTodo = 4;
 
@@ -91,15 +90,7 @@ class IslandLedger {
       }
     }
 
-    final perDay = <String, int>{};
-    for (final session in sessions) {
-      final key = session.startedAt.dayKey;
-      perDay[key] = (perDay[key] ?? 0) + session.minutes;
-    }
-    var minutes = 0;
-    for (final value in perDay.values) {
-      minutes += value > focusCapPerDay ? focusCapPerDay : value;
-    }
+    final minutes = sessions.fold(0, (sum, session) => sum + session.minutes);
 
     return IslandLedger(
       checks: checks,

@@ -101,6 +101,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(LucideIcons.arrowUp));
     await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 800));
 
     expect(find.byType(TodoTile), findsOneWidget);
     expect(find.text('SOMEDAY'), findsOneWidget);

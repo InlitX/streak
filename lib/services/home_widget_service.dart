@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
@@ -30,18 +31,29 @@ class HomeWidgetService {
 
   static const _allHabitsIcon = 'activity';
 
+  static const appGroup = 'group.com.streak.app';
+
+  static bool _grouped = false;
+
+  static Future<void> prepare() async {
+    if (!Platform.isIOS || _grouped) return;
+    await HomeWidget.setAppGroupId(appGroup);
+    _grouped = true;
+  }
+
   static String? _lastLocale;
   static String? _locale;
 
   static Future<void> localize(
     AppLocalizations l10n,
-    Map<String, Habit> habits,
+    Map<String, Habit> Function() habits,
   ) async {
     if (!hasHomeWidgets) return;
     if (_lastLocale == l10n.localeName) return;
     _lastLocale = l10n.localeName;
     _locale = l10n.localeName;
     try {
+      await prepare();
       await HomeWidget.saveWidgetData<String>(
         'widget_strings',
         json.encode({
@@ -89,7 +101,7 @@ class HomeWidgetService {
         }),
       );
     } catch (_) {}
-    await sync(habits);
+    await sync(habits());
   }
 
   static Timer? _pendingSync;
@@ -110,6 +122,7 @@ class HomeWidgetService {
     _pendingSync = null;
     if (!hasHomeWidgets) return;
     try {
+      await prepare();
       final icons = await WidgetIconService.resolve(
         [..._ordered(habits).map((h) => h.icon), _allHabitsIcon],
         render: renderIcons,
@@ -119,7 +132,7 @@ class HomeWidgetService {
         _encode(habits, icons),
       );
       for (final provider in _providers) {
-        await HomeWidget.updateWidget(androidName: provider);
+        await HomeWidget.updateWidget(androidName: provider, iOSName: provider);
       }
     } catch (e) {
       debugPrint('Widget sync failed: $e');
@@ -133,6 +146,7 @@ class HomeWidgetService {
   }) async {
     if (!hasHomeWidgets) return;
     try {
+      await prepare();
       await HomeWidget.saveWidgetData<String>(
         'widget_style',
         json.encode({
@@ -142,7 +156,7 @@ class HomeWidgetService {
         }),
       );
       for (final provider in _providers) {
-        await HomeWidget.updateWidget(androidName: provider);
+        await HomeWidget.updateWidget(androidName: provider, iOSName: provider);
       }
     } catch (_) {}
   }
@@ -177,6 +191,7 @@ class HomeWidgetService {
         'name': habit.name,
         'description': habit.description,
         'iconPath': icons[habit.icon] ?? '',
+        if (Platform.isIOS) 'iconData': _iconData(icons[habit.icon]),
         'iconTintable': HabitIcons.isIcon(habit.icon),
         'color': habit.color.toARGB32(),
         'cover': habit.coverPath,
@@ -230,6 +245,7 @@ class HomeWidgetService {
       'dayCutoff': AppClock.cutoffHour,
       'heatmap': _heatmapLevels(listed, today),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
+      if (Platform.isIOS) 'fallbackIconData': _iconData(icons[_allHabitsIcon]),
       'summary': {
         'doneToday': due.where((h) => h.isCompletedOn(today)).length,
         'total': due.length,
@@ -238,6 +254,15 @@ class HomeWidgetService {
       },
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
+  }
+
+  static String _iconData(String? path) {
+    if (path == null) return '';
+    try {
+      return base64Encode(File(path).readAsBytesSync());
+    } catch (_) {
+      return '';
+    }
   }
 
   static List<DateTime> _heatmapDays(DateTime midnight) {

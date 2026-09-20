@@ -167,7 +167,7 @@ class _DayLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final days = today.epochDay - date.atMidnight.epochDay;
     final label = switch (days) {
       0 => context.l10n.today,

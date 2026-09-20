@@ -51,7 +51,7 @@ Future<void> showDayActionsSheet(
               ),
             ),
             if (habit.hasSubsteps &&
-                !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
+                !date.atMidnight.isAfter(AppClock.today())) ...[
               Consumer<HabitsController>(
                 builder: (inner, controller, _) => HabitChecklist(
                   habit: controller.byId(habit.id) ?? habit,
@@ -63,7 +63,7 @@ Future<void> showDayActionsSheet(
               const SizedBox(height: 10),
             ],
             if (!habit.isRestDay(date) &&
-                !date.atMidnight.isAfter(AppClock.now().atMidnight)) ...[
+                !date.atMidnight.isAfter(AppClock.today())) ...[
               SheetAction(
                 icon: LucideIcons.palmtree,
                 label: paused

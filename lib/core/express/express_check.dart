@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_shapes.dart';
@@ -70,7 +69,6 @@ class _ExpressCheckState extends State<ExpressCheck>
       onTapCancel: enabled ? () => _set(false) : null,
       onTap: enabled
           ? () {
-              HapticFeedback.mediumImpact();
               widget.onTap!();
             }
           : null,

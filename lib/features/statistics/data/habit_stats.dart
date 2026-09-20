@@ -89,7 +89,7 @@ class HabitStats {
       }
       return count;
     }
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     for (final entry in habit.completions.values) {
       if (entry.count < habit.effectiveTarget) continue;
       final date = parseDayKey(entry.date);
@@ -168,7 +168,7 @@ class HabitStats {
       habits.where((h) => !h.tracking).toList();
 
   static HabitStats compute(List<Habit> habits, int year) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final daily = <String, int>{};
     final monthly = List<int>.filled(12, 0);
     final weekday = List<int>.filled(7, 0);

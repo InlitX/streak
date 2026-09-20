@@ -103,7 +103,7 @@ Future<void> _startup() async {
       NotificationService().pendingHabitId = null;
       _openHabit(pending);
     }
-    if (Platform.isAndroid) {
+    if (isMobile) {
       final launched =
           await _appChannel.invokeMethod<String>('consumeLaunchHabit');
       if (launched != null) _openHabit(launched);
@@ -137,7 +137,9 @@ void _run() {
           create: (_) {
             final controller = HabitsController();
             HomeWidgetService.sync(controller.asMap);
-            controller.rescheduleReminders();
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => controller.rescheduleReminders(),
+            );
             return controller;
           },
         ),

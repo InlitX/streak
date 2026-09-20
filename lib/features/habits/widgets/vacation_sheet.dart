@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -109,7 +108,6 @@ class _VacationSheet extends StatelessWidget {
               selected: habit.restDays,
               accent: accent,
               onChanged: (days) {
-                HapticFeedback.selectionClick();
                 context.read<HabitsController>().setRestDays(habit.id, days);
               },
             ),
@@ -120,7 +118,6 @@ class _VacationSheet extends StatelessWidget {
   }
 
   void _setVacation(BuildContext context, Habit habit, bool value) {
-    HapticFeedback.mediumImpact();
     context.read<HabitsController>().setVacation(habit.id, value);
   }
 }

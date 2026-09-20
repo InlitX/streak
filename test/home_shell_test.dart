@@ -41,13 +41,17 @@ void main() {
     await pumpScreen(tester, const HomeShell());
     await tester.pumpAndSettle();
 
-    final page = tester.state<State<StatisticsPage>>(
+    expect(
       find.byType(StatisticsPage, skipOffstage: false),
-    ) as dynamic;
-    expect(page.debugStats.total, 0, reason: 'no cuenta nada escondida');
+      findsNothing,
+      reason: 'no se construye hasta abrirla',
+    );
 
     await tester.tap(find.byIcon(LucideIcons.chartColumn).last);
     await tester.pumpAndSettle();
+    final page = tester.state<State<StatisticsPage>>(
+      find.byType(StatisticsPage),
+    ) as dynamic;
     expect(page.debugStats.total, 5, reason: 'cuenta al abrirla');
   });
 
@@ -77,7 +81,7 @@ void main() {
     expect(find.byType(TodosPage), findsOneWidget);
   });
 
-  testWidgets('swiping walks from Today to the next tab', (tester) async {
+  testWidgets('swiping no longer jumps to another tab', (tester) async {
     await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
     await pumpScreen(
       tester,
@@ -88,7 +92,7 @@ void main() {
     await tester.fling(find.byType(HomePage), const Offset(-300, 0), 1000);
     await tester.pumpAndSettle();
 
-    expect(find.text('To-Do'), findsWidgets);
+    expect(find.byType(TodosPage), findsNothing);
   });
 
   testWidgets('a wide window gives minimal a rail and a detail pane',

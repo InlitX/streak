@@ -42,7 +42,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
 
   DateTime _startFrom(bool rolling) {
     if (rolling) {
-      final today = AppClock.now().atMidnight;
+      final today = AppClock.today();
       return today
           .addDays(-(today.weekday - 1))
           .addDays(-(7 * 52));
@@ -73,7 +73,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_scroll.hasClients) return;
       final position = _scroll.position;
-      final today = AppClock.now().atMidnight;
+      final today = AppClock.today();
       final rolling = _rollingFor(
         context.read<SettingsController>().heatmapRolling,
       );
@@ -90,7 +90,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
 
   @override
   Widget build(BuildContext context) {
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final rolling =
         _rollingFor(context.watch<SettingsController>().heatmapRolling);
     final start = _startFrom(rolling);

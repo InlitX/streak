@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -46,7 +45,6 @@ class ClassicHabitList extends StatelessWidget {
       itemCount: habits.length,
       buildDefaultDragHandles: false,
       onReorder: (oldIndex, newIndex) {
-        HapticFeedback.mediumImpact();
         onReorder(oldIndex, newIndex);
       },
       proxyDecorator: (child, index, animation) => Material(

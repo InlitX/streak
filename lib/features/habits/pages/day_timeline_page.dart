@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +38,7 @@ class DayTimelinePage extends StatefulWidget {
 }
 
 class _DayTimelinePageState extends State<DayTimelinePage> {
-  late DateTime _day = AppClock.now().atMidnight;
+  late DateTime _day = AppClock.today();
   final _celebration = ValueNotifier(0);
 
   @override
@@ -63,7 +62,6 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     if (!await confirmUnscheduledDay(context, habit: habit, date: _day)) return;
 
     final wasDone = habit.isCompletedOn(_day);
-    HapticFeedback.mediumImpact();
     if (habit.kind == HabitKind.quantitative) {
       await controller.addProgress(habit.id, _day, habit.incrementAmount);
     } else {

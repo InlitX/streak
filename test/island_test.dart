@@ -55,13 +55,13 @@ void main() {
     expect(ledger.earned, 0);
   });
 
-  test('focus minutes are capped at sixty a day', () {
+  test('every focus minute counts', () {
     final ledger = IslandLedger.of(const [], [
       _session(today, 50),
       _session(today, 40),
       _session(yesterday, 20),
     ], const []);
-    expect(ledger.focusMinutes, 60 + 20);
+    expect(ledger.focusMinutes, 50 + 40 + 20);
   });
 
   test('a perfect day needs every habit that was due', () {

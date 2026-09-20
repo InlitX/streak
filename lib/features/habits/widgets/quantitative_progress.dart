@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -58,7 +57,6 @@ class QuantitativeProgress extends StatelessWidget {
             await confirmUnscheduledDay(context, habit: habit, date: today);
         if (!allowed) return;
       }
-      HapticFeedback.selectionClick();
       await controller.addProgress(habit.id, today, delta);
     }
 

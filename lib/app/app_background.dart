@@ -79,10 +79,12 @@ class _Backdrop extends StatelessWidget {
       if (type != 2) return ColoredBox(color: base);
       return ColoredBox(
         color: base,
-        child: CustomPaint(
-          painter: _DotsPainter(
-            (isDark ? Colors.white : Colors.black).withValues(
-              alpha: dotAlpha ?? (isDark ? 0.03 : 0.035),
+        child: RepaintBoundary(
+          child: CustomPaint(
+            painter: _DotsPainter(
+              (isDark ? Colors.white : Colors.black).withValues(
+                alpha: dotAlpha ?? (isDark ? 0.03 : 0.035),
+              ),
             ),
           ),
         ),
@@ -104,8 +106,10 @@ class _Backdrop extends StatelessWidget {
         case 2:
           return ColoredBox(
             color: AppPalette.darkBackground,
-            child: CustomPaint(
-              painter: _DotsPainter(Colors.white.withValues(alpha: 0.035)),
+            child: RepaintBoundary(
+              child: CustomPaint(
+                painter: _DotsPainter(Colors.white.withValues(alpha: 0.035)),
+              ),
             ),
           );
         case 3:
@@ -130,8 +134,10 @@ class _Backdrop extends StatelessWidget {
       case 2:
         return ColoredBox(
           color: const Color(0xFFF1F1F6),
-          child: CustomPaint(
-            painter: _DotsPainter(Colors.black.withValues(alpha: 0.09)),
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: _DotsPainter(Colors.black.withValues(alpha: 0.09)),
+            ),
           ),
         );
       case 3:

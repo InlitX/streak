@@ -66,4 +66,15 @@ class ReminderSchedule {
     }
     return when.isBefore(now) ? when.add(const Duration(days: 7)) : when;
   }
+
+  static DateTime nextDaily({
+    required DateTime now,
+    required int hour,
+    required int minute,
+  }) {
+    final when = DateTime(now.year, now.month, now.day, hour, minute);
+    return when.isBefore(now)
+        ? DateTime(now.year, now.month, now.day + 1, hour, minute)
+        : when;
+  }
 }

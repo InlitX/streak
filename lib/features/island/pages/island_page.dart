@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -77,7 +76,6 @@ class _IslandPageState extends State<IslandPage> {
     final island = context.read<IslandController>();
     if (island.owns(piece) || _balance < piece.price) return;
     await island.buy(piece);
-    HapticFeedback.mediumImpact();
     _canvas.currentState?.reveal(piece);
     _canvas.currentState?.celebrate(piece);
     if (!mounted) return;
@@ -259,7 +257,6 @@ class _Compass extends StatelessWidget {
         child: InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
-            HapticFeedback.selectionClick();
             turn.value = (value + 1) % 4;
           },
           child: SizedBox(

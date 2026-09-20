@@ -24,7 +24,7 @@ Color heatmapCellColor(
   if (!inScope) return Colors.transparent;
 
   final scheme = context.colors;
-  final today = AppClock.now().atMidnight;
+  final today = AppClock.today();
   final beforeCreation = date.atMidnight.isBefore(habit.startedAt);
 
   if (!beforeCreation && !date.isAfter(today) && habit.isNeutralOn(date)) {
@@ -100,7 +100,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   final _scroll = ScrollController();
   bool _scrolled = false;
 
-  DateTime get _today => AppClock.now().atMidnight;
+  DateTime get _today => AppClock.today();
 
   DateTime _mondayOf(DateTime d) =>
       d.atMidnight.addDays(-(d.weekday - 1));

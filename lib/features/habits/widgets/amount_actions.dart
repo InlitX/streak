@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -25,6 +24,5 @@ Future<void> addCustomAmount(BuildContext context, Habit habit) async {
   );
   if (amount == null || amount <= 0 || !context.mounted) return;
 
-  HapticFeedback.mediumImpact();
   await context.read<HabitsController>().addProgress(habit.id, today, amount);
 }

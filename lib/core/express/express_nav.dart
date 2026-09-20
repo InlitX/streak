@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_type.dart';
@@ -84,7 +83,6 @@ class _NavPill extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          HapticFeedback.selectionClick();
           onTap();
         },
         child: AnimatedContainer(
@@ -221,7 +219,6 @@ class _RailPillState extends State<_RailPill> {
         child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          HapticFeedback.selectionClick();
           widget.onTap();
         },
         child: AnimatedContainer(
