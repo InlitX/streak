@@ -370,6 +370,15 @@ class CompactCategoryPicker extends StatelessWidget {
               onTap: () => Navigator.of(sheetContext).pop('edit'),
             ),
             ListTile(
+              leading: Icon(LucideIcons.arrowUpDown,
+                  color: context.colors.onSurface),
+              title: Text(
+                context.l10n.reorder,
+                style: sheetOptionStyle(sheetContext),
+              ),
+              onTap: () => Navigator.of(sheetContext).pop('reorder'),
+            ),
+            ListTile(
               leading: Icon(LucideIcons.trash2, color: context.tokens.danger),
               title: Text(
                 context.l10n.delete,
@@ -385,7 +394,9 @@ class CompactCategoryPicker extends StatelessWidget {
         ),
       ),
     );
-    if (action == 'delete') {
+    if (action == 'reorder') {
+      if (context.mounted) await showCategoryOrderSheet(context);
+    } else if (action == 'delete') {
       await controller.remove(category.id);
       if (selected == category.name) onSelected('');
     } else if (action == 'edit') {

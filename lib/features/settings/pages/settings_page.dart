@@ -11,6 +11,7 @@ import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
@@ -346,6 +347,13 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     ),
                   ),
                   settingsDivider(context),
+                  NavRow(
+                    icon: LucideIcons.tags,
+                    title: context.l10n.category_order,
+                    subtitle: context.l10n.category_order_sub,
+                    onTap: () => showCategoryOrderSheet(context),
+                  ),
+                  settingsDivider(context),
                   SettingRow(
                     icon: LucideIcons.layoutGrid,
                     title: context.l10n.card_activity,
@@ -610,7 +618,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    settingsDivider(context),
+                    if (hasBiometricLock) settingsDivider(context),
+                    if (hasBiometricLock)
                     NavRow(
                       icon: LucideIcons.keyRound,
                       title: context.l10n.app_lock_method,

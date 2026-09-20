@@ -10,6 +10,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
@@ -425,6 +426,12 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.tags,
+              title: context.l10n.category_order,
+              subtitle: context.l10n.category_order_sub,
+              onTap: () => showCategoryOrderSheet(context),
+            ),
+            SoftRow(
               icon: LucideIcons.layoutList,
               title: context.l10n.view_switcher,
               subtitle: context.l10n.view_switcher_sub,
@@ -597,7 +604,7 @@ class _PreferencesPage extends StatelessWidget {
                       settings.setAppLockDelay(SettingsActions.appLockDelays[i]),
                 ),
               ),
-            if (settings.appLock)
+            if (settings.appLock && hasBiometricLock)
               SoftRow(
                 icon: LucideIcons.keyRound,
                 title: context.l10n.app_lock_method,

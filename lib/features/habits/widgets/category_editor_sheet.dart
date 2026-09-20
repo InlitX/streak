@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/features/habits/data/category.dart';
+import 'package:streak/features/habits/state/categories_controller.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -48,6 +52,7 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
       name: _name.text.trim(),
       color: _color,
       icon: _icon,
+      order: widget.initial?.order ?? 0,
     );
     Navigator.of(context).pop(result);
   }
@@ -167,6 +172,114 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> showCategoryOrderSheet(BuildContext context) =>
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.85,
+      ),
+      builder: (_) => const _CategoryOrderSheet(),
+    );
+
+class _CategoryOrderSheet extends StatelessWidget {
+  const _CategoryOrderSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<CategoriesController>();
+    final used = {
+      for (final habit in context.watch<HabitsController>().habits)
+        if (habit.category.isNotEmpty) habit.category,
+    };
+    final all = controller.categories;
+    final categories = [
+      for (final category in all)
+        if (used.contains(category.name) ||
+            !CategoriesController.seededNames.contains(category.name))
+          category,
+    ];
+    final rest = [
+      for (final category in all)
+        if (!categories.contains(category)) category,
+    ];
+    if (categories.isEmpty) {
+      return SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(context.l10n.reorder, style: sheetTitleStyle(context)),
+              const SizedBox(height: 10),
+              Text(
+                context.l10n.category_order_empty,
+                style: sheetBodyStyle(context, size: 13),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 12, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(context.l10n.reorder, style: sheetTitleStyle(context)),
+            const SizedBox(height: 8),
+            Flexible(
+              child: ReorderableListView(
+                shrinkWrap: true,
+                buildDefaultDragHandles: false,
+                onReorder: (from, to) {
+                  final ordered = [...categories];
+                  ordered.insert(
+                    to > from ? to - 1 : to,
+                    ordered.removeAt(from),
+                  );
+                  controller.reorder([...ordered, ...rest]);
+                },
+                children: [
+                  for (final (index, category) in categories.indexed)
+                    ListTile(
+                      key: ValueKey(category.id),
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        CategoryIcons.resolve(category.icon),
+                        color: category.color,
+                      ),
+                      title: Text(
+                        context.categoryLabel(category.name),
+                        style: sheetOptionStyle(context),
+                      ),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Icon(
+                            LucideIcons.gripVertical,
+                            color: context.tokens.muted,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

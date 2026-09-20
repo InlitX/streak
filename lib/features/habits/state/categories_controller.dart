@@ -9,11 +9,23 @@ class CategoriesController extends ChangeNotifier {
     if (!LocalStore.hasCategories) _seedDefaults();
   }
 
+  static const seededNames = {
+    'Health',
+    'Fitness',
+    'Mindfulness',
+    'Productivity',
+    'Learning',
+    'Finance',
+  };
+
   final _uuid = const Uuid();
   late List<Category> _categories;
 
-  List<Category> get categories =>
-      [..._categories]..sort((a, b) => a.name.compareTo(b.name));
+  List<Category> get categories => [..._categories]
+    ..sort((a, b) {
+      final byOrder = a.order.compareTo(b.order);
+      return byOrder != 0 ? byOrder : a.name.compareTo(b.name);
+    });
 
   void reload() {
     _categories = LocalStore.readCategories();
@@ -60,11 +72,23 @@ class CategoriesController extends ChangeNotifier {
       name: name,
       color: color,
       icon: icon,
+      order: _categories.fold(0, (top, c) => c.order >= top ? c.order + 1 : top),
     );
     _categories.add(category);
     await LocalStore.writeCategory(category);
     notifyListeners();
     return category;
+  }
+
+  Future<void> reorder(List<Category> ordered) async {
+    _categories = [
+      for (final (index, category) in ordered.indexed)
+        category.copyWith(order: index),
+    ];
+    notifyListeners();
+    for (final category in _categories) {
+      await LocalStore.writeCategory(category);
+    }
   }
 
   Future<void> update(Category category) async {

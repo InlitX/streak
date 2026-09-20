@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_surface.dart';
@@ -113,7 +112,6 @@ class _ExpressTabsState extends State<ExpressTabs>
                           behavior: HitTestBehavior.opaque,
                           onTap: () {
                             if (i == widget.index) return;
-                            HapticFeedback.selectionClick();
                             widget.onChanged(i);
                           },
                           child: Center(
@@ -152,6 +150,7 @@ class ExpressChip extends StatelessWidget {
     required this.label,
     required this.active,
     required this.onTap,
+    this.onLongPress,
     this.icon,
     this.glyph,
     this.tint,
@@ -160,6 +159,7 @@ class ExpressChip extends StatelessWidget {
   final String label;
   final bool active;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
   final IconData? icon;
   final String? glyph;
   final Color? tint;
@@ -176,10 +176,8 @@ class ExpressChip extends StatelessWidget {
       button: true,
       selected: active,
       child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
+        onTap: onTap,
+        onLongPress: onLongPress,
         child: AnimatedScale(
           scale: active ? 1 : 0.94,
           duration: Express.normal,

@@ -9,6 +9,7 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/express/express_wave.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
@@ -361,12 +362,14 @@ class ExpressTodayHeader extends StatelessWidget {
                 label: context.l10n.all,
                 active: category == null,
                 onTap: () => onCategory(null),
+                onLongPress: () => showCategoryOrderSheet(context),
               ),
               for (final name in categories)
                 ExpressChip(
                   label: context.categoryLabel(name),
                   active: category == name,
                   onTap: () => onCategory(name),
+                  onLongPress: () => showCategoryOrderSheet(context),
                 ),
             ],
           ),

@@ -9,18 +9,22 @@ class Category {
     required this.name,
     required this.color,
     this.icon = 'folder',
+    this.order = 0,
   });
 
   final String id;
   final String name;
   final Color color;
   final String icon;
+  final int order;
 
-  Category copyWith({String? name, Color? color, String? icon}) => Category(
+  Category copyWith({String? name, Color? color, String? icon, int? order}) =>
+      Category(
         id: id,
         name: name ?? this.name,
         color: color ?? this.color,
         icon: icon ?? this.icon,
+        order: order ?? this.order,
       );
 
   Map<String, dynamic> toMap() => {
@@ -28,6 +32,7 @@ class Category {
         'name': name,
         'color': color.toARGB32(),
         'icon': icon,
+        'order': order,
       };
 
   factory Category.fromMap(Map<String, dynamic> map) => Category(
@@ -35,6 +40,7 @@ class Category {
         name: map['name'] as String,
         color: Color(map['color'] as int),
         icon: (map['icon'] ?? 'folder') as String,
+        order: ((map['order'] ?? 0) as num).toInt(),
       );
 
   String toJson() => json.encode(toMap());

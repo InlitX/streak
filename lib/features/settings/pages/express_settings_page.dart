@@ -17,6 +17,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
+import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
@@ -521,6 +522,12 @@ List<Widget> _preferenceTiles(BuildContext context) {
             onSelected: settings.setStartView,
           ),
         ),
+        ExpressTile(
+          icon: LucideIcons.tags,
+          title: context.l10n.category_order,
+          subtitle: context.l10n.category_order_sub,
+          onTap: () => showCategoryOrderSheet(context),
+        ),
         _Toggle(
           icon: LucideIcons.layoutGrid,
           title: context.l10n.card_activity,
@@ -698,7 +705,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
               ),
             ),
           ),
-        if (settings.appLock)
+        if (settings.appLock && hasBiometricLock)
           ExpressTile(
             icon: LucideIcons.keyRound,
             title: context.l10n.app_lock_method,
