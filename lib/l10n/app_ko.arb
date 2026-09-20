@@ -1006,7 +1006,7 @@
   "habit_duration_none": "기간 없음",
   "start_view_last": "최근 사용",
   "start_view": "실행 위치",
-  "notes_hint": "날짜를 길게 눌러 노트를 보거나 추가하세요",
+  "notes_hint": "습관을 열고 달력 위의 날짜를 길게 눌러 노트를 보거나 추가하세요",
   "app_style_sub": "앱을 전체적으로 어떤 느낌으로 나타낼지 고르세요.",
   "style_classic": "클래식",
   "style_minimal": "미니멀",
@@ -1244,5 +1244,129 @@
   "island_p_cypress": "사이프러스",
   "island_g_caleta": "작은 만",
   "island_how_note": "코인은 기록에서 가져오므로, 백업을 통해 복구할 수 있어요.",
-  "period_all_time": "전체 기간"
+  "period_all_time": "전체 기간",
+  "todo_project": "프로젝트",
+  "todo_project_new": "새 프로젝트",
+  "todo_project_name": "프로젝트 이름",
+  "todo_project_edit": "프로젝트 편집",
+  "todo_project_arrange": "순서 변경",
+  "todo_project_pick": "프로젝트 선택",
+  "todo_project_none": "프로젝트 없음",
+  "todo_project_delete_body": "프로젝트는 사라져요. 작업은 그대로 남아요.",
+  "todo_tag": "태그",
+  "todo_tag_new": "새 태그",
+  "todo_tag_name": "태그 이름",
+  "todo_tag_edit": "태그",
+  "todo_tag_none": "태그 없음",
+  "todo_tag_all": "모두",
+  "todo_tag_manage": "태그 관리",
+  "todo_tag_empty_title": "아직 태그가 없어요",
+  "todo_tag_empty_body": "프로젝트, 위치, 원하는 기준에 따라 작업을 묶으세요.",
+  "todo_tag_folders": "폴더",
+  "todo_tag_list": "목록",
+  "todo_tag_icon": "아이콘",
+  "todo_tag_pick": "태그 선택",
+  "todo_subtasks": "하위 작업",
+  "todo_subtask_hint": "하위 작업",
+  "todo_tag_filtered": "{name} 필터 적용",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_add_time": "집중한 시간 추가",
+  "focus_repeat_one": "한 번 반복",
+  "notif_streak_week": "🔥 {streak}주 연속",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_month": "🔥 {streak}개월 연속",
+  "@notif_streak_month": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "difficulty_easy": "쉬움",
+  "difficulty_medium": "보통",
+  "difficulty_hard": "어려움",
+  "pin_lock": "PIN 코드",
+  "difficulty": "난이도",
+  "pin_choose": "PIN 선택",
+  "pin_choose_sub": "4자리에서 8자리",
+  "pin_repeat": "다시 입력하세요",
+  "pin_mismatch": "일치하지 않아요. 다시 시작하세요.",
+  "pin_enter": "PIN 입력",
+  "pin_wrong": "PIN이 잘못됐어요",
+  "pin_wait": "너무 많이 시도했어요. {seconds}초 기다리세요",
+  "@pin_wait": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "pin_recovery_title": "내 복구 코드",
+  "pin_recovery_body": "PIN을 잊어버렸을 때, 이 코드를 이용해 Streak의 잠금을 풀 수 있어요. 안전한 곳에 써 두세요. 다시는 표시되지 않아요.",
+  "pin_copy": "코드 복사",
+  "pin_copied": "코드를 복사했어요",
+  "pin_forgot": "PIN을 잊으셨나요?",
+  "pin_recovery_hint": "복구 코드",
+  "pin_recovery_wrong": "코드가 올바르지 않아요",
+  "pin_recovered": "잠금을 해제했어요. 설정에서 새 PIN을 설정할 수 있어요.",
+  "pin_change": "PIN 변경",
+  "pin_remove": "PIN 제거",
+  "pin_fingerprint": "지문 사용",
+  "app_lock_biometric": "지문 또는 얼굴로",
+  "app_lock_method": "잠금 해제",
+  "difficulty_option": "습관 난이도",
+  "todo_save_another": "저장하고 하나 더 추가",
+  "todo_add_subtask": "하위 작업 추가",
+  "pin_paste": "코드 붙여넣기",
+  "today_progress_option": "오늘의 진척",
+  "plan_tab": "계획",
+  "todo_tags": "태그",
+  "todo_projects": "프로젝트",
+  "every_n_weeks": "{n}주마다",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "{n}개월마다",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "일",
+  "sched_unit_weeks": "주",
+  "sched_unit_months": "개월",
+  "todo_tag_delete_body": "태그는 사라져요. 작업은 그대로 남아요.",
+  "todo_project_arrange_hint": "폴더를 원하는 곳으로 드래그하세요.",
+  "quiet_when_done": "완료하면 조용히",
+  "quiet_when_done_sub": "이미 완료한 습관의 알림은 받지 않아요",
+  "difficulty_hint": "어려운 습관일수록 일과를 더 많이 해냈다고 간주해요",
+  "difficulty_option_sub": "어려운 습관일수록 일과를 더 많이 해냈다고 간주해요",
+  "pin_lock_sub": "폰의 잠금과 별개로 코드를 설정해요",
+  "todo_tag_count": "{n}개 남음",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "today_progress_option_sub": "일일 목표 고리와 각 습관의 진행 막대"
 }
