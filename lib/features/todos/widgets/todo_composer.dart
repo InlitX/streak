@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -226,7 +225,6 @@ class _TodoComposerState extends State<_TodoComposer> {
 
   void _save({bool another = false}) {
     if (!_canSave) return;
-    HapticFeedback.selectionClick();
     final todos = context.read<TodosController>();
     final existing = widget.todo;
     unawaited(

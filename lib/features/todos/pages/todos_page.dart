@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -130,6 +131,15 @@ class _TodosPageState extends State<TodosPage> {
   Future<void> _compose() =>
       showTodoComposer(context, project: _projectFilter ?? '');
 
+  Future<void> _add() async {
+    if (!_folders && _projectFilter != null) return _compose();
+    final project = await showTodoOrProjectChoice(context);
+    if (!mounted || project == null) return;
+    if (!project) return _compose();
+    await createProject(context);
+    if (mounted) setState(() => _folders = true);
+  }
+
   Future<void> _delete(Todo todo) async {
     final confirmed = await showDeleteSheet(context);
     if (confirmed && mounted) {
@@ -146,7 +156,6 @@ class _TodosPageState extends State<TodosPage> {
       icon: LucideIcons.eraser,
     );
     if (confirmed == true && mounted) {
-      HapticFeedback.mediumImpact();
       await context.read<TodosController>().clearCompleted();
     }
   }
@@ -181,7 +190,7 @@ class _TodosPageState extends State<TodosPage> {
     final pushed = ModalRoute.of(context)?.canPop ?? false;
 
     return PopScope(
-      canPop: !pushed,
+      canPop: !pushed || Platform.isIOS,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop || !pushed || BackHandlers.handle()) return;
         AppNavigator.pop();
@@ -359,9 +368,9 @@ class _TodosPageState extends State<TodosPage> {
                 ? ExpressFab(
                     icon: LucideIcons.plus,
                     label: context.l10n.todo_new,
-                    onPressed: _compose,
+                    onPressed: _add,
                   )
-                : _AddButton(onTap: _compose),
+                : _AddButton(onTap: _add),
           ),
         ],
       ),
@@ -651,7 +660,6 @@ class _AddButton extends StatelessWidget {
       label: context.l10n.todo_new,
       child: GestureDetector(
         onTap: () {
-          HapticFeedback.selectionClick();
           onTap();
         },
         child: Container(

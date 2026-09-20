@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +132,6 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
         }
 
         void toggle(DateTime date) {
-          HapticFeedback.selectionClick();
           switch (habit.kind) {
             case HabitKind.positive:
               unawaited(toggleDay(date));
@@ -741,7 +739,6 @@ class _FocusTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         onTap: () => AppNavigator.push(FocusStatsPage(habitId: habit.id)),
         onLongPress: () {
-          HapticFeedback.mediumImpact();
           unawaited(_openActions(context));
         },
         child: Padding(

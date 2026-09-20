@@ -1,21 +1,19 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
-import 'package:streak/core/express/express_shapes.dart';
 import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
-import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo_tag.dart';
 import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/features/todos/widgets/folder_shape.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 
 class TodoProjects extends StatefulWidget {
@@ -65,23 +63,11 @@ class _TodoProjectsState extends State<TodoProjects>
     if (!mounted || _arranging == on) return;
     setState(() => _arranging = on);
     if (on) {
-      HapticFeedback.mediumImpact();
       _wobble.repeat();
     } else {
       _wobble.stop();
       _wobble.value = 0;
     }
-  }
-
-  Future<void> _create() async {
-    final result = await showTodoTagEditor(context, project: true);
-    if (result == null || !mounted) return;
-    await context.read<TodoTagsController>().create(
-          name: result.name,
-          color: result.color,
-          icon: result.icon,
-          kind: TodoTagKind.project,
-        );
   }
 
   void _hover(String id, int target) {
@@ -92,7 +78,6 @@ class _TodoProjectsState extends State<TodoProjects>
       moved.insert(target, moved.removeAt(from));
       _order = moved;
     });
-    HapticFeedback.selectionClick();
   }
 
   Future<void> _settle() async {
@@ -130,8 +115,7 @@ class _TodoProjectsState extends State<TodoProjects>
             final cellWidth =
                 (box.maxWidth - _spacing * (columns - 1)) / columns;
             final cellHeight = cellWidth / _folderRatio + _labelHeight;
-            final extras = (loose > 0 ? 1 : 0) + 1;
-            final total = _order.length + extras;
+            final total = _order.length + (loose > 0 ? 1 : 0);
             final rows = (total / columns).ceil();
 
             Widget place(int index, Key key, Widget child) {
@@ -179,11 +163,10 @@ class _TodoProjectsState extends State<TodoProjects>
                 ),
               );
             }
-            var next = _order.length;
             if (loose > 0) {
               slots.add(
                 place(
-                  next++,
+                  _order.length,
                   const ValueKey('loose'),
                   _ProjectCell(
                     label: context.l10n.todo_project_none,
@@ -195,12 +178,8 @@ class _TodoProjectsState extends State<TodoProjects>
                 ),
               );
             }
-            slots.add(
-              place(next, const ValueKey('new'), _NewProject(onTap: _create)),
-            );
-
             return SizedBox(
-              height: rows * cellHeight + (rows - 1) * _spacing,
+              height: math.max(0, rows * cellHeight + (rows - 1) * _spacing),
               child: Stack(children: slots),
             );
           },
@@ -237,12 +216,6 @@ TextStyle folderCountStyle(BuildContext context, int style, Color color) =>
         fontWeight: FontWeight.w600,
         color: color,
       ),
-    };
-
-double folderRadius(int style) => switch (style) {
-      2 => 28,
-      1 => 14,
-      _ => 15,
     };
 
 class _ArrangeBar extends StatelessWidget {
@@ -375,7 +348,6 @@ class _ProjectSlot extends StatelessWidget {
         delay: const Duration(milliseconds: 120),
         dragAnchorStrategy: pointerDragAnchorStrategy,
         onDragStarted: () {
-          HapticFeedback.mediumImpact();
           onStart();
         },
         onDragEnd: (_) => onEnd(),
@@ -483,7 +455,6 @@ class _ProjectCellState extends State<_ProjectCell> {
           onTap: tap == null
               ? null
               : () {
-                  HapticFeedback.selectionClick();
                   tap();
                 },
           onLongPress: widget.onLongPress,
@@ -505,6 +476,8 @@ class _ProjectCellState extends State<_ProjectCell> {
                   child: FolderShape(
                     color: widget.color,
                     icon: widget.icon,
+                    papers: widget.count,
+                    lifted: _pressed || (_hovered && tap != null),
                     seed: widget.seed,
                   ),
                 ),
@@ -556,289 +529,6 @@ class _ProjectCellState extends State<_ProjectCell> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FolderShape extends StatelessWidget {
-  const FolderShape({
-    super.key,
-    required this.color,
-    this.icon,
-    this.seed = 0,
-  });
-
-  final Color color;
-  final IconData? icon;
-  final int seed;
-
-  @override
-  Widget build(BuildContext context) {
-    return switch (context.watch<SettingsController>().appStyle) {
-      1 => _MinimalFolder(color: color, icon: icon),
-      2 => _ExpressFolder(color: color, icon: icon, seed: seed),
-      _ => _ClassicFolder(color: color, icon: icon),
-    };
-  }
-}
-
-class _ClassicFolder extends StatelessWidget {
-  const _ClassicFolder({required this.color, this.icon});
-
-  final Color color;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    final face = Color.lerp(color, context.colors.surface, dark ? 0.56 : 0.7)!;
-    final back = Color.lerp(face, dark ? Colors.white : Colors.black, 0.13)!;
-    final crest = Color.lerp(face, Colors.white, dark ? 0.08 : 0.42)!;
-    final glyph = Color.lerp(face, dark ? Colors.white : Colors.black, 0.24)!;
-
-    return LayoutBuilder(
-      builder: (context, box) {
-        final height = box.maxHeight;
-        return Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              width: box.maxWidth * 0.42,
-              height: height * 0.28,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: back,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(9),
-                    topRight: Radius.circular(11),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: height * 0.11,
-              bottom: 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: back,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: dark ? 0.3 : 0.24),
-                      blurRadius: 18,
-                      offset: const Offset(0, 9),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: height * 0.2,
-              bottom: 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [crest, face],
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: icon == null
-                    ? null
-                    : Center(
-                        child: Icon(icon, size: height * 0.3, color: glyph),
-                      ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _MinimalFolder extends StatelessWidget {
-  const _MinimalFolder({required this.color, this.icon});
-
-  final Color color;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final sheet = minimalRaised(context);
-    final line = minimalLineColor(context);
-
-    return LayoutBuilder(
-      builder: (context, box) {
-        final height = box.maxHeight;
-        return Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              width: box.maxWidth * 0.38,
-              height: height * 0.26,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.3),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    topRight: Radius.circular(6),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: height * 0.14,
-              bottom: 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: sheet,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: line),
-                ),
-                child: icon == null
-                    ? null
-                    : Align(
-                        alignment: const Alignment(0, 0.1),
-                        child: Icon(icon, size: height * 0.26, color: color),
-                      ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _ExpressFolder extends StatelessWidget {
-  const _ExpressFolder({required this.color, this.icon, required this.seed});
-
-  final Color color;
-  final IconData? icon;
-  final int seed;
-
-  @override
-  Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    final body = Color.lerp(color, context.colors.surface, dark ? 0.34 : 0.5)!;
-    final tab = Color.lerp(body, dark ? Colors.white : Colors.black, 0.12)!;
-    final badge = Color.lerp(body, dark ? Colors.black : Colors.white, 0.7)!;
-
-    return LayoutBuilder(
-      builder: (context, box) {
-        final height = box.maxHeight;
-        return Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              width: box.maxWidth * 0.46,
-              height: height * 0.32,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: tab,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(18),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: height * 0.16,
-              bottom: 0,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: body,
-                  borderRadius: BorderRadius.circular(28),
-                ),
-                child: icon == null
-                    ? null
-                    : Center(
-                        child: SizedBox.square(
-                          dimension: height * 0.42,
-                          child: DecoratedBox(
-                            decoration: ShapeDecoration(
-                              color: badge,
-                              shape: ExpressBorder(
-                                shape: ExpressShape.pick(seed),
-                              ),
-                            ),
-                            child: Icon(
-                              icon,
-                              size: height * 0.2,
-                              color: color,
-                            ),
-                          ),
-                        ),
-                      ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _NewProject extends StatelessWidget {
-  const _NewProject({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final muted = context.tokens.muted;
-    final style = context.watch<SettingsController>().appStyle;
-    return Semantics(
-      button: true,
-      label: context.l10n.todo_project_new,
-      excludeSemantics: true,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(folderRadius(style)),
-                    border: Border.all(
-                      color: muted.withValues(alpha: 0.3),
-                      width: 1.2,
-                    ),
-                  ),
-                  child: Center(
-                    child: Icon(LucideIcons.plus, size: 22, color: muted),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 9),
-              Text(
-                context.l10n.todo_project_new,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: folderNameStyle(context, style, muted),
-              ),
-            ],
           ),
         ),
       ),

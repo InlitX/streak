@@ -13,7 +13,9 @@ import 'package:uuid/uuid.dart';
 class TodosController extends ChangeNotifier {
   TodosController() {
     _todos = LocalStore.readTodos();
-    unawaited(_notifications.rescheduleTodos(_todos));
+    if (!NotificationService.armedToday('todoRemindersArmedOn')) {
+      unawaited(_notifications.rescheduleTodos(_todos));
+    }
   }
 
   final _notifications = NotificationService();

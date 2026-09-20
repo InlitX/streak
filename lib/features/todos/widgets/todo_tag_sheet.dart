@@ -75,6 +75,57 @@ Future<void> showTodoTagPicker(
       builder: (_) => _TagPickerSheet(selected: selected, onChanged: onChanged),
     );
 
+Future<void> createProject(BuildContext context) async {
+  final tags = context.read<TodoTagsController>();
+  final result = await showTodoTagEditor(context, project: true);
+  if (result == null) return;
+  await tags.create(
+    name: result.name,
+    color: result.color,
+    icon: result.icon,
+    kind: TodoTagKind.project,
+  );
+}
+
+Future<bool?> showTodoOrProjectChoice(BuildContext context) =>
+    showModalBottomSheet<bool>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) => SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(
+                  LucideIcons.squareCheckBig,
+                  color: sheet.colors.onSurface,
+                ),
+                title: Text(
+                  sheet.l10n.todo_new,
+                  style: sheetOptionStyle(sheet),
+                ),
+                onTap: () => Navigator.of(sheet).pop(false),
+              ),
+              ListTile(
+                leading: Icon(
+                  LucideIcons.folderPlus,
+                  color: sheet.colors.onSurface,
+                ),
+                title: Text(
+                  sheet.l10n.todo_project_new,
+                  style: sheetOptionStyle(sheet),
+                ),
+                onTap: () => Navigator.of(sheet).pop(true),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
+    );
+
 Future<void> editTag(BuildContext context, TodoTag tag) async {
   final tags = context.read<TodoTagsController>();
   final result = await showTodoTagEditor(context, initial: tag);

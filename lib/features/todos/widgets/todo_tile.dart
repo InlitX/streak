@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -239,7 +238,6 @@ class _CheckButton extends StatelessWidget {
       excludeSemantics: true,
       child: GestureDetector(
         onTap: () {
-          HapticFeedback.selectionClick();
           onToggle();
         },
         child: AnimatedContainer(

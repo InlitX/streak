@@ -10,6 +10,7 @@ import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 List<Completion> checkLog(Habit habit) {
@@ -190,6 +191,13 @@ class _EntryState extends State<_Entry> {
         : DateFormat.yMMMEd(context.l10n.localeName).format(day);
     final times = [...entry.times]..sort();
     final many = times.length > 1;
+    final written = [
+      for (final note in context.watch<NotesController>().forDay(
+        widget.habit.id,
+        entry.date,
+      ))
+        if (note.text.trim().isNotEmpty) note.text.trim(),
+    ];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
@@ -235,6 +243,39 @@ class _EntryState extends State<_Entry> {
               ),
             ),
           ),
+          if (written.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 0, 4, 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2, right: 7),
+                    child: Icon(
+                      LucideIcons.notebookPen,
+                      size: 13,
+                      color: context.tokens.muted,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      written.first,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: sheetBodyStyle(context, size: 12.5),
+                    ),
+                  ),
+                  if (written.length > 1)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(
+                        '+${written.length - 1}',
+                        style: sheetLabelStyle(context, size: 12),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           if (many && _open)
             Padding(
               padding: const EdgeInsets.fromLTRB(22, 2, 0, 8),

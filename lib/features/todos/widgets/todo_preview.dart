@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -182,7 +181,6 @@ class _TodoPreview extends StatelessWidget {
                                     _StepRow(
                                       step: step,
                                       onTap: () {
-                                        HapticFeedback.selectionClick();
                                         todos.toggleStep(todo.id, step.id);
                                       },
                                     ),
@@ -244,7 +242,6 @@ class _TodoPreview extends StatelessWidget {
                                   ? context.l10n.a11y_mark_not_done(todo.title)
                                   : context.l10n.a11y_mark_done(todo.title),
                               onTap: () {
-                                HapticFeedback.selectionClick();
                                 todos.toggle(todo.id);
                               },
                             ),
