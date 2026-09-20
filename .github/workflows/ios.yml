@@ -1,0 +1,42 @@
+name: iOS build
+
+on:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '3.41.9'
+
+jobs:
+  ios:
+    name: Build unsigned ipa
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
+
+      - name: Package
+        run: |
+          mkdir -p Payload
+          mv build/ios/iphoneos/Runner.app Payload/
+          zip -qry Streak-ios.ipa Payload
+
+      - name: Upload the ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: Streak-ios
+          path: Streak-ios.ipa
+          if-no-files-found: error

@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 
 class AppIconService {
   const AppIconService._();
@@ -10,7 +9,7 @@ class AppIconService {
   static const _names = ['default', 'neutral', 'accent'];
 
   static Future<void> apply(int index) async {
-    if (!Platform.isAndroid) return;
+    if (!hasAppIcons) return;
     final name = _names[index.clamp(0, _names.length - 1)];
     try {
       await _channel.invokeMethod('setIcon', {'icon': name});
