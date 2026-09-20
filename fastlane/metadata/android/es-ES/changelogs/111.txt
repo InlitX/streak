@@ -1,9 +1,10 @@
-🚀 Nueva versión 2.0.0
-🐧 Streak ya funciona en Linux, en AppImage o en tar.gz
-⏱️ Focus te sigue fuera de la app, con el tiempo restante arriba de la pantalla
-⏭️ Sáltate el descanso, suma un minuto, toca donde sea para pausar y dos veces para el reloj a pantalla completa
-🌙 Una sesión que cruza la medianoche se reparte entre los dos días
-🗂️ Ordena tus categorías, y una pestaña Plan para tu día
-📵 Se acabó la vibración en cada toque y el deslizar que te cambiaba de pestaña
-⚡ Arranque y estadísticas más rápidos
-🐛 Arreglados el eje de la gráfica, el botón Guardar escondido y un aviso fantasma de Focus
+Streak 2.0.0 🚀
+
+- Streak ya funciona en Linux, en AppImage o en tar.gz
+- Focus sigue contigo fuera de la app, con el tiempo restante arriba de la pantalla
+- Sáltate el descanso, suma un minuto, toca donde sea para pausar y dos veces para el reloj a pantalla completa
+- Una sesión que cruza la medianoche cuenta en los dos días
+- Ordena tus categorías, y una pestaña Plan para tu día
+- Se acabó la vibración en cada toque y el deslizar que cambiaba de pestaña
+- Arranque y estadísticas más rápidos
+- Arreglados el eje de la gráfica, el botón Guardar escondido y un aviso fantasma de Focus
