@@ -1,0 +1,9 @@
+🚀 New version 2.0.0
+🐧 Streak now runs on Linux, as an AppImage or a tar.gz
+⏱️ Focus follows you out of the app, with the time left at the top of the screen
+⏭️ Skip the break, add a minute, tap anywhere to pause, double tap for a full screen clock
+🌙 A session that crosses midnight is split between the two days
+🗂️ Reorder your categories, and a Plan tab for your day
+📵 No more vibration on every tap, and no more sliding into the wrong tab
+⚡ A faster start and faster statistics
+🐛 Fixed the graph axis, the hidden Save button and a phantom Focus alarm
