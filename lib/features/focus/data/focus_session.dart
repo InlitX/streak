@@ -22,8 +22,40 @@ class FocusSession {
   int get minutes => seconds ~/ 60;
 
   DateTime get countedOn => startedAt
-      .add(Duration(seconds: seconds))
+      .add(Duration(seconds: seconds > 0 ? seconds - 1 : 0))
       .subtract(Duration(hours: AppClock.cutoffHour));
+
+  List<FocusSession> split() {
+    final pieces = <FocusSession>[];
+    var start = startedAt;
+    var left = seconds;
+    while (left > 0) {
+      final span = dayBorderAfter(start).difference(start).inSeconds;
+      if (span >= left) {
+        pieces.add(_pieceOf(pieces.length + 1, start, left, last: true));
+        break;
+      }
+      pieces.add(_pieceOf(pieces.length + 1, start, span));
+      start = start.add(Duration(seconds: span));
+      left -= span;
+    }
+    if (pieces.length < 2 || pieces.any((piece) => piece.seconds < 60)) {
+      return [this];
+    }
+    return pieces;
+  }
+
+  FocusSession _pieceOf(int index, DateTime start, int span,
+          {bool last = false}) =>
+      FocusSession(
+        id: index == 1 ? id : '$id-$index',
+        habitId: habitId,
+        targetMinutes: targetMinutes,
+        seconds: span,
+        completed: completed && last,
+        startedAt: start,
+        counted: counted,
+      );
 
   FocusSession get asCounted => FocusSession(
         id: id,
@@ -56,6 +88,12 @@ class FocusSession {
         counted: map['counted'] == true,
       );
 }
+
+DateTime dayBorderAfter(DateTime moment) => moment
+    .subtract(Duration(hours: AppClock.cutoffHour))
+    .atMidnight
+    .addDays(1)
+    .add(Duration(hours: AppClock.cutoffHour));
 
 String formatDuration(int seconds) {
   final h = seconds ~/ 3600;

@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -152,9 +153,84 @@ class _MusicSheet extends StatelessWidget {
                 ),
               ),
             ),
+            const Divider(height: 28),
+            _AlertRow(settings: settings),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _AlertRow extends StatelessWidget {
+  const _AlertRow({required this.settings});
+
+  final SettingsController settings;
+
+  String _label(BuildContext context) {
+    final alert = settings.focusAlert;
+    if (alert == FocusAudio.silentAlert) return context.l10n.focus_alert_none;
+    if (alert.isEmpty) return context.l10n.focus_alert_chime;
+    return alert.split(RegExp(r'[\\/]')).last;
+  }
+
+  Future<void> _pick(BuildContext context) async {
+    final alert = settings.focusAlert;
+    await showOptionSheet(
+      context,
+      title: context.l10n.focus_alert,
+      options: [
+        context.l10n.focus_alert_chime,
+        context.l10n.focus_alert_custom,
+        context.l10n.focus_alert_none,
+      ],
+      index: alert.isEmpty
+          ? 0
+          : alert == FocusAudio.silentAlert
+              ? 2
+              : 1,
+      onSelected: (index) async {
+        if (index == 0) return settings.setFocusAlert('');
+        if (index == 2) return settings.setFocusAlert(FocusAudio.silentAlert);
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: FocusAudio.trackExtensions,
+        );
+        final path = result?.files.single.path;
+        if (path == null) return;
+        final kept = await FocusTrack.store(path, folder: 'alerts');
+        await CoverStorage.clearPickerCache();
+        await settings.setFocusAlert(kept);
+        await FocusAudio.alert(kept);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(LucideIcons.bellRing, color: context.colors.onSurface),
+          title: Text(context.l10n.focus_alert, style: sheetOptionStyle(context)),
+          subtitle: Text(
+            _label(context),
+            style: TextStyle(fontSize: 12.5, color: context.tokens.muted),
+          ),
+          onTap: () => _pick(context),
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          value: settings.focusHold,
+          onChanged: settings.setFocusHold,
+          title: Text(context.l10n.focus_hold, style: sheetOptionStyle(context)),
+          subtitle: Text(
+            context.l10n.focus_hold_sub,
+            style: TextStyle(fontSize: 12.5, color: context.tokens.muted),
+          ),
+        ),
+      ],
     );
   }
 }

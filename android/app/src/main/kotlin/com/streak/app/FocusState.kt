@@ -38,6 +38,10 @@ object FocusState {
         state.put("pauseLabel", arguments["pauseLabel"] as? String ?: "")
         state.put("resumeLabel", arguments["resumeLabel"] as? String ?: "")
         state.put("stopLabel", arguments["stopLabel"] as? String ?: "")
+        state.put("skipLabel", arguments["skipLabel"] as? String ?: "")
+        state.put("continueLabel", arguments["continueLabel"] as? String ?: "")
+        state.put("minuteLabel", arguments["minuteLabel"] as? String ?: "")
+        state.put("total", (arguments["total"] as? Number)?.toInt() ?: 0)
         state.put("phase", arguments["phase"] as? String ?: "")
         state.put("running", running)
         state.put("done", arguments["done"] as? Boolean ?: false)
@@ -66,6 +70,18 @@ object FocusState {
         return copyOf(state)
             .put("running", true)
             .put("anchor", anchorFor(state.optBoolean("countDown"), frozen))
+    }
+
+    fun extended(state: JSONObject): JSONObject {
+        if (!state.optBoolean("countDown")) return state
+        val next = copyOf(state)
+            .put("total", state.optInt("total") + 60)
+            .put("done", false)
+        return if (state.optBoolean("running")) {
+            next.put("anchor", maxOf(state.optLong("anchor"), System.currentTimeMillis()) + 60_000L)
+        } else {
+            next.put("frozen", state.optInt("frozen") + 60)
+        }
     }
 
     private fun anchorFor(countDown: Boolean, seconds: Int): Long {

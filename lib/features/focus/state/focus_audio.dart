@@ -35,8 +35,8 @@ class FocusTrack {
 
   static const _folder = 'tracks';
 
-  static Future<String> store(String source) async {
-    final dir = Directory('${(await appDataDir()).path}/$_folder');
+  static Future<String> store(String source, {String folder = _folder}) async {
+    final dir = Directory('${(await appDataDir()).path}/$folder');
     if (!dir.existsSync()) dir.createSync(recursive: true);
     final found = source.split('.').last.toLowerCase();
     final extension = FocusAudio.trackExtensions.contains(found) ? found : 'mp3';
@@ -173,10 +173,26 @@ class FocusAudio {
     current.value = '';
   }
 
-  static Future<void> chime() async {
+  static const silentAlert = 'none';
+
+  static Future<void> alert(String sound, {bool loop = false}) async {
+    if (sound == silentAlert) return;
     try {
       await _effects.stop();
-      await _effects.play(AssetSource('sounds/chime.ogg'), volume: 0.9);
+      await _effects.setReleaseMode(loop ? ReleaseMode.loop : ReleaseMode.stop);
+      await _effects.play(
+        sound.isEmpty
+            ? AssetSource('sounds/chime.ogg')
+            : DeviceFileSource(sound),
+        volume: 0.9,
+      );
+    } catch (_) {}
+  }
+
+  static Future<void> stopAlert() async {
+    try {
+      await _effects.stop();
+      await _effects.setReleaseMode(ReleaseMode.stop);
     } catch (_) {}
   }
 

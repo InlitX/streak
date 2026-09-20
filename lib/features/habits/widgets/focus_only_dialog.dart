@@ -9,6 +9,7 @@ import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/pages/habit_details_page.dart';
 
 Future<bool> allowManualCheck(
   BuildContext context, {
@@ -21,6 +22,11 @@ Future<bool> allowManualCheck(
       title: context.l10n.focus_only_clear_title,
       message: context.l10n.focus_only_clear_body(habit.name),
       confirmLabel: context.l10n.clear,
+      extraLabel: context.l10n.focus_history,
+      onExtra: () => AppNavigator.push(
+        HabitDetailsPage(habitId: habit.id),
+        fade: true,
+      ),
       icon: LucideIcons.timer,
     );
     return cleared == true;

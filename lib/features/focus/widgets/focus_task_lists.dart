@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -123,7 +122,6 @@ class _FocusTaskListState extends State<FocusTaskList> {
                           selected: checked.contains(step.id),
                           child: GestureDetector(
                             onTap: () {
-                              HapticFeedback.selectionClick();
                               habits.setStep(
                                 widget.habit.id,
                                 today,

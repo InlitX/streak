@@ -19,6 +19,7 @@ class FocusClock extends StatelessWidget {
     required this.color,
     required this.label,
     required this.size,
+    this.row = false,
   });
 
   final ClockStyle style;
@@ -27,6 +28,7 @@ class FocusClock extends StatelessWidget {
   final Color color;
   final String label;
   final double size;
+  final bool row;
 
   static String clockText(int seconds) => formatDuration(seconds);
 
@@ -40,7 +42,7 @@ class FocusClock extends StatelessWidget {
           label: label,
           size: size,
         ),
-      ClockStyle.flip => _FlipClock(seconds: seconds, size: size),
+      ClockStyle.flip => _FlipClock(seconds: seconds, size: size, row: row),
       ClockStyle.dots => _DotsClock(seconds: seconds, size: size),
     };
   }
@@ -289,10 +291,11 @@ class _DotTextPainter extends CustomPainter {
 }
 
 class _FlipClock extends StatelessWidget {
-  const _FlipClock({required this.seconds, required this.size});
+  const _FlipClock({required this.seconds, required this.size, this.row = false});
 
   final int seconds;
   final double size;
+  final bool row;
 
   @override
   Widget build(BuildContext context) {
@@ -306,23 +309,28 @@ class _FlipClock extends StatelessWidget {
       (unit: 's', value: (seconds % 60).toString().padLeft(2, '0')),
     ];
 
-    final width = groups.length > 2 ? size * 0.42 : size * 0.64;
-    final height = width * 1.3;
+    final share = row
+        ? (groups.length > 2 ? 0.3 : 0.46)
+        : (groups.length > 2 ? 0.42 : 0.64);
+    final width = size * share;
+    final height = width * (row ? 1.06 : 1.3);
+    final gap = width * 0.12;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < groups.length; i++) ...[
-          if (i > 0) SizedBox(height: height * 0.13),
-          _FlipGroup(
-            key: ValueKey('${groups[i].unit}:$width'),
-            value: groups[i].value,
-            width: width,
-            height: height,
-          ),
-        ],
+    final faces = [
+      for (var i = 0; i < groups.length; i++) ...[
+        if (i > 0) SizedBox(width: row ? gap : 0, height: row ? 0 : gap),
+        _FlipGroup(
+          key: ValueKey('${groups[i].unit}:$width'),
+          value: groups[i].value,
+          width: width,
+          height: height,
+        ),
       ],
-    );
+    ];
+
+    return row
+        ? Row(mainAxisSize: MainAxisSize.min, children: faces)
+        : Column(mainAxisSize: MainAxisSize.min, children: faces);
   }
 }
 

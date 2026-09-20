@@ -75,6 +75,7 @@ class FocusController extends ChangeNotifier {
   void Function(FocusSession session)? onRoundSaved;
   int _round = 1;
   bool _open = false;
+  bool _awaiting = false;
   int _accumulated = 0;
   DateTime? _since;
   Timer? _ticker;
@@ -114,10 +115,16 @@ class FocusController extends ChangeNotifier {
       completed: true,
       startedAt: startedAt,
     );
-    _sessions.add(session);
-    await LocalStore.writeFocusSession(session);
+    await _keep(session);
     notifyListeners();
     return session;
+  }
+
+  Future<void> _keep(FocusSession session) async {
+    for (final piece in session.split()) {
+      _sessions.add(piece);
+      await LocalStore.writeFocusSession(piece);
+    }
   }
 
   List<FocusTask> get tasks => List.unmodifiable(_tasks);
@@ -132,6 +139,7 @@ class FocusController extends ChangeNotifier {
 
   bool get isActive => _open;
   bool get isRunning => _since != null;
+  bool get isAwaiting => _awaiting;
 
   int elapsedAt(DateTime at) {
     final live = _since == null ? 0 : at.difference(_since!).inSeconds;
@@ -181,6 +189,7 @@ class FocusController extends ChangeNotifier {
   }
 
   void pause({DateTime? at}) {
+    unawaited(FocusAudio.stopAlert());
     if (_since == null) return;
     _accumulated = elapsedAt(at ?? DateTime.now());
     _since = null;
@@ -204,7 +213,16 @@ class FocusController extends ChangeNotifier {
     unawaited(FocusAudio.resume());
   }
 
+  void continueNow() {
+    if (!_awaiting) return;
+    _awaiting = false;
+    unawaited(FocusAudio.stopAlert());
+    unawaited(_advancePhase());
+  }
+
   void reset() {
+    _awaiting = false;
+    unawaited(FocusAudio.stopAlert());
     _accumulated = 0;
     _since = isRunning ? DateTime.now() : null;
     _celebrated = false;
@@ -212,6 +230,26 @@ class FocusController extends ChangeNotifier {
     _persist();
     _sync();
     notifyListeners();
+  }
+
+  void addMinute() {
+    if (!_open || isFlow) return;
+    if (reachedTarget) {
+      _accumulated = targetSeconds;
+      if (isRunning) _since = DateTime.now();
+    }
+    _targetMinutes++;
+    _celebrated = false;
+    if (isRunning) _startTicker();
+    _persist();
+    _sync();
+    notifyListeners();
+  }
+
+  void skipBreak() {
+    _awaiting = false;
+    unawaited(FocusAudio.stopAlert());
+    if (_isBreak) unawaited(_advancePhase());
   }
 
   void addTask() {
@@ -246,6 +284,12 @@ class FocusController extends ChangeNotifier {
         resume(at: action.at);
       case FocusAction.stop:
         return stop(completed: reachedTarget || isFlow, at: action.at);
+      case FocusAction.minute:
+        addMinute();
+      case FocusAction.skip:
+        skipBreak();
+      case FocusAction.next:
+        continueNow();
     }
     return null;
   }
@@ -256,6 +300,8 @@ class FocusController extends ChangeNotifier {
     final habitId = _habitId;
     final target = _focusMinutes;
     _stopTicker();
+    _awaiting = false;
+    unawaited(FocusAudio.stopAlert());
     _accumulated = 0;
     _since = null;
     _habitId = '';
@@ -283,8 +329,7 @@ class FocusController extends ChangeNotifier {
       completed: completed,
       startedAt: endedAt.subtract(Duration(seconds: seconds)),
     );
-    _sessions.add(session);
-    await LocalStore.writeFocusSession(session);
+    await _keep(session);
     notifyListeners();
     return session;
   }
@@ -302,14 +347,14 @@ class FocusController extends ChangeNotifier {
           completed: true,
           startedAt: endedAt.subtract(Duration(seconds: seconds)),
         );
-        _sessions.add(session);
-        await LocalStore.writeFocusSession(session);
+        await _keep(session);
         onRoundSaved?.call(session);
       }
     } else {
       _round++;
     }
     _isBreak = !_isBreak;
+    _awaiting = false;
     _targetMinutes = _isBreak ? _breakMinutes : _focusMinutes;
     _accumulated = 0;
     _since = DateTime.now();
@@ -336,7 +381,19 @@ class FocusController extends ChangeNotifier {
       if (!_celebrated && reachedTarget) {
         _celebrated = true;
         completedTick.value++;
-        if (isPomodoro) {
+        final hold = isPomodoro && LocalStore.setting('focusHold', false);
+        unawaited(
+          FocusAudio.alert(
+            LocalStore.setting('focusAlert', ''),
+            loop: hold,
+          ),
+        );
+        if (hold) {
+          _awaiting = true;
+          _stopTicker();
+          _persist();
+          _sync();
+        } else if (isPomodoro) {
           _advancePhase();
         } else {
           _stopTicker();
@@ -359,7 +416,24 @@ class FocusController extends ChangeNotifier {
     return isFlow ? began : began + targetSeconds * 1000 + 999;
   }
 
+  Future<void> _syncEndAlarm() async {
+    final notifications = NotificationService();
+    try {
+      if (!_open || !isRunning) return await notifications.cancelFocusEnd();
+      if (isFlow || reachedTarget) return;
+      final strings = await notifications.localizations();
+      await notifications.scheduleFocusEnd(
+        title: strings.focus_done_title,
+        body: strings.focus_notif_body,
+        after: Duration(seconds: remainingSeconds),
+      );
+    } catch (e) {
+      debugPrint('Focus end alarm failed: $e');
+    }
+  }
+
   Future<void> _sync() async {
+    unawaited(_syncEndAlarm());
     try {
       if (!_open) {
         await FocusService.hide();
@@ -367,8 +441,10 @@ class FocusController extends ChangeNotifier {
       }
       final strings = await NotificationService().localizations();
       final habit = _habitId.isEmpty ? null : LocalStore.readHabits()[_habitId];
-      final done = reachedTarget && !isPomodoro;
-      final label = done
+      final done = _awaiting || (reachedTarget && !isPomodoro);
+      final label = _awaiting
+          ? strings.focus_continue
+          : done
           ? strings.focus_target_reached
           : _isBreak
               ? strings.focus_break
@@ -377,7 +453,9 @@ class FocusController extends ChangeNotifier {
                   : isFlow
                       ? strings.focus_flowtime
                       : strings.focus_notif_running;
-      final phase = done
+      final phase = _awaiting
+          ? 'waiting'
+          : done
           ? 'done'
           : _isBreak
               ? 'break'
@@ -396,10 +474,14 @@ class FocusController extends ChangeNotifier {
         countDown: !isFlow,
         seconds: displaySeconds,
         anchor: _anchorMs,
+        total: isFlow ? 0 : targetSeconds,
         channelName: strings.focus_notif_channel,
         pauseLabel: strings.focus_pause,
         resumeLabel: strings.focus_resume,
         stopLabel: strings.focus_end,
+        continueLabel: strings.focus_continue,
+        skipLabel: strings.focus_skip_break,
+        minuteLabel: '+${strings.minutes_short('1')}',
       );
     } catch (e) {
       debugPrint('Focus notification sync failed: $e');

@@ -42,13 +42,15 @@ Future<void> countFocusTime(
   final habit = habits.byId(session.habitId);
   if (habit == null || !habit.isTimeAmount) return;
   if (undo && !session.counted) return;
-  final minutes = session.seconds / 60;
-  await habits.addProgress(
-    habit.id,
-    session.countedOn,
-    undo ? -minutes : minutes,
-  );
-  if (!undo) await focus.markCounted(session.id);
+  for (final piece in session.split()) {
+    final minutes = piece.seconds / 60;
+    await habits.addProgress(
+      habit.id,
+      piece.countedOn,
+      undo ? -minutes : minutes,
+    );
+    if (!undo) await focus.markCounted(piece.id);
+  }
 }
 
 Future<void> drainFocusActions() async {

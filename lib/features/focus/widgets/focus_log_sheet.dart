@@ -35,7 +35,7 @@ class _FocusLog extends StatefulWidget {
 
 class _FocusLogState extends State<_FocusLog> {
   late String _habitId = widget.habitId;
-  late DateTime _day = AppClock.now().atMidnight;
+  late DateTime _day = AppClock.today();
   late TimeOfDay _time = TimeOfDay.fromDateTime(AppClock.now());
   int _minutes = 25;
 
@@ -212,7 +212,6 @@ class _PickField extends StatelessWidget {
       label: '$label $value',
       child: ExpressSquish(
         onTap: onTap,
-        haptic: express,
         scale: express ? 0.965 : 1,
         child: Container(
           padding: EdgeInsets.symmetric(

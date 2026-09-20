@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -114,7 +113,6 @@ class _Arrow extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: enabled
             ? () {
-                HapticFeedback.selectionClick();
                 onTap!();
               }
             : null,

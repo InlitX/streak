@@ -20,7 +20,7 @@ class FocusDailyBars extends StatelessWidget {
     final express = context.watch<SettingsController>().isExpressStyle;
     final focus = context.watch<FocusController>();
     final span = express ? 30 : days;
-    final today = AppClock.now().atMidnight;
+    final today = AppClock.today();
     final start = today.subtract(Duration(days: span - 1));
     final minutes = [
       for (var i = 0; i < span; i++)

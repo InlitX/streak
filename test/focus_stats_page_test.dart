@@ -117,6 +117,7 @@ void main() {
 
     await tester.runAsync(() => tester.tap(find.text('Save')));
     await _waitFor(tester, find.text('Free session'));
+    await _waitFor(tester, find.text('25m'));
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('Free session'), findsOneWidget);

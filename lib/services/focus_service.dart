@@ -12,6 +12,9 @@ class FocusAction {
   static const pause = 'pause';
   static const resume = 'resume';
   static const stop = 'stop';
+  static const minute = 'minute';
+  static const skip = 'skip';
+  static const next = 'next';
 }
 
 class FocusService {
@@ -41,10 +44,14 @@ class FocusService {
     required bool countDown,
     required int seconds,
     required int anchor,
+    required int total,
     required String channelName,
     required String pauseLabel,
     required String resumeLabel,
     required String stopLabel,
+    required String continueLabel,
+    required String skipLabel,
+    required String minuteLabel,
   }) =>
       _invoke('show', {
         'habitId': habitId,
@@ -56,10 +63,14 @@ class FocusService {
         'countDown': countDown,
         'seconds': seconds,
         'anchor': anchor,
+        'total': total,
         'channelName': channelName,
         'pauseLabel': pauseLabel,
         'resumeLabel': resumeLabel,
         'stopLabel': stopLabel,
+        'continueLabel': continueLabel,
+        'skipLabel': skipLabel,
+        'minuteLabel': minuteLabel,
       });
 
   static Future<void> hide() => _invoke('hide', const {});

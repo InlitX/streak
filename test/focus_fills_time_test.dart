@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 
@@ -65,6 +66,50 @@ void main() {
         completions: CompletionOps.addProgress(habit, AppClock.now(), 5),
       );
       expect(_minutes(habit), 25);
+    });
+  });
+
+  group('a session that crosses the day', () {
+    FocusSession session(DateTime startedAt, int seconds) => FocusSession(
+          id: 'night',
+          habitId: 'study',
+          targetMinutes: seconds ~/ 60,
+          seconds: seconds,
+          completed: true,
+          startedAt: startedAt,
+        );
+
+    test('splits where the day changes and keeps every second', () {
+      final pieces =
+          session(DateTime(2026, 9, 14, 21), 8 * 3600).split();
+
+      expect(pieces.length, 2);
+      expect(pieces.first.startedAt, DateTime(2026, 9, 14, 21));
+      expect(pieces.first.seconds, 3 * 3600);
+      expect(pieces.last.startedAt, DateTime(2026, 9, 15));
+      expect(pieces.last.seconds, 5 * 3600);
+      expect(pieces.first.countedOn.dayKey, DateTime(2026, 9, 14).dayKey);
+      expect(pieces.last.countedOn.dayKey, DateTime(2026, 9, 15).dayKey);
+    });
+
+    test('only the last piece counts as completed', () {
+      final pieces = session(DateTime(2026, 9, 14, 23), 2 * 3600).split();
+
+      expect(pieces.map((piece) => piece.completed), [false, true]);
+      expect(pieces.map((piece) => piece.id), ['night', 'night-2']);
+    });
+
+    test('crossing by a few seconds stays in one piece', () {
+      final pieces = session(DateTime(2026, 9, 14, 23, 59), 70).split();
+
+      expect(pieces.length, 1);
+      expect(pieces.single.seconds, 70);
+    });
+
+    test('a session inside one day is left alone', () {
+      final pieces = session(DateTime(2026, 9, 14, 9), 3600).split();
+
+      expect(pieces.single.id, 'night');
     });
   });
 }
