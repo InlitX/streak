@@ -1245,5 +1245,8 @@
   },
   "island": "Ilha",
   "island_shop": "Loja",
-  "period_all_time": "Todo o período"
+  "period_all_time": "Todo o período",
+  "onb_kicker": "Boas vindas",
+  "onb_free_title": "Gratuito para sempre",
+  "onb_free_body": "Sem ads, s"
 }
