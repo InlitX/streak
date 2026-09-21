@@ -763,7 +763,7 @@
   "focus_log_saved": "Сеанс додано",
   "perfect_streak": "Серія ідеальних днів",
   "edit_note": "Редагувати нотатку",
-  "notes_hint": "Затисніть день, щоб переглянути або додати нотатки",
+  "notes_hint": "Відкрийте звичку. Затисніть пальцем на дні в календарі. Так ви зможете побачити або додати нотатки",
   "focus_total": "Час фокусування",
   "share_size_large": "Здоровий",
   "share_size_small": "Квадратний",
@@ -1113,7 +1113,7 @@
   "island_p_storage_box": "",
   "island_g_cabo": "",
   "island_p_water_bucket": "",
-  "streak_unit_month": "",
+  "streak_unit_month": "{count} міс.",
   "@streak_unit_month": {
     "placeholders": {
       "count": {
@@ -1207,7 +1207,7 @@
   "island_t_deep": "",
   "island_p_large_rock": "",
   "island_p_terrace_house": "",
-  "streak_unit_week": "",
+  "streak_unit_week": "{count} тиж.",
   "@streak_unit_week": {
     "placeholders": {
       "count": {
@@ -1244,5 +1244,100 @@
   "island_p_cypress": "",
   "island_g_caleta": "",
   "island_how_note": "",
-  "period_all_time": ""
+  "period_all_time": "",
+  "onb_kicker": "Вітаємо в",
+  "onb_blurb": "Маленькі щоденні перевірки стають звичками, які ви зберігаєте.",
+  "onb_free_title": "Безоплатно, назавжди",
+  "onb_free_body": "Немає реклами, немає передплат, немає закритих функцій.",
+  "onb_private_title": "Приватний та без мережі",
+  "onb_private_body": "Усе залишається на вашому пристрої. Обліковий запис не потрібен.",
+  "onb_yours_title": "Ваші дані належать вам",
+  "onb_yours_body": "Робіть копію або тримайте її при собі, коли забажаєте.",
+  "onb_step": "Крок {step} із {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_weeks": "Кожні {n} тиж.",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "Кожні {n} міс.",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Днів",
+  "sched_unit_weeks": "Тижнів",
+  "sched_unit_months": "Місяців",
+  "todo_tags": "Теги",
+  "todo_projects": "Проєкти",
+  "todo_project": "Проєкт",
+  "todo_project_new": "Новий проєкт",
+  "todo_project_name": "Назва проєкту",
+  "todo_project_edit": "Редагувати проєкт",
+  "todo_project_arrange": "Переставити",
+  "todo_project_arrange_hint": "Перетягніть теки туди, куди ви хочете.",
+  "todo_project_pick": "Оберіть проєкт",
+  "todo_project_none": "Немає проєкту",
+  "todo_project_delete_body": "Проєкт закінчиться. Завдання залишаться.",
+  "todo_tag": "Тег",
+  "todo_tag_new": "Новий тег",
+  "todo_tag_name": "Назва тегу",
+  "todo_tag_edit": "Редагувати тег",
+  "todo_tag_delete_body": "Тег зникне. Завдання залишаться.",
+  "todo_tag_none": "Немає тегу",
+  "todo_tag_all": "Усі",
+  "todo_tag_manage": "Керувати тегами",
+  "todo_tag_empty_title": "Поки що без тегів",
+  "todo_tag_empty_body": "Збирайте завдання за проєктами, місцями або як вам подобається.",
+  "todo_tag_folders": "Теки",
+  "todo_tag_list": "Список",
+  "todo_tag_count": "{n} відкрито",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Значок",
+  "todo_tag_pick": "Обрати теги",
+  "todo_tag_filtered": "Відфільтровано за {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_subtasks": "Підзадачі",
+  "todo_subtask_hint": "Підзадача",
+  "focus_countdown": "3-секундний зворотний відлік",
+  "focus_skip_break": "Пропустити перерву",
+  "focus_continue": "Продовжити",
+  "focus_alert": "Раунд скоро закінчиться",
+  "focus_alert_chime": "Дзвін",
+  "focus_alert_custom": "Оберіть звук",
+  "focus_alert_none": "Тиша",
+  "focus_hold": "Почекати, поки я зупиню",
+  "focus_hold_sub": "Наступний раунд почнеться, коли ви натиснете «Продовжити».",
+  "focus_restart": "Перезапустити",
+  "focus_restart_title": "Перезапустити цей раунд?",
+  "focus_restart_body": "Час, який ви витратили в цьому раунді, буде втрачено.",
+  "focus_end_add_time": "Додати час зосередження",
+  "focus_repeat_one": "Повторювати знову"
 }
