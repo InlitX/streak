@@ -1,1 +1,1406 @@
-{}
+{
+  "app_tagline": "Tracker de obiceiuri",
+  "today": "Azi",
+  "stats": "Statistici",
+  "settings": "Setări",
+  "new_label": "Nou",
+  "save": "Salvează",
+  "cancel": "Anulează",
+  "delete": "Șterge",
+  "good_morning": "Bună dimineața",
+  "good_afternoon": "Bună ziua",
+  "good_evening": "Bună seara",
+  "no_habits_yet": "Niciun obicei încă",
+  "all_done_today": "Gata pe azi!",
+  "x_of_y_completed": "{done} din {total} finalizate",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Începe primul tău streak",
+  "empty_body": "Creează un obicei și atinge o zi pentru a-l bifa. Pași mici, în fiecare zi.",
+  "add_habit": "Adaugă obicei",
+  "all": "Toate",
+  "onb1_title": "Construiește streak-uri reale",
+  "onb1_body": "Bifează un obicei dintr-o singură atingere și privește cum crește avântul zi după zi.",
+  "onb2_title": "Rămâi pe drumul cel bun",
+  "onb2_body": "Obiective zilnice, săptămânale sau lunare, cu memento-uri inteligente, ca să nu-ți scape nimic.",
+  "onb3_title": "Vezi-ți progresul",
+  "onb3_body": "Statistici detaliate și o grilă anuală îți arată exact cât ai avansat.",
+  "skip": "Sari peste",
+  "next": "Următorul",
+  "get_started": "Începe",
+  "onb_kicker": "Bine ai venit la",
+  "onb_blurb": "Mici bifări zilnice care se transformă în obiceiuri pe care le păstrezi.",
+  "onb_free_title": "Gratuit, pentru totdeauna",
+  "onb_free_body": "Fără reclame, fără abonamente, fără funcții blocate.",
+  "onb_private_title": "Privat și offline",
+  "onb_private_body": "Totul rămâne pe dispozitivul tău. Nu ai nevoie de cont.",
+  "onb_yours_title": "Datele tale sunt ale tale",
+  "onb_yours_body": "Fă-ți o copie de rezervă sau ia-le cu tine oricând vrei.",
+  "onb_step": "Pasul {step} din {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statistics": "Statistici",
+  "done_today": "Făcute azi",
+  "best_streak": "Cel mai bun streak",
+  "active_habits": "Obiceiuri active",
+  "total_logs": "Total bifări",
+  "last_7_days": "Ultimele 7 zile",
+  "last_30_days": "Ultimele 30 de zile",
+  "your_habits": "Obiceiurile tale",
+  "stats_empty": "Adaugă obiceiuri ca să-ți vezi statisticile",
+  "completion_rate_short": "Consecvență",
+  "completion_rate": "Rată de finalizare",
+  "appearance": "Aspect",
+  "theme": "Temă",
+  "system": "Sistem",
+  "light": "Deschisă",
+  "dark": "Întunecată",
+  "week_starts_on": "Săptămâna începe",
+  "mon": "Lun",
+  "sat": "Sâm",
+  "sun": "Dum",
+  "language": "Limbă",
+  "data": "Date",
+  "export_backup": "Exportă copia de rezervă",
+  "export_backup_sub": "Salvează toate obiceiurile într-un fișier",
+  "auto_backup": "Copie de rezervă automată",
+  "auto_backup_sub": "Dezactivat",
+  "auto_backup_off": "Dezactivat",
+  "auto_backup_daily": "În fiecare zi",
+  "auto_backup_weekly": "În fiecare săptămână",
+  "auto_backup_where": "Când deschizi aplicația, Streak scrie o copie de rezervă plus o versiune lizibilă a obiceiurilor tale, pe care o poți deschide în orice editor. Se păstrează ultimele 5 copii de rezervă.",
+  "auto_backup_folder": "Folder",
+  "auto_backup_folder_default": "Folderul aplicației",
+  "auto_backup_folder_set": "Folder salvat",
+  "auto_backup_folder_failed": "Nu se poate scrie în acel folder",
+  "auto_backup_no_permission": "Permisiunea de stocare a fost refuzată",
+  "auto_backup_run_now": "Fă o copie acum",
+  "refresh_now": "Reîmprospătează",
+  "refresh_now_sub": "Adu ce au lăsat celelalte dispozitive în folder",
+  "refresh_brought": "Obiceiurile tale sunt la zi",
+  "refresh_nothing": "Nimic nou în folder",
+  "import_backup": "Importă copia de rezervă",
+  "import_backup_sub": "Restaurează obiceiurile dintr-un fișier",
+  "import_from_app": "Importă din altă aplicație",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "S-au importat {habits} obiceiuri ({days} zile) din {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Fișierul nu a putut fi importat",
+  "about": "Despre",
+  "backup_saved": "Copie de rezervă salvată",
+  "export_cancelled": "Export anulat",
+  "habits_imported": "Obiceiuri importate",
+  "new_habit": "Obicei nou",
+  "edit_habit": "Editează obiceiul",
+  "name": "Nume",
+  "name_hint": "ex. Alergare de dimineață",
+  "description": "Descriere",
+  "description_hint": "Notiță opțională",
+  "icon": "Pictogramă",
+  "color": "Culoare",
+  "category": "Categorie",
+  "category_health": "Sănătate",
+  "category_fitness": "Fitness",
+  "category_mindfulness": "Mindfulness",
+  "category_productivity": "Productivitate",
+  "category_learning": "Învățare",
+  "category_finance": "Finanțe",
+  "count_days": "{count, plural, =1{1 zi} few{{count} zile} other{{count} de zile}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 săptămână} few{{count} săptămâni} other{{count} de săptămâni}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 lună} few{{count} luni} other{{count} de luni}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}s",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}l",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_kind": "Tip de obicei",
+  "kind_positive": "Normal",
+  "kind_negative": "De evitat",
+  "kind_quantitative": "Cantitate",
+  "kind_locked_hint": "Tipul nu mai poate fi schimbat după crearea obiceiului.",
+  "kind_negative_hint": "În mod implicit, fiecare zi contează ca fiind curată — streak-ul crește de la sine. Atinge bifa doar dacă cedezi; acea zi devine roșie și poți anula acțiunea.",
+  "cost_per_day": "Cost pe zi",
+  "cost_note": "Opțional. Lasă gol dacă acest obicei nu costă bani.",
+  "currency": "Monedă",
+  "currency_custom": "Personalizată",
+  "currency_hint": "Simbol sau cod",
+  "money_saved": "Bani economisiți",
+  "clean_days": "Zile curate",
+  "quant_preset_water": "Apă",
+  "quant_preset_reading": "Citit",
+  "quant_preset_generic": "Personalizat",
+  "quant_unit_hint": "Unitate (ex. ml, pagini, repetări)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "pagini",
+  "quant_edit_title": "Cantitatea de azi",
+  "quant_daily_goal": "Obiectiv zilnic",
+  "quant_tap_amount": "Cantitate pe atingere",
+  "quant_per_day": "Cantitate pe zi",
+  "quant_average": "Media pe zi",
+  "quant_logged_days": "Zile înregistrate",
+  "quant_best_day": "Cea mai bună zi",
+  "quant_goal_days": "Obiectiv atins",
+  "quant_stats_empty": "Înregistrează o cantitate și se adună aici, chiar și în zilele în care nu atingi obiectivul.",
+  "frequency": "Frecvență",
+  "daily": "Zilnic",
+  "weekly": "Săptămânal",
+  "monthly": "Lunar",
+  "sched_days": "Zile",
+  "sched_interval": "Interval",
+  "times_per_week": "de {n} ori pe săptămână",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "de {n} ori pe lună",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/săpt.",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/lună",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Memento-uri",
+  "add_reminder": "Adaugă memento",
+  "delete_habit": "Șterge obiceiul",
+  "archive_habit": "Arhivează obiceiul",
+  "archive": "Arhivează",
+  "share_friends": "Trimite unui prieten",
+  "share_friends_sub": "Trimite-le aplicația",
+  "share_friends_message": "Îmi țin streak-urile în viață cu Streak — un tracker de obiceiuri mic, gratuit și offline, fără conturi și fără reclame. Vino să-ți construiești și tu: https://inlitx.github.io/streak/",
+  "copy_message": "Copiază mesajul",
+  "message_copied": "Mesaj copiat",
+  "app_lock": "Blocarea aplicației",
+  "app_lock_sub": "Cere amprenta sau fața pentru a deschide Streak",
+  "app_lock_unavailable": "Acest telefon nu are date biometrice configurate",
+  "app_lock_failed": "Nu s-a putut verifica identitatea",
+  "app_lock_title": "Streak este blocat",
+  "app_lock_unlock": "Deblochează",
+  "app_lock_delay": "Blochează după",
+  "app_lock_delay_instant": "Imediat",
+  "app_lock_delay_seconds": "{value} secunde",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Fotografii",
+  "note_take_photo": "Cameră",
+  "note_pick_photo": "Galerie",
+  "journey": "Parcurs",
+  "journey_sub": "{count, plural, =1{1 fotografie} few{{count} fotografii} other{{count} de fotografii}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Nicio fotografie încă",
+  "journey_empty_sub": "Adaugă o fotografie la o notiță și apare aici.",
+  "archive_habit_body": "Muți „{name}” în arhivă? Istoricul se păstrează și îl poți restaura din Setări.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "Obiceiuri arhivate",
+  "archived_habits_sub": "Restaurează-le sau șterge-le definitiv",
+  "archived_empty": "Nimic arhivat",
+  "archived_empty_sub": "Obiceiurile pe care le ștergi ajung aici, cu tot istoricul lor.",
+  "restore": "Restaurează",
+  "restored": "Obicei restaurat",
+  "delete_forever": "Șterge definitiv",
+  "delete_forever_body": "Ștergi „{name}” și tot istoricul său? Acțiunea nu poate fi anulată.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Obicei șters",
+  "clear_progress": "Șterge progresul",
+  "clear_progress_sub": "Istoric, notițe și sesiuni de focus",
+  "clear_progress_warning": "Aceasta șterge fiecare zi înregistrată, notiță și sesiune de focus, dar păstrează obiceiurile, programările lor și setările tale. Nu poate fi anulată decât dacă ai un fișier de rezervă de importat ulterior.",
+  "clear_progress_confirm": "Șterge progresul",
+  "clear_progress_done": "Progres șters",
+  "wipe_data": "Șterge toate datele",
+  "wipe_data_sub": "Obiceiuri, notițe, sesiuni de focus și setări",
+  "wipe_data_warning": "Aceasta șterge fiecare obicei, notiță, sesiune de focus și setare de pe acest telefon. Nu poate fi anulată decât dacă ai un fișier de rezervă de importat ulterior.",
+  "wipe_data_sure": "Chiar ștergi tot?",
+  "wipe_data_sure_body": "Ultima șansă. Fără o copie de rezervă, aceste date se pierd definitiv.",
+  "wipe_data_confirm": "Șterge tot",
+  "wipe_data_done": "Toate datele au fost șterse",
+  "day_start": "Ziua începe",
+  "day_start_sub": "Nopțile târzii contează tot pentru ziua precedentă",
+  "day_start_midnight": "Miezul nopții",
+  "day_start_hour": "{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "Fotografie",
+  "share_stats_short": "Statistici",
+  "undo": "Anulează",
+  "habit_archived": "Obicei arhivat",
+  "share_blur": "Estompare",
+  "delete_habit_body": "Ștergi „{name}”? Acțiunea nu poate fi anulată.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Înregistrezi o recădere?",
+  "log_relapse_body": "Aceasta întrerupe streak-ul curat de azi pentru „{name}”. Poți anula atingând din nou.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Da, înregistrează",
+  "permission_required": "Este necesară permisiunea pentru notificări",
+  "streaks": "Streak-uri",
+  "activity": "Activitate",
+  "current": "Curent",
+  "best": "Cel mai bun",
+  "total": "Total",
+  "relapses": "Recăderi",
+  "strength": "Forță",
+  "week": "Săptămână",
+  "month": "Lună",
+  "year": "An",
+  "new_reminder": "Memento nou",
+  "edit_reminder": "Editează memento-ul",
+  "days": "Zile",
+  "time": "Oră",
+  "save_reminder": "Salvează memento-ul",
+  "select_one_day": "Selectează cel puțin o zi",
+  "every_day": "În fiecare zi",
+  "no_days": "Nicio zi",
+  "repeat_hours": "Repetă în timpul zilei",
+  "every_n_hours": "La fiecare {n} h",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "Zile specifice",
+  "repeat_interval": "La fiecare N zile",
+  "every_n_days": "La fiecare {n} zile",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_weeks": "La fiecare {n} săptămâni",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "La fiecare {n} luni",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Zile",
+  "sched_unit_weeks": "Săptămâni",
+  "sched_unit_months": "Luni",
+  "todo_tags": "Etichete",
+  "todo_projects": "Proiecte",
+  "todo_project": "Proiect",
+  "todo_project_new": "Proiect nou",
+  "todo_project_name": "Numele proiectului",
+  "todo_project_edit": "Editează proiectul",
+  "todo_project_arrange": "Rearanjează",
+  "todo_project_arrange_hint": "Trage folderele unde vrei să fie.",
+  "todo_project_pick": "Alege un proiect",
+  "todo_project_none": "Fără proiect",
+  "todo_project_delete_body": "Proiectul dispare. Sarcinile rămân.",
+  "todo_tag": "Etichetă",
+  "todo_tag_new": "Etichetă nouă",
+  "todo_tag_name": "Numele etichetei",
+  "todo_tag_edit": "Editează eticheta",
+  "todo_tag_delete_body": "Eticheta dispare. Sarcinile rămân.",
+  "todo_tag_none": "Fără etichetă",
+  "todo_tag_all": "Toate",
+  "todo_tag_manage": "Gestionează etichetele",
+  "todo_tag_empty_title": "Nicio etichetă încă",
+  "todo_tag_empty_body": "Grupează sarcinile după proiect, loc sau orice altceva vrei.",
+  "todo_tag_folders": "Foldere",
+  "todo_tag_list": "Listă",
+  "todo_tag_count": "{n} deschise",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Pictogramă",
+  "todo_tag_pick": "Alege etichete",
+  "todo_tag_filtered": "Filtrat după {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "uncategorized": "Fără categorie",
+  "more_icons": "Mai multe pictograme",
+  "less_icons": "Mai puține pictograme",
+  "completions": "Finalizări",
+  "completion_time": "Ora finalizării",
+  "current_streak": "Streak curent",
+  "days_active": "Zile active",
+  "completions_per_month": "Finalizări / Lună",
+  "overview": "Prezentare generală",
+  "preferences": "Preferințe",
+  "support": "Asistență",
+  "profile": "Profil",
+  "about_app": "Despre această aplicație",
+  "about_app_sub": "Versiune, credite și cod sursă",
+  "my_heatmap": "Harta mea de activitate",
+  "my_heatmap_sub": "Deschide grila anuală de activitate",
+  "rate_github": "Oferă o stea pe GitHub",
+  "rate_github_sub": "Susține proiectul cu o stea",
+  "buy_coffee": "Cumpără-mi o cafea",
+  "buy_coffee_sub": "Ajută la menținerea aplicației gratuite",
+  "view_source": "Vezi codul sursă pe GitHub",
+  "about_title": "Creată pentru tine. Gratuit, pentru totdeauna.",
+  "about_footer": "Făcută cu ☕ și mult timp liber.",
+  "about_body": "Streak s-a născut dintr-o idee simplă: de ce să plătești ca să-ți urmărești propriile obiceiuri?\n\nAceastă aplicație este complet open source. Oricine poate vedea exact cum funcționează, poate sugera îmbunătățiri sau chiar își poate construi propria versiune. Fără cutii negre. Fără surprize.\n\nConfidențialitatea ta este totală — totul rămâne pe telefonul tău. Fără conturi, fără servere, fără reclame. Niciun octet nu părăsește dispozitivul tău.\n\nFără limite. Creează câte obiceiuri vrei. Fără abonamente, fără „versiune pro”, fără ferestre care îți cer să plătești. Niciodată.\n\nDacă aplicația îți aduce ceva, o poți susține cu o stea pe GitHub sau cumpărându-mi o cafea. Dar este complet opțional — aplicația e a ta oricum.",
+  "close": "Închide",
+  "no_data_yet": "Încă nu există date",
+  "import_question_body": "Înlocuiești toate obiceiurile actuale cu cele din copia de rezervă sau le îmbini?",
+  "import_replace": "Înlocuiește tot",
+  "import_merge": "Îmbină",
+  "go": "Continuă",
+  "quote_1": "Pași mici, în fiecare zi.",
+  "quote_2": "Consecvența bate intensitatea.",
+  "quote_3": "Fii prezent pentru tine.",
+  "quote_4": "Câte o zi pe rând.",
+  "quote_5": "Progres, nu perfecțiune.",
+  "quote_6": "Făcut e mai bine decât perfect.",
+  "quote_7": "Ține streak-ul în viață.",
+  "quote_8": "Obiceiuri mici, schimbare mare.",
+  "quote_9": "Ai încredere în proces.",
+  "quote_10": "Câștigă dimineața.",
+  "quote_11": "Disciplina înseamnă libertate.",
+  "quote_12": "Azi contează.",
+  "just_tracking_option": "Oferă doar urmărire",
+  "just_tracking_option_sub": "Adaugă comutatorul când creezi un obicei",
+  "just_tracking": "Doar urmărire",
+  "just_tracking_sub": "Își păstrează propria grilă și cifre, dar rămâne în afara Progresului și a numărătorii zilei",
+  "quotes": "Citate",
+  "quotes_which": "Ce citate",
+  "quotes_app": "Din aplicație",
+  "quotes_mine": "Ale mele",
+  "quotes_both": "Ambele",
+  "quotes_off": "Dezactivat",
+  "quotes_my_list": "Citatele mele",
+  "quotes_add": "Adaugă citat",
+  "quotes_edit": "Editează citatul",
+  "quotes_hint": "Scrie-ți citatul",
+  "quotes_empty": "Niciun citat propriu",
+  "quotes_empty_sub": "Scrie-ți propriile citate și vor apărea pe pagina Azi.",
+  "motiv_start": "Începe ziua în forță 💪",
+  "motiv_progress": "Ești pe drumul cel bun, continuă",
+  "motiv_almost": "Aproape gata! Încă puțin",
+  "motiv_perfect": "Zi perfectă! 🔥",
+  "app_background": "Fundal",
+  "widgets": "Widget-uri",
+  "customize_widgets": "Personalizează widget-urile",
+  "customize_widgets_sub": "Fundal, opacitate, chenar",
+  "widget_background": "Culoarea fundalului",
+  "widget_opacity": "Opacitate",
+  "widget_border": "Chenar",
+  "widget_preview": "Previzualizare",
+  "bg_solid": "Uniform",
+  "bg_gradient": "Degrade",
+  "bg_dots": "Puncte",
+  "bg_oled": "OLED",
+  "weekdays": "Zile lucrătoare",
+  "weekends": "Weekend",
+  "reminder_message": "Mesaj (opțional)",
+  "reminder_message_hint": "Lasă gol pentru un citat motivațional",
+  "new_category": "Categorie nouă",
+  "edit_category": "Editează categoria",
+  "add_category": "Nouă",
+  "delete_category": "Șterge categoria",
+  "edit": "Editează",
+  "cover_image": "Imagine de copertă",
+  "book_cover": "Coperta cărții",
+  "add_image": "Adaugă imagine",
+  "when_best": "Când ești cel mai consecvent?",
+  "streak_evolution": "Evoluția streak-ului",
+  "consistency": "Consecvență",
+  "consistency_trend": "Tendința consecvenței",
+  "by_habit": "După obicei",
+  "ranking": "Clasament",
+  "active_days": "Zile active",
+  "perfect_days": "Zile perfecte",
+  "per_week": "Pe săptămână",
+  "best_month": "Cea mai bună lună",
+  "streak_on": "🔥 {n} zile la rând. Nu-l întrerupe!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 Azi poți începe un nou streak",
+  "not_enough_data": "Încă nu sunt suficiente date",
+  "about_inline": "Streak este o aplicație open source pentru urmărirea obiceiurilor. Fără conturi, fără limite, fără plăți. Totul rămâne pe telefonul tău.\n\nOricine poate vedea codul, îl poate îmbunătăți sau îl poate folosi liber.",
+  "about_subtitle": "Pentru zilele în care alegi să fii prezent.",
+  "about_story": "Această aplicație s-a născut din frustrarea față de tracker-ele de obiceiuri existente. Cele mai multe limitează câte obiceiuri poți crea, ascund funcții de bază în spatele unui paywall, te urmăresc sau te bombardează cu reclame. Așa că am decis să construiesc Streak: complet gratuit, fără reclame, fără plăți, fără urmărire. Totul rulează local — datele tale sunt ale tale. Open source, fără cârlige.",
+  "made_by": "Făcută cu ❤️ de @InlitX",
+  "share": "Distribuie",
+  "share_progress": "Distribuie progresul",
+  "share_failed": "Imaginea nu a putut fi creată",
+  "share_swipe_hint": "Glisează cardul pentru a naviga în timp",
+  "share_background": "Fundal",
+  "share_size": "Dimensiune",
+  "share_size_large": "Înaltă",
+  "share_size_small": "Pătrată",
+  "share_show_stats": "Arată statisticile",
+  "share_save": "Salvează",
+  "share_saved": "Salvat în galerie",
+  "share_save_failed": "Imaginea nu a putut fi salvată",
+  "about_developer": "Dezvoltatorul",
+  "about_credits": "Credite",
+  "about_credits_body": "Construită cu Flutter. Pictograme de la Lucide. Grafice de la fl_chart. Fonturi: Figtree și Playfair Display.",
+  "dev_handle": "@InlitX",
+  "dev_role": "Creator indie · Streak",
+  "notes": "Notițe",
+  "notes_enable_sub": "Atașează notițe oricărei zile a unui obicei",
+  "add_note": "Adaugă notiță",
+  "edit_note": "Editează notița",
+  "view_notes": "Vezi notițele",
+  "edit_entry": "Editează intrarea",
+  "note_type": "Tip",
+  "note_kind_note": "Notiță",
+  "note_kind_planned": "Planificat",
+  "note_kind_completed": "Finalizat",
+  "note_hint": "Scrie-ți notița...",
+  "note_time_optional": "Oră (opțional)",
+  "save_note": "Salvează notița",
+  "notes_empty": "Nicio notiță pentru această zi încă",
+  "delete_note": "Șterge notița",
+  "legend_note_added": "Notiță adăugată",
+  "tomorrow": "Mâine",
+  "notes_count": "{count, plural, =1{1 notiță} few{{count} notițe} other{{count} de notițe}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "De făcut",
+  "todos_enable_sub": "O listă rapidă lângă obiceiurile tale",
+  "todo_new": "Sarcină nouă",
+  "todo_hint": "Ce trebuie făcut?",
+  "todo_subtasks": "Subsarcini",
+  "todo_subtask_hint": "Subsarcină",
+  "todo_empty_title": "Nimic pe listă",
+  "todo_empty_body": "Notează ce vrei să realizezi în următoarele zile.",
+  "todo_date": "Dată",
+  "todo_no_date": "Fără dată",
+  "todo_time": "Oră",
+  "todo_priority": "Prioritate",
+  "priority_none": "Fără prioritate",
+  "priority_low": "Scăzută",
+  "priority_medium": "Medie",
+  "priority_high": "Ridicată",
+  "todo_overdue": "Întârziate",
+  "todo_upcoming": "Viitoare",
+  "todo_someday": "Cândva",
+  "pick_a_date": "Alege o dată",
+  "todo_left": "{count, plural, =0{Totul e gata} =1{1 de făcut} other{{count} de făcut}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, =1{Finalizate (1)} other{Finalizate ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "Caută sarcini",
+  "todo_search_empty": "Nimic nu se potrivește",
+  "todo_clear_completed": "Șterge finalizate",
+  "todo_clear_completed_body": "{count, plural, =1{Se șterge sarcina finalizată.} few{Se șterg cele {count} sarcini finalizate.} other{Se șterg cele {count} de sarcini finalizate.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "General",
+  "prefs_features": "Funcții",
+  "prefs_privacy": "Confidențialitate",
+  "collapse_cards": "Restrânge cardurile",
+  "expand_cards": "Extinde cardurile",
+  "view_switcher": "Comutator de vizualizare",
+  "view_switcher_sub": "Afișează butoanele Săptămână / Lună / An pe pagina Azi",
+  "view_switcher_needs": "Activează activitatea pe carduri ca să-l poți folosi",
+  "focus": "Focus",
+  "focus_enable_sub": "Un cronometru pentru obiceiurile care au nevoie de unul",
+  "focus_free_session": "Sesiune liberă",
+  "focus_duration": "Durată",
+  "focus_start": "Începe sesiunea",
+  "focus_style": "Stilul cronometrului",
+  "focus_style_digital": "Cerc",
+  "focus_style_flip": "Răsturnare",
+  "focus_style_dots": "Puncte",
+  "focus_countdown": "Numărătoare inversă de 3 secunde",
+  "focus_skip_break": "Sari peste pauză",
+  "focus_continue": "Continuă",
+  "focus_alert": "Alertă la sfârșitul rundei",
+  "focus_alert_chime": "Clopoțel",
+  "focus_alert_custom": "Alege un sunet",
+  "focus_alert_none": "Silențios",
+  "focus_hold": "Așteaptă până îl opresc",
+  "focus_hold_sub": "Runda următoare așteaptă până apeși Continuă.",
+  "focus_restart": "Repornește",
+  "focus_restart_title": "Repornești această rundă?",
+  "focus_restart_body": "Timpul în care te-ai concentrat în această rundă se va pierde.",
+  "focus_saved": "{time} înregistrat",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_total": "Timp de focus",
+  "focus_sessions": "Sesiuni",
+  "focus_stop_title": "Închei sesiunea?",
+  "focus_stop_body": "Minutele tale se salvează oricum. Obiceiul este finalizat doar dacă atingi ținta.",
+  "focus_end": "Încheie",
+  "focus_pick_habit": "Pe ce te concentrezi?",
+  "focus_scene_custom": "Imaginea ta",
+  "unit_hours": "ore",
+  "unit_minutes": "minute",
+  "unit_seconds": "secunde",
+  "focus_target_reached": "Țintă atinsă",
+  "focus_pause": "Pauză",
+  "focus_resume": "Reia",
+  "focus_sound": "Sunet",
+  "focus_pick_audio": "Alege o melodie de pe telefon",
+  "focus_no_sound": "Nicio melodie aleasă",
+  "focus_tasks": "Subsarcină din listă",
+  "focus_custom_duration": "Personalizată",
+  "focus_end_short": "Îți mai lipsesc {time} până la obiectiv.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "{count} sarcini încă nu sunt bifate.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "Obiectiv atins. Obiceiul va fi marcat ca finalizat.",
+  "focus_end_keep": "Continuă",
+  "focus_end_anyway": "Încheie oricum",
+  "focus_end_complete": "Marchează ca finalizat",
+  "focus_end_add_time": "Adaugă timpul de concentrare",
+  "focus_amount_added": "{amount} adăugat la {habit}",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "Personalizat",
+  "focus_track_rain": "Ploaie",
+  "focus_track_brown": "Zgomot maro",
+  "focus_track_pad": "Sunet cald",
+  "focus_add_track": "Adaugă melodie",
+  "focus_shuffle": "Aleatoriu",
+  "focus_loop": "În ordine",
+  "focus_repeat_one": "Repetă una",
+  "focus_track_too_long": "Melodiile trebuie să fie sub 20 de minute",
+  "focus_track_limit": "Până la 10 melodii",
+  "focus_done_title": "Sesiune finalizată",
+  "focus_your_tracks": "Melodiile tale",
+  "focus_built_in": "Incluse",
+  "unit_hour_short": "h",
+  "unit_min_short": "min",
+  "focus_notif_body": "Sesiunea ta de focus s-a încheiat. Bravo!",
+  "celebration": "Efect la finalizare",
+  "celebration_confetti": "Confetti",
+  "celebration_fireworks": "Artificii",
+  "celebration_surprise": "Surprinde-mă",
+  "focus_notif_channel": "Sesiuni de focus",
+  "focus_notif_running": "În concentrare",
+  "focus_paused": "În pauză",
+  "focus_scene_black": "Negru",
+  "focus_pomodoro": "Pomodoro",
+  "focus_pomodoro_sub": "Înlănțuie runde de focus cu pauze scurte",
+  "focus_break": "Pauză",
+  "focus_round": "Runda {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_daily_goal": "Obiectiv de focus",
+  "focus_goal_today": "{done} din {goal} azi",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_keep_awake": "Menține ecranul aprins",
+  "focus_images_limit": "Până la 10 imagini",
+  "select_all": "Selectează tot",
+  "selected_count": "{count, plural, =1{1 selectat} few{{count} selectate} other{{count} de selectate}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_delete_sessions": "Ștergi sesiunile?",
+  "focus_delete_sessions_body": "{count, plural, =1{Se va șterge 1 sesiune de focus. Acțiunea nu poate fi anulată.} few{Se vor șterge {count} sesiuni de focus. Acțiunea nu poate fi anulată.} other{Se vor șterge {count} de sesiuni de focus. Acțiunea nu poate fi anulată.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_sessions_deleted": "{count, plural, =1{1 sesiune ștearsă} few{{count} sesiuni șterse} other{{count} de sesiuni șterse}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_title": "Zi neprogramată",
+  "unscheduled_body": "Acest obicei nu este programat pentru {day}. Îl înregistrezi oricum, ca extra?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "unscheduled_confirm": "Înregistrează oricum",
+  "rest_days_none": "Niciuna",
+  "last_90_days": "Ultimele 90 de zile",
+  "focus_clear_today": "Șterge sesiunile de azi",
+  "focus_defaults": "Valori implicite ale sesiunii",
+  "plan_day": "Planifică ziua",
+  "plan_day_sub": "Atribuie obiceiurilor o oră din zi și vezi-le pe o cronologie.",
+  "habit_time": "Ora din zi",
+  "habit_time_none": "Oricând",
+  "habit_duration": "Durată",
+  "habit_duration_none": "Fără durată",
+  "day_timeline": "Zi",
+  "day_timeline_free": "{span} liber",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "day_timeline_anytime": "Oricând",
+  "day_timeline_empty": "Nimic planificat pentru această zi",
+  "day_timeline_empty_sub": "Atribuie unui obicei o oră din zi și va apărea aici.",
+  "clear": "Șterge",
+  "start_view": "Pagina Azi se deschide pe",
+  "start_view_last": "Ultima folosită",
+  "focus_stats": "Statistici de focus",
+  "focus_average": "Sesiune medie",
+  "focus_log": "Înregistrează o sesiune",
+  "focus_log_date": "Dată",
+  "focus_log_saved": "Sesiune adăugată",
+  "perfect_streak": "Streak de zile perfecte",
+  "focus_history": "Istoric",
+  "focus_history_empty": "Nicio sesiune încă",
+  "focus_history_empty_sub": "Fiecare sesiune de focus pe care o finalizezi apare aici.",
+  "focus_history_day": "{count, plural, =1{1 sesiune} few{{count} sesiuni} other{{count} de sesiuni}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "Ieri",
+  "notes_hint": "Deschide un obicei și apasă lung pe o zi din calendar pentru a vedea sau adăuga notițe",
+  "app_style": "Stilul aplicației",
+  "app_style_sub": "Alege cum arată și cum se simte întreaga aplicație.",
+  "style_classic": "Clasic",
+  "style_minimal": "Minimal",
+  "style_classic_desc": "Lista de obiceiuri, bara de jos și toate setările pe un singur ecran.",
+  "style_minimal_desc": "Grila de obiceiuri și setările grupate în patru secțiuni.",
+  "appearance_sub": "Temă, accent și fundal",
+  "preferences_sub": "Limbă, săptămână și sortare",
+  "data_sub": "Copii de rezervă și import",
+  "about_sub": "Versiune, cod sursă și asistență",
+  "support_sub": "Raportează o eroare sau cere o funcție",
+  "check_style": "Stilul bifei",
+  "square": "Pătrat",
+  "circle": "Cerc",
+  "github_star_row": "Vezi codul sursă și oferă o stea",
+  "github_star_sub": "Oferă proiectului o stea ca mai mulți oameni să-l descopere",
+  "icons_tab": "Pictograme",
+  "emojis_tab": "Emoji",
+  "emoji_own": "Scrie sau lipește orice emoji",
+  "report_issue": "Raportează o problemă",
+  "report_issue_sub": "Spune-mi despre o eroare sau cere o funcție",
+  "advanced_options": "Opțiuni avansate",
+  "default_user": "Inlitx",
+  "your_name": "Numele tău",
+  "edit_name": "Editează numele",
+  "change_photo": "Schimbă fotografia",
+  "remove_photo": "Elimină fotografia",
+  "notif_greeting": "Salut {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "Pictograma aplicației",
+  "icon_default": "Implicită",
+  "icon_neutral": "Verde",
+  "icon_accent": "Tricolor",
+  "custom": "Personalizat",
+  "see_more": "Vezi mai mult",
+  "see_less": "Vezi mai puțin",
+  "colors_tab": "Culori",
+  "reorder": "Reordonează",
+  "reorder_hint": "Trage obiceiurile pentru a le reordona",
+  "category_order": "Ordinea categoriilor",
+  "category_order_sub": "Trage-le în ordinea dorită",
+  "category_order_empty": "Atribuie unui obicei o categorie și va apărea aici",
+  "done": "Gata",
+  "accent_color": "Culoare de accent",
+  "heatmap_path": "Conectează zilele",
+  "heatmap_path_sub": "Desenează grila ca o singură plimbare lungă",
+  "sort_completed_last": "Finalizate la final",
+  "sort_completed_last_sub": "Trimite ce finalizezi la baza listei",
+  "today_only": "Doar cele de azi",
+  "today_only_sub": "Ascunde obiceiurile care nu sunt programate pentru azi",
+  "card_activity": "Activitate pe carduri",
+  "card_activity_sub": "Afișează ultimele zile pe card, gata de bifat",
+  "readable_copy": "Copie lizibilă",
+  "readable_copy_sub": "Scrie obiceiurile și ca fișiere markdown",
+  "theme_sub": "Deschisă, întunecată sau cea a sistemului",
+  "accent_color_sub": "Folosită pe butoane și evidențieri",
+  "app_background_sub": "Ce vezi în spatele cardurilor",
+  "check_style_sub": "Bife pătrate sau rotunde",
+  "app_icon_sub": "Pictograma de pe ecranul principal",
+  "language_sub": "Limba întregii aplicații",
+  "week_start_sub": "Prima coloană a fiecărei grile",
+  "celebration_sub": "Ce vezi când bifezi un obicei",
+  "start_view_sub": "Vizualizarea în care se deschide pagina Azi",
+  "quotes_sub": "Ce citate apar pe pagina Azi",
+  "focus_daily_goal_sub": "Minute de focus pe care ți le propui în fiecare zi",
+  "app_lock_delay_sub": "Cât de repede cere din nou după ce ieși",
+  "focus_only": "Doar cu o sesiune de focus",
+  "focus_only_hint": "Obiceiul este bifat când finalizezi o sesiune, nu prin atingere.",
+  "focus_only_title": "Necesită o sesiune de focus",
+  "focus_only_body": "„{name}” se finalizează prin încheierea unei sesiuni de focus.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_past": "„{name}” se finalizează doar printr-o sesiune de focus, așa că zilele trecute nu pot fi bifate.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_clear_title": "Ștergi această bifă?",
+  "focus_only_clear_body": "Doar o sesiune de focus poate bifa din nou „{name}”.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_start": "Începe sesiunea",
+  "focus_flowtime": "Flowtime",
+  "focus_flowtime_hint": "Fără obiectiv și fără alarmă. Ceasul numără crescător și te oprești când simți că ai terminat.",
+  "focus_end_flow": "Te-ai concentrat timp de {time}.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "on": "Activat",
+  "off": "Dezactivat",
+  "checklist": "Listă de verificare",
+  "checklist_hint": "Împarte obiceiul în pași. Este gata doar când fiecare pas este bifat.",
+  "add_step": "Adaugă pas",
+  "step_hint": "Numele pasului",
+  "todays_checklist": "Lista de verificare de azi",
+  "steps_done": "{done}/{total} pași",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all": "Pune pe pauză toate obiceiurile",
+  "vacation_all_sub": "Nimic nu contează ca ratat cât timp e activ",
+  "vacation_mode": "Mod vacanță",
+  "vacation_on_desc": "În pauză — aceste zile nu vor conta ca ratate sau finalizate.",
+  "vacation_off_desc": "Pune pe pauză acest obicei. Zilele sărite nu-ți vor întrerupe streak-ul.",
+  "paused": "În pauză",
+  "start_vacation": "Începe vacanța",
+  "end_vacation": "Încheie vacanța",
+  "vacation_day_on": "Marchează ca zi de vacanță",
+  "vacation_day_off": "Elimină ziua de vacanță",
+  "rest_days": "Zile de odihnă",
+  "rest_days_desc": "Pune-l pe pauză în fiecare săptămână în aceste zile. Le poți înregistra oricum și vor conta.",
+  "widget_no_habits": "Niciun obicei încă\nAtinge pentru a deschide Streak",
+  "widget_no_data": "Încă nu există date\nDeschide Streak pentru sincronizare",
+  "widget_open_to_sync": "Deschide Streak pentru sincronizare",
+  "widget_activity": "Activitate",
+  "widget_today_progress": "Azi  {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "De făcut  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_empty": "Nimic rămas pentru azi",
+  "widget_done_today": "făcute azi",
+  "widget_best_streak": "🔥 {streak} cel mai bun streak",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_title": "Personalizează widget-ul",
+  "widget_cfg_color": "Culoare",
+  "widget_cfg_image": "Imagine",
+  "widget_cfg_choose_image": "Alege imaginea",
+  "widget_cfg_change_image": "Schimbă imaginea",
+  "widget_cfg_custom_color": "Culoare personalizată",
+  "widget_cfg_follow_system": "Urmează tema sistemului",
+  "widget_cfg_dark_color": "Temă întunecată",
+  "widget_cfg_light_color": "Temă deschisă",
+  "widget_cfg_opacity": "Opacitate  {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_border": "Chenar",
+  "widget_cfg_thickness": "Grosime  {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_todos_scope": "Sarcini",
+  "widget_cfg_todos_all": "Afișează toate sarcinile",
+  "widget_cfg_todos_hint": "Dezactivat: doar sarcinile de azi, întârziate și fără dată",
+  "widget_cfg_show_activity": "Afișează activitatea pentru",
+  "widget_cfg_dot_color": "Culoarea punctelor",
+  "widget_cfg_style": "Stil",
+  "widget_cfg_style_classic": "Clasic",
+  "widget_cfg_style_card": "Card",
+  "widget_cfg_all_habits": "Toate obiceiurile",
+  "widget_cfg_save": "Salvează",
+  "widget_cfg_add": "Adaugă widget",
+  "widget_cfg_reset": "Resetează la implicit",
+  "widget_cfg_hue": "Nuanță",
+  "widget_cfg_saturation": "Saturație",
+  "widget_cfg_brightness": "Luminozitate",
+  "widget_demo_read": "Citit",
+  "widget_demo_run": "Alergare",
+  "widget_demo_water": "Apă",
+  "notif_streak": "🔥 streak de {streak} zile",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_week": "🔥 streak de {streak} săptămâni",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_month": "🔥 streak de {streak} luni",
+  "@notif_streak_month": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_done": "Gata",
+  "notif_action_snooze": "Amână",
+  "notif_action_add": "Adaugă cantitate",
+  "notif_action_add_hint": "Cât de mult?",
+  "snooze_duration": "Amână pentru",
+  "snooze_custom": "Personalizat",
+  "snooze_custom_hint": "Minute",
+  "minutes_short": "{value} min",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_done": "Marchează {name} ca finalizat",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_not_done": "Marchează {name} ca nefinalizat",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_add_amount": "Adaugă la {name}",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_log_relapse": "Înregistrează o recădere pentru {name}",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_clear_relapse": "Șterge recăderea de azi pentru {name}",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_not_done": "nefinalizat",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_previous_week": "Săptămâna anterioară",
+  "a11y_next_week": "Săptămâna următoare",
+  "a11y_increase": "Mărește",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "a11y_decrease": "Micșorează",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "a11y_pick_color": "Alege o culoare",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "period_this_week": "Săptămâna aceasta",
+  "period_last_week": "Săptămâna trecută",
+  "period_this_month": "Luna aceasta",
+  "period_last_month": "Luna trecută",
+  "period_this_year": "Anul acesta",
+  "period_all_time": "Dintotdeauna",
+  "times_completed": "De câte ori finalizat",
+  "period_last_year": "Anul trecut",
+  "period_week_of": "Săptămâna din {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_period_sessions": "{count, plural, =0{Nicio sesiune} =1{1 sesiune} few{{count} sesiuni} other{{count} de sesiuni}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "Toate notițele",
+  "notes_empty_all": "Nicio notiță încă",
+  "quant_preset_time": "Timp",
+  "style_express": "Express",
+  "style_express_desc": "Forme rotunjite, mișcare elastică și un font mai lat.",
+  "celebration_none": "Niciunul",
+  "quant_add_title": "Adaugă cantitate",
+  "pane_hint": "Deschide ceva din listă pentru a-l vedea aici",
+  "average_short": "Medie",
+  "island": "Insulă",
+  "island_enable_sub": "Transformă-ți obiceiurile într-un arhipelag mediteraneean pe care îl construiești bucată cu bucată",
+  "island_open": "Deschide insula",
+  "island_shop": "Magazin",
+  "island_build": "Construiește",
+  "island_done": "Construit",
+  "island_complete": "Arhipelagul este finalizat",
+  "island_tap_hint": "Atinge o formă pentru a vedea ce se pune acolo",
+  "island_empty": "Bifează un obicei și insulele încep să crească",
+  "island_how": "Cum funcționează punctele",
+  "island_how_check": "10 pentru fiecare obicei pe care îl bifezi",
+  "island_how_focus": "1 pentru fiecare minut de focus",
+  "island_how_perfect": "încă 25 pentru o zi perfectă",
+  "island_how_note": "Monedele provin din istoricul tău, așa că o copie de rezervă le aduce înapoi.",
+  "island_built": "{done} din {total} construite",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "{count} puncte până la țintă",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_placed": "{name} este acum pe insulă",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_agave": "Agavă",
+  "island_p_altar": "Altar",
+  "island_p_archway": "Arcadă",
+  "island_p_banner": "Stindard",
+  "island_p_bench": "Bancă",
+  "island_p_blue_railing": "Balustradă albastră",
+  "island_p_bougainvillea": "Bougainvillea",
+  "island_p_boulder": "Bolovan",
+  "island_p_crate": "Ladă",
+  "island_p_crop_patch": "Petic de culturi",
+  "island_p_cube_house": "Casă cub",
+  "island_p_cypress": "Chiparos",
+  "island_p_dry_grass": "Iarbă uscată",
+  "island_p_flat_stone": "Piatră plată",
+  "island_p_flower_pot": "Ghiveci de flori",
+  "island_p_garden_bed": "Strat de grădină",
+  "island_p_hanging_lantern": "Felinar suspendat",
+  "island_p_hay_bale": "Balot de fân",
+  "island_p_house": "Casă mică",
+  "island_p_lantern_post": "Stâlp de felinar",
+  "island_p_large_rock": "Stâncă mare",
+  "island_p_main_chapel": "Capela principală",
+  "island_p_mossy_stone": "Piatră cu mușchi",
+  "island_p_olive": "Măslin",
+  "island_p_pebbles": "Pietricele",
+  "island_p_pergola_house": "Casă cu pergolă",
+  "island_p_pottery_jar": "Ulcior de lut",
+  "island_p_rocks": "Stânci",
+  "island_p_signpost": "Indicator",
+  "island_p_small_bridge": "Debarcader de lemn",
+  "island_p_stone_basin": "Bazin de piatră",
+  "island_p_stone_lantern": "Felinar de piatră",
+  "island_p_stone_pile": "Grămadă de pietre",
+  "island_p_storage_box": "Cufăr de depozitare",
+  "island_p_terrace_house": "Casă cu terasă",
+  "island_p_terracotta_pot": "Vas de teracotă",
+  "island_p_tower_chapel": "Clopotniță",
+  "island_p_two_story": "Casă cu două etaje",
+  "island_p_veg_garden": "Grădină de legume",
+  "island_p_villa": "Vilă",
+  "island_p_water_bucket": "Găleată cu apă",
+  "island_p_well": "Fântână",
+  "island_p_windmill": "Moară de vânt",
+  "island_p_wood_pile": "Grămadă de lemne",
+  "island_reset": "Reîncepe insula",
+  "island_reset_sub": "Totul este demolat și fiecare punct revine în soldul tău.",
+  "island_coins": "Monede",
+  "island_g_pueblo": "Satul",
+  "island_g_cala": "Golful",
+  "island_g_terrazas": "Terasele",
+  "island_g_puerto": "Portul",
+  "island_g_molino": "Creasta morii de vânt",
+  "island_how_todo": "4 pentru fiecare sarcină pe care o finalizezi",
+  "island_how_streak": "Un bonus când un obicei atinge 7, 30, 100 și 365 de zile",
+  "island_zoom_hint": "Trage cu un deget pentru a te deplasa. Apropie două degete pentru zoom, răsucește pentru a roti insula.",
+  "island_t_teal": "turcoaz",
+  "island_t_clay": "teracotă",
+  "island_t_white": "alb",
+  "island_t_coral": "coral",
+  "island_t_lilac": "liliac",
+  "island_t_autumn": "toamnă",
+  "island_t_deep": "închis",
+  "island_t_silver": "argintiu",
+  "island_g_huerta": "Livada",
+  "island_g_faro": "Colții de stâncă",
+  "island_turn": "Rotește vederea",
+  "gamification": "Gamificare",
+  "island_default_name": "Insula mea",
+  "island_rename": "Denumește-ți insula",
+  "island_only_affordable": "Doar ce îmi permit",
+  "island_nothing_here": "Încă nimic aici",
+  "island_g_vega": "Pajiștea",
+  "island_g_mirador": "Punctul de belvedere",
+  "island_g_astillero": "Șantierul naval",
+  "island_g_ermita": "Insula capelei",
+  "island_g_caleta": "Golfulețul",
+  "island_g_cabo": "Capul",
+  "island_goal": "Așa arată când fiecare piesă este construită.",
+  "island_reset_go": "Reîncepe",
+  "island_beta": "Aceasta este o primă variantă de gamificare și este încă în beta. Poate crește, își poate schimba forma sau poate fi înlocuită complet, în funcție de cum o folosiți.",
+  "gamification_beta": "Gamificare (beta)",
+  "last_check": "Ultima bifă",
+  "check_history": "Istoricul bifelor",
+  "check_history_sub": "{count} zile bifate",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "check_never": "Niciodată",
+  "check_no_time": "niciun timp salvat",
+  "heatmap_rolling": "Ultimele 12 luni",
+  "heatmap_rolling_sub": "Grila anuală se termină azi, în loc de 31 decembrie",
+  "check_marks": "{count} bife",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "today_progress_option": "Progres pe pagina Azi",
+  "today_progress_option_sub": "Inelul zilei și bara de forță pe fiecare obicei",
+  "quiet_when_done": "Liniște după finalizare",
+  "quiet_when_done_sub": "Fără alte memento-uri azi pentru un obicei deja finalizat",
+  "plan_tab": "Plan",
+  "difficulty": "Dificultate",
+  "difficulty_hint": "Obiceiurile mai dificile contează mai mult în progresul zilei",
+  "difficulty_easy": "Ușor",
+  "difficulty_medium": "Mediu",
+  "difficulty_hard": "Dificil",
+  "pin_lock": "Cod PIN",
+  "pin_lock_sub": "Codul tău propriu, separat de blocarea telefonului",
+  "pin_choose": "Alege un PIN",
+  "pin_choose_sub": "4 până la 8 cifre",
+  "pin_repeat": "Introdu-l din nou",
+  "pin_mismatch": "Nu se potrivesc. Ia-o de la capăt.",
+  "pin_enter": "Introdu PIN-ul",
+  "pin_wrong": "PIN greșit",
+  "pin_wait": "Prea multe încercări. Așteaptă {seconds} s",
+  "@pin_wait": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "pin_recovery_title": "Codul tău de recuperare",
+  "pin_recovery_body": "Dacă uiți PIN-ul, acest cod deschide Streak și dezactivează blocarea. Păstrează-l undeva în siguranță: nu va mai fi afișat.",
+  "pin_copy": "Copiază codul",
+  "pin_copied": "Cod copiat",
+  "pin_forgot": "Ți-ai uitat PIN-ul?",
+  "pin_recovery_hint": "Cod de recuperare",
+  "pin_recovery_wrong": "Codul nu este corect",
+  "pin_recovered": "Blocarea a fost dezactivată. Poți seta un nou PIN în Setări.",
+  "pin_change": "Schimbă PIN-ul",
+  "pin_remove": "Elimină PIN-ul",
+  "pin_fingerprint": "Folosește amprenta",
+  "app_lock_method": "Deblochează cu",
+  "app_lock_biometric": "Amprentă sau față",
+  "difficulty_option": "Dificultatea obiceiului",
+  "difficulty_option_sub": "Permite ca obiceiurile mai dificile să conteze mai mult în progresul zilei",
+  "todo_save_another": "Salvează și adaugă alta",
+  "todo_add_subtask": "Adaugă subsarcină",
+  "pin_paste": "Lipește codul"
+}
