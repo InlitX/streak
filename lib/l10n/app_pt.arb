@@ -1113,7 +1113,7 @@
   "island_p_storage_box": "",
   "island_g_cabo": "",
   "island_p_water_bucket": "",
-  "streak_unit_month": "",
+  "streak_unit_month": "{count}mês",
   "@streak_unit_month": {
     "placeholders": {
       "count": {
@@ -1248,5 +1248,73 @@
   "period_all_time": "Todo o período",
   "onb_kicker": "Boas vindas",
   "onb_free_title": "Gratuito para sempre",
-  "onb_free_body": "Sem ads, s"
+  "onb_free_body": "Sem ads, s",
+  "onb_blurb": "Pequenos check-ins diários que transformam em hábitos permanentes.",
+  "onb_private_title": "Privado e off-line",
+  "onb_private_body": "Tudo fica no seu celular. Sem necessidade de contas.",
+  "onb_yours_title": "Seu dado é seu",
+  "onb_yours_body": "Faça bakup dos dados ou leve-os quando você quiser.",
+  "onb_step": "Passo {step} de {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Dias",
+  "sched_unit_weeks": "Semanas",
+  "every_n_weeks": "A cada {n} semanas",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "A cada {n} meses",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_months": "Meses",
+  "todo_tags": "Tags",
+  "todo_projects": "Projetos",
+  "todo_project": "Projeto",
+  "todo_project_new": "Novo projeto",
+  "todo_project_name": "Nome do projeto",
+  "todo_project_edit": "Editar projeto",
+  "todo_project_arrange": "Reorganizar",
+  "todo_project_arrange_hint": "Solte os arquivos na posição que você quiser",
+  "todo_project_pick": "Escolha um projeto",
+  "todo_project_none": "Sem projeto",
+  "todo_project_delete_body": "O projeto vai embora. As atividades ficam.",
+  "todo_tag": "Tag",
+  "todo_tag_new": "Nova tag",
+  "todo_tag_name": "Nome da tag",
+  "todo_tag_edit": "Editar tag",
+  "todo_tag_delete_body": "A tagarela vai embora. As atividades ficam.",
+  "todo_tag_none": "Sem tag",
+  "todo_tag_all": "Tudo",
+  "todo_tag_manage": "Administrar tags",
+  "todo_tag_empty_title": "Sem tags ainda",
+  "todo_tag_empty_body": "Agrupe tags por projeto, local ou qualquer coisa que preferir.",
+  "todo_tag_folders": "Pastas",
+  "todo_tag_list": "Lista",
+  "todo_tag_count": "{n} aberto",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Ícone",
+  "todo_tag_pick": "Selecione as tags"
 }
