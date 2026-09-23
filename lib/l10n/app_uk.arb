@@ -199,7 +199,7 @@
   },
   "sched_days": "Днів",
   "circle": "Коло",
-  "buy_coffee": "Придбати мені кави",
+  "buy_coffee": "Придбати кави",
   "sort_completed_last": "Завершено останньою",
   "name": "Назва",
   "edit_category": "Редагувати категорію",
@@ -314,7 +314,7 @@
   },
   "streak_evolution": "Еволюція серії",
   "notif_action_add": "Додати кількість",
-  "week_starts_on": "Тиждень починається",
+  "week_starts_on": "Тиждень починається з",
   "minutes_short": "{value} хв",
   "@minutes_short": {
     "placeholders": {
@@ -1082,17 +1082,17 @@
   "week_start_sub": "Перший стовпець кожної сітки",
   "app_lock_delay_sub": "Як скоро застовунок знову запитає після того, як ви вийдете",
   "start_view_sub": "Перегляд «Сьогодні» відкривається о",
-  "island_p_bougainvillea": "",
+  "island_p_bougainvillea": "Бугенвілія",
   "gamification_beta": "",
   "island_t_lilac": "",
-  "island_p_crop_patch": "",
-  "island_enable_sub": "",
-  "island_how": "",
-  "island_p_garden_bed": "",
+  "island_p_crop_patch": "Грядка",
+  "island_enable_sub": "Перетворіть свої звички на середземноморський архіпелаг, який ви розбудовуєте острівець за острівцем",
+  "island_how": "Як працюють бали",
+  "island_p_garden_bed": "Клумба",
   "island_p_signpost": "",
-  "island_p_dry_grass": "",
+  "island_p_dry_grass": "Сіно",
   "island_reset": "",
-  "island_placed": "",
+  "island_placed": "{name} зараз на острові",
   "@island_placed": {
     "placeholders": {
       "name": {
@@ -1101,9 +1101,9 @@
     }
   },
   "island_t_silver": "",
-  "island_p_blue_railing": "",
+  "island_p_blue_railing": "Сині перила",
   "heatmap_rolling": "",
-  "island_p_boulder": "",
+  "island_p_boulder": "Валун",
   "island_p_small_bridge": "",
   "island_only_affordable": "",
   "island_g_terrazas": "",
@@ -1121,10 +1121,10 @@
       }
     }
   },
-  "island_p_altar": "",
+  "island_p_altar": "Святиня",
   "island_t_autumn": "",
   "gamification": "",
-  "island_built": "",
+  "island_built": "Збудовано {done} з {total}",
   "@island_built": {
     "placeholders": {
       "done": {
@@ -1135,39 +1135,39 @@
       }
     }
   },
-  "island_build": "",
+  "island_build": "Будівля",
   "island_turn": "",
-  "island_p_cube_house": "",
+  "island_p_cube_house": "Кубічний дім",
   "check_never": "",
-  "island_tap_hint": "",
-  "island_empty": "",
-  "island_complete": "",
-  "island_p_hanging_lantern": "",
+  "island_tap_hint": "Торкніться фігури, щоби побачити, що там має бути",
+  "island_empty": "Позначте звичку, і острови почнуть рости",
+  "island_complete": "Архіпелаг готовий",
+  "island_p_hanging_lantern": "Підвісний ліхтар",
   "island_g_astillero": "",
   "island_p_stone_lantern": "",
   "island_nothing_here": "",
-  "island_p_archway": "",
+  "island_p_archway": "Арка",
   "island_t_clay": "",
-  "island_open": "",
+  "island_open": "Відкрити острів",
   "island_p_veg_garden": "",
   "island_p_well": "",
-  "emoji_own": "",
+  "emoji_own": "Уведіть або вставте будь-який емоджі",
   "island_p_villa": "",
   "island_g_mirador": "",
   "island_p_tower_chapel": "",
   "island_p_terracotta_pot": "",
-  "island_how_perfect": "",
+  "island_how_perfect": "Ще 25 за ідеальний день",
   "island_beta": "",
-  "times_completed": "",
+  "times_completed": "Разів виконано",
   "island_rename": "",
-  "island_p_main_chapel": "",
+  "island_p_main_chapel": "Головна каплиця",
   "island_p_stone_pile": "",
-  "island_p_bench": "",
+  "island_p_bench": "Лавка",
   "island_reset_sub": "",
   "last_check": "",
   "heatmap_rolling_sub": "",
   "island_reset_go": "",
-  "island_how_focus": "",
+  "island_how_focus": "1 за хвилину фокусування",
   "island_p_stone_basin": "",
   "check_marks": "",
   "@check_marks": {
@@ -1177,7 +1177,7 @@
       }
     }
   },
-  "island_need": "",
+  "island_need": "Ще {count} балів",
   "@island_need": {
     "placeholders": {
       "count": {
@@ -1190,22 +1190,22 @@
   "island_p_windmill": "",
   "island_g_puerto": "",
   "island_t_white": "",
-  "island_p_hay_bale": "",
-  "island_done": "",
-  "island_p_agave": "",
-  "island_p_mossy_stone": "",
+  "island_p_hay_bale": "Тюк сіна",
+  "island_done": "Збудовано",
+  "island_p_agave": "Агава",
+  "island_p_mossy_stone": "Замшілий камінь",
   "island_how_streak": "",
   "island_goal": "",
-  "island_p_house": "",
-  "island_p_crate": "",
+  "island_p_house": "Малий дім",
+  "island_p_crate": "Ящик",
   "island_t_coral": "",
   "check_no_time": "",
-  "island_p_flat_stone": "",
+  "island_p_flat_stone": "Плаский камінь",
   "island_t_teal": "",
-  "island_p_olive": "",
+  "island_p_olive": "Оливкове дерево",
   "island_zoom_hint": "",
   "island_t_deep": "",
-  "island_p_large_rock": "",
+  "island_p_large_rock": "Велика скеля",
   "island_p_terrace_house": "",
   "streak_unit_week": "{count} тиж.",
   "@streak_unit_week": {
@@ -1217,9 +1217,9 @@
   },
   "island_p_wood_pile": "",
   "island_default_name": "",
-  "island_how_check": "",
-  "island_p_banner": "",
-  "island_p_flower_pot": "",
+  "island_how_check": "10 за кожну відмічену звичку",
+  "island_p_banner": "Плакат",
+  "island_p_flower_pot": "Квітковий горщик",
   "check_history_sub": "",
   "@check_history_sub": {
     "placeholders": {
@@ -1228,23 +1228,23 @@
       }
     }
   },
-  "island_p_lantern_post": "",
-  "island": "",
+  "island_p_lantern_post": "Ліхтарний стовп",
+  "island": "Острів",
   "island_g_molino": "",
   "island_g_cala": "",
   "island_g_huerta": "",
   "island_g_faro": "",
   "island_p_pottery_jar": "",
-  "island_p_pebbles": "",
+  "island_p_pebbles": "Галька",
   "island_g_vega": "",
   "island_p_two_story": "",
-  "island_shop": "",
+  "island_shop": "Крамниця",
   "island_p_rocks": "",
-  "island_p_pergola_house": "",
-  "island_p_cypress": "",
+  "island_p_pergola_house": "Будинок із перголою",
+  "island_p_cypress": "Кипарис",
   "island_g_caleta": "",
-  "island_how_note": "",
-  "period_all_time": "",
+  "island_how_note": "Монети походять з вашої історії, тому резервна копія їх повертає.",
+  "period_all_time": "Увесь час",
   "onb_kicker": "Вітаємо в",
   "onb_blurb": "Маленькі щоденні перевірки стають звичками, які ви зберігаєте.",
   "onb_free_title": "Безоплатно, назавжди",
@@ -1339,5 +1339,24 @@
   "focus_restart_title": "Перезапустити цей раунд?",
   "focus_restart_body": "Час, який ви витратили в цьому раунді, буде втрачено.",
   "focus_end_add_time": "Додати час зосередження",
-  "focus_repeat_one": "Повторювати знову"
+  "focus_repeat_one": "Повторювати знову",
+  "category_order": "Порядок категорій",
+  "category_order_sub": "Перетягніть їх у потрібному вам порядку",
+  "category_order_empty": "Призначте звичці категорію, і вона з’явиться тут",
+  "notif_streak_week": "🔥 {streak}-тижнева серія",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_month": "🔥 {streak}-місячна серія",
+  "@notif_streak_month": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  }
 }
