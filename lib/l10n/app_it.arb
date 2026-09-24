@@ -1,1 +1,527 @@
-{}
+{
+  "app_tagline": "Habit tracker",
+  "stats": "Statistiche",
+  "today": "Oggi",
+  "settings": "Impostazioni",
+  "new_label": "Nuovo",
+  "save": "Salva",
+  "cancel": "Annulla",
+  "delete": "Elimina",
+  "good_morning": "Buongiorno",
+  "good_afternoon": "Buon pomeriggio",
+  "good_evening": "Buonasera",
+  "no_habits_yet": "Ancora nessuna abitudine",
+  "all_done_today": "Finito tutto oggi!",
+  "x_of_y_completed": "{done} di {total} completati",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Inizia la tua prima serie",
+  "empty_body": "Prendi l'abitudine e tocca lo schermo ogni giorno per registrarla. Piccoli passi, ogni giorno.",
+  "add_habit": "Aggiungi un'abitudine",
+  "all": "Tutto",
+  "onb1_title": "Crea vere serie consecutive",
+  "onb1_body": "Registra un'abitudine con un solo tocco e osserva come il tuo slancio cresce giorno dopo giorno.",
+  "onb2_title": "Non perdere di vista l'obiettivo",
+  "onb2_body": "Obiettivi giornalieri, settimanali o mensili con promemoria intelligenti, così non ti sfuggirà nulla.",
+  "onb3_title": "Vedi i tuoi progressi",
+  "onb3_body": "Statistiche dettagliate e un grafico annuale ti mostrano esattamente i progressi che hai compiuto.",
+  "skip": "Salta",
+  "next": "Successivo",
+  "get_started": "Inizia",
+  "onb_kicker": "Benvenuti a",
+  "onb_blurb": "Piccoli momenti di riflessione quotidiani che diventano abitudini da mantenere.",
+  "onb_free_title": "Gratuito, per sempre",
+  "onb_free_body": "Nessuna pubblicità, nessun abbonamento, nessuna funzionalità bloccata.",
+  "onb_private_title": "Privato e offline",
+  "onb_private_body": "Tutto rimane sul tuo dispositivo. Nessun account richiesto.",
+  "onb_yours_title": "I tuoi dati appartengono a te",
+  "onb_yours_body": "Fai il backup o portalo con te quando vuoi.",
+  "onb_step": "Passo {step} di {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statistics": "Statistiche",
+  "done_today": "Fatto oggi",
+  "best_streak": "Serie di vittorie consecutive",
+  "active_habits": "Abitudini attive",
+  "total_logs": "Totale registrazioni",
+  "last_7_days": "Ultimi 7 giorni",
+  "last_30_days": "Ultimi 30 giorni",
+  "your_habits": "Le tue abitudini",
+  "stats_empty": "Aggiungi abitudini per vedere le tue statistiche",
+  "completion_rate_short": "Consistenza",
+  "completion_rate": "Tasso di completamento",
+  "appearance": "Aspetto",
+  "theme": "Tema",
+  "system": "Sistema",
+  "light": "Chiaro",
+  "dark": "Scuro",
+  "week_starts_on": "Inizio della settimana",
+  "mon": "Lun",
+  "sat": "Sab",
+  "sun": "Dom",
+  "language": "Lingua",
+  "data": "Dati",
+  "export_backup": "Esporta backup",
+  "export_backup_sub": "Salva tutte le abitudini in un file",
+  "auto_backup": "Backup automatico",
+  "auto_backup_sub": "Spento",
+  "auto_backup_off": "Spento",
+  "auto_backup_daily": "Tutti i giorni",
+  "auto_backup_weekly": "Ogni settimana",
+  "auto_backup_where": "Quando apri l'app, Streak crea un backup e una copia leggibile delle tue abitudini che puoi aprire con qualsiasi editor. Vengono conservati gli ultimi 5 backup.",
+  "auto_backup_folder": "Cartella",
+  "auto_backup_folder_default": "Cartella app",
+  "auto_backup_folder_set": "Cartella salvata",
+  "auto_backup_folder_failed": "Non è possibile scrivere in quella cartella",
+  "auto_backup_no_permission": "Autorizzazione di archiviazione negata",
+  "auto_backup_run_now": "Esegui subito il backup",
+  "refresh_now": "Aggiorna",
+  "refresh_now_sub": "Importa ciò che gli altri dispositivi hanno lasciato nella cartella",
+  "refresh_brought": "Le tue abitudini sono aggiornate",
+  "refresh_nothing": "Niente di nuovo nella cartella",
+  "import_backup": "Importa backup",
+  "import_backup_sub": "Ripristina le abitudini da un file",
+  "import_from_app": "Importa da un'altra app",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "Importati {habits} abitudini ({days} giorni) da {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Non è stato possibile importare quel file",
+  "about": "About",
+  "backup_saved": "Backup salvato",
+  "export_cancelled": "Export annullato",
+  "habits_imported": "Abitudini importate",
+  "new_habit": "Nuova abitudine",
+  "edit_habit": "Modifica abitudine",
+  "name": "Nome",
+  "name_hint": "es. Corsa mattutina",
+  "description": "Descrizione",
+  "description_hint": "Note opzionali",
+  "icon": "Icona",
+  "color": "Colore",
+  "category": "Categoria",
+  "category_health": "Salute",
+  "category_fitness": "Fitness",
+  "category_mindfulness": "Mindfulness",
+  "category_productivity": "Produttività",
+  "category_learning": "Apprendimento",
+  "category_finance": "Finanza",
+  "count_days": "{count, plural, =1{1 giorno} altri{{count} giorni}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 settimana} altri{{count} settimane}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 mese} altri{{count} mesi}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}s",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}me",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_kind": "Tipologia di abitudine",
+  "kind_positive": "Normale",
+  "kind_negative": "Da evitare",
+  "kind_quantitative": "Quantitativo",
+  "kind_locked_hint": "Una volta creata l'abitudine, non è più possibile modificarne il tipo.",
+  "kind_negative_hint": "Ogni giorno viene considerato “pulito” per impostazione predefinita: la tua serie continua ad allungarsi automaticamente. Tocca il segno di spunta solo se commetti un errore; quel giorno diventerà rosso e potrai annullare l'azione.",
+  "cost_per_day": "Costo giornaliero",
+  "cost_note": "Facoltativo. Lascia il campo vuoto se questa abitudine non comporta alcuna spesa.",
+  "currency": "Valuta",
+  "currency_custom": "Personalizzato",
+  "currency_hint": "Simbolo o codice",
+  "money_saved": "Risparmiato",
+  "clean_days": "Giorni di pulizia",
+  "quant_preset_water": "Acqua",
+  "quant_preset_reading": "Lettura",
+  "quant_preset_generic": "Personalizzato",
+  "quant_unit_hint": "Unità (ad es. ml, pagine, ripetizioni)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "pagine",
+  "quant_edit_title": "Quantitativo di oggi",
+  "quant_daily_goal": "Obiettivo giornaliero",
+  "quant_tap_amount": "Quantitativo per tocco",
+  "quant_per_day": "Quantitativo giornaliero",
+  "quant_average": "Media giornaliera",
+  "quant_logged_days": "Giorni registrati",
+  "quant_best_day": "Miglior giorno",
+  "quant_goal_days": "Obiettivo raggiunto",
+  "quant_stats_empty": "Inserisci un importo e verrà sommato qui, anche nei giorni in cui non raggiungi l'obiettivo.",
+  "frequency": "Frequenza",
+  "daily": "Giornaliero",
+  "weekly": "Settimanale",
+  "monthly": "Mensile",
+  "sched_days": "Giorni",
+  "sched_interval": "Intervallo",
+  "times_per_week": "{n} volte a settimana",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} volte al mese",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/settimana",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/mese",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Promemoria",
+  "add_reminder": "Aggiungi promemoria",
+  "delete_habit": "Elimina abitudine",
+  "archive_habit": "Archivia abitudine",
+  "archive": "Archivia",
+  "share_friends": "Condividi con un amico",
+  "share_friends_sub": "Invia l'app",
+  "share_friends_message": "Sto mantenendo vive le mie serie consecutive con Streak — un piccolo tracker delle abitudini gratuito e utilizzabile offline, senza account né pubblicità. Vieni a crearne uno anche tu: https://inlitx.github.io/streak/",
+  "copy_message": "Copia messaggio",
+  "message_copied": "Messaggio copiato",
+  "app_lock": "Blocco app",
+  "app_lock_sub": "Chiedi di utilizzare le tue impronte digitali o il riconoscimento facciale per sbloccare Streak",
+  "app_lock_unavailable": "Su questo telefono non è stata configurata alcuna funzione biometrica",
+  "app_lock_failed": "Non sono riuscito a verificare che fossi tu",
+  "app_lock_title": "Streak è bloccato",
+  "app_lock_unlock": "Sblocca",
+  "app_lock_delay": "Blocca dopo",
+  "app_lock_delay_instant": "Immediatamente",
+  "app_lock_delay_seconds": "{value} secondi",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Foto",
+  "note_take_photo": "Fotocamera",
+  "note_pick_photo": "Galleria",
+  "journey_sub": "{count, plural, =1{1 foto} altre{{count} foto}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Nessuna foto",
+  "journey_empty_sub": "Aggiungi una foto a una nota e apparirà qui.",
+  "archive_habit_body": "Vuoi spostare “{name}” nell'archivio? La cronologia verrà conservata e potrai ripristinarlo dalle Impostazioni.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "Abitudini archiviate",
+  "archived_habits_sub": "Ripristinarli o eliminarli definitivamente",
+  "archived_empty": "Niente archiviato",
+  "archived_empty_sub": "Le abitudini che tu elimini finiranno qua, con tutta la loro cronologia.",
+  "restore": "Ripristina",
+  "restored": "Abitudine ripristinata",
+  "delete_forever": "Elimina definitivamente",
+  "delete_forever_body": "Elimina “{name}” e tutta la cronologia associata? Questa operazione non può essere annullata.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Abitudine eliminata",
+  "clear_progress": "Pulisci progressi",
+  "clear_progress_sub": "Storia, appunti e sessioni di focus",
+  "clear_progress_warning": "Questa operazione cancella tutti i giorni registrati, le note e le sessioni di concentrazione, ma conserva le tue abitudini, i relativi orari e le tue impostazioni. Non è possibile annullare l'operazione a meno che tu non disponga di un file di backup da importare in seguito.",
+  "clear_progress_confirm": "Pulisci progresso",
+  "clear_progress_done": "Progresso pulito",
+  "wipe_data": "Elimina tutti i dati",
+  "wipe_data_sub": "Abitudini, note, sessioni focus e impostazioni",
+  "wipe_data_warning": "Questa operazione cancella tutte le abitudini, le note, le sessioni di concentrazione e le impostazioni presenti su questo telefono. Non è possibile annullare l'operazione a meno che non si disponga di un file di backup da importare in seguito.",
+  "wipe_data_sure": "Vuoi davvero cancellare tutto?",
+  "wipe_data_sure_body": "Ultima possibilità. Senza un backup, questi dati andranno persi per sempre.",
+  "wipe_data_confirm": "Elimina tutto",
+  "wipe_data_done": "Tutti i dati sono stati eliminati",
+  "day_start": "Giorno di inizio",
+  "day_start_sub": "Le ore notturne in ritardo vengono comunque conteggiate come appartenenti al giorno precedente",
+  "day_start_midnight": "Mezzanotte",
+  "day_start_hour": "{hour}:00 AM",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "Foto",
+  "share_stats_short": "Statistiche",
+  "undo": "Annulla",
+  "habit_archived": "Abitudine archiviata",
+  "share_blur": "Sfoca",
+  "delete_habit_body": "Eliminare \"{name}\"? Questo non può essere annullato.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_body": "Questo interrompe la serie di giorni senza errori di “{name}”. Puoi annullare l'operazione toccando di nuovo.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Si, registralo",
+  "permission_required": "È richiesta l'autorizzazione alle notifiche",
+  "activity": "Attività",
+  "current": "Attuale",
+  "best": "Migliore",
+  "total": "Totale",
+  "week": "Settimana",
+  "month": "Mese",
+  "year": "Anno",
+  "new_reminder": "Nuovo promemoria",
+  "edit_reminder": "Modifica promemoria",
+  "days": "Giorni",
+  "time": "Orario",
+  "save_reminder": "Salva promemoria",
+  "select_one_day": "Seleziona almeno un giorno",
+  "every_day": "Tutti i giorni",
+  "no_days": "Nessun giorno",
+  "repeat_hours": "Ripeti durante la giornata",
+  "every_n_hours": "Ogni {n} h",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "Giorni specifici",
+  "repeat_interval": "Ogni N giorni",
+  "every_n_days": "Ogni {n} giorni",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_weeks": "Ogni {n} settimane",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "Ogni {n} mesi",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Giorni",
+  "sched_unit_weeks": "Settimane",
+  "sched_unit_months": "Mesi",
+  "todo_tags": "Tags",
+  "todo_projects": "Progetti",
+  "todo_project": "Progetto",
+  "todo_project_new": "Nuovo progetto",
+  "todo_project_name": "Nome del progetto",
+  "todo_project_edit": "Modifica progetto",
+  "todo_project_arrange": "Riorganizza",
+  "todo_project_arrange_hint": "Trascina le cartelle dove vuoi.",
+  "todo_project_pick": "Seleziona un progetto",
+  "todo_project_none": "Nessun progetto",
+  "todo_project_delete_body": "Il progetto finisce. Le attività rimangono.",
+  "todo_tag": "Tag",
+  "todo_tag_new": "Nuovo tag",
+  "todo_tag_name": "Nome del tag",
+  "todo_tag_edit": "Modifica tag",
+  "todo_tag_delete_body": "Il tag scompare. Le attività rimangono.",
+  "todo_tag_none": "Nessun tag",
+  "todo_tag_all": "Tutto",
+  "todo_tag_manage": "Gesctisci tag",
+  "todo_tag_empty_title": "Nessun tag",
+  "todo_tag_empty_body": "Raggruppa le attività per progetto, luogo o qualsiasi altro criterio tu preferisca.",
+  "todo_tag_folders": "Cartelle",
+  "todo_tag_list": "Lista",
+  "todo_tag_count": "{n} aperto",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Icona",
+  "todo_tag_pick": "Seleziona tag",
+  "todo_tag_filtered": "Filtrato per {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "uncategorized": "Non categorizzato",
+  "more_icons": "Altre icone",
+  "less_icons": "Meno icone",
+  "completions": "Completamento",
+  "completion_time": "Tempo di completamento",
+  "current_streak": "Serie attuale",
+  "days_active": "Giorni attivi",
+  "completions_per_month": "Completamento / Mese",
+  "overview": "Panoramica",
+  "preferences": "Preferenze",
+  "support": "Supporto",
+  "profile": "Profilo",
+  "about_app": "Informazioni su quest'app",
+  "about_app_sub": "Versione, crediti, codice sorgente",
+  "my_heatmap_sub": "Apri la tabella delle attività annuali",
+  "rate_github": "Valuta su GitHub",
+  "rate_github_sub": "Supporta il progetto con una valutazione",
+  "buy_coffee": "Comprami un caffè",
+  "buy_coffee_sub": "Aiuta a tenere l'applicazione gratuita",
+  "view_source": "Visualizza il codice sorgente su GitHub",
+  "about_title": "Costruito per te. Gratuito, per sempre.",
+  "about_footer": "Fatto con ☕ e molto tempo libero.",
+  "about_body": "Streak è nata da un’idea semplice: perché pagare per tenere traccia delle proprie abitudini?\n\nQuesta app è completamente open source. Chiunque può vedere esattamente come funziona, suggerire miglioramenti o persino creare la propria versione. Niente “scatole nere”. Niente sorprese.\n\nLa tua privacy è totale: tutto rimane sul tuo telefono. Niente account, niente server, niente pubblicità. Nemmeno un byte esce dal tuo dispositivo.\n\nNessun limite. Crea tutte le abitudini che vuoi. Nessun abbonamento, nessuna “versione pro”, nessun pop-up che ti chieda di pagare. Mai.\n\nSe l’app ti è utile, puoi sostenerla con una stella su GitHub o offrendomi un caffè. Ma è del tutto facoltativo: l’app è tua in ogni caso.",
+  "close": "Chiudi",
+  "no_data_yet": "Nessun dato",
+  "import_question_body": "Sostituire tutte le tue attuali abitudini con quelle di backup, oppure unirle insieme?",
+  "import_replace": "Sostituisci tutto",
+  "import_merge": "Uniscili",
+  "go": "Vai",
+  "quote_1": "Piccoli passi, ogni giorno.",
+  "quote_2": "La costanza batte l'intensità.",
+  "quote_3": "Fatti valere.",
+  "quote_4": "Un giorno alla volta.",
+  "quote_5": "Progresso, non perfezione.",
+  "quote_6": "Meglio fatto che perfetto.",
+  "quote_7": "Non interrompere la serie.",
+  "quote_8": "Piccole abitudini, grandi cambiamenti.",
+  "quote_9": "Fidati del processo.",
+  "quote_10": "Vinci la mattina.",
+  "quote_11": "Disciplina equivale alla libertà.",
+  "quote_12": "Oggi conta.",
+  "just_tracking_option_sub": "Aggiunge l'opzione quando crei un'abitudine",
+  "just_tracking": "Solo monitoraggio",
+  "just_tracking_sub": "Mantieni la propria griglia e i propri numeri, ma escludila da Progress e dal conteggio giornaliero",
+  "quotes": "Citazioni",
+  "quotes_which": "Quale citazione",
+  "quotes_app": "Dall'app",
+  "quotes_mine": "Personali",
+  "quotes_both": "Entrambi",
+  "quotes_off": "Spegni",
+  "quotes_my_list": "Le mie citazioni",
+  "quotes_add": "Aggiungi citazione",
+  "quotes_edit": "Modifica citazione",
+  "quotes_hint": "Scrivi la tua citazione",
+  "quotes_empty": "Nessuna citazione personale",
+  "quotes_empty_sub": "Scrivi le tue personali e verranno pubblicati su Oggi.",
+  "motiv_start": "Inizia la giornata alla grande 💪",
+  "motiv_progress": "Sei sulla buona strada, continua così",
+  "motiv_almost": "Ci siamo quasi! Ancora un po'",
+  "motiv_perfect": "Giorno perfetto! 🔥",
+  "app_background": "Sfondo",
+  "widgets": "Widgets",
+  "customize_widgets": "Widgets personalizzati",
+  "customize_widgets_sub": "Sfondo, opacità, bordo",
+  "widget_background": "Colore sfondo",
+  "widget_opacity": "Opacità",
+  "widget_border": "Bordo",
+  "widget_preview": "Anteprima",
+  "bg_solid": "Tinta unità",
+  "bg_gradient": "Gradiente",
+  "bg_dots": "A pois",
+  "bg_oled": "OLED",
+  "weekdays": "Settimana lavorativa",
+  "weekends": "Fine settimana",
+  "reminder_message": "Messaggio (opzionale)",
+  "reminder_message_hint": "Lascia vuoto per una citazione motivazionale",
+  "new_category": "Nuova categoria",
+  "edit_category": "Modifica categoria",
+  "add_category": "Nuovo",
+  "delete_category": "Elimina categoria",
+  "edit": "Modifica",
+  "cover_image": "Immagine di copertina"
+}
