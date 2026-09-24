@@ -1396,5 +1396,11 @@
   "pin_change": "Змінити PIN-код",
   "pin_remove": "Видалити PIN-код",
   "pin_fingerprint": "Використати відбиток",
-  "app_lock_method": "Розблокувати за допомогою"
+  "app_lock_method": "Розблокувати за допомогою",
+  "app_lock_biometric": "Відбиток чи обличчя",
+  "difficulty_option": "Складність звички",
+  "difficulty_option_sub": "Нехай складніші звички вагоміше впливають на денний поступ",
+  "todo_save_another": "Зберегти й додати ще",
+  "todo_add_subtask": "Додати підзадачу",
+  "pin_paste": "Вставити код"
 }
