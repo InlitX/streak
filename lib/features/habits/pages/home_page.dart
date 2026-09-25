@@ -157,6 +157,12 @@ class _HomePageState extends State<HomePage> {
             false,
           ),
           (
+            LucideIcons.copy,
+            context.l10n.duplicate_habit,
+            () => run(() => _duplicate(controller, habit)),
+            false,
+          ),
+          (
             LucideIcons.archive,
             context.l10n.archive_habit,
             () => run(() => _confirmDelete(controller, habit)),
@@ -235,6 +241,17 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
+    );
+  }
+
+  Future<void> _duplicate(HabitsController controller, Habit habit) async {
+    final copy = await controller.duplicate(habit);
+    if (!mounted) return;
+    AppSnackbar.action(
+      context,
+      context.l10n.habit_duplicated(copy.name),
+      label: context.l10n.undo,
+      onPressed: () => controller.remove(copy.id),
     );
   }
 
