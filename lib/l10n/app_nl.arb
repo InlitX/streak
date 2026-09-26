@@ -641,5 +641,608 @@
   "celebration": "Voltooiingseffect",
   "celebration_confetti": "Confetti",
   "celebration_fireworks": "Vuurwerk",
-  "celebration_surprise": "Verras me"
+  "celebration_surprise": "Verras me",
+  "widget_cfg_todos_scope": "",
+  "island_p_bougainvillea": "",
+  "gamification_beta": "",
+  "widget_cfg_brightness": "",
+  "style_express_desc": "",
+  "a11y_add_amount": "",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all_sub": "",
+  "island_t_lilac": "",
+  "island_p_crop_patch": "",
+  "island_enable_sub": "",
+  "island_how": "",
+  "island_p_garden_bed": "",
+  "island_p_signpost": "",
+  "widget_today_progress": "",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_dry_grass": "",
+  "island_reset": "",
+  "island_placed": "",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_silver": "",
+  "widget_cfg_change_image": "",
+  "island_p_blue_railing": "",
+  "a11y_decrease": "",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "widget_activity": "",
+  "widget_cfg_border": "",
+  "heatmap_rolling": "",
+  "island_p_boulder": "",
+  "island_p_small_bridge": "",
+  "notif_action_add_hint": "",
+  "a11y_not_done": "",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_increase": "",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "island_only_affordable": "",
+  "add_step": "",
+  "island_g_terrazas": "",
+  "island_g_pueblo": "",
+  "snooze_custom_hint": "",
+  "steps_done": "",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_how_todo": "",
+  "island_g_ermita": "",
+  "island_p_storage_box": "",
+  "island_g_cabo": "",
+  "vacation_mode": "",
+  "island_p_water_bucket": "",
+  "period_last_week": "",
+  "widget_cfg_dark_color": "",
+  "notes_empty_all": "",
+  "widget_done_today": "",
+  "island_p_altar": "",
+  "island_t_autumn": "",
+  "vacation_off_desc": "",
+  "gamification": "",
+  "island_built": "",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "rest_days": "",
+  "average_short": "",
+  "island_build": "",
+  "widget_no_habits": "",
+  "island_turn": "",
+  "a11y_previous_week": "",
+  "island_p_cube_house": "",
+  "check_never": "",
+  "island_tap_hint": "",
+  "island_empty": "",
+  "period_this_week": "",
+  "a11y_clear_relapse": "",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_complete": "",
+  "island_p_hanging_lantern": "",
+  "island_g_astillero": "",
+  "island_p_stone_lantern": "",
+  "widget_cfg_light_color": "",
+  "widget_cfg_color": "",
+  "island_nothing_here": "",
+  "notes_all": "",
+  "widget_demo_read": "",
+  "island_p_archway": "",
+  "widget_cfg_saturation": "",
+  "a11y_log_relapse": "",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_clay": "",
+  "island_open": "",
+  "island_p_veg_garden": "",
+  "snooze_duration": "",
+  "quant_add_title": "",
+  "island_p_well": "",
+  "end_vacation": "",
+  "island_p_villa": "",
+  "island_g_mirador": "",
+  "island_p_tower_chapel": "",
+  "vacation_all": "",
+  "island_p_terracotta_pot": "",
+  "island_how_perfect": "",
+  "island_beta": "",
+  "times_completed": "",
+  "island_rename": "",
+  "island_p_main_chapel": "",
+  "island_p_stone_pile": "",
+  "widget_cfg_hue": "",
+  "island_p_bench": "",
+  "a11y_next_week": "",
+  "widget_cfg_style": "",
+  "island_reset_sub": "",
+  "last_check": "",
+  "notif_action_snooze": "",
+  "heatmap_rolling_sub": "",
+  "paused": "",
+  "widget_demo_water": "",
+  "step_hint": "",
+  "island_reset_go": "",
+  "snooze_custom": "",
+  "island_how_focus": "",
+  "widget_todos_empty": "",
+  "pane_hint": "",
+  "widget_best_streak": "",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_stone_basin": "",
+  "notif_action_add": "",
+  "minutes_short": "",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "",
+  "widget_cfg_style_card": "",
+  "check_marks": "",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_choose_image": "",
+  "island_coins": "",
+  "quant_preset_time": "",
+  "check_history": "",
+  "island_p_windmill": "",
+  "island_g_puerto": "",
+  "island_t_white": "",
+  "island_p_hay_bale": "",
+  "widget_demo_run": "",
+  "widget_cfg_style_classic": "",
+  "a11y_mark_done": "",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_done": "",
+  "widget_cfg_all_habits": "",
+  "island_p_agave": "",
+  "island_p_mossy_stone": "",
+  "island_how_streak": "",
+  "island_goal": "",
+  "island_p_house": "",
+  "widget_cfg_image": "",
+  "island_p_crate": "",
+  "widget_cfg_opacity": "",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_coral": "",
+  "period_this_month": "",
+  "widget_cfg_todos_hint": "",
+  "check_no_time": "",
+  "island_p_flat_stone": "",
+  "period_this_year": "",
+  "island_t_teal": "",
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_not_done": "",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_olive": "",
+  "style_express": "",
+  "island_zoom_hint": "",
+  "island_t_deep": "",
+  "island_p_large_rock": "",
+  "island_p_terrace_house": "",
+  "island_p_wood_pile": "",
+  "notif_action_done": "",
+  "widget_cfg_todos_all": "",
+  "widget_no_data": "",
+  "island_default_name": "",
+  "island_how_check": "",
+  "island_p_banner": "",
+  "a11y_pick_color": "",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "widget_cfg_title": "",
+  "period_last_month": "",
+  "focus_period_sessions": "",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vacation_day_on": "",
+  "widget_cfg_follow_system": "",
+  "island_p_flower_pot": "",
+  "check_history_sub": "",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_lantern_post": "",
+  "widget_open_to_sync": "",
+  "island": "",
+  "island_g_molino": "",
+  "widget_cfg_custom_color": "",
+  "island_g_cala": "",
+  "todays_checklist": "",
+  "island_g_huerta": "",
+  "island_g_faro": "",
+  "island_p_pottery_jar": "",
+  "island_p_pebbles": "",
+  "celebration_none": "",
+  "vacation_day_off": "",
+  "island_g_vega": "",
+  "island_p_two_story": "",
+  "island_shop": "",
+  "island_p_rocks": "",
+  "island_p_pergola_house": "",
+  "island_p_cypress": "",
+  "widget_cfg_reset": "",
+  "period_last_year": "",
+  "widget_cfg_thickness": "",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "island_g_caleta": "",
+  "island_how_note": "",
+  "widget_cfg_add": "",
+  "period_all_time": "",
+  "widget_cfg_show_activity": "",
+  "vacation_on_desc": "",
+  "rest_days_desc": "",
+  "period_week_of": "",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_save": "",
+  "start_vacation": "",
+  "focus_flowtime": "Flowtijd",
+  "focus_notif_running": "Focussen",
+  "rest_days_none": "Geen",
+  "report_issue_sub": "Vertel me over een bug of vraag om een functie",
+  "focus_daily_goal_sub": "Minuten van focus waar je naar streeft elke dag",
+  "app_icon_sub": "Het icoon op je startscherm",
+  "habit_duration": "Duur",
+  "quotes_sub": "Welke citaten op Vandaag verschijnen",
+  "remove_photo": "Verwijder foto",
+  "focus_only_title": "Heeft een focussessie nodig",
+  "accent_color": "Accentkleur",
+  "today_only": "Alleen vandaag",
+  "focus_only_past": "\"{name}' wordt alleen voltooid door een focussessie, dus de afgelopen dagen kunnen niet afgevinkt worden.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "style_classic": "Klassiek",
+  "your_name": "Jouw naam",
+  "focus_history_day": "{count, plural, =1{1 sessie} other{{count} sessies}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "Pomodoro",
+  "about_sub": "Versie, broncode en ondersteuning",
+  "focus_average": "Gemiddelde sessie",
+  "focus_only_body": "\"{name}' wordt voltooid door een focussessie af te ronden.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "style_classic_desc": "Gewoontelijst, onderste balk en elke instelling op één scherm.",
+  "focus_history": "Geschiedenis",
+  "focus_clear_today": "Leeg sessies van vandaag",
+  "focus_end_flow": "Je focuste je voor {time}.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "readable_copy": "Leesbare kopie",
+  "focus_scene_black": "Zwart",
+  "checklist_hint": "Breek de gewoonte op in stappen. Het is voltooid als elke stap afgevinkt wordt.",
+  "streak_unit_month": "{count}ma",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "card_activity": "Activiteit op kaarten",
+  "clear": "Leeg",
+  "app_style_sub": "Kies hoe de hele app eruit ziet en voelt.",
+  "heatmap_path": "Verbind de dagen",
+  "on": "Aan",
+  "day_timeline_empty_sub": "Geef een gewoonte een tijd van de dag en het zal hier verschijnen.",
+  "preferences_sub": "Taal, week en sortering",
+  "habit_duration_none": "Geen duur",
+  "celebration_sub": "Wat je ziet als je een gewoonte afvinkt",
+  "default_user": "Inlitx",
+  "report_issue": "Rapporteer een probleem",
+  "readable_copy_sub": "Schrijft ook je gewoonten als markdown bestanden",
+  "circle": "Cirkel",
+  "sort_completed_last": "Laatst voltooid",
+  "focus_only_clear_body": "Alleen een focussessie kan \"{name}' opnieuw afvinken.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "App icoon",
+  "icon_neutral": "Groen",
+  "focus_paused": "Gepauzeerd",
+  "focus_history_empty": "Nog geen sessies",
+  "off": "Uit",
+  "square": "Vierkant",
+  "focus_goal_today": "{done} van {goal} vandaag",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "icon_default": "Standaard",
+  "check_style_sub": "Vierkante of ronde markeringen",
+  "theme_sub": "Licht, donker of die van systeem",
+  "focus_delete_sessions_body": "{count, plural, =1{1 focussessie wordt verwijderd. Dit kan niet ongedaan worden gemaakt.} other{{count} focussessies worden verwijderd. Dit kan niet ongedaan worden gemaakt..}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "plan_day": "Plan de dag",
+  "habit_time": "Tijd van de dag",
+  "github_star_sub": "Geef het project een ster zodat meer mensen het vinden",
+  "emoji_own": "Type of plak elke emoji",
+  "language_sub": "De taal van de hele app",
+  "notif_greeting": "Hi {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_style": "App stijl",
+  "start_view": "Vandaag opent op",
+  "last_90_days": "Laatste 90 dagen",
+  "day_timeline": "Dag",
+  "app_background_sub": "Wat je ziet achter de kaarten",
+  "select_all": "Alles selecteren",
+  "focus_round": "Ronde {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_confirm": "Toch registreren",
+  "focus_break": "Pauze",
+  "see_more": "Bekijk meer",
+  "accent_color_sub": "Gebruikt op knoppen en highlights",
+  "support_sub": "Rapporteer een fout of vraag om een functie",
+  "unscheduled_title": "Dag niet gepland",
+  "sort_completed_last_sub": "Stuurt wat je voltooid naar de onderkant van de lijst",
+  "week_start_sub": "De eerste kolom van elk raster",
+  "start_view_last": "Laatst gebruikt",
+  "focus_only_clear_title": "Leeg deze voltooiing?",
+  "focus_sessions_deleted": "{count, plural, =1{1 sessie verwijderd} other{{count} sessies verwijderd}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro_sub": "Ketting focus rondes met korte pauzes",
+  "advanced_options": "Geanvanceerde opties",
+  "reorder": "Herschik",
+  "plan_day_sub": "Geef gewoonten een tijd van de dag en zie ze op een tijdlijn.",
+  "focus_images_limit": "Maximum 10 afbeeldingen",
+  "day_timeline_anytime": "Elke tijd",
+  "notes_hint": "Druk lang op een dag om notities te bekijken of toe te voegen",
+  "yesterday": "Gisteren",
+  "app_lock_delay_sub": "Hoe snel het weer vraagt nadat je weg bent",
+  "focus_only_start": "Start sessie",
+  "selected_count": "{count, plural, =1{1 geselecteerd} other{{count} geselecteerd}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "see_less": "Bekijk minder",
+  "icons_tab": "Iconen",
+  "focus_defaults": "Sessiestandaarden",
+  "github_star_row": "Bekijk bron & geef een ster",
+  "reorder_hint": "Versleep de gewoontes om ze te herschikken",
+  "edit_name": "Bewerk naam",
+  "unscheduled_body": "Deze gewoonte is niet gepland op {day}. Toch registreren als een extra?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "checklist": "Checklist",
+  "focus_log_saved": "Sessie toegevoegd",
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_history_empty_sub": "Elke focussessie die je voltooid verschijnt hier.",
+  "heatmap_path_sub": "Tekent het raster als een lange wandeling",
+  "focus_log_date": "Datum",
+  "icon_accent": "Driekleurig",
+  "card_activity_sub": "Toont de laatste dagen op de kaart, klaar om aan te vinken",
+  "today_only_sub": "Verbergt de gewoonten die niet gepland zijn voor vandaag",
+  "style_minimal": "Minimaal",
+  "day_timeline_empty": "Niets gepland voor deze dag",
+  "check_style": "Voltooid stijl",
+  "style_minimal_desc": "Gewoonterooster en instellingen gegroepeerd in vier secties.",
+  "focus_flowtime_hint": "Geen doel en geen alarm. De klok telt en je stopt als je klaar bent.",
+  "focus_keep_awake": "Houd scherm aan",
+  "data_sub": "Back-ups en importeren",
+  "focus_notif_channel": "Focussessies",
+  "colors_tab": "Kleuren",
+  "focus_daily_goal": "Focus doel",
+  "focus_stats": "Focus statistieken",
+  "focus_log": "Registreer een sessie",
+  "custom": "Aangepast",
+  "focus_only_hint": "De gewoonte wordt afgevinkt wanneer je een sessie afmaakt, niet door erop te tikken.",
+  "emojis_tab": "Emojis",
+  "focus_only": "Alleen met een focussessie",
+  "change_photo": "Verander foto",
+  "appearance_sub": "Thema, accent en achtergrond",
+  "focus_delete_sessions": "Sessies verwijderen?",
+  "day_timeline_free": "{span} vrij",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_time_none": "Elke tijd",
+  "done": "Klaar",
+  "start_view_sub": "Het scherm waar Vandaag in opent",
+  "perfect_streak": "Perfecte dagreeks"
 }

@@ -489,7 +489,7 @@
   "focus_images_limit": "Jusqu'à 10 images",
   "edit_note": "Modifier la note",
   "dark": "Sombre",
-  "notes_hint": "Appuyer longuement sur un jour pour voir ou ajouter des notes",
+  "notes_hint": "Ouvrez une habitude et appuyer longuement sur un jour pour voir ou ajouter des notes",
   "focus_total": "Temps focus",
   "widget_cfg_opacity": "Opacité  {value}%",
   "@widget_cfg_opacity": {
@@ -1008,5 +1008,343 @@
   "todos": "A faire",
   "quotes_mine": "Mien",
   "cost_note": "Facultatif. Veillez laisser vide si l'habitude ne coûte rien.",
-  "priority_high": "Haut"
+  "priority_high": "Haut",
+  "island_p_bougainvillea": "",
+  "gamification_beta": "Gamification (bêta)",
+  "style_express_desc": "",
+  "island_t_lilac": "",
+  "island_p_crop_patch": "",
+  "island_enable_sub": "",
+  "island_how": "Comment fonctionne les points",
+  "island_p_garden_bed": "",
+  "island_p_signpost": "",
+  "island_p_dry_grass": "",
+  "island_reset": "",
+  "report_issue_sub": "Remonter un problème ou demander une fonctionnalité",
+  "island_placed": "{name} est sur l'île maintenant",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_daily_goal_sub": "",
+  "island_t_silver": "argent",
+  "app_icon_sub": "Icône de l'application",
+  "island_p_blue_railing": "",
+  "quotes_sub": "Quelles citations s'affiche dans \"Aujourd'hui\"",
+  "heatmap_rolling": "12 derniers mois",
+  "island_p_boulder": "",
+  "island_p_small_bridge": "",
+  "island_only_affordable": "Uniquement ce que je peux acheter",
+  "island_g_terrazas": "",
+  "island_g_pueblo": "Le village",
+  "island_how_todo": "4 point pour chaque tâche finis dans votre to do",
+  "island_g_ermita": "",
+  "island_p_storage_box": "Coffre",
+  "island_g_cabo": "",
+  "island_p_water_bucket": "Sceau d'eau",
+  "period_last_week": "La semaine dernière",
+  "refresh_now": "",
+  "readable_copy": "",
+  "notes_empty_all": "Aucune notes",
+  "streak_unit_month": "",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_altar": "",
+  "island_t_autumn": "automne",
+  "gamification": "Gamification",
+  "island_built": "{done} sur {total} construit",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_search_empty": "Aucune correspondance",
+  "heatmap_path": "",
+  "average_short": "Environ",
+  "island_build": "Construire",
+  "refresh_brought": "",
+  "island_turn": "Tourner la vue",
+  "island_p_cube_house": "",
+  "refresh_now_sub": "",
+  "check_never": "Jamais",
+  "just_tracking_option_sub": "",
+  "island_tap_hint": "",
+  "celebration_sub": "Ce que vous voyez quand vous cochez une habitude",
+  "island_empty": "",
+  "readable_copy_sub": "Écrire les habitudes dans un fichier markdown",
+  "period_this_week": "Cette semaine",
+  "focus_only_clear_body": "Seul une session de concentration peut valider \"{name}\" again.",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_complete": "",
+  "island_p_hanging_lantern": "",
+  "island_g_astillero": "",
+  "island_p_stone_lantern": "Lanterne en pierre",
+  "island_nothing_here": "Il n'y a rien ici",
+  "notes_all": "Toutes les notes",
+  "island_p_archway": "",
+  "check_style_sub": "",
+  "theme_sub": "Clair, sombre ou système",
+  "island_t_clay": "Terre cuite",
+  "island_open": "Ouvrir l'île",
+  "island_p_veg_garden": "",
+  "quant_add_title": "Ajouter un montant",
+  "island_p_well": "",
+  "github_star_sub": "Ajouter une étoile au projet pour lui donner de la visibilité",
+  "emoji_own": "Écrire ou coller un emlji",
+  "island_p_villa": "Villa",
+  "language_sub": "Langue de l'application",
+  "island_g_mirador": "",
+  "island_p_tower_chapel": "",
+  "island_p_terracotta_pot": "Pot en terre cuite",
+  "island_how_perfect": "25 points pour un jour parfait",
+  "island_beta": "C'est une première tentative de gamification, c'est encore en bêta. Cela peut a tout moment évoluer, changer de forme ou etre totalement remplacé, cela va dépendre de la façon dont vous allez l'utiliser.",
+  "times_completed": "",
+  "island_rename": "Nommer votre île",
+  "island_p_main_chapel": "",
+  "island_p_stone_pile": "",
+  "island_p_bench": "Banc",
+  "island_reset_sub": "",
+  "last_check": "Dernière vérification",
+  "heatmap_rolling_sub": "",
+  "app_background_sub": "",
+  "island_reset_go": "",
+  "island_how_focus": "1 point par minute de concertation",
+  "pane_hint": "Ouvrir un élément de la liste pour le voir ici",
+  "island_p_stone_basin": "Bassin en pierre",
+  "quotes_off": "Off",
+  "check_marks": "",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "{count} points pour y arriver",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "accent_color_sub": "",
+  "island_coins": "Points",
+  "quant_preset_time": "Temps",
+  "sort_completed_last_sub": "Envoyé ce que vous avez accompli en bas de la liste",
+  "week_start_sub": "La première colonne de toutes les grilles",
+  "check_history": "Vérifier l'historique",
+  "island_p_windmill": "",
+  "island_g_puerto": "",
+  "island_t_white": "Blanc",
+  "island_p_hay_bale": "Botte de foins",
+  "focus_only_clear_title": "Supprimer cette validation",
+  "island_done": "Construit",
+  "island_p_agave": "",
+  "island_p_mossy_stone": "",
+  "island_how_streak": "Bonjour quand une habitude atteint 7, 30, 100 et 365 jours",
+  "island_goal": "Voici a quoi cela ressemble quand tout est construit.",
+  "island_p_house": "Petite maison",
+  "island_p_crate": "",
+  "todo_search": "",
+  "island_t_coral": "Corail",
+  "period_this_month": "Ce mois-ci",
+  "app_lock_delay_sub": "",
+  "just_tracking_sub": "",
+  "check_no_time": "",
+  "island_p_flat_stone": "Pierre plate",
+  "period_this_year": "Cette année",
+  "island_t_teal": "",
+  "island_p_olive": "Olivier",
+  "style_express": "",
+  "island_zoom_hint": "Déplacer avec un doigt. Utilisez deux doigt pour zoomer, faire une rotation pour tourner l'île.",
+  "island_t_deep": "sombre",
+  "island_p_large_rock": "",
+  "island_p_terrace_house": "",
+  "streak_unit_week": "",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_wood_pile": "",
+  "heatmap_path_sub": "",
+  "island_default_name": "Mon île",
+  "island_how_check": "10 points pour chaque habitude validée",
+  "island_p_banner": "Bannière",
+  "card_activity_sub": "",
+  "period_last_month": "Le mois dernier",
+  "today_only_sub": "Maquer les habitudes qui be sont pas programmer pour aujourd'hui",
+  "focus_period_sessions": "{count, plural, =0{No sessions} =1{1 session} other{{count} sessions}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "island_p_flower_pot": "Pot de fleurs",
+  "check_history_sub": "{count} jours validés",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_lantern_post": "",
+  "view_switcher_needs": "Activez l'activité sur la carte pour l'utiliser",
+  "island": "Île",
+  "island_g_molino": "",
+  "island_g_cala": "",
+  "island_g_huerta": "",
+  "island_g_faro": "",
+  "island_p_pottery_jar": "",
+  "island_p_pebbles": "",
+  "celebration_none": "Aucun",
+  "island_g_vega": "",
+  "island_p_two_story": "",
+  "island_shop": "Boutique",
+  "island_p_rocks": "Cailloux",
+  "just_tracking": "",
+  "island_p_pergola_house": "Pergola",
+  "island_p_cypress": "",
+  "period_last_year": "L'année dernière",
+  "island_g_caleta": "",
+  "island_how_note": "Les points viennent de votre historique, la restauration d'une sauvegarde les fait réapparaître",
+  "period_all_time": "Depuis toujours",
+  "just_tracking_option": "",
+  "period_week_of": "Semaine du {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "start_view_sub": "",
+  "refresh_nothing": "",
+  "onb_kicker": "Bienvenue à",
+  "onb_free_title": "Gratuit, pour toujours",
+  "onb_free_body": "Pas de publicités, pas d'abonnements, pas de Fonctionnalités verrouillées.",
+  "onb_private_title": "Privé et hors ligne",
+  "sched_unit_months": "Mois",
+  "todo_tags": "Étiquettes",
+  "todo_projects": "Projets",
+  "todo_project": "Projet",
+  "todo_project_new": "Nouveau projet",
+  "todo_project_name": "Nom du projet",
+  "todo_project_edit": "Modifier le projet",
+  "todo_project_arrange": "Organiser",
+  "todo_project_arrange_hint": "Déplacer le dossier ou vous le souhaitez.",
+  "todo_project_pick": "Choisir un projet",
+  "todo_project_none": "Aucun projet",
+  "todo_project_delete_body": "Le projet sera supprimé. Les tâches seront gardées.",
+  "todo_tag": "Étiquette",
+  "todo_tag_new": "Nouvelle étiquette",
+  "todo_tag_name": "Nom de l'étiquette",
+  "todo_tag_edit": "Modifier l'étiquette",
+  "todo_tag_delete_body": "L'étiquette sera supprimée. Les tâches seront conservées.",
+  "todo_tag_none": "Aucune étiquette",
+  "todo_tag_all": "Tout",
+  "todo_tag_manage": "Gérer les étiquettes",
+  "todo_tag_empty_title": "Aune étiquette pour l'instant",
+  "todo_tag_empty_body": "Grouper les tâches par projet, lieux ou ce que vous préférez.",
+  "todo_tag_folders": "Dossiers",
+  "todo_tag_list": "Liste",
+  "todo_tag_count": "{n} ouvert",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Icône",
+  "todo_tag_pick": "Choisir une étiquette",
+  "todo_tag_filtered": "Filtrer par {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_subtasks": "Sous-tâches",
+  "todo_subtask_hint": "Sous-tâche",
+  "focus_countdown": "Décompte de 3 secondes",
+  "focus_skip_break": "Passer la pause",
+  "focus_continue": "Continuer",
+  "focus_alert_custom": "Choisir un son",
+  "focus_alert_none": "Silencieux",
+  "focus_hold": "Attendre jusqu'à ce que je l'arrête",
+  "focus_restart": "Redémarrer",
+  "focus_restart_title": "Redémarrer ce tour ?",
+  "focus_restart_body": "Le temps de concentration de ce tour sera perdu.",
+  "focus_repeat_one": "Répéter une fois",
+  "category_order": "Ordre des catégories",
+  "category_order_sub": "Déplacer les dans l'ordre que vous souhaitez",
+  "category_order_empty": "Ajouter une catégorie a une habitude, elle apparaîtra ici",
+  "today_progress_option": "Progression aujourd'hui",
+  "quiet_when_done_sub": "Aucun rappel pour aujourd'hui vous avez complété toutes vos habitudes",
+  "plan_tab": "Plan",
+  "difficulty": "Difficulté",
+  "difficulty_hint": "Les habitudes durs comptent plus dans la progression du jou",
+  "difficulty_easy": "Facile",
+  "difficulty_medium": "Moyen",
+  "difficulty_hard": "Difficile",
+  "pin_lock": "Code PIN",
+  "pin_lock_sub": "Votre code, différent de celui du téléphone",
+  "pin_choose": "Choisir un PIN",
+  "pin_choose_sub": "4 à 8 chiffres",
+  "pin_repeat": "Confirmation du code",
+  "pin_mismatch": "Les codes ne correspondent pas. Veuillez recommencer.",
+  "pin_enter": "Entrer votre code",
+  "pin_wrong": "Mauvais code",
+  "pin_wait": "Trop d'essai. Veuillez attendre {seconds} sec",
+  "@pin_wait": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "pin_recovery_title": "Code de secours",
+  "pin_recovery_body": "Si vous perdez votre code PIN, ce code ouvrira Streak et désactiver automatiquement le verrouillage de l'application. Garder ce code précieusement en sécurité : il ne sera plus affiché.",
+  "pin_copy": "Copier le code",
+  "pin_copied": "Code copié !",
+  "pin_forgot": "PIN oublié ?",
+  "pin_recovery_hint": "Code de secours",
+  "pin_recovery_wrong": "Le code est incorrecte",
+  "pin_recovered": "Verrouillage désactivé. Vous pouvez définir un nouveau PIN depuis les paramètres.",
+  "pin_change": "Changer le PIN",
+  "pin_remove": "Retirer le PIN",
+  "pin_fingerprint": "Utiliser l'empreinte digital",
+  "app_lock_method": "Déverrouiller avec",
+  "app_lock_biometric": "Empreinte ou visage",
+  "difficulty_option": "Difficulté de l'habitude",
+  "todo_save_another": "Sauvegarder et ajouter une autre",
+  "todo_add_subtask": "Ajouter une sous-tâche",
+  "pin_paste": "Coller le code"
 }

@@ -199,7 +199,7 @@
   },
   "sched_days": "Днів",
   "circle": "Коло",
-  "buy_coffee": "Придбати мені кави",
+  "buy_coffee": "Придбати кави",
   "sort_completed_last": "Завершено останньою",
   "name": "Назва",
   "edit_category": "Редагувати категорію",
@@ -314,7 +314,7 @@
   },
   "streak_evolution": "Еволюція серії",
   "notif_action_add": "Додати кількість",
-  "week_starts_on": "Тиждень починається",
+  "week_starts_on": "Тиждень починається з",
   "minutes_short": "{value} хв",
   "@minutes_short": {
     "placeholders": {
@@ -763,7 +763,7 @@
   "focus_log_saved": "Сеанс додано",
   "perfect_streak": "Серія ідеальних днів",
   "edit_note": "Редагувати нотатку",
-  "notes_hint": "Затисніть день, щоб переглянути або додати нотатки",
+  "notes_hint": "Відкрийте звичку. Затисніть пальцем на дні в календарі. Так ви зможете побачити або додати нотатки",
   "focus_total": "Час фокусування",
   "share_size_large": "Здоровий",
   "share_size_small": "Квадратний",
@@ -1074,5 +1074,333 @@
   "accent_color_sub": "Використовується для кнопок і виділень",
   "app_background_sub": "Те, що ви бачите за картами",
   "check_style_sub": "Квадратні або круглі позначки",
-  "app_icon_sub": "Значок на вашому головному екрані"
+  "app_icon_sub": "Значок на вашому головному екрані",
+  "focus_daily_goal_sub": "Кількість хвилин фокусу, якої ви прагнете досягати щодня",
+  "quotes_sub": "Які цитати показуються в розділі «Сьогодні»",
+  "celebration_sub": "Що ви бачите, коли відмічаєте звичку",
+  "language_sub": "Мова всього застосунку",
+  "week_start_sub": "Перший стовпець кожної сітки",
+  "app_lock_delay_sub": "Як скоро застовунок знову запитає після того, як ви вийдете",
+  "start_view_sub": "Перегляд «Сьогодні» відкривається о",
+  "island_p_bougainvillea": "Бугенвілія",
+  "gamification_beta": "Ігровізація (бета)",
+  "island_t_lilac": "бузковий",
+  "island_p_crop_patch": "Грядка",
+  "island_enable_sub": "Перетворіть свої звички на середземноморський архіпелаг, який ви розбудовуєте острівець за острівцем",
+  "island_how": "Як працюють бали",
+  "island_p_garden_bed": "Клумба",
+  "island_p_signpost": "Указівник",
+  "island_p_dry_grass": "Сіно",
+  "island_reset": "Почати острів заново",
+  "island_placed": "{name} зараз на острові",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_silver": "сріблястий",
+  "island_p_blue_railing": "Сині перила",
+  "heatmap_rolling": "Останні 12 місяців",
+  "island_p_boulder": "Валун",
+  "island_p_small_bridge": "Дерев’яний причал",
+  "island_only_affordable": "Лише те, що мені по кишені",
+  "island_g_terrazas": "Тераси",
+  "island_g_pueblo": "Село",
+  "island_how_todo": "4 за кожне виконане завдання",
+  "island_g_ermita": "Острів каплиці",
+  "island_p_storage_box": "Скриня для зберігання",
+  "island_g_cabo": "Плащ",
+  "island_p_water_bucket": "Відро для води",
+  "streak_unit_month": "{count} міс.",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_altar": "Святиня",
+  "island_t_autumn": "осінній",
+  "gamification": "Ігровізація",
+  "island_built": "Збудовано {done} з {total}",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_build": "Будівля",
+  "island_turn": "Змінити ракурс",
+  "island_p_cube_house": "Кубічний дім",
+  "check_never": "Ніколи",
+  "island_tap_hint": "Торкніться фігури, щоби побачити, що там має бути",
+  "island_empty": "Позначте звичку, і острови почнуть рости",
+  "island_complete": "Архіпелаг готовий",
+  "island_p_hanging_lantern": "Підвісний ліхтар",
+  "island_g_astillero": "Верф",
+  "island_p_stone_lantern": "Кам’яний ліхтар",
+  "island_nothing_here": "Поки що тут нічого немає",
+  "island_p_archway": "Арка",
+  "island_t_clay": "теракотовий",
+  "island_open": "Відкрити острів",
+  "island_p_veg_garden": "Город",
+  "island_p_well": "Криниця",
+  "emoji_own": "Уведіть або вставте будь-який емоджі",
+  "island_p_villa": "Вілла",
+  "island_g_mirador": "Спостерігач",
+  "island_p_tower_chapel": "Дзвіниця",
+  "island_p_terracotta_pot": "Теракотовий горщик",
+  "island_how_perfect": "Ще 25 за ідеальний день",
+  "island_beta": "Це перша спроба ігровізації, і вона все ще перебуває на стадії бета-тестування. Залежно від того, як ви всі нею користуватиметеся, вона може розвиватися, змінюватися або бути повністю замінена.",
+  "times_completed": "Разів виконано",
+  "island_rename": "Назвати свій острів",
+  "island_p_main_chapel": "Головна каплиця",
+  "island_p_stone_pile": "Купа каміння",
+  "island_p_bench": "Лавка",
+  "island_reset_sub": "Усе списується, а кожен бал повертається на ваш рахунок.",
+  "last_check": "Остання перевірка",
+  "heatmap_rolling_sub": "Річний графік закінчується сьогодні, а не 31 грудня",
+  "island_reset_go": "Почати спочатку",
+  "island_how_focus": "1 за хвилину фокусування",
+  "island_p_stone_basin": "Кам’яний басейн",
+  "check_marks": "{count} позначок",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "Ще {count} балів",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_coins": "Монети",
+  "check_history": "Перевірити історію",
+  "island_p_windmill": "Вітряк",
+  "island_g_puerto": "Гавань",
+  "island_t_white": "білий",
+  "island_p_hay_bale": "Тюк сіна",
+  "island_done": "Збудовано",
+  "island_p_agave": "Агава",
+  "island_p_mossy_stone": "Замшілий камінь",
+  "island_how_streak": "Бонус, коли звичка досягає 7, 30, 100 і 365 днів",
+  "island_goal": "Ось так це виглядає, коли зібрано кожну деталь.",
+  "island_p_house": "Малий дім",
+  "island_p_crate": "Ящик",
+  "island_t_coral": "кораловий",
+  "check_no_time": "не заощадило часу",
+  "island_p_flat_stone": "Плаский камінь",
+  "island_t_teal": "бірюзовий",
+  "island_p_olive": "Оливкове дерево",
+  "island_zoom_hint": "Перетягуйте одним пальцем, щоб перемістити. Зведіть два пальці, аби збільшити масштаб, і поверніть їх, щоб обернути острів.",
+  "island_t_deep": "темний",
+  "island_p_large_rock": "Велика скеля",
+  "island_p_terrace_house": "Будинок із терасою",
+  "streak_unit_week": "{count} тиж.",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_wood_pile": "Стос дров",
+  "island_default_name": "Мій острів",
+  "island_how_check": "10 за кожну відмічену звичку",
+  "island_p_banner": "Плакат",
+  "island_p_flower_pot": "Квітковий горщик",
+  "check_history_sub": "Відмічено днів: {count}",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_lantern_post": "Ліхтарний стовп",
+  "island": "Острів",
+  "island_g_molino": "Хребет вітряків",
+  "island_g_cala": "Бухта",
+  "island_g_huerta": "Фруктовий сад",
+  "island_g_faro": "Стоси",
+  "island_p_pottery_jar": "Глиняний глечик",
+  "island_p_pebbles": "Галька",
+  "island_g_vega": "Луг",
+  "island_p_two_story": "Двоповерховий будинок",
+  "island_shop": "Крамниця",
+  "island_p_rocks": "Скелі",
+  "island_p_pergola_house": "Будинок із перголою",
+  "island_p_cypress": "Кипарис",
+  "island_g_caleta": "Маленька бухта",
+  "island_how_note": "Монети походять з вашої історії, тому резервна копія їх повертає.",
+  "period_all_time": "Увесь час",
+  "onb_kicker": "Вітаємо в",
+  "onb_blurb": "Маленькі щоденні перевірки стають звичками, які ви зберігаєте.",
+  "onb_free_title": "Безоплатно, назавжди",
+  "onb_free_body": "Немає реклами, немає передплат, немає закритих функцій.",
+  "onb_private_title": "Приватний та без мережі",
+  "onb_private_body": "Усе залишається на вашому пристрої. Обліковий запис не потрібен.",
+  "onb_yours_title": "Ваші дані належать вам",
+  "onb_yours_body": "Робіть копію або тримайте її при собі, коли забажаєте.",
+  "onb_step": "Крок {step} із {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_weeks": "Кожні {n} тиж.",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "Кожні {n} міс.",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Днів",
+  "sched_unit_weeks": "Тижнів",
+  "sched_unit_months": "Місяців",
+  "todo_tags": "Теги",
+  "todo_projects": "Проєкти",
+  "todo_project": "Проєкт",
+  "todo_project_new": "Новий проєкт",
+  "todo_project_name": "Назва проєкту",
+  "todo_project_edit": "Редагувати проєкт",
+  "todo_project_arrange": "Переставити",
+  "todo_project_arrange_hint": "Перетягніть теки туди, куди ви хочете.",
+  "todo_project_pick": "Оберіть проєкт",
+  "todo_project_none": "Немає проєкту",
+  "todo_project_delete_body": "Проєкт закінчиться. Завдання залишаться.",
+  "todo_tag": "Тег",
+  "todo_tag_new": "Новий тег",
+  "todo_tag_name": "Назва тегу",
+  "todo_tag_edit": "Редагувати тег",
+  "todo_tag_delete_body": "Тег зникне. Завдання залишаться.",
+  "todo_tag_none": "Немає тегу",
+  "todo_tag_all": "Усі",
+  "todo_tag_manage": "Керувати тегами",
+  "todo_tag_empty_title": "Поки що без тегів",
+  "todo_tag_empty_body": "Збирайте завдання за проєктами, місцями або як вам подобається.",
+  "todo_tag_folders": "Теки",
+  "todo_tag_list": "Список",
+  "todo_tag_count": "{n} відкрито",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Значок",
+  "todo_tag_pick": "Обрати теги",
+  "todo_tag_filtered": "Відфільтровано за {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_subtasks": "Підзадачі",
+  "todo_subtask_hint": "Підзадача",
+  "focus_countdown": "3-секундний зворотний відлік",
+  "focus_skip_break": "Пропустити перерву",
+  "focus_continue": "Продовжити",
+  "focus_alert": "Раунд скоро закінчиться",
+  "focus_alert_chime": "Дзвін",
+  "focus_alert_custom": "Оберіть звук",
+  "focus_alert_none": "Тиша",
+  "focus_hold": "Почекати, поки я зупиню",
+  "focus_hold_sub": "Наступний раунд почнеться, коли ви натиснете «Продовжити».",
+  "focus_restart": "Перезапустити",
+  "focus_restart_title": "Перезапустити цей раунд?",
+  "focus_restart_body": "Час, який ви витратили в цьому раунді, буде втрачено.",
+  "focus_end_add_time": "Додати час зосередження",
+  "focus_repeat_one": "Повторювати знову",
+  "category_order": "Порядок категорій",
+  "category_order_sub": "Перетягніть їх у потрібному вам порядку",
+  "category_order_empty": "Призначте звичці категорію, і вона з’явиться тут",
+  "notif_streak_week": "🔥 {streak}-тижнева серія",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_month": "🔥 {streak}-місячна серія",
+  "@notif_streak_month": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "today_progress_option": "Поступ за сьогодні",
+  "today_progress_option_sub": "Кільце дня та індикатор сили для кожної звички",
+  "quiet_when_done": "Тиша після завершення",
+  "quiet_when_done_sub": "Сьогодні більше не надсилати нагадування про звичку, яку ви вже виконали",
+  "plan_tab": "План",
+  "difficulty": "Складність",
+  "difficulty_hint": "Складніші звички мають більшу вагу в поступі за день",
+  "difficulty_easy": "Легка",
+  "difficulty_medium": "Середня",
+  "difficulty_hard": "Важка",
+  "pin_lock": "PIN-код",
+  "pin_lock_sub": "Ваш власний код, окремо від коду блокування телефона",
+  "pin_choose": "Оберіть PIN-код",
+  "pin_choose_sub": "Від 4 до 8 цифр",
+  "pin_repeat": "Введіть повторно",
+  "pin_mismatch": "Вони не збігаються. Почніть спочатку.",
+  "pin_enter": "Уведіть свій PIN-код",
+  "pin_wrong": "Неправильний PIN-код",
+  "pin_wait": "Забагато спроб. Зачекайте {seconds} с",
+  "@pin_wait": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "pin_recovery_title": "Ваш код відновлення",
+  "pin_recovery_body": "Якщо ви забудете PIN-код, цей код відкриє Streak і вимкне блокування. Зберігайте його в надійному місці: його більше не буде показано.",
+  "pin_copy": "Копіювати код",
+  "pin_copied": "Код скопійовано",
+  "pin_forgot": "Забули PIN-код?",
+  "pin_recovery_hint": "Код відновлення",
+  "pin_recovery_wrong": "Цей код неправильний",
+  "pin_recovered": "Блокування вимкнено. Ви можете встановити новий PIN-код у налаштуваннях.",
+  "pin_change": "Змінити PIN-код",
+  "pin_remove": "Видалити PIN-код",
+  "pin_fingerprint": "Використати відбиток",
+  "app_lock_method": "Розблокувати за допомогою",
+  "app_lock_biometric": "Відбиток чи обличчя",
+  "difficulty_option": "Складність звички",
+  "difficulty_option_sub": "Нехай складніші звички вагоміше впливають на денний поступ",
+  "todo_save_another": "Зберегти й додати ще",
+  "todo_add_subtask": "Додати підзадачу",
+  "pin_paste": "Вставити код"
 }

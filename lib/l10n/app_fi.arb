@@ -1,0 +1,1248 @@
+{
+  "widget_cfg_todos_scope": "",
+  "island_p_bougainvillea": "",
+  "gamification_beta": "",
+  "todo_time": "",
+  "widget_cfg_brightness": "",
+  "style_express_desc": "",
+  "focus_end_keep": "",
+  "a11y_add_amount": "",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all_sub": "",
+  "about_story": "",
+  "island_t_lilac": "",
+  "island_p_crop_patch": "",
+  "focus_flowtime": "",
+  "focus_saved": "",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "island_enable_sub": "",
+  "focus_notif_running": "",
+  "island_how": "",
+  "focus_your_tracks": "",
+  "island_p_garden_bed": "",
+  "rest_days_none": "",
+  "island_p_signpost": "",
+  "widget_today_progress": "",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak": "",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_dry_grass": "",
+  "expand_cards": "",
+  "island_reset": "",
+  "todo_overdue": "",
+  "report_issue_sub": "",
+  "island_placed": "",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_no_date": "",
+  "share_background": "",
+  "focus_sessions": "",
+  "focus_amount_added": "",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_empty": "",
+  "focus_daily_goal_sub": "",
+  "island_t_silver": "",
+  "app_icon_sub": "",
+  "habit_duration": "",
+  "widget_cfg_change_image": "",
+  "island_p_blue_railing": "",
+  "quotes_sub": "",
+  "remove_photo": "",
+  "a11y_decrease": "",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "widget_activity": "",
+  "widget_cfg_border": "",
+  "heatmap_rolling": "",
+  "island_p_boulder": "",
+  "focus_only_title": "",
+  "island_p_small_bridge": "",
+  "delete_note": "",
+  "accent_color": "",
+  "notif_action_add_hint": "",
+  "a11y_not_done": "",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_increase": "",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "today_only": "",
+  "focus_only_past": "",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_only_affordable": "",
+  "add_step": "",
+  "island_g_terrazas": "",
+  "focus_end_anyway": "",
+  "island_g_pueblo": "",
+  "snooze_custom_hint": "",
+  "focus_custom_duration": "",
+  "focus_tasks": "",
+  "steps_done": "",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "style_classic": "",
+  "your_name": "",
+  "island_how_todo": "",
+  "focus_history_day": "",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pomodoro": "",
+  "share_show_stats": "",
+  "about_sub": "",
+  "focus_average": "",
+  "focus_track_pad": "",
+  "island_g_ermita": "",
+  "island_p_storage_box": "",
+  "island_g_cabo": "",
+  "vacation_mode": "",
+  "island_p_water_bucket": "",
+  "period_last_week": "",
+  "focus_only_body": "",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dark_color": "",
+  "style_classic_desc": "",
+  "focus_history": "",
+  "save_note": "",
+  "focus_clear_today": "",
+  "focus_end_flow": "",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "readable_copy": "",
+  "notes_empty_all": "",
+  "focus_end_complete": "",
+  "widget_done_today": "",
+  "focus_scene_black": "",
+  "checklist_hint": "",
+  "share_failed": "",
+  "share_swipe_hint": "",
+  "view_switcher": "",
+  "focus_free_session": "",
+  "card_activity": "",
+  "share_progress": "",
+  "island_p_altar": "",
+  "clear": "",
+  "island_t_autumn": "",
+  "pick_a_date": "",
+  "share_size": "",
+  "focus_track_too_long": "",
+  "dev_role": "",
+  "vacation_off_desc": "",
+  "focus_style_dots": "",
+  "celebration_surprise": "",
+  "gamification": "",
+  "share_save": "",
+  "island_built": "",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "rest_days": "",
+  "todo_empty_body": "",
+  "app_style_sub": "",
+  "todo_search_empty": "",
+  "heatmap_path": "",
+  "on": "",
+  "average_short": "",
+  "day_timeline_empty_sub": "",
+  "todo_date": "",
+  "preferences_sub": "",
+  "island_build": "",
+  "focus_built_in": "",
+  "widget_no_habits": "",
+  "focus_sound": "",
+  "todo_completed_count": "",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "island_turn": "",
+  "a11y_previous_week": "",
+  "island_p_cube_house": "",
+  "check_never": "",
+  "habit_duration_none": "",
+  "add_note": "",
+  "island_tap_hint": "",
+  "prefs_privacy": "",
+  "note_kind_planned": "",
+  "celebration_sub": "",
+  "island_empty": "",
+  "default_user": "",
+  "share_saved": "",
+  "report_issue": "",
+  "readable_copy_sub": "",
+  "period_this_week": "",
+  "circle": "",
+  "sort_completed_last": "",
+  "focus_only_clear_body": "",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unit_minutes": "",
+  "a11y_clear_relapse": "",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_reached": "",
+  "island_complete": "",
+  "app_icon": "",
+  "island_p_hanging_lantern": "",
+  "island_g_astillero": "",
+  "icon_neutral": "",
+  "island_p_stone_lantern": "",
+  "widget_cfg_light_color": "",
+  "focus_paused": "",
+  "focus_personalize": "",
+  "focus_history_empty": "",
+  "off": "",
+  "widget_cfg_color": "",
+  "square": "",
+  "island_nothing_here": "",
+  "unit_seconds": "",
+  "focus_enable_sub": "",
+  "notes_all": "",
+  "focus_shuffle": "",
+  "focus_goal_today": "",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "icon_default": "",
+  "edit_entry": "",
+  "widget_demo_read": "",
+  "about_credits_body": "",
+  "island_p_archway": "",
+  "check_style_sub": "",
+  "theme_sub": "",
+  "about_developer": "",
+  "widget_cfg_saturation": "",
+  "a11y_log_relapse": "",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_clay": "",
+  "todos_enable_sub": "",
+  "about_credits": "",
+  "focus_delete_sessions_body": "",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "island_open": "",
+  "focus_add_track": "",
+  "plan_day": "",
+  "island_p_veg_garden": "",
+  "snooze_duration": "",
+  "quant_add_title": "",
+  "celebration": "",
+  "island_p_well": "",
+  "habit_time": "",
+  "end_vacation": "",
+  "github_star_sub": "",
+  "notes": "",
+  "emoji_own": "",
+  "todo_empty_title": "",
+  "island_p_villa": "",
+  "language_sub": "",
+  "notif_greeting": "",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_g_mirador": "",
+  "island_p_tower_chapel": "",
+  "vacation_all": "",
+  "dev_handle": "",
+  "focus_no_sound": "",
+  "island_p_terracotta_pot": "",
+  "island_how_perfect": "",
+  "island_beta": "",
+  "times_completed": "",
+  "island_rename": "",
+  "island_p_main_chapel": "",
+  "app_style": "",
+  "island_p_stone_pile": "",
+  "start_view": "",
+  "made_by": "",
+  "priority_none": "",
+  "focus_pick_habit": "",
+  "widget_cfg_hue": "",
+  "last_90_days": "",
+  "island_p_bench": "",
+  "todo_hint": "",
+  "unit_min_short": "",
+  "a11y_next_week": "",
+  "widget_cfg_style": "",
+  "day_timeline": "",
+  "island_reset_sub": "",
+  "last_check": "",
+  "celebration_confetti": "",
+  "notif_action_snooze": "",
+  "heatmap_rolling_sub": "",
+  "paused": "",
+  "widget_demo_water": "",
+  "app_background_sub": "",
+  "select_all": "",
+  "step_hint": "",
+  "island_reset_go": "",
+  "snooze_custom": "",
+  "note_hint": "",
+  "focus_style_digital": "",
+  "island_how_focus": "",
+  "focus_stop_body": "",
+  "widget_todos_empty": "",
+  "pane_hint": "",
+  "tomorrow": "",
+  "focus_round": "",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_best_streak": "",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_stone_basin": "",
+  "unscheduled_confirm": "",
+  "notif_action_add": "",
+  "minutes_short": "",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_dot_color": "",
+  "widget_cfg_style_card": "",
+  "priority_low": "",
+  "check_marks": "",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_target_reached": "",
+  "note_kind_completed": "",
+  "focus_break": "",
+  "island_need": "",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_choose_image": "",
+  "see_more": "",
+  "focus_style": "",
+  "accent_color_sub": "",
+  "support_sub": "",
+  "island_coins": "",
+  "unscheduled_title": "",
+  "quant_preset_time": "",
+  "sort_completed_last_sub": "",
+  "week_start_sub": "",
+  "note_type": "",
+  "start_view_last": "",
+  "check_history": "",
+  "focus_scene_custom": "",
+  "focus": "",
+  "todo_new": "",
+  "island_p_windmill": "",
+  "island_g_puerto": "",
+  "island_t_white": "",
+  "island_p_hay_bale": "",
+  "focus_only_clear_title": "",
+  "todo_priority": "",
+  "widget_demo_run": "",
+  "widget_cfg_style_classic": "",
+  "a11y_mark_done": "",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "note_kind_note": "",
+  "island_done": "",
+  "focus_sessions_deleted": "",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_cfg_all_habits": "",
+  "island_p_agave": "",
+  "island_p_mossy_stone": "",
+  "island_how_streak": "",
+  "focus_pomodoro_sub": "",
+  "focus_duration": "",
+  "island_goal": "",
+  "advanced_options": "",
+  "reorder": "",
+  "island_p_house": "",
+  "widget_cfg_image": "",
+  "plan_day_sub": "",
+  "unit_hour_short": "",
+  "todo_someday": "",
+  "focus_images_limit": "",
+  "day_timeline_anytime": "",
+  "edit_note": "",
+  "notes_hint": "",
+  "island_p_crate": "",
+  "focus_total": "",
+  "widget_cfg_opacity": "",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "share_size_large": "",
+  "todo_search": "",
+  "island_t_coral": "",
+  "period_this_month": "",
+  "share_size_small": "",
+  "yesterday": "",
+  "focus_resume": "",
+  "app_lock_delay_sub": "",
+  "widget_cfg_todos_hint": "",
+  "focus_only_start": "",
+  "selected_count": "",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "see_less": "",
+  "check_no_time": "",
+  "icons_tab": "",
+  "island_p_flat_stone": "",
+  "focus_defaults": "",
+  "github_star_row": "",
+  "priority_medium": "",
+  "prefs_features": "",
+  "reorder_hint": "",
+  "period_this_year": "",
+  "edit_name": "",
+  "todo_left": "",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "island_t_teal": "",
+  "unscheduled_body": "",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_not_done": "",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_olive": "",
+  "checklist": "",
+  "style_express": "",
+  "focus_log_saved": "",
+  "island_zoom_hint": "",
+  "island_t_deep": "",
+  "island_p_large_rock": "",
+  "focus_end": "",
+  "island_p_terrace_house": "",
+  "focus_pick_audio": "",
+  "island_p_wood_pile": "",
+  "notif_action_done": "",
+  "focus_history_empty_sub": "",
+  "widget_cfg_todos_all": "",
+  "widget_no_data": "",
+  "todo_upcoming": "",
+  "heatmap_path_sub": "",
+  "focus_log_date": "",
+  "share_save_failed": "",
+  "island_default_name": "",
+  "island_how_check": "",
+  "icon_accent": "",
+  "focus_done_title": "",
+  "island_p_banner": "",
+  "a11y_pick_color": "",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "widget_cfg_title": "",
+  "notes_count": "",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "card_activity_sub": "",
+  "period_last_month": "",
+  "focus_style_flip": "",
+  "legend_note_added": "",
+  "today_only_sub": "",
+  "focus_period_sessions": "",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "style_minimal": "",
+  "vacation_day_on": "",
+  "prefs_general": "",
+  "widget_cfg_follow_system": "",
+  "day_timeline_empty": "",
+  "island_p_flower_pot": "",
+  "check_history_sub": "",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_lantern_post": "",
+  "focus_notif_body": "",
+  "widget_open_to_sync": "",
+  "view_switcher_needs": "",
+  "todo_clear_completed": "",
+  "focus_track_limit": "",
+  "check_style": "",
+  "style_minimal_desc": "",
+  "focus_flowtime_hint": "",
+  "island": "",
+  "focus_keep_awake": "",
+  "data_sub": "",
+  "island_g_molino": "",
+  "note_time_optional": "",
+  "focus_notif_channel": "",
+  "widget_cfg_custom_color": "",
+  "focus_pause": "",
+  "focus_track_rain": "",
+  "unit_hours": "",
+  "island_g_cala": "",
+  "todays_checklist": "",
+  "island_g_huerta": "",
+  "island_g_faro": "",
+  "todo_clear_completed_body": "",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_tasks": "",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "island_p_pottery_jar": "",
+  "notes_enable_sub": "",
+  "island_p_pebbles": "",
+  "celebration_none": "",
+  "focus_start": "",
+  "colors_tab": "",
+  "focus_stop_title": "",
+  "vacation_day_off": "",
+  "island_g_vega": "",
+  "focus_loop": "",
+  "focus_daily_goal": "",
+  "focus_stats": "",
+  "island_p_two_story": "",
+  "island_shop": "",
+  "share": "",
+  "island_p_rocks": "",
+  "focus_log": "",
+  "island_p_pergola_house": "",
+  "island_p_cypress": "",
+  "widget_cfg_reset": "",
+  "period_last_year": "",
+  "widget_cfg_thickness": "",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "island_g_caleta": "",
+  "custom": "",
+  "view_notes": "",
+  "collapse_cards": "",
+  "focus_track_brown": "",
+  "focus_only_hint": "",
+  "view_switcher_sub": "",
+  "todos": "",
+  "focus_end_short": "",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "island_how_note": "",
+  "widget_cfg_add": "",
+  "emojis_tab": "",
+  "focus_only": "",
+  "change_photo": "",
+  "appearance_sub": "",
+  "period_all_time": "",
+  "priority_high": "",
+  "widget_cfg_show_activity": "",
+  "vacation_on_desc": "",
+  "focus_delete_sessions": "",
+  "rest_days_desc": "",
+  "day_timeline_free": "",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "celebration_fireworks": "",
+  "habit_time_none": "",
+  "period_week_of": "",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_save": "",
+  "start_vacation": "",
+  "done": "",
+  "start_view_sub": "",
+  "perfect_streak": "",
+  "motiv_almost": "Melkein valmista! Vielä vähän lisää",
+  "share_friends_sub": "Jaa sovellus",
+  "currency_hint": "Symboli tai koodi",
+  "about_app": "Tietoja sovelluksesta",
+  "description_hint": "Vaihtoehtoinen muistiinpano",
+  "money_saved": "Rahaa säästetty",
+  "times_per_month": "{n} kertaa kuukaudessa",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Kuvat",
+  "app_lock_delay_instant": "Välittömästi",
+  "app_background": "Tausta",
+  "onb2_body": "Päivittäiset, viikottaiset tai kuukausittaiset tavoitteet älykkäillä muistutuksilla, ettei mikään niistä karkaa.",
+  "month": "Kuukausi",
+  "quant_preset_reading": "Lukeminen",
+  "auto_backup_run_now": "Luo varmuuskopio nyt",
+  "your_habits": "Tapasi",
+  "about_subtitle": "Niille päiville, kun päätät panostaa itseesi.",
+  "close": "Sulje",
+  "current": "Nykyinen",
+  "wipe_data_sub": "Tavat, muistiinpanot, keskittymissessiot ja asetukset",
+  "streak_off": "💪 Tänään voit aloittaa uuden putken",
+  "save": "Tallenna",
+  "completion_rate_short": "Yhtenäisyys",
+  "my_heatmap": "Lämpökarttani",
+  "new_category": "Uusi luokka",
+  "onb1_body": "Kirjaa tapa yhdellä napautuksella ja katso, kuinka vauhtisi kasvaa päivä päivältä.",
+  "message_copied": "Viesti kopioitu",
+  "kind_negative_hint": "Jokainen päivä lasketaan oletuksena suoritetuksi – putkesi kasvaa itsestään. Napauta ruutua vain, jos lipsut tavoitteesta; se päivä muuttuu punaiseksi ja voit kumota sen.",
+  "monthly": "Kuukausittain",
+  "view_source": "Katso lähdekoodi GitHubissa",
+  "clean_days": "Puhtaita päiviä",
+  "add_image": "Lisää kuva",
+  "consistency_trend": "Johdomukaisuuden trendi",
+  "cost_per_day": "Kustannukset päivässä",
+  "archived_empty_sub": "Tavat, jotka arkistoit, siirtyvät tänne, säilyttäen kaiken historiansa.",
+  "freq_per_month_short": "{n}×/kuukausi",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "days_active": "Päiviä aktiivisena",
+  "quotes_edit": "Muokkaa sitaattia",
+  "wipe_data_sure": "Poistetaanko todella kaikki?",
+  "day_start_hour": "{hour}:00",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_app": "Sovelluksesta",
+  "about_inline": "Streak on avoimen lähdekoodin sovellus tapojesi seurantaan. Ei käyttäjiä, ei rajoituksia, ei maksuja. Kaikki pysyy puhelimellasi.\n\nKuka vaan voi nähdä koodin, kehittää sitä, tai käyttää sitä vapaasti.",
+  "ranking": "Sijoitukset",
+  "count_months": "{count, plural, =1{1 kuukausi} other{{count} kuukautta}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clear_progress": "Tyhjennä edistyminen",
+  "currency": "Rahayksikkö",
+  "archive_habit_body": "Siirretäänkö \"{name}\" arkistoon? Sen historia säilytetään ja voit palauttaa sen asetuksista.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "every_day": "Joka päivä",
+  "clear_progress_done": "Edistyminen tyhjennetty",
+  "weekends": "Viikonloput",
+  "per_week": "Viikossa",
+  "get_started": "Aloita",
+  "bg_solid": "Kiinteä",
+  "good_evening": "Hyvää iltaa",
+  "quote_11": "Rutiinit tuovat vapautta.",
+  "edit_habit": "Muokkaa tapaa",
+  "onb2_title": "Pysy oikealla tiellä",
+  "good_afternoon": "Hyvää iltapäivää",
+  "total_logs": "Kirjauksia yhteensä",
+  "add_reminder": "Lisää muistutus",
+  "quotes_empty_sub": "Kirjoita omasi ja ne näkyvät \"Tänään\" sivulla.",
+  "backup_saved": "Varmuuskopio tallennettu",
+  "widget_opacity": "Peittävyys",
+  "last_30_days": "Viimeiset 30 päivää",
+  "bg_oled": "OLED",
+  "stats_empty": "Lisää tapoja nähdäksesi tilastoja",
+  "when_best": "Milloin olet johdonmukaisin?",
+  "refresh_now": "Päivitä",
+  "next": "Seuraava",
+  "widget_preview": "Esikatselu",
+  "completion_time": "Suoritusaika",
+  "category_fitness": "Kunto",
+  "import_question_body": "Korvataanko kaikki nykyiset tavat varmuuskopiolla vai yhdistetäänkö ne?",
+  "archived_empty": "Ei arkistoituja tapoja",
+  "streak_unit_month": "{count}kk",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "active_habits": "Aktiiviset tavat",
+  "new_reminder": "Uusi muistutus",
+  "quant_daily_goal": "Päivittäinen tavoite",
+  "import_merge": "Yhdistä",
+  "quote_2": "Johdonmukaisuus päihittää intensiteetin.",
+  "relapses": "Retkahdukset",
+  "day_start_midnight": "Keskiyö",
+  "total": "Yhteensä",
+  "best": "Paras",
+  "all": "Kaikki",
+  "icon": "Kuvake",
+  "import_backup": "Tuo varmuuskopio",
+  "clear_progress_warning": "Tämä poistaa kaikki kirjatut päivät, muistiinpanot ja keskittymissessiot, mutta säilyttää tapasi, niiden aikataulut ja asetuksesi. Tätä ei voi kumota, jollei sinulla ole varmuuskopiota jälkikäteen tuotavaksi.",
+  "book_cover": "Kirjan kansi",
+  "days": "Päivää",
+  "widget_background": "Taustan väri",
+  "quotes_both": "Molemmat",
+  "journey_empty": "Ei vielä kuvia",
+  "share_stats_short": "Tilastot",
+  "quote_1": "Pieniä askelia, joka päivä.",
+  "quote_6": "Tehty on parempi kuin täydellinen.",
+  "activity": "Toiminta",
+  "freq_per_week_short": "{n}×/viikko",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "motiv_perfect": "Täydellinen päivä! 🔥",
+  "add_habit": "Lisää tapa",
+  "app_lock_sub": "Kysy sormenjälkeä tai kasvojentunnistusta Streakin avaamiseksi",
+  "edit": "Muokkaa",
+  "not_enough_data": "Ei vielä tarpeeksi tietoja",
+  "auto_backup_daily": "Joka päivä",
+  "restore": "Palauta",
+  "refresh_brought": "Tapasi ovat ajan tasalla",
+  "auto_backup_no_permission": "Tallennustilan käyttö evätty",
+  "quant_unit_hint": "Yksikkö (esim. ml, sivua, toistoa)",
+  "refresh_now_sub": "Tuo mitä muut laitteesi jättivät kansioon",
+  "just_tracking_option_sub": "Lisää tämän vaihtoehdon kun luot tavan",
+  "quant_preset_water": "Vesi",
+  "theme": "Teema",
+  "year": "Vuosi",
+  "import_backup_sub": "Palauta tavat tiedostosta",
+  "share_photo": "Kuva",
+  "quant_average": "Keskiarvo päivässä",
+  "about_app_sub": "Versio, tekijät ja lähdekoodi",
+  "appearance": "Ulkonäkö",
+  "empty_title": "Aloita ensimmäinen putkesi",
+  "strength": "Voima",
+  "description": "Kuvaus",
+  "count_days": "{count, plural, =1{1 päivä} other{{count} päivää}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_days": "Päivät",
+  "wipe_data_confirm": "Poista kaikki",
+  "buy_coffee": "Osta minulle kahvi",
+  "share_blur": "Sumennus",
+  "name": "Nimi",
+  "edit_category": "Muokkaa luokkaa",
+  "save_reminder": "Tallenna muistutus",
+  "export_backup_sub": "Tallenna kaikki tavat tiedostoon",
+  "preferences": "Valinnat",
+  "widget_border": "Reunus",
+  "light": "Vaalea",
+  "kind_negative": "Vältettävä",
+  "habit_kind": "Tavan tyyppi",
+  "import_failed": "Tiedostoa ei voitu tuoda",
+  "category_health": "Terveys",
+  "category_mindfulness": "Mindfulness",
+  "permission_required": "Lupa ilmoitusten käyttöön vaaditaan",
+  "clear_progress_sub": "Historia, muistiinpanot ja keskittymissessiot",
+  "customize_widgets_sub": "Tausta, peittävyys, reunus",
+  "select_one_day": "Valitse vähintään yksi päivä",
+  "add_category": "Uusi",
+  "delete_forever_body": "Poistetaanko \"{name}\" ja sen koko historia? Tätä ei voi kumota.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category_learning": "Oppiminen",
+  "count_weeks": "{count, plural, =1{1 viikko} other{{count} viikkoa}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "delete_habit": "Poista tapa",
+  "delete": "Poista",
+  "times_per_week": "{n} kertaa viikossa",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "support": "Tue",
+  "weekdays": "Viikonpäivät",
+  "data": "Data",
+  "best_streak": "Paras putki",
+  "log_relapse_body": "Tämä rikkoo tänäisen puhtaan putken tavalle \"{name}\". Voit kumota sen napauttamalla uudelleen.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quote_5": "Edistys, ei täydellisyys.",
+  "wipe_data": "Poista kaikki data",
+  "auto_backup_weekly": "Joka viikko",
+  "onb1_title": "Rakenna aitoja putkia",
+  "frequency": "Toistuvuus",
+  "import_replace": "Korvaa kaikki",
+  "no_habits_yet": "Ei vielä tapoja",
+  "wipe_data_done": "Kaikki data poistettu",
+  "reminder_message_hint": "Jätä tyhjäksi motivoivaa sitaattia varten",
+  "delete_habit_body": "Poistetaanko \"{name}\"? Tätä ei voi kumota.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_reminder": "Muokkaa muistutusta",
+  "completions_per_month": "Suorituksia kuukaudessa",
+  "quote_4": "Yksi päivä kerrallaan.",
+  "customize_widgets": "Muokkaa widgettejä",
+  "new_label": "Uusi",
+  "day_start": "Päivä alkaa",
+  "cover_image": "Kansikuva",
+  "empty_body": "Luo tapa ja napauta päivää sen kirjaamiseksi. Pienin askelin, joka päivä.",
+  "current_streak": "Nykyinen putki",
+  "new_habit": "Uusi tapa",
+  "note_take_photo": "Kamera",
+  "skip": "Ohita",
+  "buy_coffee_sub": "Auta pitämään sovellus ilmaisena",
+  "delete_forever": "Poista lopullisesti",
+  "bg_dots": "Pisteet",
+  "auto_backup_folder_failed": "Tuohon kansioon ei voida kirjoittaa",
+  "app_lock_unlock": "Avaa lukitus",
+  "quote_7": "Pidä putki yllä.",
+  "auto_backup_folder_default": "Sovelluksen kansio",
+  "perfect_days": "Täydellisiä päiviä",
+  "kind_quantitative": "Määrällinen",
+  "quotes_add": "Lisää sitaatti",
+  "streak_evolution": "Putken kehitys",
+  "quotes_off": "Pois",
+  "journey": "Matka",
+  "week_starts_on": "Viikko alkaa",
+  "daily": "Päivittäin",
+  "bg_gradient": "Liukuväri",
+  "rate_github_sub": "Tue projektia antamalla tähti",
+  "share_friends_message": "Pidän tavoistani kiinni Streakilla – pieni, ilmainen ja paikallinen tapojen seuranta ilman käyttäjätunnuksia ja mainoksia. Tutustu sinäkin: https://inlitx.github.io/streak/",
+  "no_data_yet": "Ei vielä tietoja",
+  "about": "Tietoja",
+  "undo": "Kumoa",
+  "quotes_empty": "Ei omia sitaatteja",
+  "app_tagline": "Tapaseuranta",
+  "journey_sub": "{count, plural, =1{1 kuva} other{{count} kuvaa}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "last_7_days": "Viimeiset 7 päivää",
+  "about_footer": "Tehty ☕ ja paljolla vapaa-ajalla.",
+  "habits_imported": "Tavat tuotu",
+  "mon": "Ma",
+  "quant_unit_ml": "ml",
+  "wipe_data_warning": "Tämä poistaa kaikki tavat, muistiinpanot, keskittymissessiot ja asetukset tällä laitteella. Tätä ei voi kumota, jollei sinulla ole varmuuskopiota jälkikäteen tuotavaksi.",
+  "auto_backup_where": "Kun avaat sovelluksen, Streak luo varmuuskopion sekä luettavan kopion tavoistasi, minkä voit avata millä vain tekstieditorilla. Varmuuskopioista 5 uusinta säilytetään.",
+  "streaks": "Putket",
+  "quant_edit_title": "Tänäinen määrä",
+  "reminder_message": "Viesti (vaihtoehtoinen)",
+  "archived_habits_sub": "Palauta tapoja tai poista ne lopullisesti",
+  "streak_on": "🔥 {n} päivää peräkkäin. Älä riko sitä!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "export_cancelled": "Vienti peruutettu",
+  "quotes_which": "Valitse sitaatit",
+  "stats": "Tilastot",
+  "motiv_progress": "Olet oikealla tiellä, jatka samaan malliin",
+  "kind_locked_hint": "Tavan tyyppiä ei voi muuttaa tavan luomisen jälkeen.",
+  "repeat_hours": "Toista päivän aikana",
+  "rate_github": "Anna tähti GitHubissa",
+  "dark": "Tumma",
+  "import_from_app": "Tuo toisesta sovelluksesta",
+  "name_hint": "esim. Aamulenkki",
+  "quote_12": "Tällä päivällä on väliä.",
+  "cancel": "Peruuta",
+  "quant_logged_days": "Päiviä kirjattu",
+  "import_from_app_done": "Tuotu {habits} tapaa ({days} päivää) kohteesta {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "app_lock_title": "Streak on lukittu",
+  "archived_habits": "Arkistoidut tavat",
+  "restored": "Tapa palautettu",
+  "app_lock_delay_seconds": "{value} sekuntia",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "quote_3": "Pidä itsestäsi huolta.",
+  "just_tracking_sub": "Pitää oman taulukon ja numerot, mutta pysyy ulkona Edistymisestä ja päivän määrästä",
+  "good_morning": "Hyvää huomenta",
+  "export_backup": "Vie varmuuskopio",
+  "quant_tap_amount": "Määrä napautusta kohden",
+  "log_relapse_confirm": "Kyllä, kirjaa se",
+  "uncategorized": "Luokittelematon",
+  "habit_archived": "Tapa arkistoitu",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "category_finance": "Talous",
+  "onb3_title": "Näe edistyksesi",
+  "statistics": "Tilastot",
+  "share_friends": "Jaa ystävälle",
+  "currency_custom": "Mukautettu",
+  "no_days": "Ei päiviä",
+  "auto_backup_off": "Pois",
+  "quant_best_day": "Paras päivä",
+  "journey_empty_sub": "Lisää muistiinpanoon kuva ja se näkyy täällä.",
+  "language": "Kieli",
+  "sat": "La",
+  "auto_backup_folder": "Kansio",
+  "streak_unit_week": "{count}vk",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "quant_stats_empty": "Kirjaa määrä ja se kertyy tänne, myös päivinä, jolloin et saavuta tavoitetta.",
+  "quant_goal_days": "Tavoite saavutettu",
+  "weekly": "Viikoittain",
+  "auto_backup_sub": "Pois",
+  "best_month": "Paras kuukausi",
+  "all_done_today": "Kaikki tehty tältä päivältä!",
+  "overview": "Yleiskatsaus",
+  "consistency": "Johdonmukaisuus",
+  "quotes_my_list": "Minun sitaattini",
+  "quant_per_day": "Määrä päivässä",
+  "kind_positive": "Tavallinen",
+  "repeat_weekly": "Tiettyinä päivinä",
+  "note_pick_photo": "Galleria",
+  "app_lock_failed": "Ei voitu varmistaa, että se olit sinä",
+  "week": "Viikko",
+  "onb3_body": "Rikkaat tilastot ja vuosittainen taulukko näyttävät, kuinka pitkälle olet edennyt.",
+  "auto_backup": "Automaattinen varmuuskopiointi",
+  "more_icons": "Lisää kuvakkeita",
+  "day_start_sub": "Myöhäiset illat lasketaan vielä edelliseksi päiväksi",
+  "delete_category": "Poista luokka",
+  "widgets": "Widgetit",
+  "app_lock_unavailable": "Laitteella ei ole asetettua biometriikkaa",
+  "auto_backup_folder_set": "Kansio tallennettu",
+  "archive_habit": "Arkistoi tapa",
+  "settings": "Asetukset",
+  "quote_10": "Ota aamu haltuun.",
+  "clear_progress_confirm": "Tyhjennä edistyminen",
+  "quotes": "Sitaatit",
+  "go": "Mene",
+  "quant_preset_generic": "Mukautettu",
+  "quotes_hint": "Kirjoita sitaattisi",
+  "x_of_y_completed": "{done}/{total} suoritettu",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "wipe_data_sure_body": "Viimeinen varoitus. Ilman varmuuskopiota tämä data on lopullisesti mennyttä.",
+  "completion_rate": "Suoritusprosentti",
+  "archive": "Arkistoi",
+  "completions": "Suoritukset",
+  "app_lock": "Sovelluksen lukitus",
+  "by_habit": "Tavan mukaan",
+  "quote_9": "Luota prosessiin.",
+  "category": "Luokka",
+  "deleted_forever": "Tapa poistettu",
+  "category_productivity": "Tuottavuus",
+  "every_n_hours": "{n}t välein",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "system": "Järjestelmä",
+  "less_icons": "Vähemmän kuvakkeita",
+  "my_heatmap_sub": "Avaa vuotuinen aktiivisuustaulukko",
+  "quant_unit_pages": "sivua",
+  "app_lock_delay": "Lukitse uudelleen",
+  "copy_message": "Kopioi viesti",
+  "just_tracking": "Vain seuranta",
+  "sun": "Su",
+  "motiv_start": "Aloita päivä vahvasti 💪",
+  "about_body": "Streak syntyi yksinkertaisesta ideasta: miksi maksaa omien tapojen seurannasta?\n\nTämä sovellus on myös täysin avointa lähdekoodia. Kuka vain voi nähdä miten se toimii, ehdottaa muutoksia, tai tehdä oman versionsa. Ei mustia laatikoita. Ei yllätyksiä.\n\nYksityisyytesi on totaalista – kaikki pysyy puhelimellasi. Ei käyttäjiä, ei palvelimia, ei mainoksia. Yksikään tavu ei poistu laitteeltasi.\n\nEi rajoituksia. Luo tapoja sydämesi kyllyydestä. Ei tilauksia, ei \"pro-versiota\", ei pop-up-ilmoituksia kysymässä maksuja. Ikinä.\n\nJos sovellus antaa sinulle jotain, voit tukea sitä tähdellä GitHubissa tai ostamalla minulle kahvin. Mutta se on täysin vaihtoehtoista – sovellus on sinun joka tapauksessa.",
+  "done_today": "Tänään suoritettu",
+  "time": "Aika",
+  "quote_8": "Pienet tavat, suuri muutos.",
+  "every_n_days": "{n} päivän välein",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "log_relapse_title": "Kirjataanko retkahdus?",
+  "about_title": "Luotu sinulle. Ilmaiseksi, ikuisesti.",
+  "repeat_interval": "N päivän välein",
+  "quotes_mine": "Omani",
+  "color": "Väri",
+  "cost_note": "Vaihtoehtoinen. Jätä tyhjäksi, jos tällä tavalla ei ole kustannuksia.",
+  "sched_interval": "Aikaväli",
+  "today": "Tänään",
+  "just_tracking_option": "Tarjoa vain seuranta",
+  "profile": "Profiili",
+  "reminders": "Muistutukset",
+  "active_days": "Aktiivisia päiviä",
+  "refresh_nothing": "Kansiossa ei ole mitään uutta"
+}

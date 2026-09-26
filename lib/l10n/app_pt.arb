@@ -367,7 +367,7 @@
   "today_only": "Apenas de hoje",
   "per_week": "Por semana",
   "snooze_custom_hint": "Minutos",
-  "category_fitness": "Forma Física",
+  "category_fitness": "Bem-estar",
   "widget_done_today": "feito hoje",
   "book_cover": "Capa do livro",
   "widget_no_habits": "Sem hábitos ainda\nToque para abrir o Streak",
@@ -622,7 +622,7 @@
   },
   "focus": "Foco",
   "wipe_data_warning": "Isso apaga todos os hábitos, notas, sessões de foco e configurações deste telefone. A ação não pode ser desfeita, a menos que você tenha um arquivo de backup para importar posteriormente.",
-  "auto_backup_where": "Um backup completo é escrito quando você abre o app. Os últimos 5 são mantidos.",
+  "auto_backup_where": "Ao abrir o aplicativo, o Streak cria um backup e uma cópia legível dos seus hábitos, que você pode abrir em qualquer editor. Os últimos 5 backups são mantidos.",
   "archived_habits_sub": "Recuperar ou deletar para sempre",
   "note_kind_note": "Nota",
   "focus_pomodoro_sub": "Sequência focada com pausas curtas",
@@ -924,7 +924,7 @@
   "day_timeline_empty": "Nada planejado para este dia",
   "day_timeline_empty_sub": "Dê um horário específico ao seu hábito e ele aparecerá aqui.",
   "clear": "Limpar",
-  "start_view": "A semana começa em",
+  "start_view": "Tela de início abre em",
   "start_view_last": "Último uso",
   "focus_stats": "Estatísticas de foco",
   "focus_average": "Sessão média",
@@ -1029,5 +1029,292 @@
   "refresh_nothing": "Nada de novo na pasta",
   "just_tracking_option": "Somente rastreamento",
   "just_tracking_option_sub": "Adiciona a opção ao criar um hábito",
-  "just_tracking": "Somente rastreamento"
+  "just_tracking": "Somente rastreamento",
+  "style_express_desc": "Formas arredondadas, movimento estático, e tipografia larga.",
+  "report_issue_sub": "Me informe sobre um bug ou peça uma funcionalidade",
+  "focus_daily_goal_sub": "Minutos de focos que você precisa para cada dia",
+  "app_icon_sub": "O ícone na sua homescreen",
+  "quotes_sub": "Quais frases aparecem em Hoje",
+  "period_last_week": "Semana passada",
+  "readable_copy": "Copia legível",
+  "notes_empty_all": "Sem notas ainda",
+  "average_short": "Qtd",
+  "celebration_sub": "O que você vê quando marca um hábito",
+  "readable_copy_sub": "Também escreve seus hábitos como arquivos markdown",
+  "period_this_week": "Essa semana",
+  "notes_all": "Todas as notas",
+  "check_style_sub": "Caixas de seleção quadradas ou circulares",
+  "theme_sub": "Claro, escuro ou do sistema",
+  "quant_add_title": "Adicionar quantidade",
+  "github_star_sub": "Dê ao projeto uma estrela para que mais pessoas o encontre",
+  "language_sub": "O idioma de todo o aplicativo",
+  "app_background_sub": "O que você ve atrás dos cartões",
+  "pane_hint": "Abre alguma coisa da lista para ver aqui",
+  "quotes_off": "Desligado",
+  "accent_color_sub": "Usado nos botões e destaques",
+  "quant_preset_time": "Tempo",
+  "sort_completed_last_sub": "Envia o que voce já finalizou para o final da lista",
+  "week_start_sub": "A primeira coluna de toda a seção",
+  "period_this_month": "Este mês",
+  "app_lock_delay_sub": "Quanto tempo depois de você sair ele pergunta novamente?",
+  "just_tracking_sub": "Mantenha sua própria grade e números, mas deixe fora do Progresso e da contagem diária",
+  "period_this_year": "Este ano",
+  "style_express": "Expresso",
+  "card_activity_sub": "Mostra o último dia no cartao, pronto para marcar",
+  "period_last_month": "Mês passado",
+  "today_only_sub": "Esconda os hábitos que nao estão agendados para hoje",
+  "focus_period_sessions": "{conta, plural, =0{sem seção} =1{1 seção} other{{count} seções}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "view_switcher_needs": "Ligue as atividades nos cartões para usar",
+  "celebration_none": "Nenhuma",
+  "period_last_year": "Ano passado",
+  "period_week_of": "Semana de {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "start_view_sub": "Visualização padrão em semana, mês ou ano",
+  "island_p_bougainvillea": "",
+  "gamification_beta": "",
+  "island_t_lilac": "",
+  "island_p_crop_patch": "",
+  "island_how": "",
+  "island_p_garden_bed": "",
+  "island_p_signpost": "",
+  "island_p_dry_grass": "",
+  "island_reset": "",
+  "island_placed": "",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_t_silver": "",
+  "island_p_blue_railing": "",
+  "heatmap_rolling": "",
+  "island_p_boulder": "",
+  "island_p_small_bridge": "",
+  "island_only_affordable": "",
+  "island_g_terrazas": "",
+  "island_g_pueblo": "",
+  "island_how_todo": "",
+  "island_g_ermita": "",
+  "island_p_storage_box": "",
+  "island_g_cabo": "",
+  "island_p_water_bucket": "",
+  "streak_unit_month": "{count}mês",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_altar": "",
+  "island_t_autumn": "",
+  "gamification": "",
+  "island_built": "",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_turn": "",
+  "island_p_cube_house": "",
+  "check_never": "",
+  "island_tap_hint": "",
+  "island_empty": "",
+  "island_p_hanging_lantern": "",
+  "island_g_astillero": "",
+  "island_p_stone_lantern": "",
+  "island_nothing_here": "",
+  "island_p_archway": "",
+  "island_t_clay": "",
+  "island_open": "",
+  "island_p_veg_garden": "",
+  "island_p_well": "",
+  "island_p_villa": "",
+  "island_g_mirador": "",
+  "island_p_tower_chapel": "",
+  "island_p_terracotta_pot": "",
+  "island_how_perfect": "",
+  "island_beta": "",
+  "times_completed": "",
+  "island_rename": "",
+  "island_p_main_chapel": "",
+  "island_p_stone_pile": "",
+  "island_p_bench": "",
+  "island_reset_sub": "",
+  "last_check": "",
+  "heatmap_rolling_sub": "",
+  "island_reset_go": "",
+  "island_how_focus": "",
+  "island_p_stone_basin": "",
+  "check_marks": "",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_coins": "",
+  "check_history": "",
+  "island_p_windmill": "",
+  "island_g_puerto": "",
+  "island_t_white": "",
+  "island_p_hay_bale": "",
+  "island_p_agave": "",
+  "island_p_mossy_stone": "",
+  "island_how_streak": "",
+  "island_goal": "",
+  "island_p_house": "",
+  "island_p_crate": "",
+  "island_t_coral": "",
+  "check_no_time": "",
+  "island_p_flat_stone": "",
+  "island_t_teal": "",
+  "island_p_olive": "",
+  "island_zoom_hint": "",
+  "island_t_deep": "",
+  "island_p_large_rock": "",
+  "island_p_terrace_house": "",
+  "island_p_wood_pile": "",
+  "island_default_name": "",
+  "island_how_check": "",
+  "island_p_banner": "",
+  "island_p_flower_pot": "",
+  "check_history_sub": "",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_lantern_post": "",
+  "island_g_molino": "",
+  "island_g_cala": "",
+  "island_g_huerta": "",
+  "island_g_faro": "",
+  "island_p_pottery_jar": "",
+  "island_p_pebbles": "",
+  "island_g_vega": "",
+  "island_p_two_story": "",
+  "island_p_rocks": "",
+  "island_p_pergola_house": "",
+  "island_p_cypress": "",
+  "island_g_caleta": "",
+  "island_how_note": "",
+  "island_enable_sub": "Transforme seus hábitos em um arquipélago Mediterrâneo que você constrói pouco a pouco",
+  "island_build": "Construir",
+  "island_complete": "O arquipélago está pronto",
+  "emoji_own": "Digite ou cole qualquer emoji",
+  "island_done": "Construído",
+  "streak_unit_week": "{count}w",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island": "Ilha",
+  "island_shop": "Loja",
+  "period_all_time": "Todo o período",
+  "onb_kicker": "Boas vindas",
+  "onb_free_title": "Gratuito para sempre",
+  "onb_free_body": "Sem ads, s",
+  "onb_blurb": "Pequenos check-ins diários que transformam em hábitos permanentes.",
+  "onb_private_title": "Privado e off-line",
+  "onb_private_body": "Tudo fica no seu celular. Sem necessidade de contas.",
+  "onb_yours_title": "Seu dado é seu",
+  "onb_yours_body": "Faça bakup dos dados ou leve-os quando você quiser.",
+  "onb_step": "Passo {step} de {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Dias",
+  "sched_unit_weeks": "Semanas",
+  "every_n_weeks": "A cada {n} semanas",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "A cada {n} meses",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_months": "Meses",
+  "todo_tags": "Tags",
+  "todo_projects": "Projetos",
+  "todo_project": "Projeto",
+  "todo_project_new": "Novo projeto",
+  "todo_project_name": "Nome do projeto",
+  "todo_project_edit": "Editar projeto",
+  "todo_project_arrange": "Reorganizar",
+  "todo_project_arrange_hint": "Solte os arquivos na posição que você quiser",
+  "todo_project_pick": "Escolha um projeto",
+  "todo_project_none": "Sem projeto",
+  "todo_project_delete_body": "O projeto vai embora. As atividades ficam.",
+  "todo_tag": "Tag",
+  "todo_tag_new": "Nova tag",
+  "todo_tag_name": "Nome da tag",
+  "todo_tag_edit": "Editar tag",
+  "todo_tag_delete_body": "A tagarela vai embora. As atividades ficam.",
+  "todo_tag_none": "Sem tag",
+  "todo_tag_all": "Tudo",
+  "todo_tag_manage": "Administrar tags",
+  "todo_tag_empty_title": "Sem tags ainda",
+  "todo_tag_empty_body": "Agrupe tags por projeto, local ou qualquer coisa que preferir.",
+  "todo_tag_folders": "Pastas",
+  "todo_tag_list": "Lista",
+  "todo_tag_count": "{n} aberto",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Ícone",
+  "todo_tag_pick": "Selecione as tags"
 }
