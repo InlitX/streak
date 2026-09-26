@@ -1023,7 +1023,6 @@
   "vacation_all_sub": "开启后，任何习惯都不会算作未完成",
   "currency_hint": "符号或代码",
   "money_saved": "已省金额",
-  "clean_days": "",
   "cost_per_day": "每日花费",
   "currency": "货币",
   "quant_average": "平均每天",
@@ -1325,6 +1324,5 @@
   "period_all_time": "全部时间",
   "just_tracking_option": "仅记录",
   "start_view_sub": "「今天」的默认显示方式",
-  "refresh_nothing": "文件夹中没有新内容",
-  "quant_add_title": ""
+  "refresh_nothing": "文件夹中没有新内容"
 }

@@ -1063,7 +1063,7 @@
   "card_activity_sub": "Mostra o último dia no cartao, pronto para marcar",
   "period_last_month": "Mês passado",
   "today_only_sub": "Esconda os hábitos que nao estão agendados para hoje",
-  "focus_period_sessions": "{conta, plural, =0{sem seção} =1{1 seção} other{{count} seções}}",
+  "focus_period_sessions": "{count, plural, =0{Nenhuma sessão} =1{1 sessão} other{{count} sessões}}",
   "@focus_period_sessions": {
     "placeholders": {
       "count": {
@@ -1083,36 +1083,6 @@
     }
   },
   "start_view_sub": "Visualização padrão em semana, mês ou ano",
-  "island_p_bougainvillea": "",
-  "gamification_beta": "",
-  "island_t_lilac": "",
-  "island_p_crop_patch": "",
-  "island_how": "",
-  "island_p_garden_bed": "",
-  "island_p_signpost": "",
-  "island_p_dry_grass": "",
-  "island_reset": "",
-  "island_placed": "",
-  "@island_placed": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "island_t_silver": "",
-  "island_p_blue_railing": "",
-  "heatmap_rolling": "",
-  "island_p_boulder": "",
-  "island_p_small_bridge": "",
-  "island_only_affordable": "",
-  "island_g_terrazas": "",
-  "island_g_pueblo": "",
-  "island_how_todo": "",
-  "island_g_ermita": "",
-  "island_p_storage_box": "",
-  "island_g_cabo": "",
-  "island_p_water_bucket": "",
   "streak_unit_month": "{count}mês",
   "@streak_unit_month": {
     "placeholders": {
@@ -1121,115 +1091,6 @@
       }
     }
   },
-  "island_p_altar": "",
-  "island_t_autumn": "",
-  "gamification": "",
-  "island_built": "",
-  "@island_built": {
-    "placeholders": {
-      "done": {
-        "type": "String"
-      },
-      "total": {
-        "type": "String"
-      }
-    }
-  },
-  "island_turn": "",
-  "island_p_cube_house": "",
-  "check_never": "",
-  "island_tap_hint": "",
-  "island_empty": "",
-  "island_p_hanging_lantern": "",
-  "island_g_astillero": "",
-  "island_p_stone_lantern": "",
-  "island_nothing_here": "",
-  "island_p_archway": "",
-  "island_t_clay": "",
-  "island_open": "",
-  "island_p_veg_garden": "",
-  "island_p_well": "",
-  "island_p_villa": "",
-  "island_g_mirador": "",
-  "island_p_tower_chapel": "",
-  "island_p_terracotta_pot": "",
-  "island_how_perfect": "",
-  "island_beta": "",
-  "times_completed": "",
-  "island_rename": "",
-  "island_p_main_chapel": "",
-  "island_p_stone_pile": "",
-  "island_p_bench": "",
-  "island_reset_sub": "",
-  "last_check": "",
-  "heatmap_rolling_sub": "",
-  "island_reset_go": "",
-  "island_how_focus": "",
-  "island_p_stone_basin": "",
-  "check_marks": "",
-  "@check_marks": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "island_need": "",
-  "@island_need": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "island_coins": "",
-  "check_history": "",
-  "island_p_windmill": "",
-  "island_g_puerto": "",
-  "island_t_white": "",
-  "island_p_hay_bale": "",
-  "island_p_agave": "",
-  "island_p_mossy_stone": "",
-  "island_how_streak": "",
-  "island_goal": "",
-  "island_p_house": "",
-  "island_p_crate": "",
-  "island_t_coral": "",
-  "check_no_time": "",
-  "island_p_flat_stone": "",
-  "island_t_teal": "",
-  "island_p_olive": "",
-  "island_zoom_hint": "",
-  "island_t_deep": "",
-  "island_p_large_rock": "",
-  "island_p_terrace_house": "",
-  "island_p_wood_pile": "",
-  "island_default_name": "",
-  "island_how_check": "",
-  "island_p_banner": "",
-  "island_p_flower_pot": "",
-  "check_history_sub": "",
-  "@check_history_sub": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "island_p_lantern_post": "",
-  "island_g_molino": "",
-  "island_g_cala": "",
-  "island_g_huerta": "",
-  "island_g_faro": "",
-  "island_p_pottery_jar": "",
-  "island_p_pebbles": "",
-  "island_g_vega": "",
-  "island_p_two_story": "",
-  "island_p_rocks": "",
-  "island_p_pergola_house": "",
-  "island_p_cypress": "",
-  "island_g_caleta": "",
-  "island_how_note": "",
   "island_enable_sub": "Transforme seus hábitos em um arquipélago Mediterrâneo que você constrói pouco a pouco",
   "island_build": "Construir",
   "island_complete": "O arquipélago está pronto",

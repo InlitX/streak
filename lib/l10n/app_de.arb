@@ -1305,7 +1305,7 @@
   "todo_tag_empty_body": "Gruppiere Aufgaben nach Projekten, Orten oder was auch immer du möchtest.",
   "todo_tag_folders": "Ordner",
   "todo_tag_list": "Liste",
-  "todo_tag_count": "{n] öffnen",
+  "todo_tag_count": "{n} offen",
   "@todo_tag_count": {
     "placeholders": {
       "n": {

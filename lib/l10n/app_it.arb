@@ -133,7 +133,7 @@
   "category_productivity": "Produttività",
   "category_learning": "Apprendimento",
   "category_finance": "Finanza",
-  "count_days": "{count, plural, =1{1 giorno} altri{{count} giorni}}",
+  "count_days": "{count, plural, =1{1 giorno} other{{count} giorni}}",
   "@count_days": {
     "placeholders": {
       "count": {
@@ -141,7 +141,7 @@
       }
     }
   },
-  "count_weeks": "{count, plural, =1{1 settimana} altri{{count} settimane}}",
+  "count_weeks": "{count, plural, =1{1 settimana} other{{count} settimane}}",
   "@count_weeks": {
     "placeholders": {
       "count": {
@@ -149,7 +149,7 @@
       }
     }
   },
-  "count_months": "{count, plural, =1{1 mese} altri{{count} mesi}}",
+  "count_months": "{count, plural, =1{1 mese} other{{count} mesi}}",
   "@count_months": {
     "placeholders": {
       "count": {
@@ -268,7 +268,7 @@
   "note_photos": "Foto",
   "note_take_photo": "Fotocamera",
   "note_pick_photo": "Galleria",
-  "journey_sub": "{count, plural, =1{1 foto} altre{{count} foto}}",
+  "journey_sub": "{count, plural, =1{1 foto} other{{count} foto}}",
   "@journey_sub": {
     "placeholders": {
       "count": {
