@@ -679,6 +679,14 @@ class Habit {
     );
   }
 
+  /// A copy of this habit under a new [id], optionally reordered. Used when
+  /// duplicating a habit so the copy gets its own identity.
+  Habit rebuildId(String id, {int? order}) => Habit.fromMap({
+        ...toMap(),
+        'id': id,
+        if (order != null) 'order': order,
+      });
+
   Map<String, dynamic> toMap() => {
         'id': id,
         'name': name,

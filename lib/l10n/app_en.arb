@@ -278,6 +278,15 @@
   "share_stats_short": "Stats",
   "undo": "Undo",
   "habit_archived": "Habit archived",
+  "duplicate_habit": "Duplicate habit",
+  "habit_duplicated": "{name} added",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "share_blur": "Blur",
   "delete_habit_body": "Delete \"{name}\"? This cannot be undone.",
   "@delete_habit_body": {

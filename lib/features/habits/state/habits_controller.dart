@@ -162,6 +162,49 @@ class HabitsController extends ChangeNotifier {
     HomeWidgetService.syncSoon(() => asMap);
   }
 
+  /// Copies [source] into a new habit that starts from zero: same settings,
+  /// no history and a fresh id. Returns the copy.
+  Future<Habit> duplicate(Habit source) async {
+    final copy = source
+        .copyWith(
+          name: _duplicateName(source.name),
+          completions: const {},
+          vacations: const [],
+          clearArchived: true,
+        )
+        .rebuildId(_uuid.v4(), order: habits.length);
+
+    _habits[copy.id] = copy;
+    await LocalStore.writeHabit(copy);
+    notifyListeners();
+    // The copy is already saved; a notification backend that is unavailable
+    // must not turn a successful duplication into a failure.
+    try {
+      await _notifications.scheduleFor(copy);
+    } catch (e) {
+      debugPrint('Scheduling ${copy.name} failed: $e');
+    }
+    HomeWidgetService.syncSoon(() => asMap);
+    return copy;
+  }
+
+  static final _copySuffix = RegExp(r'^(.*) \((\d+)\)$');
+
+  /// "Run" becomes "Run (2)", and the next free slot after that: "Run (3)",
+  /// "Run (4)"… so duplicating the same habit twice never collides.
+  String _duplicateName(String name) {
+    final match = _copySuffix.firstMatch(name);
+    final base = match?.group(1) ?? name;
+    var next = match == null ? 1 : int.parse(match.group(2)!);
+
+    final taken = {for (final habit in _habits.values) habit.name};
+    String candidate(int n) => '$base ($n)';
+    while (taken.contains(candidate(next + 1))) {
+      next++;
+    }
+    return candidate(next + 1);
+  }
+
   Future<void> toggle(String id, DateTime date, {bool fromFocus = false}) async {
     final habit = _habits[id];
     if (habit == null) return;
