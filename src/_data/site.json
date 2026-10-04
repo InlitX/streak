@@ -1,0 +1,15 @@
+{
+  "name": "Streak",
+  "url": "https://inlitx.github.io/streak",
+  "version": "2.2.0",
+  "repo": "https://github.com/InlitX/streak",
+  "releases": "https://github.com/InlitX/streak/releases/latest/download",
+  "kofi": "https://ko-fi.com/inlitx",
+  "weblate": "https://hosted.weblate.org/engage/streak/",
+  "giscus": {
+    "repo": "InlitX/streak",
+    "repoId": "R_kgDOS0cf4Q",
+    "category": "Blog",
+    "categoryId": "DIC_kwDOS0cf4c4DHCef"
+  }
+}

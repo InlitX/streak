@@ -1,0 +1,196 @@
+---
+layout: base.njk
+page_kind: home
+---
+{% from "t.njk" import t %}
+{% from "brands.njk" import brand %}
+<div class="glow" aria-hidden="true">
+  <div class="veil"></div>
+  <svg class="spot" viewBox="0 0 3787 2842" fill="none">
+    <g filter="url(#spotblur)">
+      <ellipse cx="1924.71" cy="273.501" rx="1924.71" ry="273.501"
+        transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+        fill="rgba(214,204,255,.55)" fill-opacity="0.21"></ellipse>
+    </g>
+    <defs>
+      <filter id="spotblur" x="0.86" y="0.84" width="3785.16" height="2840.26"
+        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="bg"></feFlood>
+        <feBlend mode="normal" in="SourceGraphic" in2="bg" result="shape"></feBlend>
+        <feGaussianBlur stdDeviation="151" result="blur"></feGaussianBlur>
+      </filter>
+    </defs>
+  </svg>
+</div>
+
+<section class="hero">
+  <div class="hero__copy">
+    <a class="ver rise" href="{{ site.repo }}/releases/latest" target="_blank" rel="noopener">
+      <b>v{{ site.version }}</b>
+      <span>Android · Windows · Linux</span>
+    </a>
+    <h1 class="rise">
+      {{ t('One tap a day.', 'Un toque al día.') }}
+      <em>{{ t('Watch the year fill in.', 'Mira cómo se llena el año.') }}</em>
+    </h1>
+    <p class="lede rise">{{ t(
+      'A habit tracker that keeps quiet. No account, no ads, and no internet permission at all. Your habits stay on your device.',
+      'Un registro de hábitos que no da la lata. Sin cuenta, sin anuncios y sin permiso de internet. Tus hábitos se quedan en tu dispositivo.'
+    ) }}</p>
+    <div class="cta rise">
+      <a class="btn btn--go" href="#download">{{ t('Download', 'Descargar') }}</a>
+      <a class="btn" href="{{ site.repo }}" target="_blank" rel="noopener">{{ t('Source code', 'Código fuente') }}</a>
+    </div>
+    <div class="stats rise">
+      <a href="{{ site.repo }}/releases" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <b data-count="downloads">—</b> {{ t('downloads', 'descargas') }}
+      </a>
+      <a href="{{ site.repo }}/stargazers" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12 2.4l2.95 5.98 6.6.96-4.78 4.65 1.13 6.57L12 17.46l-5.9 3.1 1.13-6.57L2.45 9.34l6.6-.96L12 2.4Z"/></svg>
+        <b data-count="stars">—</b> {{ t('stars', 'estrellas') }}
+      </a>
+    </div>
+  </div>
+
+  <div class="hero__art rise">
+    <div class="heat" id="heat" aria-hidden="true"></div>
+    <img class="ph ph--side" src="/assets/phones/stats.webp" width="640" height="1346" alt="Statistics with a year of activity" />
+    <img class="ph ph--main" src="/assets/phones/today.webp" width="640" height="1346" fetchpriority="high" alt="The Today screen with habits and streaks" />
+    <img class="ph ph--side" src="/assets/phones/focus.webp" width="640" height="1346" alt="A focus session with a dotted clock" />
+  </div>
+</section>
+
+<section class="sec" id="features">
+  <h2 class="h2">{{ t('What it does', 'Qué hace') }}</h2>
+  <ol class="feats">
+    <li>
+      <b>{{ t('One tap', 'Un toque') }}</b>
+      <p>{{ t('Mark a habit from the list, a home-screen widget or the reminder itself.', 'Marca un hábito desde la lista, un widget o el propio recordatorio.') }}</p>
+    </li>
+    <li>
+      <b>{{ t('More than yes or no', 'Más que sí o no') }}</b>
+      <p>{{ t('Count glasses or pages, split a habit into steps, or track one you want to quit.', 'Cuenta vasos o páginas, divide un hábito en pasos o sigue uno que quieras dejar.') }}</p>
+    </li>
+    <li>
+      <b>{{ t('Focus timer', 'Temporizador Focus') }}</b>
+      <p>{{ t('Pomodoro rounds, three clocks, scenes and sounds. Minutes count toward the habit.', 'Rondas Pomodoro, tres relojes, escenas y sonidos. Los minutos suman al hábito.') }}</p>
+    </li>
+    <li>
+      <b>{{ t('The whole year', 'El año entero') }}</b>
+      <p>{{ t('Streaks, a month calendar, a year grid and statistics that read at a glance.', 'Rachas, calendario del mes, la rejilla del año y estadísticas que se leen de un vistazo.') }}</p>
+    </li>
+    <li>
+      <b>{{ t('Notes on any day', 'Notas en cualquier día') }}</b>
+      <p>{{ t('Write what happened, plan ahead or add a photo. It shows as a dot on the calendar.', 'Escribe lo que pasó, planifica o añade una foto. Sale como un punto en el calendario.') }}</p>
+    </li>
+    <li>
+      <b>{{ t('Three styles', 'Tres estilos') }}</b>
+      <p>{{ t('Classic, Minimal or Express. The same habits, dressed the way you like.', 'Clásico, Minimal o Express. Los mismos hábitos, a tu gusto.') }}</p>
+    </li>
+  </ol>
+</section>
+
+<section class="sec sec--wide">
+  <div class="shelf-head">
+    <h2 class="h2">{{ t('A look inside', 'Por dentro') }}</h2>
+    <p class="shelf-hint">{{ t('Scroll sideways, tap to zoom', 'Desliza de lado, toca para ampliar') }}</p>
+  </div>
+  <div class="shelf-wrap">
+    <button class="nudge nudge--prev" type="button" data-shelf="-1" aria-label="Previous"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+    <div class="shelf" id="shelf" tabindex="0" aria-label="Screens">
+      {% set shots = [
+        ['water', 'An amount habit', 'Hábito de cantidad'],
+        ['calendar', 'Calendar and notes', 'Calendario y notas'],
+        ['flip', 'Flip clock', 'Reloj de tarjetas'],
+        ['insights', 'Habits compared', 'Hábitos comparados'],
+        ['charts', 'Month by month', 'Mes a mes'],
+        ['minimal', 'Minimal style', 'Estilo Minimal'],
+        ['note', 'A day note', 'Una nota del día'],
+        ['cabin', 'Ring clock', 'Reloj de anillo'],
+        ['settings', 'Settings', 'Ajustes']
+      ] %}
+      {% for shot in shots %}
+      <figure class="shot">
+        <button class="zoom" type="button" data-group="screens" aria-label="Zoom: {{ shot[1] }}"><img src="/assets/phones/{{ shot[0] }}.webp" width="640" height="1346" alt="{{ shot[1] }}" loading="lazy" /></button>
+        <figcaption>{{ t(shot[1], shot[2]) }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <button class="nudge nudge--next" type="button" data-shelf="1" aria-label="Next"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="quiet">
+    <h2 class="h2">{{ t('No account. No internet. No ads.', 'Sin cuenta. Sin internet. Sin anuncios.') }}</h2>
+    <p>{{ t(
+      'Streak does not ask for the internet permission, so nothing can leave your phone. Back up to a folder you choose, and if you want your habits on two devices, sync that folder yourself.',
+      'Streak no pide permiso de internet, así que nada puede salir de tu móvil. Haz copias en la carpeta que elijas y, si quieres tus hábitos en dos dispositivos, sincroniza esa carpeta tú mismo.'
+    ) }}</p>
+  </div>
+</section>
+
+<section class="sec" id="download">
+  <h2 class="h2">{{ t('Download', 'Descargar') }}</h2>
+  <div class="dl">
+    <div class="dl__col">
+      <h3>{{ brand('android', 22) }}Android</h3>
+      <a href="https://f-droid.org/packages/com.streak.app/" target="_blank" rel="noopener"><img src="/assets/stores/fdroid.png" width="26" height="26" alt="" />F-Droid</a>
+      <a href="https://apt.izzysoft.de/fdroid/index/apk/com.streak.app" target="_blank" rel="noopener"><img src="/assets/stores/izzy.png" width="26" height="26" alt="" />IzzyOnDroid</a>
+      <a href="https://www.openapk.net/streak/com.streak.app/" target="_blank" rel="noopener"><img src="/assets/stores/openapk.png" width="26" height="26" alt="" />OpenAPK</a>
+      <a href="{{ site.releases }}/Streak-arm64-v8a.apk"><span class="dl__gh dl__gh--store">{{ brand('github', 22) }}</span>APK <small>arm64</small></a>
+    </div>
+    <div class="dl__col">
+      <h3>{{ brand('windows', 20) }}Windows</h3>
+      <a href="{{ site.releases }}/Streak-windows-x64-setup.exe"><span class="dl__gh">{{ brand('github', 18) }}</span>{{ t('Installer', 'Instalador') }} <small>.exe</small></a>
+      <a href="{{ site.releases }}/Streak-windows-x64.zip"><span class="dl__gh">{{ brand('github', 18) }}</span>{{ t('Portable', 'Portátil') }} <small>.zip</small></a>
+    </div>
+    <div class="dl__col">
+      <h3>{{ brand('linux', 22) }}Linux</h3>
+      <a href="{{ site.releases }}/Streak-x86_64.AppImage"><span class="dl__gh">{{ brand('github', 18) }}</span>AppImage</a>
+      <a href="{{ site.releases }}/Streak-linux-x64.tar.gz"><span class="dl__gh">{{ brand('github', 18) }}</span>{{ t('Archive', 'Archivo') }} <small>.tar.gz</small></a>
+    </div>
+  </div>
+  <p class="dl__all"><a href="{{ site.repo }}/releases/latest" target="_blank" rel="noopener">{{ t('All files and release notes', 'Todos los ficheros y novedades') }} ↗</a></p>
+</section>
+
+<section class="sec" id="support">
+  <div class="back-it">
+    <div class="back-it__copy">
+      <span class="back-it__tag">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 21.3 3.9 13.4a5 5 0 0 1 7-7.1l1.1 1.1 1.1-1.1a5 5 0 0 1 7 7.1Z"/></svg>
+        {{ t('Support Streak', 'Apoya Streak') }}
+      </span>
+      <h2>{{ t('Made by one person.<br />Free for everyone.', 'La hace una sola persona.<br />Gratis para todos.') }}</h2>
+      <p>{{ t(
+        'No company, no investors, no ads and no premium version. I build Streak in my free time and keep it free so anyone can use it. If it helps you keep a habit, a coffee helps me keep building it.',
+        'Sin empresa, sin inversores, sin anuncios y sin versión de pago. Hago Streak en mi tiempo libre y la mantengo gratis para que cualquiera pueda usarla. Si te ayuda a mantener un hábito, un café me ayuda a seguir haciéndola.'
+      ) }}</p>
+      <a class="kofi" href="{{ site.kofi }}" target="_blank" rel="noopener"><img src="/assets/kofi.png" width="580" height="146" alt="Buy me a coffee on Ko-fi" /></a>
+      <a class="back-it__sig" href="https://github.com/InlitX" target="_blank" rel="noopener">
+        <img src="https://github.com/InlitX.png?size=80" width="30" height="30" alt="" loading="lazy" />
+        <span><b>InlitX</b> · {{ t('maker of Streak', 'creador de Streak') }}</span>
+      </a>
+    </div>
+    <div class="back-it__ways">
+      <a href="{{ site.repo }}/stargazers" target="_blank" rel="noopener">
+        <span class="way-ic way-ic--star"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2.4l2.95 5.98 6.6.96-4.78 4.65 1.13 6.57L12 17.46l-5.9 3.1 1.13-6.57L2.45 9.34l6.6-.96L12 2.4Z"/></svg></span>
+        <span><b>{{ t('Star it on GitHub', 'Dale una estrella en GitHub') }}</b><small>{{ t('Free, and it is how most people find Streak.', 'Es gratis y así la descubre la mayoría.') }}</small></span>
+        <em data-count="stars">—</em>
+      </a>
+      <a href="{{ site.weblate }}" target="_blank" rel="noopener">
+        <span class="way-ic">{{ brand('weblate', 20) }}</span>
+        <span><b>{{ t('Translate it', 'Tradúcela') }}</b><small>{{ t('Bring Streak to your language on Weblate.', 'Lleva Streak a tu idioma en Weblate.') }}</small></span>
+      </a>
+      <a href="{{ site.repo }}/issues" target="_blank" rel="noopener">
+        <span class="way-ic">{{ brand('github', 20) }}</span>
+        <span><b>{{ t('Report a bug or ask for a feature', 'Reporta un fallo o pide una función') }}</b><small>{{ t('Every issue makes the next version better.', 'Cada aviso mejora la siguiente versión.') }}</small></span>
+      </a>
+      <button type="button" class="way--share" data-share="{{ site.url }}/">
+        <span class="way-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></span>
+        <span><b>{{ t('Tell a friend', 'Cuéntaselo a alguien') }}</b><small class="share-idle">{{ t('Share the link. Word of mouth is all the marketing Streak has.', 'Comparte el enlace. El boca a boca es toda la publicidad que tiene.') }}</small><small class="share-done">{{ t('Link copied. Paste it anywhere.', 'Enlace copiado. Pégalo donde quieras.') }}</small></span>
+      </button>
+    </div>
+  </div>
+</section>

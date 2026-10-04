@@ -1,0 +1,20 @@
+[
+  { "kind": "scene", "file": "cat_fireplace.mp4", "poster": "cat_fireplace.webp", "en": "Cat by the fire", "es": "Gato junto al fuego", "size": "1920×1080", "seconds": 58.7 },
+  { "kind": "scene", "file": "girl_study.mp4", "poster": "girl_study.webp", "en": "Late study", "es": "Estudio de noche", "size": "1920×1080", "seconds": 52.1 },
+  { "kind": "scene", "file": "fireplace_room.mp4", "poster": "fireplace_room.webp", "en": "Fireplace room", "es": "Salón con chimenea", "size": "1920×1076", "seconds": 30 },
+  { "kind": "scene", "file": "cabin_rain.mp4", "poster": "cabin_rain.webp", "en": "Cabin in the rain", "es": "Cabaña bajo la lluvia", "size": "1920×1080", "seconds": 5.3 },
+
+  { "kind": "image", "file": "lantern_tree.jpg", "poster": "lantern_tree.webp", "en": "Lantern tree", "es": "Árbol del farol", "size": "736×1447" },
+  { "kind": "image", "file": "forest_cabin.jpg", "poster": "forest_cabin.webp", "en": "Forest cabin", "es": "Cabaña del bosque", "size": "736×1451" },
+  { "kind": "image", "file": "night_city.jpg", "poster": "night_city.webp", "en": "Night city", "es": "Ciudad de noche", "size": "736×1592" },
+  { "kind": "image", "file": "valley_river.jpg", "poster": "valley_river.webp", "en": "Valley river", "es": "Río del valle", "size": "736×1472" },
+  { "kind": "image", "file": "frog_pond.jpg", "poster": "frog_pond.webp", "en": "Frog pond", "es": "Charca de ranas", "size": "736×1448" },
+  { "kind": "image", "file": "street_lamp.jpg", "poster": "street_lamp.webp", "en": "Street lamp", "es": "Farola", "size": "736×1308" },
+
+  { "kind": "sound", "file": "rain.mp3", "en": "Rain", "es": "Lluvia", "seconds": 229.8, "tone": 0 },
+  { "kind": "sound", "file": "brown_noise.mp3", "en": "Brown noise", "es": "Ruido marrón", "seconds": 57.1, "tone": 1 },
+  { "kind": "sound", "file": "fire.mp3", "en": "Fire", "es": "Fuego", "seconds": 76.5, "tone": 2 },
+  { "kind": "sound", "file": "one_love.mp3", "en": "One Love", "es": "One Love", "seconds": 153.4, "tone": 3 },
+  { "kind": "sound", "file": "i_can_find_you.mp3", "en": "I Can Find You", "es": "I Can Find You", "seconds": 173.3, "tone": 4 },
+  { "kind": "sound", "file": "chime.mp3", "en": "End chime", "es": "Campana del final", "seconds": 2.2, "tone": 5 }
+]

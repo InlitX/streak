@@ -1,0 +1,4 @@
+{
+  "layout": "post.njk",
+  "permalink": "/{{ 'es/' if lang == 'es' }}blog/{{ page.fileSlug | replace('.es', '') }}/"
+}

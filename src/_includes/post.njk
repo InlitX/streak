@@ -1,0 +1,45 @@
+---
+layout: base.njk
+page_kind: blog
+---
+{% from "t.njk" import t %}
+<article class="post">
+  <header class="post__head">
+    <a class="back" href="/blog/">← Blog</a>
+    <h1>{{ title }}</h1>
+    <p class="post__meta">
+      <time datetime="{{ page.date | iso }}">{{ page.date | day(lang) }}</time>
+      · {{ content | striptags | minutes }} min {{ t('read', 'de lectura') }}
+      {% if translation %}· <a href="{{ translation }}" data-alt>{{ t('Leer en español', 'Read in English') }}</a>{% endif %}
+    </p>
+  </header>
+
+  <div class="prose">
+{{ content | safe }}
+  </div>
+
+  <section class="talk" id="comments">
+    <h2>{{ t('Comments', 'Comentarios') }}</h2>
+    <p class="talk__hint">{{ t('Sign in with GitHub to comment or react. Everything is stored as a GitHub discussion.', 'Entra con GitHub para comentar o reaccionar. Todo se guarda como una discusión de GitHub.') }}</p>
+    {% if site.giscus.categoryId %}
+    <script src="https://giscus.app/client.js"
+      data-repo="{{ site.giscus.repo }}"
+      data-repo-id="{{ site.giscus.repoId }}"
+      data-category="{{ site.giscus.category }}"
+      data-category-id="{{ site.giscus.categoryId }}"
+      data-mapping="specific"
+      data-term="{{ thread }}"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="transparent_dark"
+      data-lang="{{ lang }}"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async></script>
+    {% else %}
+    <p class="talk__off">{{ t('Comments are not switched on yet.', 'Los comentarios aún no están activados.') }}</p>
+    {% endif %}
+  </section>
+</article>

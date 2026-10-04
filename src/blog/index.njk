@@ -1,0 +1,26 @@
+---
+layout: base.njk
+page_kind: blog
+title: Blog
+description: Guides and notes about Streak, the quiet habit tracker.
+---
+{% from "t.njk" import t %}
+<section class="head">
+  <h1>Blog</h1>
+  <p>{{ t('Guides, release notes and the thinking behind Streak.', 'Guías, novedades y el porqué de Streak.') }}</p>
+</section>
+
+<section class="sec sec--narrow">
+  <ul class="posts">
+    {% for post in collections.posts %}
+    <li class="{{ post.data.lang }}">
+      <a href="{{ post.url }}">
+        <time datetime="{{ post.date | iso }}">{{ post.date | day(post.data.lang) }}</time>
+        <h2>{{ post.data.title }}</h2>
+        <p>{{ post.data.description }}</p>
+        <span class="posts__meta">{{ post.content | striptags | minutes }} min {{ t('read', 'de lectura') }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
