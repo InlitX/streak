@@ -22,6 +22,8 @@ page_kind: blog
     <h2>{{ t('Comments', 'Comentarios') }}</h2>
     <p class="talk__hint">{{ t('Sign in with GitHub to comment or react. Everything is stored as a GitHub discussion.', 'Entra con GitHub para comentar o reaccionar. Todo se guarda como una discusión de GitHub.') }}</p>
     {% if site.giscus.categoryId %}
+    {% set english = collections.posts | english(thread) %}
+    <meta name="giscus:backlink" content="{{ site.url }}{{ english.url }}" />
     <script src="https://giscus.app/client.js"
       data-repo="{{ site.giscus.repo }}"
       data-repo-id="{{ site.giscus.repoId }}"
@@ -38,6 +40,16 @@ page_kind: blog
       data-loading="lazy"
       crossorigin="anonymous"
       async></script>
+    {% if lang != 'en' %}
+    <script>
+      (function () {
+        var meta = document.querySelector("meta[name='description']");
+        var own = meta.content;
+        meta.content = {{ english.data.description | dump | safe }};
+        document.currentScript.previousElementSibling.addEventListener('load', function () { meta.content = own; });
+      })();
+    </script>
+    {% endif %}
     {% else %}
     <p class="talk__off">{{ t('Comments are not switched on yet.', 'Los comentarios aún no están activados.') }}</p>
     {% endif %}

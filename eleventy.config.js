@@ -52,7 +52,11 @@ export default function (config) {
 
   config.addFilter("ofKind", (items, kind) => items.filter((item) => item.kind === kind));
 
-  config.addCollection("posts", (api) =>
+  config.addFilter("english", (posts, thread) =>
+    posts.find((post) => post.data.thread === thread && post.data.lang === "en"),
+  );
+
+  config.addCollection("posts",(api) =>
     api.getFilteredByGlob("src/blog/posts/*.md").sort((a, b) => b.date - a.date),
   );
 
