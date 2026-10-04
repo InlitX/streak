@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import { HtmlBasePlugin } from "@11ty/eleventy";
 
@@ -28,7 +29,11 @@ export default function (config) {
     }).format(date),
   );
 
-  config.addFilter("iso", (date) => date.toISOString().slice(0, 10));
+  config.addFilter("v", (file) =>
+    crypto.createHash("md5").update(fs.readFileSync(`src/${file}`)).digest("hex").slice(0, 8),
+  );
+
+  config.addFilter("iso",(date) => date.toISOString().slice(0, 10));
 
   config.addFilter("bytes", (file) => {
     const size = fs.statSync(`src/files/${file}`).size;
