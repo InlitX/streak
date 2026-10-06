@@ -588,7 +588,7 @@
   "focus_add_track": "음악 추가",
   "focus_shuffle": "뒤섞기",
   "focus_loop": "순서대로",
-  "focus_track_rain": "비",
+  "focus_track_rain": "Rain",
   "focus_track_brown": "갈색소음",
   "focus_track_pad": "따스한 배경음",
   "focus_track_too_long": "음악은 20분보다 짧아야 해요",
@@ -1453,5 +1453,48 @@
   "todo_sort": "우선순위 순서",
   "todo_sort_high_first": "높은 우선순위 먼저",
   "todo_sort_low_first": "낮은 우선순위 먼저",
-  "todo_list_item": "목록 항목"
+  "todo_list_item": "목록 항목",
+  "data_folder": "데이터 폴더",
+  "data_folder_documents": "문서",
+  "data_folder_pick": "폴더 선택",
+  "data_folder_inside": "현재 폴더 바깥의 폴더를 고르세요.",
+  "data_folder_taken": "이 폴더에는 이미 Streak 데이터가 들어 있어요.",
+  "data_folder_denied": "Streak에서 그 폴더에 쓸 수 없어요.",
+  "data_folder_move_title": "데이터 이동",
+  "data_folder_move_body": "Streak가 닫히고 데이터를 {path} 위치에 이동해요. 앱이 닫히면 다시 여세요. 무언가 잘못되어도, 해당 위치에 데이터가 남아 있어요.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "이동 및 닫기",
+  "focus_label": "라벨",
+  "focus_label_none": "라벨 없음",
+  "focus_label_new": "새 라벨",
+  "focus_label_hint": "수학, 독서, 운동...",
+  "focus_label_remove": "라벨 제거",
+  "focus_label_remove_body": "{label} 라벨을 목록에서 없애요. 이전 세션에서는 유지돼요.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "제거",
+  "a11y_previous_month": "이전 달",
+  "a11y_next_month": "다음 달",
+  "plan_show_month": "월 전체 표시",
+  "plan_show_week": "한 주 표시",
+  "widget_cfg_show_habits": "표시할 습관",
+  "widget_cfg_show_habits_hint": "하나 이상 고르세요. 습관이 하나라면, 요약에서 연속 기록을 보여줘요.",
+  "plan_show_todos": "할 일",
+  "day_timeline_empty_todos": "이 날짜에 할 일을 설정하면 여기에 나타나요.",
+  "plan_show_habits": "습관",
+  "plan_show_both": "모두",
+  "focus_fullscreen": "전체화면",
+  "focus_exit_fullscreen": "전체화면 종료",
+  "focus_options": "옵션"
 }
