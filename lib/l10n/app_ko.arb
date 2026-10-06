@@ -423,7 +423,7 @@
   "save_note": "노트 저장",
   "notes_empty": "아직 이 날의 노트가 없어요",
   "delete_note": "노트 삭제",
-  "legend_note_added": "노트를 추가했어요",
+  "legend_note_added": "노트 추가함",
   "tomorrow": "내일",
   "notes_count": "{count, plural, other{노트 {count}개}}",
   "@notes_count": {
@@ -848,7 +848,7 @@
   "style_minimal_desc": "습관과 설정을 네 영역으로 묶었어요.",
   "appearance_sub": "테마, 강조, 배경",
   "preferences_sub": "언어, 주, 정렬",
-  "data_sub": "백업, 가져오기",
+  "data_sub": "백업, 아카이브, 가져오기",
   "widget_cfg_color": "색상",
   "widget_cfg_title": "위젯 맞춤 설정",
   "widget_cfg_image": "사진",
@@ -1429,7 +1429,7 @@
   "widget_cfg_square": "사각형",
   "widget_cfg_circle": "원",
   "widget_cfg_checks": "체크",
-  "focus_hold_sub": "계속 버튼을 누르기 전까지 다음 회차로 넘어가지 않아요.",
+  "focus_hold_sub": "계속 버튼을 누르기 전까지 휴식 시간으로 넘어가지 않아요. 휴식한 뒤에도 집중 시간으로 자동으로 넘어가지 않아요.",
   "duplicate_habit": "습관 복제",
   "habit_duplicated": "{name} 습관을 추가했어요",
   "@habit_duplicated": {
@@ -1496,5 +1496,86 @@
   "plan_show_both": "모두",
   "focus_fullscreen": "전체화면",
   "focus_exit_fullscreen": "전체화면 종료",
-  "focus_options": "옵션"
+  "focus_options": "옵션",
+  "focus_break_in": "{n}초 뒤 휴식",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "{n}초 뒤 집중",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_notif_break": "쉬어갈 시간이에요.",
+  "focus_notif_back": "다시 집중해 봐요.",
+  "focus_break_over": "휴식 끝",
+  "todo_estimate": "기간",
+  "todo_estimate_none": "기간 없음",
+  "todo_view_list": "간단",
+  "todo_view_papers": "폴더",
+  "todo_style": "할 일 스타일",
+  "todo_style_sub": "간단한 목록으로 두거나, Google Keep처럼 폴더를 이용할 수 있어요.",
+  "focus_long_break": "긴 휴식",
+  "focus_long_break_sub": "매 4회차마다, 긴 휴식을 가져요.",
+  "focus_whole_rounds": "완전히 끝난 회차만 세기",
+  "focus_whole_rounds_sub": "일찍 끝낸 회차는 세지 않아요.",
+  "focus_end_drop": "지금 끝내면, 이번 회차를 세지 않아요.",
+  "tracked_week": "이번주 {n}",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "이번달 {n}",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "올해 {n}",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "today_filter": "표시",
+  "hide_done": "완료할 일 숨김",
+  "hide_done_sub": "오늘 마친 일을 목록에서 숨기기",
+  "focus_volume": "볼륨",
+  "from_last_done": "마지막 시간으로부터 계속 세기",
+  "data_folder_app": "앱에 함께",
+  "pick_one_day": "최소 하루 이상 선택하세요",
+  "month_weekday": "매달의 시작을 같은 요일로",
+  "month_weekday_sub": "고정된 날짜가 아닌, {when}에서 한 달을 잘라요.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "nth_weekday": "{n, select, first{첫째} second{둘째} third{셋째} fourth{넷째} other{마지막}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  }
 }
