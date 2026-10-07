@@ -110,7 +110,7 @@
   "support_sub": "بلغ عن خطأ أو اطلب ميزة جديدة",
   "island_t_white": "أبيض",
   "wipe_data_warning": "سيؤدي هذا إلى مسح كل عادة وملاحظة وجلسة تركيز وإعداد على هذا الهاتف. لا يمكن التراجع عن هذا الإجراء إلا إذا كان لديك ملف نسخة احتياطية لاستيراده لاحقاً.",
-  "auto_backup_where": "عندما تفتح التطبيق، ستريك يقوم بعمل نسخة احتياطية ويقوم بعمل نسخة من عاداتك يمكنك فتحها في اي برنامج. آخر 5 نسخ احتياطية يتم الاحتفاظ بها.",
+  "auto_backup_where": "عندما تفتح التطبيق، ستريك يحفظ نسخة إحتياطية كاملة : بصيغة .zip تضم كل شيء الصور, والموسيقى وأيضا ملف .json. و أيضا يكتب نسخة مقروءة يمكنك فتحها في أي معدل نصوص. آخر بضع نسخة إحتياطية سوف تحفظ (لن تخذف).",
   "streaks": "السلاسل",
   "advanced_options": "الخيارات المتقدمة",
   "reorder": "إعادة تنظيم",
@@ -327,11 +327,11 @@
   "new_habit": "عادة جديدة",
   "note_take_photo": "كاميرا",
   "skip": "تخطي",
-  "auto_backup_folder_default": "مجلد التطبيق",
+  "auto_backup_folder_default": "داخل التطبيق (سيحذف إذا حذف التطبيق)",
   "kind_quantitative": "الكمية",
   "journey": "رحلة",
   "daily": "يوميا",
-  "app_tagline": "العادات",
+  "app_tagline": "متتبع العادات",
   "quant_edit_title": "كمية اليوم",
   "stats": "إحصائيات",
   "dark": "مظلم",
@@ -447,5 +447,91 @@
   },
   "category_order": "ترتيب الفئات",
   "category_order_sub": "اسحبهم الى الترتيب الذي تريده",
-  "category_order_empty": "قم بتعيين فئة لعادة ما، وستظهر هنا"
+  "category_order_empty": "قم بتعيين فئة لعادة ما، وستظهر هنا",
+  "data_folder": "ملف البيانات",
+  "data_folder_documents": "المستندات",
+  "data_folder_app": "بجانب للتطبيق",
+  "data_folder_pick": "إختر مجلد",
+  "data_folder_inside": "إختر مجلد خارج المجلد الحالي.",
+  "data_folder_taken": "هذا المجلد يحتوي بالفعل على بيانات ستريك بداخله.",
+  "data_folder_denied": "ستريك لا يستطيع الكتابة على هذا المجلد.",
+  "data_folder_move_title": "نقل بياناتك",
+  "data_folder_move_body": "ستريك سيغلق وستنقل بياناتك إلى {path}. إفتحه مجددا عندما يغلق. تذكر إذا حدث أي مكروه سوف تبقى بياناتك مكانها.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "نقل وإغلاق",
+  "count_days": "{count, plural, =1{1 day} other{{count} days}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 week} other{{count} weeks}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 month} other{{count} months}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}س",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "pick_one_day": "إختر يوم واحد كحد أدنى",
+  "reminder_habit_days": "في يوم العادة",
+  "reminder_habit_days_hint": "سيرن في الأيام التي بها العادة.",
+  "focus_label": "علامة",
+  "focus_label_none": "لا علامات",
+  "focus_label_new": "علامة جديدة",
+  "focus_label_hint": "رياضيات, قراءة, عمل...",
+  "focus_label_remove": "إزالة العلامة",
+  "focus_label_remove_body": "{label} غادرة القائمة. احتفظ بجلستك السابقة.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "إزالة",
+  "by_label": "حسب العلامة",
+  "tracking_hide": "إخفاء التتتبع فقط",
+  "tracking_show": "إظهار التتتبع فقط({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_sub": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "لا صور بعد",
+  "journey_empty_sub": "أضف صورة إلى الملاحظة وسوف تظهر هنا."
 }
