@@ -47,7 +47,7 @@
   "priority_low": "Düşük",
   "priority_medium": "Orta",
   "priority_high": "Yüksek",
-  "todos": "To-Do",
+  "todos": "Yapılacaklar",
   "gamification": "Oyunlaştırma",
   "island_g_puerto": "Liman",
   "island_p_agave": "Sabır çiçeği",
@@ -76,7 +76,7 @@
   "day_start_midnight": "Gece yarısı",
   "repeat_hours": "Gün içinde tekrarla",
   "todo_tag_folders": "Klasörler",
-  "rate_github": "Github'da yıldızla",
+  "rate_github": "GitHub'da yıldızla",
   "profile": "Profil",
   "new_category": "Yeni kategori",
   "difficulty_easy": "Kolay",
@@ -95,7 +95,7 @@
   "widget_demo_water": "Su",
   "no_habits_yet": "Henüz alışkanlık yok",
   "all_done_today": "Bugünlük hepsi tamam!",
-  "x_of_y_completed": "{done} of {total} tamamlandı",
+  "x_of_y_completed": "{done}/{total} tamamlandı",
   "@x_of_y_completed": {
     "placeholders": {
       "done": {
@@ -108,15 +108,15 @@
   },
   "empty_title": "İlk serini başlat",
   "empty_body": "Bir alışkanlık oluştur ve kaydetmek için bir güne dokun. Her gün küçük adımlar.",
-  "onb1_title": "Gerçek seriler oluşturun",
-  "onb1_body": "Alışkanlığınızı tek dokunuşla kaydedin ve ivmenizin günden güne artışını izleyin.",
-  "onb2_title": "Yolunuzdan sapmayın",
+  "onb1_title": "Gerçek seriler oluştur",
+  "onb1_body": "Alışkanlığını tek dokunuşla kaydet ve ivmenin günden güne artışını izle.",
+  "onb2_title": "Yolundan sapma",
   "onb2_body": "Hiçbir şeyi gözden kaçırmamak için akıllı hatırlatıcılarla günlük, haftalık veya aylık hedefler.",
-  "onb3_title": "İlerlemenizi görün",
-  "onb3_body": "Zengin istatistikler ve yıllık tablo, ne kadar yol katettiğinizi net bir şekilde gösterir.",
+  "onb3_title": "İlerlemeni gör",
+  "onb3_body": "Zengin istatistikler ve yıllık tablo, ne kadar yol katettiğini net bir şekilde gösterir.",
   "skip": "Atla",
   "get_started": "Başlayın",
-  "onb_kicker": "Hoş geldiniz",
+  "onb_kicker": "Hoş geldin",
   "onb_free_title": "Ücretsiz, sonsuza dek",
   "onb_free_body": "Reklam yok, abonelik yok, kilitli özellik yok.",
   "onb_private_title": "Gizli ve çevrimdışı",
@@ -243,7 +243,7 @@
   "category_mindfulness": "Farkındalık",
   "kind_quantitative": "Miktar",
   "kind_locked_hint": "Alışkanlık oluşturulduktan sonra türü değiştirilemez.",
-  "kind_negative_hint": "Varsayılan olarak her gün \"temiz\" sayılır — seriniz kendi kendine ilerler. Yalnızca bir aksama olursa onay işaretine dokunun; o gün kırmızıya döner ve işlemi geri alabilirsiniz.",
+  "kind_negative_hint": "Varsayılan olarak her gün \"temiz\" sayılır — serin kendi kendine ilerler. Yalnızca bir aksama olursa onay işaretine dokun; o gün kırmızıya döner ve işlemi geri alabilirsin.",
   "currency_custom": "Özel",
   "money_saved": "Tasarruf edilen para",
   "clean_days": "Temiz günler",
@@ -452,7 +452,7 @@
       }
     }
   },
-  "every_n_weeks": "{n} haftada bir",
+  "every_n_weeks": "{n, plural, =1{Her hafta} other{{n} haftada bir}}",
   "@every_n_weeks": {
     "placeholders": {
       "n": {
@@ -460,7 +460,7 @@
       }
     }
   },
-  "every_n_months": "{n} ayda bir",
+  "every_n_months": "{n, plural, =1{Her ay} other{{n} ayda bir}}",
   "@every_n_months": {
     "placeholders": {
       "n": {
@@ -749,7 +749,7 @@
   "focus_alert_custom": "Ses seç",
   "focus_alert_none": "Sessiz",
   "focus_hold": "Ben durdurana kadar bekle",
-  "focus_hold_sub": "Sonraki tur, Devam et'e dokunmanı bekler.",
+  "focus_hold_sub": "Mola da Devam et'e dokunmanı bekler. Moladan sonra Odaklanma her zaman bekler.",
   "focus_restart": "Yeniden başlat",
   "focus_restart_title": "Bu tur yeniden başlatılsın mı?",
   "focus_restart_body": "Bu turda odaklandığın süre kaybolur.",
@@ -821,7 +821,7 @@
   "focus_loop": "Sırayla",
   "focus_repeat_one": "Birini tekrarla",
   "focus_track_too_long": "Parçalar 20 dakikadan kısa olmalı",
-  "focus_track_limit": "En fazla 10 parça",
+  "focus_track_limit": "En fazla 30 parça",
   "focus_done_title": "Oturum tamamlandı",
   "focus_your_tracks": "Parçaların",
   "focus_built_in": "Dahili",
@@ -1393,7 +1393,7 @@
   "island_g_cabo": "Burun",
   "island_goal": "Her parça inşa edildiğinde görünüşü böyle olur.",
   "island_reset_go": "Baştan başla",
-  "island_beta": "Bu, oyunlaştırmaya yönelik ilk deneme ve hâlâ beta aşamasında. Nasıl kullandığınıza bağlı olarak büyüyebilir, şekil değiştirebilir ya da tamamen başka bir şeyle değiştirilebilir.",
+  "island_beta": "Bu, oyunlaştırmaya yönelik ilk deneme ve hâlâ beta aşamasında. Nasıl kullandığına bağlı olarak büyüyebilir, şekil değiştirebilir ya da tamamen başka bir şeyle değiştirilebilir.",
   "last_check": "Son işaret",
   "check_history": "İşaret geçmişi",
   "check_history_sub": "{count} gün işaretlendi",
@@ -1453,5 +1453,95 @@
   "difficulty_option_sub": "Zor alışkanlıklar günün ilerlemesinde daha çok sayılsın",
   "todo_save_another": "Kaydet ve bir tane daha ekle",
   "todo_add_subtask": "Alt görev ekle",
-  "pin_paste": "Kodu yapıştır"
+  "pin_paste": "Kodu yapıştır",
+  "data_folder": "Veri klasörü",
+  "data_folder_documents": "Belgeler",
+  "data_folder_app": "Uygulamanın yanında",
+  "data_folder_pick": "Klasör seç",
+  "data_folder_inside": "Mevcut klasörün dışında bir klasör seç.",
+  "data_folder_taken": "Bu klasörde zaten Streak verisi var.",
+  "data_folder_denied": "Streak bu klasöre yazamıyor.",
+  "data_folder_move_title": "Verilerini taşı",
+  "data_folder_move_body": "Streak kapanacak ve verilerini {path} konumuna taşıyacak. Kapandıktan sonra tekrar aç. Bir şey ters giderse verilerin olduğu yerde kalır.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Taşı ve kapat",
+  "pick_one_day": "En az bir gün seç",
+  "reminder_habit_days": "Alışkanlığın günlerinde",
+  "reminder_habit_days_hint": "Alışkanlığın yapılması gereken günlerde çalar.",
+  "focus_label": "Etiket",
+  "focus_label_none": "Etiket yok",
+  "focus_label_new": "Yeni etiket",
+  "focus_label_hint": "Matematik, okuma, iş...",
+  "focus_label_remove": "Etiketi kaldır",
+  "focus_label_remove_body": "{label} listeden çıkar. Geçmiş oturumların onu korur.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "Kaldır",
+  "by_label": "Etikete göre",
+  "tracking_hide": "Sadece takip olanları gizle",
+  "tracking_show": "Sadece takip olanları göster ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "repeat_until": "Şu zamana kadar",
+  "end_of_day": "Günün sonu",
+  "any_amount": "Her miktar sayılır",
+  "any_amount_sub": "Herhangi bir miktar kaydetmek, hedefin altında olsa bile günü tamamlanmış sayar.",
+  "any_step": "Her adım sayılır",
+  "any_step_sub": "Tek bir adımı işaretlemek, hepsini yapmadan günü tamamlanmış sayar.",
+  "sched_start": "Başlangıç",
+  "todo_view_list": "Basit",
+  "todo_view_papers": "Klasörler",
+  "todo_style": "Görev stili",
+  "todo_style_sub": "Basit bir liste ya da Google Keep gibi sayfa klasörleri.",
+  "todo_estimate": "Süre",
+  "todo_estimate_none": "Süre yok",
+  "focus_options": "Seçenekler",
+  "focus_fullscreen": "Tam ekran",
+  "focus_exit_fullscreen": "Tam ekrandan çık",
+  "focus_volume": "Ses düzeyi",
+  "focus_notif_break": "Mola zamanı.",
+  "focus_break_over": "Mola bitti",
+  "focus_notif_back": "Odaklanmaya dön.",
+  "focus_break_in": "{n} sonra mola",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "{n} sonra odaklanma",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "plan_show_habits": "Alışkanlıklar",
+  "plan_show_both": "İkisi",
+  "plan_show_todos": "Görevler",
+  "day_timeline_empty_todos": "Bir göreve bu tarihi ver, burada görünsün.",
+  "widget_cfg_show_habits": "Gösterilecek alışkanlıklar",
+  "widget_cfg_show_habits_hint": "Bir veya daha fazlasını seç. Tek alışkanlıkta özet, onun serisini gösterir.",
+  "a11y_previous_month": "Önceki ay",
+  "a11y_next_month": "Sonraki ay",
+  "plan_show_month": "Ayın tamamını göster",
+  "plan_show_week": "Tek bir hafta göster"
 }

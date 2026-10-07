@@ -423,7 +423,7 @@
   "save_note": "노트 저장",
   "notes_empty": "아직 이 날의 노트가 없어요",
   "delete_note": "노트 삭제",
-  "legend_note_added": "노트를 추가했어요",
+  "legend_note_added": "노트 추가함",
   "tomorrow": "내일",
   "notes_count": "{count, plural, other{노트 {count}개}}",
   "@notes_count": {
@@ -588,7 +588,7 @@
   "focus_add_track": "음악 추가",
   "focus_shuffle": "뒤섞기",
   "focus_loop": "순서대로",
-  "focus_track_rain": "비",
+  "focus_track_rain": "Rain",
   "focus_track_brown": "갈색소음",
   "focus_track_pad": "따스한 배경음",
   "focus_track_too_long": "음악은 20분보다 짧아야 해요",
@@ -848,7 +848,7 @@
   "style_minimal_desc": "습관과 설정을 네 영역으로 묶었어요.",
   "appearance_sub": "테마, 강조, 배경",
   "preferences_sub": "언어, 주, 정렬",
-  "data_sub": "백업, 가져오기",
+  "data_sub": "백업, 아카이브, 가져오기",
   "widget_cfg_color": "색상",
   "widget_cfg_title": "위젯 맞춤 설정",
   "widget_cfg_image": "사진",
@@ -1429,7 +1429,7 @@
   "widget_cfg_square": "사각형",
   "widget_cfg_circle": "원",
   "widget_cfg_checks": "체크",
-  "focus_hold_sub": "계속 버튼을 누르기 전까지 다음 회차로 넘어가지 않아요.",
+  "focus_hold_sub": "계속 버튼을 누르기 전까지 휴식 시간으로 넘어가지 않아요. 휴식한 뒤에도 집중 시간으로 자동으로 넘어가지 않아요.",
   "duplicate_habit": "습관 복제",
   "habit_duplicated": "{name} 습관을 추가했어요",
   "@habit_duplicated": {
@@ -1453,5 +1453,129 @@
   "todo_sort": "우선순위 순서",
   "todo_sort_high_first": "높은 우선순위 먼저",
   "todo_sort_low_first": "낮은 우선순위 먼저",
-  "todo_list_item": "목록 항목"
+  "todo_list_item": "목록 항목",
+  "data_folder": "데이터 폴더",
+  "data_folder_documents": "문서",
+  "data_folder_pick": "폴더 선택",
+  "data_folder_inside": "현재 폴더 바깥의 폴더를 고르세요.",
+  "data_folder_taken": "이 폴더에는 이미 Streak 데이터가 들어 있어요.",
+  "data_folder_denied": "Streak에서 그 폴더에 쓸 수 없어요.",
+  "data_folder_move_title": "데이터 이동",
+  "data_folder_move_body": "Streak가 닫히고 데이터를 {path} 위치에 이동해요. 앱이 닫히면 다시 여세요. 무언가 잘못되어도, 해당 위치에 데이터가 남아 있어요.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "이동 및 닫기",
+  "focus_label": "라벨",
+  "focus_label_none": "라벨 없음",
+  "focus_label_new": "새 라벨",
+  "focus_label_hint": "수학, 독서, 운동...",
+  "focus_label_remove": "라벨 제거",
+  "focus_label_remove_body": "{label} 라벨을 목록에서 없애요. 이전 세션에서는 유지돼요.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "제거",
+  "a11y_previous_month": "이전 달",
+  "a11y_next_month": "다음 달",
+  "plan_show_month": "월 전체 표시",
+  "plan_show_week": "한 주 표시",
+  "widget_cfg_show_habits": "표시할 습관",
+  "widget_cfg_show_habits_hint": "하나 이상 고르세요. 습관이 하나라면, 요약에서 연속 기록을 보여줘요.",
+  "plan_show_todos": "할 일",
+  "day_timeline_empty_todos": "이 날짜에 할 일을 설정하면 여기에 나타나요.",
+  "plan_show_habits": "습관",
+  "plan_show_both": "모두",
+  "focus_fullscreen": "전체화면",
+  "focus_exit_fullscreen": "전체화면 종료",
+  "focus_options": "옵션",
+  "focus_break_in": "{n}초 뒤 휴식",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "{n}초 뒤 집중",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_notif_break": "쉬어갈 시간이에요.",
+  "focus_notif_back": "다시 집중해 봐요.",
+  "focus_break_over": "휴식 끝",
+  "todo_estimate": "기간",
+  "todo_estimate_none": "기간 없음",
+  "todo_view_list": "간단",
+  "todo_view_papers": "폴더",
+  "todo_style": "할 일 스타일",
+  "todo_style_sub": "간단한 목록으로 두거나, Google Keep처럼 폴더를 이용할 수 있어요.",
+  "focus_long_break": "긴 휴식",
+  "focus_long_break_sub": "매 4회차마다, 긴 휴식을 가져요.",
+  "focus_whole_rounds": "완전히 끝난 회차만 세기",
+  "focus_whole_rounds_sub": "일찍 끝낸 회차는 세지 않아요.",
+  "focus_end_drop": "지금 끝내면, 이번 회차를 세지 않아요.",
+  "tracked_week": "이번주 {n}",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "이번달 {n}",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "올해 {n}",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "today_filter": "표시",
+  "hide_done": "완료할 일 숨김",
+  "hide_done_sub": "오늘 마친 일을 목록에서 숨기기",
+  "focus_volume": "볼륨",
+  "from_last_done": "마지막 시간으로부터 계속 세기",
+  "data_folder_app": "앱에 함께",
+  "pick_one_day": "최소 하루 이상 선택하세요",
+  "month_weekday": "매달의 시작을 같은 요일로",
+  "month_weekday_sub": "고정된 날짜가 아닌, {when}에서 한 달을 잘라요.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "nth_weekday": "{n, select, first{첫째} second{둘째} third{셋째} fourth{넷째} other{마지막}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  }
 }
