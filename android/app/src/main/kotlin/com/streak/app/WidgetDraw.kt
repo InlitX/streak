@@ -234,7 +234,7 @@ object WidgetDraw {
             when (kind) {
                 ButtonKind.DONE -> {
                     canvas.drawRoundRect(rect, r, r, gradient)
-                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.56f, android.graphics.Color.WHITE)
+                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.56f, CardBitmaps.inkOn(argb))
                 }
                 ButtonKind.AMOUNT -> {
                     canvas.drawRoundRect(rect, r, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.2f).toArgb() })
@@ -242,7 +242,7 @@ object WidgetDraw {
                     canvas.clipRect(0f, px * (1f - fill.coerceIn(0f, 1f)), px.toFloat(), px.toFloat())
                     canvas.drawRoundRect(rect, r, r, gradient)
                     canvas.restore()
-                    centered(canvas, paint(context, sizeDp * 0.6f, android.graphics.Color.WHITE, 700), "+", c, c)
+                    centered(canvas, paint(context, sizeDp * 0.6f, if (fill >= 0.5f) CardBitmaps.inkOn(argb) else android.graphics.Color.WHITE, 700), "+", c, c)
                 }
                 ButtonKind.TODO -> {
                     canvas.drawRoundRect(rect, r, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.14f).toArgb() })
@@ -377,7 +377,7 @@ object WidgetDraw {
             when (mark) {
                 WeekMark.DONE -> {
                     canvas.drawCircle(c, c, c, gradient)
-                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.58f, android.graphics.Color.WHITE)
+                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.58f, CardBitmaps.inkOn(argb))
                 }
                 WeekMark.PART -> {
                     canvas.drawCircle(c, c, c, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })

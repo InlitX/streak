@@ -60,14 +60,14 @@ object HeatmapRenderer {
         manager: AppWidgetManager,
         appWidgetId: Int,
     ): RemoteViews? {
+        val style = CardStyle.loadFor(context, appWidgetId)
         val data = HabitCardData.load(
             context,
             HeatmapConfig.habitOf(context, appWidgetId),
             HeatmapConfig.colorOf(context, appWidgetId),
-        ) ?: return null
+        )?.tinted(style.dark) ?: return null
         if (data.levels.isEmpty()) return null
 
-        val style = CardStyle.loadFor(context, appWidgetId)
         val layout = HeatmapConfig.layoutOf(context, appWidgetId)
         val density = context.resources.displayMetrics.density
 
@@ -95,7 +95,7 @@ object HeatmapRenderer {
                     data.iconPath,
                     when {
                         !data.iconTintable -> null
-                        filled -> Color.WHITE
+                        filled -> CardBitmaps.inkOn(data.color)
                         tight -> data.color
                         else -> style.content
                     },
@@ -111,7 +111,7 @@ object HeatmapRenderer {
                         } else {
                             CardBitmaps.withAlpha(data.color, 0.20f)
                         },
-                        if (data.doneToday) Color.WHITE else data.color,
+                        if (data.doneToday) CardBitmaps.inkOn(data.color) else data.color,
                     ),
                 )
             }
@@ -162,7 +162,7 @@ object HeatmapRenderer {
             context,
             HeatmapConfig.habitOf(context, appWidgetId),
             HeatmapConfig.colorOf(context, appWidgetId),
-        )
+        )?.tinted(style.dark)
 
         if (data == null || data.levels.isEmpty()) {
             views.setViewVisibility(R.id.hm_content, View.GONE)
@@ -238,7 +238,7 @@ object HeatmapRenderer {
                 data.iconPath,
                 when {
                     !data.iconTintable -> null
-                    filled -> Color.WHITE
+                    filled -> CardBitmaps.inkOn(data.color)
                     tight -> data.color
                     else -> style.content
                 },
@@ -289,7 +289,7 @@ object HeatmapRenderer {
             CardBitmaps.check(
                 tilePx,
                 if (data.doneToday) data.color else CardBitmaps.withAlpha(data.color, 0.20f),
-                if (data.doneToday) Color.WHITE else data.color,
+                if (data.doneToday) CardBitmaps.inkOn(data.color) else data.color,
             ),
         )
         views.setOnClickPendingIntent(
@@ -343,7 +343,7 @@ object HeatmapRenderer {
     }
 }
 
-class HabitCardData(
+data class HabitCardData(
     val id: String?,
     val name: String,
     val description: String,
@@ -357,6 +357,8 @@ class HabitCardData(
     val completions: List<Boolean>,
     val levels: List<Int>,
 ) {
+
+    fun tinted(dark: Boolean): HabitCardData = copy(color = CardBitmaps.shown(color, dark))
 
     fun isDoneOn(dayIndex: Int): Boolean =
         dayIndex >= 0 && dayIndex < completions.size && completions[dayIndex]

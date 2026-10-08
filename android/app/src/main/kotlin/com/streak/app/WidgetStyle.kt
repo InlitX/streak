@@ -38,6 +38,10 @@ data class WidgetStyle(
     val imagePath: String?,
     val scrim: Color,
 ) {
+    val dark: Boolean get() = content == Color.White
+
+    fun shown(color: Color): Color = Color(CardBitmaps.shown(color.toArgb(), dark))
+
     companion object {
         fun loadFor(context: Context, id: Int): WidgetStyle {
             val opacity = WidgetConfig.opacity(context, id)

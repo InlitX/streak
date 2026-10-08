@@ -260,7 +260,7 @@ class HabitWidget : GlanceAppWidget() {
         pastFirst: Boolean,
     ) {
         val habitId = habit.optString("id")
-        val color = Color(habit.optInt("color", FALLBACK_COLOR))
+        val color = style.shown(Color(habit.optInt("color", FALLBACK_COLOR)))
         val kind = habit.optInt("kind", 0)
         val target = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val quantified = kind == KIND_QUANTITATIVE || target > 1

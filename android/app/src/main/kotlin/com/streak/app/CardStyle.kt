@@ -14,6 +14,8 @@ data class CardStyle(
     val imagePath: String?,
     val scrim: Int,
 ) {
+    val dark: Boolean get() = content == Color.WHITE
+
     companion object {
         fun loadFor(context: Context, id: Int): CardStyle {
             val opacity = WidgetConfig.opacity(context, id)

@@ -219,7 +219,7 @@ class TodayWidget : GlanceAppWidget() {
         density: Float,
         habit: JSONObject,
     ) {
-        val color = Color(habit.optInt("color", FALLBACK_COLOR))
+        val color = style.shown(Color(habit.optInt("color", FALLBACK_COLOR)))
         val kind = habit.optInt("kind", 0)
         val target = habit.optDouble("perDayTarget", 1.0).coerceAtLeast(1.0)
         val today = WidgetPayload.TODAY

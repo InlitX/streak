@@ -758,8 +758,8 @@ class WidgetConfigActivity : ComponentActivity() {
         habitId: String?,
         allColor: Int,
     ) {
-        val data = remember(habitId, allColor) {
-            HabitCardData.load(this, habitId, if (habitId == null) allColor else null)
+        val data = remember(habitId, allColor, style.dark) {
+            HabitCardData.load(this, habitId, if (habitId == null) allColor else null)?.tinted(style.dark)
         }
         if (data == null) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -785,7 +785,7 @@ class WidgetConfigActivity : ComponentActivity() {
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     BitmapImage(
-                        remember(data.id, tilePx) {
+                        remember(data.id, data.color, tilePx) {
                             CardBitmaps.tile(
                                 tilePx,
                                 CardBitmaps.withAlpha(data.color, 0.20f),
@@ -812,12 +812,12 @@ class WidgetConfigActivity : ComponentActivity() {
                     if (data.id != null) {
                         Spacer(Modifier.width(8.dp))
                         BitmapImage(
-                            remember(data.id, data.doneToday, tilePx) {
+                            remember(data.id, data.color, data.doneToday, tilePx) {
                                 CardBitmaps.check(
                                     tilePx,
                                     if (data.doneToday) data.color
                                     else CardBitmaps.withAlpha(data.color, 0.20f),
-                                    if (data.doneToday) android.graphics.Color.WHITE else data.color,
+                                    if (data.doneToday) CardBitmaps.inkOn(data.color) else data.color,
                                 )
                             },
                             tileDp.dp,
@@ -832,7 +832,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     .onSizeChanged { gridSize = it },
             ) {
                 if (gridSize.width > 0 && gridSize.height > 0) {
-                    val grid = remember(gridSize, data.id, classic, data.levels.size, style.cell) {
+                    val grid = remember(gridSize, data.id, data.color, classic, data.levels.size, style.cell) {
                         CardBitmaps.grid(
                             gridSize.width, gridSize.height, data.levels, data.color,
                             if (classic) style.cell.toArgb() else null,
@@ -950,7 +950,7 @@ class WidgetConfigActivity : ComponentActivity() {
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(Modifier.size(12.dp).clip(CircleShape).background(option.color))
+        Box(Modifier.size(12.dp).clip(CircleShape).background(Color(CardBitmaps.shown(option.color.toArgb(), true))))
         Spacer(Modifier.width(14.dp))
         Text(
             option.name, fontSize = 16.sp, fontWeight = FontWeight.Bold,

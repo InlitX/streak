@@ -231,6 +231,16 @@ object CardBitmaps {
     fun withAlpha(color: Int, alpha: Float): Int =
         ((alpha.coerceIn(0f, 1f) * 255).toInt() shl 24) or (color and 0x00FFFFFF)
 
+    fun shown(color: Int, dark: Boolean): Int {
+        val luminance = Color.luminance(color or 0xFF000000.toInt())
+        if (dark && luminance < 0.06f) return 0xFFF2F2F2.toInt()
+        if (!dark && luminance > 0.82f) return 0xFF1C1C1E.toInt()
+        return color
+    }
+
+    fun inkOn(color: Int): Int =
+        if (Color.luminance(color or 0xFF000000.toInt()) > 0.55f) 0xFF14141A.toInt() else Color.WHITE
+
     private fun decode(path: String?): Bitmap? {
         if (path.isNullOrEmpty()) return null
         return try {
