@@ -872,13 +872,19 @@ class _PresetChip extends StatelessWidget {
             children: [
               Icon(icon, size: 17, color: selected ? scheme.primary : context.tokens.muted),
               const SizedBox(height: 4),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: selected ? scheme.primary : context.tokens.muted,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: selected ? scheme.primary : context.tokens.muted,
+                    ),
+                  ),
                 ),
               ),
             ],
