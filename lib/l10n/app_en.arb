@@ -723,7 +723,6 @@
     "placeholders": { "amount": { "type": "String" }, "habit": { "type": "String" } }
   },
   "focus_personalize": "Custom",
-  "focus_track_rain": "Rain",
   "focus_track_brown": "Brown noise",
   "focus_track_fire": "Fire",
   "focus_track_ticking": "Ticking clock",

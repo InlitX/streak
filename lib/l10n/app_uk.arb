@@ -866,7 +866,6 @@
   "data_sub": "Резервні копії та імпорт",
   "note_time_optional": "Час (необов’язково)",
   "focus_pause": "Призупинити",
-  "focus_track_rain": "Дощ",
   "unit_hours": "години",
   "focus_end_tasks": "{count} завдань досі не позначено.",
   "@focus_end_tasks": {

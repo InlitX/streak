@@ -41,7 +41,6 @@ List<FocusTrack> focusTracksOf(BuildContext context, SettingsController s) => [
           FocusTrack(
             id: entry.key,
             name: switch (entry.key) {
-              'rain.mp3' => context.l10n.focus_track_rain,
               'brown_noise.mp3' => context.l10n.focus_track_brown,
               'fire.mp3' => context.l10n.focus_track_fire,
               'ticking.mp3' => context.l10n.focus_track_ticking,
@@ -103,11 +102,14 @@ class _MusicSheet extends StatelessWidget {
 
     return SafeArea(
       top: false,
+      bottom: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 2, 20, 16),
+        padding: const EdgeInsets.fromLTRB(20, 2, 20, 0),
         child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.only(
+            bottom: 16 + MediaQuery.paddingOf(context).bottom,
+          ),
           children: [
             Row(
               children: [
@@ -241,11 +243,13 @@ class _VolumeRow extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              width: 38,
+            ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 38),
               child: Text(
                 '${(volume * 100).round()}%',
                 textAlign: TextAlign.end,
+                maxLines: 1,
+                softWrap: false,
                 style: sheetLabelStyle(context, size: 12),
               ),
             ),

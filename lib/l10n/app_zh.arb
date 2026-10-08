@@ -900,7 +900,6 @@
   "widget_cfg_dark_color": "深色主题",
   "widget_cfg_light_color": "浅色主题",
   "focus_pause": "暂停",
-  "focus_track_rain": "雨声",
   "unit_hours": "小时",
   "focus_end_tasks": "还有 {count} 项任务未勾选。",
   "@focus_end_tasks": {

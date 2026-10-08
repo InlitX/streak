@@ -675,7 +675,6 @@
   "data_sub": "Backups und Import",
   "note_time_optional": "Zeit (optional)",
   "focus_pause": "Pause",
-  "focus_track_rain": "Regen",
   "unit_hours": "Stunden",
   "focus_end_tasks": "{count} Aufgaben sind noch offen.",
   "@focus_end_tasks": {
