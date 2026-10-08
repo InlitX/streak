@@ -1145,7 +1145,7 @@
   "island_p_stone_pile": "Steinhaufen",
   "island_p_bench": "Bank",
   "island_reset_sub": "Alles wird abgerissen und jeder Punkt geht zurück auf dein Konto.",
-  "last_check": "Letzter Aufruf",
+  "last_check": "Zuletzt eingetragen",
   "heatmap_rolling_sub": "Das jährliche Raster endet heut anstatt am 31. Dezember",
   "app_background_sub": "Was du hinter den Karten siehst",
   "island_reset_go": "Neu starten",

@@ -1338,7 +1338,7 @@
   "island_reset_go": "Start over",
   "island_beta": "This is a first take on gamification and it is still in beta. It may grow, change shape or be replaced entirely, depending on how you all use it.",
   "gamification_beta": "Gamification (beta)",
-  "last_check": "Last check",
+  "last_check": "Last logged",
   "check_history": "Check history",
   "check_history_sub": "{count} days checked off",
   "@check_history_sub": {"placeholders": {"count": {"type": "String"}}},
