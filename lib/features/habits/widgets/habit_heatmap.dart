@@ -55,7 +55,7 @@ Color heatmapCellColor(
   }
   final target = habit.effectiveTarget <= 0 ? 1.0 : habit.effectiveTarget;
   final ratio = (count / target).clamp(0.25, 1.0);
-  final full = QuantProgress.of(count: count, target: target)
+  final full = (habit.hasGoal ? QuantProgress.of(count: count, target: target) : habit.progressFor(count))
       .solidColor(habit.color.shownIn(context));
   return Color.lerp(habit.color.shownIn(context).withValues(alpha: 0.4), full, ratio)!;
 }

@@ -197,7 +197,8 @@ class _CalendarCell extends StatelessWidget {
       final ratio = (count / target).clamp(0.25, 1.0);
       fillColor = Color.lerp(
         habit.color.shownIn(context).withValues(alpha: 0.4),
-        QuantProgress.of(count: count, target: target).solidColor(habit.color.shownIn(context)),
+        (habit.hasGoal ? QuantProgress.of(count: count, target: target) : habit.progressFor(count))
+            .solidColor(habit.color.shownIn(context)),
         ratio,
       );
     } else if (isCurrentMonth && !negative && !ratioFill && completed) {
