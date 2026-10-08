@@ -189,7 +189,8 @@ class HabitWidget : GlanceAppWidget() {
                 } else {
                     WidgetText.get(context, "this_week", "This week")
                 }
-                Drawn(WidgetDraw.text(context, title, 19f, style.content, 800, grid.name - 4f), density, title)
+                val size = WidgetDraw.fit(context, title, 19f, 15f, 800, grid.name - 4f)
+                Drawn(WidgetDraw.text(context, title, size, style.content, 800, grid.name - 4f), density, title)
                 if (due > 0) {
                     val line = WidgetText.format(
                         context, "week_done", "$done of $due",
