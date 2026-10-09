@@ -77,7 +77,7 @@ object WidgetDraw {
 
     fun fit(context: Context, value: String, maxSp: Float, minSp: Float, weight: Int, maxWidthDp: Float): Float {
         val width = paint(context, maxSp, 0, weight).measureText(value)
-        val room = maxWidthDp * density(context)
+        val room = maxWidthDp * density(context) * 0.95f
         return if (width <= room) maxSp else (maxSp * room / width).coerceAtLeast(minSp)
     }
 
