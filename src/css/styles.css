@@ -490,7 +490,7 @@ main{position:relative;z-index:1}
 @keyframes zoomin{from{opacity:0;transform:scale(.94)}}
 
 @media (max-width:900px){
-  .hero{grid-template-columns:1fr;padding-top:48px}
+  .hero{grid-template-columns:minmax(0,1fr);padding-top:48px}
   .hero__art{min-height:0;margin-top:20px}
   .feats{grid-template-columns:1fr 1fr}
   .feats li:not(:nth-child(3n+1)){padding-left:0;border-left:0}
@@ -508,7 +508,9 @@ main{position:relative;z-index:1}
   .stars{display:none}
   .sec{padding-top:56px}
   .lede{font-size:16.5px}
-  .ph--side{transform:translateY(22px)}
+  .hero__art{gap:0;overflow-x:clip}
+  .ph--main{width:46%;z-index:2}
+  .ph--side{width:33%;margin:0 -6%;transform:translateY(22px)}
   .nudge{display:none}
   .shot{width:180px}
   .back-it{padding:26px 20px}
