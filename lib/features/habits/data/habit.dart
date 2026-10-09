@@ -860,7 +860,7 @@ class Habit {
             ) ??
             const {},
         interval: HabitInterval.values[(map['interval'] ?? 0) as int],
-        targetFrequency: (map['targetFrequency'] ?? 1) as int,
+        targetFrequency: math.max(1, (map['targetFrequency'] ?? 1) as int),
         scheduleWeekdays: (map['scheduleWeekdays'] as List?)
                 ?.map((e) => e as int)
                 .toList() ??

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:streak/core/extensions/date_extensions.dart';
 
 class FocusSession {
@@ -29,10 +31,11 @@ class FocusSession {
 
   List<FocusSession> split() {
     final pieces = <FocusSession>[];
-    var start = startedAt;
+    var start = startedAt.toLocal();
     var left = seconds;
     while (left > 0) {
-      final span = dayBorderAfter(start).difference(start).inSeconds;
+      final gap = dayBorderAfter(start).difference(start).inMilliseconds;
+      final span = max(1, (gap / 1000).ceil());
       if (span >= left) {
         pieces.add(_pieceOf(pieces.length + 1, start, left, last: true));
         break;

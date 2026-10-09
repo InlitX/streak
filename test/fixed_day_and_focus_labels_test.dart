@@ -110,6 +110,20 @@ void main() {
       expect(pieces.every((piece) => piece.label == 'Reading'), isTrue);
     });
 
+    test('a session started less than a second before midnight still splits',
+        () {
+      final edge = FocusSession(
+        id: 'edge',
+        habitId: '',
+        targetMinutes: 50,
+        seconds: 50 * 60,
+        completed: true,
+        startedAt: DateTime(2026, 10, 8, 23, 59, 59, 500),
+      );
+      final pieces = edge.split();
+      expect(pieces.fold(0, (sum, piece) => sum + piece.seconds), 50 * 60);
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
     test('time adds up per label and unlabelled sessions stay out', () {
       final stats = FocusStats.compute(
         sessions: [
