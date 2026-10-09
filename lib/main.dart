@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' show AppExitResponse;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,7 @@ import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/image_cleanup_service.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:streak/services/portable_traces.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:streak/services/widget_action_service.dart';
 
@@ -50,6 +52,16 @@ Future<void> main() async {
     return;
   }
   _run();
+}
+
+Future<AppExitResponse> _leaveNoTrace() async {
+  try {
+    await NotificationService().cancelAll();
+    await PortableTraces.clear(NotificationService.windowsAppId);
+  } catch (e) {
+    debugPrint('Could not clear what the portable app left: $e');
+  }
+  return AppExitResponse.exit;
 }
 
 bool _blockedByWindows(Object error) =>
@@ -94,6 +106,7 @@ Future<void> _startup() async {
   } catch (e, s) {
     debugPrint('Startup init (notifications/widget) failed: $e\n$s');
   }
+  if (isPortable) AppLifecycleListener(onExitRequested: _leaveNoTrace);
 
   _appChannel.setMethodCallHandler((call) async {
     if (call.method == 'openHabit') {

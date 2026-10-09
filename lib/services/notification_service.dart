@@ -11,6 +11,7 @@ import 'package:streak/core/constants/motivational_quotes.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/amount_format.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -20,7 +21,7 @@ import 'package:streak/services/reminder_schedule.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/l10n/app_localizations_en.dart';
 import 'package:streak/services/home_widget_service.dart';
-import 'package:streak/services/linux_notifications.dart';
+import 'package:streak/services/in_app_notifications.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:streak/services/widget_icon_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -32,9 +33,11 @@ class NotificationService {
   factory NotificationService() => _instance;
 
   final _plugin = FlutterLocalNotificationsPlugin();
-  late final _linux = LinuxNotifications(_plugin);
+  late final _inApp = InAppNotifications(_plugin);
   static const _channelId = 'habit_reminders';
   static const _channelName = 'Habit Reminders';
+  static String get windowsAppId =>
+      isPortable ? 'com.streak.app.portable' : 'com.streak.app';
 
   static const actionDone = 'habit_done';
   static const actionSnooze = 'habit_snooze';
@@ -175,7 +178,7 @@ class NotificationService {
     );
     final windows = WindowsInitializationSettings(
       appName: 'Streak',
-      appUserModelId: 'com.streak.app',
+      appUserModelId: windowsAppId,
       guid: 'cfb32a7d-9c06-495b-8afa-df8829d33edc',
       iconPath: [
         File(Platform.resolvedExecutable).parent.path,
@@ -222,6 +225,7 @@ class NotificationService {
           ));
     }
 
+    if (isPortable) await _plugin.cancelAll();
     await _repairStore();
 
     _ready = true;
@@ -481,7 +485,7 @@ class NotificationService {
     bool daily = false,
   }) async {
     final when = tz.TZDateTime.from(next, tz.local);
-    if (Platform.isWindows && !when.isBefore(from)) {
+    if (Platform.isWindows && !isPortable && !when.isBefore(from)) {
       final details = await _details(habit, body, strings);
       final ids = <int>{};
       for (var turn = 1; turn <= (daily ? 14 : 8); turn++) {
@@ -898,7 +902,7 @@ class NotificationService {
   }
 
   Future<void> cancelAll() async {
-    if (Platform.isLinux) _linux.cancelAll();
+    if (_queuesInApp) _inApp.cancelAll();
     await _plugin.cancelAll();
   }
 
@@ -920,8 +924,8 @@ class NotificationService {
     String? payload,
     DateTimeComponents? matchDateTimeComponents,
   }) async {
-    if (Platform.isLinux) {
-      _linux.schedule(
+    if (_queuesInApp) {
+      _inApp.schedule(
         id: id,
         title: title,
         body: body,
@@ -948,14 +952,16 @@ class NotificationService {
     );
   }
 
+  bool get _queuesInApp => Platform.isLinux || isPortable;
+
   Future<void> _cancel(int id) async {
-    if (Platform.isLinux) _linux.cancel(id);
+    if (_queuesInApp) _inApp.cancel(id);
     await _plugin.cancel(id);
   }
 
   Future<List<PendingNotificationRequest>> _pending() =>
-      Platform.isLinux
-          ? Future.value(_linux.pending)
+      _queuesInApp
+          ? Future.value(_inApp.pending)
           : _plugin.pendingNotificationRequests();
 
   int _notificationId(String habitId, String reminderId, int slot) =>

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-class LinuxNotifications {
-  LinuxNotifications(this._plugin);
+class InAppNotifications {
+  InAppNotifications(this._plugin);
 
   final FlutterLocalNotificationsPlugin _plugin;
   final _queue = <int, _Queued>{};

@@ -24,6 +24,14 @@ String _dataPath = '';
 
 String get dataPath => _dataPath;
 
+bool get isPortable =>
+    Platform.isWindows &&
+    _dataPath.isNotEmpty &&
+    _plain(_dataPath) == _plain(DataLocation.portableDir.path);
+
+String _plain(String path) =>
+    path.replaceAll(r'\', '/').replaceAll(RegExp(r'/+$'), '').toLowerCase();
+
 Future<Directory> appDataDir() => _dataDir ??= _resolveDataDir().then((dir) {
       _dataPath = dir.path;
       return dir;
