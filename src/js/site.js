@@ -145,6 +145,7 @@ let lbList = [];
 let lbAt = 0;
 
 const captionOf = (el) => {
+  if (el.closest('.prose')) return el.querySelector('img').alt;
   const item = el.closest('.item, .shot');
   if (!item) return '';
   const label = item.querySelector('h3, figcaption');
@@ -174,10 +175,27 @@ const showAt = (index) => {
     media.alt = thumb ? thumb.alt : '';
     if (!el.dataset.src) media.className = 'is-phone';
   }
+  lbStage.classList.remove('is-pan');
+  if (el.closest('.prose')) {
+    media.addEventListener('load', () => {
+      lbStage.classList.toggle('is-pan', media.naturalWidth > media.naturalHeight);
+    });
+  }
   lbStage.appendChild(media);
   lbCap.textContent = captionOf(el);
   lb.querySelectorAll('.lb__nav').forEach((nav) => { nav.hidden = lbList.length < 2; });
 };
+
+document.querySelectorAll('.prose img').forEach((img) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'zoom';
+  button.dataset.group = 'post';
+  button.dataset.src = img.getAttribute('src');
+  button.setAttribute('aria-label', img.alt);
+  img.replaceWith(button);
+  button.appendChild(img);
+});
 
 document.querySelectorAll('.zoom').forEach((el) => {
   el.addEventListener('click', () => {

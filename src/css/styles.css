@@ -337,6 +337,7 @@ main{position:relative;z-index:1}
 .prose pre code{padding:0;border:0;background:none}
 .prose blockquote{padding-left:16px;border-left:2px solid var(--violet);color:var(--muted)}
 .prose img{display:block;width:auto;max-width:100%;max-height:560px;margin:1.6em auto;border-radius:16px;border:1px solid var(--line)}
+.prose .zoom{display:block;width:100%;padding:0}
 
 .talk{margin-top:72px;padding-top:36px;border-top:1px solid var(--line)}
 .talk h2{font-size:22px;font-weight:800;letter-spacing:-.02em}
@@ -473,6 +474,10 @@ main{position:relative;z-index:1}
   box-shadow:0 30px 90px -20px rgba(0,0,0,.9);animation:zoomin .35s var(--ease);
 }
 .lb__stage .is-phone{border-radius:0;box-shadow:none;max-height:88dvh;filter:drop-shadow(0 30px 50px rgba(0,0,0,.7))}
+@media (max-width:700px){
+  .lb__stage.is-pan{max-width:100vw;max-height:84dvh;overflow:auto;justify-content:flex-start;align-items:flex-start}
+  .lb__stage.is-pan img{max-width:none;max-height:none;width:860px;border-radius:12px}
+}
 .lb__x,.lb__nav{
   position:fixed;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
   background:rgba(244,244,246,.92);color:#0B0B0E;
