@@ -124,8 +124,8 @@ class _TodayProgressState extends State<TodayProgress>
               ),
             ),
             SizedBox(
-              width: 58,
-              height: 58,
+              width: 64,
+              height: 64,
               child: AnimatedBuilder(
                 animation: _curve,
                 builder: (context, _) {
