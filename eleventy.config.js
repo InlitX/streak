@@ -37,8 +37,8 @@ export default function (config) {
 
   config.addFilter("bytes", (file) => {
     const size = fs.statSync(`src/files/${file}`).size;
-    if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`;
-    return `${(size / 1024 / 1024).toFixed(1)} MB`;
+    if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`;
+    return `${(size / 1024 / 1024).toFixed(1)} MB`;
   });
 
   config.addFilter("clock", (seconds) => {
