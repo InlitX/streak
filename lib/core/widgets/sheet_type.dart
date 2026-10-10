@@ -147,6 +147,8 @@ class SheetTitle extends StatelessWidget {
 
     if (trailing == null) return title;
     return Row(
+      crossAxisAlignment:
+          subtitle == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Expanded(child: title),
         const SizedBox(width: 12),

@@ -36,6 +36,7 @@ import 'package:url_launcher/url_launcher.dart';
 const kGitHubUrl = 'https://github.com/InlitX/streak';
 const kIssuesUrl = 'https://github.com/InlitX/streak/issues';
 const kCoffeeUrl = 'https://ko-fi.com/inlitx';
+const kSiteUrl = 'https://inlitx.github.io/streak';
 
 class SettingsActions {
   const SettingsActions._();
@@ -231,6 +232,16 @@ class SettingsActions {
                 SheetTitle(
                   context.l10n.auto_backup,
                   subtitle: context.l10n.auto_backup_where,
+                  trailing: IconButton(
+                    icon: Icon(LucideIcons.circleHelp, color: context.tokens.muted),
+                    tooltip: context.l10n.sync_guide,
+                    onPressed: () => openUrl(
+                      context,
+                      Localizations.localeOf(context).languageCode == 'es'
+                          ? '$kSiteUrl/es/blog/sync-without-internet/'
+                          : '$kSiteUrl/blog/sync-without-internet/',
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 for (var i = 0; i < 3; i++)

@@ -34,6 +34,7 @@ import 'package:streak/features/focus/widgets/timer_clocks.dart';
 import 'package:streak/core/widgets/morph_menu.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/desktop_window.dart';
 import 'package:streak/services/notification_service.dart';
@@ -893,6 +894,11 @@ class _TopBar extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: Icon(LucideIcons.circleHelp, color: Colors.white.withValues(alpha: 0.8)),
+            tooltip: context.l10n.focus_resources,
+            onPressed: () => SettingsActions.openUrl(context, '$kSiteUrl/resources/'),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 6),
