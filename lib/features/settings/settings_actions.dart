@@ -29,6 +29,7 @@ import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/auto_sync.dart';
 import 'package:streak/services/folder_sync.dart';
+import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/import_service.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -126,13 +127,15 @@ class SettingsActions {
   }
 
   static Future<void> reloadAll(BuildContext context) async {
-    await context.read<HabitsController>().reload();
+    final habits = context.read<HabitsController>();
+    await habits.reload();
     if (!context.mounted) return;
     context.read<NotesController>().reload();
     context.read<FocusController>().reload();
     context.read<TodosController>().reload();
     context.read<TodoTagsController>().reload();
     context.read<CategoriesController>().reload();
+    await HomeWidgetService.sync(habits.asMap);
   }
 
   static Future<void> refreshFolder(BuildContext context) async {

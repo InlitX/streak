@@ -23,6 +23,7 @@ class LocalStore {
   static const _todosBox = 'todos';
   static const _todoTagsBox = 'todo_tags';
   static const _changesKey = 'syncChanges';
+  static const _deletedKey = 'syncDeleted';
   static const _deviceKey = 'deviceId';
 
   static late Box _habits;
@@ -41,6 +42,7 @@ class LocalStore {
 
   static void Function()? onChanged;
   static Map<String, int>? _changes;
+  static Map<String, int>? _deleted;
   static int _quiet = 0;
 
   static Map<String, int> get changes => _changes ??= {
@@ -48,25 +50,53 @@ class LocalStore {
           if (entry.value is int) entry.key: entry.value as int,
       };
 
+  static Map<String, int> get deleted => _deleted ??= {
+        for (final entry in settingMap(_deletedKey).entries)
+          if (entry.value is int) entry.key: entry.value as int,
+      };
+
   static int? changedAt(String id) => changes[id];
+
+  static int? deletedAt(String id) => deleted[id];
 
   static Future<void> stampChange(String id, int at) async {
     changes[id] = at;
+    await _settings.put(_changesKey, Map<String, int>.of(changes));
+    if (deleted.remove(id) != null) {
+      await _settings.put(_deletedKey, Map<String, int>.of(deleted));
+    }
+  }
+
+  static Future<void> stampDeleted(String id, int at) async {
+    deleted[id] = at;
+    changes.remove(id);
+    await _settings.put(_deletedKey, Map<String, int>.of(deleted));
     await _settings.put(_changesKey, Map<String, int>.of(changes));
   }
 
   static Future<void> _touch(Iterable<String> ids) async {
     if (_quiet > 0) return;
     final now = DateTime.now().millisecondsSinceEpoch;
+    var revived = false;
     for (final id in ids) {
       changes[id] = now;
+      revived = deleted.remove(id) != null || revived;
     }
     await _settings.put(_changesKey, Map<String, int>.of(changes));
+    if (revived) await _settings.put(_deletedKey, Map<String, int>.of(deleted));
     onChanged?.call();
   }
 
-  static void _removed() {
-    if (_quiet == 0) onChanged?.call();
+  static Future<void> _removed(Iterable<String> ids) async {
+    if (_quiet > 0 || ids.isEmpty) return;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    for (final id in ids) {
+      deleted[id] = now;
+      changes.remove(id);
+    }
+    await _settings.put(_deletedKey, Map<String, int>.of(deleted));
+    await _settings.put(_changesKey, Map<String, int>.of(changes));
+    onChanged?.call();
   }
 
   static Future<T> quietly<T>(Future<T> Function() action) async {
@@ -106,6 +136,7 @@ class LocalStore {
     _habitsStamp = _stampOf(_habits);
     _settings = await Hive.openBox(_settingsBox);
     _changes = null;
+    _deleted = null;
     _categories = await Hive.openBox(_categoriesBox);
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
@@ -183,12 +214,12 @@ class LocalStore {
 
   static Future<void> removeTodo(String id) async {
     await _todos.delete(id);
-    _removed();
+    await _removed([id]);
   }
 
   static Future<void> removeTodos(Iterable<String> ids) async {
     await _todos.deleteAll(ids);
-    _removed();
+    await _removed(ids);
   }
 
   static List<TodoTag> readTodoTags() {
@@ -219,7 +250,7 @@ class LocalStore {
 
   static Future<void> removeTodoTag(String id) async {
     await _todoTags.delete(id);
-    _removed();
+    await _removed([id]);
   }
 
   static List<FocusSession> readFocusSessions() {
@@ -248,7 +279,7 @@ class LocalStore {
     for (final id in ids) {
       await _focus.delete(id);
     }
-    _removed();
+    await _removed(ids);
   }
 
   static Future<void> removeFocusFor(String habitId) async {
@@ -259,7 +290,7 @@ class LocalStore {
     for (final id in ids) {
       await _focus.delete(id);
     }
-    _removed();
+    await _removed(ids);
   }
 
   static List<HabitNote> readNotes() {
@@ -286,7 +317,7 @@ class LocalStore {
 
   static Future<void> removeNote(String id) async {
     await _notes.delete(id);
-    _removed();
+    await _removed([id]);
   }
 
   static Future<void> removeNotesFor(String habitId) async {
@@ -297,7 +328,7 @@ class LocalStore {
     for (final id in ids) {
       await _notes.delete(id);
     }
-    _removed();
+    await _removed(ids);
   }
 
   static Map<String, Habit> readHabits() {
@@ -348,7 +379,7 @@ class LocalStore {
 
   static Future<void> removeHabit(String id) async {
     await _habits.delete(id);
-    _removed();
+    await _removed([id]);
   }
 
   static Future<void> reloadHabits() async {
@@ -443,5 +474,6 @@ class LocalStore {
     await _categories.clear();
     await _settings.clear();
     _changes = null;
+    _deleted = null;
   }
 }

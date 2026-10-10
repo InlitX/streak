@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/services/backup_service.dart';
+import 'package:streak/services/notification_service.dart';
 
 class FolderSync {
   const FolderSync._();
@@ -63,7 +64,7 @@ class FolderSync {
         _settled.add(file.path);
         break;
       }
-      if (data.device == self || data.isEmpty) {
+      if (data.device == self || (data.isEmpty && data.deleted.isEmpty)) {
         _settled.add(file.path);
         continue;
       }
@@ -87,9 +88,11 @@ class FolderSync {
 
   static Future<int> _take(BackupData data) async {
     final stamps = data.changes;
-    var brought = 0;
+    final deletes = LocalStore.setting('autoSync', false);
+    var brought = deletes ? await _forget(data.deleted) : 0;
 
     for (final theirs in data.habits) {
+      if (deletes && _buried(theirs.id, stamps[theirs.id])) continue;
       final ours = LocalStore.habit(theirs.id);
       final newer = _theirsNewer(stamps[theirs.id], theirs.id);
       final merged = ours == null
@@ -107,20 +110,78 @@ class FolderSync {
     for (final category in data.categories) {
       await LocalStore.mergeCategory(category);
     }
-    brought += await _records(data.notes, stamps, (n) => n.id,
-        LocalStore.note, (n) => n.toMap(), LocalStore.writeNote);
-    brought += await _records(data.focus, stamps, (f) => f.id,
-        LocalStore.focusSession, (f) => f.toMap(), LocalStore.writeFocusSession);
-    brought += await _records(data.todos, stamps, (t) => t.id,
+    bool orphan(String habitId) =>
+        deletes && LocalStore.habit(habitId) == null && LocalStore.deletedAt(habitId) != null;
+    brought += await _records(data.notes.where((n) => !orphan(n.habitId)), stamps, deletes,
+        (n) => n.id, LocalStore.note, (n) => n.toMap(), LocalStore.writeNote);
+    brought += await _records(data.focus.where((f) => !orphan(f.habitId)), stamps, deletes,
+        (f) => f.id, LocalStore.focusSession, (f) => f.toMap(), LocalStore.writeFocusSession);
+    brought += await _records(data.todos, stamps, deletes, (t) => t.id,
         LocalStore.todo, (t) => t.toMap(), LocalStore.writeTodo);
-    brought += await _records(data.todoTags, stamps, (t) => t.id,
+    brought += await _records(data.todoTags, stamps, deletes, (t) => t.id,
         LocalStore.todoTag, (t) => t.toMap(), LocalStore.writeTodoTag);
     return brought;
   }
 
+  static Future<int> _forget(Map<String, int> deleted) async {
+    var brought = 0;
+    for (final MapEntry(key: id, value: at) in deleted.entries) {
+      final known = LocalStore.deletedAt(id);
+      if (known != null && known >= at) continue;
+      final edited = LocalStore.changedAt(id);
+      if (edited != null && edited > at) continue;
+      if (await _remove(id)) brought++;
+      await LocalStore.stampDeleted(id, at);
+    }
+    return brought;
+  }
+
+  static Future<bool> _remove(String id) async {
+    final notifications = NotificationService();
+    if (LocalStore.habit(id) != null) {
+      try {
+        await notifications.cancelFor(id);
+      } catch (e) {
+        debugPrint('Could not cancel the reminders of $id: $e');
+      }
+      await LocalStore.removeHabit(id);
+      await LocalStore.removeNotesFor(id);
+      await LocalStore.removeFocusFor(id);
+      return true;
+    }
+    if (LocalStore.todo(id) != null) {
+      try {
+        await notifications.cancelTodo(id);
+      } catch (e) {
+        debugPrint('Could not cancel the reminder of $id: $e');
+      }
+      await LocalStore.removeTodo(id);
+      return true;
+    }
+    if (LocalStore.note(id) != null) {
+      await LocalStore.removeNote(id);
+      return true;
+    }
+    if (LocalStore.focusSession(id) != null) {
+      await LocalStore.removeFocusSessions([id]);
+      return true;
+    }
+    if (LocalStore.todoTag(id) != null) {
+      await LocalStore.removeTodoTag(id);
+      return true;
+    }
+    return false;
+  }
+
+  static bool _buried(String id, int? theirs) {
+    final gone = LocalStore.deletedAt(id);
+    return gone != null && (theirs == null || theirs <= gone);
+  }
+
   static Future<int> _records<T>(
-    List<T> items,
+    Iterable<T> items,
     Map<String, int> stamps,
+    bool deletes,
     String Function(T) idOf,
     T? Function(String) ours,
     Map<String, dynamic> Function(T) mapOf,
@@ -129,6 +190,7 @@ class FolderSync {
     var brought = 0;
     for (final theirs in items) {
       final id = idOf(theirs);
+      if (deletes && _buried(id, stamps[id])) continue;
       final mine = ours(id);
       if (mine != null &&
           (!_theirsNewer(stamps[id], id) || _same(mapOf(mine), mapOf(theirs)))) {

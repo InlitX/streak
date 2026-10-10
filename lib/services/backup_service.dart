@@ -39,6 +39,7 @@ class BackupData {
     this.settings = const {},
     this.device = '',
     this.changes = const {},
+    this.deleted = const {},
   });
 
   final List<Habit> habits;
@@ -52,6 +53,7 @@ class BackupData {
   final Map<String, Object?> settings;
   final String device;
   final Map<String, int> changes;
+  final Map<String, int> deleted;
 
   bool get isEmpty =>
       habits.isEmpty && notes.isEmpty && focus.isEmpty && todos.isEmpty;
@@ -66,6 +68,7 @@ class BackupService {
         'exportedAt': DateTime.now().toIso8601String(),
         'device': LocalStore.deviceId,
         'changes': LocalStore.changes,
+        'deleted': LocalStore.deleted,
         'habits': habits.map((h) => h.toMap()).toList(),
         'categories':
             LocalStore.readCategories().map((c) => c.toMap()).toList(),
@@ -335,15 +338,20 @@ class BackupService {
           ? Map<String, Object?>.from(root['settings'] as Map)
           : const {},
       device: root['device'] is String ? root['device'] as String : '',
-      changes: root['changes'] is Map
-          ? {
-              for (final entry in (root['changes'] as Map).entries)
-                if (entry.value is int) '${entry.key}': entry.value as int,
-            }
-          : const {},
+      changes: _stamps(root['changes']),
+      deleted: _stamps(root['deleted']),
     );
 
-    if (data.isEmpty) throw Exception('No habits found in that file');
+    if (data.isEmpty && data.deleted.isEmpty) {
+      throw Exception('No habits found in that file');
+    }
     return data;
   }
+
+  static Map<String, int> _stamps(Object? source) => source is Map
+      ? {
+          for (final entry in source.entries)
+            if (entry.value is int) '${entry.key}': entry.value as int,
+        }
+      : const {};
 }
