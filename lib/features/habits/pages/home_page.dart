@@ -611,12 +611,9 @@ class _HomePageState extends State<HomePage> {
               final scheduled = settings.todayOnly
                   ? all.where((h) => h.isScheduledOn(today)).toList()
                   : all;
-              final tracked = scheduled.where((h) => h.tracking).length;
               final listed = settings.hideTracking
                   ? scheduled.where((h) => !h.tracking).toList()
                   : scheduled;
-              void toggleTracking() =>
-                  settings.setHideTracking(!settings.hideTracking);
               final filtered = _category == null
                   ? listed
                   : listed.where((h) => h.category == _category).toList();
@@ -665,9 +662,6 @@ class _HomePageState extends State<HomePage> {
                       categories: categories,
                       category: _category,
                       onCategory: _pickCategory,
-                      tracked: tracked,
-                      hideTracking: settings.hideTracking,
-                      onTracking: toggleTracking,
                       filtered: todayFiltered(settings),
                       onFilter: openFilter,
                       allDone: allDone,
@@ -685,17 +679,12 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(height: settings.showTodayProgress ? 20 : 6),
                           _ViewSelector(mode: _mode, onChanged: _changeMode),
                         ],
-                        if (!minimal ||
-                            categories.isNotEmpty ||
-                            tracked > 0) ...[
+                        if (!minimal || categories.isNotEmpty) ...[
                           const SizedBox(height: 14),
                           _CategoryBar(
                             categories: categories,
                             selected: _category,
                             onSelected: _pickCategory,
-                            tracked: tracked,
-                            hideTracking: settings.hideTracking,
-                            onTracking: toggleTracking,
                             filtered: todayFiltered(settings),
                             onFilter: minimal ? null : openFilter,
                           ),
@@ -1098,9 +1087,6 @@ class _CategoryBar extends StatelessWidget {
     required this.categories,
     required this.selected,
     required this.onSelected,
-    required this.tracked,
-    required this.hideTracking,
-    required this.onTracking,
     required this.filtered,
     required this.onFilter,
   });
@@ -1108,9 +1094,6 @@ class _CategoryBar extends StatelessWidget {
   final List<String> categories;
   final String? selected;
   final ValueChanged<String?> onSelected;
-  final int tracked;
-  final bool hideTracking;
-  final VoidCallback onTracking;
   final bool filtered;
   final VoidCallback? onFilter;
 
@@ -1138,12 +1121,6 @@ class _CategoryBar extends StatelessWidget {
               active: selected == category,
               onTap: () => onSelected(category),
               onLongPress: () => showCategoryOrderSheet(context),
-            ),
-          if (tracked > 0)
-            _Chip(
-              label: trackingChipLabel(context, tracked, hideTracking),
-              active: false,
-              onTap: onTracking,
             ),
         ],
       ),

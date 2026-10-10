@@ -202,6 +202,7 @@
   "focus_label_remove_confirm": "Remove",
   "by_label": "By label",
   "tracking_hide": "Hide just tracking",
+  "tracking_hide_sub": "Habits you only track stay out of this list",
   "tracking_show": "Show just tracking ({count})",
   "@tracking_show": {"placeholders": {"count": {"type": "int"}}},
   "daily": "Daily",

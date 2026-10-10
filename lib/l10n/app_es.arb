@@ -175,6 +175,7 @@
   "focus_label_remove_confirm": "Quitar",
   "by_label": "Por etiqueta",
   "tracking_hide": "Ocultar seguimiento",
+  "tracking_hide_sub": "Los hábitos de solo seguimiento no salen en esta lista",
   "tracking_show": "Mostrar seguimiento ({count})",
   "@tracking_show": {"placeholders": {"count": {"type": "int"}}},
   "daily": "Diario",

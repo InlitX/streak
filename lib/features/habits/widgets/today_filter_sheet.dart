@@ -5,10 +5,11 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_switch.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 bool todayFiltered(SettingsController settings) =>
-    settings.todayOnly || settings.hideDone;
+    settings.todayOnly || settings.hideDone || settings.hideTracking;
 
 Future<void> showTodayFilterSheet(BuildContext context) {
   return showModalBottomSheet<void>(
@@ -25,6 +26,9 @@ class _TodayFilterSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final tracked = context.select<HabitsController, bool>(
+      (habits) => habits.habits.any((habit) => habit.tracking),
+    );
     return SafeArea(
       top: false,
       child: Padding(
@@ -53,6 +57,16 @@ class _TodayFilterSheet extends StatelessWidget {
               value: settings.hideDone,
               onChanged: settings.setHideDone,
             ),
+            if (tracked || settings.hideTracking) ...[
+              const SizedBox(height: 18),
+              _FilterRow(
+                icon: LucideIcons.eyeOff,
+                title: context.l10n.tracking_hide,
+                subtitle: context.l10n.tracking_hide_sub,
+                value: settings.hideTracking,
+                onChanged: settings.setHideTracking,
+              ),
+            ],
           ],
         ),
       ),
