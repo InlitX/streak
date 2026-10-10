@@ -155,6 +155,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialTodosAll = WidgetConfig.todosAll(this, appWidgetId),
                 initialArt = WidgetConfig.art(this, appWidgetId),
                 initialSpan = WidgetConfig.span(this, appWidgetId),
+                initialLook = WidgetConfig.look(this, appWidgetId),
                 initialChosen = WidgetConfig.habits(this, appWidgetId),
                 isEdit = WidgetConfig.exists(this, appWidgetId),
             )
@@ -193,7 +194,7 @@ class WidgetConfigActivity : ComponentActivity() {
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
         habitId: String?, allColor: Int, layout: Int,
         followSystem: Boolean, bgLight: Int, todosAll: Boolean,
-        chosen: Set<String>, art: Boolean, span: Int,
+        chosen: Set<String>, art: Boolean, span: Int, look: WidgetLook,
     ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
@@ -204,6 +205,7 @@ class WidgetConfigActivity : ComponentActivity() {
         if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
         if (type == WType.STATS || type == WType.TODOS) WidgetConfig.setArt(this, appWidgetId, art)
         if (type == WType.HABIT) WidgetConfig.setSpan(this, appWidgetId, span)
+        if (type == WType.HABIT || type == WType.TODAY) WidgetConfig.setLook(this, appWidgetId, look)
         if (filters) WidgetConfig.setHabits(this, appWidgetId, chosen)
         if (type == WType.HEATMAP) {
             HeatmapConfig.setHabit(this, appWidgetId, habitId)
@@ -301,6 +303,7 @@ class WidgetConfigActivity : ComponentActivity() {
         initialTodosAll: Boolean,
         initialArt: Boolean,
         initialSpan: Int,
+        initialLook: WidgetLook,
         initialChosen: Set<String>,
         isEdit: Boolean,
     ) {
@@ -318,6 +321,7 @@ class WidgetConfigActivity : ComponentActivity() {
         var todosAll by remember { mutableStateOf(initialTodosAll) }
         var art by remember { mutableStateOf(initialArt) }
         var span by remember { mutableStateOf(initialSpan) }
+        var look by remember { mutableStateOf(initialLook) }
         var chosen by remember { mutableStateOf(initialChosen) }
         val mode by bgModeState
         val image by imageState
@@ -332,7 +336,8 @@ class WidgetConfigActivity : ComponentActivity() {
 
         val hasArt = type == WType.STATS || type == WType.TODOS
         val hasPicker = filters && habits.size > 1
-        val hasContent = type == WType.HEATMAP || type == WType.TODOS || type == WType.HABIT || hasArt || hasPicker
+        val hasContent = type == WType.HEATMAP || type == WType.TODOS || type == WType.HABIT ||
+            type == WType.TODAY || hasArt || hasPicker
 
         CompositionLocalProvider(LocalTextStyle provides TextStyle(fontFamily = rounded, color = ink)) {
             Column(modifier = Modifier.fillMaxSize().background(screenBg)) {
@@ -347,7 +352,7 @@ class WidgetConfigActivity : ComponentActivity() {
                             .padding(18.dp),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor, art, span)
+                        Preview(style, image.takeIf { mode == 1 }, layout, habitId, allColor, art, span, look)
                     }
                 }
                 Column(
@@ -379,6 +384,20 @@ class WidgetConfigActivity : ComponentActivity() {
                                         Chip("8", span == 8) { span = 8 }
                                         Chip("9", span == 9) { span = 9 }
                                     }
+                                }
+                            }
+                            if (type == WType.HABIT || type == WType.TODAY) {
+                                if (type == WType.HABIT) Line()
+                                ToggleRow(tr("cfg_show_header", "Header"), null, look.header) { look = look.copy(header = it) }
+                                Line()
+                                ToggleRow(tr("cfg_show_icons", "Habit icons"), null, look.icons) { look = look.copy(icons = it) }
+                                Line()
+                                ToggleRow(tr("cfg_show_cards", "Background behind each habit"), null, look.cards) {
+                                    look = look.copy(cards = it)
+                                }
+                                Line()
+                                ToggleRow(tr("cfg_show_details", "Streak under the name"), null, look.details) {
+                                    look = look.copy(details = it)
                                 }
                             }
                             if (type == WType.TODOS) {
@@ -525,7 +544,7 @@ class WidgetConfigActivity : ComponentActivity() {
                             .clickable {
                                 save(
                                     bg, opacity, border, borderWidth, habitId, allColor, layout,
-                                    followSystem, bgLight, todosAll, chosen, art, span,
+                                    followSystem, bgLight, todosAll, chosen, art, span, look,
                                 )
                             },
                         contentAlignment = Alignment.Center,
@@ -550,6 +569,7 @@ class WidgetConfigActivity : ComponentActivity() {
                                 layout = HeatmapConfig.LAYOUT_CLASSIC
                                 art = true
                                 span = 7
+                                look = WidgetLook()
                                 todosAll = false
                                 chosen = emptySet()
                                 bgModeState.value = 0
@@ -697,6 +717,7 @@ class WidgetConfigActivity : ComponentActivity() {
         allColor: Int,
         art: Boolean,
         span: Int,
+        look: WidgetLook,
     ) = Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         val frame = when (type) {
             WType.STATS -> Modifier.size(158.dp)
@@ -742,8 +763,8 @@ class WidgetConfigActivity : ComponentActivity() {
                 )
             }
             when (type) {
-                WType.HABIT -> WeekSample(style, span)
-                WType.TODAY -> TodaySample(style)
+                WType.HABIT -> WeekSample(style, span, look)
+                WType.TODAY -> TodaySample(style, look)
                 WType.STATS -> StatsSample(style, art)
                 WType.HEATMAP -> Box(Modifier.padding(14.dp)) { LivePreview(style, layout, habitId, allColor) }
                 WType.TODOS -> TodosSample(style, art)

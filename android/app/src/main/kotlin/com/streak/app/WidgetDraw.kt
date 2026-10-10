@@ -55,8 +55,9 @@ object WidgetDraw {
 
     fun density(context: Context): Float = context.resources.displayMetrics.density
 
-    private fun scale(context: Context): Float =
-        density(context) * context.resources.configuration.fontScale.coerceIn(1f, 1.3f)
+    fun textScale(context: Context): Float = context.resources.configuration.fontScale.coerceIn(1f, 1.3f)
+
+    private fun scale(context: Context): Float = density(context) * textScale(context)
 
     private fun remember(key: String, make: () -> Bitmap): Bitmap {
         synchronized(cache) { cache[key]?.let { return it } }

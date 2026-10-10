@@ -111,6 +111,7 @@ class HabitWidget : GlanceAppWidget() {
         val cell = (inner - name - RIGHT_INSET) / span
         val grid = Grid(inner, name, cell, minOf(22f, cell - 4f), first, span)
         val pastFirst = data.optBoolean("pastFirst", false)
+        val look = WidgetConfig.look(context, appWidgetId)
         val keys = List(span) {
             dayAt(data, first + it)?.optString("key") ?: WidgetPayload.todayKey(context)
         }
@@ -119,18 +120,20 @@ class HabitWidget : GlanceAppWidget() {
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding(PAD.dp)
+                .padding(start = PAD.dp, top = PAD.dp, bottom = PAD.dp)
                 .clickable(actionStartActivity<MainActivity>()),
         ) {
-            Box(modifier = GlanceModifier.fillMaxWidth().height((HEADER + LIST_GAP).dp)) {
+            val edge = GlanceModifier.fillMaxWidth().padding(end = PAD.dp)
+            val header = HEADER * WidgetDraw.textScale(context)
+            Box(modifier = edge.height((header + LIST_GAP).dp)) {
                 val top = BAR_H + BAR_GAP + (LETTER_ROW - grid.dot) / 2f - 3f
-                Band(context, style, grid, top, HEADER + LIST_GAP - top, openTop = false, openBottom = true)
-                Header(context, style, grid, density, habits, data)
+                Band(context, style, grid, top, header + LIST_GAP - top, openTop = false, openBottom = true)
+                Header(context, style, grid, density, habits, data, header, look.header)
             }
             LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
                 items(habits.length()) { index ->
                     habits.optJSONObject(index)?.let {
-                        HabitRow(context, style, grid, density, it, keys, index == last, pastFirst)
+                        Box(edge) { HabitRow(context, style, grid, density, it, keys, index == last, pastFirst, look) }
                     }
                 }
             }
@@ -173,6 +176,8 @@ class HabitWidget : GlanceAppWidget() {
         density: Float,
         habits: JSONArray,
         data: JSONObject,
+        height: Float,
+        titled: Boolean,
     ) {
         var due = 0
         var done = 0
@@ -182,8 +187,9 @@ class HabitWidget : GlanceAppWidget() {
             done += k
             if (d == 0 || grid.first + column > TODAY_INDEX) 0f else k / d.toFloat()
         }
-        Row(modifier = GlanceModifier.fillMaxWidth().height(HEADER.dp)) {
+        Row(modifier = GlanceModifier.fillMaxWidth().height(height.dp)) {
             Column(modifier = GlanceModifier.width(grid.name.dp)) {
+                if (!titled) return@Column
                 val title = if (grid.span > 7) {
                     WidgetText.format(context, "last_days", "Last ${grid.span} days", "{count}" to grid.span.toString())
                 } else {
@@ -259,6 +265,7 @@ class HabitWidget : GlanceAppWidget() {
         keys: List<String>,
         last: Boolean,
         pastFirst: Boolean,
+        look: WidgetLook,
     ) {
         val habitId = habit.optString("id")
         val color = style.shown(Color(habit.optInt("color", FALLBACK_COLOR)))
@@ -267,7 +274,7 @@ class HabitWidget : GlanceAppWidget() {
         val quantified = kind == KIND_QUANTITATIVE || target > 1
         val streak = habit.optInt("streak", 0)
         val name = habit.optString("name")
-        val room = grid.name - 9f - ICON - 8f - 4f
+        val room = grid.name - 9f - (if (look.icons) ICON + 8f else 0f) - 4f
 
         Box(modifier = GlanceModifier.fillMaxWidth().height((ROW + ROW_GAP).dp)) {
             Band(
@@ -280,15 +287,17 @@ class HabitWidget : GlanceAppWidget() {
                     .fillMaxWidth()
                     .height(ROW.dp)
                     .cornerRadius(15.dp)
-                    .background(ColorProvider(style.content.copy(alpha = 0.07f))),
+                    .background(ColorProvider(style.content.copy(alpha = if (look.cards) 0.07f else 0f))),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Spacer(GlanceModifier.width(9.dp))
-                HabitIcon(habit, color)
-                Spacer(GlanceModifier.width(8.dp))
+                if (look.icons) {
+                    HabitIcon(habit, color)
+                    Spacer(GlanceModifier.width(8.dp))
+                }
                 Column(modifier = GlanceModifier.width(room.dp)) {
                     Drawn(WidgetDraw.text(context, name, 12.5f, style.content, 650, room), density, name)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (look.details) Row(verticalAlignment = Alignment.CenterVertically) {
                         Glyph(R.drawable.widget_flame_3d, 10.dp)
                         Spacer(GlanceModifier.width(3.dp))
                         Drawn(

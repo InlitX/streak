@@ -184,8 +184,9 @@ class TodosWidget : GlanceAppWidget() {
             modifier = modifier
                 .cornerRadius(18.dp)
                 .background(ColorProvider(card.surface))
-                .padding(horizontal = 12.dp, vertical = 9.dp),
+                .padding(start = 12.dp, top = 9.dp, bottom = 9.dp),
         ) {
+            val edge = GlanceModifier.fillMaxWidth().padding(end = 12.dp)
             val title = WidgetText.title(context, "todos_open", "To-do")
             Drawn(WidgetDraw.text(context, title, 11.5f, card.muted, 700, width - 24f), density, title)
             Spacer(GlanceModifier.height(6.dp))
@@ -198,7 +199,7 @@ class TodosWidget : GlanceAppWidget() {
                 Drawn(WidgetDraw.text(context, empty, 13f, card.muted, 600, width - 24f), density, empty)
             } else {
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                    items(todos.size) { i -> TodoRow(context, card, density, todos[i], width - 24f) }
+                    items(todos.size) { i -> Box(edge) { TodoRow(context, card, density, todos[i], width - 24f) } }
                 }
             }
         }

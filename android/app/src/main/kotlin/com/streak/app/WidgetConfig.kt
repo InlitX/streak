@@ -4,6 +4,13 @@ import android.content.Context
 import android.content.res.Configuration
 import java.io.File
 
+data class WidgetLook(
+    val header: Boolean = true,
+    val icons: Boolean = true,
+    val cards: Boolean = true,
+    val details: Boolean = true,
+)
+
 object WidgetConfig {
     private const val PREFS = "StreakWidgetConfig"
     const val DEFAULT_BG = 0x101014
@@ -65,6 +72,25 @@ object WidgetConfig {
         prefs(context).edit().putInt("span_$id", value).commit()
     }
 
+    fun look(context: Context, id: Int): WidgetLook {
+        val p = prefs(context)
+        return WidgetLook(
+            header = p.getBoolean("header_$id", true),
+            icons = p.getBoolean("icons_$id", true),
+            cards = p.getBoolean("cards_$id", true),
+            details = p.getBoolean("details_$id", true),
+        )
+    }
+
+    fun setLook(context: Context, id: Int, look: WidgetLook) {
+        prefs(context).edit()
+            .putBoolean("header_$id", look.header)
+            .putBoolean("icons_$id", look.icons)
+            .putBoolean("cards_$id", look.cards)
+            .putBoolean("details_$id", look.details)
+            .commit()
+    }
+
     fun habits(context: Context, id: Int): Set<String> =
         prefs(context).getStringSet("habits_$id", null)?.toSet() ?: emptySet()
 
@@ -116,6 +142,10 @@ object WidgetConfig {
             .remove("span_$id")
             .remove("round_$id")
             .remove("habits_$id")
+            .remove("header_$id")
+            .remove("icons_$id")
+            .remove("cards_$id")
+            .remove("details_$id")
             .apply()
     }
 

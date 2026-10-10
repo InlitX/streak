@@ -89,15 +89,19 @@ class TodayWidget : GlanceAppWidget() {
         val scale = if (size.width.value < 200f) SNUG else ROOMY
         val inner = size.width.value - scale.pad * 2
         val density = WidgetDraw.density(context)
+        val look = WidgetConfig.look(context, appWidgetId)
 
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding(scale.pad.dp)
+                .padding(start = scale.pad.dp, top = scale.pad.dp, bottom = scale.pad.dp)
                 .clickable(actionStartActivity<MainActivity>()),
         ) {
-            Header(context, style, scale, density, done, total)
-            Spacer(GlanceModifier.height(10.dp))
+            val edge = GlanceModifier.fillMaxWidth().padding(end = scale.pad.dp)
+            if (look.header) {
+                Box(edge) { Header(context, style, scale, density, done, total) }
+                Spacer(GlanceModifier.height(10.dp))
+            }
             val habits = data?.optJSONArray("habits")
             val due = habits?.let(::dueToday).orEmpty()
             if (due.isEmpty()) {
@@ -111,12 +115,12 @@ class TodayWidget : GlanceAppWidget() {
                     style,
                 )
             } else {
-                if (size.height.value >= WEEK_MIN_HEIGHT && scale == ROOMY) {
-                    Week(context, style, data, inner, density)
+                if (look.header && size.height.value >= WEEK_MIN_HEIGHT && scale == ROOMY) {
+                    Box(edge) { Week(context, style, data, inner, density) }
                     Spacer(GlanceModifier.height(12.dp))
                 }
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                    items(due.size) { i -> HabitRow(context, style, scale, inner, density, due[i]) }
+                    items(due.size) { i -> Box(edge) { HabitRow(context, style, scale, inner, density, due[i], look) } }
                 }
             }
         }
@@ -218,6 +222,7 @@ class TodayWidget : GlanceAppWidget() {
         inner: Float,
         density: Float,
         habit: JSONObject,
+        look: WidgetLook,
     ) {
         val color = style.shown(Color(habit.optInt("color", FALLBACK_COLOR)))
         val kind = habit.optInt("kind", 0)
@@ -230,7 +235,7 @@ class TodayWidget : GlanceAppWidget() {
             if (habit.optBoolean("clock", false)) WidgetText::clock else WidgetText::amount
         val streak = habit.optInt("streak", 0)
         val name = habit.optString("name")
-        val room = inner - scale.inset * 2 - scale.icon - scale.iconGap - 6f - scale.button
+        val room = inner - scale.inset * 2 - (if (look.icons) scale.icon + scale.iconGap else 0f) - 6f - scale.button
 
         Column(modifier = GlanceModifier.fillMaxWidth()) {
             Row(
@@ -238,15 +243,17 @@ class TodayWidget : GlanceAppWidget() {
                     .fillMaxWidth()
                     .height(scale.row.dp)
                     .cornerRadius(16.dp)
-                    .background(ColorProvider(style.content.copy(alpha = 0.07f)))
+                    .background(ColorProvider(style.content.copy(alpha = if (look.cards) 0.07f else 0f)))
                     .padding(horizontal = scale.inset.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                HabitIcon(habit, color, scale.icon)
-                Spacer(GlanceModifier.width(scale.iconGap.dp))
+                if (look.icons) {
+                    HabitIcon(habit, color, scale.icon)
+                    Spacer(GlanceModifier.width(scale.iconGap.dp))
+                }
                 Column(modifier = GlanceModifier.defaultWeight()) {
                     Drawn(WidgetDraw.text(context, name, scale.name, style.content, 650, room), density, name)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (look.details) Row(verticalAlignment = Alignment.CenterVertically) {
                         Glyph(R.drawable.widget_flame_3d, 11.dp)
                         Spacer(GlanceModifier.width(3.dp))
                         val line = buildString {

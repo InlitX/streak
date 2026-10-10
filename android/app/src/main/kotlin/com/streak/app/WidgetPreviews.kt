@@ -68,12 +68,12 @@ fun StatsSample(s: WidgetStyle, art: Boolean) {
 }
 
 @Composable
-fun TodaySample(s: WidgetStyle) {
+fun TodaySample(s: WidgetStyle, look: WidgetLook = WidgetLook()) {
     val context = LocalContext.current
     BoxWithConstraints(Modifier.fillMaxSize().padding(14.dp)) {
         val inner = maxWidth.value
         Column {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            if (look.header) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Bmp(WidgetDraw.text(context, sample(context, "today", "Today"), 20f, s.content, 800), context)
                     val line = WidgetText.format(context, "today_done", "1 of 2 done", "{done}" to "1", "{total}" to "2")
@@ -81,16 +81,16 @@ fun TodaySample(s: WidgetStyle) {
                 }
                 Bmp(WidgetDraw.ring(context, 0.5f, 42f, 4.2f, s.content, "1/2", 12f), context)
             }
-            Spacer(Modifier.height(10.dp))
+            if (look.header) Spacer(Modifier.height(10.dp))
             SAMPLE.forEach { habit ->
                 Row(
                     Modifier.fillMaxWidth().height(40.dp).clip(RoundedCornerShape(16.dp))
-                        .background(s.content.copy(alpha = 0.07f)).padding(horizontal = 10.dp),
+                        .background(s.content.copy(alpha = if (look.cards) 0.07f else 0f)).padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(Modifier.weight(1f)) {
                         Bmp(WidgetDraw.text(context, habit.name, 13.5f, s.content, 650, inner - 70f), context)
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (look.details) Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(painterResource(R.drawable.widget_flame_3d), null, Modifier.size(10.dp))
                             Spacer(Modifier.width(3.dp))
                             Bmp(WidgetDraw.text(context, habit.streak.toString(), 10.5f, s.content.copy(alpha = 0.6f), 650), context)
@@ -154,7 +154,7 @@ fun TodosSample(s: WidgetStyle, art: Boolean) {
 }
 
 @Composable
-fun WeekSample(s: WidgetStyle, span: Int = 7) {
+fun WeekSample(s: WidgetStyle, span: Int = 7, look: WidgetLook = WidgetLook()) {
     val context = LocalContext.current
     val week = listOf("M", "T", "W", "T", "F", "S", "S")
     val letters = List(span) { week[it % 7] }
@@ -177,6 +177,7 @@ fun WeekSample(s: WidgetStyle, span: Int = 7) {
         Column {
             Row(Modifier.height(44.dp)) {
                 Column(Modifier.width(name.dp)) {
+                    if (!look.header) return@Column
                     Bmp(WidgetDraw.text(context, title, 19f, s.content, 800, name - 4f), context)
                     val line = WidgetText.format(context, "week_done", "3 of 4", "{done}" to "3", "{total}" to "4") + "  ·  75%"
                     Bmp(WidgetDraw.text(context, line, 11.5f, s.content.copy(alpha = 0.6f), 600, name - 4f), context)
@@ -207,7 +208,7 @@ fun WeekSample(s: WidgetStyle, span: Int = 7) {
             SAMPLE.forEachIndexed { row, habit ->
                 Row(
                     Modifier.fillMaxWidth().height(40.dp).clip(RoundedCornerShape(15.dp))
-                        .background(s.content.copy(alpha = 0.07f)),
+                        .background(s.content.copy(alpha = if (look.cards) 0.07f else 0f)),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(Modifier.width(9.dp))
