@@ -161,6 +161,10 @@ class _FocusPageState extends State<FocusPage> {
 
   void _toggleRunning() {
     if (!_focus.isActive || _leadValue > 0) return;
+    if (_focus.isFinished) {
+      _confirmStop();
+      return;
+    }
     if (_focus.isAwaiting || _focus.switchIn > 0) {
       _focus.continueNow();
       return;
@@ -387,6 +391,7 @@ class _FocusPageState extends State<FocusPage> {
                     running: focus.isRunning,
                     onReset: _restart,
                     awaiting: focus.isAwaiting || focus.switchIn > 0,
+                    finished: focus.isFinished,
                     onSkip: focus.isBreak ? focus.skipBreak : null,
                     onAddMinute: focus.isFlow ? null : focus.addMinute,
                     onToggle: _toggleRunning,
@@ -413,6 +418,7 @@ class _FocusPageState extends State<FocusPage> {
                       vertical: landscape,
                       running: focus.isRunning,
                       awaiting: focus.isAwaiting || focus.switchIn > 0,
+                      finished: focus.isFinished,
                       onToggle: _toggleRunning,
                       onSkip: focus.isBreak ? focus.skipBreak : null,
                       onAddMinute: focus.isFlow ? null : focus.addMinute,
@@ -926,10 +932,31 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+IconData _toggleIcon({
+  required bool running,
+  required bool awaiting,
+  required bool finished,
+}) {
+  if (finished) return LucideIcons.check;
+  return running && !awaiting ? LucideIcons.pause : LucideIcons.play;
+}
+
+String _toggleLabel(
+  BuildContext context, {
+  required bool running,
+  required bool awaiting,
+  required bool finished,
+}) {
+  if (finished) return context.l10n.focus_end;
+  if (awaiting) return context.l10n.focus_continue;
+  return running ? context.l10n.focus_pause : context.l10n.focus_resume;
+}
+
 class _Controls extends StatelessWidget {
   const _Controls({
     required this.running,
     required this.awaiting,
+    required this.finished,
     required this.onReset,
     required this.onSkip,
     required this.onAddMinute,
@@ -939,6 +966,7 @@ class _Controls extends StatelessWidget {
 
   final bool running;
   final bool awaiting;
+  final bool finished;
   final VoidCallback onReset;
   final VoidCallback? onSkip;
   final VoidCallback? onAddMinute;
@@ -948,6 +976,7 @@ class _Controls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final skip = onSkip;
+    final icon = _toggleIcon(running: running, awaiting: awaiting, finished: finished);
     final buttons = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -981,19 +1010,15 @@ class _Controls extends StatelessWidget {
                       child: FadeTransition(opacity: animation, child: child),
                     ),
                     child: Icon(
-                      running ? LucideIcons.pause : LucideIcons.play,
-                      key: ValueKey(running || awaiting),
+                      icon,
+                      key: ValueKey(icon),
                       size: 18,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    awaiting
-                        ? context.l10n.focus_continue
-                        : running
-                            ? context.l10n.focus_pause
-                            : context.l10n.focus_resume,
+                    _toggleLabel(context, running: running, awaiting: awaiting, finished: finished),
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -1080,6 +1105,7 @@ class _ZenControls extends StatelessWidget {
     required this.vertical,
     required this.running,
     required this.awaiting,
+    required this.finished,
     required this.onToggle,
     required this.onSkip,
     required this.onAddMinute,
@@ -1089,6 +1115,7 @@ class _ZenControls extends StatelessWidget {
   final bool vertical;
   final bool running;
   final bool awaiting;
+  final bool finished;
   final VoidCallback onToggle;
   final VoidCallback? onSkip;
   final VoidCallback? onAddMinute;
@@ -1100,12 +1127,8 @@ class _ZenControls extends StatelessWidget {
     final minute = onAddMinute;
     final items = <Widget>[
       _ZenButton(
-        icon: running ? LucideIcons.pause : LucideIcons.play,
-        label: awaiting
-            ? context.l10n.focus_continue
-            : running
-                ? context.l10n.focus_pause
-                : context.l10n.focus_resume,
+        icon: _toggleIcon(running: running, awaiting: awaiting, finished: finished),
+        label: _toggleLabel(context, running: running, awaiting: awaiting, finished: finished),
         onTap: onToggle,
       ),
       if (skip != null)

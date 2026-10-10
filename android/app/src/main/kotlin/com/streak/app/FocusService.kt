@@ -65,8 +65,10 @@ class FocusService : Service() {
                 FocusState.save(this, FocusState.extended(state))
                 FocusBridge.enqueue(this, "minute")
             }
-            ACTION_SKIP -> FocusBridge.enqueue(this, "skip")
-            ACTION_NEXT -> FocusBridge.enqueue(this, "next")
+            ACTION_SKIP, ACTION_NEXT -> {
+                FocusState.advanced(state)?.let { FocusState.save(this, it) }
+                FocusBridge.enqueue(this, if (intent?.action == ACTION_SKIP) "skip" else "next")
+            }
         }
 
         val current = FocusState.read(this) ?: state
@@ -136,7 +138,7 @@ class FocusService : Service() {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setAutoCancel(true)
-                .setContentIntent(open(state))
+                .setContentIntent(open())
                 .build(),
         )
     }
@@ -233,7 +235,7 @@ class FocusService : Service() {
             .setShowWhen(false)
             .setCategory(NotificationCompat.CATEGORY_STOPWATCH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setContentIntent(open(state))
+            .setContentIntent(open())
 
         for (button in buttons(state, running, ended || state.optBoolean("done"))) {
             builder.addAction(button.icon, button.label, action(button.action, button.request))
@@ -277,7 +279,7 @@ class FocusService : Service() {
             .setShowWhen(false)
             .setCategory(Notification.CATEGORY_STOPWATCH)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
-            .setContentIntent(open(state))
+            .setContentIntent(open())
             .setShortCriticalText(if (done) "✓" else time)
         builder.extras.putBoolean(PROMOTED, true)
 
@@ -303,6 +305,7 @@ class FocusService : Service() {
         val end = Button(R.drawable.ic_focus_stop, state.optString("stopLabel"), ACTION_STOP, REQUEST_STOP)
         return when {
             state.optString("phase") == PHASE_WAITING -> listOf(next, end)
+            done && state.optBoolean("hold") -> listOf(next, end)
             done -> listOfNotNull(minute.takeIf { timed }, end)
             !running -> listOf(resume, end)
             state.optString("phase") == PHASE_BREAK -> listOf(skip, pause, end)
@@ -310,12 +313,12 @@ class FocusService : Service() {
         }
     }
 
-    private fun open(state: JSONObject): PendingIntent {
+    private fun open(): PendingIntent {
         val open = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_ACTIVITY_SINGLE_TOP or
                 Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(WidgetActionReceiver.EXTRA_START_FOCUS, state.optString("habitId"))
+            putExtra(EXTRA_OPEN_PAGE, "focus")
         }
         return PendingIntent.getActivity(
             this,

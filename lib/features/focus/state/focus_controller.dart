@@ -7,6 +7,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
+import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
@@ -176,6 +177,7 @@ class FocusController extends ChangeNotifier {
   bool get isActive => _open;
   bool get isRunning => _since != null;
   bool get isAwaiting => _awaiting;
+  bool get isFinished => _open && !isPomodoro && reachedTarget;
 
   static const switchDelay = 5;
 
@@ -256,11 +258,11 @@ class FocusController extends ChangeNotifier {
     unawaited(FocusAudio.resume());
   }
 
-  void continueNow() {
+  void continueNow({DateTime? at}) {
     if (!_awaiting && !(isPomodoro && reachedTarget)) return;
     _awaiting = false;
     unawaited(FocusAudio.stopAlert());
-    _advancePhase();
+    _advancePhase(at: at);
   }
 
   void reset() {
@@ -293,10 +295,10 @@ class FocusController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void skipBreak() {
+  void skipBreak({DateTime? at}) {
     _awaiting = false;
     unawaited(FocusAudio.stopAlert());
-    if (_isBreak) _advancePhase();
+    if (_isBreak) _advancePhase(at: at);
   }
 
   void addTask() {
@@ -330,13 +332,16 @@ class FocusController extends ChangeNotifier {
       case FocusAction.resume:
         resume(at: action.at);
       case FocusAction.stop:
-        return stop(completed: reachedTarget || isFlow, at: action.at);
+        return stop(
+          completed: isFlow || elapsedAt(action.at) >= targetSeconds,
+          at: action.at,
+        );
       case FocusAction.minute:
         addMinute();
       case FocusAction.skip:
-        skipBreak();
+        skipBreak(at: action.at);
       case FocusAction.next:
-        continueNow();
+        continueNow(at: action.at);
     }
     return null;
   }
@@ -395,7 +400,7 @@ class FocusController extends ChangeNotifier {
     onRoundSaved?.call(session);
   }
 
-  void _advancePhase() {
+  void _advancePhase({DateTime? at}) {
     final endedAt = _phaseEnd;
     if (!_isBreak) {
       final seconds = elapsedAt(endedAt);
@@ -426,7 +431,7 @@ class FocusController extends ChangeNotifier {
         ? _longBreakMinutes
         : _breakMinutes;
     _accumulated = 0;
-    _since = DateTime.now();
+    _since = at ?? DateTime.now();
     _celebrated = false;
     _startTicker();
     _persist();
@@ -463,12 +468,14 @@ class FocusController extends ChangeNotifier {
         if (!isMobile) unawaited(_announceEnd(breakEnded: _isBreak));
         final always = isPomodoro && LocalStore.setting('focusHold', false);
         final hold = always || (isPomodoro && _isBreak);
-        unawaited(
-          FocusAudio.alert(
-            LocalStore.setting('focusAlert', ''),
-            loop: always,
-          ),
-        );
+        if (DateTime.now().difference(_phaseEnd).inSeconds < 60) {
+          unawaited(
+            FocusAudio.alert(
+              LocalStore.setting('focusAlert', ''),
+              loop: always,
+            ),
+          );
+        }
         if (hold) {
           _awaiting = true;
           _stopTicker();
@@ -581,6 +588,7 @@ class FocusController extends ChangeNotifier {
                   ? 'running'
                   : 'paused';
       final (endTitle, endBody) = await _endTexts(breakEnded: _isBreak);
+      final always = isPomodoro && LocalStore.setting('focusHold', false);
       await FocusService.show(
         habitId: _habitId,
         title: name ?? strings.focus,
@@ -603,10 +611,46 @@ class FocusController extends ChangeNotifier {
         minuteLabel: '+${strings.minutes_short('1')}',
         endTitle: endTitle,
         endBody: endBody,
+        hold: always || (isPomodoro && _isBreak),
+        upcoming: isPomodoro ? _upcoming(strings, always: always) : const [],
       );
     } catch (e) {
       debugPrint('Focus notification sync failed: $e');
     }
+  }
+
+  List<Map<String, Object>> _upcoming(
+    AppLocalizations strings, {
+    required bool always,
+  }) {
+    final phases = <Map<String, Object>>[];
+    var round = _round;
+    var onBreak = _isBreak;
+    for (var i = 0; i < 8; i++) {
+      if (onBreak) round++;
+      onBreak = !onBreak;
+      final long =
+          onBreak && _longBreakMinutes > 0 && round % longBreakEvery == 0;
+      final minutes = !onBreak
+          ? _focusMinutes
+          : long
+          ? _longBreakMinutes
+          : _breakMinutes;
+      final label = !onBreak
+          ? strings.focus_notif_running
+          : long
+          ? strings.focus_long_break
+          : strings.focus_break;
+      phases.add({
+        'total': minutes * 60,
+        'state': '$label  ·  ${strings.focus_round(round)}',
+        'phase': onBreak ? 'break' : 'running',
+        'hold': always || onBreak,
+        'endTitle': onBreak ? strings.focus_break_over : strings.focus_done_title,
+        'endBody': onBreak ? strings.focus_notif_back : strings.focus_notif_break,
+      });
+    }
+    return phases;
   }
 
   static const _labelsKey = 'focusLabels';

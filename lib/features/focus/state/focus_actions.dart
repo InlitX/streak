@@ -68,6 +68,7 @@ Future<void> countFocusTime(
 }
 
 Future<void> drainFocusActions() async {
+  if (AppNavigator.key.currentContext == null) return;
   for (final action in await FocusService.drain()) {
     await applyFocusAction(action);
   }

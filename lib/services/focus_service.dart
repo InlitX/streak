@@ -54,6 +54,8 @@ class FocusService {
     required String minuteLabel,
     required String endTitle,
     required String endBody,
+    required bool hold,
+    required List<Map<String, Object>> upcoming,
   }) =>
       _invoke('show', {
         'habitId': habitId,
@@ -75,6 +77,8 @@ class FocusService {
         'minuteLabel': minuteLabel,
         'endTitle': endTitle,
         'endBody': endBody,
+        'hold': hold,
+        'upcoming': upcoming,
       });
 
   static Future<void> hide() => _invoke('hide', const {});

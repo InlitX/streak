@@ -125,6 +125,7 @@ Future<void> _startup() async {
   });
 
   WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await drainFocusActions();
     final pending = NotificationService().pendingHabitId;
     if (pending != null) {
       NotificationService().pendingHabitId = null;
@@ -139,7 +140,6 @@ Future<void> _startup() async {
       final page = await _appChannel.invokeMethod<String>('consumeLaunchPage');
       if (page != null) _openPage(page);
     }
-    await drainFocusActions();
   });
 }
 
@@ -197,6 +197,7 @@ void _openTodos() {
 void _openPage(String page) {
   if (page == 'todos') _openTodos();
   if (page == 'stats') AppNavigator.push(const StatisticsPage(), fade: true);
+  if (page == 'focus') _openFocus();
   if (page.startsWith('day:')) _openDay(page.substring(4));
 }
 
@@ -212,6 +213,13 @@ void _openDay(String target) {
     date: parseDayKey(target.substring(split + 1)),
     notesEnabled: context.read<SettingsController>().notesEnabled,
   );
+}
+
+void _openFocus() {
+  final context = AppNavigator.key.currentContext;
+  if (context == null || !context.read<FocusController>().isActive) return;
+  if (AppNavigator.isShowing(FocusPage.routeName)) return;
+  AppNavigator.push(const FocusPage(), fade: true, name: FocusPage.routeName);
 }
 
 void _startFocus(String habitId) {
