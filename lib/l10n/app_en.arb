@@ -243,6 +243,8 @@
     }
   },
   "reminders": "Reminders",
+  "reminders_ready_title": "Reminders are on",
+  "reminders_ready_body": "Streak will remind you here.",
   "add_reminder": "Add reminder",
   "delete_habit": "Delete habit",
   "archive_habit": "Archive habit",

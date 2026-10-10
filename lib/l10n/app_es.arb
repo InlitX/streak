@@ -188,6 +188,8 @@
   "freq_per_week_short": "{n}×/semana",
   "freq_per_month_short": "{n}×/mes",
   "reminders": "Recordatorios",
+  "reminders_ready_title": "Recordatorios activados",
+  "reminders_ready_body": "Streak te avisará por aquí.",
   "add_reminder": "Añadir recordatorio",
   "delete_habit": "Eliminar hábito",
   "archive_habit": "Archivar hábito",

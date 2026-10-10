@@ -106,6 +106,7 @@ class NotificationService {
   String? pendingHabitId;
 
   bool _ready = false;
+  bool _knownToWindows = false;
 
   static (String?, String?, String?) _read(NotificationResponse response) {
     final payload = response.payload;
@@ -940,6 +941,7 @@ class NotificationService {
       );
       return;
     }
+    if (Platform.isWindows) await _introduceToWindows();
     await _plugin.zonedSchedule(
       id,
       title,
@@ -950,6 +952,28 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: matchDateTimeComponents,
     );
+  }
+
+  static const _windowsReadyId = -987653;
+
+  Future<void> _introduceToWindows() async {
+    if (_knownToWindows || LocalStore.setting('windowsToastsReady', false)) return;
+    _knownToWindows = true;
+    try {
+      final strings = await localizations();
+      await _plugin.show(
+        _windowsReadyId,
+        strings.reminders_ready_title,
+        strings.reminders_ready_body,
+        NotificationDetails(
+          windows: WindowsNotificationDetails(images: await _windowsLogo(null)),
+        ),
+      );
+      await LocalStore.writeSetting('windowsToastsReady', true);
+    } catch (e) {
+      _knownToWindows = false;
+      debugPrint('Could not introduce Streak to Windows: $e');
+    }
   }
 
   bool get _queuesInApp => Platform.isLinux || isPortable;
