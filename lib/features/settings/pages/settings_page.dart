@@ -163,6 +163,11 @@ class _ClassicAppearancePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final icons = [
+      context.l10n.icon_default,
+      context.l10n.icon_neutral,
+      context.l10n.icon_accent,
+    ];
 
     return _ClassicSection(
       title: context.l10n.appearance,
@@ -215,18 +220,17 @@ class _ClassicAppearancePage extends StatelessWidget {
         ),
         if (hasAppIcons) ...[
           settingsDivider(context),
-          SettingRow(
+          PickerRow(
             icon: LucideIcons.appWindow,
             title: context.l10n.app_icon,
             subtitle: context.l10n.app_icon_sub,
-            trailing: Segmented(
-              options: [
-                context.l10n.icon_default,
-                context.l10n.icon_neutral,
-                context.l10n.icon_accent,
-              ],
+            value: icons[settings.appIcon],
+            onTap: () => showOptionSheet(
+              context,
+              title: context.l10n.app_icon,
+              options: icons,
               index: settings.appIcon,
-              onChanged: settings.setAppIcon,
+              onSelected: settings.setAppIcon,
             ),
           ),
         ],
