@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -92,6 +93,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   int _startMinute = -1;
   int _durationMinutes = 0;
   late List<Substep> _substeps;
+  late final String _opened;
 
   bool get _kindLocked => widget.isEditing;
 
@@ -180,6 +182,61 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _reminders = [];
       _substeps = [];
     }
+    _opened = _snapshot();
+  }
+
+  String _snapshot() => jsonEncode([
+        _name.text,
+        _description.text,
+        _unitLabel.text,
+        _dailyCost.text,
+        _icon,
+        _category,
+        _color.toARGB32(),
+        _interval.name,
+        _frequency,
+        _scheduleWeekdays,
+        _scheduleEvery,
+        _scheduleStart?.toIso8601String(),
+        _fromLastDone,
+        _monthWeekday,
+        _scheduleUnit.name,
+        _cover,
+        _coverClarity,
+        [for (final reminder in _reminders) reminder.toMap()],
+        _kind.name,
+        _quantKind.name,
+        _quantTarget,
+        _noGoal,
+        _quantIncrement,
+        _bookCover,
+        _focusOnly,
+        _tracking,
+        _anyAmount,
+        _anySteps,
+        _stepsNeeded,
+        _difficulty,
+        _focusMinutes,
+        _pomodoro,
+        _breakMinutes,
+        _startMinute,
+        _durationMinutes,
+        [for (final step in _substeps) step.toMap()],
+      ]);
+
+  Future<void> _close() async {
+    if (_snapshot() != _opened) {
+      final discard = await showAppConfirmDialog(
+        context,
+        title: context.l10n.discard_changes,
+        message: context.l10n.discard_changes_body,
+        confirmLabel: context.l10n.discard,
+        cancelLabel: context.l10n.keep_editing,
+        icon: LucideIcons.undo2,
+      );
+      if (discard != true || !mounted) return;
+    }
+    AppNavigator.pop();
   }
 
   @override
@@ -411,7 +468,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   @override
   Widget build(BuildContext context) {
     final style = context.watch<SettingsController>();
-    return GestureDetector(
+    final form = GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       excludeFromSemantics: true,
       child: style.isMinimalStyle
@@ -419,6 +476,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
           : style.isExpressStyle
               ? _buildExpress(context)
               : _buildClassic(context),
+    );
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _close();
+      },
+      child: form,
     );
   }
 
@@ -443,7 +507,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           child: Center(child: ExpressIconButton(
             icon: LucideIcons.x,
             tooltip: context.l10n.cancel,
-            onPressed: () => AppNavigator.pop(),
+            onPressed: _close,
           )),
         ),
         actions: [
@@ -727,7 +791,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         toolbarHeight: 52,
         leading: IconButton(
           icon: const Icon(LucideIcons.x),
-          onPressed: () => AppNavigator.pop(),
+          onPressed: _close,
         ),
         actions: [
           if (widget.isEditing)
@@ -1113,7 +1177,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           title: Text(title),
           leading: IconButton(
             icon: const Icon(LucideIcons.x),
-            onPressed: () => AppNavigator.pop(),
+            onPressed: _close,
           ),
           actions: [
             if (widget.isEditing)
