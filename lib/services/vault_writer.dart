@@ -105,7 +105,9 @@ class VaultWriter {
     String content,
   ) async {
     if (!dir.existsSync()) dir.createSync(recursive: true);
-    await File('${dir.path}/$name').writeAsString(content);
+    final file = File('${dir.path}/$name');
+    if (file.existsSync() && file.readAsStringSync() == content) return;
+    await file.writeAsString(content);
   }
 
   static String _readme(

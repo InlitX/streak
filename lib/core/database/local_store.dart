@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -21,6 +22,8 @@ class LocalStore {
   static const _focusBox = 'focus';
   static const _todosBox = 'todos';
   static const _todoTagsBox = 'todo_tags';
+  static const _changesKey = 'syncChanges';
+  static const _deviceKey = 'deviceId';
 
   static late Box _habits;
   static late Box _settings;
@@ -35,6 +38,54 @@ class LocalStore {
   static String _todosStamp = '';
 
   static bool get isWriting => _writing > 0;
+
+  static void Function()? onChanged;
+  static Map<String, int>? _changes;
+  static int _quiet = 0;
+
+  static Map<String, int> get changes => _changes ??= {
+        for (final entry in settingMap(_changesKey).entries)
+          if (entry.value is int) entry.key: entry.value as int,
+      };
+
+  static int? changedAt(String id) => changes[id];
+
+  static Future<void> stampChange(String id, int at) async {
+    changes[id] = at;
+    await _settings.put(_changesKey, Map<String, int>.of(changes));
+  }
+
+  static Future<void> _touch(Iterable<String> ids) async {
+    if (_quiet > 0) return;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    for (final id in ids) {
+      changes[id] = now;
+    }
+    await _settings.put(_changesKey, Map<String, int>.of(changes));
+    onChanged?.call();
+  }
+
+  static void _removed() {
+    if (_quiet == 0) onChanged?.call();
+  }
+
+  static Future<T> quietly<T>(Future<T> Function() action) async {
+    _quiet++;
+    try {
+      return await action();
+    } finally {
+      _quiet--;
+    }
+  }
+
+  static String get deviceId {
+    final saved = setting(_deviceKey, '');
+    if (saved.isNotEmpty) return saved;
+    final random = Random.secure();
+    final made = List.generate(8, (_) => random.nextInt(16).toRadixString(16)).join();
+    _settings.put(_deviceKey, made);
+    return made;
+  }
 
   static Future<T> guardWrites<T>(Future<T> Function() action) async {
     _writing++;
@@ -54,6 +105,7 @@ class LocalStore {
     _habits = await Hive.openBox(_habitsBox);
     _habitsStamp = _stampOf(_habits);
     _settings = await Hive.openBox(_settingsBox);
+    _changes = null;
     _categories = await Hive.openBox(_categoriesBox);
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
@@ -100,6 +152,16 @@ class LocalStore {
   static Future<void> writeTodo(Todo todo) async {
     await _todos.put(todo.id, todo.toMap());
     _todosStamp = _stampOf(_todos);
+    await _touch([todo.id]);
+  }
+
+  static Todo? todo(String id) {
+    try {
+      final raw = _todos.get(id);
+      return raw is Map ? Todo.fromMap(Map<String, dynamic>.from(raw)) : null;
+    } catch (_) {
+      return null;
+    }
   }
 
   static bool get todosChangedElsewhere {
@@ -114,12 +176,20 @@ class LocalStore {
     _todosStamp = _stampOf(_todos);
   }
 
-  static Future<void> writeTodos(Iterable<Todo> todos) =>
-      _todos.putAll({for (final todo in todos) todo.id: todo.toMap()});
+  static Future<void> writeTodos(Iterable<Todo> todos) async {
+    await _todos.putAll({for (final todo in todos) todo.id: todo.toMap()});
+    await _touch(todos.map((todo) => todo.id));
+  }
 
-  static Future<void> removeTodo(String id) => _todos.delete(id);
+  static Future<void> removeTodo(String id) async {
+    await _todos.delete(id);
+    _removed();
+  }
 
-  static Future<void> removeTodos(Iterable<String> ids) => _todos.deleteAll(ids);
+  static Future<void> removeTodos(Iterable<String> ids) async {
+    await _todos.deleteAll(ids);
+    _removed();
+  }
 
   static List<TodoTag> readTodoTags() {
     final result = <TodoTag>[];
@@ -133,10 +203,24 @@ class LocalStore {
     return result;
   }
 
-  static Future<void> writeTodoTag(TodoTag tag) =>
-      _todoTags.put(tag.id, tag.toJson());
+  static Future<void> writeTodoTag(TodoTag tag) async {
+    await _todoTags.put(tag.id, tag.toJson());
+    await _touch([tag.id]);
+  }
 
-  static Future<void> removeTodoTag(String id) => _todoTags.delete(id);
+  static TodoTag? todoTag(String id) {
+    try {
+      final raw = _todoTags.get(id);
+      return raw is String ? TodoTag.fromJson(raw) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> removeTodoTag(String id) async {
+    await _todoTags.delete(id);
+    _removed();
+  }
 
   static List<FocusSession> readFocusSessions() {
     final result = <FocusSession>[];
@@ -146,13 +230,25 @@ class LocalStore {
     return result;
   }
 
-  static Future<void> writeFocusSession(FocusSession session) =>
-      _focus.put(session.id, session.toMap());
+  static Future<void> writeFocusSession(FocusSession session) async {
+    await _focus.put(session.id, session.toMap());
+    await _touch([session.id]);
+  }
+
+  static FocusSession? focusSession(String id) {
+    try {
+      final raw = _focus.get(id);
+      return raw is Map ? FocusSession.fromMap(Map<String, dynamic>.from(raw)) : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   static Future<void> removeFocusSessions(Iterable<String> ids) async {
     for (final id in ids) {
       await _focus.delete(id);
     }
+    _removed();
   }
 
   static Future<void> removeFocusFor(String habitId) async {
@@ -163,6 +259,7 @@ class LocalStore {
     for (final id in ids) {
       await _focus.delete(id);
     }
+    _removed();
   }
 
   static List<HabitNote> readNotes() {
@@ -173,10 +270,24 @@ class LocalStore {
     return result;
   }
 
-  static Future<void> writeNote(HabitNote note) =>
-      _notes.put(note.id, note.toMap());
+  static Future<void> writeNote(HabitNote note) async {
+    await _notes.put(note.id, note.toMap());
+    await _touch([note.id]);
+  }
 
-  static Future<void> removeNote(String id) => _notes.delete(id);
+  static HabitNote? note(String id) {
+    try {
+      final raw = _notes.get(id);
+      return raw is Map ? HabitNote.fromMap(Map<String, dynamic>.from(raw)) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> removeNote(String id) async {
+    await _notes.delete(id);
+    _removed();
+  }
 
   static Future<void> removeNotesFor(String habitId) async {
     final ids = readNotes()
@@ -186,6 +297,7 @@ class LocalStore {
     for (final id in ids) {
       await _notes.delete(id);
     }
+    _removed();
   }
 
   static Map<String, Habit> readHabits() {
@@ -215,6 +327,7 @@ class LocalStore {
   static Future<void> writeHabit(Habit habit) async {
     await _habits.put(habit.id, habit.toJson());
     _habitsStamp = _stampOf(_habits);
+    await _touch([habit.id]);
   }
 
   static String _stampOf(Box box) {
@@ -233,7 +346,10 @@ class LocalStore {
     return stamp.isEmpty || stamp != _habitsStamp;
   }
 
-  static Future<void> removeHabit(String id) => _habits.delete(id);
+  static Future<void> removeHabit(String id) async {
+    await _habits.delete(id);
+    _removed();
+  }
 
   static Future<void> reloadHabits() async {
     if (_writing > 0) return;
@@ -326,5 +442,6 @@ class LocalStore {
     await _todoTags.clear();
     await _categories.clear();
     await _settings.clear();
+    _changes = null;
   }
 }

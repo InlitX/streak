@@ -832,6 +832,8 @@
   "card_activity_sub": "Enseña los últimos días en la tarjeta, listos para marcar",
   "readable_copy": "Copia legible",
   "readable_copy_sub": "Escribe además tus hábitos en ficheros markdown",
+  "auto_sync": "Mantener sincronizados",
+  "auto_sync_sub": "Guarda tras cada cambio y mira la carpeta cada pocos minutos",
   "theme_sub": "Claro, oscuro o el del sistema",
   "accent_color_sub": "Se usa en botones y detalles",
   "app_background_sub": "Lo que se ve detrás de las tarjetas",

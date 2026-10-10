@@ -29,10 +29,12 @@ import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/today_intro.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
+import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/services/auto_sync.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/widget_action_service.dart';
 
@@ -84,6 +86,14 @@ class _HomeShellState extends State<HomeShell>
     focus.onRoundSaved =
         (session) => unawaited(creditFocusRound(habits, focus, session));
     _waitForNextDay();
+    final settings = context.read<SettingsController>();
+    AutoSync.start(
+      enabled: () => settings.syncsFolder,
+      reload: () async {
+        if (mounted) await SettingsActions.reloadAll(context);
+      },
+      save: () => settings.runAutoBackup(force: true, archive: false),
+    );
   }
 
   void _waitForNextDay() {
@@ -102,6 +112,7 @@ class _HomeShellState extends State<HomeShell>
   @override
   void dispose() {
     _nextDay?.cancel();
+    AutoSync.stop();
     _swap.dispose();
     _compact.dispose();
     _toSettings.removeListener(_openSettings);
@@ -209,6 +220,7 @@ class _HomeShellState extends State<HomeShell>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
       _leftAt ??= DateTime.now();
+      unawaited(AutoSync.pause());
     }
     if (state == AppLifecycleState.resumed) {
       final left = _leftAt;
@@ -223,6 +235,7 @@ class _HomeShellState extends State<HomeShell>
       context.read<TodosController>().refresh();
       drainFocusActions();
       context.read<SettingsController>().runAutoBackup();
+      AutoSync.resume();
       _waitForNextDay();
     }
   }

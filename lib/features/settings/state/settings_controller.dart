@@ -137,6 +137,7 @@ class SettingsController extends ChangeNotifier {
     _autoBackupAt = LocalStore.setting('autoBackupAt', '');
     _autoBackupFolder = LocalStore.setting('autoBackupFolder', '');
     _readableCopy = LocalStore.setting('readableCopy', true);
+    _autoSync = LocalStore.setting('autoSync', false);
     _widgetBgColor = LocalStore.setting('widgetBgColor', defaultWidgetBg);
     _widgetOpacity = LocalStore.setting('widgetOpacity', 100);
     _widgetBorder = LocalStore.setting('widgetBorder', false);
@@ -215,6 +216,7 @@ class SettingsController extends ChangeNotifier {
   late String _autoBackupAt;
   late String _autoBackupFolder;
   late bool _readableCopy;
+  late bool _autoSync;
   late int _widgetBgColor;
   late int _widgetOpacity;
   late bool _widgetBorder;
@@ -610,6 +612,17 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get autoSync => _autoSync;
+
+  bool get syncsFolder =>
+      _autoSync && _autoBackup > 0 && _autoBackupFolder.isNotEmpty;
+
+  Future<void> setAutoSync(bool value) async {
+    _autoSync = value;
+    await LocalStore.writeSetting('autoSync', value);
+    notifyListeners();
+  }
+
   Future<void> setAutoBackup(int value) async {
     if (_autoBackup == value) return;
     _autoBackup = value;
@@ -626,17 +639,17 @@ class SettingsController extends ChangeNotifier {
 
   bool _backingUp = false;
 
-  Future<bool> runAutoBackup({bool force = false}) async {
+  Future<bool> runAutoBackup({bool force = false, bool archive = true}) async {
     if (_autoBackup == 0 || _backingUp) return false;
     _backingUp = true;
     try {
-      return await _backUp(force);
+      return await _backUp(force, archive);
     } finally {
       _backingUp = false;
     }
   }
 
-  Future<bool> _backUp(bool force) async {
+  Future<bool> _backUp(bool force, bool archive) async {
     final last = autoBackupAt;
     if (!force && last != null) {
       final due = _autoBackup == 1
@@ -647,6 +660,7 @@ class SettingsController extends ChangeNotifier {
     final path = await BackupService.runAuto(
       folder: _autoBackupFolder,
       readable: _readableCopy,
+      archive: archive,
     );
     if (path == null) return false;
     _autoBackupAt = DateTime.now().toIso8601String();

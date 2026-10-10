@@ -944,6 +944,8 @@
   "card_activity_sub": "Shows the last days on the card, ready to tick",
   "readable_copy": "Readable copy",
   "readable_copy_sub": "Also writes your habits as markdown files",
+  "auto_sync": "Keep devices in sync",
+  "auto_sync_sub": "Saves after each change and checks the folder every few minutes",
   "theme_sub": "Light, dark or the system one",
   "accent_color_sub": "Used on buttons and highlights",
   "app_background_sub": "What you see behind the cards",

@@ -27,6 +27,7 @@ import 'package:streak/services/notification_service.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/services/backup_service.dart';
+import 'package:streak/services/auto_sync.dart';
 import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/import_service.dart';
 import 'package:share_plus/share_plus.dart';
@@ -123,20 +124,22 @@ class SettingsActions {
     return settings.autoBackup > 0 && settings.autoBackupFolder.isNotEmpty;
   }
 
+  static Future<void> reloadAll(BuildContext context) async {
+    await context.read<HabitsController>().reload();
+    if (!context.mounted) return;
+    context.read<NotesController>().reload();
+    context.read<FocusController>().reload();
+    context.read<TodosController>().reload();
+    context.read<TodoTagsController>().reload();
+    context.read<CategoriesController>().reload();
+  }
+
   static Future<void> refreshFolder(BuildContext context) async {
     final settings = context.read<SettingsController>();
-    final habits = context.read<HabitsController>();
     final brought = await LocalStore.guardWrites(FolderSync.pull);
     if (!context.mounted) return;
-    if (brought > 0) {
-      await habits.reload();
-      if (!context.mounted) return;
-      context.read<NotesController>().reload();
-      context.read<FocusController>().reload();
-      context.read<TodosController>().reload();
-      context.read<TodoTagsController>().reload();
-      context.read<CategoriesController>().reload();
-    }
+    if (brought > 0) await reloadAll(context);
+    if (!context.mounted) return;
     await settings.runAutoBackup(force: true);
     if (!context.mounted) return;
     brought > 0
@@ -281,6 +284,25 @@ class SettingsActions {
                   subtitle: Text(context.l10n.readable_copy_sub),
                   value: s.readableCopy,
                   onChanged: settings.setReadableCopy,
+                ),
+                if (s.autoBackupFolder.isNotEmpty)
+                SwitchListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  secondary: Icon(
+                    LucideIcons.refreshCw,
+                    color: context.tokens.muted,
+                  ),
+                  title: Text(
+                    context.l10n.auto_sync,
+                    style: sheetOptionStyle(sheetContext, size: 15),
+                  ),
+                  subtitle: Text(context.l10n.auto_sync_sub),
+                  value: s.autoSync,
+                  onChanged: (value) async {
+                    await settings.setAutoSync(value);
+                    if (value) AutoSync.changed();
+                  },
                 ),
                 const SizedBox(height: 4),
                 SizedBox(
