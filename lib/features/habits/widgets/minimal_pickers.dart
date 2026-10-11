@@ -16,6 +16,7 @@ import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
+import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/habits/widgets/custom_emoji_field.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 
@@ -217,6 +218,7 @@ class _CompactColorPickerState extends State<CompactColorPicker> {
                             decoration: BoxDecoration(
                               color: color,
                               borderRadius: BorderRadius.circular(9),
+                              border: swatchOutline(context, color),
                             ),
                             child: widget.selected.toARGB32() == color.toARGB32()
                                 ? Icon(

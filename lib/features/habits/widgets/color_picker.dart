@@ -133,6 +133,15 @@ class _Segment2 extends StatelessWidget {
   }
 }
 
+Border? swatchOutline(BuildContext context, Color color) {
+  final scheme = Theme.of(context).colorScheme;
+  final blends =
+      (color.computeLuminance() - scheme.surface.computeLuminance()).abs() < 0.1;
+  return blends
+      ? Border.all(color: scheme.onSurface.withValues(alpha: 0.3))
+      : null;
+}
+
 class _Swatch extends StatelessWidget {
   const _Swatch({
     required this.color,
@@ -166,7 +175,9 @@ class _Swatch extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(10),
-            border: selected ? Border.all(color: borderColor, width: 2.5) : null,
+            border: selected
+                ? Border.all(color: borderColor, width: 2.5)
+                : swatchOutline(context, color),
             boxShadow: selected
                 ? [BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 10)]
                 : null,
