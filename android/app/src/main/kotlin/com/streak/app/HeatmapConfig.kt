@@ -12,7 +12,7 @@ object HeatmapConfig {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     fun habitOf(context: Context, appWidgetId: Int): String? =
-        prefs(context).getString("habit_$appWidgetId", null)
+        prefs(context).getString("habit_${WidgetConfig.source(context, appWidgetId)}", null)
 
     fun setHabit(context: Context, appWidgetId: Int, habitId: String?) {
         prefs(context).edit().apply {
@@ -22,7 +22,7 @@ object HeatmapConfig {
     }
 
     fun layoutOf(context: Context, appWidgetId: Int): Int =
-        when (prefs(context).getInt("layout_$appWidgetId", LAYOUT_CLASSIC)) {
+        when (prefs(context).getInt("layout_${WidgetConfig.source(context, appWidgetId)}", LAYOUT_CLASSIC)) {
             LAYOUT_CLASSIC -> LAYOUT_CLASSIC
             else -> LAYOUT_CARD
         }
@@ -33,7 +33,8 @@ object HeatmapConfig {
 
     fun colorOf(context: Context, appWidgetId: Int): Int? {
         val p = prefs(context)
-        return if (p.contains("color_$appWidgetId")) p.getInt("color_$appWidgetId", 0) else null
+        val k = WidgetConfig.source(context, appWidgetId)
+        return if (p.contains("color_$k")) p.getInt("color_$k", 0) else null
     }
 
     fun setColor(context: Context, appWidgetId: Int, color: Int?) {

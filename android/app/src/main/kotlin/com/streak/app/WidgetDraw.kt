@@ -219,14 +219,14 @@ object WidgetDraw {
         }
     }
 
-    fun button(context: Context, sizeDp: Float, color: Color, kind: ButtonKind, fill: Float, ink: Color): Bitmap {
-        val key = "b:$sizeDp:${color.toArgb()}:$kind:${(fill * 100).toInt()}:${ink.toArgb()}"
+    fun button(context: Context, sizeDp: Float, color: Color, kind: ButtonKind, fill: Float, ink: Color, round: Boolean): Bitmap {
+        val key = "b:$sizeDp:${color.toArgb()}:$kind:${(fill * 100).toInt()}:${ink.toArgb()}:$round"
         return remember(key) {
             val d = density(context)
             val px = (sizeDp * d).toInt().coerceAtLeast(1)
             val bitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
-            val r = px * 0.34f
+            val r = if (round) px / 2f else px * 0.34f
             val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
             val argb = color.toArgb()
             val gradient = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -363,8 +363,8 @@ object WidgetDraw {
         }
     }
 
-    fun dot(context: Context, sizeDp: Float, color: Color, mark: WeekMark, fill: Float, ink: Color): Bitmap {
-        val key = "dot:$sizeDp:${color.toArgb()}:$mark:${(fill * 100).toInt()}:${ink.toArgb()}"
+    fun dot(context: Context, sizeDp: Float, color: Color, mark: WeekMark, fill: Float, ink: Color, round: Boolean): Bitmap {
+        val key = "dot:$sizeDp:${color.toArgb()}:$mark:${(fill * 100).toInt()}:${ink.toArgb()}:$round"
         return remember(key) {
             val d = density(context)
             val px = (sizeDp * d).toInt().coerceAtLeast(1)
@@ -381,32 +381,36 @@ object WidgetDraw {
                 )
             }
             val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
+            val corner = if (round) c else px * 0.3f
+            fun shape(paint: Paint, inset: Float = 0f) = canvas.drawRoundRect(
+                RectF(inset, inset, px - inset, px - inset), corner - inset, corner - inset, paint,
+            )
             when (mark) {
                 WeekMark.DONE -> {
-                    canvas.drawCircle(c, c, c, gradient)
+                    shape(gradient)
                     glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.58f, CardBitmaps.inkOn(argb))
                 }
                 WeekMark.PART -> {
-                    canvas.drawCircle(c, c, c, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })
                     canvas.save()
                     canvas.clipRect(0f, px * (1f - fill.coerceIn(0f, 1f)), px.toFloat(), px.toFloat())
-                    canvas.drawCircle(c, c, c, gradient)
+                    shape(gradient)
                     canvas.restore()
                 }
                 WeekMark.RELAPSE -> {
-                    canvas.drawCircle(c, c, c, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = 0x24FF5448 })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = 0x24FF5448 })
                     glyph(context, canvas, R.drawable.ic_widget_cross, c, c, px * 0.5f, 0xCCFF5448.toInt())
                 }
                 WeekMark.TODAY -> {
-                    canvas.drawCircle(c, c, c, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.14f).toArgb() })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.14f).toArgb() })
                     ring.strokeWidth = 2 * d
                     ring.color = color.copy(alpha = 0.9f).toArgb()
-                    canvas.drawCircle(c, c, c - d, ring)
+                    shape(ring, d)
                 }
                 WeekMark.EMPTY, WeekMark.MISSED -> {
                     ring.strokeWidth = 1.6f * d
                     ring.color = ink.copy(alpha = 0.16f).toArgb()
-                    canvas.drawCircle(c, c, c - 0.8f * d, ring)
+                    shape(ring, 0.8f * d)
                 }
                 WeekMark.OFF -> canvas.drawCircle(c, c, px * 0.09f, Paint(Paint.ANTI_ALIAS_FLAG).apply {
                     this.color = ink.copy(alpha = 0.22f).toArgb()

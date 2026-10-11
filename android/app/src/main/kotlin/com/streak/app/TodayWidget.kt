@@ -27,6 +27,7 @@ import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
@@ -66,6 +67,8 @@ private data class Scale(
 private val ROOMY = Scale(14f, 20f, 11.5f, 42f, 4.2f, 12f, 48f, 10f, 28f, 10f, 14f, 32f, 6f)
 private val SNUG = Scale(12f, 17f, 10.5f, 34f, 3.6f, 10.5f, 40f, 8f, 22f, 8f, 12.5f, 26f, 5f)
 
+private fun Scale.compact() = copy(row = row * 0.72f, icon = icon * 0.75f, name = name - 1.5f, button = button * 0.78f, gap = 3f)
+
 class TodayWidget : GlanceAppWidget() {
 
     override val sizeMode = SizeMode.Exact
@@ -86,10 +89,11 @@ class TodayWidget : GlanceAppWidget() {
         val done = summary?.optInt("doneToday") ?: 0
         val total = summary?.optInt("total") ?: 0
         val size = LocalSize.current
-        val scale = if (size.width.value < 200f) SNUG else ROOMY
+        val look = WidgetConfig.look(context, appWidgetId, round = false)
+        val base = if (size.width.value < 200f) SNUG else ROOMY
+        val scale = if (look.compact) base.compact() else base
         val inner = size.width.value - scale.pad * 2
         val density = WidgetDraw.density(context)
-        val look = WidgetConfig.look(context, appWidgetId)
 
         Column(
             modifier = GlanceModifier
@@ -104,6 +108,7 @@ class TodayWidget : GlanceAppWidget() {
             }
             val habits = data?.optJSONArray("habits")
             val due = habits?.let(::dueToday).orEmpty()
+                .filterNot { look.hideDone && it.optJSONArray("completions")?.optBoolean(WidgetPayload.TODAY, false) == true }
             if (due.isEmpty()) {
                 EmptyNote(
                     when {
@@ -115,8 +120,8 @@ class TodayWidget : GlanceAppWidget() {
                     style,
                 )
             } else {
-                if (look.header && size.height.value >= WEEK_MIN_HEIGHT && scale == ROOMY) {
-                    Box(edge) { Week(context, style, data, inner, density) }
+                if (look.header && size.height.value >= WEEK_MIN_HEIGHT && base == ROOMY) {
+                    Box(edge) { Week(context, style, data, inner) }
                     Spacer(GlanceModifier.height(12.dp))
                 }
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
@@ -161,7 +166,7 @@ class TodayWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Week(context: Context, style: WidgetStyle, data: JSONObject?, inner: Float, density: Float) {
+    private fun Week(context: Context, style: WidgetStyle, data: JSONObject?, inner: Float) {
         val days = data?.optJSONArray("days")
         val width = (inner - CHIP_GAP * (WidgetPayload.WEEK - 1)) / WidgetPayload.WEEK
         Row(modifier = GlanceModifier.fillMaxWidth()) {
@@ -170,10 +175,13 @@ class TodayWidget : GlanceAppWidget() {
                 val label = info?.optString("short").orEmpty()
                     .ifEmpty { info?.optString("label").orEmpty() }
                 if (day > 0) Spacer(GlanceModifier.width(CHIP_GAP.dp))
-                Drawn(
-                    WidgetDraw.chip(context, width, CHIP_DP, kindOf(data, day), label, style.content, progressOf(data, day)),
-                    density,
-                    label,
+                Image(
+                    provider = ImageProvider(
+                        WidgetDraw.chip(context, width, CHIP_DP, kindOf(data, day), label, style.content, progressOf(data, day)),
+                    ),
+                    contentDescription = label,
+                    contentScale = ContentScale.Fit,
+                    modifier = GlanceModifier.defaultWeight().height(CHIP_DP.dp),
                 )
             }
         }
@@ -251,15 +259,29 @@ class TodayWidget : GlanceAppWidget() {
                     HabitIcon(habit, color, scale.icon)
                     Spacer(GlanceModifier.width(scale.iconGap.dp))
                 }
-                Column(modifier = GlanceModifier.defaultWeight()) {
+                val line = buildString {
+                    append(if (streak > 999) "999+" else streak.toString())
+                    if (quantified) append("  ·  ${format(count)}/${format(target)}")
+                }
+                if (look.compact) Row(modifier = GlanceModifier.defaultWeight(), verticalAlignment = Alignment.CenterVertically) {
+                    val detail = if (look.details) {
+                        WidgetDraw.text(context, line, 10.5f, style.content.copy(alpha = 0.6f), 650, room * 0.5f)
+                    } else {
+                        null
+                    }
+                    val used = detail?.let { it.width / density + 19f } ?: 0f
+                    Drawn(WidgetDraw.text(context, name, scale.name, style.content, 650, room - used), density, name)
+                    if (detail != null) {
+                        Spacer(GlanceModifier.width(6.dp))
+                        Glyph(R.drawable.widget_flame_3d, 10.dp)
+                        Spacer(GlanceModifier.width(3.dp))
+                        Drawn(detail, density, line)
+                    }
+                } else Column(modifier = GlanceModifier.defaultWeight()) {
                     Drawn(WidgetDraw.text(context, name, scale.name, style.content, 650, room), density, name)
                     if (look.details) Row(verticalAlignment = Alignment.CenterVertically) {
                         Glyph(R.drawable.widget_flame_3d, 11.dp)
                         Spacer(GlanceModifier.width(3.dp))
-                        val line = buildString {
-                            append(if (streak > 999) "999+" else streak.toString())
-                            if (quantified) append("  ·  ${format(count)}/${format(target)}")
-                        }
                         Drawn(
                             WidgetDraw.text(context, line, 11f, style.content.copy(alpha = 0.6f), 650, room - 14f),
                             density,
@@ -290,7 +312,7 @@ class TodayWidget : GlanceAppWidget() {
                     Drawn(
                         WidgetDraw.button(
                             context, scale.button, color, button,
-                            (count / target).toFloat(), style.content,
+                            (count / target).toFloat(), style.content, look.round,
                         ),
                         density,
                     )

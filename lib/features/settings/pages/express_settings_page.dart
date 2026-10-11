@@ -27,6 +27,7 @@ import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
+import 'package:streak/features/settings/widgets/widget_style_list.dart';
 
 class ExpressSettingsPage extends StatelessWidget {
   const ExpressSettingsPage({super.key});
@@ -462,9 +463,27 @@ List<Widget> _appearanceTiles(BuildContext context) {
               onSelected: settings.setAppIcon,
             ),
           ),
+        if (Platform.isAndroid)
+          ExpressTile(
+            icon: LucideIcons.layoutDashboard,
+            title: context.l10n.widgets,
+            subtitle: context.l10n.widgets_sub,
+            onTap: () => AppNavigator.push(const _WidgetsPage()),
+          ),
       ],
     ),
   ];
+}
+
+class _WidgetsPage extends StatelessWidget {
+  const _WidgetsPage();
+
+  @override
+  Widget build(BuildContext context) => ExpressScaffold(
+    title: context.l10n.widgets,
+    subtitle: context.l10n.widgets_hint,
+    children: const [WidgetStyleList()],
+  );
 }
 
 List<Widget> _preferenceTiles(BuildContext context) {

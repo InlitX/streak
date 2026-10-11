@@ -70,14 +70,16 @@ class TodosWidget : GlanceAppWidget() {
                 WidgetStyle.loadFor(context, appWidgetId),
                 WidgetConfig.todosAll(context, appWidgetId),
                 WidgetConfig.art(context, appWidgetId),
+                WidgetConfig.look(context, appWidgetId, round = false),
             )
         }
     }
 
     @Composable
-    private fun Content(context: Context, style: WidgetStyle, all: Boolean, art: Boolean) {
+    private fun Content(context: Context, style: WidgetStyle, all: Boolean, art: Boolean, look: WidgetLook) {
         val todos = TodosPayload.due(context, all)
         val done = todos.count { it.optBoolean("done", false) }
+        val shown = todos.filterNot { look.hideDone && it.optBoolean("done", false) }
         val size = LocalSize.current
         val wide = size.width.value >= 250f
         val night = (context.resources.configuration.uiMode and
@@ -114,8 +116,8 @@ class TodosWidget : GlanceAppWidget() {
                             }
                         }
                         Card(
-                            context, card, density, todos, size.width.value - left - PAD_DP,
-                            GlanceModifier.defaultWeight().fillMaxHeight(),
+                            context, card, density, shown, size.width.value - left - PAD_DP,
+                            GlanceModifier.defaultWeight().fillMaxHeight(), look.compact,
                         )
                     }
                 }
@@ -138,8 +140,8 @@ class TodosWidget : GlanceAppWidget() {
                         }
                     }
                     Card(
-                        context, card, density, todos, size.width.value - PAD_DP * 2,
-                        GlanceModifier.fillMaxWidth().defaultWeight(),
+                        context, card, density, shown, size.width.value - PAD_DP * 2,
+                        GlanceModifier.fillMaxWidth().defaultWeight(), look.compact,
                     )
                 }
             }
@@ -179,6 +181,7 @@ class TodosWidget : GlanceAppWidget() {
         todos: List<JSONObject>,
         width: Float,
         modifier: GlanceModifier,
+        compact: Boolean,
     ) {
         Column(
             modifier = modifier
@@ -199,14 +202,14 @@ class TodosWidget : GlanceAppWidget() {
                 Drawn(WidgetDraw.text(context, empty, 13f, card.muted, 600, width - 24f), density, empty)
             } else {
                 LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                    items(todos.size) { i -> Box(edge) { TodoRow(context, card, density, todos[i], width - 24f) } }
+                    items(todos.size) { i -> Box(edge) { TodoRow(context, card, density, todos[i], width - 24f, compact) } }
                 }
             }
         }
     }
 
     @Composable
-    private fun TodoRow(context: Context, card: CardInk, density: Float, todo: JSONObject, width: Float) {
+    private fun TodoRow(context: Context, card: CardInk, density: Float, todo: JSONObject, width: Float, compact: Boolean) {
         val id = todo.optString("id")
         val title = todo.optString("title")
         val day = todo.optLong("day", -1L)
@@ -215,15 +218,18 @@ class TodosWidget : GlanceAppWidget() {
         val priority = PRIORITY_COLORS.getOrNull(todo.optInt("priority", 0))
         val label = if (done) "" else trailing(context, todo, overdue)
         val room = width - 12f - 8f - 26f
+        val inline = compact && label.isNotEmpty()
+        val tag = if (inline) WidgetDraw.text(context, label, 10.5f, if (overdue) OVERDUE else card.muted, 650, room * 0.4f) else null
+        val titleRoom = tag?.let { room - it.width / density - 6f } ?: room
 
         Row(
-            modifier = GlanceModifier.fillMaxWidth().padding(vertical = 4.dp),
+            modifier = GlanceModifier.fillMaxWidth().padding(vertical = if (compact) 2.dp else 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = GlanceModifier
                     .width(3.dp)
-                    .height(if (label.isEmpty()) 16.dp else 28.dp)
+                    .height(if (label.isEmpty() || compact) 14.dp else 28.dp)
                     .cornerRadius(2.dp)
                     .background(
                         ColorProvider(
@@ -236,7 +242,22 @@ class TodosWidget : GlanceAppWidget() {
                     ),
             ) {}
             Spacer(GlanceModifier.width(9.dp))
-            Column(
+            if (compact) Row(
+                modifier = GlanceModifier
+                    .defaultWeight()
+                    .clickable(openPageAction(context, "todos")),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Drawn(
+                    WidgetDraw.text(context, title, 12.5f, if (done) card.muted else card.ink, 650, titleRoom, strike = done),
+                    density,
+                    title,
+                )
+                if (tag != null) {
+                    Spacer(GlanceModifier.width(6.dp))
+                    Drawn(tag, density, label)
+                }
+            } else Column(
                 modifier = GlanceModifier
                     .defaultWeight()
                     .clickable(openPageAction(context, "todos")),
@@ -257,11 +278,11 @@ class TodosWidget : GlanceAppWidget() {
             Spacer(GlanceModifier.width(8.dp))
             Box(
                 modifier = GlanceModifier
-                    .size(26.dp)
+                    .size(if (compact) 22.dp else 26.dp)
                     .clickable(actionSendBroadcast(WidgetActionReceiver.todoIntent(context, id))),
                 contentAlignment = Alignment.Center,
             ) {
-                Drawn(WidgetDraw.roundCheck(context, 22f, card.ink, done), density)
+                Drawn(WidgetDraw.roundCheck(context, if (compact) 18f else 22f, card.ink, done), density)
             }
         }
     }

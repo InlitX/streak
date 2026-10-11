@@ -1092,6 +1092,14 @@
   "widget_cfg_show_icons": "Habit icons",
   "widget_cfg_show_cards": "Background behind each habit",
   "widget_cfg_show_details": "Streak under the name",
+  "widget_cfg_buttons": "Buttons",
+  "widget_cfg_buttons_round": "Round",
+  "widget_cfg_buttons_square": "Square",
+  "widget_cfg_hide_done": "Hide completed",
+  "widget_cfg_compact": "Compact",
+  "widget_cfg_compact_hint": "Smaller rows, streak next to the name",
+  "widget_cfg_compact_todos_hint": "Smaller rows, time next to the task",
+  "widget_cfg_today_band": "Highlight today",
   "widget_cfg_show_activity": "Show activity of",
   "widget_cfg_dot_color": "Dot color",
   "widget_cfg_style": "Style",
@@ -1399,5 +1407,12 @@
   "difficulty_option_sub": "Let harder habits count for more in the day's progress",
   "todo_save_another": "Save and add another",
   "todo_add_subtask": "Add subtask",
-  "pin_paste": "Paste code"
+  "pin_paste": "Paste code",
+  "widgets_sub": "Widget style, for phones without the widget editor",
+  "widgets_hint": "If your home screen doesn't open the editor when you add or hold a widget, change its style here. It applies to every widget of that type that wasn't customized on its own.",
+  "widget_kind_habit": "Habits",
+  "widget_kind_today": "Today",
+  "widget_kind_stats": "Summary",
+  "widget_kind_heatmap": "Heatmap",
+  "widget_kind_todos": "To-do"
 }

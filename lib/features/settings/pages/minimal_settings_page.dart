@@ -18,6 +18,7 @@ import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
+import 'package:streak/features/settings/widgets/widget_style_list.dart';
 
 class MinimalSettingsPage extends StatelessWidget {
   const MinimalSettingsPage({super.key});
@@ -326,11 +327,29 @@ class _AppearancePage extends StatelessWidget {
                 ),
               ),
             ],
+            if (Platform.isAndroid)
+              SoftRow(
+                icon: LucideIcons.layoutDashboard,
+                title: context.l10n.widgets,
+                subtitle: context.l10n.widgets_sub,
+                onTap: () => AppNavigator.push(const _WidgetsPage()),
+              ),
           ],
         ),
       ],
     );
   }
+}
+
+class _WidgetsPage extends StatelessWidget {
+  const _WidgetsPage();
+
+  @override
+  Widget build(BuildContext context) => MinimalPage(
+    title: context.l10n.widgets,
+    subtitle: context.l10n.widgets_hint,
+    children: const [WidgetStyleList()],
+  );
 }
 
 class _PreferencesPage extends StatelessWidget {

@@ -158,6 +158,7 @@ object WidgetPayload {
             habit.put("counts", slice(habit.optJSONArray("counts"), start))
             if (scheduled != null) habit.put("scheduled", slice(scheduled, start))
 
+            if (habit.optBoolean("tracking", false)) continue
             for (day in 0 until WEEK) {
                 if (completions.optBoolean(day, false)) weekDone++
             }

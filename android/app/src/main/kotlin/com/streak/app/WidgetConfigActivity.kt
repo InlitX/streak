@@ -87,6 +87,10 @@ private const val BRAND_FALLBACK = 0xFF7C3AED.toInt()
 
 class WidgetConfigActivity : ComponentActivity() {
 
+    companion object {
+        const val EXTRA_TEMPLATE = "widgetTemplate"
+    }
+
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private var providerClass = ""
     private var type = WType.HABIT
@@ -124,7 +128,8 @@ class WidgetConfigActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
 
-        appWidgetId = intent?.extras?.getInt(
+        val kind = intent?.getStringExtra(EXTRA_TEMPLATE)
+        appWidgetId = if (kind != null) WidgetConfig.template(kind) else intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID,
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
@@ -133,8 +138,8 @@ class WidgetConfigActivity : ComponentActivity() {
             return
         }
 
-        providerClass = providerOf(appWidgetId)
-        type = typeOf(providerClass)
+        providerClass = if (kind != null) "" else providerOf(appWidgetId)
+        type = WType.entries[WidgetConfig.KINDS.indexOf(kind ?: WidgetConfig.kindOf(providerClass))]
 
         originalImage = WidgetConfig.image(this, appWidgetId)
         imageState.value = originalImage
@@ -155,9 +160,9 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialTodosAll = WidgetConfig.todosAll(this, appWidgetId),
                 initialArt = WidgetConfig.art(this, appWidgetId),
                 initialSpan = WidgetConfig.span(this, appWidgetId),
-                initialLook = WidgetConfig.look(this, appWidgetId),
+                initialLook = WidgetConfig.look(this, appWidgetId, round = type == WType.HABIT),
                 initialChosen = WidgetConfig.habits(this, appWidgetId),
-                isEdit = WidgetConfig.exists(this, appWidgetId),
+                isEdit = kind != null || WidgetConfig.exists(this, appWidgetId),
             )
         }
     }
@@ -180,14 +185,6 @@ class WidgetConfigActivity : ComponentActivity() {
         return ""
     }
 
-    private fun typeOf(name: String) = when {
-        name.contains("Todos") -> WType.TODOS
-        name.contains("Today") -> WType.TODAY
-        name.contains("Stats") -> WType.STATS
-        name.contains("Heatmap") -> WType.HEATMAP
-        else -> WType.HABIT
-    }
-
     private fun tr(key: String, fallback: String) = WidgetText.get(this, key, fallback)
 
     private fun save(
@@ -205,7 +202,7 @@ class WidgetConfigActivity : ComponentActivity() {
         if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
         if (type == WType.STATS || type == WType.TODOS) WidgetConfig.setArt(this, appWidgetId, art)
         if (type == WType.HABIT) WidgetConfig.setSpan(this, appWidgetId, span)
-        if (type == WType.HABIT || type == WType.TODAY) WidgetConfig.setLook(this, appWidgetId, look)
+        if (type == WType.HABIT || type == WType.TODAY || type == WType.TODOS) WidgetConfig.setLook(this, appWidgetId, look)
         if (filters) WidgetConfig.setHabits(this, appWidgetId, chosen)
         if (type == WType.HEATMAP) {
             HeatmapConfig.setHabit(this, appWidgetId, habitId)
@@ -215,6 +212,16 @@ class WidgetConfigActivity : ComponentActivity() {
 
         val id = appWidgetId
         val ctx = applicationContext
+        if (id < 0) {
+            lifecycleScope.launch {
+                try {
+                    WidgetRefreshReceiver.repaint(ctx)
+                } catch (_: Exception) {
+                }
+                finish()
+            }
+            return
+        }
         setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id))
         if (type == WType.HEATMAP) {
             HeatmapRenderer.update(ctx, AppWidgetManager.getInstance(ctx), id)
@@ -399,6 +406,32 @@ class WidgetConfigActivity : ComponentActivity() {
                                 ToggleRow(tr("cfg_show_details", "Streak under the name"), null, look.details) {
                                     look = look.copy(details = it)
                                 }
+                                Line()
+                                if (type == WType.HABIT) {
+                                    ToggleRow(tr("cfg_today_band", "Highlight today"), null, look.band) {
+                                        look = look.copy(band = it)
+                                    }
+                                    Line()
+                                }
+                                ToggleRow(tr("cfg_hide_done", "Hide completed"), null, look.hideDone) {
+                                    look = look.copy(hideDone = it)
+                                }
+                                Line()
+                                ToggleRow(tr("cfg_compact", "Compact"), tr("cfg_compact_hint", "Smaller rows, streak next to the name"), look.compact) {
+                                    look = look.copy(compact = it)
+                                }
+                                Line()
+                                Inset {
+                                    Label(tr("cfg_buttons", "Buttons"))
+                                    Spacer(Modifier.height(12.dp))
+                                    Segmented(
+                                        left = tr("cfg_buttons_round", "Round"),
+                                        right = tr("cfg_buttons_square", "Square"),
+                                        selected = if (look.round) 0 else 1,
+                                        onLeft = { look = look.copy(round = true) },
+                                        onRight = { look = look.copy(round = false) },
+                                    )
+                                }
                             }
                             if (type == WType.TODOS) {
                                 ToggleRow(
@@ -406,6 +439,14 @@ class WidgetConfigActivity : ComponentActivity() {
                                     tr("cfg_todos_hint", "Off: only today, late and undated tasks"),
                                     todosAll,
                                 ) { todosAll = it }
+                                Line()
+                                ToggleRow(tr("cfg_hide_done", "Hide completed"), null, look.hideDone) {
+                                    look = look.copy(hideDone = it)
+                                }
+                                Line()
+                                ToggleRow(tr("cfg_compact", "Compact"), tr("cfg_compact_todos_hint", "Smaller rows, time next to the task"), look.compact) {
+                                    look = look.copy(compact = it)
+                                }
                             }
                             if (hasArt) {
                                 if (type == WType.TODOS) Line()
@@ -569,7 +610,7 @@ class WidgetConfigActivity : ComponentActivity() {
                                 layout = HeatmapConfig.LAYOUT_CLASSIC
                                 art = true
                                 span = 7
-                                look = WidgetLook()
+                                look = WidgetLook(round = type == WType.HABIT)
                                 todosAll = false
                                 chosen = emptySet()
                                 bgModeState.value = 0
@@ -767,7 +808,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 WType.TODAY -> TodaySample(style, look)
                 WType.STATS -> StatsSample(style, art)
                 WType.HEATMAP -> Box(Modifier.padding(14.dp)) { LivePreview(style, layout, habitId, allColor) }
-                WType.TODOS -> TodosSample(style, art)
+                WType.TODOS -> TodosSample(style, art, look)
             }
         }
     }

@@ -55,7 +55,7 @@ private const val ROW_GAP = 5f
 private const val ICON = 20f
 private const val RIGHT_INSET = 8f
 
-private data class Grid(val inner: Float, val name: Float, val cell: Float, val dot: Float, val first: Int, val span: Int)
+private data class Grid(val inner: Float, val name: Float, val cell: Float, val dot: Float, val first: Int, val span: Int, val row: Float, val gap: Float)
 
 private fun series(habit: JSONObject, name: String, day: Int): Any? =
     if (day >= 0) {
@@ -109,14 +109,21 @@ class HabitWidget : GlanceAppWidget() {
         val inner = size.width.value - PAD * 2
         val name = inner * 0.40f
         val cell = (inner - name - RIGHT_INSET) / span
-        val grid = Grid(inner, name, cell, minOf(22f, cell - 4f), first, span)
+        val look = WidgetConfig.look(context, appWidgetId, round = true)
+        val grid = if (look.compact) {
+            Grid(inner, name, cell, minOf(18f, cell - 4f), first, span, 30f, 3f)
+        } else {
+            Grid(inner, name, cell, minOf(22f, cell - 4f), first, span, ROW, ROW_GAP)
+        }
         val pastFirst = data.optBoolean("pastFirst", false)
-        val look = WidgetConfig.look(context, appWidgetId)
         val keys = List(span) {
             dayAt(data, first + it)?.optString("key") ?: WidgetPayload.todayKey(context)
         }
 
-        val last = habits.length() - 1
+        val shown = (0 until habits.length())
+            .mapNotNull { habits.optJSONObject(it) }
+            .filterNot { look.hideDone && series(it, "completions", TODAY_INDEX) == true }
+        val last = shown.size - 1
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -127,14 +134,14 @@ class HabitWidget : GlanceAppWidget() {
             val header = HEADER * WidgetDraw.textScale(context)
             Box(modifier = edge.height((header + LIST_GAP).dp)) {
                 val top = BAR_H + BAR_GAP + (LETTER_ROW - grid.dot) / 2f - 3f
-                Band(context, style, grid, top, header + LIST_GAP - top, openTop = false, openBottom = true)
+                if (look.band) Band(context, style, grid, top, header + LIST_GAP - top, openTop = false, openBottom = shown.isNotEmpty())
                 Header(context, style, grid, density, habits, data, header, look.header)
             }
-            LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                items(habits.length()) { index ->
-                    habits.optJSONObject(index)?.let {
-                        Box(edge) { HabitRow(context, style, grid, density, it, keys, index == last, pastFirst, look) }
-                    }
+            if (shown.isEmpty()) {
+                EmptyNote(WidgetText.get(context, "todos_empty", "Nothing left for today"), style)
+            } else LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                items(shown.size) { index ->
+                    Box(edge) { HabitRow(context, style, grid, density, shown[index], keys, index == last, pastFirst, look) }
                 }
             }
         }
@@ -276,16 +283,16 @@ class HabitWidget : GlanceAppWidget() {
         val name = habit.optString("name")
         val room = grid.name - 9f - (if (look.icons) ICON + 8f else 0f) - 4f
 
-        Box(modifier = GlanceModifier.fillMaxWidth().height((ROW + ROW_GAP).dp)) {
-            Band(
+        Box(modifier = GlanceModifier.fillMaxWidth().height((grid.row + grid.gap).dp)) {
+            if (look.band) Band(
                 context, style, grid, 0f,
-                if (last) ROW / 2f + grid.dot / 2f + 3f else ROW + ROW_GAP,
+                if (last) grid.row / 2f + grid.dot / 2f + 3f else grid.row + grid.gap,
                 openTop = true, openBottom = !last,
             )
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(ROW.dp)
+                    .height(grid.row.dp)
                     .cornerRadius(15.dp)
                     .background(ColorProvider(style.content.copy(alpha = if (look.cards) 0.07f else 0f))),
                 verticalAlignment = Alignment.CenterVertically,
@@ -295,14 +302,25 @@ class HabitWidget : GlanceAppWidget() {
                     HabitIcon(habit, color)
                     Spacer(GlanceModifier.width(8.dp))
                 }
-                Column(modifier = GlanceModifier.width(room.dp)) {
+                val days = if (streak > 999) "999+" else streak.toString()
+                if (look.compact) Row(modifier = GlanceModifier.width(room.dp), verticalAlignment = Alignment.CenterVertically) {
+                    val detail = if (look.details) WidgetDraw.text(context, days, 10f, style.content.copy(alpha = 0.6f), 650) else null
+                    val used = detail?.let { it.width / density + 16f } ?: 0f
+                    Drawn(WidgetDraw.text(context, name, 11.5f, style.content, 650, room - used), density, name)
+                    if (detail != null) {
+                        Spacer(GlanceModifier.width(4.dp))
+                        Glyph(R.drawable.widget_flame_3d, 9.dp)
+                        Spacer(GlanceModifier.width(3.dp))
+                        Drawn(detail, density)
+                    }
+                } else Column(modifier = GlanceModifier.width(room.dp)) {
                     Drawn(WidgetDraw.text(context, name, 12.5f, style.content, 650, room), density, name)
                     if (look.details) Row(verticalAlignment = Alignment.CenterVertically) {
                         Glyph(R.drawable.widget_flame_3d, 10.dp)
                         Spacer(GlanceModifier.width(3.dp))
                         Drawn(
                             WidgetDraw.text(
-                                context, if (streak > 999) "999+" else streak.toString(),
+                                context, days,
                                 10f, style.content.copy(alpha = 0.6f), 650,
                             ),
                             density,
@@ -326,7 +344,7 @@ class HabitWidget : GlanceAppWidget() {
                             i == TODAY_INDEX -> WeekMark.TODAY
                             else -> WeekMark.MISSED
                         }
-                        val cell = GlanceModifier.width(grid.cell.dp).height(ROW.dp)
+                        val cell = GlanceModifier.width(grid.cell.dp).height(grid.row.dp)
                         val key = keys.getOrElse(column) { WidgetPayload.todayKey(context) }
                         Box(
                             modifier = when {
@@ -337,7 +355,7 @@ class HabitWidget : GlanceAppWidget() {
                             contentAlignment = Alignment.Center,
                         ) {
                             Drawn(
-                                WidgetDraw.dot(context, grid.dot, color, mark, (count / target).toFloat(), style.content),
+                                WidgetDraw.dot(context, grid.dot, color, mark, (count / target).toFloat(), style.content, look.round),
                                 density,
                             )
                         }

@@ -955,6 +955,14 @@
   "widget_cfg_show_icons": "Iconos de los hábitos",
   "widget_cfg_show_cards": "Fondo detrás de cada hábito",
   "widget_cfg_show_details": "Racha bajo el nombre",
+  "widget_cfg_buttons": "Botones",
+  "widget_cfg_buttons_round": "Redondos",
+  "widget_cfg_buttons_square": "Cuadrados",
+  "widget_cfg_hide_done": "Ocultar lo completado",
+  "widget_cfg_compact": "Compacto",
+  "widget_cfg_compact_hint": "Filas más pequeñas, racha junto al nombre",
+  "widget_cfg_compact_todos_hint": "Filas más pequeñas, hora junto a la tarea",
+  "widget_cfg_today_band": "Resaltar hoy",
   "widget_cfg_show_activity": "Mostrar actividad de",
   "widget_cfg_dot_color": "Color de los puntos",
   "widget_cfg_style": "Estilo",
@@ -1209,5 +1217,12 @@
   "difficulty_option_sub": "Que los hábitos difíciles cuenten más en el progreso del día",
   "todo_save_another": "Guardar y crear otra",
   "todo_add_subtask": "Añadir subtarea",
-  "pin_paste": "Pegar código"
+  "pin_paste": "Pegar código",
+  "widgets_sub": "Estilo de los widgets, para móviles sin editor de widgets",
+  "widgets_hint": "Si tu pantalla de inicio no abre el editor al añadir o mantener pulsado un widget, cambia su estilo aquí. Se aplica a todos los widgets de ese tipo que no tengan su propio estilo.",
+  "widget_kind_habit": "Hábitos",
+  "widget_kind_today": "Hoy",
+  "widget_kind_stats": "Resumen",
+  "widget_kind_heatmap": "Mapa de actividad",
+  "widget_kind_todos": "Tareas"
 }
