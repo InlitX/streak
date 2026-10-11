@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/express/express_motion.dart';
@@ -322,7 +323,7 @@ class _SessionTile extends StatelessWidget {
     final habit = session.habitId.isEmpty
         ? null
         : context.watch<HabitsController>().byId(session.habitId);
-    final color = habit?.color ?? context.colors.primary;
+    final color = habit?.color.shownIn(context) ?? context.colors.primary;
     final locale = Localizations.localeOf(context).toString();
     final scheme = context.colors;
     final express = context.watch<SettingsController>().isExpressStyle;

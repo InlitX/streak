@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -36,7 +37,7 @@ class _MinimalFocusStatsPageState extends State<MinimalFocusStatsPage> {
     final focus = context.read<FocusController>();
     final habits = context.watch<HabitsController>();
     final habit = widget.habitId == null ? null : habits.byId(widget.habitId!);
-    final accent = habit?.color ?? context.colors.primary;
+    final accent = habit?.color.shownIn(context) ?? context.colors.primary;
     final title = habit?.name ?? context.l10n.focus_stats;
 
     final stats = FocusStats.compute(
@@ -52,7 +53,7 @@ class _MinimalFocusStatsPageState extends State<MinimalFocusStatsPage> {
       for (final entry in stats.perHabit.entries)
         (
           name: habits.byId(entry.key)?.name ?? context.l10n.focus_free_session,
-          color: habits.byId(entry.key)?.color ?? accent,
+          color: habits.byId(entry.key)?.color.shownIn(context) ?? accent,
           seconds: entry.value,
         ),
     ]..sort((a, b) => b.seconds.compareTo(a.seconds));

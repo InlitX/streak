@@ -17,7 +17,7 @@ class CheckSeal extends StatelessWidget {
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: color.computeLuminance() > 0.55 ? Colors.black : Colors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(

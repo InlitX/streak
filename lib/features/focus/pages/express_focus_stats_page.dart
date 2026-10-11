@@ -8,6 +8,7 @@ import 'package:streak/core/express/express_shapes.dart';
 import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/express/express_type.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -45,7 +46,7 @@ class _ExpressFocusStatsPageState extends State<ExpressFocusStatsPage> {
       for (final entry in stats.perHabit.entries)
         (
           name: habits.byId(entry.key)?.name ?? context.l10n.focus_free_session,
-          color: habits.byId(entry.key)?.color ?? accent,
+          color: habits.byId(entry.key)?.color.shownIn(context) ?? accent,
           count: entry.value,
         ),
     ]..sort((a, b) => b.count.compareTo(a.count));
@@ -58,7 +59,7 @@ class _ExpressFocusStatsPageState extends State<ExpressFocusStatsPage> {
     final focus = context.read<FocusController>();
     final habits = context.watch<HabitsController>();
     final habit = widget.habitId == null ? null : habits.byId(widget.habitId!);
-    final accent = habit?.color ?? context.colors.primary;
+    final accent = habit?.color.shownIn(context) ?? context.colors.primary;
 
     final stats = FocusStats.compute(
       sessions: focus.sessions,

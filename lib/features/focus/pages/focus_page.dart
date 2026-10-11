@@ -10,6 +10,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_switch.dart';
 import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
@@ -230,7 +231,7 @@ class _FocusPageState extends State<FocusPage> {
         reached: reached,
         addsTime: habit?.isTimeAmount ?? false,
         lines: lines,
-        accent: habit?.color ?? Theme.of(dialog).colorScheme.primary,
+        accent: habit?.color.shownIn(dialog) ?? Theme.of(dialog).colorScheme.primary,
       ),
     );
     if (result == null || !mounted) return;
@@ -353,7 +354,7 @@ class _FocusPageState extends State<FocusPage> {
                   animation: focus,
                   builder: (context, _) {
                     final paused = !leading && focus.isActive && !focus.isRunning;
-                    final accent = habit?.color ?? context.colors.primary;
+                    final accent = habit?.color.shownIn(context) ?? context.colors.primary;
                     return AnimatedOpacity(
                       opacity: paused ? (style == ClockStyle.ring ? 0.7 : 0.55) : 1,
                       duration: const Duration(milliseconds: 300),
@@ -405,7 +406,7 @@ class _FocusPageState extends State<FocusPage> {
                     children: [
                       _ZenLabel(
                         text: label,
-                        color: habit?.color ?? context.colors.primary,
+                        color: habit?.color.shownIn(context) ?? context.colors.primary,
                       ),
                       const SizedBox(height: 10),
                       Expanded(

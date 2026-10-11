@@ -222,7 +222,7 @@ class _RoundActionButtonState extends State<_RoundActionButton> {
             color: disabled
                 ? color.withValues(alpha: 0.3)
                 : widget.filled
-                    ? Colors.white
+                    ? color.ink
                     : color,
           ),
         ),
