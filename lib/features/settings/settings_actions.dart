@@ -643,6 +643,7 @@ class SettingsActions {
       'tr': 'Türkçe',
       'nl': 'Nederlands',
       'pl': 'Polski',
+      'ro': 'Română',
       'uk': 'Українська',
       'hi': 'हिन्दी',
       'id': 'Bahasa Indonesia',
