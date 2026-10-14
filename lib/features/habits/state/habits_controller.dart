@@ -62,6 +62,14 @@ class HabitsController extends ChangeNotifier {
   Habit? byId(String id) => _habits[id];
 
   Future<void> rescheduleReminders() async {
+    try {
+      await _notifications.cancelOrphans({
+        for (final habit in _habits.values)
+          if (!habit.isArchived) habit.id,
+      });
+    } catch (e) {
+      debugPrint('Could not clear stale reminders: $e');
+    }
     if (NotificationService.armedToday('habitRemindersArmedOn')) return;
     for (final habit in _habits.values) {
       if (habit.isArchived || habit.reminders.isEmpty) continue;

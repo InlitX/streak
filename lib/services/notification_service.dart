@@ -270,7 +270,7 @@ class NotificationService {
 
   Future<void> scheduleFor(Habit habit) async {
     if (!_ready) await initialize();
-    if (habit.isOnVacation) {
+    if (habit.isOnVacation || habit.isArchived) {
       await cancelFor(habit.id);
       return;
     }
@@ -899,7 +899,18 @@ class NotificationService {
   }
 
   Future<void> cancelFor(String habitId) async {
+    if (!_ready) await initialize();
     await _cancelExcept(habitId, const {});
+  }
+
+  Future<void> cancelOrphans(Set<String> liveHabitIds) async {
+    if (!_ready) await initialize();
+    for (final n in await _pending()) {
+      final payload = n.payload;
+      if (payload == null || payload.isEmpty) continue;
+      if (payload.startsWith(_todoPayload)) continue;
+      if (!liveHabitIds.contains(payload)) await _cancel(n.id);
+    }
   }
 
   Future<void> cancelAll() async {
@@ -1017,7 +1028,10 @@ class NotificationActions {
       await LocalStore.reloadHabits();
       final habits = LocalStore.readHabits();
       final habit = habits[habitId];
-      if (habit == null) return;
+      if (habit == null || habit.isArchived) {
+        await NotificationService().cancelFor(habitId);
+        return;
+      }
 
       if (actionId == NotificationService.actionSnooze) {
         await NotificationService().snooze(habit);
