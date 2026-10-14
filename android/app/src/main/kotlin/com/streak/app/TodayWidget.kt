@@ -174,14 +174,14 @@ class TodayWidget : GlanceAppWidget() {
                 val info = days?.optJSONObject(day)
                 val label = info?.optString("short").orEmpty()
                     .ifEmpty { info?.optString("label").orEmpty() }
-                if (day > 0) Spacer(GlanceModifier.width(CHIP_GAP.dp))
                 Image(
                     provider = ImageProvider(
                         WidgetDraw.chip(context, width, CHIP_DP, kindOf(data, day), label, style.content, progressOf(data, day)),
                     ),
                     contentDescription = label,
                     contentScale = ContentScale.Fit,
-                    modifier = GlanceModifier.defaultWeight().height(CHIP_DP.dp),
+                    modifier = GlanceModifier.defaultWeight().height(CHIP_DP.dp)
+                        .padding(start = if (day > 0) CHIP_GAP.dp else 0.dp),
                 )
             }
         }
