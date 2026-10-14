@@ -327,6 +327,12 @@ class _AppearancePage extends StatelessWidget {
                 ),
               ),
             ],
+            SoftRow(
+              icon: LucideIcons.gauge,
+              title: context.l10n.performance,
+              subtitle: context.l10n.performance_sub,
+              onTap: () => AppNavigator.push(const _PerformancePage()),
+            ),
             if (Platform.isAndroid)
               SoftRow(
                 icon: LucideIcons.layoutDashboard,
@@ -334,6 +340,35 @@ class _AppearancePage extends StatelessWidget {
                 subtitle: context.l10n.widgets_sub,
                 onTap: () => AppNavigator.push(const _WidgetsPage()),
               ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _PerformancePage extends StatelessWidget {
+  const _PerformancePage();
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+
+    return MinimalPage(
+      title: context.l10n.performance,
+      subtitle: context.l10n.performance_sub,
+      children: [
+        SoftCard(
+          children: [
+            SoftRow(
+              icon: LucideIcons.sparkles,
+              title: context.l10n.animations,
+              subtitle: context.l10n.animations_sub,
+              trailing: _SoftSwitch(
+                value: settings.animations,
+                onChanged: settings.setAnimations,
+              ),
+            ),
           ],
         ),
       ],

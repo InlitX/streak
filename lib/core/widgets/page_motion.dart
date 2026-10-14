@@ -8,6 +8,7 @@ class FadeThrough extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
     return FadeTransition(
       opacity: CurvedAnimation(
         parent: animation,
@@ -37,6 +38,7 @@ class SlideThrough extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
     final rtl = Directionality.of(context) == TextDirection.rtl ? -1.0 : 1.0;
     return SlideTransition(
       position: Tween(begin: Offset.zero, end: Offset(-0.06 * rtl, 0)).animate(

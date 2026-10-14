@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 typedef ClassicNavItem = ({IconData icon, String label});
 
@@ -115,6 +117,9 @@ class _ClassicNavBarState extends State<ClassicNavBar>
     final dark = Theme.of(context).brightness == Brightness.dark;
     final muted = context.tokens.muted;
     final count = widget.items.length;
+    final glass = context.select<SettingsController, bool>(
+      (settings) => settings.glassEffects,
+    );
 
     return LayoutBuilder(
       builder: (context, box) => AnimatedBuilder(
@@ -167,10 +172,13 @@ class _ClassicNavBarState extends State<ClassicNavBar>
             child: ClipRRect(
               borderRadius: BorderRadius.circular(_height / 2),
               child: BackdropFilter(
+                enabled: glass,
                 filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: scheme.surface.withValues(alpha: dark ? 0.7 : 0.78),
+                    color: scheme.surface.withValues(
+                      alpha: glass ? (dark ? 0.7 : 0.78) : 0.97,
+                    ),
                     borderRadius: BorderRadius.circular(_height / 2),
                     border: Border.all(
                       color: dark

@@ -71,6 +71,9 @@ class _EntranceState extends State<Entrance>
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) {
+      return Opacity(opacity: widget.leaving ? 0 : 1, child: widget.child);
+    }
     final express = context.select<SettingsController, bool>(
       (settings) => settings.isExpressStyle,
     );

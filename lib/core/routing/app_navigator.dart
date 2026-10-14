@@ -97,6 +97,7 @@ class AppNavigator {
       opaque: true,
       pageBuilder: (_, __, ___) => AppBackground(child: page),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (MediaQuery.disableAnimationsOf(context)) return child;
         final route = ModalRoute.of(context)! as PageRoute<T>;
         if (Platform.isIOS && !fade && !fullscreenDialog) {
           return const CupertinoPageTransitionsBuilder().buildTransitions(

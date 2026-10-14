@@ -235,6 +235,13 @@ class _ClassicAppearancePage extends StatelessWidget {
             ),
           ),
         ],
+        settingsDivider(context),
+        NavRow(
+          icon: LucideIcons.gauge,
+          title: context.l10n.performance,
+          subtitle: context.l10n.performance_sub,
+          onTap: () => AppNavigator.push(const _ClassicPerformancePage()),
+        ),
         if (Platform.isAndroid) ...[
           settingsDivider(context),
           NavRow(
@@ -244,6 +251,43 @@ class _ClassicAppearancePage extends StatelessWidget {
             onTap: () => AppNavigator.push(const _ClassicWidgetsPage()),
           ),
         ],
+      ],
+    );
+  }
+}
+
+class _ClassicPerformancePage extends StatelessWidget {
+  const _ClassicPerformancePage();
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsController>();
+
+    return _ClassicSection(
+      title: context.l10n.performance,
+      label: context.l10n.performance_sub,
+      children: [
+        SettingRow(
+          icon: LucideIcons.blend,
+          title: context.l10n.glass_effects,
+          subtitle: context.l10n.glass_effects_sub,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.glassEffects ? 1 : 0,
+            onChanged: (i) => settings.setGlassEffects(i == 1),
+          ),
+        ),
+        settingsDivider(context),
+        SettingRow(
+          icon: LucideIcons.sparkles,
+          title: context.l10n.animations,
+          subtitle: context.l10n.animations_sub,
+          trailing: Segmented(
+            options: [context.l10n.off, context.l10n.on],
+            index: settings.animations ? 1 : 0,
+            onChanged: (i) => settings.setAnimations(i == 1),
+          ),
+        ),
       ],
     );
   }

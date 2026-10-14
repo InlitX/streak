@@ -129,7 +129,9 @@ class _TodayProgressState extends State<TodayProgress>
               child: AnimatedBuilder(
                 animation: _curve,
                 builder: (context, _) {
-                  final ratio = _shown;
+                  final ratio = MediaQuery.disableAnimationsOf(context)
+                      ? widget.ratio
+                      : _shown;
                   return CustomPaint(
                     painter: _RingPainter(
                       ratio: ratio,

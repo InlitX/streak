@@ -23,7 +23,9 @@ class StrengthBar extends StatelessWidget {
               Container(height: 6, color: track),
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: value.clamp(0.0, 1.0)),
-                duration: const Duration(milliseconds: 700),
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : const Duration(milliseconds: 700),
                 curve: Curves.easeOutCubic,
                 builder: (context, t, _) => Container(
                   height: 6,

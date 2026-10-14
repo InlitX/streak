@@ -47,7 +47,9 @@ class _HabitEntranceState extends State<HabitEntrance>
   }
 
   @override
-  Widget build(BuildContext context) => FadeTransition(
+  Widget build(BuildContext context) => MediaQuery.disableAnimationsOf(context)
+      ? RepaintBoundary(child: widget.child)
+      : FadeTransition(
         opacity: _fade,
         child: SlideTransition(
           position: _slide,

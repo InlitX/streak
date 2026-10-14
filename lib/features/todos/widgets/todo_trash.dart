@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 
@@ -361,6 +362,9 @@ class _BinFront extends StatelessWidget {
         ClipPath(
           clipper: _FrontClip(),
           child: BackdropFilter(
+            enabled: context.select<SettingsController, bool>(
+              (settings) => settings.glassEffects,
+            ),
             filter: ui.ImageFilter.blur(sigmaX: 2.2, sigmaY: 2.2),
             child: Stack(
               fit: StackFit.expand,

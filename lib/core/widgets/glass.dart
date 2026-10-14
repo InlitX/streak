@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 
 class GlassStyle {
   const GlassStyle._();
@@ -269,12 +271,17 @@ class _EdgeBlurState extends State<EdgeBlur> {
   Widget build(BuildContext context) {
     final tone = Theme.of(context).colorScheme.surface;
     final program = _program;
+    final glass = context.select<SettingsController, bool>(
+      (settings) => settings.glassEffects,
+    );
     return IgnorePointer(
       child: SizedBox(
         height: widget.height,
         child: Stack(
           children: [
-            if (program != null)
+            if (!glass)
+              const SizedBox.shrink()
+            else if (program != null)
               for (final filter
                   in _layers(program, MediaQuery.devicePixelRatioOf(context)))
                 Positioned.fill(

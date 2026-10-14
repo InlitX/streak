@@ -36,7 +36,12 @@ class StreakApp extends StatelessWidget {
           AppLocalizations.of(context),
           () => context.read<HabitsController>().asMap,
         );
-        return AnnotatedRegion<SystemUiOverlayStyle>(
+        final media = MediaQuery.of(context);
+        return MediaQuery(
+          data: settings.animations
+              ? media
+              : media.copyWith(disableAnimations: true),
+          child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: AppTheme.systemBars(Theme.of(context).brightness),
           child: AppLockGate(
             child: AppBackground(
@@ -46,6 +51,7 @@ class StreakApp extends StatelessWidget {
               ),
             ),
           ),
+        ),
         );
       },
       locale: settings.locale,

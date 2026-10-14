@@ -76,6 +76,8 @@ class SettingsController extends ChangeNotifier {
     _cardActivity = LocalStore.setting('cardActivity', true);
     _viewSwitcher = LocalStore.setting('viewSwitcher', true);
     _compactCards = LocalStore.setting('compactCards', false);
+    _glassEffects = LocalStore.setting('glassEffects', true);
+    _animations = LocalStore.setting('animations', true);
     _todosEnabled = LocalStore.setting('todosEnabled', true);
     _todoPapers = LocalStore.setting('todoPapers', true);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
@@ -171,6 +173,8 @@ class SettingsController extends ChangeNotifier {
   late bool _cardActivity;
   late bool _viewSwitcher;
   late bool _compactCards;
+  late bool _glassEffects;
+  late bool _animations;
   late bool _todosEnabled;
   late int _appStyle;
   late bool _sortCompletedLast;
@@ -376,6 +380,22 @@ class SettingsController extends ChangeNotifier {
   Future<void> setCompactCards(bool value) async {
     _compactCards = value;
     await LocalStore.writeSetting('compactCards', value);
+    notifyListeners();
+  }
+
+  bool get glassEffects => _glassEffects;
+
+  Future<void> setGlassEffects(bool value) async {
+    _glassEffects = value;
+    await LocalStore.writeSetting('glassEffects', value);
+    notifyListeners();
+  }
+
+  bool get animations => _animations;
+
+  Future<void> setAnimations(bool value) async {
+    _animations = value;
+    await LocalStore.writeSetting('animations', value);
     notifyListeners();
   }
 

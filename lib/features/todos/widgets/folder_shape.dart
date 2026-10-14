@@ -62,6 +62,9 @@ class FolderShape extends StatelessWidget {
     final withBack = layer != FolderLayer.front;
     final withFront = layer != FolderLayer.back;
     final style = context.watch<SettingsController>().appStyle;
+    final glass = context.select<SettingsController, bool>(
+      (settings) => settings.glassEffects,
+    );
     final dark = Theme.of(context).brightness == Brightness.dark;
     final panel = dark
         ? const [Color(0xFF26262A), Color(0xFF18181B)]
@@ -143,6 +146,7 @@ class FolderShape extends StatelessWidget {
               child: ClipPath(
                 clipper: ShapeBorderClipper(shape: outline),
                 child: BackdropFilter(
+                  enabled: glass,
                   filter: ImageFilter.blur(
                     sigmaX: width * 0.015,
                     sigmaY: width * 0.015,
