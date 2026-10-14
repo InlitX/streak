@@ -119,6 +119,16 @@ class _HomePageState extends State<HomePage> {
     context.read<SettingsController>().setHeatmapMode(mode.index);
   }
 
+  void _openFilter(SettingsController settings) {
+    final modes = !settings.viewSwitcher &&
+        (settings.isMinimalStyle || settings.cardActivity);
+    showTodayFilterSheet(
+      context,
+      mode: modes ? _mode : null,
+      onMode: _changeMode,
+    );
+  }
+
   void _celebrate() => _confetti.value++;
 
   void _payout(HabitsController controller, DateTime date) {
@@ -397,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                   tooltip: context.l10n.today_filter,
                   style: MorphMenuStyle.paper(context),
                   active: todayFiltered(settings),
-                  onTap: () => showTodayFilterSheet(context),
+                  onTap: () => _openFilter(settings),
                 ),
                 const SizedBox(width: 10),
                 Builder(
@@ -644,7 +654,7 @@ class _HomePageState extends State<HomePage> {
                     );
               final allDone =
                   hidingDone && visible.isEmpty && filtered.isNotEmpty;
-              void openFilter() => showTodayFilterSheet(context);
+              void openFilter() => _openFilter(settings);
 
               final header = _reordering
                   ? _ReorderBanner(text: context.l10n.reorder_hint)

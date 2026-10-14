@@ -3,28 +3,53 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_switch.dart';
+import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/settings_rows.dart';
 
 bool todayFiltered(SettingsController settings) =>
     settings.todayOnly || settings.hideDone || settings.hideTracking;
 
-Future<void> showTodayFilterSheet(BuildContext context) {
+Future<void> showTodayFilterSheet(
+  BuildContext context, {
+  HeatmapMode? mode,
+  ValueChanged<HeatmapMode>? onMode,
+}) {
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    builder: (_) => const _TodayFilterSheet(),
+    builder: (_) => _TodayFilterSheet(mode: mode, onMode: onMode),
   );
 }
 
-class _TodayFilterSheet extends StatelessWidget {
-  const _TodayFilterSheet();
+class _TodayFilterSheet extends StatefulWidget {
+  const _TodayFilterSheet({this.mode, this.onMode});
+
+  final HeatmapMode? mode;
+  final ValueChanged<HeatmapMode>? onMode;
+
+  @override
+  State<_TodayFilterSheet> createState() => _TodayFilterSheetState();
+}
+
+class _TodayFilterSheetState extends State<_TodayFilterSheet> {
+  late HeatmapMode? _mode = widget.mode;
+
+  void _pick(int index) {
+    final mode = HeatmapMode.values[index];
+    setState(() => _mode = mode);
+    widget.onMode?.call(mode);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final mode = _mode;
+    final modes = [context.l10n.week, context.l10n.month, context.l10n.year];
     final settings = context.watch<SettingsController>();
     final tracked = context.select<HabitsController, bool>(
       (habits) => habits.habits.any((habit) => habit.tracking),
@@ -42,6 +67,37 @@ class _TodayFilterSheet extends StatelessWidget {
               style: sheetTitleStyle(context, size: 18),
             ),
             const SizedBox(height: 18),
+            if (mode != null) ...[
+              if (settings.isExpressStyle)
+                ExpressTabs(
+                  labels: modes,
+                  index: mode.index.clamp(0, 2),
+                  onChanged: _pick,
+                )
+              else
+                Row(
+                  children: [
+                    Icon(
+                      LucideIcons.calendarRange,
+                      size: 20,
+                      color: context.tokens.muted,
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        context.l10n.today_view,
+                        style: sheetHeadingStyle(context),
+                      ),
+                    ),
+                    Segmented(
+                      options: modes,
+                      index: mode.index.clamp(0, 2),
+                      onChanged: _pick,
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 18),
+            ],
             _FilterRow(
               icon: LucideIcons.calendarCheck,
               title: context.l10n.today_only,

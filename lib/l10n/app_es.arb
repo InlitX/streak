@@ -593,7 +593,7 @@
   "collapse_cards": "Encoger tarjetas",
   "expand_cards": "Expandir tarjetas",
   "view_switcher": "Selector de vista",
-  "view_switcher_sub": "Muestra los botones Semana / Mes / Año en Hoy",
+  "view_switcher_sub": "Muestra los botones Semana / Mes / Año en Hoy. Apagado, pasan al menú de filtro",
   "view_switcher_needs": "Enciende la actividad en las tarjetas para usarlo",
   "focus": "Focus",
   "focus_enable_sub": "Un cronómetro para los hábitos que lo necesiten",
@@ -1224,5 +1224,6 @@
   "widget_kind_today": "Hoy",
   "widget_kind_stats": "Resumen",
   "widget_kind_heatmap": "Mapa de actividad",
-  "widget_kind_todos": "Tareas"
+  "widget_kind_todos": "Tareas",
+  "today_view": "Vista"
 }
