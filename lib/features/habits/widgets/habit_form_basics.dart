@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -230,14 +231,35 @@ class IconPicker extends StatefulWidget {
   State<IconPicker> createState() => _IconPickerState();
 }
 
+void revealCategory(ScrollController controller, GlobalKey chip) {
+  final box = chip.currentContext?.findRenderObject();
+  if (box == null || !controller.hasClients) return;
+  final target = RenderAbstractViewport.of(box).getOffsetToReveal(box, 0.5);
+  controller.jumpTo(
+      target.offset.clamp(0.0, controller.position.maxScrollExtent));
+}
+
 class _IconPickerState extends State<IconPicker> {
+  final _cats = ScrollController();
+  final _activeCat = GlobalKey();
   bool _emoji = false;
-  late String _category = HabitIcons.categories.keys.first;
+  late String _category;
 
   @override
   void initState() {
     super.initState();
     _emoji = HabitEmojis.isEmoji(widget.selected);
+    _category = _emoji
+        ? HabitEmojis.categoryOf(widget.selected)
+        : HabitIcons.categoryOf(widget.selected);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => revealCategory(_cats, _activeCat));
+  }
+
+  @override
+  void dispose() {
+    _cats.dispose();
+    super.dispose();
   }
 
   @override
@@ -273,10 +295,13 @@ class _IconPickerState extends State<IconPicker> {
             SizedBox(
               height: 32,
               child: ListView(
+                controller: _cats,
+                cacheExtent: 2000,
                 scrollDirection: Axis.horizontal,
                 children: [
                   for (final cat in cats)
                     Padding(
+                      key: _category == cat ? _activeCat : null,
                       padding: const EdgeInsets.only(right: 8),
                       child: Semantics(
                         button: true,
@@ -288,7 +313,7 @@ class _IconPickerState extends State<IconPicker> {
                             padding: const EdgeInsets.symmetric(horizontal: 14),
                             decoration: BoxDecoration(
                               color: _category == cat
-                                  ? widget.color.withValues(alpha: 0.16)
+                                  ? context.colors.primary
                                   : context.colors.surfaceContainerHighest,
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -298,7 +323,7 @@ class _IconPickerState extends State<IconPicker> {
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
                                 color: _category == cat
-                                    ? widget.color
+                                    ? context.colors.onPrimary
                                     : context.tokens.muted,
                               ),
                             ),

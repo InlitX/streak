@@ -391,4 +391,9 @@ class HabitIcons {
   static IconData resolve(String name) => all[name] ?? all[defaultIcon]!;
 
   static bool isIcon(String name) => all.containsKey(name);
+
+  static String categoryOf(String name) => categories.entries
+      .firstWhere((e) => e.value.contains(name),
+          orElse: () => categories.entries.first)
+      .key;
 }

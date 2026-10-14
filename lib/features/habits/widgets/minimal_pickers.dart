@@ -18,6 +18,7 @@ import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/habits/widgets/custom_emoji_field.dart';
+import 'package:streak/features/habits/widgets/habit_form_basics.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 
 class CompactIconPicker extends StatefulWidget {
@@ -37,8 +38,25 @@ class CompactIconPicker extends StatefulWidget {
 }
 
 class _CompactIconPickerState extends State<CompactIconPicker> {
+  final _cats = ScrollController();
+  final _activeCat = GlobalKey();
   late bool _emoji = HabitEmojis.isEmoji(widget.selected);
-  late String _category = HabitIcons.categories.keys.first;
+  late String _category = _emoji
+      ? HabitEmojis.categoryOf(widget.selected)
+      : HabitIcons.categoryOf(widget.selected);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => revealCategory(_cats, _activeCat));
+  }
+
+  @override
+  void dispose() {
+    _cats.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +88,13 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
           SizedBox(
             height: 24,
             child: ListView(
+              controller: _cats,
+              cacheExtent: 2000,
               scrollDirection: Axis.horizontal,
               children: [
                 for (final cat in cats)
                   Semantics(
+                    key: _category == cat ? _activeCat : null,
                     button: true,
                     selected: _category == cat,
                     child: GestureDetector(
@@ -89,7 +110,7 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
                                 ? FontWeight.w700
                                 : FontWeight.w600,
                             color: _category == cat
-                                ? widget.color
+                                ? context.colors.primary
                                 : context.tokens.muted,
                           ),
                         ),

@@ -63,4 +63,9 @@ class HabitEmojis {
 
   static bool isEmoji(String value) =>
       value.isNotEmpty && value.runes.first > 0x2000;
+
+  static String categoryOf(String emoji) => categories.entries
+      .firstWhere((e) => e.value.contains(emoji),
+          orElse: () => categories.entries.first)
+      .key;
 }

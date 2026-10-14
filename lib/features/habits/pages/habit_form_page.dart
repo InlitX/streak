@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_icons.dart';
@@ -755,7 +756,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       SectionLabel(context.l10n.icon, key: _lookAnchor),
       IconPicker(
         selected: _icon,
-        color: _color,
+        color: _color.shownIn(context),
         onSelected: (icon) => setState(() => _icon = icon),
       ),
       const SizedBox(height: 26),
@@ -1124,7 +1125,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       SectionLabel(context.l10n.icon),
       CompactIconPicker(
         selected: _icon,
-        color: _color,
+        color: _color.shownIn(context),
         onSelected: (icon) => setState(() => _icon = icon),
       ),
       const SizedBox(height: 16),
@@ -1408,7 +1409,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             SectionLabel(context.l10n.icon),
             IconPicker(
               selected: _icon,
-              color: _color,
+              color: _color.shownIn(context),
               onSelected: (icon) => setState(() => _icon = icon),
             ),
             const SizedBox(height: 20),
