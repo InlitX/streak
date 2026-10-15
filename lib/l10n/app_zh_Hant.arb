@@ -1,1 +1,27 @@
-{}
+{
+  "app_tagline": "習慣追蹤器",
+  "today": "今日",
+  "stats": "統計",
+  "settings": "設定",
+  "new_label": "新的",
+  "save": "儲存",
+  "cancel": "取消",
+  "discard_changes": "放棄更改?",
+  "discard_changes_body": "你對這個習慣的更改將不會保存",
+  "discard": "捨棄",
+  "keep_editing": "繼續編輯",
+  "delete": "刪除",
+  "good_morning": "早安",
+  "good_afternoon": "午安",
+  "good_evening": "晚安",
+  "no_habits_yet": "還沒有任何習慣",
+  "empty_title": "開始你的第一個連勝",
+  "empty_body": "創造一個習慣，並點擊某天以記錄它。每天都可以邁出小小的步伐。",
+  "add_habit": "增加一個習慣",
+  "all": "全部",
+  "onb1_title": "建立真正的連勝",
+  "onb3_title": "看見你的進展",
+  "skip": "略過",
+  "next": "下一個",
+  "onb_kicker": "歡迎來到"
+}
