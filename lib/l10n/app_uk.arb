@@ -841,7 +841,7 @@
   "collapse_cards": "Згорнути картки",
   "expand_cards": "Розгорнути картки",
   "view_switcher": "Перемикач вигляду",
-  "view_switcher_sub": "Показувати кнопки «Тиждень / Місяць / Рік» на екрані «Сьогодні»",
+  "view_switcher_sub": "Показувати кнопки «Тиждень» / «Місяць» / «Рік» на екрані «Сьогодні». Якщо вимкнути, вони перемістяться в меню фільтрів",
   "app_lock_failed": "Не вдалося підтвердити вашу особу",
   "focus_style_flip": "Перевернутий",
   "legend_note_added": "Нотатку додано",
@@ -863,7 +863,7 @@
   "focus_track_limit": "До 30 треків",
   "style_minimal_desc": "Сітка звичок і налаштування згруповані у чотири розділи.",
   "focus_keep_awake": "Не вимикати екран",
-  "data_sub": "Резервні копії та імпорт",
+  "data_sub": "Резервні копії, архів та імпорт",
   "note_time_optional": "Час (необов’язково)",
   "focus_pause": "Призупинити",
   "unit_hours": "години",
@@ -1556,5 +1556,189 @@
   "focus_resources": "Безплатні сцени та звуки",
   "focus_volume": "Гучність",
   "focus_notif_break": "Час зробити перерву.",
-  "focus_break_over": "Перерва закінчилася"
+  "focus_break_over": "Перерва закінчилася",
+  "focus_notif_back": "Повернімося до фокусування.",
+  "focus_break_in": "Перерва через {n}",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "Фокусування через {n}",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "plan_todos": "Задачі в плані",
+  "plan_todos_sub": "Показувати нижче звичок список справ, запланованих на той день.",
+  "plan_show_habits": "Звички",
+  "plan_show_both": "Обидва",
+  "plan_show_todos": "Списки справ",
+  "swipe_cards": "Перегортати картки звичок",
+  "swipe_cards_sub": "Проведіть ліворуч, щоби позначити звичку як виконану, і праворуч, аби скасувати цю дію.",
+  "habit_time_sub": "Зараз додає звичку до плану. Вона й досі показується в розділі «Сьогодні» на весь день.",
+  "day_timeline_empty_todos": "Додайте завдання на цю дату, і воно з’явиться тут.",
+  "hide_done": "Приховати виконані",
+  "hide_done_sub": "Те, що ви завершуєте сьогодні, буде викреслено зі списку",
+  "past_first": "Спочатку відкривати минулі дні",
+  "past_first_sub": "Натискання на минулий день спершу показує його, щоби нічого не змінити випадково",
+  "miss_reason_title": "Чому ви це пропустили?",
+  "miss_reasons": "Чому ви пропустили",
+  "miss_other": "Інше",
+  "miss_other_hint": "Напишіть причину",
+  "miss_overslept": "Проспав",
+  "miss_busy": "Не маю часу",
+  "miss_traveling": "Подорожую",
+  "miss_sick": "Хворію",
+  "miss_tired": "Не маю сил",
+  "miss_forgot": "Вилетіло з голови",
+  "day_not_done": "Не виконано",
+  "day_clean": "Чистий",
+  "day_relapses": "{count, plural, =1{1 рецидив} other{{count} рецидивів}}",
+  "@day_relapses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "day_log_relapse": "Записати рецидив",
+  "day_amount": "{value} з {goal}",
+  "@day_amount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "today_filter": "Показати",
+  "today_fold_done": "Готово ({count})",
+  "@today_fold_done": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_other": "Інші дні ({count})",
+  "@today_fold_other": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_hidden": "Приховано ({count})",
+  "@today_fold_hidden": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "auto_sync": "Синхронізуйте пристрої",
+  "auto_sync_sub": "Зберігає після кожної зміни й перевіряє теку кожні кілька хвилин",
+  "sync_guide": "Як синхронізувати два пристрої",
+  "widget_today_done": "{done} з {total} готово",
+  "@widget_today_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_streak_days": "Днів поспіль",
+  "widget_this_week": "Цей тиждень",
+  "widget_last_days": "Останні {count} дні",
+  "@widget_last_days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_days": "Показані дні",
+  "widget_week_done": "{done} з {total}",
+  "@widget_week_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_content": "Уміст",
+  "widget_cfg_background": "Тло",
+  "widget_cfg_show_art": "Показати ілюстрацію",
+  "widget_cfg_show_header": "Заголовок",
+  "widget_cfg_show_icons": "Значок звички",
+  "widget_cfg_show_cards": "Підґрунтя кожної звички",
+  "widget_cfg_show_details": "Поточна серія під іменем",
+  "widget_cfg_buttons": "Кнопки",
+  "widget_cfg_buttons_round": "Раунд",
+  "widget_cfg_buttons_square": "Квадрат",
+  "widget_cfg_hide_done": "Приховати виконані",
+  "widget_cfg_compact": "Компактний",
+  "widget_cfg_compact_hint": "Менші рядки, серія поруч з іменем",
+  "widget_cfg_compact_todos_hint": "Менші рядки, час поруч із задачею",
+  "widget_cfg_today_band": "Виділити сьогодні",
+  "widget_cfg_show_habits": "Звички, які слід показати",
+  "widget_cfg_show_habits_hint": "Виберіть одну або кілька. Якщо вибрати одну звичку, у зведенні буде показано її серію.",
+  "a11y_previous_month": "Попередній місяць",
+  "a11y_next_month": "Наступний місяць",
+  "plan_show_month": "Показати весь місяць",
+  "plan_show_week": "Показати один тиждень",
+  "tracked_week": "{n} цього тижня",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "{n} цього місяця",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "{n} цього року",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "quant_mode_add": "Додати",
+  "quant_mode_replace": "Замінити",
+  "performance": "Виконання",
+  "performance_sub": "Полегшена версія застосунку для старих або малопотужних телефонів",
+  "glass_effects": "Ефекти скла",
+  "glass_effects_sub": "Розмиття за панеллю та по краях екрана. Саме воно найбільше важить",
+  "animations": "Анімації",
+  "animations_sub": "Входи, зміни сторінок і рухомий текст",
+  "widgets_sub": "Стиль віджета для телефонів без редактора віджетів",
+  "widgets_hint": "Якщо на головному екрані під час додавання віджета або його затискання не відкривається редактор, змініть тут його стиль. Це стосується всіх віджетів цього типу, які не налаштовували окремо.",
+  "widget_kind_habit": "Звички",
+  "widget_kind_today": "Сьогодні",
+  "widget_kind_stats": "Підсумок",
+  "widget_kind_heatmap": "Мапа активності",
+  "widget_kind_todos": "Список справ",
+  "today_view": "Перегляд"
 }
