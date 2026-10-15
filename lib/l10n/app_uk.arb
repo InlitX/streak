@@ -659,7 +659,7 @@
       }
     }
   },
-  "auto_backup_folder_default": "Тека застосунку",
+  "auto_backup_folder_default": "У застосунку (видаляється, якщо його видалити)",
   "tomorrow": "Завтра",
   "focus_round": "{n} раунд",
   "@focus_round": {
@@ -689,7 +689,7 @@
   },
   "focus": "Фокус",
   "wipe_data_warning": "Це видалить усі звички, нотатки, сеанси фокусування та налаштування на цьому телефоні. Цю дію неможливо скасувати, якщо у вас немає файлу резервної копії для подальшого імпорту.",
-  "auto_backup_where": "Коли ви відкриваєте застосунок, Streak створює резервну копію, а також доступну для читання копію ваших звичок, яку можна відкрити в будь-якому редакторі. Зберігаються останні 5 резервних копій.",
+  "auto_backup_where": "Коли ви відкриваєте застосунок, Streak створює повну резервну копію: ZIP-архів з усім вмістом, включно з фотографіями та музикою, а також файл JSON. Крім того, він зберігає копію у читабельному форматі, яку можна відкрити в будь-якому редакторі. Зберігаються кілька останніх резервних копій.",
   "archived_habits_sub": "Відновити або видалити їх назавжди",
   "note_kind_note": "Нотатка",
   "focus_pomodoro_sub": "Чергуйте періоди концентрації з короткими перервами",
@@ -1332,7 +1332,7 @@
   "focus_alert_custom": "Оберіть звук",
   "focus_alert_none": "Тиша",
   "focus_hold": "Почекати, поки я зупиню",
-  "focus_hold_sub": "Наступний раунд почнеться, коли ви натиснете «Продовжити».",
+  "focus_hold_sub": "Перерва також триває, доки ви не натиснете «Продовжити». Після перерви «Фокусування» завжди чекає.",
   "focus_restart": "Перезапустити",
   "focus_restart_title": "Перезапустити цей раунд?",
   "focus_restart_body": "Час, який ви витратили в цьому раунді, буде втрачено.",
@@ -1398,5 +1398,163 @@
   "difficulty_option_sub": "Нехай складніші звички вагоміше впливають на денний поступ",
   "todo_save_another": "Зберегти й додати ще",
   "todo_add_subtask": "Додати підзадачу",
-  "pin_paste": "Вставити код"
+  "pin_paste": "Вставити код",
+  "discard_changes": "Відхилити зміни?",
+  "discard_changes_body": "Зміни, внесені до цієї звички, буде втрачено.",
+  "discard": "Відхилити",
+  "keep_editing": "Продовжити редагувати",
+  "data_folder": "Тека даних",
+  "data_folder_documents": "Документи",
+  "data_folder_app": "Біля застосунку",
+  "data_folder_pick": "Оберіть теку",
+  "data_folder_inside": "Виберіть теку поза поточною.",
+  "data_folder_taken": "У цій теці вже є дані Streak.",
+  "data_folder_denied": "Streak не може записати дані в цю теку.",
+  "data_folder_move_title": "Перенесення своїх даних",
+  "data_folder_move_body": "Streak закриється та перемістить ваші дані до {path}. Відкрийте його знову після закриття. Якщо щось піде не так, ваші дані залишаться там, де вони є.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Перемістити та закрити",
+  "pick_one_day": "Виберіть принаймні один день",
+  "reminder_habit_days": "У дні звички",
+  "reminder_habit_days_hint": "Він дзвонить у ті дні, коли настав час виконувати звичку.",
+  "focus_label": "Мітка",
+  "focus_label_none": "Немає мітки",
+  "focus_label_new": "Нова мітка",
+  "focus_label_hint": "Математика, читання, робота...",
+  "focus_label_remove": "Видалити мітку",
+  "focus_label_remove_body": "{label} зникає зі списку. Ваші попередні сеанси зберігають його.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "Видалити",
+  "by_label": "За міткою",
+  "tracking_hide": "Приховати лише відстеження",
+  "tracking_hide_sub": "Звички, які ви лише відстежуєте, не додавайте до цього списку",
+  "tracking_show": "Показати лише відстеження ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminders_ready_title": "Нагадування ввімкнено",
+  "reminders_ready_body": "Streak нагадає вам тут.",
+  "duplicate_habit": "Дублювати звичку",
+  "habit_duplicated": "{name} додано",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_until": "До",
+  "end_of_day": "У кінці дня",
+  "no_goal": "Немає щоденної мети",
+  "no_goal_sub": "Просто записуйте значення, наприклад свою вагу. Будь-яке значення зараховується за день.",
+  "any_amount": "Будь-яка кількість",
+  "any_amount_sub": "Будь-який запис зараховується як виконання за день, навіть якщо він менший за цільовий показник.",
+  "any_step": "Виконано кілька кроків",
+  "any_step_sub": "Якщо позначити один крок, день буде позначено як виконаний, навіть якщо не виконати всі кроки.",
+  "steps_needed_sub": "День вважається завершеним після виконання {needed} з {total} кроків.",
+  "@steps_needed_sub": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_start": "Починається",
+  "from_last_done": "Рахувати від останнього разу",
+  "month_weekday": "Той самий день тижня щомісяця",
+  "month_weekday_sub": "Припадає на {when}-е число місяця, а не на фіксовану дату.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "nth_weekday": "{n, select, first{перший} second{другий} third{третій} fourth{четвертий} other{останній}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "from_last_done_sub": "Щоразу, коли ви це робите, відлік очікування починається знову. Один пропущений день — і серія переривається.",
+  "about_legal": "© InlitX. Streak — це вільне програмне забезпечення за ліцензією GNU GPLv3 з додатковими умовами, викладеними в розділі 7, і надається без жодних гарантій. Натисніть, щоб прочитати ліцензію.",
+  "todo_view_list": "Простий",
+  "todo_view_papers": "Теки",
+  "todo_style": "У стилі списку справ",
+  "todo_style_sub": "Простий список або теки з нотатками, як у Google Keep.",
+  "todo_estimate": "Тривалість",
+  "todo_estimate_none": "Без тривалості",
+  "todo_paper": "Колір",
+  "todo_add": "Додати",
+  "todo_list_item": "Елемент списку",
+  "todo_title_hint": "Назва",
+  "todo_body_hint": "Нотатка",
+  "todo_sort": "Порядок пріоритетів",
+  "todo_sort_high_first": "Спочатку — найвищий пріоритет",
+  "todo_sort_low_first": "Спочатку — найнижчий пріоритет",
+  "todo_project_empty": "У цій теці поки що нічого немає",
+  "todo_background": "Тло",
+  "todo_background_pick": "Оберіть фото",
+  "todo_deleted": "Нотатку видалено",
+  "todo_mark_done": "Позначити як виконане",
+  "todo_mark_open": "Позначити як невиконане",
+  "todo_pin": "Прикріпити",
+  "todo_unpin": "Відкріпити",
+  "todo_select": "Вибрати",
+  "todo_selected": "{count, plural, =1{Вибрано 1 елемент} other{Вибрано {count} елементів}}",
+  "@todo_selected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_deleted_many": "{count, plural, =1{Нотатку видалено} other{{count} нотаток видалено}}",
+  "@todo_deleted_many": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_cards": "Картки та календар",
+  "prefs_habits": "Звички",
+  "focus_long_break": "Довга перерва",
+  "focus_long_break_sub": "Після кожних 4 раундів — довша перерва.",
+  "focus_whole_rounds": "Рахувати лише повні раунди",
+  "focus_whole_rounds_sub": "Раунд, який ви завершуєте достроково, не зберігається.",
+  "focus_end_drop": "Якщо ви завершите зараз, цей раунд не буде збережено.",
+  "focus_options": "Параметри",
+  "focus_fullscreen": "Повний екран",
+  "focus_exit_fullscreen": "Вийти з повного екрана",
+  "focus_track_fire": "Вогонь",
+  "focus_track_ticking": "Цокання годинника",
+  "focus_resources": "Безплатні сцени та звуки",
+  "focus_volume": "Гучність",
+  "focus_notif_break": "Час зробити перерву.",
+  "focus_break_over": "Перерва закінчилася"
 }
