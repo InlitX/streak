@@ -112,12 +112,14 @@ class FocusDial extends StatelessWidget {
             SizedBox(height: size * 0.035),
             FocusSwap(
               size: false,
-              child: Text(
-                caption,
+              child: FittedBox(
                 key: ValueKey(mode),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: sheetLabelStyle(context, size: 13, color: muted),
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  caption,
+                  maxLines: 1,
+                  style: sheetLabelStyle(context, size: 13, color: muted),
+                ),
               ),
             ),
           ],
@@ -171,19 +173,23 @@ class FocusDial extends StatelessWidget {
                     ? Duration.zero
                     : const Duration(milliseconds: 260),
                 curve: Curves.easeOutCubic,
-                builder: (context, focusShare, _) => CustomPaint(
-                  size: Size.square(size),
-                  painter: _DialPainter(
-                    focus: focusShare,
-                    rest: mode == FocusMode.pomodoro
-                        ? breakMinutes / focusDialMax
-                        : 0,
-                    flow: _flow,
-                    color: color,
-                    track: context.colors.onSurface.withValues(alpha: 0.08),
-                    tick: context.colors.onSurface.withValues(alpha: 0.22),
-                    knob: context.colors.surface,
-                    stroke: _stroke,
+                builder: (context, focusShare, _) => _FlowSpin(
+                  on: _flow,
+                  builder: (spin) => CustomPaint(
+                    size: Size.square(size),
+                    painter: _DialPainter(
+                      focus: focusShare,
+                      rest: mode == FocusMode.pomodoro
+                          ? breakMinutes / focusDialMax
+                          : 0,
+                      flow: _flow,
+                      spin: spin,
+                      color: color,
+                      track: context.colors.onSurface.withValues(alpha: 0.08),
+                      tick: context.colors.onSurface.withValues(alpha: 0.22),
+                      knob: context.colors.surface,
+                      stroke: _stroke,
+                    ),
                   ),
                 ),
               ),
@@ -212,11 +218,63 @@ class _RingDrag extends PanGestureRecognizer {
   }
 }
 
+class _FlowSpin extends StatefulWidget {
+  const _FlowSpin({required this.on, required this.builder});
+
+  final bool on;
+  final Widget Function(double spin) builder;
+
+  @override
+  State<_FlowSpin> createState() => _FlowSpinState();
+}
+
+class _FlowSpinState extends State<_FlowSpin>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _turn = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 6),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_FlowSpin old) {
+    super.didUpdateWidget(old);
+    _sync();
+  }
+
+  void _sync() {
+    final spin = widget.on && !MediaQuery.disableAnimationsOf(context);
+    if (spin && !_turn.isAnimating) {
+      _turn.repeat();
+    } else if (!spin && _turn.isAnimating) {
+      _turn.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _turn.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _turn,
+        builder: (context, _) => widget.builder(_turn.value),
+      );
+}
+
 class _DialPainter extends CustomPainter {
   const _DialPainter({
     required this.focus,
     required this.rest,
     required this.flow,
+    required this.spin,
     required this.color,
     required this.track,
     required this.tick,
@@ -227,6 +285,7 @@ class _DialPainter extends CustomPainter {
   final double focus;
   final double rest;
   final bool flow;
+  final double spin;
   final Color color;
   final Color track;
   final Color tick;
@@ -272,8 +331,33 @@ class _DialPainter extends CustomPainter {
         Paint()
           ..style = PaintingStyle.stroke
           ..strokeWidth = stroke
-          ..color = color.withValues(alpha: 0.35),
+          ..color = color.withValues(alpha: 0.18),
       );
+      const tail = 2 * math.pi / 3;
+      final start = top + 2 * math.pi * spin;
+      canvas.drawArc(
+        rect,
+        start,
+        tail,
+        false,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = stroke
+          ..shader = SweepGradient(
+            colors: [color.withValues(alpha: 0), color],
+            stops: const [0, 1],
+            transform: GradientRotation(start),
+            endAngle: tail,
+          ).createShader(rect),
+      );
+      final head = center +
+          Offset(math.cos(start + tail), math.sin(start + tail)) * radius;
+      canvas.drawCircle(
+        head,
+        stroke * 1.05,
+        Paint()..color = color.withValues(alpha: 0.25),
+      );
+      canvas.drawCircle(head, stroke * 0.6, Paint()..color = color);
       return;
     }
 
@@ -312,6 +396,7 @@ class _DialPainter extends CustomPainter {
       old.focus != focus ||
       old.rest != rest ||
       old.flow != flow ||
+      old.spin != spin ||
       old.color != color ||
       old.track != track;
 }
@@ -349,62 +434,86 @@ class FocusModeSwitch extends StatelessWidget {
 
     const icons = [LucideIcons.timer, LucideIcons.repeat, LucideIcons.infinity];
     final scheme = context.colors;
+    final textStyle = DefaultTextStyle.of(context).style.merge(
+      sheetActionStyle(context, size: 13.5),
+    );
+    final scale = MediaQuery.textScalerOf(context);
+    final direction = Directionality.of(context);
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: focusPanel(context).copyWith(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        children: [
-          for (var i = 0; i < labels.length; i++)
-            Expanded(
-              child: Semantics(
-                button: true,
-                selected: mode.index == i,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => pick(i),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: mode.index == i
-                          ? scheme.primary
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          icons[i],
-                          size: 15,
-                          color: mode.index == i
-                              ? scheme.onPrimary
-                              : context.tokens.muted,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final segment = constraints.maxWidth / labels.length - 12;
+          final withIcons = labels.every((label) {
+            final painter = TextPainter(
+              text: TextSpan(text: label, style: textStyle),
+              maxLines: 1,
+              textDirection: direction,
+              textScaler: scale,
+            )..layout();
+            final width = painter.width;
+            painter.dispose();
+            return width + 21 <= segment;
+          });
+          return Row(
+            children: [
+              for (var i = 0; i < labels.length; i++)
+                Expanded(
+                  child: Semantics(
+                    button: true,
+                    selected: mode.index == i,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => pick(i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 180),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 10,
                         ),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            labels[i],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: sheetActionStyle(
-                              context,
-                              size: 13.5,
-                              color: mode.index == i
-                                  ? scheme.onPrimary
-                                  : context.tokens.muted,
-                            ),
+                        decoration: BoxDecoration(
+                          color: mode.index == i
+                              ? scheme.primary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (withIcons) ...[
+                                Icon(
+                                  icons[i],
+                                  size: 15,
+                                  color: mode.index == i
+                                      ? scheme.onPrimary
+                                      : context.tokens.muted,
+                                ),
+                                const SizedBox(width: 6),
+                              ],
+                              Text(
+                                labels[i],
+                                maxLines: 1,
+                                style: textStyle.copyWith(
+                                  color: mode.index == i
+                                      ? scheme.onPrimary
+                                      : context.tokens.muted,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

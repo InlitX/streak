@@ -86,8 +86,7 @@ class _NewLabelDialog extends StatefulWidget {
 
 class _NewLabelDialogState extends State<_NewLabelDialog> {
   static const _icons = [
-    '📚', '💼', '💻', '✍️', '🧮', '🎨',
-    '🎧', '🧘', '🗣️', '🔬', '🎹', '🏋️',
+    '📚', '💼', '💻', '✍️', '🎨', '🎹',
   ];
 
   final _field = TextEditingController();
