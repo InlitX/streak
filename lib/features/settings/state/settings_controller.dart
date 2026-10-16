@@ -347,7 +347,6 @@ class SettingsController extends ChangeNotifier {
 
   Future<void> setPlanMonth(bool value) async {
     _planMonth = value;
-    notifyListeners();
     await LocalStore.writeSetting('planMonth', value);
   }
 

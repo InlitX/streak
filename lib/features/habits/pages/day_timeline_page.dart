@@ -406,7 +406,10 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                 month: style.planMonth,
                 onSelected: _select,
                 onShift: _shift,
-                onFold: () => style.setPlanMonth(!style.planMonth),
+                onFold: () {
+                  style.setPlanMonth(!style.planMonth);
+                  setState(() {});
+                },
               ),
               Expanded(
                 child: NotificationListener<ScrollUpdateNotification>(

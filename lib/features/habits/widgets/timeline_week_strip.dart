@@ -151,6 +151,7 @@ class _TimelineWeekStripState extends State<TimelineWeekStrip>
       }
     }
     final muted = context.tokens.muted;
+    final spoken = DateFormat.MMMMEEEEd(locale);
 
     Widget row(int w, double fold) => Row(
           children: [
@@ -161,6 +162,7 @@ class _TimelineWeekStripState extends State<TimelineWeekStrip>
                   child: _DayCard(
                     day: weeks[w].addDays(i),
                     label: labels[i],
+                    spoken: spoken,
                     selected: weeks[w].addDays(i).isSameDay(widget.selected),
                     outside: weeks[w].addDays(i).month != widget.selected.month,
                     tally: tallies[w][i],
@@ -395,6 +397,7 @@ class _DayCard extends StatelessWidget {
   const _DayCard({
     required this.day,
     required this.label,
+    required this.spoken,
     required this.selected,
     required this.outside,
     required this.tally,
@@ -405,6 +408,7 @@ class _DayCard extends StatelessWidget {
 
   final DateTime day;
   final String label;
+  final DateFormat spoken;
   final bool selected;
   final bool outside;
   final DayTally tally;
@@ -420,27 +424,23 @@ class _DayCard extends StatelessWidget {
     final muted = context.tokens.muted;
     final today = day.isSameDay(AppClock.today());
     final strong = minimal ? scheme.onSurface : scheme.primary;
+    final dim = outside && !selected ? 1 - 0.6 * fold : 1.0;
+    Color fade(Color color) => color.withValues(alpha: color.a * dim);
     final ink = selected
         ? (minimal ? scheme.surface : scheme.onPrimary)
-        : today
-            ? strong
-            : scheme.onSurface;
-    final soft = selected ? ink.withValues(alpha: 0.75) : muted;
+        : fade(today ? strong : scheme.onSurface);
+    final soft = selected ? ink.withValues(alpha: 0.75) : fade(muted);
+    final faint = soft.withValues(alpha: soft.a * (1 - fold));
     final radius = express ? (selected ? 24.0 : 16.0) : 16.0;
-    final size = lerpDouble(19, 16, fold)!;
-    final dim = outside && !selected ? 1 - 0.6 * fold : 1.0;
 
     return Semantics(
       button: true,
       selected: selected,
-      label: DateFormat.MMMMEEEEd(Localizations.localeOf(context).toString())
-          .format(day),
+      label: spoken.format(day),
       excludeSemantics: true,
       child: GestureDetector(
         onTap: () => onTap(day),
-        child: Opacity(
-          opacity: dim,
-          child: SizedBox(
+        child: SizedBox(
             height: lerpDouble(66, 46, fold),
             child: AnimatedContainer(
               duration:
@@ -449,7 +449,7 @@ class _DayCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: selected
                     ? strong
-                    : scheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                    : fade(scheme.surfaceContainerHighest.withValues(alpha: 0.5)),
                 borderRadius: BorderRadius.circular(radius),
                 border: Border.all(
                   color: today && !selected
@@ -468,9 +468,7 @@ class _DayCard extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           heightFactor: 1 - fold,
-                          child: Opacity(
-                            opacity: 1 - fold,
-                            child: Padding(
+                          child: Padding(
                               padding: const EdgeInsets.only(bottom: 4),
                               child: Text(
                                 label,
@@ -482,35 +480,36 @@ class _DayCard extends StatelessWidget {
                                         11,
                                         weight: 800,
                                         height: 1.1,
-                                        color: soft,
+                                        color: faint,
                                       )
                                     : minimal
-                                        ? MinimalType.label(size: 11, color: soft)
+                                        ? MinimalType.label(size: 11, color: faint)
                                         : TextStyle(
                                             fontSize: 11,
                                             fontWeight: FontWeight.w700,
                                             height: 1.1,
-                                            color: soft,
+                                            color: faint,
                                           ),
                               ),
-                            ),
                           ),
                         ),
                       ),
-                    Text(
+                    Transform.scale(
+                      scale: lerpDouble(1, 16 / 19, fold)!,
+                      child: Text(
                       '${day.day}',
                       maxLines: 1,
                       style: express
                           ? ExpressType.display.at(
-                              size,
+                              19,
                               height: 1.05,
                               color: ink,
                               tabular: true,
                             )
                           : minimal
-                              ? MinimalType.figure(size, height: 1.05, color: ink)
+                              ? MinimalType.figure(19, height: 1.05, color: ink)
                               : TextStyle(
-                                  fontSize: size,
+                                  fontSize: 19,
                                   fontWeight: FontWeight.w800,
                                   height: 1.05,
                                   color: ink,
@@ -519,17 +518,17 @@ class _DayCard extends StatelessWidget {
                                   ],
                                 ),
                     ),
+                    ),
                     SizedBox(height: lerpDouble(3, 2, fold)),
                     _DayMeter(
                       tally: tally,
-                      color: selected ? ink : strong,
+                      color: selected ? ink : fade(strong),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-        ),
       ),
     );
   }
@@ -547,26 +546,25 @@ class _DayMeter extends StatelessWidget {
     if (tally.done == tally.due) {
       return Icon(LucideIcons.circleCheck, size: 14, color: color);
     }
+    final radius = BorderRadius.circular(2);
     return Container(
       width: 24,
       height: 4,
       margin: const EdgeInsets.symmetric(vertical: 5),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(2),
-        child: ColoredBox(
-          color: color.withValues(alpha: 0.2),
-          child: Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(end: tally.done / tally.due),
-              duration: const Duration(milliseconds: 420),
-              curve: Curves.easeOutCubic,
-              builder: (context, fraction, _) => FractionallySizedBox(
-                widthFactor: fraction,
-                heightFactor: 1,
-                child: ColoredBox(color: color),
-              ),
-            ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: color.a * 0.2),
+        borderRadius: radius,
+      ),
+      alignment: AlignmentDirectional.centerStart,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(end: tally.done / tally.due),
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOutCubic,
+        builder: (context, fraction, _) => FractionallySizedBox(
+          widthFactor: fraction,
+          heightFactor: 1,
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: color, borderRadius: radius),
           ),
         ),
       ),
