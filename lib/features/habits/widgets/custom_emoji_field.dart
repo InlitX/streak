@@ -6,10 +6,12 @@ import 'package:streak/core/icons/habit_emojis.dart';
 class CustomEmojiField extends StatefulWidget {
   const CustomEmojiField({
     super.key,
+    required this.selected,
     required this.color,
     required this.onPicked,
   });
 
+  final String selected;
   final Color color;
   final ValueChanged<String> onPicked;
 
@@ -18,10 +20,32 @@ class CustomEmojiField extends StatefulWidget {
 }
 
 class _CustomEmojiFieldState extends State<CustomEmojiField> {
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController(text: _own(widget.selected));
+  final _focus = FocusNode();
+
+  static String _own(String glyph) {
+    if (!HabitEmojis.isEmoji(glyph)) return '';
+    final listed =
+        HabitEmojis.categories.values.any((list) => list.contains(glyph));
+    return listed ? '' : glyph;
+  }
+
+  @override
+  void didUpdateWidget(CustomEmojiField old) {
+    super.didUpdateWidget(old);
+    final own = _own(widget.selected);
+    if (own != _controller.text) _controller.text = own;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(() => setState(() {}));
+  }
 
   @override
   void dispose() {
+    _focus.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -36,27 +60,51 @@ class _CustomEmojiFieldState extends State<CustomEmojiField> {
       widget.onPicked(glyph);
       return;
     }
+    _controller.text = _own(widget.selected);
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      onChanged: _pick,
-      textAlign: TextAlign.center,
-      style: const TextStyle(fontSize: 18),
-      decoration: InputDecoration(
-        isDense: true,
-        filled: true,
-        fillColor: context.colors.surfaceContainerHighest,
-        hintText: context.l10n.emoji_own,
-        hintStyle: TextStyle(fontSize: 13, color: context.tokens.muted),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+    final picked = _controller.text.isNotEmpty;
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            context.l10n.emoji_own,
+            style: TextStyle(fontSize: 13, color: context.tokens.muted),
+          ),
         ),
-      ),
+        const SizedBox(width: 12),
+        SizedBox(
+          width: 52,
+          child: TextField(
+            controller: _controller,
+            focusNode: _focus,
+            onChanged: _pick,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22),
+            decoration: InputDecoration(
+              isDense: true,
+              filled: true,
+              fillColor: picked
+                  ? widget.color.withValues(alpha: 0.16)
+                  : context.colors.surfaceContainerHighest,
+              hintText: _focus.hasFocus ? null : '+',
+              hintStyle: TextStyle(fontSize: 20, color: context.tokens.muted),
+              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              enabledBorder: _border(picked ? widget.color : null),
+              focusedBorder: _border(widget.color),
+            ),
+          ),
+        ),
+      ],
     );
   }
+
+  InputBorder _border(Color? color) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: color == null
+            ? BorderSide.none
+            : BorderSide(color: color, width: 1.6),
+      );
 }

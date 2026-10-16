@@ -287,6 +287,7 @@ class _IconPickerState extends State<IconPicker> {
             if (_emoji) ...[
               const SizedBox(height: 12),
               CustomEmojiField(
+                selected: widget.selected,
                 color: widget.color,
                 onPicked: widget.onSelected,
               ),

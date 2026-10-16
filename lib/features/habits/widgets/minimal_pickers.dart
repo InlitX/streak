@@ -80,6 +80,7 @@ class _CompactIconPickerState extends State<CompactIconPicker> {
           if (_emoji) ...[
             const SizedBox(height: 10),
             CustomEmojiField(
+              selected: widget.selected,
               color: widget.color,
               onPicked: widget.onSelected,
             ),
