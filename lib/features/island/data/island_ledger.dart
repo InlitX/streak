@@ -73,6 +73,7 @@ class IslandLedger {
       var due = false;
       var all = true;
       for (var i = 0; i < counted.length; i++) {
+        if (day > shares[i].last) continue;
         if (!shares[i].everyDay &&
             !counted[i].isScheduledOn(date ??= epochDayDate(day))) {
           continue;
@@ -113,17 +114,18 @@ class IslandLedger {
 
   static _Share _cleanShare(Habit habit, DateTime today, int milestones) {
     final relapses = {for (final key in habit.completions.keys) dayKeyEpoch(key)};
+    final last = _lastDay(habit, today);
     final clean = <int>{
-      for (var day = habit.startedAt.epochDay; day <= today.epochDay; day++)
+      for (var day = habit.startedAt.epochDay; day <= last; day++)
         if (!relapses.contains(day)) day,
     };
-    return _Share(today, _everyDay(habit), milestones, clean, clean);
+    return _Share(today, last, _everyDay(habit), milestones, clean, clean);
   }
 
   static _Share _checkedShare(Habit habit, DateTime today, int milestones) {
     final checked = <int>{};
     final done = <int>{};
-    final last = today.epochDay;
+    final last = _lastDay(habit, today);
     for (final entry in habit.completions.values) {
       final day = dayKeyEpoch(entry.date);
       if (day > last) continue;
@@ -132,7 +134,14 @@ class IslandLedger {
       }
       if (habit.isDoneEntry(entry)) done.add(day);
     }
-    return _Share(today, _everyDay(habit), milestones, checked, done);
+    return _Share(today, last, _everyDay(habit), milestones, checked, done);
+  }
+
+  static int _lastDay(Habit habit, DateTime today) {
+    final archived = habit.archivedAt?.epochDay;
+    return archived == null || archived > today.epochDay
+        ? today.epochDay
+        : archived;
   }
 
   static bool _everyDay(Habit habit) => switch (habit.interval) {
@@ -145,9 +154,17 @@ class IslandLedger {
 }
 
 class _Share {
-  const _Share(this.today, this.everyDay, this.milestones, this.checked, this.done);
+  const _Share(
+    this.today,
+    this.last,
+    this.everyDay,
+    this.milestones,
+    this.checked,
+    this.done,
+  );
 
   final DateTime today;
+  final int last;
   final bool everyDay;
   final int milestones;
   final Set<int> checked;

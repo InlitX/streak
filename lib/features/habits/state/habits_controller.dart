@@ -26,6 +26,7 @@ class HabitsController extends ChangeNotifier {
 
   late Map<String, Habit> _habits;
   List<Habit>? _active;
+  List<Habit>? _every;
   int _countedOn = AppClock.today().epochDay;
   bool _disposed = false;
 
@@ -39,12 +40,15 @@ class HabitsController extends ChangeNotifier {
   void notifyListeners() {
     if (_disposed) return;
     _active = null;
+    _every = null;
     super.notifyListeners();
   }
 
   List<Habit> get habits => _active ??=
       _habits.values.where((h) => !h.isArchived).toList()
         ..sort((a, b) => a.order.compareTo(b.order));
+
+  List<Habit> get withArchived => _every ??= _habits.values.toList();
 
   List<Habit> get archived {
     final list = _habits.values.where((h) => h.isArchived).toList()

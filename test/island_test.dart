@@ -47,6 +47,18 @@ void main() {
     expect(ledger.earned, 2 * 10 + 2 * 25);
   });
 
+  test('archived habits keep their coins but stop counting after', () {
+    final ledger = IslandLedger.of([
+      _habit(
+        id: 'a',
+        done: [yesterday, today],
+      ).copyWith(archivedAt: yesterday),
+      _habit(id: 'b', done: [today]),
+    ], const [], const []);
+    expect(ledger.checks, 2);
+    expect(ledger.perfectDays, 1);
+  });
+
   test('tracking habits earn nothing', () {
     final ledger = IslandLedger.of([
       _habit(id: 'a', done: [today], tracking: true),

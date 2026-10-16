@@ -24,7 +24,7 @@ class IslandEntry extends StatelessWidget {
     }
     final island = context.watch<IslandController>();
     final ledger = island.ledgerFor(
-      context.watch<HabitsController>().habits,
+      context.watch<HabitsController>().withArchived,
       context.select<FocusController, List<FocusSession>>((f) => f.sessions),
       context.read<TodosController>().all,
       context.select<TodosController, int>((t) => t.doneCount),

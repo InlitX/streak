@@ -106,7 +106,7 @@ class _IslandPageState extends State<IslandPage> {
         context.select<FocusController, List<FocusSession>>((f) => f.sessions);
     final todos = context.read<TodosController>();
     _ledger = island.ledgerFor(
-      habits.habits,
+      habits.withArchived,
       sessions,
       todos.all,
       context.select<TodosController, int>((t) => t.doneCount),
