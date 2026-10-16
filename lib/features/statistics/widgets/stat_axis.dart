@@ -68,6 +68,9 @@ FlGridData axisGrid(BuildContext context, double interval, {double top = 0}) =>
       ),
     );
 
+TextScaler axisTextScaler(BuildContext context) =>
+    MediaQuery.textScalerOf(context).clamp(maxScaleFactor: _maxAxisScale);
+
 double axisWidth(
   BuildContext context,
   TextStyle style,

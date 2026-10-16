@@ -446,11 +446,15 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                         child: FilledButton.icon(
                           onPressed: _start,
                           icon: const Icon(LucideIcons.play, size: 18),
-                          label: Text(
-                            _startLabel(),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                          label: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              _startLabel(),
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                           ),
                           style: FilledButton.styleFrom(

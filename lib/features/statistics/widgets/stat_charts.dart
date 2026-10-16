@@ -119,6 +119,7 @@ class ValueBars extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     label(value.toInt()),
+                    textScaler: axisTextScaler(context),
                     style: TextStyle(
                       color: context.tokens.muted,
                       fontSize: 12,

@@ -268,6 +268,7 @@ class HourArea extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     '${value.toInt().toString().padLeft(2, '0')}h',
+                    textScaler: axisTextScaler(context),
                     style: statLabel(context),
                   ),
                 ),
@@ -397,6 +398,7 @@ class MonthlyLine extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 9),
                     child: Text(
                       short[index],
+                      textScaler: axisTextScaler(context),
                       style: TextStyle(
                         fontSize: 10.5,
                         fontWeight: peak ? FontWeight.w800 : FontWeight.w600,

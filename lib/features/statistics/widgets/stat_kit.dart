@@ -186,6 +186,9 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleSize = MediaQuery.textScalerOf(context).scale(16);
+    final titleLines = titleSize > 19 ? 3 : 2;
+    final titleHeight = titleSize * 1.25 * titleLines;
     return Card(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
@@ -193,25 +196,12 @@ class StatCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 44,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.25,
-                        fontWeight: FontWeight.w800,
-                        color: context.colors.onSurface,
-                      ),
-                    ),
-                  ),
-                  StatIconSquare(icon: icon, color: color),
-                ],
+              height: titleHeight > 44 ? titleHeight : 44,
+              child: _StatHeader(
+                title: title,
+                icon: icon,
+                color: color,
+                lines: titleLines,
               ),
             ),
             const SizedBox(height: 12),
@@ -219,6 +209,79 @@ class StatCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StatHeader extends StatelessWidget {
+  const _StatHeader({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.lines,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color color;
+  final int lines;
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = context.colors.onSurface;
+    final scale = MediaQuery.textScalerOf(context);
+    final direction = Directionality.of(context);
+    final base = DefaultTextStyle.of(context).style;
+    TextStyle style(double size) => TextStyle(
+          fontSize: size,
+          height: 1.25,
+          fontWeight: FontWeight.w800,
+          color: textColor,
+        );
+    bool fits(double size, double width) {
+      final painter = TextPainter(
+        text: TextSpan(text: title, style: base.merge(style(size))),
+        maxLines: lines,
+        textDirection: direction,
+        textScaler: scale,
+      )..layout(maxWidth: width);
+      var ok = !painter.didExceedMaxLines;
+      for (final word in title.split(' ')) {
+        if (!ok) break;
+        painter
+          ..text = TextSpan(text: word, style: base.merge(style(size)))
+          ..maxLines = 1
+          ..layout();
+        ok = painter.width <= width;
+      }
+      painter.dispose();
+      return ok;
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final withIcon = fits(16, width - 44);
+        var size = 16.0;
+        while (!withIcon && size > 10 && !fits(size, width)) {
+          size -= 1;
+        }
+        final text = Text(
+          title,
+          maxLines: lines,
+          overflow: TextOverflow.ellipsis,
+          style: style(size),
+        );
+        if (!withIcon) return text;
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: text),
+            const SizedBox(width: 8),
+            StatIconSquare(icon: icon, color: color),
+          ],
+        );
+      },
     );
   }
 }

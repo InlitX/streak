@@ -528,14 +528,16 @@ class MinimalButton extends StatelessWidget {
                   const SizedBox(width: 10),
                 ],
                 Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: MinimalType.title(
-                      15.5,
-                      weight: 700,
-                      color: scheme.surface,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      style: MinimalType.title(
+                        15.5,
+                        weight: 700,
+                        color: scheme.surface,
+                      ),
                     ),
                   ),
                 ),
