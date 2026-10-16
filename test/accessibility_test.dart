@@ -93,8 +93,8 @@ void main() {
     await tester.scrollUntilVisible(find.bySemanticsLabel('Add step'), 300, scrollable: list);
     expect(find.bySemanticsLabel('Add step'), findsOneWidget);
 
-    await tester.scrollUntilVisible(find.bySemanticsLabel('dumbbell'), 300, scrollable: list);
-    expect(find.bySemanticsLabel('dumbbell'), findsOneWidget);
+    await tester.scrollUntilVisible(find.bySemanticsLabel('sparkles'), 300, scrollable: list);
+    expect(find.bySemanticsLabel('sparkles'), findsOneWidget);
     handle.dispose();
   });
 
