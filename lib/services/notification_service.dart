@@ -432,6 +432,7 @@ class NotificationService {
           next,
           from,
           daily: daily,
+          reminder: reminder,
         ));
       }
     }
@@ -484,10 +485,11 @@ class NotificationService {
     DateTime next,
     tz.TZDateTime from, {
     bool daily = false,
+    Reminder? reminder,
   }) async {
     final when = tz.TZDateTime.from(next, tz.local);
     if (Platform.isWindows && !isPortable && !when.isBefore(from)) {
-      final details = await _details(habit, body, strings);
+      final details = await _details(habit, body, strings, reminder: reminder);
       final ids = <int>{};
       for (var turn = 1; turn <= (daily ? 14 : 8); turn++) {
         final turnId = ReminderSchedule.quietId(id, turn);
@@ -518,7 +520,7 @@ class NotificationService {
         habit.name,
         body,
         when,
-        await _details(habit, body, strings),
+        await _details(habit, body, strings, reminder: reminder),
         payload: habit.id,
         matchDateTimeComponents: daily
             ? DateTimeComponents.time
@@ -544,7 +546,7 @@ class NotificationService {
           ),
           tz.local,
         ),
-        await _details(habit, body, strings),
+        await _details(habit, body, strings, reminder: reminder),
         payload: habit.id,
       );
     }
@@ -576,7 +578,7 @@ class NotificationService {
         habit.name,
         body,
         tz.TZDateTime.from(at, tz.local),
-        await _details(habit, body, strings),
+        await _details(habit, body, strings, reminder: reminder),
         payload: habit.id,
       );
     }
@@ -678,8 +680,9 @@ class NotificationService {
   Future<NotificationDetails> _details(
     Habit habit,
     String body,
-    AppLocalizations strings,
-  ) async =>
+    AppLocalizations strings, {
+    Reminder? reminder,
+  }) async =>
       NotificationDetails(
         windows: await _windowsDetails(habit, strings),
         android: AndroidNotificationDetails(
@@ -693,6 +696,9 @@ class NotificationService {
           icon: 'ic_stat_notify',
           styleInformation: BigTextStyleInformation(body),
           largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+          timeoutAfter: reminder != null && reminder.isHourly
+              ? reminder.everyHours * Duration.millisecondsPerHour
+              : null,
           actions: [
             if (habit.kind != HabitKind.negative)
               AndroidNotificationAction(
