@@ -981,6 +981,29 @@
   "focus_only_start": "Start session",
   "focus_flowtime": "Flowtime",
   "focus_flowtime_hint": "No goal and no alarm. The clock counts up and you stop when you feel done.",
+  "focus_mode_timer": "Timer",
+  "focus_ends_at": "Ends at {time}",
+  "@focus_ends_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_no_limit": "No time limit",
+  "focus_style_plain": "Simple",
+  "focus_label_sub": "Sort your sessions, for example by subject. Hold one to remove it.",
+  "focus_label_icon": "Icon (optional)",
+  "focus_save_timer": "Save timer",
+  "focus_remove_timer": "Remove this saved timer?",
+  "focus_days_row": "{count, plural, =1{1 day in a row} other{{count} days in a row}}",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_end_flow": "You focused for {time}.",
   "@focus_end_flow": {
     "placeholders": { "time": { "type": "String" } }

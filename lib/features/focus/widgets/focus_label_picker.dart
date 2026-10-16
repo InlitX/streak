@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
@@ -83,7 +85,13 @@ class _NewLabelDialog extends StatefulWidget {
 }
 
 class _NewLabelDialogState extends State<_NewLabelDialog> {
+  static const _icons = [
+    '📚', '💼', '💻', '✍️', '🧮', '🎨',
+    '🎧', '🧘', '🗣️', '🔬', '🎹', '🏋️',
+  ];
+
   final _field = TextEditingController();
+  String _icon = '';
 
   @override
   void dispose() {
@@ -91,19 +99,81 @@ class _NewLabelDialogState extends State<_NewLabelDialog> {
     super.dispose();
   }
 
-  void _done() => Navigator.of(context).pop(_field.text);
+  void _done() {
+    final name = _field.text.trim();
+    if (name.isEmpty) return Navigator.of(context).pop();
+    Navigator.of(context).pop(_icon.isEmpty ? name : '$_icon $name');
+  }
 
   @override
   Widget build(BuildContext context) {
+    final accent = context.colors.primary;
     return AlertDialog(
       title: Text(context.l10n.focus_label_new),
-      content: TextField(
-        controller: _field,
-        autofocus: true,
-        maxLength: FocusLabelPicker.maxLength,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(hintText: context.l10n.focus_label_hint),
-        onSubmitted: (_) => _done(),
+      content: SizedBox(
+        width: 320,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _field,
+              autofocus: true,
+              maxLength: FocusLabelPicker.maxLength,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: context.l10n.focus_label_hint,
+                prefix: _icon.isEmpty
+                    ? null
+                    : Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: Text(_icon),
+                      ),
+              ),
+              onSubmitted: (_) => _done(),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              context.l10n.focus_label_icon,
+              style: sheetLabelStyle(context, size: 12.5),
+            ),
+            const SizedBox(height: 10),
+            GridView.count(
+              crossAxisCount: 6,
+              shrinkWrap: true,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                for (final icon in _icons)
+                  Semantics(
+                    button: true,
+                    selected: _icon == icon,
+                    label: icon,
+                    child: GestureDetector(
+                      onTap: () =>
+                          setState(() => _icon = _icon == icon ? '' : icon),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 140),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: _icon == icon
+                              ? accent.withValues(alpha: 0.16)
+                              : context.colors.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: _icon == icon ? accent : Colors.transparent,
+                            width: 1.4,
+                          ),
+                        ),
+                        child: Text(icon, style: const TextStyle(fontSize: 20)),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

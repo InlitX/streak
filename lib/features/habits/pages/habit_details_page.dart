@@ -18,6 +18,7 @@ import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_daily_bars.dart';
+import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -804,12 +805,15 @@ class _FocusTile extends StatelessWidget {
               else
                 Icon(LucideIcons.timer, size: 21, color: habit.color.shownIn(context)),
               const SizedBox(width: 14),
-              Expanded(
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 150),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       context.l10n.focus_total,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: express
                           ? ExpressType.headline.at(
                               16,
@@ -841,6 +845,13 @@ class _FocusTile extends StatelessWidget {
                   ],
                 ),
               ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: FocusQuickTimers(habit: habit),
+                ),
+              ),
+              const SizedBox(width: 6),
               if (express)
                 ExpressIconButton(
                   icon: LucideIcons.play,

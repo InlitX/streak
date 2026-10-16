@@ -22,11 +22,13 @@ void main() {
     expect(find.text('What are you focusing on?'), findsOneWidget);
     expect(find.text('Read'), findsOneWidget);
     expect(find.text('Walk'), findsOneWidget);
-    expect(find.text('Start session'), findsOneWidget);
+    expect(find.textContaining('Start session'), findsOneWidget);
 
     await tester.tap(find.text('Walk'));
     await tester.pumpAndSettle();
-    expect(find.text('Start session'), findsOneWidget);
+    expect(find.text('Walk'), findsOneWidget);
+    expect(find.text('Free session'), findsOneWidget);
+    expect(find.textContaining('Start session'), findsOneWidget);
   });
 
   testWidgets('focus history says when there is nothing', (tester) async {

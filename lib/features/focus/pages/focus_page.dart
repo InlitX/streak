@@ -565,6 +565,7 @@ class _TopBar extends StatelessWidget {
       context.l10n.focus_style_digital,
       context.l10n.focus_style_flip,
       context.l10n.focus_style_dots,
+      context.l10n.focus_style_plain,
     ];
     await _sheet(
       context,
@@ -574,19 +575,26 @@ class _TopBar extends StatelessWidget {
         children: [
           Consumer<SettingsController>(
             builder: (_, s, __) => LiveSeconds(
-              builder: (context, seconds) => Row(
+              builder: (context, seconds) => Column(
                 children: [
-                  for (var i = 0; i < labels.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 10),
-                    Expanded(
-                      child: ClockPreview(
-                        style: ClockStyle.values[i],
-                        label: labels[i],
-                        color: context.colors.primary,
-                        selected: s.focusClockStyle == i,
-                        seconds: seconds,
-                        onTap: () => s.setFocusClockStyle(i),
-                      ),
+                  for (var row = 0; row < labels.length; row += 2) ...[
+                    if (row > 0) const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        for (var i = row; i < row + 2 && i < labels.length; i++) ...[
+                          if (i > row) const SizedBox(width: 12),
+                          Expanded(
+                            child: ClockPreview(
+                              style: ClockStyle.values[i],
+                              label: labels[i],
+                              color: context.colors.primary,
+                              selected: s.focusClockStyle == i,
+                              seconds: seconds,
+                              onTap: () => s.setFocusClockStyle(i),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ],

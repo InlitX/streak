@@ -13,6 +13,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
+import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -171,7 +172,17 @@ class MinimalFocusRow extends StatelessWidget {
               ? null
               : '${context.l10n.today}  ${formatHoursShort(today)}',
           value: seconds == 0 ? null : formatHoursShort(seconds),
-          trailing: _PlayButton(habit: habit, active: focus.isActive),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 170),
+                child: FocusQuickTimers(habit: habit),
+              ),
+              const SizedBox(width: 8),
+              _PlayButton(habit: habit, active: focus.isActive),
+            ],
+          ),
           onTap: () =>
               AppNavigator.push(FocusStatsPage(habitId: habit.id)),
           last: true,

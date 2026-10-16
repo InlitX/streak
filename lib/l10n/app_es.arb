@@ -874,6 +874,29 @@
   "focus_only_start": "Empezar sesión",
   "focus_flowtime": "Flowtime",
   "focus_flowtime_hint": "Sin meta y sin alarma. El reloj cuenta hacia arriba y paras cuando lo veas.",
+  "focus_mode_timer": "Temporizador",
+  "focus_ends_at": "Termina a las {time}",
+  "@focus_ends_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_no_limit": "Sin límite de tiempo",
+  "focus_style_plain": "Sencillo",
+  "focus_label_sub": "Ordena tus sesiones, por ejemplo por asignatura. Mantén una pulsada para quitarla.",
+  "focus_label_icon": "Icono (opcional)",
+  "focus_save_timer": "Guardar temporizador",
+  "focus_remove_timer": "¿Quitar este temporizador guardado?",
+  "focus_days_row": "{count, plural, =1{1 día seguido} other{{count} días seguidos}}",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "focus_end_flow": "Te has concentrado {time}.",
   "@focus_end_flow": {
     "placeholders": {

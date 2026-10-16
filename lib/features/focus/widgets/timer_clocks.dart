@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/core/express/express_type.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 
-enum ClockStyle { ring, flip, dots }
+enum ClockStyle { ring, flip, dots, plain }
 
 const _flipDepth = 0.22;
 const _flipBleed = 0.08;
@@ -56,7 +56,72 @@ class FocusClock extends StatelessWidget {
         ),
       ClockStyle.flip => _FlipClock(seconds: seconds, size: size, row: row),
       ClockStyle.dots => _DotsClock(seconds: seconds, size: size),
+      ClockStyle.plain => _PlainClock(
+          seconds: seconds,
+          label: label,
+          size: size,
+          paused: paused,
+        ),
     };
+  }
+}
+
+class _PlainClock extends StatelessWidget {
+  const _PlainClock({
+    required this.seconds,
+    required this.label,
+    required this.size,
+    required this.paused,
+  });
+
+  final int seconds;
+  final String label;
+  final double size;
+  final bool paused;
+
+  @override
+  Widget build(BuildContext context) {
+    final caption = Text(
+      label,
+      maxLines: 2,
+      textAlign: TextAlign.center,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: size * 0.065,
+        fontWeight: FontWeight.w600,
+        height: 1.3,
+        color: Colors.white.withValues(alpha: paused ? 0.9 : 0.6),
+      ),
+    );
+    return SizedBox(
+      width: size,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              FocusClock.clockText(seconds),
+              maxLines: 1,
+              style: _digitWeight(context, FontWeight.w300).copyWith(
+                fontSize: size * 0.32,
+                height: 1,
+                letterSpacing: -2,
+                color: Colors.white,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+          ),
+          if (label.isNotEmpty) ...[
+            SizedBox(height: size * 0.05),
+            SizedBox(
+              width: size * 0.85,
+              child: paused ? _Pulse(child: caption) : caption,
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }
 
@@ -82,13 +147,14 @@ class _RingClock extends StatelessWidget {
     final text = FocusClock.clockText(seconds);
     final caption = Text(
       label.toUpperCase(),
-      maxLines: 1,
+      maxLines: 2,
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: size * 0.048,
         fontWeight: FontWeight.w700,
         letterSpacing: 3,
+        height: 1.35,
         color: Colors.white.withValues(alpha: paused ? 0.9 : 0.55),
       ),
     );

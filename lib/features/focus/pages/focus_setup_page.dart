@@ -2,28 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
-import 'package:streak/core/express/express_motion.dart';
-import 'package:streak/core/express/express_shapes.dart';
-import 'package:streak/core/express/express_surface.dart';
-import 'package:streak/core/express/express_type.dart';
+import 'package:streak/core/express/express_button.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
-import 'package:streak/core/icons/habit_glyph.dart';
-import 'package:streak/core/routing/app_navigator.dart';
-import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
-import 'package:streak/core/minimal/minimal_type.dart';
-import 'package:streak/core/widgets/section_label.dart';
+import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/core/widgets/entrance.dart';
+import 'package:streak/core/widgets/number_keypad_dialog.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
-import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
-import 'package:streak/features/focus/widgets/focus_label_picker.dart';
+import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_dial.dart';
+import 'package:streak/features/focus/widgets/focus_habit_card.dart';
+import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
-import 'package:streak/core/express/express_button.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 const _entrance = Duration(milliseconds: 340);
+const _minutePresets = [15, 25, 45, 60];
+const _breakPresets = [5, 10, 15];
 
 class FocusSetupPage extends StatefulWidget {
   const FocusSetupPage({super.key, this.habitId});
@@ -38,9 +39,17 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
   late String _habitId = widget.habitId ?? '';
   String _label = '';
   int _minutes = 25;
+  int _lastMinutes = 25;
   bool _pomodoro = false;
   int _breakMinutes = 5;
   bool _restored = false;
+  List<FocusTimer> _timers = FocusTimer.load();
+
+  FocusMode get _mode => _minutes <= 0
+      ? FocusMode.flow
+      : _pomodoro
+      ? FocusMode.pomodoro
+      : FocusMode.timer;
 
   @override
   void didChangeDependencies() {
@@ -63,20 +72,135 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
     if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
   }
 
+  void _choose(Habit? habit) => setState(() {
+    if (habit != null) return _pick(habit);
+    _habitId = '';
+    _label = '';
+  });
+
+  void _setMinutes(int value) => setState(() {
+    _minutes = value;
+    if (value > 0) _lastMinutes = value;
+  });
+
+  void _setMode(FocusMode mode) => setState(() {
+    if (mode == FocusMode.flow) {
+      if (_minutes > 0) _lastMinutes = _minutes;
+      _minutes = 0;
+      return;
+    }
+    if (_minutes <= 0) _minutes = _lastMinutes;
+    _pomodoro = mode == FocusMode.pomodoro;
+  });
+
+  FocusTimer get _current =>
+      FocusTimer(_minutes, _mode == FocusMode.pomodoro ? _breakMinutes : 0);
+
+  void _apply(FocusTimer timer) => setState(() {
+    if (timer.mode == FocusMode.flow) {
+      if (_minutes > 0) _lastMinutes = _minutes;
+      _minutes = 0;
+      return;
+    }
+    _minutes = timer.minutes;
+    _lastMinutes = timer.minutes;
+    _pomodoro = timer.breakMinutes > 0;
+    if (_pomodoro) _breakMinutes = timer.breakMinutes;
+  });
+
+  void _saveTimer() {
+    setState(() => _timers = [..._timers, _current]);
+    FocusTimer.store(_timers);
+  }
+
+  Future<void> _removeTimer(FocusTimer timer) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: context.l10n.focus_remove_timer,
+      message: timer.text(context),
+      confirmLabel: context.l10n.focus_label_remove_confirm,
+    );
+    if (confirmed != true || !mounted) return;
+    setState(() => _timers = [..._timers]..remove(timer));
+    FocusTimer.store(_timers);
+  }
+
+  String _startLabel() =>
+      '${context.l10n.focus_start}  ·  ${_current.text(context)}';
+
+  Future<void> _customMinutes() async {
+    final value = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.focus_duration,
+      value: (_minutes > 0 ? _minutes : _lastMinutes).toDouble(),
+      unit: context.l10n.unit_min_short,
+      min: 1,
+    );
+    if (value == null || !mounted) return;
+    _setMinutes(value.round().clamp(1, 600));
+  }
+
+  Future<void> _customBreak() async {
+    final value = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.focus_break,
+      value: _breakMinutes.toDouble(),
+      unit: context.l10n.unit_min_short,
+      min: 1,
+    );
+    if (value == null || !mounted) return;
+    setState(() => _breakMinutes = value.round().clamp(1, 120));
+  }
+
+  Future<void> _openHabits(List<Habit> habits) async {
+    final id = await showFocusHabitPicker(
+      context,
+      habits: habits,
+      selectedId: _habitId,
+    );
+    if (id == null || !mounted) return;
+    _choose(context.read<HabitsController>().byId(id));
+  }
+
+  List<Habit?> _quick(List<Habit> habits) {
+    final byId = {for (final habit in habits) habit.id: habit};
+    final picked = <Habit?>[];
+    final seen = <String>{_habitId};
+    if (_habitId.isNotEmpty) picked.add(null);
+    final sessions = context.read<FocusController>().sessions;
+    for (var i = sessions.length - 1; i >= 0 && picked.length < 3; i--) {
+      final habit = byId[sessions[i].habitId];
+      if (habit == null || !seen.add(habit.id)) continue;
+      picked.add(habit);
+    }
+    final rest = [
+      ...habits.where((h) => h.isTimeAmount || h.focusOnly),
+      ...habits,
+    ];
+    for (final habit in rest) {
+      if (picked.length >= 3) break;
+      if (seen.add(habit.id)) picked.add(habit);
+    }
+    return picked;
+  }
+
   void _start() {
-    final breakMinutes = _pomodoro ? _breakMinutes : 0;
+    final breakMinutes = _mode == FocusMode.pomodoro ? _breakMinutes : 0;
     final habits = context.read<HabitsController>();
     final habit = habits.byId(_habitId);
     if (habit == null) {
-      context
-          .read<SettingsController>()
-          .rememberFocusSetup(_minutes, breakMinutes);
+      context.read<SettingsController>().rememberFocusSetup(
+        _minutes,
+        breakMinutes,
+      );
     } else if (habit.focusMinutes != _minutes ||
         habit.focusBreakMinutes != breakMinutes) {
-      habits.update(habit.copyWith(
-        focusMinutes: _minutes,
-        focusBreakMinutes: breakMinutes,
-      ));
+      habits.update(
+        habit.copyWith(
+          focusMinutes: _minutes,
+          focusBreakMinutes: breakMinutes,
+        ),
+      );
     }
     AppNavigator.pop();
     AppNavigator.push(
@@ -91,13 +215,72 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
     );
   }
 
+  Widget _options(SettingsController settings) {
+    if (_mode == FocusMode.flow) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Text(
+          context.l10n.focus_flowtime_hint,
+          textAlign: TextAlign.center,
+          style: sheetBodyStyle(context),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        FocusChoiceRow(
+          presets: _minutePresets,
+          value: _minutes,
+          onPick: _setMinutes,
+          onCustom: _customMinutes,
+        ),
+        if (_mode == FocusMode.pomodoro) ...[
+          const SizedBox(height: 12),
+          FocusChoiceRow(
+            presets: _breakPresets,
+            value: _breakMinutes,
+            onPick: (value) => setState(() => _breakMinutes = value),
+            onCustom: _customBreak,
+            title: context.l10n.focus_break,
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FocusOptionTag(
+                label: context.l10n.focus_long_break,
+                on: settings.focusLongBreak > 0,
+                onTap: () => settings.setFocusLongBreak(
+                  settings.focusLongBreak > 0 ? 0 : 15,
+                ),
+              ),
+              FocusOptionTag(
+                label: context.l10n.focus_whole_rounds,
+                on: settings.focusWholeRounds,
+                onTap: () =>
+                    settings.setFocusWholeRounds(!settings.focusWholeRounds),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final habits = context.watch<HabitsController>().habits;
+    final controller = context.watch<HabitsController>();
+    final habits = controller.habits;
+    final habit = controller.byId(_habitId);
 
-    final style = context.watch<SettingsController>();
-    final express = style.isExpressStyle;
-    final minimal = style.isMinimalStyle;
+    final settings = context.watch<SettingsController>();
+    final express = settings.isExpressStyle;
+    final minimal = settings.isMinimalStyle;
+    final accent = habit?.color.shownIn(context) ?? context.colors.primary;
+    final side = express ? 18.0 : 16.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -106,10 +289,12 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
         leading: express
             ? Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child: Center(child: ExpressIconButton(
-                  icon: LucideIcons.x,
-                  onPressed: () => AppNavigator.pop(),
-                )),
+                child: Center(
+                  child: ExpressIconButton(
+                    icon: LucideIcons.x,
+                    onPressed: () => AppNavigator.pop(),
+                  ),
+                ),
               )
             : IconButton(
                 icon: const Icon(LucideIcons.x),
@@ -122,8 +307,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                   child: ExpressIconButton(
                     icon: LucideIcons.chartColumn,
                     tooltip: context.l10n.focus_stats,
-                    onPressed: () =>
-                        AppNavigator.push(const FocusStatsPage()),
+                    onPressed: () => AppNavigator.push(const FocusStatsPage()),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -154,106 +338,88 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
         child: Column(
           children: [
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(express ? 18 : 16, 8, express ? 18 : 16, 16),
-                children: [
-                  if (express)
-                    Entrance(
-                      delay: _entrance,
-                      child: const Padding(
-                        padding: EdgeInsets.only(bottom: 18),
-                        child: _ExpressTitle(),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final dial = (constraints.maxWidth * 0.6).clamp(190.0, 280.0);
+                  return ListView(
+                    padding: EdgeInsets.fromLTRB(side, 0, side, 16),
+                    children: [
+                      Entrance(
+                        delay: _entrance,
+                        child: const FocusTodayStrip(),
                       ),
-                    ),
-                  if (minimal)
-                    Entrance(
-                      delay: _entrance,
-                      child: MinimalTitle(title: context.l10n.focus),
-                    ),
-                  Entrance(
-                    delay: _entrance,
-                    child: _Label(context.l10n.focus_pick_habit),
-                  ),
-                  Entrance(
-                    index: 1,
-                    delay: _entrance,
-                    child: _HabitOption(
-                      label: context.l10n.focus_free_session,
-                      icon: LucideIcons.timer,
-                      color: context.colors.primary,
-                      selected: _habitId.isEmpty,
-                      onTap: () => setState(() {
-                        _habitId = '';
-                        _label = '';
-                      }),
-                    ),
-                  ),
-                  for (var i = 0; i < habits.length; i++)
-                    Entrance(
-                      index: i + 2,
-                      delay: _entrance,
-                      child: _HabitOption(
-                        label: habits[i].name,
-                        glyph: habits[i].icon,
-                        color: habits[i].color,
-                        selected: _habitId == habits[i].id,
-                        onTap: () => setState(() => _pick(habits[i])),
-                      ),
-                    ),
-                  const SizedBox(height: 22),
-                  Entrance(
-                    index: habits.length + 2,
-                    delay: _entrance,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _Label(context.l10n.focus_label),
-                        FocusLabelPicker(
-                          habitId: _habitId,
-                          selected: _label,
-                          onChanged: (value) => setState(() => _label = value),
+                      const SizedBox(height: 14),
+                      Entrance(
+                        index: 1,
+                        delay: _entrance,
+                        child: Center(
+                          child: FocusDial(
+                            mode: _mode,
+                            minutes: _minutes,
+                            breakMinutes: _breakMinutes,
+                            color: accent,
+                            size: dial,
+                            onMinutes: _setMinutes,
+                            onCustom: _customMinutes,
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  Entrance(
-                    index: habits.length + 2,
-                    delay: _entrance,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _Label(context.l10n.focus_duration),
-                        FocusDurationChips(
-                          minutes: _minutes,
-                          onChanged: (value) =>
-                              setState(() => _minutes = value),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (_minutes > 0) ...[
-                    const SizedBox(height: 22),
-                    Entrance(
-                      index: habits.length + 3,
-                      delay: _entrance,
-                      child: FocusPomodoroCard(
-                        enabled: _pomodoro,
-                        breakMinutes: _breakMinutes,
-                        onToggle: (v) => setState(() => _pomodoro = v),
-                        onBreakChanged: (v) => setState(() => _breakMinutes = v),
                       ),
-                    ),
-                  ],
-                  if (_minutes <= 0) ...[
-                    const SizedBox(height: 14),
-                    Entrance(
-                      index: habits.length + 3,
-                      delay: _entrance,
-                      child: _FlowHint(),
-                    ),
-                  ],
-                ],
+                      const SizedBox(height: 14),
+                      Entrance(
+                        index: 2,
+                        delay: _entrance,
+                        child: FocusSwap(
+                          child: FocusSavedTimers(
+                            timers: _timers,
+                            current: _current,
+                            onApply: _apply,
+                            onSave: _saveTimer,
+                            onRemove: _removeTimer,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Entrance(
+                        index: 2,
+                        delay: _entrance,
+                        child: FocusModeSwitch(
+                          mode: _mode,
+                          onChanged: _setMode,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Entrance(
+                        index: 3,
+                        delay: _entrance,
+                        child: FocusSwap(
+                          child: KeyedSubtree(
+                            key: ValueKey(_mode),
+                            child: _options(settings),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Entrance(
+                        index: 4,
+                        delay: _entrance,
+                        child: FocusHabitCard(
+                          habit: habit,
+                          quick: _quick(habits),
+                          label: _label,
+                          onPick: _choose,
+                          onOpenAll: () => _openHabits(habits),
+                          onOpenLabel: () => showFocusLabelSheet(
+                            context,
+                            habitId: _habitId,
+                            selected: _label,
+                            onChanged: (value) =>
+                                setState(() => _label = value),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             Padding(
@@ -262,7 +428,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                 delay: _entrance + const Duration(milliseconds: 120),
                 child: express
                     ? ExpressButton(
-                        label: context.l10n.focus_start,
+                        label: _startLabel(),
                         icon: LucideIcons.play,
                         expand: true,
                         onPressed: _start,
@@ -270,7 +436,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                     : minimal
                     ? MinimalButton(
                         icon: LucideIcons.play,
-                        label: context.l10n.focus_start,
+                        label: _startLabel(),
                         onPressed: _start,
                         expand: true,
                       )
@@ -281,7 +447,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                           onPressed: _start,
                           icon: const Icon(LucideIcons.play, size: 18),
                           label: Text(
-                            context.l10n.focus_start,
+                            _startLabel(),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -297,277 +463,6 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Label extends StatelessWidget {
-  const _Label(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    if (context.watch<SettingsController>().isExpressStyle) {
-      return SectionLabel(text);
-    }
-    return Padding(
-      padding: const EdgeInsets.only(left: 2, bottom: 10),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
-          color: context.tokens.muted,
-        ),
-      ),
-    );
-  }
-}
-
-class _ExpressTitle extends StatelessWidget {
-  const _ExpressTitle();
-
-  @override
-  Widget build(BuildContext context) =>
-      ExpressHeadline(title: context.l10n.focus);
-}
-
-class _FlowHint extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final accent = context.colors.primary;
-    final express = context.watch<SettingsController>().isExpressStyle;
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(express ? 22 : 16),
-        border: Border.all(color: accent.withValues(alpha: 0.25)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (express)
-            ExpressBlob(
-              size: 30,
-              color: accent.withValues(alpha: 0.18),
-              shape: ExpressShape.burst,
-              child: Icon(LucideIcons.infinity, size: 15, color: accent),
-            )
-          else
-            Icon(LucideIcons.infinity, size: 18, color: accent),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              context.l10n.focus_flowtime_hint,
-              style: express
-                  ? ExpressType.body.at(
-                      13,
-                      height: 1.4,
-                      weight: 600,
-                      color: context.tokens.muted,
-                    )
-                  : TextStyle(
-                      fontSize: 13,
-                      height: 1.4,
-                      color: context.tokens.muted,
-                    ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HabitOption extends StatelessWidget {
-  const _HabitOption({
-    required this.label,
-    required this.color,
-    required this.selected,
-    required this.onTap,
-    this.glyph,
-    this.icon,
-  });
-
-  final String label;
-  final Color color;
-  final bool selected;
-  final VoidCallback onTap;
-  final String? glyph;
-  final IconData? icon;
-
-  Widget _express(BuildContext context) {
-    final onColor = color.computeLuminance() > 0.55
-        ? Colors.black
-        : Colors.white;
-    return ExpressSquish(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: Express.normal,
-        curve: Express.emphasized,
-        padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? color.withValues(alpha: 0.13)
-              : expressSurface(context),
-          borderRadius: BorderRadius.circular(selected ? 26 : 20),
-          border: selected
-              ? Border.all(color: color.withValues(alpha: 0.45), width: 1.4)
-              : expressHairline(context),
-        ),
-        child: Row(
-          children: [
-            ExpressBlob(
-              size: 42,
-              color: color.withValues(alpha: selected ? 0.24 : 0.14),
-              shape: selected
-                  ? ExpressShape.cookie.copyWith(rotation: 0.2)
-                  : ExpressShape.squircle,
-              child: glyph != null
-                  ? HabitGlyph(glyph: glyph!, color: color, size: 20)
-                  : Icon(icon, size: 19, color: color),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: ExpressType.headline.at(
-                  16,
-                  weight: selected ? 800 : 700,
-                  color: context.colors.onSurface,
-                ),
-              ),
-            ),
-            AnimatedScale(
-              duration: Express.normal,
-              curve: Express.bouncy,
-              scale: selected ? 1 : 0,
-              child: ExpressBlob(
-                size: 24,
-                color: color,
-                shape: ExpressShape.cookie,
-                child: Icon(LucideIcons.check, size: 13, color: onColor),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _minimal(BuildContext context) {
-    return MinimalCard(
-      onTap: onTap,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      radius: 18,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 24,
-            child: Center(
-              child: glyph != null
-                  ? HabitGlyph(glyph: glyph!, color: color, size: 19)
-                  : Icon(icon, size: 19, color: color),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: MinimalType.body(
-                15,
-                weight: selected ? 600 : 500,
-                color: context.colors.onSurface,
-              ),
-            ),
-          ),
-          if (selected) Icon(LucideIcons.check, size: 17, color: color),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final style = context.watch<SettingsController>();
-    final express = style.isExpressStyle;
-    if (style.isMinimalStyle) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Semantics(
-          button: true,
-          selected: selected,
-          child: _minimal(context),
-        ),
-      );
-    }
-    if (express) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Semantics(
-          button: true,
-          selected: selected,
-          child: _express(context),
-        ),
-      );
-    }
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Semantics(
-        button: true,
-        selected: selected,
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 160),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            decoration: BoxDecoration(
-              color: selected
-                  ? color.withValues(alpha: 0.12)
-                  : context.colors.surfaceContainerHighest.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: selected ? color : Colors.transparent,
-                width: 1.4,
-              ),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 26,
-                  child: Center(
-                    child: glyph != null
-                        ? HabitGlyph(glyph: glyph!, color: color, size: 20)
-                        : Icon(icon, size: 20, color: color),
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      fontWeight: FontWeight.w600,
-                      color: context.colors.onSurface,
-                    ),
-                  ),
-                ),
-                if (selected)
-                  Icon(LucideIcons.check, size: 18, color: color),
-              ],
-            ),
-          ),
         ),
       ),
     );
