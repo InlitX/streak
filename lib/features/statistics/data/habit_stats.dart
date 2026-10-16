@@ -147,10 +147,13 @@ class HabitStats {
     return series;
   }
 
-  static bool _isDue(Habit habit, DateTime day) =>
-      !day.isBefore(habit.startedAt) &&
-      habit.isScheduledOn(day) &&
-      !habit.isNeutralOn(day);
+  static bool _isDue(Habit habit, DateTime day) {
+    if (day.isBefore(habit.startedAt)) return false;
+    if (!day.isAfter(habit.startedAt) && !habit.isCompletedOn(day)) {
+      return false;
+    }
+    return habit.isScheduledOn(day) && !habit.isNeutralOn(day);
+  }
 
   static ({int current, int best}) perfectStreakOf(
     List<Habit> habits,
@@ -284,7 +287,7 @@ class HabitStats {
     var perfectDays = 0;
     for (final key in daily.keys) {
       final date = parseDayKey(key);
-      final due = habits.where((h) => h.isScheduledOn(date));
+      final due = habits.where((h) => _isDue(h, date));
       if (due.isNotEmpty && due.every((h) => h.isCompletedOn(date))) {
         perfectDays++;
       }
