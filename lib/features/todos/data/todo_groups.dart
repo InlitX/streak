@@ -64,6 +64,12 @@ int _byUrgency(Todo a, Todo b, bool lowFirst) {
         ? _rank(a.priority).compareTo(_rank(b.priority))
         : b.priority.index.compareTo(a.priority.index);
   }
+  if (a.estimate != b.estimate) {
+    if (a.estimate == null || b.estimate == null) {
+      return a.estimate == null ? 1 : -1;
+    }
+    return a.estimate!.compareTo(b.estimate!);
+  }
   return b.createdAt.compareTo(a.createdAt);
 }
 
