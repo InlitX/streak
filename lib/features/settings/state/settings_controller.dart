@@ -63,6 +63,7 @@ class SettingsController extends ChangeNotifier {
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _todayCategory = LocalStore.setting('todayCategory', '');
+    _minimalShortcut = LocalStore.setting('minimalShortcut', '');
     _heatmapPath = LocalStore.setting('heatmapPath', false);
     _heatmapRolling = LocalStore.setting('heatmapRolling', false);
     _consistencyPeriod = LocalStore.setting('consistencyPeriod', 2);
@@ -163,6 +164,7 @@ class SettingsController extends ChangeNotifier {
   late int _accentColor;
   late int _heatmapMode;
   late String _todayCategory;
+  late String _minimalShortcut;
   late bool _heatmapPath;
   late bool _heatmapRolling;
   late int _consistencyPeriod;
@@ -306,6 +308,15 @@ class SettingsController extends ChangeNotifier {
   }
 
   String get todayCategory => _todayCategory;
+
+  String get minimalShortcut => _minimalShortcut;
+
+  Future<void> setMinimalShortcut(String value) async {
+    if (value == _minimalShortcut) return;
+    _minimalShortcut = value;
+    await LocalStore.writeSetting('minimalShortcut', value);
+    notifyListeners();
+  }
 
   Future<void> setTodayCategory(String value) async {
     _todayCategory = value;
