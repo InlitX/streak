@@ -7,7 +7,9 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 
@@ -20,6 +22,7 @@ class ExpressStreakRow extends StatefulWidget {
     this.days = 7,
     this.height = 50,
     this.showLabels = true,
+    this.showNotes = false,
   });
 
   final Habit habit;
@@ -28,6 +31,7 @@ class ExpressStreakRow extends StatefulWidget {
   final int days;
   final double height;
   final bool showLabels;
+  final bool showNotes;
 
   @override
   State<ExpressStreakRow> createState() => _ExpressStreakRowState();
@@ -117,6 +121,7 @@ class _ExpressStreakRowState extends State<ExpressStreakRow>
                       : null,
                   isToday: dates[i] == today,
                   ink: ink,
+                  showNotes: widget.showNotes,
                   onToggle: widget.onToggle,
                   onLongPress: widget.onLongPress,
                 ),
@@ -136,6 +141,7 @@ class _DayCell extends StatelessWidget {
     required this.label,
     required this.isToday,
     required this.ink,
+    required this.showNotes,
     required this.onToggle,
     required this.onLongPress,
   });
@@ -146,6 +152,7 @@ class _DayCell extends StatelessWidget {
   final String? label;
   final bool isToday;
   final Color ink;
+  final bool showNotes;
   final void Function(DateTime date)? onToggle;
   final void Function(DateTime date)? onLongPress;
 
@@ -199,6 +206,17 @@ class _DayCell extends StatelessWidget {
                       color: isToday && !done && !relapse
                           ? context.colors.primary
                           : text.withValues(alpha: 0.75),
+                    ),
+                  ),
+                if (showNotes)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: NoteDots(
+                      types: context.watch<NotesController>().typesFor(
+                        habit.id,
+                        date.dayKey,
+                      ),
+                      size: 4,
                     ),
                   ),
               ],

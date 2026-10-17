@@ -529,6 +529,7 @@ class _ActivityView extends StatelessWidget {
           height: 60,
           onToggle: onToggle,
           onLongPress: onLongPress,
+          showNotes: showNotes,
         ),
       );
     }
