@@ -16,6 +16,7 @@ const backupSettingKeys = {
   'celebration',
   'checkStyle',
   'compactCards',
+  'consistencyPeriod',
   'currency',
   'customQuotes',
   'dayCutoff',

@@ -62,7 +62,7 @@ void main() {
 
     test('a page of nothing but tracked habits does not blow up', () {
       final stats = HabitStats.compute(const [], 2026);
-      expect(stats.consistency, 0);
+      expect(stats.consistencyOver(ConsistencyPeriod.quarter).now, 0);
       expect(stats.currentStreak, 0);
       expect(stats.perHabit, isEmpty);
     });

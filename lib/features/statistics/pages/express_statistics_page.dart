@@ -28,6 +28,7 @@ import 'package:streak/features/island/widgets/island_entry.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
+import 'package:streak/features/statistics/widgets/consistency_period.dart';
 import 'package:streak/features/statistics/widgets/period_totals.dart';
 import 'package:streak/features/statistics/widgets/express_line_chart.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
@@ -229,7 +230,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
         : focus.sessions.where((s) => s.habitId == _habitId).length;
 
     return [
-      _ConsistencyHero(percent: stats.consistency, accent: accent),
+      _ConsistencyHero(stats: stats, accent: accent),
       const SizedBox(height: 24),
       const SpanEnd(),
       SectionLabel(context.l10n.times_completed),
@@ -454,14 +455,19 @@ class _HabitScope extends StatelessWidget {
 }
 
 class _ConsistencyHero extends StatelessWidget {
-  const _ConsistencyHero({required this.percent, required this.accent});
+  const _ConsistencyHero({required this.stats, required this.accent});
 
-  final int percent;
+  final HabitStats stats;
   final Color accent;
 
   @override
   Widget build(BuildContext context) {
+    final period = consistencyPeriodOf(context);
+    final value = stats.consistencyOver(period);
+    final percent = value.now;
+    final change = consistencyChange(context, value);
     return ExpressCard(
+      onTap: () => pickConsistencyPeriod(context),
       radius: 30,
       padding: const EdgeInsets.symmetric(vertical: 22),
       child: Column(
@@ -500,14 +506,32 @@ class _ConsistencyHero extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          Text(
-            context.l10n.last_90_days,
-            style: ExpressType.body.at(
-              13,
-              weight: 700,
-              color: context.tokens.muted,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                consistencyCaption(context, period),
+                style: ExpressType.body.at(
+                  13,
+                  weight: 700,
+                  color: context.tokens.muted,
+                ),
+              ),
+              const SizedBox(width: 2),
+              Icon(
+                LucideIcons.chevronDown,
+                size: 15,
+                color: context.tokens.muted,
+              ),
+            ],
           ),
+          if (change != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              change,
+              style: ExpressType.body.at(12.5, weight: 600, color: accent),
+            ),
+          ],
         ],
       ),
     );

@@ -11,12 +11,14 @@ class ConsistencyGauge extends StatelessWidget {
     required this.color,
     required this.caption,
     this.size = 150,
+    this.footer,
   });
 
   final int percent;
   final Color color;
   final String caption;
   final double size;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,10 @@ class ConsistencyGauge extends StatelessWidget {
             ),
           ),
         ),
+        if (footer != null) ...[
+          const SizedBox(height: 8),
+          footer!,
+        ],
       ],
     );
   }

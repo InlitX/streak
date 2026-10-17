@@ -474,6 +474,22 @@ class Habit {
 
   late final int consistency = (strength * 100).round();
 
+  ({double done, int days}) tally(DateTime from, DateTime to) {
+    var done = 0.0;
+    var days = 0;
+    for (var day = from; !day.isAfter(to); day = day.addDays(1)) {
+      if (day.isBefore(startedAt) ||
+          !isScheduledOn(day) ||
+          isNeutralOn(day) ||
+          isCoveredOn(day)) {
+        continue;
+      }
+      days++;
+      done += _dayValue(day);
+    }
+    return (done: done, days: days);
+  }
+
   int _countInRange(DateTime start, DateTime end) {
     var count = 0;
     for (var i = 0; i <= end.epochDay - start.epochDay; i++) {

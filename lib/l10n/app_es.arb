@@ -701,6 +701,8 @@
   "unscheduled_confirm": "Registrar",
   "rest_days_none": "Ninguno",
   "last_90_days": "Últimos 90 días",
+  "last_12_months": "Últimos 12 meses",
+  "consistency_vs_previous": "{change} frente al anterior",
   "focus_clear_today": "Borrar las sesiones de hoy",
   "focus_defaults": "Sesión por defecto",
   "plan_day": "Planificar el día",

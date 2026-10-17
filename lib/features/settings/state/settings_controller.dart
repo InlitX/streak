@@ -65,6 +65,7 @@ class SettingsController extends ChangeNotifier {
     _todayCategory = LocalStore.setting('todayCategory', '');
     _heatmapPath = LocalStore.setting('heatmapPath', false);
     _heatmapRolling = LocalStore.setting('heatmapRolling', false);
+    _consistencyPeriod = LocalStore.setting('consistencyPeriod', 2);
     _startView = LocalStore.setting('startView', 0);
     _planningEnabled = LocalStore.setting('planningEnabled', true);
     _planContent = LocalStore.setting(
@@ -164,6 +165,7 @@ class SettingsController extends ChangeNotifier {
   late String _todayCategory;
   late bool _heatmapPath;
   late bool _heatmapRolling;
+  late int _consistencyPeriod;
   late int _startView;
   late bool _planningEnabled;
   late int _planContent;
@@ -286,6 +288,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setHeatmapPath(bool value) async {
     _heatmapPath = value;
     await LocalStore.writeSetting('heatmapPath', value);
+    notifyListeners();
+  }
+
+  int get consistencyPeriod => _consistencyPeriod;
+
+  Future<void> setConsistencyPeriod(int value) async {
+    _consistencyPeriod = value;
+    await LocalStore.writeSetting('consistencyPeriod', value);
     notifyListeners();
   }
 

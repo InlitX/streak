@@ -21,6 +21,7 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/data/habit_stats.dart';
 import 'package:streak/features/statistics/pages/express_statistics_page.dart';
 import 'package:streak/features/statistics/pages/minimal_statistics_page.dart';
+import 'package:streak/features/statistics/widgets/consistency_period.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
 import 'package:streak/features/statistics/widgets/statistics_filters.dart';
 import 'package:streak/features/statistics/widgets/stat_donut.dart';
@@ -271,12 +272,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         icon: LucideIcons.target,
                         color: accent,
                         child: Center(
-                          child: ConsistencyGauge(
-                            percent: stats.consistency,
-                            color: accent,
-                            caption: context.l10n.last_90_days,
-                            size: 130,
-                          ),
+                          child: _ConsistencyCard(stats: stats, color: accent),
                         ),
                       ),
                     ),
@@ -602,6 +598,55 @@ class _PerfectStreakCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ConsistencyCard extends StatelessWidget {
+  const _ConsistencyCard({required this.stats, required this.color});
+
+  final HabitStats stats;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final period = consistencyPeriodOf(context);
+    final value = stats.consistencyOver(period);
+    return ConsistencyGauge(
+      percent: value.now,
+      color: color,
+      caption: consistencyChange(context, value) ?? '',
+      size: 130,
+      footer: Semantics(
+        button: true,
+        child: InkWell(
+          onTap: () => pickConsistencyPeriod(context),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(10, 5, 6, 5),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      consistencyCaption(context, period),
+                      style: statLabel(context).copyWith(color: color),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Icon(LucideIcons.chevronDown, size: 14, color: color),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

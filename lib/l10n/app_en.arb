@@ -802,6 +802,13 @@
   "rest_days_none": "None",
   "consistency": "Consistency",
   "last_90_days": "Last 90 days",
+  "last_12_months": "Last 12 months",
+  "consistency_vs_previous": "{change} vs previous",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {"type": "String"}
+    }
+  },
   "focus_clear_today": "Clear today's sessions",
   "focus_defaults": "Session defaults",
   "plan_day": "Plan the day",
