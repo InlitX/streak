@@ -102,8 +102,7 @@ class TodoTile extends StatelessWidget {
                       ),
                     ),
                   ],
-                  if (todo.pinned ||
-                          todo.estimate != null ||
+                  if (todo.estimate != null ||
                           due != null ||
                           project != null ||
                           todo.tags.isNotEmpty ||
@@ -115,7 +114,6 @@ class TodoTile extends StatelessWidget {
                       runSpacing: 4,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        if (todo.pinned) const TodoPin(scale: 0.8),
                         if (project != null) _ProjectMark(project: project),
                         if (due != null)
                           _MetaLabel(
@@ -166,6 +164,11 @@ class TodoTile extends StatelessWidget {
                 ],
               ),
             ),
+            if (todo.pinned)
+              const Padding(
+                padding: EdgeInsetsDirectional.only(start: 8),
+                child: TodoPin(scale: 0.8),
+              ),
           ],
         )),
       ),
