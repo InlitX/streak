@@ -82,14 +82,17 @@ class TimelineBlock extends StatelessWidget {
           width: timelineGutter,
           child: Padding(
             padding: const EdgeInsets.only(top: 14, right: 8),
-            child: Text(
-              minuteLabel(habit.startMinute),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: FontWeight.w700,
-                color: context.tokens.muted,
-                fontFeatures: const [FontFeature.tabularFigures()],
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                minuteLabel(habit.startMinute),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                  color: context.tokens.muted,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               ),
             ),
           ),
@@ -240,14 +243,17 @@ class TimelineTodo extends StatelessWidget {
           width: timelineGutter,
           child: Padding(
             padding: const EdgeInsets.only(top: 14, right: 8),
-            child: Text(
-              minuteLabel(_start),
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: FontWeight.w700,
-                color: context.tokens.muted,
-                fontFeatures: const [FontFeature.tabularFigures()],
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                minuteLabel(_start),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                  color: context.tokens.muted,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               ),
             ),
           ),
