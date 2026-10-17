@@ -118,13 +118,15 @@ class YearNavigator extends StatelessWidget {
         ),
         SizedBox(
           width: 96,
-          child: Text(
-            '$year',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: context.colors.onSurface,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '$year',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: context.colors.onSurface,
+              ),
             ),
           ),
         ),
