@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/widgets/stat_axis.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 
@@ -19,11 +21,15 @@ class WeekdayBars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = WeekdayLabels.narrowMonFirst(
+    final weekStart = context.watch<SettingsController>().weekStart;
+    final labels = WeekdayLabels.narrowFrom(
       Localizations.localeOf(context).languageCode,
+      weekStart,
     );
     return ValueBars(
-      values: [for (final value in values) value.toDouble()],
+      values: [
+        for (var i = 0; i < 7; i++) values[(weekStart - 1 + i) % 7].toDouble(),
+      ],
       color: color,
       height: height,
       label: (index) => labels[index % 7],
