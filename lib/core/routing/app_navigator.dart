@@ -35,6 +35,9 @@ class AppNavigator {
     );
   }
 
+  static Future<T?> pushRoute<T>(Route<T> route) =>
+      (_pane ?? key.currentState!).push<T>(route);
+
   static Future<T?> morph<T>(
     Widget page, {
     required BuildContext from,

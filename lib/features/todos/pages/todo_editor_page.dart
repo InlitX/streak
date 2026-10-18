@@ -41,7 +41,7 @@ Future<bool?> openTodoEditor(
   String project = '',
   String date = '',
 }) =>
-    AppNavigator.key.currentState!.push(
+    AppNavigator.pushRoute(
       TodoNoteRoute(
         page: TodoEditorPage(todo: todo, project: project, date: date),
       ),
