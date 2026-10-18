@@ -336,6 +336,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
         ),
       ],
       if (entries.length > 1) ...[
+        const SameColumn(),
         const SizedBox(height: 24),
         SectionLabel(context.l10n.ranking),
         ExpressCard(

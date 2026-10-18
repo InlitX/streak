@@ -9,6 +9,13 @@ class SpanEnd extends StatelessWidget {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
+class SameColumn extends StatelessWidget {
+  const SameColumn({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}
+
 List<Widget> spanned(BuildContext context, List<Widget> items) {
   final cut = items.indexWhere((item) => item is SpanEnd);
   if (cut == -1) {
@@ -42,16 +49,28 @@ class StatColumns extends StatelessWidget {
         final left = <Widget>[];
         final right = <Widget>[];
         var group = <Widget>[];
+        List<Widget>? last;
+        var stay = false;
         for (final card in cards) {
+          if (card is SameColumn) {
+            stay = true;
+            continue;
+          }
           group.add(card);
           if (card is SizedBox || card is SectionLabel) continue;
-          final column = left.length <= right.length ? left : right;
+          final column = stay && last != null
+              ? last
+              : left.length <= right.length
+                  ? left
+                  : right;
           if (column.isEmpty) {
             while (group.isNotEmpty && group.first is SizedBox) {
               group.removeAt(0);
             }
           }
           column.addAll(group);
+          last = column;
+          stay = false;
           group = <Widget>[];
         }
         left.addAll(group);
