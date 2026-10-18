@@ -12,11 +12,14 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 # Pinned Flutter version. F-Droid extracts this exact value from the recipe so
 # its build matches upstream. Defined once here and reused by both jobs.
 env:
   FLUTTER_VERSION: '3.41.9'
+  SIGNPATH_ORGANIZATION_ID: '56d04f3f-a39d-43ed-9e68-fb90ca3852d6'
+  SIGNPATH_PROJECT: 'streak'
 
 jobs:
   build:
@@ -76,8 +79,8 @@ jobs:
   release:
     name: Publish release
     runs-on: ubuntu-latest
-    # Only when manually dispatched with a tag. The notes are generated from the
-    # merged pull requests, and the rest is filled in by hand after publishing.
+    # Only when manually dispatched with a tag. The notes come from
+    # .github/release-notes.md, written before each release.
     if: github.event_name == 'workflow_dispatch'
 
     # Reproducible build: keep the pub cache at a fixed path inside the workspace
@@ -155,7 +158,7 @@ jobs:
         with:
           tag_name: ${{ inputs.tag }}
           name: ${{ inputs.tag }}
-          generate_release_notes: true
+          body_path: .github/release-notes.md
           files: |
             build/app/outputs/flutter-apk/Streak-arm64-v8a.apk
             build/app/outputs/flutter-apk/Streak-armeabi-v7a.apk
@@ -186,6 +189,28 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
+      - name: Upload the unsigned app
+        id: unsigned-app
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-windows-unsigned-app
+          path: build/windows/x64/runner/Release/
+
+      - name: Sign the app
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: windows-portable
+          github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: build/signed-app
+
+      - name: Use the signed app
+        run: Copy-Item -Path build\signed-app\* -Destination build\windows\x64\runner\Release -Recurse -Force
+
       # Everything the app needs to run: Streak.exe, the plugin DLLs, the MSVC
       # runtime and data/. Unzip anywhere and double click.
       - name: Zip the build
@@ -199,6 +224,28 @@ jobs:
           $iscc = (Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe").FullName
           & $iscc "/DAppVersion=$('${{ inputs.tag }}'.TrimStart('v'))" windows\installer.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload the unsigned installer
+        id: unsigned-installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-windows-unsigned-installer
+          path: build/installer/Streak-windows-x64-setup.exe
+
+      - name: Sign the installer
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: windows-installer
+          github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: build/signed-installer
+
+      - name: Use the signed installer
+        run: Copy-Item -Path build\signed-installer\Streak-windows-x64-setup.exe -Destination build\installer -Force
 
       - name: Add it to the release
         uses: softprops/action-gh-release@v2
