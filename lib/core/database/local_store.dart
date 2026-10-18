@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -24,7 +25,10 @@ class LocalStore {
   static const _todoTagsBox = 'todo_tags';
   static const _changesKey = 'syncChanges';
   static const _deletedKey = 'syncDeleted';
+  static const _clearedKey = 'syncCleared';
   static const _deviceKey = 'deviceId';
+  static const _quietZone = #streakQuiet;
+  static const _forgetAfter = Duration(days: 120);
 
   static late Box _habits;
   static late Box _settings;
@@ -43,21 +47,34 @@ class LocalStore {
   static void Function()? onChanged;
   static Map<String, int>? _changes;
   static Map<String, int>? _deleted;
-  static int _quiet = 0;
+  static Map<String, int>? _cleared;
+  static Completer<void>? _idle;
 
-  static Map<String, int> get changes => _changes ??= {
-        for (final entry in settingMap(_changesKey).entries)
+  static Map<String, int> _stamps(String key) => {
+        for (final entry in settingMap(key).entries)
           if (entry.value is int) entry.key: entry.value as int,
       };
 
-  static Map<String, int> get deleted => _deleted ??= {
-        for (final entry in settingMap(_deletedKey).entries)
-          if (entry.value is int) entry.key: entry.value as int,
-      };
+  static Map<String, int> get changes => _changes ??= _stamps(_changesKey);
+
+  static Map<String, int> get deleted => _deleted ??= _forgetOld(_stamps(_deletedKey));
+
+  static Map<String, int> get cleared => _cleared ??= _stamps(_clearedKey);
+
+  static Map<String, int> _forgetOld(Map<String, int> marks) {
+    final limit = DateTime.now().subtract(_forgetAfter).millisecondsSinceEpoch;
+    return marks..removeWhere((_, at) => at < limit);
+  }
 
   static int? changedAt(String id) => changes[id];
 
   static int? deletedAt(String id) => deleted[id];
+
+  static int? clearedAt(String id) => cleared[id];
+
+  static bool get _tracking => setting('autoBackupFolder', '').isNotEmpty;
+
+  static bool get _quiet => Zone.current[_quietZone] == true;
 
   static Future<void> stampChange(String id, int at) async {
     changes[id] = at;
@@ -74,38 +91,48 @@ class LocalStore {
     await _settings.put(_changesKey, Map<String, int>.of(changes));
   }
 
-  static Future<void> _touch(Iterable<String> ids) async {
-    if (_quiet > 0) return;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    var revived = false;
+  static Future<void> stampCleared(Iterable<String> ids, int at) async {
     for (final id in ids) {
-      changes[id] = now;
-      revived = deleted.remove(id) != null || revived;
+      cleared[id] = at;
     }
-    await _settings.put(_changesKey, Map<String, int>.of(changes));
-    if (revived) await _settings.put(_deletedKey, Map<String, int>.of(deleted));
+    await _settings.put(_clearedKey, Map<String, int>.of(cleared));
+  }
+
+  static Future<void> _touch(Iterable<String> ids) async {
+    if (_quiet) return;
+    if (_tracking) {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      var revived = false;
+      for (final id in ids) {
+        changes[id] = now;
+        revived = deleted.remove(id) != null || revived;
+      }
+      await _settings.put(_changesKey, Map<String, int>.of(changes));
+      if (revived) await _settings.put(_deletedKey, Map<String, int>.of(deleted));
+    }
     onChanged?.call();
   }
 
   static Future<void> _removed(Iterable<String> ids) async {
-    if (_quiet > 0 || ids.isEmpty) return;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    for (final id in ids) {
-      deleted[id] = now;
-      changes.remove(id);
+    if (_quiet || ids.isEmpty) return;
+    if (_tracking) {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      for (final id in ids) {
+        deleted[id] = now;
+        changes.remove(id);
+      }
+      await _settings.put(_deletedKey, Map<String, int>.of(deleted));
+      await _settings.put(_changesKey, Map<String, int>.of(changes));
     }
-    await _settings.put(_deletedKey, Map<String, int>.of(deleted));
-    await _settings.put(_changesKey, Map<String, int>.of(changes));
     onChanged?.call();
   }
 
-  static Future<T> quietly<T>(Future<T> Function() action) async {
-    _quiet++;
-    try {
-      return await action();
-    } finally {
-      _quiet--;
-    }
+  static Future<T> quietly<T>(Future<T> Function() action) =>
+      runZoned(action, zoneValues: {_quietZone: true});
+
+  static Future<void> idle() {
+    if (_writing == 0) return Future.value();
+    return (_idle ??= Completer<void>()).future;
   }
 
   static String get deviceId {
@@ -123,6 +150,10 @@ class LocalStore {
       return await action();
     } finally {
       _writing--;
+      if (_writing == 0) {
+        _idle?.complete();
+        _idle = null;
+      }
     }
   }
 
@@ -137,6 +168,7 @@ class LocalStore {
     _settings = await Hive.openBox(_settingsBox);
     _changes = null;
     _deleted = null;
+    _cleared = null;
     _categories = await Hive.openBox(_categoriesBox);
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
@@ -449,11 +481,20 @@ class LocalStore {
       _settings.put(key, value);
 
   static Future<void> clearProgress() async {
-    for (final habit in readHabits().values) {
+    final habits = readHabits().values.toList();
+    for (final habit in habits) {
       await writeHabit(habit.copyWith(completions: const {}));
     }
+    if (_tracking) {
+      await stampCleared(
+        habits.map((h) => h.id),
+        DateTime.now().millisecondsSinceEpoch,
+      );
+    }
+    final gone = [..._notes.keys.cast<String>(), ..._focus.keys.cast<String>()];
     await _notes.clear();
     await _focus.clear();
+    await _removed(gone);
   }
 
   static Future<void> wipeContent() async {
@@ -475,5 +516,6 @@ class LocalStore {
     await _settings.clear();
     _changes = null;
     _deleted = null;
+    _cleared = null;
   }
 }

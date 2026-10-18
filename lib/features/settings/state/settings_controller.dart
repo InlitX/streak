@@ -703,6 +703,7 @@ class SettingsController extends ChangeNotifier {
       archive: archive,
     );
     if (path == null) return false;
+    if (!archive) return true;
     _autoBackupAt = DateTime.now().toIso8601String();
     await LocalStore.writeSetting('autoBackupAt', _autoBackupAt);
     notifyListeners();

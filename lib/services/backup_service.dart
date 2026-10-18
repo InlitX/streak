@@ -40,6 +40,7 @@ class BackupData {
     this.device = '',
     this.changes = const {},
     this.deleted = const {},
+    this.cleared = const {},
   });
 
   final List<Habit> habits;
@@ -54,6 +55,7 @@ class BackupData {
   final String device;
   final Map<String, int> changes;
   final Map<String, int> deleted;
+  final Map<String, int> cleared;
 
   bool get isEmpty =>
       habits.isEmpty && notes.isEmpty && focus.isEmpty && todos.isEmpty;
@@ -69,6 +71,7 @@ class BackupService {
         'device': LocalStore.deviceId,
         'changes': LocalStore.changes,
         'deleted': LocalStore.deleted,
+        'cleared': LocalStore.cleared,
         'habits': habits.map((h) => h.toMap()).toList(),
         'categories':
             LocalStore.readCategories().map((c) => c.toMap()).toList(),
@@ -204,18 +207,28 @@ class BackupService {
   }
 
   static void _prune(Directory dir, String prefix, String extension, int keep) {
-    final old = dir
+    const stampLength = 19;
+    final plain = prefix.length + stampLength + extension.length;
+    final own = '_${LocalStore.deviceId}$extension';
+    final files = dir
         .listSync()
         .whereType<File>()
         .where((f) {
           final name = f.uri.pathSegments.last;
-          return name.startsWith(prefix) && name.endsWith(extension);
+          return name.startsWith(prefix) &&
+              name.endsWith(extension) &&
+              (name.length == plain || name.endsWith(own));
         })
         .toList()
       ..sort((a, b) => b.path.compareTo(a.path));
-    for (final stale in old.skip(keep)) {
+    final days = <String>{};
+    for (final (index, file) in files.indexed) {
+      final name = file.uri.pathSegments.last;
+      final day = name.substring(prefix.length, prefix.length + 10);
+      final daily = days.length < keep && days.add(day);
+      if (index < keep || daily) continue;
       try {
-        stale.deleteSync();
+        file.deleteSync();
       } catch (_) {}
     }
   }
@@ -340,6 +353,7 @@ class BackupService {
       device: root['device'] is String ? root['device'] as String : '',
       changes: _stamps(root['changes']),
       deleted: _stamps(root['deleted']),
+      cleared: _stamps(root['cleared']),
     );
 
     if (data.isEmpty && data.deleted.isEmpty) {

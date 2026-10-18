@@ -304,6 +304,33 @@ void main() {
     expect(dir.listSync().whereType<File>(), hasLength(6));
   });
 
+  test('old copies keep one per day and the other device is left alone', () async {
+    await _seedEverything(1);
+    final dir = await Directory.systemTemp.createTemp('streak_auto');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final me = LocalStore.deviceId;
+    String name(String stamp, String device) =>
+        '${dir.path}/streak_backup_${stamp}_$device.json';
+    for (var day = 1; day <= 3; day++) {
+      for (var minute = 0; minute < 4; minute++) {
+        File(name('2026-01-0${day}_10-0$minute-00', me)).writeAsStringSync('{}');
+      }
+    }
+    File(name('2026-01-01_09-00-00', 'other123')).writeAsStringSync('{}');
+
+    await BackupService.runAuto(folder: dir.path, readable: false, archive: false);
+
+    final left = dir
+        .listSync()
+        .whereType<File>()
+        .map((f) => f.uri.pathSegments.last)
+        .toSet();
+    expect(left, contains('streak_backup_2026-01-01_09-00-00_other123.json'));
+    expect(left, contains('streak_backup_2026-01-01_10-03-00_$me.json'));
+    expect(left, contains('streak_backup_2026-01-02_10-03-00_$me.json'));
+    expect(left, isNot(contains('streak_backup_2026-01-01_10-00-00_$me.json')));
+  });
+
   test('a completion keeps its steps, hour and amount through the trip', () {
     final day = AppClock.now().dayKey;
     final habit = testHabit(id: 'x', name: 'X').copyWith(

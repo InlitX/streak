@@ -86,7 +86,10 @@ class AutoSync {
     _busy = true;
     try {
       final brought = await LocalStore.guardWrites(FolderSync.pull);
-      if (brought > 0) await _reload();
+      if (brought > 0) {
+        await LocalStore.idle();
+        await _reload();
+      }
       if (_dirty) {
         _dirty = false;
         if (!await _save()) _dirty = true;

@@ -12,28 +12,45 @@ class FolderSync {
 
   static const _prefix = 'streak_backup_';
   static const _seenKey = 'folderSeenAt';
+  static const _seenByKey = 'folderSeenBy';
 
   static bool get isSet =>
       LocalStore.setting('autoBackupFolder', '').isNotEmpty;
 
-  static final _settled = <String>{};
-  static DateTime? _settledSince;
+  static final _peeked =
+      <String, ({DateTime modified, DateTime? at, String device})>{};
 
   static Future<int> pull() async {
     final folder = LocalStore.setting('autoBackupFolder', '');
     if (folder.isEmpty) return 0;
     try {
       final since = DateTime.tryParse(LocalStore.setting(_seenKey, ''));
-      final batch = incoming(Directory(folder), since);
+      final seen = {
+        for (final MapEntry(:key, :value)
+            in LocalStore.settingMap(_seenByKey).entries)
+          if (DateTime.tryParse('$value') case final at?) key: at,
+      };
+      final batch = incoming(Directory(folder), since, seen);
       if (batch.isEmpty) return 0;
       var brought = 0;
+      var latest = since;
       for (final data in batch) {
         brought += await _absorb(data);
+        final at = data.exportedAt!;
+        if (data.device.isEmpty) {
+          if (latest == null || at.isAfter(latest)) latest = at;
+        } else {
+          final known = seen[data.device];
+          if (known == null || at.isAfter(known)) seen[data.device] = at;
+        }
       }
-      await LocalStore.writeSetting(
-        _seenKey,
-        batch.last.exportedAt!.toIso8601String(),
-      );
+      if (latest != null && latest != since) {
+        await LocalStore.writeSetting(_seenKey, latest.toIso8601String());
+      }
+      await LocalStore.writeSetting(_seenByKey, {
+        for (final MapEntry(:key, :value) in seen.entries)
+          key: value.toIso8601String(),
+      });
       return brought;
     } catch (e) {
       debugPrint('Could not read the shared folder: $e');
@@ -41,36 +58,53 @@ class FolderSync {
     }
   }
 
-  static List<BackupData> incoming(Directory dir, DateTime? since) {
+  static List<BackupData> incoming(
+    Directory dir,
+    DateTime? since, [
+    Map<String, DateTime> seen = const {},
+  ]) {
     final self = LocalStore.deviceId;
-    if (since != _settledSince) {
-      _settled.clear();
-      _settledSince = since;
+    bool taken(DateTime? at, String device) {
+      final mark = device.isEmpty ? since : seen[device];
+      return at == null ||
+          device == self ||
+          (mark != null && !at.isAfter(mark));
     }
+
     final found = <BackupData>[];
     for (final file in backupsIn(dir)) {
       final name = _name(file);
-      if (name.endsWith('_$self.json') || _settled.contains(file.path)) continue;
+      if (name.endsWith('_$self.json')) continue;
+      final DateTime modified;
+      try {
+        modified = file.lastModifiedSync();
+      } catch (_) {
+        continue;
+      }
+      final peek = _peeked[file.path];
+      if (peek != null &&
+          peek.modified == modified &&
+          taken(peek.at, peek.device)) {
+        continue;
+      }
       final BackupData data;
       try {
         data = BackupService.parse(file.readAsStringSync());
       } catch (e) {
         debugPrint('Skipping $name: $e');
-        _settled.add(file.path);
+        _peeked[file.path] = (modified: modified, at: null, device: '');
         continue;
       }
-      final written = data.exportedAt;
-      if (written == null || (since != null && !written.isAfter(since))) {
-        _settled.add(file.path);
-        break;
-      }
-      if (data.device == self || (data.isEmpty && data.deleted.isEmpty)) {
-        _settled.add(file.path);
-        continue;
-      }
+      final empty = data.isEmpty && data.deleted.isEmpty;
+      _peeked[file.path] = (
+        modified: modified,
+        at: empty ? null : data.exportedAt,
+        device: data.device,
+      );
+      if (empty || taken(data.exportedAt, data.device)) continue;
       found.add(data);
     }
-    return found.reversed.toList();
+    return found..sort((a, b) => a.exportedAt!.compareTo(b.exportedAt!));
   }
 
   static List<File> backupsIn(Directory dir) {
@@ -92,19 +126,32 @@ class FolderSync {
     var brought = deletes ? await _forget(data.deleted) : 0;
 
     for (final theirs in data.habits) {
-      if (deletes && _buried(theirs.id, stamps[theirs.id])) continue;
-      final ours = LocalStore.habit(theirs.id);
-      final newer = _theirsNewer(stamps[theirs.id], theirs.id);
+      final id = theirs.id;
+      if (deletes && _buried(id, stamps[id])) continue;
+      final ours = LocalStore.habit(id);
+      final newer = _theirsNewer(stamps[id], id);
+      final ourCut = LocalStore.clearedAt(id);
+      final theirCut = data.cleared[id];
+      final cut = _later(ourCut, theirCut);
+      final theirDays = _since(theirs.completions, cut, theirCut);
       final merged = ours == null
-          ? theirs
+          ? theirs.copyWith(completions: theirDays)
           : (newer ? theirs : ours).copyWith(
-              completions: mergeCompletions(ours.completions, theirs.completions),
-              missReasons: {...theirs.missReasons, ...ours.missReasons},
+              completions: mergeCompletions(
+                _since(ours.completions, cut, ourCut),
+                theirDays,
+              ),
+              missReasons: newer
+                  ? {...ours.missReasons, ...theirs.missReasons}
+                  : {...theirs.missReasons, ...ours.missReasons},
             );
+      if (cut != null && cut != ourCut) {
+        await LocalStore.stampCleared([id], cut);
+      }
       if (ours != null && _same(ours.toMap(), merged.toMap())) continue;
       brought++;
       await LocalStore.writeHabit(merged);
-      if (newer) await _adopt(theirs.id, stamps[theirs.id]);
+      if (newer) await _adopt(id, stamps[id]);
     }
 
     for (final category in data.categories) {
@@ -203,6 +250,23 @@ class FolderSync {
     return brought;
   }
 
+  static int? _later(int? a, int? b) =>
+      a == null ? b : (b == null || a >= b ? a : b);
+
+  static Map<String, Completion> _since(
+    Map<String, Completion> days,
+    int? cut,
+    int? known,
+  ) {
+    if (cut == null || cut == known) return days;
+    final end = DateTime.fromMillisecondsSinceEpoch(cut);
+    final last = DateTime(end.year, end.month, end.day);
+    return {
+      for (final entry in days.entries)
+        if (entry.value.day?.isAfter(last) ?? true) entry.key: entry.value,
+    };
+  }
+
   static bool _theirsNewer(int? theirs, String id) {
     final ours = LocalStore.changedAt(id);
     if (theirs == null) return ours == null;
@@ -225,10 +289,18 @@ class FolderSync {
         out[entry.key] = other;
         continue;
       }
+      final kept = other.count > mine.count ||
+              (other.count == mine.count &&
+                  other.marks.length > mine.marks.length)
+          ? other
+          : mine;
+      final spare = identical(kept, mine) ? other : mine;
       out[entry.key] = Completion(
-        date: other.date,
-        count: mine.count >= other.count ? mine.count : other.count,
-        hour: mine.hour ?? other.hour,
+        date: kept.date,
+        count: kept.count,
+        hour: kept.hour ?? spare.hour,
+        minute: kept.hour != null ? kept.minute : spare.minute,
+        marks: kept.marks,
         steps: {...mine.steps, ...other.steps},
       );
     }
