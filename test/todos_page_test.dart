@@ -87,7 +87,8 @@ void main() {
     ]);
     await pumpScreen(tester, const TodosPage());
 
-    expect(find.text('Today · 9:00 AM'), findsOneWidget);
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('9:00 AM'), findsOneWidget);
   });
 
   testWidgets('writing a to-do adds it to the list', (tester) async {
