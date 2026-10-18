@@ -1,0 +1,13 @@
+Streak 2.4.0 🚀
+
+- Keep your devices in sync through a shared folder
+- Habits without a daily goal, to just log a value like your weight
+- Several relapses in one day and notes on why you missed a day
+- Done with some of the steps, add or replace an amount
+- Change the time of any check
+- Focus: saved timers, a simple clock and a ticking sound
+- Consistency by period in Stats
+- Widget style from Settings
+- Performance options and a way to turn off animations
+- Romanian
+- Many fixes

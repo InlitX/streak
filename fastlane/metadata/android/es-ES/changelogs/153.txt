@@ -1,0 +1,13 @@
+Streak 2.4.0 🚀
+
+- Sincroniza tus dispositivos con una carpeta compartida
+- Hábitos sin objetivo diario, para apuntar un valor como tu peso
+- Varias recaídas al día y por qué fallaste un día
+- Hecho con parte de los pasos, sumar o reemplazar una cantidad
+- Cambia la hora de cualquier marca
+- Focus: temporizadores guardados, reloj simple y tictac
+- Constancia por periodo en Estadísticas
+- Estilo de widgets en Ajustes
+- Opciones de rendimiento y sin animaciones
+- Rumano
+- Muchas correcciones
