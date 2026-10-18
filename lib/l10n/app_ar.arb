@@ -531,5 +531,27 @@
     }
   },
   "journey_empty": "لا صور بعد",
-  "journey_empty_sub": "أضف صورة إلى الملاحظة وسوف تظهر هنا."
+  "journey_empty_sub": "أضف صورة إلى الملاحظة وسوف تظهر هنا.",
+  "discard_changes": "تجاهل التغييرات؟",
+  "discard_changes_body": "ستُفقد التغييرات التي أجريتها على هذه العادة.",
+  "discard": "تجاهل",
+  "keep_editing": "متابعة التعديل",
+  "tracking_hide_sub": "العادة التي تتابعها فقط لا تظهر في هذه القائمة",
+  "reminders_ready_title": "التذكيرات مفعّلة",
+  "reminders_ready_body": "سيُذكّرك Streak هنا.",
+  "archive_habit_body": "نقل \"{name}\" إلى الأرشيف؟ سيُحتفظ بسجله ويمكنك استعادته من الإعدادات.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "العادات المؤرشفة",
+  "archived_habits_sub": "استعدها أو احذفها نهائيًا",
+  "archived_empty": "لا يوجد شيء مؤرشف",
+  "archived_empty_sub": "العادات التي تحذفها تنتقل هنا مع سجلها الكامل.",
+  "restore": "استعادة",
+  "restored": "تمت استعادة العادة",
+  "delete_forever": "حذف نهائي"
 }
