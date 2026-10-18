@@ -496,43 +496,71 @@ class _Meta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final due = todo.due;
     final estimate = todo.estimate;
-    final length = estimate == null ? '' : formatMinutes(estimate.toDouble());
-    final (icon, label, color) = switch (todo) {
-      _ when due != null => (
-          todo.time == null ? LucideIcons.calendar : LucideIcons.clock,
-          [todoDueLabel(context, todo), if (length.isNotEmpty) length].join(' · '),
-          overdue ? context.tokens.danger : softInkOf(context),
-        ),
-      _ when estimate != null => (
-          LucideIcons.hourglass,
-          length,
-          softInkOf(context),
-        ),
-      _ => (null, '', softInkOf(context)),
-    };
-    if (icon == null) return const SizedBox.shrink();
+    final due = todo.due;
+    final time = todo.time;
+    final dueColor = overdue ? context.tokens.danger : inkOf(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (due != null)
+          _MetaLine(
+            icon: LucideIcons.calendar,
+            label: todoDateLabel(context, due),
+            color: dueColor,
+            weight: FontWeight.w800,
+          ),
+        if (due != null && time != null) ...[
+          const SizedBox(height: 3),
+          _MetaLine(
+            icon: LucideIcons.clock,
+            label: time.format(context),
+            color: dueColor,
+            weight: FontWeight.w800,
+          ),
+        ],
+        if (due != null && estimate != null) const SizedBox(height: 3),
+        if (estimate != null)
+          _MetaLine(
+            icon: LucideIcons.hourglass,
+            label: formatMinutes(estimate.toDouble()),
+            color: softInkOf(context),
+            weight: FontWeight.w700,
+          ),
+      ],
+    );
+  }
+}
 
+class _MetaLine extends StatelessWidget {
+  const _MetaLine({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.weight,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final FontWeight weight;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 12, color: color),
-        if (label.isNotEmpty) ...[
-          const SizedBox(width: 5),
-          Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
-            ),
+        const SizedBox(width: 5),
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 11.5, fontWeight: weight, color: color),
           ),
-        ],
+        ),
       ],
     );
   }
