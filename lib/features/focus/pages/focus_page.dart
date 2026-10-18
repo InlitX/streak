@@ -281,8 +281,9 @@ class _FocusPageState extends State<FocusPage> {
     final leadMinutes =
         starting ? (widget.startMinutes ?? focus.targetMinutes) : focus.targetMinutes;
     final inset = MediaQuery.viewInsetsOf(context).bottom;
+    final active = context.select<FocusController, bool>((f) => f.isActive);
 
-    if (!focus.isActive && !_leaving && _leadValue == 0) {
+    if (!active && !_leaving && _leadValue == 0) {
       _leaving = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) AppNavigator.pop();
