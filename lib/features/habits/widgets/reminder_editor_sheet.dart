@@ -185,13 +185,26 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.initial == null
-                    ? context.l10n.new_reminder
-                    : context.l10n.edit_reminder,
-                style: sheetTitleStyle(context),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.initial == null
+                          ? context.l10n.new_reminder
+                          : context.l10n.edit_reminder,
+                      style: sheetTitleStyle(context),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: (_needsDays && _days.isEmpty) ? null : _save,
+                    child: Text(
+                      context.l10n.save,
+                      style: sheetActionStyle(context, size: 16),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               if (widget.followsHabit)
                 _HabitDaysNote(minimal: minimal)
               else if (minimal)
