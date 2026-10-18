@@ -267,14 +267,23 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
       _ when _date == today.addDays(1).dayKey => 1,
       _ => 2,
     };
+    final picked = _date.isEmpty ||
+            _date == today.dayKey ||
+            _date == today.addDays(1).dayKey
+        ? null
+        : todoDateLabel(context, parseDayKey(_date));
+    final minutes = _minutes;
+    final time = minutes == null
+        ? null
+        : TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60).format(context);
     await showOptionSheet(
       context,
       title: context.l10n.todo_date,
       options: [
         context.l10n.today,
         context.l10n.tomorrow,
-        context.l10n.pick_a_date,
-        context.l10n.todo_time,
+        [context.l10n.pick_a_date, if (picked != null) picked].join(' · '),
+        [context.l10n.todo_time, if (time != null) time].join(' · '),
         context.l10n.todo_no_date,
       ],
       index: current,
