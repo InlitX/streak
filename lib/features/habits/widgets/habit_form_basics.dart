@@ -483,20 +483,14 @@ class CategoryPicker extends StatelessWidget {
   final ValueChanged<String> onSelected;
 
   Future<void> _create(BuildContext context) async {
-    final controller = context.read<CategoriesController>();
     final result = await showModalBottomSheet<Category>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => const CategoryEditorSheet(),
     );
-    if (result == null) return;
-    final created = await controller.create(
-      name: result.name,
-      color: result.color,
-      icon: result.icon,
-    );
-    onSelected(created.name);
+    if (result == null || !context.mounted) return;
+    onSelected(await addCategory(context, result));
   }
 
   Future<void> _editOrDelete(BuildContext context, Category category) async {
@@ -554,8 +548,8 @@ class CategoryPicker extends StatelessWidget {
         showDragHandle: true,
         builder: (_) => CategoryEditorSheet(initial: category),
       );
-      if (result == null) return;
-      await controller.update(result);
+      if (result == null || !context.mounted) return;
+      await saveCategory(context, category, result);
       if (selected == category.name) onSelected(result.name);
     }
   }

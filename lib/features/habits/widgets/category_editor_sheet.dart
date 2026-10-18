@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
@@ -23,12 +24,17 @@ class CategoryEditorSheet extends StatefulWidget {
 
 class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
   late final TextEditingController _name =
-      TextEditingController(text: widget.initial?.name ?? '');
+      TextEditingController(text: _label);
   late Color _color = widget.initial?.color ?? AppPalette.brand;
   late String _icon = widget.initial?.icon ?? CategoryIcons.names.first;
   bool _showAllIcons = false;
 
   static const _iconPreviewCount = 16;
+
+  String get _label {
+    final initial = widget.initial;
+    return initial == null ? '' : context.categoryLabel(initial.name);
+  }
 
   bool get _canSave => _name.text.trim().isNotEmpty;
 
@@ -47,9 +53,14 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
   }
 
   void _save() {
+    final initial = widget.initial;
+    final name = _name.text.trim();
+    final adopted = initial != null &&
+        CategoriesController.isSeed(initial) &&
+        name != _label;
     final result = Category(
-      id: widget.initial?.id ?? const Uuid().v4(),
-      name: _name.text.trim(),
+      id: initial == null || adopted ? const Uuid().v4() : initial.id,
+      name: name == _label ? initial!.name : name,
       color: _color,
       icon: _icon,
       order: widget.initial?.order ?? 0,
@@ -178,6 +189,49 @@ class _CategoryEditorSheetState extends State<CategoryEditorSheet> {
   }
 }
 
+Future<String> addCategory(BuildContext context, Category draft) async {
+  final categories = context.read<CategoriesController>();
+  final key = LocalStore.categoryKey(draft.name);
+  final labelOf = context.categoryLabel;
+  for (final existing in categories.categories) {
+    if (LocalStore.categoryKey(labelOf(existing.name)) == key) {
+      return existing.name;
+    }
+  }
+  for (final existing in categories.categories) {
+    if (LocalStore.categoryKey(existing.name) != key) continue;
+    final kept = Category(
+      id: const Uuid().v4(),
+      name: labelOf(existing.name),
+      color: existing.color,
+      icon: existing.icon,
+      order: existing.order,
+    );
+    await saveCategory(context, existing, kept);
+    break;
+  }
+  final created = await categories.create(
+    name: draft.name,
+    color: draft.color,
+    icon: draft.icon,
+  );
+  return created.name;
+}
+
+Future<void> saveCategory(
+  BuildContext context,
+  Category before,
+  Category after,
+) async {
+  final habits = context.read<HabitsController>();
+  await context.read<CategoriesController>().replace(before, after);
+  if (before.name == after.name) return;
+  for (final habit in habits.withArchived) {
+    if (habit.category != before.name) continue;
+    await habits.update(habit.copyWith(category: after.name));
+  }
+}
+
 Future<void> showCategoryOrderSheet(BuildContext context) =>
     showModalBottomSheet<void>(
       context: context,
@@ -203,7 +257,7 @@ class _CategoryOrderSheet extends StatelessWidget {
     final categories = [
       for (final category in all)
         if (used.contains(category.name) ||
-            !CategoriesController.seededNames.contains(category.name))
+            !CategoriesController.isSeed(category))
           category,
     ];
     final rest = [

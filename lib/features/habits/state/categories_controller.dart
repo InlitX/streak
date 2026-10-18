@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 class CategoriesController extends ChangeNotifier {
   CategoriesController() {
     _categories = LocalStore.readCategories();
+    _keepOwnNames();
     if (!LocalStore.hasCategories) {
       _seedDefaults();
     } else {
@@ -20,6 +21,23 @@ class CategoriesController extends ChangeNotifier {
     if (once.length == _categories.length) return;
     _categories = once;
     notifyListeners();
+  }
+
+  static Set<String> ownNames = {};
+
+  static bool isSeed(Category category) => category.id.startsWith('seed-');
+
+  void _keepOwnNames() {
+    ownNames = {
+      for (final category in _categories)
+        if (!isSeed(category)) category.name,
+    };
+  }
+
+  @override
+  void notifyListeners() {
+    _keepOwnNames();
+    super.notifyListeners();
   }
 
   static const seededNames = {
@@ -110,6 +128,15 @@ class CategoriesController extends ChangeNotifier {
     for (final category in _categories) {
       await LocalStore.writeCategory(category);
     }
+  }
+
+  Future<void> replace(Category before, Category after) async {
+    final index = _categories.indexWhere((c) => c.id == before.id);
+    if (index == -1) return;
+    _categories[index] = after;
+    if (before.id != after.id) await LocalStore.removeCategory(before.id);
+    await LocalStore.writeCategory(after);
+    notifyListeners();
   }
 
   Future<void> update(Category category) async {
