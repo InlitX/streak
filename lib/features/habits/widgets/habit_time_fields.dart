@@ -235,7 +235,10 @@ class HabitTimeFields extends StatelessWidget {
     final scheme = context.colors;
     final end = startMinute + durationMinutes;
 
-    return Container(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _planned ? null : () => _pickStart(context),
+      child: Container(
       padding: EdgeInsets.all(compact ? 12 : 14),
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest.withValues(alpha: 0.6),
@@ -309,6 +312,7 @@ class HabitTimeFields extends StatelessWidget {
           ],
         ],
       ),
+      ),
     );
   }
 }
@@ -338,6 +342,7 @@ class _Row extends StatelessWidget {
       button: true,
       label: '$label $value',
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: Row(
           children: [
@@ -356,12 +361,19 @@ class _Row extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: compact ? 13 : 14,
-                fontWeight: FontWeight.w700,
-                color: context.tokens.muted,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: compact ? 13 : 14,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
               ),
             ),
             if (onClear != null)
