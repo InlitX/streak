@@ -13,12 +13,24 @@ on:
         description: 'Existing release tag to attach to, e.g. v1.8.0. Empty = artifact only'
         required: false
         type: string
+      signing:
+        description: 'SignPath signing policy'
+        required: true
+        type: choice
+        default: none
+        options:
+          - none
+          - test-signing
+          - release-signing
 
 permissions:
   contents: write
+  actions: read
 
 env:
   FLUTTER_VERSION: '3.41.9'
+  SIGNPATH_ORGANIZATION_ID: '56d04f3f-a39d-43ed-9e68-fb90ca3852d6'
+  SIGNPATH_PROJECT: 'streak'
 
 jobs:
   windows:
@@ -42,6 +54,31 @@ jobs:
       - name: Build Windows
         run: flutter build windows --release
 
+      - name: Upload the unsigned app
+        id: unsigned-app
+        if: inputs.signing != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-windows-unsigned-app
+          path: build/windows/x64/runner/Release/
+
+      - name: Sign the app
+        if: inputs.signing != 'none'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: ${{ inputs.signing }}
+          artifact-configuration-slug: windows-portable
+          github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: build/signed-app
+
+      - name: Use the signed app
+        if: inputs.signing != 'none'
+        run: Copy-Item -Path build\signed-app\* -Destination build\windows\x64\runner\Release -Recurse -Force
+
       - name: Zip the build
         run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath Streak-windows-x64.zip
 
@@ -55,6 +92,31 @@ jobs:
           $iscc = (Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe").FullName
           & $iscc "/DAppVersion=$version" windows\installer.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload the unsigned installer
+        id: unsigned-installer
+        if: inputs.signing != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: streak-windows-unsigned-installer
+          path: build/installer/Streak-windows-x64-setup.exe
+
+      - name: Sign the installer
+        if: inputs.signing != 'none'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: ${{ inputs.signing }}
+          artifact-configuration-slug: windows-installer
+          github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: build/signed-installer
+
+      - name: Use the signed installer
+        if: inputs.signing != 'none'
+        run: Copy-Item -Path build\signed-installer\Streak-windows-x64-setup.exe -Destination build\installer -Force
 
       - name: Keep them as an artifact
         uses: actions/upload-artifact@v4
