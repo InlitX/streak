@@ -307,7 +307,9 @@ class _Item extends StatelessWidget {
                   child: Opacity(
                     opacity: (1 - fold * 1.8).clamp(0.0, 1.0),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.fromLTRB(3, 3, 3, 0),
+                      child: FittedBox(
+                      fit: BoxFit.scaleDown,
                       child: Text(
                 item.label,
                 maxLines: 1,
@@ -320,6 +322,7 @@ class _Item extends StatelessWidget {
                   color: tint,
                 ),
               ),
+                      ),
                     ),
                   ),
                 ),
