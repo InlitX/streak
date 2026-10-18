@@ -160,17 +160,23 @@ class HabitWidget : GlanceAppWidget() {
         val column = TODAY_INDEX - grid.first
         if (column !in 0 until grid.span) return
         val width = grid.dot + 6f
-        val left = grid.name + grid.cell * column + (grid.cell - width) / 2f
         Column(modifier = GlanceModifier.fillMaxSize()) {
             Spacer(GlanceModifier.height(top.dp))
-            Row {
-                Spacer(GlanceModifier.width(left.dp))
-                Image(
-                    provider = ImageProvider(WidgetDraw.band(context, width, height, style.content, openTop, openBottom)),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = GlanceModifier.width(width.dp).height(height.dp),
-                )
+            Row(modifier = GlanceModifier.fillMaxWidth()) {
+                Spacer(GlanceModifier.width(grid.name.dp))
+                Row(modifier = GlanceModifier.defaultWeight()) {
+                    for (index in 0 until grid.span) {
+                        Box(modifier = GlanceModifier.defaultWeight(), contentAlignment = Alignment.TopCenter) {
+                            if (index == column) Image(
+                                provider = ImageProvider(WidgetDraw.band(context, width, height, style.content, openTop, openBottom)),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                                modifier = GlanceModifier.width(width.dp).height(height.dp),
+                            )
+                        }
+                    }
+                }
+                Spacer(GlanceModifier.width(RIGHT_INSET.dp))
             }
         }
     }
@@ -216,21 +222,21 @@ class HabitWidget : GlanceAppWidget() {
                     )
                 }
             }
-            Column {
-                Row {
+            Column(modifier = GlanceModifier.defaultWeight()) {
+                Row(modifier = GlanceModifier.fillMaxWidth()) {
                     for (column in 0 until grid.span) {
-                        Box(modifier = GlanceModifier.width(grid.cell.dp), contentAlignment = Alignment.Center) {
+                        Box(modifier = GlanceModifier.defaultWeight(), contentAlignment = Alignment.Center) {
                             Drawn(WidgetDraw.bar(context, 5f, BAR_H, ratios[column], style.content), density)
                         }
                     }
                 }
                 Spacer(GlanceModifier.height(BAR_GAP.dp))
-                Row {
+                Row(modifier = GlanceModifier.fillMaxWidth()) {
                     for (column in 0 until grid.span) {
                         val day = dayAt(data, grid.first + column)
                         val letter = day?.optString("label").orEmpty()
                         Box(
-                            modifier = GlanceModifier.width(grid.cell.dp).height(LETTER_ROW.dp),
+                            modifier = GlanceModifier.defaultWeight().height(LETTER_ROW.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             if (grid.first + column == TODAY_INDEX) {
@@ -246,6 +252,7 @@ class HabitWidget : GlanceAppWidget() {
                     }
                 }
             }
+            Spacer(GlanceModifier.width(RIGHT_INSET.dp))
         }
     }
 
@@ -328,7 +335,7 @@ class HabitWidget : GlanceAppWidget() {
                     }
                 }
                 Spacer(GlanceModifier.width(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(modifier = GlanceModifier.defaultWeight(), verticalAlignment = Alignment.CenterVertically) {
                     for (column in 0 until grid.span) {
                         val i = grid.first + column
                         val completed = series(habit, "completions", i) == true
@@ -344,7 +351,7 @@ class HabitWidget : GlanceAppWidget() {
                             i == TODAY_INDEX -> WeekMark.TODAY
                             else -> WeekMark.MISSED
                         }
-                        val cell = GlanceModifier.width(grid.cell.dp).height(grid.row.dp)
+                        val cell = GlanceModifier.defaultWeight().height(grid.row.dp)
                         val key = keys.getOrElse(column) { WidgetPayload.todayKey(context) }
                         Box(
                             modifier = when {
@@ -361,6 +368,7 @@ class HabitWidget : GlanceAppWidget() {
                         }
                     }
                 }
+                Spacer(GlanceModifier.width(RIGHT_INSET.dp))
             }
         }
     }
