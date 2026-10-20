@@ -1,1 +1,158 @@
-{}
+{
+  "app_tagline": "Seguiment d'hàbits",
+  "today": "Avui",
+  "stats": "Estadístiques",
+  "settings": "Configuració",
+  "new_label": "Nou",
+  "save": "Desa",
+  "cancel": "Cancel·la",
+  "discard_changes": "Voleu descartar els canvis?",
+  "discard_changes_body": "Els canvis que has fet en aquest hàbit es perdran.",
+  "discard": "Descarta",
+  "keep_editing": "Segueix editant",
+  "delete": "Elimina",
+  "good_morning": "Bon dia",
+  "good_afternoon": "Bona tarda",
+  "good_evening": "Bona nit",
+  "no_habits_yet": "Encara no hi ha hàbits",
+  "all_done_today": "Ja hem acabat per avui!",
+  "x_of_y_completed": "{done} de {total} completats",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Comença la teva primera ratxa",
+  "empty_body": "Crea un hàbit i toca un dia per registrar-lo. Petits passos, cada dia.",
+  "add_habit": "Afegeix un hàbit",
+  "all": "Tot",
+  "onb1_title": "Construeix ratxes reals",
+  "onb1_body": "Registra un hàbit amb un sol toc i observa com la teva inèrcia creix dia rere dia.",
+  "onb2_title": "Mantén el rumb",
+  "onb2_body": "Objectius diaris, setmanals o mensuals amb recordatoris intel·ligents perquè no se t'escapi res.",
+  "onb3_title": "Consulta el teu progrés",
+  "onb3_body": "Unes estadístiques detallades i una graella anual revelen exactament fins on has arribat.",
+  "skip": "Ometre",
+  "next": "Següent",
+  "get_started": "Comença",
+  "onb_kicker": "Et donem la benvinguda a",
+  "onb_blurb": "Petits seguiments diaris que esdevenen hàbits que mantens.",
+  "onb_free_title": "Lliure i gratuït, per sempre",
+  "onb_free_body": "Sense anuncis, sense subscripcions, sense funcionalitats bloquejades.",
+  "onb_private_title": "Privat i fora d'internet",
+  "onb_private_body": "Tot es queda al teu dispositiu. No cal cap compte.",
+  "onb_yours_title": "Les teves dades són teves",
+  "onb_yours_body": "Fes-ne una còpia de seguretat o emporta-te-ho sempre que vulguis.",
+  "onb_step": "Pas {step} de {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "statistics": "Estadística",
+  "done_today": "Fet avui",
+  "best_streak": "Millor ratxa",
+  "active_habits": "Hàbits actius",
+  "total_logs": "Registres totals",
+  "about_body": "Streak va néixer d'una idea senzilla: per què pagar per fer seguiment dels teus propis hàbits?\n\nAquesta aplicació és completament de codi obert. Qualsevol pot veure exactament com funciona, suggerir millores o fins i tot crear la seva pròpia versió. Res de «caixes negres». Res de sorpreses.\n\nLa teva privadesa és total: tot es queda al teu telèfon. Sense comptes, sense servidors, sense anuncis. Ni un sol byte surt del teu dispositiu.\n\nSense límits. Crea tants hàbits com vulguis. Sense subscripcions, sense «versió pro», sense finestres emergents que et demanin diners. Mai.\n\nSi l'aplicació t'és útil, pots donar-hi suport posant una estrella a GitHub o convidant-me a un cafè. Però és totalment opcional; l'aplicació és teva, passi el que passi.",
+  "auto_backup_where": "En obrir l'app se'n guarda una còpia completa: un .zip amb tot, fotos i música incloses, i un .json. També s'escriu una còpia llegible que podeu obrir amb qualsevol editor. Es conserven les darreres còpies.",
+  "widgets_hint": "Si la pantalla d'inici no obre l'editor quan afegeixes un giny o el mantens premut, canvia'n l'estil aquí. Això s'aplica a tots els ginys d'aquest tipus que no s'hagin personalitzat individualment.",
+  "about_inline": "Streak és una aplicació de codi obert per fer seguiment dels teus hàbits. Sense comptes, sense límits, sense pagaments. Tot es queda al teu telèfon.\n\nQualsevol persona pot consultar el codi, millorar-lo o utilitzar-lo lliurement.",
+  "kind_negative_hint": "Cada dia compta com a net per defecte: la teva ratxa creix sola. Toca el check només si recau; aquell dia es pinta de vermell i pots desfer-ho.",
+  "island_beta": "Aquesta és una primera aproximació a la gamificació i encara es troba en fase beta. Pot evolucionar, canviar de forma o ser substituïda completament, segons com la feu servir.",
+  "data_folder_move_body": "Streak es tancarà i mourà les teves dades a {path}. Torna a obrir-lo un cop s'hagi tancat. Si alguna cosa falla, les teves dades romandran on són.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "share_friends_message": "Mantinc les meues ratxes actives amb Streak: una aplicació senzilla, gratuïta i que funciona sense connexió per fer seguiment d'hàbits, sense comptes ni anuncis. Vine a crear la teua: https://inlitx.github.io/streak/",
+  "pin_recovery_body": "Si oblides el PIN, aquest codi obre Streak i desactiva el bloqueig. Guarda'l en un lloc segur: no es tornarà a mostrar.",
+  "focus_delete_sessions_body": "{count, plural, =1{S'eliminarà 1 sessió de concentració. Aquesta acció no es pot desfer.} other{S'eliminaran {count} sessions de concentració. Aquesta acció no es pot desfer.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quant_stats_empty": "Registra una quantitat i s'hi anirà acumulant, fins i tot els dies que no arribis a l'objectiu.",
+  "view_switcher_sub": "Mostra els botons Setmana / Mes / Any a la vista «Avui». Si estan desactivats, es mouen al menú de filtres.",
+  "last_7_days": "Darrers 7 dies",
+  "last_30_days": "Darrers 30 dies",
+  "your_habits": "Els teus hàbits",
+  "stats_empty": "Afegeix hàbits per veure les teves estadístiques",
+  "completion_rate_short": "Consistència",
+  "completion_rate": "Taxa de finalització",
+  "appearance": "Aspecte",
+  "theme": "Tema",
+  "system": "Sistema",
+  "light": "Clar",
+  "dark": "Fosc",
+  "week_starts_on": "Comença la setmana",
+  "mon": "Dl",
+  "sat": "Ds",
+  "sun": "Dg",
+  "language": "Idioma",
+  "data": "Dades",
+  "export_backup": "Exporta una còpia de seguretat",
+  "export_backup_sub": "Desa tots els hàbits en un fitxer",
+  "auto_backup": "Còpia de seguretat automàtica",
+  "auto_backup_sub": "Desactivat",
+  "auto_backup_off": "Desactivat",
+  "auto_backup_daily": "Cada dia",
+  "auto_backup_weekly": "Cada setmana",
+  "auto_backup_folder": "Carpeta",
+  "auto_backup_folder_default": "Dins l'aplicació (s'esborra si la desinstal·les)",
+  "auto_backup_folder_set": "Carpeta desada",
+  "auto_backup_folder_failed": "No es pot escriure en aquesta carpeta",
+  "auto_backup_no_permission": "Permís d'emmagatzematge denegat",
+  "auto_backup_run_now": "Fes una còpia de seguretat ara",
+  "refresh_now": "Refresca",
+  "refresh_now_sub": "Incorpora el que els teus altres dispositius han deixat a la carpeta",
+  "data_folder": "Carpeta de dades",
+  "data_folder_documents": "Documents",
+  "data_folder_app": "Junt amb l'aplicació",
+  "data_folder_pick": "Tria una carpeta",
+  "data_folder_inside": "Tria una carpeta fora de l'actual.",
+  "data_folder_taken": "Aquesta carpeta ja conté dades de Streak.",
+  "data_folder_denied": "Streak no pot escriure en aquesta carpeta.",
+  "data_folder_move_title": "Mou les teves dades",
+  "data_folder_move_confirm": "Mou i tanca",
+  "refresh_brought": "Els teus hàbits estan al dia",
+  "refresh_nothing": "Res de nou a la carpeta",
+  "import_backup": "Importa una còpia de seguretat",
+  "import_backup_sub": "Restaura els hàbits des d'un fitxer",
+  "import_from_app": "Importa des d'una altra aplicació",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_from_app_done": "Importat {habits} habits ({days} dies) de {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "No s'ha pogut importar aquest fitxer",
+  "about": "Quant a",
+  "backup_saved": "Còpia de seguretat desada",
+  "export_cancelled": "Exportació cancel·lada"
+}
