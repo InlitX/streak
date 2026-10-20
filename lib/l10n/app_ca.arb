@@ -89,7 +89,7 @@
     }
   },
   "quant_stats_empty": "Registra una quantitat i s'hi anirà acumulant, fins i tot els dies que no arribis a l'objectiu.",
-  "view_switcher_sub": "Mostra els botons Setmana / Mes / Any a la vista «Avui». Si estan desactivats, es mouen al menú de filtres.",
+  "view_switcher_sub": "Mostra els botons Setmana / Mes / Any a la vista «Avui». Si estan desactivats, es mouen al menú de filtres",
   "last_7_days": "Darrers 7 dies",
   "last_30_days": "Darrers 30 dies",
   "your_habits": "Els teus hàbits",
@@ -154,5 +154,1623 @@
   "import_failed": "No s'ha pogut importar aquest fitxer",
   "about": "Quant a",
   "backup_saved": "Còpia de seguretat desada",
-  "export_cancelled": "Exportació cancel·lada"
+  "export_cancelled": "Exportació cancel·lada",
+  "habits_imported": "Hàbits importats",
+  "new_habit": "Nou hàbit",
+  "edit_habit": "Edita l'hàbit",
+  "name": "Nom",
+  "name_hint": "p. ex. Córrer al matí",
+  "description": "Descripció",
+  "description_hint": "Nota opcional",
+  "icon": "Icona",
+  "color": "Color",
+  "category": "Categoria",
+  "category_health": "Salut",
+  "category_fitness": "Exercici",
+  "category_mindfulness": "Benestar",
+  "category_productivity": "Productivitat",
+  "category_learning": "Aprenentatge",
+  "category_finance": "Finances",
+  "count_days": "{count, plural, =1{1 dia} other{{count} dies}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 setmana} other{{count} setmanes}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}set",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}mes",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_kind": "Tipus d'hàbit",
+  "kind_positive": "Normal",
+  "kind_negative": "Evita",
+  "kind_quantitative": "Quantitat",
+  "kind_locked_hint": "El tipus no es pot canviar un cop creat l'hàbit.",
+  "cost_per_day": "Cost per dia",
+  "cost_note": "Opcional. Deixa-ho en blanc si aquest hàbit no costa diners.",
+  "currency": "Moneda",
+  "currency_custom": "Personalitzat",
+  "currency_hint": "Símbol o codi",
+  "money_saved": "Diners estalviats",
+  "clean_days": "Dies buits",
+  "quant_preset_water": "Aigua",
+  "quant_preset_reading": "Llegint",
+  "quant_preset_generic": "Personalitzat",
+  "quant_unit_hint": "Unitat (p. ex. ml, pàgines, repeticions)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "pàgines",
+  "quant_edit_title": "Realitzat avui",
+  "quant_daily_goal": "Objectiu diari",
+  "quant_tap_amount": "Quantitat per pulsació",
+  "quant_per_day": "Quantitat per dia",
+  "quant_average": "Mitjana diària",
+  "quant_logged_days": "Dies registrats",
+  "quant_best_day": "El millor dia",
+  "quant_goal_days": "Objectiu assolit",
+  "frequency": "Freqüència",
+  "pick_one_day": "Tria almenys un dia",
+  "reminder_habit_days": "En els dies de l'hàbit",
+  "reminder_habit_days_hint": "Sona els dies que toca dur a terme l'hàbit.",
+  "focus_label": "Etiqueta",
+  "focus_label_none": "Cap etiqueta",
+  "focus_label_new": "Nova etiqueta",
+  "focus_label_hint": "Matemàtiques, lectura, feina...",
+  "focus_label_remove": "Elimina l'etiqueta",
+  "focus_label_remove_body": "{label} abandona la llista. Les vostres sessions anteriors la conserven.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "Elimina-ho",
+  "by_label": "Per etiqueta",
+  "tracking_hide": "Amaga només el seguiment",
+  "tracking_hide_sub": "Els hàbits que només registres queden fora d'aquesta llista",
+  "tracking_show": "Mostra només el seguiment ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daily": "Diari",
+  "weekly": "Setmanal",
+  "monthly": "Mensual",
+  "sched_days": "Dies",
+  "sched_interval": "Intèrval",
+  "times_per_week": "{n} vegades per setmana",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "times_per_month": "{n} vegades al mes",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/setmana",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/mes",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Recordatoris",
+  "reminders_ready_title": "Els recordatoris estan activats",
+  "reminders_ready_body": "Streak t'ho recordarà aquí.",
+  "add_reminder": "Afegeix un recordatori",
+  "delete_habit": "Elimina l'hàbit",
+  "archive_habit": "Arxiva l'hàbit",
+  "archive": "Arxiva",
+  "share_friends": "Comparteix amb una amistat",
+  "share_friends_sub": "Envia l'aplicació",
+  "copy_message": "Copia el missatge",
+  "message_copied": "Missatge copiat",
+  "app_lock": "Bloqueig de l'aplicació",
+  "app_lock_sub": "Demana la teva empremta digital o la teva cara per obrir Streak",
+  "app_lock_unavailable": "Aquest telèfon no té configurats sistemes biomètrics",
+  "app_lock_failed": "No s'ha pogut verificar que fossis tu",
+  "app_lock_title": "Streak està bloquejat",
+  "app_lock_unlock": "Desbloqueja",
+  "app_lock_delay": "Desbloqueja després de",
+  "app_lock_delay_instant": "Immediatament",
+  "app_lock_delay_seconds": "{value} segons",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Fotos",
+  "note_take_photo": "Càmera",
+  "note_pick_photo": "Galeria",
+  "journey": "Jornada",
+  "journey_sub": "{count, plural, =1{1 foto} other{{count} fotos}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Encara no hi ha fotos",
+  "archive_habit_body": "Vols moure «{name}» a l'arxiu? Se'n conserva l'historial i el pots restaurar des de la configuració.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journey_empty_sub": "Afegeix una foto a una nota i apareixerà aquí.",
+  "archived_habits": "Hàbits arxivats",
+  "archived_habits_sub": "Restaura'ls o elimina'ls definitivament",
+  "archived_empty": "Res arxivat",
+  "archived_empty_sub": "Els hàbits que elimines van a parar aquí, amb tot el seu historial.",
+  "restore": "Restaura",
+  "restored": "Hàbit restablert",
+  "count_months": "{count, plural, =1{1 mes} other{{count} mesos}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "delete_forever": "Suprimeix definitivament",
+  "delete_forever_body": "Voleu suprimir «{name}» i tot el seu historial? Aquesta acció no es pot desfer.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Hàbit eliminat",
+  "clear_progress": "Progrés clar",
+  "clear_progress_sub": "Historial, notes i sessions d'enfocament",
+  "clear_progress_warning": "Això esborra tots els dies, notes i sessions de concentració registrades, però conserva els teus hàbits, els horaris i la configuració. No es pot desfer tret que tinguis un fitxer de còpia de seguretat per importar-lo posteriorment.",
+  "clear_progress_confirm": "Buida el progrés",
+  "clear_progress_done": "Progrés eliminat",
+  "wipe_data": "Esborra totes les dades",
+  "wipe_data_sub": "Hàbits, notes, sessions de concentració i configuració",
+  "wipe_data_warning": "Això esborra tots els hàbits, notes, sessions de concentració i configuracions d'aquest telèfon. No es pot desfer, llevat que tinguis un fitxer de còpia de seguretat per importar-lo posteriorment.",
+  "wipe_data_sure": "De debò ho vols esborrar tot?",
+  "wipe_data_sure_body": "Última oportunitat. Sense una còpia de seguretat, aquestes dades es perdran per sempre.",
+  "wipe_data_confirm": "Esborra-ho tot",
+  "wipe_data_done": "Totes les dades esborrades",
+  "day_start": "Comença el dia",
+  "day_start_sub": "Les hores de la matinada encara compten com a part del dia anterior",
+  "day_start_midnight": "Mitjanit",
+  "day_start_hour": "{hour}:00 AM",
+  "@day_start_hour": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "share_photo": "Foto",
+  "share_stats_short": "Estadístiques",
+  "undo": "Desfés",
+  "habit_archived": "Hàbit arxivat",
+  "duplicate_habit": "Hàbit duplicat",
+  "habit_duplicated": "{name} afegit",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "share_blur": "Desenfocament",
+  "delete_habit_body": "Voleu suprimir «{name}»? Aquesta acció no es pot desfer.",
+  "@delete_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_title": "Registrar una recaiguda?",
+  "log_relapse_body": "Això trenca la ratxa neta d'avui de «{name}». Pots desfer-ho tocant de nou.",
+  "@log_relapse_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "log_relapse_confirm": "Sí, registra-ho",
+  "permission_required": "Cal permís per a les notificacions",
+  "streaks": "Ratxes",
+  "activity": "Activitat",
+  "current": "Actualment",
+  "best": "Millor",
+  "total": "Total",
+  "relapses": "Recaigudes",
+  "strength": "Força",
+  "week": "Setmana",
+  "month": "Mes",
+  "year": "Any",
+  "new_reminder": "Nou recordatori",
+  "edit_reminder": "Afegeix recordatori",
+  "days": "Dies",
+  "time": "Hora",
+  "save_reminder": "Desa el recordatori",
+  "select_one_day": "Selecciona almenys un dia",
+  "no_days": "Cap dia",
+  "repeat_hours": "Repetiu durant el dia",
+  "repeat_until": "Fins a",
+  "end_of_day": "Final del dia",
+  "every_n_hours": "Cada {n} h",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_weekly": "Dies concrets",
+  "repeat_interval": "Cada N dies",
+  "every_n_days": "Cada {n} dies",
+  "@every_n_days": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_weeks": "{n, plural, =1{Every setmana} other{Every {n} setmanes}}",
+  "@every_n_weeks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "every_n_months": "{n, plural, =1{Cada mes} other{Cada {n} mesos}}",
+  "@every_n_months": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_unit_days": "Dies",
+  "sched_unit_weeks": "Setmanes",
+  "sched_unit_months": "Mesos",
+  "todo_tags": "Etiquetes",
+  "todo_projects": "Projectes",
+  "todo_project": "Projecte",
+  "todo_project_new": "Nou projecte",
+  "todo_project_name": "Nom del projecte",
+  "todo_project_edit": "Edita el projecte",
+  "todo_project_arrange": "Reordena",
+  "todo_project_arrange_hint": "Arrossega les carpetes on vulguis.",
+  "todo_project_pick": "Tria un projecte",
+  "todo_project_none": "Cap projecte",
+  "todo_project_delete_body": "El projecte desapareix. Les tasques romanen.",
+  "todo_tag": "Etiqueta",
+  "todo_tag_new": "Nova etiqueta",
+  "todo_tag_name": "Nom de l'etiqueta",
+  "todo_tag_edit": "Edita l'etiqueta",
+  "todo_tag_delete_body": "L'etiqueta desapareix. Les tasques es queden.",
+  "todo_tag_none": "Sense etiqueta",
+  "todo_tag_all": "Tot",
+  "todo_tag_manage": "Gestiona les etiquetes",
+  "todo_tag_empty_title": "Cap etiqueta encara",
+  "todo_tag_empty_body": "Agrupa les tasques per projecte, lloc o el que vulguis.",
+  "todo_tag_folders": "Carpetes",
+  "todo_tag_list": "Llista",
+  "todo_tag_count": "{n} obert",
+  "@todo_tag_count": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_tag_icon": "Icona",
+  "todo_tag_pick": "Selecciona etiquetes",
+  "todo_tag_filtered": "Filtrat per {name}",
+  "@todo_tag_filtered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "about_story": "Aquesta aplicació va néixer de la frustració amb els seguidors d'hàbits existents. La majoria limiten el nombre d'hàbits que pots crear, amaguen funcionalitats bàsiques darrere d'un mur de pagament, et rastregen o t'omplen de publicitat. Per això vaig decidir crear Streak: totalment gratuïta, sense anuncis, sense pagaments i sense rastreig. Tot funciona localment; les teves dades són teves. És de codi obert, sense trucs.",
+  "about_legal": "© InlitX. Streak és programari lliure sota la llicència GNU GPLv3, amb els termes addicionals de la seva secció 7, i es distribueix sense cap mena de garantia. Toca per llegir la llicència.",
+  "island_zoom_hint": "Arrossega amb un dit per moure. Pessiga amb dos dits per fer zoom, i gira per rotar l'illa.",
+  "focus_flowtime_hint": "Sense objectiu ni alarma. El rellotge avança i t'atures quan sents que has acabat.",
+  "focus_stop_body": "Els teus minuts es guarden en qualsevol cas. L'hàbit només es dona per completat si assoleixes l'objectiu.",
+  "from_last_done_sub": "Cada vegada que ho fas, l'espera torna a començar. Un dia perdut trenca la ratxa.",
+  "just_tracking_sub": "Manteniu la seva pròpia graella i els seus números, però excloeu-lo de Progrés i del recompte del dia",
+  "habit_time_sub": "Situa l'hàbit a Planificar en aquest moment. Continua apareixent a Avui durant tot el dia.",
+  "notes_hint": "Obre un hàbit i mantén premut un dia al seu calendari per veure o afegir notes",
+  "rest_days_desc": "Posa-ho en pausa cada setmana aquests dies. Encara pots registrar-los, i comptaran.",
+  "about_credits_body": "Creat amb Flutter. Icones de Lucide. Gràfics de fl_chart. Tipografia: Figtree i Playfair Display.",
+  "focus_only_past": "«{name}» només es completa mitjançant una sessió de concentració; per tant, no es poden marcar els dies anteriors.",
+  "@focus_only_past": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_hold_sub": "La pausa també espera fins que toqueu Continua. Després d'una pausa, el mode Enfocament sempre espera.",
+  "glass_effects_sub": "Desenfocament darrere la barra i a les vores de la pantalla. És el que més pesa",
+  "todo_empty_body": "Anota allò que vols fer durant els propers dies.",
+  "day_timeline_empty_sub": "Assigna un moment del dia a un hàbit i apareixerà aquí.",
+  "focus_only_hint": "L'hàbit es marca en finalitzar una sessió, no tocant-lo.",
+  "todo_clear_completed_body": "{count, plural, =1{Això elimina la tasca pendent completada.} other{Això elimina les {count} tasques pendents completades.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "checklist_hint": "Divideix l'hàbit en passos. Només es dona per completat quan s'ha marcat cada pas.",
+  "unscheduled_body": "Aquest hàbit no està programat per al {day}. Vols registrar-lo igualment com a extra?",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "island_how_streak": "Una bonificació quan un hàbit assoleix els 7, 30, 100 i 365 dies",
+  "past_first_sub": "Tocar un dia passat fa que es mostri en primer lloc, de manera que no es produeixi cap canvi per error",
+  "no_goal_sub": "Simplement registra el valor, com ara el teu pes. Qualsevol quantitat serveix per marcar el dia.",
+  "plan_day_sub": "Assigna una hora del dia als hàbits i visualitza'ls en una línia temporal.",
+  "month_weekday_sub": "Cau el {when} del mes, no en una data fixa.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "island_enable_sub": "Converteix els teus hàbits en un arxipèlag mediterrani que construeixes peça a peça",
+  "focus_label_sub": "Organitza les teves sessions, per exemple per assignatura. Mantén-ne una premuda per eliminar-la.",
+  "import_question_body": "Substituir tots els teus hàbits actuals per la còpia de seguretat, o fusionar-los?",
+  "widget_cfg_show_habits_hint": "Tria'n un o més. Amb un hàbit, el resum en mostra la ratxa.",
+  "any_step_sub": "Marcar un pas indica que el dia està completat, sense haver-los fet tots.",
+  "any_amount_sub": "Registrar qualsevol quantitat marca el dia com a completat, fins i tot si és per sota de l'objectiu.",
+  "focus_days_row": "{count, plural, =1{1 dia seguit} other{{count} dies seguits}}",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_restart_body": "El temps que has dedicat en aquesta ronda es perdrà.",
+  "swipe_cards_sub": "Fes lliscar cap a l'esquerra per completar un hàbit i cap a la dreta per desfer-lo.",
+  "auto_sync_sub": "Desa després de cada canvi i comprova la carpeta cada pocs minuts",
+  "category_order_empty": "Assigna una categoria a un hàbit i apareixerà aquí",
+  "pin_recovered": "Bloqueig desactivat. Pots establir un nou PIN a la configuració.",
+  "island_goal": "Així és com queda quan totes les peces estan construïdes.",
+  "island_how_note": "Les monedes provenen del teu historial, per la qual cosa una còpia de seguretat les recupera.",
+  "day_timeline_empty_todos": "Assigna una tasca a aquesta data i apareixerà aquí.",
+  "island_reset_sub": "Tot es redueix a una cosa, i cada punt torna al teu saldo.",
+  "github_star_sub": "Posa una estrella al projecte perquè més gent el trobi",
+  "today_progress_option_sub": "L'anell del dia i la barra de força a cada hàbit",
+  "steps_needed_sub": "El dia es considera completat amb {needed} de {total} passos.",
+  "@steps_needed_sub": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "island_empty": "Marca un hàbit i les illes comencen a créixer",
+  "heatmap_rolling_sub": "La graella anual acaba avui, en lloc del 31 de desembre",
+  "card_activity_sub": "Mostra els últims dies a la targeta, a punt per marcar",
+  "difficulty_option_sub": "Fes que els hàbits més difícils tinguin més pes en el progrés del dia",
+  "sort_completed_last_sub": "Envia al final de la llista allò que acabes",
+  "every_day": "Cada dia",
+  "uncategorized": "Sense categoria",
+  "more_icons": "Més icones",
+  "less_icons": "Menys icones",
+  "completions": "Finalitzacions",
+  "completion_time": "Temps de finalització",
+  "current_streak": "Ratxa actual",
+  "days_active": "Dies actius",
+  "completions_per_month": "Finalitzacions / mes",
+  "overview": "Visió general",
+  "preferences": "Preferències",
+  "support": "Suport",
+  "profile": "Perfil",
+  "about_app": "Sobre aquesta aplicació",
+  "about_app_sub": "Versió, crèdits i codi font",
+  "my_heatmap": "El meu mapa de calor",
+  "my_heatmap_sub": "Obre la graella d'activitats anual",
+  "rate_github": "Afegeix una estrella a GitHub",
+  "rate_github_sub": "Dóna suport al projecte amb una estrella",
+  "buy_coffee": "Convida'm a un cafè",
+  "buy_coffee_sub": "Ajuda a mantenir l'aplicació gratuïta",
+  "view_source": "Veure el codi font a GitHub",
+  "about_title": "Fet per a tu. Gratuït, per sempre.",
+  "about_footer": "Fet amb ☕ i molt de temps lliure.",
+  "close": "Tanca",
+  "no_data_yet": "Encara no hi ha dades",
+  "import_replace": "Substitueix-ho tot",
+  "import_merge": "Fusiona",
+  "go": "Anar a",
+  "quote_1": "Petits passos, cada dia.",
+  "quote_2": "La constància supera la intensitat.",
+  "quote_3": "Sigues present per a tu mateix.",
+  "quote_4": "Un dia a la vegada.",
+  "quote_5": "Progrés, no perfecció.",
+  "quote_6": "Hecho es mejor que perfecto.",
+  "quote_7": "Mantén viva la ratxa.",
+  "quote_8": "Hàbits petits, gran canvi.",
+  "quote_9": "Confia en el procés.",
+  "quote_10": "Guanya el matí.",
+  "quote_11": "La disciplina equival a la llibertat.",
+  "quote_12": "Avui compta.",
+  "just_tracking_option": "Ofereix només seguiment",
+  "just_tracking_option_sub": "Afegeix l'interruptor quan crees un hàbit",
+  "just_tracking": "Només fent seguiment",
+  "no_goal": "Sense objectiu diari",
+  "any_amount": "Qualsevol quantitat compta",
+  "any_step": "Alguns passos completats",
+  "sched_start": "Comença el",
+  "from_last_done": "Compta des de l'última vegada",
+  "month_weekday": "El mateix dia de la setmana cada mes",
+  "nth_weekday": "{n, select, first{primer} second{segon} third{tercer} fourth{quart} other{last}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes": "Cites",
+  "quotes_which": "Quines cites",
+  "quotes_app": "Des de l'aplicació",
+  "quotes_mine": "Meves",
+  "quotes_both": "Ambdós",
+  "quotes_off": "Apagades",
+  "quotes_my_list": "Les meves cites",
+  "quotes_add": "Afegeix cita",
+  "quotes_edit": "Edita la cita",
+  "quotes_hint": "Escriu la teva cita",
+  "quotes_empty": "Sense cites pròpies",
+  "quotes_empty_sub": "Escriu els teus propis i apareixeran a Avui.",
+  "motiv_start": "Comença el dia amb força 💪",
+  "motiv_progress": "Vas pel bon camí, continua així",
+  "motiv_almost": "Ja gairebé hi som! Només una mica més",
+  "motiv_perfect": "Dia perfecte! 🔥",
+  "app_background": "Fons",
+  "widgets": "Ginys",
+  "customize_widgets": "Personalitza els ginys",
+  "customize_widgets_sub": "Fons, opacitat, vora",
+  "widget_background": "Color de fons",
+  "widget_opacity": "Opacitat",
+  "widget_border": "Vora",
+  "widget_preview": "Vista prèvia",
+  "bg_solid": "Sòlid",
+  "bg_gradient": "Gradual",
+  "bg_dots": "Punts",
+  "bg_oled": "OLED",
+  "weekdays": "Dies entre setmana",
+  "weekends": "Cap de setmana",
+  "reminder_message": "Missatge (opcional",
+  "reminder_message_hint": "Deixa-ho buit per a una cita motivadora",
+  "new_category": "Nova categoria",
+  "edit_category": "Edita la categoria",
+  "add_category": "Nova",
+  "delete_category": "Elimina la categoria",
+  "edit": "Edita",
+  "cover_image": "Imatge de portada",
+  "book_cover": "Portada del llibre",
+  "add_image": "Afegeix imatge",
+  "when_best": "Quan ets més constant?",
+  "streak_evolution": "Evolució de la teva ratxa",
+  "consistency": "Consistència",
+  "consistency_trend": "Tendència de consistència",
+  "by_habit": "Per hàbit",
+  "ranking": "Rànquing",
+  "active_days": "Dies actius",
+  "perfect_days": "Dies perfectes",
+  "per_week": "Per setmana",
+  "best_month": "El millor mes",
+  "streak_on": "🔥 {n} dies seguits. No trenquis la ratxa!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 Avui pots començar una nova ratxa",
+  "not_enough_data": "Encara no hi ha prou dades",
+  "about_subtitle": "Per als dies que decideixes aparèixer.",
+  "made_by": "Fet amb ❤️ per @InlitX",
+  "share": "Comparteix",
+  "share_progress": "Comparteix el progrés",
+  "share_failed": "No s'ha pogut crear la imatge",
+  "share_swipe_hint": "Passa la targeta per desplaçar-te a través del temps",
+  "share_background": "Fons",
+  "share_size": "Mida",
+  "share_size_large": "Alt",
+  "share_size_small": "Quadrat",
+  "share_show_stats": "Mostra les estadístiques",
+  "share_save": "Desa",
+  "share_saved": "Desat a la teva galeria",
+  "share_save_failed": "No s'ha pogut desar la imatge",
+  "about_developer": "El desenvolupador",
+  "about_credits": "Crèdits",
+  "dev_handle": "@InlitX",
+  "dev_role": "Creador independent · Streak",
+  "notes": "Notes",
+  "notes_enable_sub": "Afegeix notes a qualsevol dia d'un hàbit",
+  "add_note": "Afegeix una nota",
+  "edit_note": "Edita nota",
+  "view_notes": "Visualitza nota",
+  "edit_entry": "Edita el registre",
+  "note_type": "Tipus",
+  "note_kind_note": "Nota",
+  "note_kind_planned": "Planejat",
+  "note_kind_completed": "Completat",
+  "note_hint": "Escriu una nota...",
+  "note_time_optional": "Temps (opcional)",
+  "save_note": "Desa nota",
+  "notes_empty": "Encara no hi ha notes per a aquest dia",
+  "delete_note": "Elimina nota",
+  "legend_note_added": "Nota afegida",
+  "tomorrow": "Demà",
+  "notes_count": "{count, plural, =1{1 nota} other{{count} notes}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "Tasques pendents",
+  "todo_view_list": "Simple",
+  "todo_view_papers": "Carpetes",
+  "todo_style": "Estil de llista de tasques",
+  "todo_style_sub": "Una llista senzilla, o carpetes de notes, com a Google Keep.",
+  "todos_enable_sub": "Una llista ràpida al costat dels teus hàbits",
+  "todo_new": "Nova tasca",
+  "todo_hint": "Què cal fer?",
+  "todo_subtasks": "Subtasques",
+  "todo_subtask_hint": "Subtasca",
+  "todo_empty_title": "No res a la llista",
+  "todo_date": "Data",
+  "todo_no_date": "Cap data",
+  "todo_time": "Hora",
+  "todo_estimate": "Duració",
+  "todo_estimate_none": "Sense duració",
+  "todo_priority": "Prioritat",
+  "todo_paper": "Color",
+  "todo_add": "Afegeix",
+  "todo_list_item": "Element de la llista",
+  "todo_title_hint": "Títol",
+  "todo_body_hint": "Nota",
+  "todo_sort": "Ordre de prioritat",
+  "todo_sort_high_first": "Primer, allò d'alta prioritat",
+  "todo_sort_low_first": "Primer, la prioritat baixa",
+  "todo_project_empty": "Encara no hi ha res en aquesta carpeta",
+  "todo_background": "Fons",
+  "todo_background_pick": "Tria una foto",
+  "todo_deleted": "Nota eliminada",
+  "todo_mark_done": "Marca com a relitzat",
+  "todo_mark_open": "Marca com a no realitzat",
+  "todo_pin": "Fixa",
+  "todo_unpin": "Desfixar",
+  "todo_select": "Selecciona",
+  "todo_selected": "{count, plural, =1{1 seleccionat} other{{count} seleccionats}}",
+  "@todo_selected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_deleted_many": "{count, plural, =1{Nota eliminada} other{{count} notes eliminades}}",
+  "@todo_deleted_many": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "priority_none": "Sense prioritat",
+  "priority_low": "Baix",
+  "priority_medium": "Mitjà",
+  "priority_high": "Alta",
+  "todo_overdue": "Endarrerit",
+  "todo_upcoming": "Pròximament",
+  "todo_someday": "Algun dia",
+  "pick_a_date": "Tria la data",
+  "todo_left": "{count, plural, =0{Tot fet} =1{1 pendent} other{{count} pendents}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, =1{Completat (1)} other{Completats ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "Cerca tasques",
+  "todo_search_empty": "Res no es compara amb això",
+  "todo_clear_completed": "Esborrar els completats",
+  "prefs_general": "General",
+  "prefs_cards": "Targetes i calendari",
+  "prefs_habits": "Hàbits",
+  "prefs_features": "Característiques",
+  "prefs_privacy": "Privadesa",
+  "collapse_cards": "Contraure les targetes",
+  "expand_cards": "Desplega les targetes",
+  "view_switcher": "Selector de vistes",
+  "view_switcher_needs": "Activa l'activitat a les targetes per utilitzar-la",
+  "focus": "Focus",
+  "focus_enable_sub": "Un temporitzador per a hàbits que en necessiten un",
+  "focus_free_session": "Sessió lliure",
+  "focus_duration": "Duració",
+  "focus_style": "Estil del temporitzador",
+  "focus_style_digital": "Cercle",
+  "focus_style_flip": "Fitxes",
+  "focus_style_dots": "Punts",
+  "focus_countdown": "Compte enrere de 3 segons",
+  "focus_skip_break": "Ometre la pausa",
+  "focus_continue": "Continua",
+  "focus_alert": "Avís de final de ronda",
+  "focus_alert_chime": "Campana",
+  "focus_alert_custom": "Tria un so",
+  "focus_alert_none": "Silenci",
+  "focus_hold": "Espera que ho pari",
+  "focus_long_break": "Pausa llarga",
+  "focus_long_break_sub": "Cada 4 rondes, un descans més llarg.",
+  "focus_whole_rounds": "Compta només les rondes completes",
+  "focus_whole_rounds_sub": "Una ronda que acabes abans d'hora no es desa.",
+  "focus_end_drop": "Si acabes ara, aquesta ronda no es desa.",
+  "focus_restart": "Reinicia",
+  "focus_restart_title": "Reiniciar aquesta ronda?",
+  "focus_saved": "{time} registrat",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_total": "Temps de concentració",
+  "focus_sessions": "Sessions",
+  "focus_stop_title": "Finalitzar la sessió?",
+  "focus_end": "Final",
+  "focus_pick_habit": "En què et centres?",
+  "focus_scene_custom": "La teva imatge",
+  "unit_hours": "hores",
+  "unit_minutes": "minuts",
+  "unit_seconds": "segons",
+  "focus_target_reached": "Objectiu assolit",
+  "focus_pause": "Pausa",
+  "focus_resume": "Reprèn",
+  "focus_sound": "So",
+  "focus_options": "Opcions",
+  "focus_fullscreen": "Pantalla completa",
+  "focus_exit_fullscreen": "Surt de la pantalla completa",
+  "focus_pick_audio": "Tria una cançó del telèfon",
+  "focus_no_sound": "Cap pista seleccionada",
+  "focus_tasks": "Llistar subtasca",
+  "focus_custom_duration": "Personalitzat",
+  "focus_end_short": "Et falten {time} per arribar a l'objectiu.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "{count} tasques encara estan sense marcar.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "Objectiu assolit. L'hàbit es marcarà com a completat.",
+  "focus_end_keep": "Continua",
+  "focus_end_anyway": "Acaba, de totes maneres",
+  "focus_end_complete": "Marca com a fet",
+  "focus_end_add_time": "Afegeix temps de concentració",
+  "focus_amount_added": "{amount} afegit a {habit}",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "Personalitzat",
+  "focus_track_brown": "Soroll marró",
+  "focus_track_fire": "Foc",
+  "focus_track_ticking": "Rellotge que fa tic-tac",
+  "focus_track_pad": "Fons càlid",
+  "focus_add_track": "Afegeix pista",
+  "focus_resources": "Escenes i sons gratuïts",
+  "focus_shuffle": "Aleatori",
+  "focus_loop": "En ordre",
+  "focus_repeat_one": "Repetir una vegada",
+  "focus_track_too_long": "Les pistes han de durar menys de 20 minuts",
+  "focus_track_limit": "Fins a 30 pistes",
+  "focus_volume": "Volum",
+  "focus_done_title": "Sessió finalitzada",
+  "focus_your_tracks": "Les teves pistes",
+  "focus_built_in": "Inclòs",
+  "unit_hour_short": "h",
+  "unit_min_short": "min",
+  "focus_notif_body": "La teva sessió de concentració ha acabat. Molt bé!",
+  "focus_notif_break": "S'ha acabat el descans.",
+  "focus_break_over": "S'ha acabat el descans",
+  "focus_notif_back": "Tornem a centrar-nos.",
+  "celebration": "Efecte de finalització",
+  "celebration_confetti": "Confeti",
+  "celebration_fireworks": "Focs artificials",
+  "celebration_surprise": "Sorprèn-me",
+  "focus_notif_channel": "Sessions de concentració",
+  "focus_notif_running": "Enfocament",
+  "focus_paused": "En pausa",
+  "focus_scene_black": "Negre",
+  "focus_pomodoro": "Pomodoro",
+  "focus_pomodoro_sub": "Enllaça sèries d'enfocament amb pauses breus",
+  "focus_break": "Descans",
+  "focus_break_in": "Descans en {n}",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "Enfoca en {n}",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_round": "Ronda {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_daily_goal": "Objectiu principal",
+  "focus_goal_today": "{done} de {goal} avui",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_keep_awake": "Mantenir la pantalla encesa",
+  "focus_images_limit": "Fins a 10 imatges",
+  "select_all": "Selecciona-ho tot",
+  "selected_count": "{count, plural, =1{1 seleccionat} other{{count} seleccionats}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_delete_sessions": "Suprimir les sessions?",
+  "focus_sessions_deleted": "{count, plural, =1{1 sessió eliminada} other{{count} sessions eliminades}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_title": "Dia no programat",
+  "unscheduled_confirm": "Registra't de totes maneres",
+  "rest_days_none": "Cap",
+  "last_90_days": "Darrers 90 dies",
+  "last_12_months": "Darrers 12 mesos",
+  "focus_start": "Inicia la sessió",
+  "consistency_vs_previous": "{change} respecte a l'anterior",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_clear_today": "Esborra les sessions d'avui",
+  "focus_defaults": "Valors predeterminats de la sessió",
+  "plan_day": "Planifica el dia",
+  "plan_todos": "Tasques al pla",
+  "plan_todos_sub": "Mostra les tasques programades per a aquell dia a sota dels hàbits.",
+  "plan_show_habits": "Hàbits",
+  "plan_show_both": "Ambdós",
+  "plan_show_todos": "Tasques pendents",
+  "swipe_cards": "Llisca les targetes d'hàbits",
+  "habit_time": "Moment del dia",
+  "habit_time_none": "A qualsevol moment",
+  "habit_duration": "Duració",
+  "habit_duration_none": "Sense duració",
+  "day_timeline": "Dia",
+  "day_timeline_free": "{span} lliure",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "day_timeline_anytime": "A qualsevol moment",
+  "day_timeline_empty": "Res previst per a aquest dia",
+  "clear": "Buida",
+  "start_view": "Avui s'inicia a",
+  "start_view_last": "Últim ús",
+  "focus_stats": "Estadístiques de focus",
+  "focus_average": "Sessió mitjana",
+  "focus_log": "Registra una sessió",
+  "focus_log_date": "Data",
+  "focus_log_saved": "Sessió afegida",
+  "perfect_streak": "Ratxa de dies perfectes",
+  "focus_history": "Historial",
+  "focus_history_empty": "No hi ha sessions encara",
+  "focus_history_empty_sub": "Totes les sessions de concentració que acabes apareixen aquí.",
+  "focus_history_day": "{count, plural, =1{1 sessió} other{{count} sessions}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "yesterday": "Ahir",
+  "app_style": "Estil de l'aplicació",
+  "app_style_sub": "Tria l'aspecte i la sensació de tota l'aplicació.",
+  "style_classic": "Clàssic",
+  "style_minimal": "Minimalista",
+  "style_classic_desc": "Llista d'hàbits, barra inferior i tota la configuració en una sola pantalla.",
+  "style_minimal_desc": "Graella d'hàbits i configuració agrupades en quatre seccions.",
+  "appearance_sub": "Tema, accent i fons",
+  "preferences_sub": "Idioma, setmana i ordenació",
+  "data_sub": "Còpies de seguretat, arxiu i importació",
+  "about_sub": "Versió, codi font i suport",
+  "support_sub": "Informa d'un error o sol·licita una funcionalitat",
+  "check_style": "Comprova l'estil",
+  "square": "Quadrat",
+  "circle": "Cercle",
+  "github_star_row": "Veure el codi font i posar una estrella",
+  "icons_tab": "Icones",
+  "emojis_tab": "Emojis",
+  "emoji_own": "Escriu o enganxa qualsevol emoji",
+  "report_issue": "Informa d'un problema",
+  "report_issue_sub": "Informa d'un error o sol·licita una funcionalitat",
+  "advanced_options": "Opcions avançades",
+  "default_user": "Inlitx",
+  "your_name": "El teu nom",
+  "edit_name": "Edita el nom",
+  "change_photo": "Canvia la foto",
+  "remove_photo": "Elimina la foto",
+  "notif_greeting": "Hola {name}, ",
+  "@notif_greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "app_icon": "Icona de l'aplicació",
+  "icon_default": "Per defecte",
+  "icon_neutral": "Verd",
+  "icon_accent": "Tricolor",
+  "custom": "Personalitzat",
+  "see_more": "Veure més",
+  "see_less": "Veure menys",
+  "colors_tab": "Colors",
+  "reorder": "Ordena",
+  "reorder_hint": "Arrossega els hàbits per reordenar-los",
+  "done": "Fet",
+  "accent_color": "Color d'accent",
+  "heatmap_path": "Connecta els dies",
+  "heatmap_path_sub": "Dibuixa la graella com un únic recorregut continu",
+  "sort_completed_last": "Completat en últim lloc",
+  "today_only": "Només avui",
+  "today_only_sub": "Amaga els hàbits que no estan programats per a avui",
+  "hide_done": "Amaga els completats",
+  "hide_done_sub": "El que acabis avui surt de la llista",
+  "past_first": "Obre primer els dies passats",
+  "miss_reason_title": "Per què t'ho has perdut?",
+  "miss_reasons": "Per què t'ho has perdut",
+  "miss_other": "Altres",
+  "miss_other_hint": "Escriu un motiu",
+  "miss_overslept": "M'he llevat tard",
+  "miss_busy": "Sense temps",
+  "miss_traveling": "De viatge",
+  "miss_sick": "En malaltia",
+  "miss_tired": "En cansament",
+  "miss_forgot": "Se m'ha oblidat",
+  "day_not_done": "Sense realitzar",
+  "day_clean": "Buida",
+  "day_relapses": "{count, plural, =1{1 recaiguda} other{{count} recaigudes}}",
+  "@day_relapses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "day_log_relapse": "Registrar una recaiguda",
+  "day_amount": "{value} de {goal}",
+  "@day_amount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "today_filter": "Mostra",
+  "today_fold_done": "Fet ({count})",
+  "@today_fold_done": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_other": "Altres dies ({count})",
+  "@today_fold_other": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_hidden": "Ocult ({count})",
+  "@today_fold_hidden": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "card_activity": "Activitat a les targetes",
+  "readable_copy": "Còpia llegible",
+  "readable_copy_sub": "També desa els teus hàbits com a fitxers Markdown",
+  "auto_sync": "Mantén els dispositius sincronitzats",
+  "sync_guide": "Com sincronitzar dos dispositius",
+  "theme_sub": "Clar, fosc o el sistema",
+  "accent_color_sub": "S'utilitza en botons i elements destacats",
+  "app_background_sub": "El que veus darrere de les cartes",
+  "check_style_sub": "Marques quadrades o rodones",
+  "app_icon_sub": "La icona a la pantalla d'inici",
+  "language_sub": "L'idioma de tota l'aplicació",
+  "week_start_sub": "La primera columna de cada graella",
+  "celebration_sub": "El que veus quan marques un hàbit",
+  "start_view_sub": "La vista Avui s'obre a",
+  "quotes_sub": "Quines cites apareixen a Avui",
+  "focus_daily_goal_sub": "Minuts de concentració que et proposes cada dia",
+  "app_lock_delay_sub": "Com de ràpid torna a preguntar després que marxis",
+  "focus_only": "Només amb una sessió de concentració",
+  "focus_only_title": "Necessita una sessió de concentració",
+  "focus_only_body": "\"{name}\" es completa finalitzant una sessió de concentració.",
+  "@focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_clear_title": "Voleu liquidar aquest xec?",
+  "focus_only_clear_body": "Només una sessió de concentració pot tornar a comprovar \"{name}\".",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_only_start": "Inicia la sessió",
+  "focus_flowtime": "Temps de flux",
+  "focus_mode_timer": "Temporitzador",
+  "focus_ends_at": "Acaba a les {time}",
+  "@focus_ends_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_no_limit": "Sense límit de temps",
+  "focus_style_plain": "Simple",
+  "focus_label_icon": "Icona (opcional)",
+  "focus_save_timer": "Desa el temporitzador",
+  "focus_remove_timer": "Vols eliminar aquest temporitzador desat?",
+  "focus_end_flow": "T'has concentrat durant {time}.",
+  "@focus_end_flow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "on": "Obert",
+  "off": "Tancat",
+  "checklist": "Llista de verificació",
+  "add_step": "Afegeix un pas",
+  "step_hint": "Nom del pas",
+  "todays_checklist": "Llista de tasques d'avui",
+  "steps_done": "{done}/{total} passos",
+  "@steps_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vacation_all": "Posa en pausa tots els hàbits",
+  "vacation_all_sub": "Res compta com a perdut mentre està activat",
+  "vacation_mode": "Mode vacances",
+  "vacation_on_desc": "En pausa — aquests dies no comptaran ni com a perduts ni com a completats.",
+  "vacation_off_desc": "Fes una pausa en aquest hàbit. Els dies que te'ls saltis no trencaran la teva ratxa.",
+  "paused": "En pausa",
+  "start_vacation": "Comença les vacances",
+  "end_vacation": "Final de les vacances",
+  "vacation_day_on": "Marcar com a dia de vacances",
+  "vacation_day_off": "Elimina dia de vacances",
+  "rest_days": "Dies de descans",
+  "widget_no_habits": "Encara no hi ha hàbits\nToca per obrir la ratxa",
+  "widget_no_data": "Encara no hi ha dades\nObre Streak per sincronitzar",
+  "widget_open_to_sync": "Obre Streak per sincronitzar",
+  "widget_activity": "Activitat",
+  "widget_today_progress": "Avui {done}/{total}",
+  "@widget_today_progress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_today_done": "{done} de {total} completats",
+  "@widget_today_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_open": "Tasca pendent {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_empty": "Ja no queda res per avui",
+  "widget_done_today": "fet avui",
+  "widget_streak_days": "Dies de ratxa",
+  "widget_this_week": "Aquesta setmana",
+  "widget_last_days": "Últims {count} dies",
+  "@widget_last_days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_days": "Dies mostrats",
+  "widget_week_done": "{done} de {total}",
+  "@widget_week_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_best_streak": "🔥 {streak} millor ratxa",
+  "@widget_best_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_title": "Personalitza el giny",
+  "widget_cfg_content": "Contingut",
+  "widget_cfg_background": "Fons",
+  "widget_cfg_color": "Color",
+  "widget_cfg_image": "Imatge",
+  "widget_cfg_choose_image": "Tria una imatge",
+  "widget_cfg_change_image": "Canvia la imatge",
+  "widget_cfg_custom_color": "Color personalitzat",
+  "widget_cfg_follow_system": "Segueix el tema del sistema",
+  "widget_cfg_dark_color": "Tema fosc",
+  "widget_cfg_light_color": "Tema clar",
+  "widget_cfg_opacity": "Opacitat {value}%",
+  "@widget_cfg_opacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_border": "Marge",
+  "widget_cfg_thickness": "Gruix {value}dp",
+  "@widget_cfg_thickness": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_todos_all": "Mostra totes les tasques",
+  "widget_cfg_todos_hint": "Desactivat: només tasques d'avui, endarrerides i sense data",
+  "widget_cfg_show_art": "Mostra la il·lustració",
+  "widget_cfg_show_header": "Capçalera",
+  "widget_cfg_show_icons": "Icones d'hàbits",
+  "widget_cfg_show_cards": "El rerefons de cada hàbit",
+  "widget_cfg_show_details": "Ratxa sota el nom",
+  "widget_cfg_buttons": "Botons",
+  "widget_cfg_buttons_round": "Rodó",
+  "widget_cfg_buttons_square": "Quadrat",
+  "widget_cfg_hide_done": "Amaga els completats",
+  "widget_cfg_compact": "Compacte",
+  "widget_cfg_compact_hint": "Files més petites, ratlla al costat del nom",
+  "widget_cfg_compact_todos_hint": "Files més petites, temps al costat de la tasca",
+  "widget_cfg_today_band": "Destacat d'avui",
+  "widget_cfg_show_activity": "Mostra l'activitat de",
+  "widget_cfg_dot_color": "Color del punt",
+  "widget_cfg_style": "Estil",
+  "widget_cfg_style_classic": "Clàssic",
+  "widget_cfg_style_card": "Tarjeta",
+  "widget_cfg_all_habits": "Tots els hàbits",
+  "widget_cfg_show_habits": "Hàbits per mostrar",
+  "widget_cfg_save": "Desa",
+  "widget_cfg_add": "Afegeix un giny",
+  "widget_cfg_reset": "Restableix els valors predeterminats",
+  "widget_cfg_hue": "Tonalitat",
+  "widget_cfg_saturation": "Saturació",
+  "widget_cfg_brightness": "Lluminositat",
+  "widget_demo_read": "Llegeix",
+  "widget_demo_run": "Corre",
+  "widget_demo_water": "Aigua",
+  "notif_streak": "🔥 Ratxa de {streak} dies",
+  "@notif_streak": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_week": "🔥 Ratxa de {streak} setmanes",
+  "@notif_streak_week": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_streak_month": "🔥 Ratxa de {streak} mesos",
+  "@notif_streak_month": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "notif_action_done": "Fet",
+  "notif_action_snooze": "Posposa",
+  "notif_action_add": "Afegeix quantitat",
+  "notif_action_add_hint": "Quant?",
+  "snooze_duration": "Posposa durant",
+  "snooze_custom": "Personalitzat",
+  "snooze_custom_hint": "Minuts",
+  "minutes_short": "{value} min",
+  "@minutes_short": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_mark_done": "Marca {name} com a fet",
+  "@a11y_mark_done": {
+    "description": "Screen reader label for the button that logs a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_add_amount": "Afegeix a {name}",
+  "@a11y_add_amount": {
+    "description": "Screen reader label for the button that adds progress to a quantitative habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_log_relapse": "Registra una recaiguda de {name}",
+  "@a11y_log_relapse": {
+    "description": "Screen reader label for the button that logs a relapse on a habit to avoid",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_clear_relapse": "Esborra la recaiguda d'avui de {name}",
+  "@a11y_clear_relapse": {
+    "description": "Screen reader label for the button that removes today's relapse",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "a11y_not_done": "no fet",
+  "@a11y_not_done": {
+    "description": "Screen reader state of a day that has not been logged"
+  },
+  "a11y_previous_week": "La setmana anterior",
+  "a11y_next_week": "La setmana vinent",
+  "a11y_previous_month": "Mes anterior",
+  "a11y_next_month": "Mes següent",
+  "plan_show_week": "Mostra una setmana",
+  "a11y_increase": "Augmenta",
+  "@a11y_increase": {
+    "description": "Screen reader label for the plus button of a number stepper"
+  },
+  "a11y_decrease": "Disminueix",
+  "@a11y_decrease": {
+    "description": "Screen reader label for the minus button of a number stepper"
+  },
+  "a11y_pick_color": "Tria un color",
+  "@a11y_pick_color": {
+    "description": "Screen reader label for a colour swatch in the picker"
+  },
+  "period_this_week": "Aquesta setmana",
+  "tracked_week": "{n} aquesta setmana",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "{n} aquest mes",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "{n} aquest any",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "period_last_week": "La setmana passada",
+  "period_this_month": "Aquest mes",
+  "period_last_month": "El mes passat",
+  "period_this_year": "Enguany",
+  "period_all_time": "De tots els temps",
+  "times_completed": "Vegades completat",
+  "period_last_year": "L'any passat",
+  "period_week_of": "Setmana del {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_period_sessions": "{count, plural, =0{Cap sessió} =1{1 sessió} other{{count} sessions}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notes_all": "Totes les notes",
+  "notes_empty_all": "Encara no hi ha notes",
+  "quant_preset_time": "Temps",
+  "style_express": "Exprés",
+  "style_express_desc": "Formes arrodonides, moviment elàstic i una tipografia més ampla.",
+  "celebration_none": "Cap",
+  "quant_mode_add": "Afegeix",
+  "quant_mode_replace": "Reemplaça",
+  "quant_add_title": "Afegeix quantitat",
+  "pane_hint": "Obre un element de la llista per veure'l aquí",
+  "average_short": "Mitjana",
+  "island": "Illa",
+  "island_open": "Obre l'illa",
+  "island_shop": "Botiga",
+  "island_build": "Construeix",
+  "island_done": "Construït",
+  "island_complete": "L'arxipèlag s'ha acabat",
+  "island_tap_hint": "Toca una forma per veure què hi va",
+  "island_how": "Com funcionen els punts",
+  "island_how_check": "10 per cada hàbit que marquis",
+  "island_how_focus": "1 per minut de concentració",
+  "island_how_perfect": "25 més per a un dia perfecte",
+  "island_built": "{done} de {total} construïts",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "Falten {count} punts",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_placed": "{name} és a l'illa ara",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_agave": "Agave",
+  "island_p_altar": "Santuari",
+  "island_p_banner": "Bàner",
+  "island_p_bench": "Banc",
+  "island_p_blue_railing": "Barana blava",
+  "island_p_bougainvillea": "Buganvilla",
+  "island_p_boulder": "Còndol",
+  "island_p_crate": "Caixa",
+  "island_p_crop_patch": "Parcel·la de cultiu",
+  "island_p_cube_house": "Casa cub",
+  "island_p_cypress": "Xiprer",
+  "island_p_dry_grass": "Herba seca",
+  "island_p_flat_stone": "Pedra plana",
+  "island_p_flower_pot": "Test de flors",
+  "island_p_garden_bed": "BancalBancal",
+  "island_p_hanging_lantern": "Llanterna penjant",
+  "a11y_mark_not_done": "Marca {name} com a no fet",
+  "@a11y_mark_not_done": {
+    "description": "Screen reader label for the button that undoes a habit",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "plan_show_month": "Mostra tot el mes",
+  "island_p_archway": "Arcada",
+  "island_p_hay_bale": "Bala de fenc",
+  "island_p_house": "Casa petita",
+  "island_p_lantern_post": "Fanal",
+  "island_p_large_rock": "Roca gran",
+  "island_p_main_chapel": "Capella principal",
+  "island_p_mossy_stone": "Pedra coberta de molsa",
+  "island_p_olive": "Olivera",
+  "island_p_pebbles": "Còdols",
+  "island_p_pergola_house": "Casa pèrgola",
+  "island_p_pottery_jar": "Gerra de ceràmica",
+  "island_p_signpost": "Senyal",
+  "island_p_small_bridge": "Moll de fusta",
+  "island_p_stone_basin": "Pica de pedra",
+  "island_p_stone_lantern": "Llanterna de pedra",
+  "island_p_stone_pile": "Pila de pedres",
+  "island_p_storage_box": "Bagul d'emmagatzematge",
+  "island_p_terrace_house": "Casa adossada",
+  "island_p_terracotta_pot": "Test de terracota",
+  "island_p_tower_chapel": "Campanar",
+  "island_p_two_story": "Casa de dues plantes",
+  "island_p_veg_garden": "Hort",
+  "island_p_villa": "Vil·la",
+  "island_p_water_bucket": "Galleda d'aigua",
+  "island_p_well": "Pou",
+  "island_p_windmill": "Molí de vent",
+  "island_reset": "Torna a començar l'illa",
+  "island_coins": "Monedes",
+  "island_g_pueblo": "El poble",
+  "island_g_cala": "La cala",
+  "island_g_terrazas": "Les terrasses",
+  "island_g_puerto": "El port",
+  "island_g_molino": "La carena dels molins de vent",
+  "island_how_todo": "4 per cada tasca que acabis",
+  "island_t_teal": "verd blavós",
+  "island_t_clay": "terracota",
+  "island_t_white": "blanc",
+  "island_t_coral": "coral",
+  "island_t_lilac": "lila",
+  "island_t_autumn": "tardor",
+  "island_t_deep": "fosc",
+  "island_t_silver": "plata",
+  "island_g_huerta": "L'hort",
+  "island_g_faro": "Les prestatgeries",
+  "island_turn": "Gira la vista",
+  "gamification": "Gamificació",
+  "island_default_name": "La meva illa",
+  "island_rename": "Posa nom a la teva illa",
+  "island_only_affordable": "Només el que em puc permetre",
+  "island_nothing_here": "Encara no hi ha res aquí",
+  "island_g_vega": "El prat",
+  "island_g_mirador": "El mirador",
+  "island_g_astillero": "La drassana",
+  "island_g_ermita": "L'illa de la capella",
+  "island_g_caleta": "La caleta",
+  "island_g_cabo": "La capa",
+  "island_reset_go": "Començar de nou",
+  "gamification_beta": "Gamificació (beta)",
+  "last_check": "Últim registre",
+  "check_history": "Consulta l'historial",
+  "check_history_sub": "{count} dies marcats",
+  "@check_history_sub": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "check_never": "Mai",
+  "check_no_time": "no s'ha estalviat temps",
+  "heatmap_rolling": "Darrers 12 mesos",
+  "check_marks": "{count} punts",
+  "@check_marks": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "today_progress_option": "Avenços avui",
+  "quiet_when_done": "Silenci un cop acabat",
+  "quiet_when_done_sub": "Ja no hi ha més recordatoris avui per a un hàbit que ja has completat",
+  "plan_tab": "Pla",
+  "difficulty": "Dificultat",
+  "difficulty_hint": "Els hàbits més difícils tenen més pes en el progrés del dia",
+  "difficulty_easy": "Fàcil",
+  "difficulty_medium": "Mitjà",
+  "difficulty_hard": "Difícil",
+  "pin_lock": "Codi PIN",
+  "pin_lock_sub": "El teu propi codi, independent del bloqueig del telèfon",
+  "pin_choose": "Tria un PIN",
+  "pin_choose_sub": "De 4 a 8 dígits",
+  "pin_repeat": "Torna-ho a introduir",
+  "pin_mismatch": "No coincideixen. Torna a començar.",
+  "pin_enter": "Introduïu el vostre PIN",
+  "pin_wrong": "PIN incorrecte",
+  "pin_wait": "Massa intents. Espera {seconds} s",
+  "@pin_wait": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "pin_recovery_title": "El teu codi de recuperació",
+  "pin_copy": "Copia el codi",
+  "pin_copied": "Codi copiat",
+  "pin_forgot": "Has oblidat el teu PIN?",
+  "pin_recovery_hint": "Codi de recuperació",
+  "pin_recovery_wrong": "Aquest codi no és correcte",
+  "pin_change": "Canviar el PIN",
+  "pin_remove": "Elimina el PIN",
+  "island_p_rocks": "Roques",
+  "island_p_wood_pile": "Pila de llenya",
+  "pin_fingerprint": "Utilitza l'empremta digital",
+  "app_lock_method": "Desbloqueja amb",
+  "app_lock_biometric": "Empremta dactilar o rostre",
+  "difficulty_option": "Dificultat de l'hàbit",
+  "todo_save_another": "Desa i afegeix-ne un altre",
+  "todo_add_subtask": "Afegeix una subtasca",
+  "pin_paste": "Enganxa el codi",
+  "performance": "Rendiment",
+  "performance_sub": "Aplicació més lleugera per a telèfons antics o de gamma baixa",
+  "glass_effects": "Efectes de vidre",
+  "animations": "Animacions",
+  "animations_sub": "Entrades, canvis de pàgina i desplaçament de text",
+  "widgets_sub": "Estil de giny, per a telèfons sense editor de ginys",
+  "widget_kind_habit": "Hàbits",
+  "widget_kind_today": "Avui",
+  "widget_kind_stats": "Resum",
+  "widget_kind_heatmap": "Mapa de calor",
+  "widget_kind_todos": "Tasques pendents",
+  "today_view": "Visualitza"
 }
