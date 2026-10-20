@@ -1175,5 +1175,13 @@
     }
   },
   "todo_tag_icon": "Ícone",
-  "todo_tag_pick": "Selecione as tags"
+  "todo_tag_pick": "Selecione as tags",
+  "discard_changes": "Descartar alterações?",
+  "discard_changes_body": "As alterações que você fez neste hábito serão perdidas.",
+  "discard": "Descartar",
+  "keep_editing": "Continuar editando",
+  "gamification": "Gamificação",
+  "island_default_name": "Minha ilha",
+  "island_rename": "Nome da sua ilha",
+  "island_nothing_here": "Ainda não há nada aqui"
 }
