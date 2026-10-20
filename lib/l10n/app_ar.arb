@@ -553,5 +553,24 @@
   "archived_empty_sub": "العادات التي تحذفها تنتقل هنا مع سجلها الكامل.",
   "restore": "استعادة",
   "restored": "تمت استعادة العادة",
-  "delete_forever": "حذف نهائي"
+  "delete_forever": "حذف نهائي",
+  "delete_forever_body": "حذف \"{name}\" وجميع تاريخة؟ هذا لا يمكن التراجع عنه",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "duplicate_habit": "عادة مكررة",
+  "habit_duplicated": "أضيفت {name}",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_until": "حتى",
+  "end_of_day": "نهاية اليوم"
 }
