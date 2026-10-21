@@ -10,6 +10,7 @@
   "discard_changes": "Discard changes?",
   "discard_changes_body": "The changes you made to this habit will be lost.",
   "discard": "Discard",
+  "todo_discard_body": "The changes you made to this to-do will be lost.",
   "keep_editing": "Keep editing",
   "delete": "Delete",
   "good_morning": "Good morning",

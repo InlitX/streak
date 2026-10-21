@@ -102,7 +102,7 @@ void main() {
 
     await tester.enterText(find.byType(TextField).first, 'Book the flight');
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(LucideIcons.arrowLeft));
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     await tester.pump(const Duration(milliseconds: 800));
 

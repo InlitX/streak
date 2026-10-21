@@ -12,6 +12,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/utils/amount_format.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/time_picker.dart';
@@ -104,6 +105,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   Future<void>? _creating;
   Timer? _pending;
   late final AppLifecycleListener _life;
+  late final String _opened;
 
   void _edit(VoidCallback change) {
     setState(change);
@@ -116,9 +118,27 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     _pending = Timer(const Duration(milliseconds: 600), _persist);
   }
 
+  String _snapshot() => jsonEncode([
+        _title.text.trim(),
+        _body.text.trim(),
+        _date,
+        _minutes,
+        _estimate,
+        _priority.name,
+        _paper,
+        _cover,
+        _done,
+        _pinned,
+        _photos,
+        _tags,
+        _project,
+        [for (final step in _steps) step.toMap()],
+      ]);
+
   @override
   void initState() {
     super.initState();
+    _opened = _snapshot();
     _todos = context.read<TodosController>();
     _life = AppLifecycleListener(onInactive: _persist);
     _title.addListener(_schedule);
@@ -256,6 +276,29 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     final created = widget.todo == null ? _existing : null;
     if (created != null) unawaited(_todos.discard(created.id));
     Navigator.of(context).pop(widget.todo != null);
+  }
+
+  Future<void> _close() async {
+    if (_snapshot() == _opened) {
+      Navigator.of(context).pop();
+      return;
+    }
+    final discard = await showAppConfirmDialog(
+      context,
+      title: context.l10n.discard_changes,
+      message: context.l10n.todo_discard_body,
+      confirmLabel: context.l10n.discard,
+      cancelLabel: context.l10n.keep_editing,
+      icon: LucideIcons.undo2,
+    );
+    if (discard != true || !mounted) return;
+    final original = widget.todo;
+    if (original == null) return _delete();
+    _gone = true;
+    _pending?.cancel();
+    await _creating;
+    await _todos.update(original);
+    if (mounted) Navigator.of(context).pop(false);
   }
 
   Future<void> _pickDate() async {
@@ -427,8 +470,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     final wide = MediaQuery.sizeOf(context).width > 720;
 
     return PopScope(
+      canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (didPop && !_gone) _leave();
+        if (!didPop) {
+          _close();
+        } else if (!_gone) {
+          _leave();
+        }
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
@@ -472,7 +520,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                               tooltip: MaterialLocalizations.of(context)
                                   .backButtonTooltip,
                               icon: Icon(LucideIcons.arrowLeft, color: ink),
-                              onPressed: () => Navigator.of(context).maybePop(),
+                              onPressed: _close,
                             ),
                             const Spacer(),
                             _Tool(
@@ -486,15 +534,6 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                               active: _pinned,
                               onTap: () => _edit(() => _pinned = !_pinned),
                             ),
-                            _Tool(
-                              icon: _date.isEmpty
-                                  ? LucideIcons.bell
-                                  : LucideIcons.bellRing,
-                              label: context.l10n.todo_date,
-                              ink: ink,
-                              active: _date.isNotEmpty,
-                              onTap: _pickDate,
-                            ),
                             if (widget.todo != null)
                               _Tool(
                                 icon: _done
@@ -507,9 +546,16 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                                 active: _done,
                                 onTap: () => _edit(() => _done = !_done),
                               ),
+                            if (widget.todo != null)
+                              _Tool(
+                                icon: LucideIcons.trash2,
+                                label: context.l10n.delete,
+                                ink: ink,
+                                onTap: _delete,
+                              ),
                             const SizedBox(width: 6),
                             _SaveButton(
-                              onTap: () => Navigator.of(context).maybePop(),
+                              onTap: () => Navigator.of(context).pop(),
                             ),
                           ],
                         ),
@@ -658,7 +704,12 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-                        child: Row(
+                        child: LayoutBuilder(
+                          builder: (context, box) => FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: SizedBox(
+                              width: box.maxWidth < 360 ? 360 : box.maxWidth,
+                              child: Row(
                           children: [
                             _Tool(
                               icon: LucideIcons.squarePlus,
@@ -703,12 +754,25 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                             ),
                             const Spacer(),
                             _Tool(
-                              icon: LucideIcons.trash2,
-                              label: context.l10n.delete,
+                              icon: _date.isEmpty
+                                  ? LucideIcons.bell
+                                  : LucideIcons.bellRing,
+                              label: context.l10n.todo_date,
                               ink: ink,
-                              onTap: _delete,
+                              active: _date.isNotEmpty,
+                              onTap: _pickDate,
+                            ),
+                            _Tool(
+                              icon: LucideIcons.clock,
+                              label: context.l10n.todo_time,
+                              ink: ink,
+                              active: _minutes != null,
+                              onTap: _pickTime,
                             ),
                           ],
+                        ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
