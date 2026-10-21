@@ -13,6 +13,7 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/data/focus_stats.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/widgets/focus_period_bar.dart';
 import 'package:streak/features/focus/widgets/focus_range_bars.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -53,10 +54,12 @@ class _MinimalFocusStatsPageState extends State<MinimalFocusStatsPage> {
       for (final entry in stats.perHabit.entries)
         (
           name: habits.byId(entry.key)?.name ?? context.l10n.focus_free_session,
-          color: habits.byId(entry.key)?.color.shownIn(context) ?? accent,
+          color: habits.byId(entry.key)?.color.shownIn(context) ?? context.tokens.muted,
           seconds: entry.value,
         ),
     ]..sort((a, b) => b.seconds.compareTo(a.seconds));
+
+    final muted = TextStyle(fontSize: 13, color: context.tokens.muted);
 
     return Scaffold(
       appBar: AppBar(
@@ -111,6 +114,16 @@ class _MinimalFocusStatsPageState extends State<MinimalFocusStatsPage> {
                           label: context.l10n.focus_average,
                           value: formatHoursShort(stats.averageSeconds),
                         ),
+                        MinimalTile(
+                          icon: LucideIcons.flame,
+                          label: context.l10n.focus_streak,
+                          value: context.l10n.count_days(stats.streak),
+                        ),
+                        MinimalTile(
+                          icon: LucideIcons.calendarRange,
+                          label: context.l10n.month,
+                          value: formatHoursShort(stats.monthSeconds),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 26),
@@ -145,9 +158,69 @@ class _MinimalFocusStatsPageState extends State<MinimalFocusStatsPage> {
                               stats: stats,
                               range: _range,
                               color: accent,
+                              stacks: widget.habitId == null
+                                  ? focusStacks(context, stats, accent)
+                                  : null,
                             ),
+                            if (focusChangeLine(context, stats)
+                                case final change?) ...[
+                              const SizedBox(height: 10),
+                              Text(change, style: muted),
+                            ],
                           ],
                         ),
+                      ),
+                    ),
+                    if (stats.measured > 0)
+                      MinimalSection(
+                        title: context.l10n.focus_plan_vs_real,
+                        child: MinimalCard(
+                          child: FocusPlanFacts(
+                            stats: stats,
+                            headline: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: context.colors.onSurface,
+                            ),
+                            body: muted,
+                          ),
+                        ),
+                      ),
+                    if (stats.rangeSeconds > 0) ...[
+                      MinimalSection(
+                        title: context.l10n.focus_by_hour,
+                        child: MinimalCard(
+                          padding: const EdgeInsets.fromLTRB(10, 14, 10, 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                child: Text(
+                                  context.l10n.focus_busiest(
+                                    focusHour(context, stats.busiestHour),
+                                  ),
+                                  style: muted,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              FocusHourBars(stats: stats, color: accent),
+                            ],
+                          ),
+                        ),
+                      ),
+                      MinimalSection(
+                        title: context.l10n.focus_by_weekday,
+                        child: MinimalCard(
+                          padding: const EdgeInsets.fromLTRB(10, 14, 10, 10),
+                          child: FocusWeekdayBars(stats: stats, color: accent),
+                        ),
+                      ),
+                    ],
+                    MinimalSection(
+                      title: context.l10n.focus_heatmap,
+                      child: MinimalCard(
+                        child: FocusHeat(stats: stats, color: accent),
                       ),
                     ),
                     if (widget.habitId == null && ranked.length > 1)

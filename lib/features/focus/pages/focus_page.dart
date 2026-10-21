@@ -28,6 +28,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/features/focus/widgets/focus_end_dialog.dart';
+import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/widgets/focus_task_lists.dart';
 import 'package:streak/features/focus/widgets/focus_video_scene.dart';
 import 'package:streak/features/focus/widgets/music_sheet.dart';
@@ -212,14 +213,20 @@ class _FocusPageState extends State<FocusPage> {
     final pending = habit == null
         ? focus.pendingTasks
         : habit.substeps.where((step) => !checked.contains(step.id)).length;
+    final draft = focus.draft;
 
     final lines = <String>[
       if (focus.isFlow)
         context.l10n.focus_end_flow(formatHoursShort(focus.elapsedSeconds))
       else if (reached)
-        context.l10n.focus_end_reached
+        habit == null
+            ? context.l10n.focus_end_reached_free
+            : context.l10n.focus_end_reached
       else
         context.l10n.focus_end_short(formatHoursShort(focus.remainingSeconds)),
+      if (reached && draft.measured)
+        '${focusSessionLine(context, draft)}  ·  '
+            '${context.l10n.focus_pause_count(draft.pauses)}',
       if (pending > 0) context.l10n.focus_end_tasks(pending),
       if (!reached && focus.isPomodoro && !focus.isBreak && settings.focusWholeRounds)
         context.l10n.focus_end_drop,

@@ -13,11 +13,13 @@ class WeekdayBars extends StatelessWidget {
     required this.values,
     required this.color,
     this.height = 150,
+    this.format,
   });
 
   final List<int> values;
   final Color color;
   final double height;
+  final String Function(double value)? format;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class WeekdayBars extends StatelessWidget {
       color: color,
       height: height,
       label: (index) => labels[index % 7],
-      tooltip: (value) => '${value.round()}',
+      tooltip: format ?? (value) => '${value.round()}',
     );
   }
 }
@@ -49,9 +51,11 @@ class ValueBars extends StatelessWidget {
     this.height = 150,
     this.barWidth = 12,
     this.goal,
+    this.stacks,
   });
 
   final List<double> values;
+  final List<List<(double, Color)>>? stacks;
   final Color color;
   final String Function(int index) label;
   final String Function(double value) tooltip;
@@ -59,6 +63,16 @@ class ValueBars extends StatelessWidget {
   final double height;
   final double barWidth;
   final double? goal;
+
+  List<BarChartRodStackItem> _stack(int index) {
+    final pieces = stacks;
+    if (pieces == null || index >= pieces.length) return const [];
+    var from = 0.0;
+    return [
+      for (final (value, tint) in pieces[index])
+        BarChartRodStackItem(from, from += value, tint),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +158,7 @@ class ValueBars extends StatelessWidget {
                   BarChartRodData(
                     toY: values[i],
                     color: color,
+                    rodStackItems: _stack(i),
                     width: barWidth,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(barWidth / 2),

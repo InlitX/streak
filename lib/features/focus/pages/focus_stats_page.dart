@@ -14,6 +14,7 @@ import 'package:streak/features/focus/pages/express_focus_stats_page.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/pages/minimal_focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/widgets/focus_period_bar.dart';
 import 'package:streak/features/focus/widgets/focus_range_bars.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -44,7 +45,7 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
       for (final entry in stats.perHabit.entries)
         (
           name: habits.byId(entry.key)?.name ?? context.l10n.focus_free_session,
-          color: habits.byId(entry.key)?.color.shownIn(context) ?? accent,
+          color: habits.byId(entry.key)?.color.shownIn(context) ?? context.tokens.muted,
           count: entry.value,
         ),
     ]..sort((a, b) => b.count.compareTo(a.count));
@@ -136,6 +137,16 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 12),
+                StatReveal(
+                  child: MiniStat(
+                    icon: LucideIcons.flame,
+                    color: context.tokens.warning,
+                    value: context.l10n.count_days(stats.streak),
+                    label: context.l10n.focus_streak,
+                    wide: true,
+                  ),
+                ),
                 const SizedBox(height: 16),
                 StatReveal(
                   child: StatCard(
@@ -173,9 +184,76 @@ class _FocusStatsPageState extends State<FocusStatsPage> {
                           stats: stats,
                           range: _range,
                           color: accent,
+                          stacks: widget.habitId == null
+                              ? focusStacks(context, stats, accent)
+                              : null,
                         ),
+                        if (focusChangeLine(context, stats) case final change?) ...[
+                          const SizedBox(height: 10),
+                          Text(change, style: statLabel(context)),
+                        ],
                       ],
                     ),
+                  ),
+                ),
+                if (stats.measured > 0) ...[
+                  const SizedBox(height: 16),
+                  StatReveal(
+                    child: StatCard(
+                      title: context.l10n.focus_plan_vs_real,
+                      icon: LucideIcons.scale,
+                      color: accent,
+                      child: FocusPlanFacts(
+                        stats: stats,
+                        headline: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w800,
+                          color: context.colors.onSurface,
+                        ),
+                        body: statLabel(context),
+                      ),
+                    ),
+                  ),
+                ],
+                if (stats.rangeSeconds > 0) ...[
+                  const SizedBox(height: 16),
+                  StatReveal(
+                    child: StatCard(
+                      title: context.l10n.focus_by_hour,
+                      icon: LucideIcons.clock,
+                      color: accent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.l10n.focus_busiest(
+                              focusHour(context, stats.busiestHour),
+                            ),
+                            style: statLabel(context),
+                          ),
+                          const SizedBox(height: 12),
+                          FocusHourBars(stats: stats, color: accent),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  StatReveal(
+                    child: StatCard(
+                      title: context.l10n.focus_by_weekday,
+                      icon: LucideIcons.calendarDays,
+                      color: accent,
+                      child: FocusWeekdayBars(stats: stats, color: accent),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
+                StatReveal(
+                  child: StatCard(
+                    title: context.l10n.focus_heatmap,
+                    icon: LucideIcons.grid2x2,
+                    color: accent,
+                    child: FocusHeat(stats: stats, color: accent),
                   ),
                 ),
                 if (widget.habitId == null && stats.perHabit.length > 1) ...[

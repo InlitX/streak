@@ -14,12 +14,14 @@ class FocusRangeBars extends StatelessWidget {
     required this.range,
     required this.color,
     this.height = 150,
+    this.stacks,
   });
 
   final FocusStats stats;
   final FocusRange range;
   final Color color;
   final double height;
+  final List<List<(double, Color)>>? stacks;
 
   double get _barWidth => switch (range) {
     FocusRange.week => 14,
@@ -52,6 +54,7 @@ class FocusRangeBars extends StatelessWidget {
       key: ValueKey(range),
       values: [for (final seconds in stats.series) seconds / 60],
       color: color,
+      stacks: stacks,
       height: height,
       barWidth: _barWidth,
       label: (index) => _label(context, index),

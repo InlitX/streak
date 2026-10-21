@@ -18,6 +18,7 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/data/focus_stats.dart';
 import 'package:streak/features/focus/pages/focus_history_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/widgets/focus_period_bar.dart';
 import 'package:streak/features/focus/widgets/focus_range_bars.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -46,7 +47,7 @@ class _ExpressFocusStatsPageState extends State<ExpressFocusStatsPage> {
       for (final entry in stats.perHabit.entries)
         (
           name: habits.byId(entry.key)?.name ?? context.l10n.focus_free_session,
-          color: habits.byId(entry.key)?.color.shownIn(context) ?? accent,
+          color: habits.byId(entry.key)?.color.shownIn(context) ?? context.tokens.muted,
           count: entry.value,
         ),
     ]..sort((a, b) => b.count.compareTo(a.count));
@@ -89,6 +90,13 @@ class _ExpressFocusStatsPageState extends State<ExpressFocusStatsPage> {
             tint: context.tokens.warning,
             shape: ExpressShape.clover,
           ),
+          ExpressStatRow(
+            icon: LucideIcons.flame,
+            label: context.l10n.focus_streak,
+            value: context.l10n.count_days(stats.streak),
+            tint: context.tokens.warning,
+            shape: ExpressShape.burst,
+          ),
         ],
       ),
       const SizedBox(height: 20),
@@ -121,9 +129,91 @@ class _ExpressFocusStatsPageState extends State<ExpressFocusStatsPage> {
               onOffset: (value) => setState(() => _offset = value),
             ),
             const SizedBox(height: 14),
-            FocusRangeBars(stats: stats, range: _range, color: accent),
+            FocusRangeBars(
+              stats: stats,
+              range: _range,
+              color: accent,
+              stacks: widget.habitId == null
+                  ? focusStacks(context, stats, accent)
+                  : null,
+            ),
+            if (focusChangeLine(context, stats) case final change?) ...[
+              const SizedBox(height: 10),
+              Text(
+                change,
+                style: ExpressType.body.at(
+                  12.5,
+                  weight: 600,
+                  color: context.tokens.muted,
+                ),
+              ),
+            ],
           ],
         ),
+      ),
+      if (stats.measured > 0) ...[
+        const SizedBox(height: 12),
+        ExpressStatPanel(
+          title: context.l10n.focus_plan_vs_real,
+          icon: LucideIcons.scale,
+          tint: accent,
+          shape: ExpressShape.pebble,
+          child: FocusPlanFacts(
+            stats: stats,
+            headline: ExpressType.headline.at(
+              18,
+              weight: 800,
+              color: context.colors.onSurface,
+            ),
+            body: ExpressType.body.at(
+              13,
+              weight: 600,
+              color: context.tokens.muted,
+            ),
+          ),
+        ),
+      ],
+      if (stats.rangeSeconds > 0) ...[
+        const SizedBox(height: 12),
+        ExpressStatPanel(
+          title: context.l10n.focus_by_hour,
+          icon: LucideIcons.clock,
+          tint: accent,
+          shape: ExpressShape.clover,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.l10n.focus_busiest(
+                  focusHour(context, stats.busiestHour),
+                ),
+                style: ExpressType.body.at(
+                  12.5,
+                  weight: 600,
+                  color: context.tokens.muted,
+                ),
+              ),
+              const SizedBox(height: 12),
+              FocusHourBars(stats: stats, color: accent),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        ExpressStatPanel(
+          title: context.l10n.focus_by_weekday,
+          icon: LucideIcons.calendarDays,
+          tint: accent,
+          shape: ExpressShape.flower,
+          child: FocusWeekdayBars(stats: stats, color: accent),
+        ),
+      ],
+      const SizedBox(height: 12),
+      ExpressStatPanel(
+        title: context.l10n.focus_heatmap,
+        icon: LucideIcons.grid2x2,
+        tint: accent,
+        shape: ExpressShape.gem,
+        child: FocusHeat(stats: stats, color: accent, express: true),
       ),
       if (widget.habitId == null && stats.perHabit.length > 1) ...[
         const SizedBox(height: 12),

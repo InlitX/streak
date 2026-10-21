@@ -12,6 +12,8 @@ class FocusSession {
     required this.startedAt,
     this.counted = false,
     this.label = '',
+    this.span = 0,
+    this.pauses = 0,
   });
 
   final String id;
@@ -22,8 +24,14 @@ class FocusSession {
   final DateTime startedAt;
   final bool counted;
   final String label;
+  final int span;
+  final int pauses;
 
   int get minutes => seconds ~/ 60;
+
+  bool get measured => span > 0 && targetMinutes > 0;
+
+  double get overrun => measured ? span / (targetMinutes * 60) - 1 : 0;
 
   DateTime get countedOn => startedAt
       .add(Duration(seconds: seconds > 0 ? seconds - 1 : 0))
@@ -61,6 +69,8 @@ class FocusSession {
         startedAt: start,
         counted: counted,
         label: label,
+        span: index == 1 ? span : 0,
+        pauses: index == 1 ? pauses : 0,
       );
 
   FocusSession get asCounted => FocusSession(
@@ -72,6 +82,8 @@ class FocusSession {
         startedAt: startedAt,
         counted: true,
         label: label,
+        span: span,
+        pauses: pauses,
       );
 
   Map<String, dynamic> toMap() => {
@@ -83,6 +95,8 @@ class FocusSession {
         'startedAt': startedAt.toIso8601String(),
         if (counted) 'counted': true,
         if (label.isNotEmpty) 'label': label,
+        if (span > 0) 'span': span,
+        if (pauses > 0) 'pauses': pauses,
       };
 
   factory FocusSession.fromMap(Map<String, dynamic> map) => FocusSession(
@@ -95,6 +109,8 @@ class FocusSession {
             DateTime.now(),
         counted: map['counted'] == true,
         label: map['label'] is String ? map['label'] as String : '',
+        span: ((map['span'] ?? 0) as num).toInt(),
+        pauses: ((map['pauses'] ?? 0) as num).toInt(),
       );
 }
 

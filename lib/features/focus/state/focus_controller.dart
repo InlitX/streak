@@ -42,6 +42,9 @@ class FocusController extends ChangeNotifier {
     _accumulated = ((map['acc'] ?? 0) as num).toInt();
     final since = (map['since'] ?? '') as String;
     _since = since.isEmpty ? null : DateTime.tryParse(since)?.toLocal();
+    final began = (map['began'] ?? '') as String;
+    _began = began.isEmpty ? null : DateTime.tryParse(began)?.toLocal();
+    _pauses = ((map['pauses'] ?? 0) as num).toInt();
     _open = (map['open'] ?? false) as bool;
     if (!_open) return;
     if (_since == null && _accumulated <= 0) {
@@ -63,6 +66,8 @@ class FocusController extends ChangeNotifier {
       'round': _round,
       'acc': _accumulated,
       'since': _since?.toUtc().toIso8601String() ?? '',
+      'began': _began?.toUtc().toIso8601String() ?? '',
+      'pauses': _pauses,
       'open': _open,
     });
   }
@@ -85,6 +90,8 @@ class FocusController extends ChangeNotifier {
   int _switchIn = 0;
   int _accumulated = 0;
   DateTime? _since;
+  DateTime? _began;
+  int _pauses = 0;
   Timer? _ticker;
   List<FocusSession>? _view;
   Map<String, int>? _perDay;
@@ -191,6 +198,28 @@ class FocusController extends ChangeNotifier {
 
   int get elapsedSeconds => elapsedAt(DateTime.now());
 
+  int get pauses => _pauses;
+
+  FocusSession get draft {
+    final now = DateTime.now();
+    final finished = !isFlow && _since != null && elapsedAt(now) >= targetSeconds;
+    return FocusSession(
+      id: '',
+      habitId: _habitId,
+      targetMinutes: _isBreak ? 0 : _focusMinutes,
+      seconds: elapsedAt(now),
+      completed: false,
+      startedAt: now,
+      span: _isBreak ? 0 : _spanTo(finished ? _phaseEnd : now),
+      pauses: _pauses,
+    );
+  }
+
+  int _spanTo(DateTime end) {
+    final began = _began;
+    return began == null ? 0 : end.difference(began).inSeconds.clamp(0, 1 << 30);
+  }
+
   bool get isFlow => _targetMinutes <= 0;
 
   int get remainingSeconds =>
@@ -226,6 +255,8 @@ class FocusController extends ChangeNotifier {
     _accumulated = 0;
     _tasks.clear();
     _since = DateTime.now();
+    _began = _since;
+    _pauses = 0;
     _celebrated = false;
     _startTicker();
     _persist();
@@ -238,6 +269,7 @@ class FocusController extends ChangeNotifier {
     if (_since == null) return;
     _accumulated = elapsedAt(at ?? DateTime.now());
     _since = null;
+    if (!_isBreak) _pauses++;
     _stopTicker();
     _persist();
     _sync();
@@ -271,6 +303,8 @@ class FocusController extends ChangeNotifier {
     unawaited(FocusAudio.stopAlert());
     _accumulated = 0;
     _since = isRunning ? DateTime.now() : null;
+    _began = DateTime.now();
+    _pauses = 0;
     _celebrated = false;
     if (isRunning) _startTicker();
     _persist();
@@ -355,6 +389,9 @@ class FocusController extends ChangeNotifier {
     final habitId = _habitId;
     final label = _label;
     final target = _focusMinutes;
+    final finished = !isFlow && _since != null && elapsedAt(endedAt) >= targetSeconds;
+    final span = _isBreak ? 0 : _spanTo(finished ? _phaseEnd : endedAt);
+    final pauses = _pauses;
     _stopTicker();
     _awaiting = false;
     _switchIn = 0;
@@ -362,6 +399,8 @@ class FocusController extends ChangeNotifier {
     if (FocusAudio.current.value.isNotEmpty) unawaited(FocusAudio.stop());
     _accumulated = 0;
     _since = null;
+    _began = null;
+    _pauses = 0;
     _habitId = '';
     _label = '';
     _tasks.clear();
@@ -388,6 +427,8 @@ class FocusController extends ChangeNotifier {
       completed: completed,
       startedAt: endedAt.subtract(Duration(seconds: seconds)),
       label: label,
+      span: span,
+      pauses: pauses,
     );
     await _keep(session);
     notifyListeners();
@@ -415,6 +456,8 @@ class FocusController extends ChangeNotifier {
               completed: true,
               startedAt: endedAt.subtract(Duration(seconds: seconds)),
               label: _label,
+              span: _spanTo(endedAt),
+              pauses: _pauses,
             ),
           ),
         );
@@ -432,6 +475,8 @@ class FocusController extends ChangeNotifier {
         : _breakMinutes;
     _accumulated = 0;
     _since = at ?? DateTime.now();
+    _began = _since;
+    _pauses = 0;
     _celebrated = false;
     _startTicker();
     _persist();

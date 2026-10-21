@@ -19,6 +19,7 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/entrance.dart';
+import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -437,6 +438,26 @@ class _SessionTile extends StatelessWidget {
                                 color: context.tokens.muted,
                               ),
                       ),
+                      if (session.measured) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          '${focusSessionLine(context, session)}'
+                          '  ·  '
+                          '${context.l10n.focus_pause_count(session.pauses)}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: express
+                              ? ExpressType.body.at(
+                                  11.5,
+                                  weight: 600,
+                                  color: context.tokens.muted,
+                                )
+                              : TextStyle(
+                                  fontSize: 12,
+                                  color: context.tokens.muted,
+                                ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

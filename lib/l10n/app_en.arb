@@ -716,6 +716,7 @@
   "focus_end_short": "You are {time} short of the goal.",
   "focus_end_tasks": "{count} tasks are still unchecked.",
   "focus_end_reached": "Goal reached. The habit will be marked as done.",
+  "focus_end_reached_free": "Goal reached.",
   "focus_end_keep": "Keep going",
   "focus_end_anyway": "End anyway",
   "focus_end_complete": "Mark as done",
@@ -1493,5 +1494,42 @@
   "count_times": "{count, plural, =1{1 time} other{{count} times}}",
   "@count_times": {
     "placeholders": { "count": { "type": "int" } }
+  },
+  "focus_streak": "Focus streak",
+  "focus_by_hour": "When you focus",
+  "focus_by_weekday": "Focus by day",
+  "focus_heatmap": "Focus activity",
+  "focus_plan_vs_real": "Planned vs real",
+  "focus_avg_longer": "On average, {pct} longer than planned",
+  "@focus_avg_longer": {
+    "placeholders": { "pct": { "type": "String" } }
+  },
+  "focus_avg_shorter": "On average, {pct} shorter than planned",
+  "@focus_avg_shorter": {
+    "placeholders": { "pct": { "type": "String" } }
+  },
+  "focus_avg_on_plan": "On average, right on plan",
+  "focus_session_longer": "{pct} longer than planned",
+  "@focus_session_longer": {
+    "placeholders": { "pct": { "type": "String" } }
+  },
+  "focus_session_shorter": "{pct} shorter than planned",
+  "@focus_session_shorter": {
+    "placeholders": { "pct": { "type": "String" } }
+  },
+  "focus_session_on_plan": "Right on plan",
+  "focus_pauses_avg": "Pauses per session",
+  "focus_pause_count": "{count, plural, =0{No pauses} =1{1 pause} other{{count} pauses}}",
+  "@focus_pause_count": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "focus_vs_previous": "{change} vs the previous period",
+  "@focus_vs_previous": {
+    "placeholders": { "change": { "type": "String" } }
+  },
+  "focus_plan_hint": "Counts from start to finish, pauses included. Only sessions started from now on.",
+  "focus_busiest": "Most focused at {hour}",
+  "@focus_busiest": {
+    "placeholders": { "hour": { "type": "String" } }
   }
 }
