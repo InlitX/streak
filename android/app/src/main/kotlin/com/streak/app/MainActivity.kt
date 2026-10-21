@@ -146,6 +146,7 @@ class MainActivity : FlutterFragmentActivity() {
             "stats" -> R.drawable.widget_preview_shot_stats
             "heatmap" -> R.drawable.widget_preview_shot_heatmap
             "todos" -> R.drawable.widget_preview_shot_todos
+            "focus" -> R.drawable.widget_preview_shot_focus
             else -> R.drawable.widget_preview_shot_week
         }
         return resources.openRawResource(shot).use { it.readBytes() }

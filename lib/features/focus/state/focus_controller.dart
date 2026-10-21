@@ -9,6 +9,7 @@ import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/services/focus_service.dart';
+import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -121,6 +122,7 @@ class FocusController extends ChangeNotifier {
     await LocalStore.removeFocusSessions(ids);
     _sessions = _sessions.where((s) => !ids.contains(s.id)).toList();
     notifyListeners();
+    _refreshWidgets();
   }
 
   Future<void> markCounted(String id) async {
@@ -153,6 +155,10 @@ class FocusController extends ChangeNotifier {
     return session;
   }
 
+  void _refreshWidgets() {
+    if (hasHomeWidgets) HomeWidgetService.syncSoon(LocalStore.readHabits);
+  }
+
   Future<void> _keep(FocusSession session) async {
     for (final piece in session.split()) {
       _sessions.add(piece);
@@ -164,6 +170,7 @@ class FocusController extends ChangeNotifier {
         debugPrint('Could not save a focus session: $e');
       }
     }
+    _refreshWidgets();
   }
 
   List<FocusTask> get tasks => List.unmodifiable(_tasks);

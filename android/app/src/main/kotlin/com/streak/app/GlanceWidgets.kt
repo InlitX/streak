@@ -56,6 +56,7 @@ object GlanceWidgets {
             HabitWidgetProvider::class.java to { HabitWidget() },
             TodayWidgetProvider::class.java to { TodayWidget() },
             StatsWidgetProvider::class.java to { StatsWidget() },
+            FocusWidgetProvider::class.java to { FocusWidget() },
             TodosWidgetProvider::class.java to { TodosWidget() },
         )
         val glance = GlanceAppWidgetManager(context)

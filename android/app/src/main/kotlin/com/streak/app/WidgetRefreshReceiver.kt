@@ -39,6 +39,7 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
             HabitWidgetProvider::class.java,
             TodayWidgetProvider::class.java,
             StatsWidgetProvider::class.java,
+            FocusWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
             TodosWidgetProvider::class.java,
         )

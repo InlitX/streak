@@ -15,6 +15,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/health_info_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
@@ -199,6 +200,7 @@ void _openPage(String page) {
   if (page == 'todos') _openTodos();
   if (page == 'stats') AppNavigator.push(const StatisticsPage(), fade: true);
   if (page == 'focus') _openFocus();
+  if (page == 'focusPage') _openFocusHome();
   if (page == 'health') AppNavigator.push(const HealthInfoPage(), fade: true);
   if (page.startsWith('day:')) _openDay(page.substring(4));
 }
@@ -215,6 +217,12 @@ void _openDay(String target) {
     date: parseDayKey(target.substring(split + 1)),
     notesEnabled: context.read<SettingsController>().notesEnabled,
   );
+}
+
+void _openFocusHome() {
+  final context = AppNavigator.key.currentContext;
+  if (context == null || AppNavigator.isShowing(FocusPage.routeName)) return;
+  openFocus(context);
 }
 
 void _openFocus() {

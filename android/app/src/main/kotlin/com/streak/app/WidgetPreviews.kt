@@ -90,6 +90,21 @@ private fun Bmp(bitmap: Bitmap, context: Context) {
 private fun sample(context: Context, key: String, fallback: String) = WidgetText.get(context, key, fallback)
 
 @Composable
+fun FocusSample(s: WidgetStyle) {
+    val context = LocalContext.current
+    val side = 158f
+    val label = side * 0.1f
+    val pad = side * 0.11f
+    Column(Modifier.fillMaxSize().padding(start = pad.dp, end = pad.dp, top = (pad * 1.5f).dp, bottom = pad.dp)) {
+        Bmp(WidgetDraw.text(context, "1h 25m", side * 0.22f, s.content, 800), context)
+        Bmp(WidgetDraw.text(context, sample(context, "focus_today", "Focus today"), label, s.content, 800), context)
+        Spacer(Modifier.height(6.dp))
+        Bmp(WidgetDraw.text(context, "${sample(context, "label_week", "Week")}  6h 40m", label * 0.85f, s.muted, 650), context)
+        Bmp(WidgetDraw.text(context, "${sample(context, "label_month", "Month")}  24h", label * 0.85f, s.muted, 650), context)
+    }
+}
+
+@Composable
 fun StatsSample(s: WidgetStyle, art: Boolean) {
     val context = LocalContext.current
     val side = 158f

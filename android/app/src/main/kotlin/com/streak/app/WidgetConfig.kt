@@ -19,7 +19,7 @@ data class WidgetLook(
 
 object WidgetConfig {
     private const val PREFS = "StreakWidgetConfig"
-    val KINDS = listOf("habit", "today", "stats", "heatmap", "todos")
+    val KINDS = listOf("habit", "today", "stats", "heatmap", "todos", "focus")
     private val templates = HashMap<Int, Int>()
     const val DEFAULT_BG = 0x101014
     const val DEFAULT_BG_LIGHT = 0xF5F5F7
@@ -124,6 +124,7 @@ object WidgetConfig {
 
     fun kindOf(className: String): String = when {
         className.contains("Todos") -> "todos"
+        className.contains("Focus") -> "focus"
         className.contains("Today") -> "today"
         className.contains("Stats") -> "stats"
         className.contains("Heatmap") -> "heatmap"

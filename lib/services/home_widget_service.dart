@@ -9,6 +9,7 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/utils/app_dirs.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/services/widget_icon_service.dart';
@@ -21,6 +22,7 @@ class HomeWidgetService {
     'TodayWidgetProvider',
     'StatsWidgetProvider',
     'HeatmapWidgetProvider',
+    'FocusWidgetProvider',
   ];
 
   static const _heatmapWeeks = 53;
@@ -69,6 +71,8 @@ class HomeWidgetService {
           'week_done': l10n.widget_week_done('{done}', '{total}'),
           'today_done': l10n.widget_today_done('{done}', '{total}'),
           'streak_days': l10n.widget_streak_days,
+          'focus_today': l10n.widget_focus_today,
+          'label_month': l10n.month,
           'todos_open': l10n.widget_todos_open('{count}'),
           'todos_empty': l10n.widget_todos_empty,
           'best_streak': l10n.widget_best_streak('{streak}'),
@@ -211,6 +215,30 @@ class HomeWidgetService {
       habits.values.where((habit) => !habit.isArchived).toList()
         ..sort((a, b) => a.order.compareTo(b.order));
 
+  static Map<String, List<int>> _focusTotals(DateTime now, int weekStart) {
+    final today = now.subtract(Duration(hours: AppClock.cutoffHour)).atMidnight;
+    final todayIndex = today.epochDay;
+    final weekIndex = today.startOfWeek(weekStart).epochDay;
+    final totals = <String, List<int>>{'': [0, 0, 0]};
+    for (final FocusSession session in LocalStore.readFocusSessions()) {
+      final day = session.countedOn;
+      final epoch = day.epochDay;
+      final slots = [
+        epoch == todayIndex,
+        epoch - weekIndex >= 0 && epoch - weekIndex < 7,
+        day.year == today.year && day.month == today.month,
+      ];
+      if (!slots.contains(true)) continue;
+      for (final key in {'', session.habitId}) {
+        final sums = totals.putIfAbsent(key, () => [0, 0, 0]);
+        for (var i = 0; i < 3; i++) {
+          if (slots[i]) sums[i] += session.seconds;
+        }
+      }
+    }
+    return totals;
+  }
+
   static String _encode(Map<String, Habit> habits, Map<String, String> icons) {
     final today = AppClock.now();
     final window = List.generate(
@@ -305,6 +333,7 @@ class HomeWidgetService {
       'dayCutoff': AppClock.cutoffHour,
       'pastFirst': LocalStore.setting('pastFirst', false),
       'heatmap': _heatmapLevels(listed, today),
+      'focus': _focusTotals(today, weekStart),
       'fallbackIconPath': icons[_allHabitsIcon] ?? '',
       if (Platform.isIOS) 'fallbackIconData': _iconData(icons[_allHabitsIcon]),
       'summary': {

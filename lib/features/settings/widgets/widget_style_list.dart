@@ -7,13 +7,14 @@ class WidgetStyleList extends StatelessWidget {
   const WidgetStyleList({super.key});
 
   static const _channel = MethodChannel('streak/app_icon');
-  static const _kinds = ['habit', 'today', 'stats', 'heatmap', 'todos'];
+  static const _kinds = ['habit', 'today', 'stats', 'heatmap', 'todos', 'focus'];
 
   static String _name(BuildContext context, String kind) => switch (kind) {
     'today' => context.l10n.widget_kind_today,
     'stats' => context.l10n.widget_kind_stats,
     'heatmap' => context.l10n.widget_kind_heatmap,
     'todos' => context.l10n.widget_kind_todos,
+    'focus' => context.l10n.widget_kind_focus,
     _ => context.l10n.widget_kind_habit,
   };
 

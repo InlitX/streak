@@ -79,7 +79,7 @@ private val swatches = listOf(
     0x009688, 0x4CAF50, 0xFFC107, 0xFF9800, 0xF44336, 0xE91E63, 0x607D8B,
 )
 
-private enum class WType { HABIT, TODAY, STATS, HEATMAP, TODOS }
+private enum class WType { HABIT, TODAY, STATS, HEATMAP, TODOS, FOCUS }
 
 private data class HabitOption(val id: String?, val name: String, val color: Color)
 
@@ -175,6 +175,7 @@ class WidgetConfigActivity : ComponentActivity() {
             TodosWidgetProvider::class.java,
             TodayWidgetProvider::class.java,
             StatsWidgetProvider::class.java,
+            FocusWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
             HabitWidgetProvider::class.java,
         )
@@ -200,7 +201,7 @@ class WidgetConfigActivity : ComponentActivity() {
         )
         if (image != originalImage) WidgetConfig.deleteImage(this, originalImage)
         if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
-        if (type == WType.STATS || type == WType.TODOS) WidgetConfig.setArt(this, appWidgetId, art)
+        if (type == WType.STATS || type == WType.TODOS || type == WType.FOCUS) WidgetConfig.setArt(this, appWidgetId, art)
         if (type == WType.HABIT) WidgetConfig.setSpan(this, appWidgetId, span)
         if (type == WType.HABIT || type == WType.TODAY || type == WType.TODOS) WidgetConfig.setLook(this, appWidgetId, look)
         if (filters) WidgetConfig.setHabits(this, appWidgetId, chosen)
@@ -241,12 +242,13 @@ class WidgetConfigActivity : ComponentActivity() {
         }
     }
 
-    private val filters get() = type == WType.HABIT || type == WType.TODAY || type == WType.STATS
+    private val filters get() = type == WType.HABIT || type == WType.TODAY || type == WType.STATS || type == WType.FOCUS
 
     private fun widgetFor(t: WType): GlanceAppWidget = when (t) {
         WType.TODOS -> TodosWidget()
         WType.TODAY -> TodayWidget()
         WType.STATS -> StatsWidget()
+        WType.FOCUS -> FocusWidget()
         WType.HEATMAP, WType.HABIT -> HabitWidget()
     }
 
@@ -341,7 +343,7 @@ class WidgetConfigActivity : ComponentActivity() {
             WidgetStyle.from(shown, opacity, border, borderWidth)
         }
 
-        val hasArt = type == WType.STATS || type == WType.TODOS
+        val hasArt = type == WType.STATS || type == WType.TODOS || type == WType.FOCUS
         val hasPicker = filters && habits.size > 1
         val hasContent = type == WType.HEATMAP || type == WType.TODOS || type == WType.HABIT ||
             type == WType.TODAY || hasArt || hasPicker
@@ -767,7 +769,7 @@ class WidgetConfigActivity : ComponentActivity() {
         look: WidgetLook,
     ) = Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         val frame = when (type) {
-            WType.STATS -> Modifier.size(158.dp)
+            WType.STATS, WType.FOCUS -> Modifier.size(158.dp)
             WType.TODAY, WType.HABIT -> Modifier.fillMaxWidth().height(176.dp)
             else -> Modifier.fillMaxWidth().height(150.dp)
         }
@@ -799,6 +801,16 @@ class WidgetConfigActivity : ComponentActivity() {
                 Image(bmp, null, Modifier.matchParentSize(), contentScale = ContentScale.Crop)
                 Box(Modifier.matchParentSize().background(style.scrim))
             }
+            if (type == WType.FOCUS && art) {
+                Image(
+                    painterResource(
+                        if (style.content.luminance() < 0.5f) R.drawable.widget_focus_target_light
+                        else R.drawable.widget_focus_target,
+                    ),
+                    null,
+                    Modifier.matchParentSize(),
+                )
+            }
             if (type == WType.STATS && art) {
                 Image(
                     painterResource(
@@ -813,6 +825,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 WType.HABIT -> WeekSample(style, span, look)
                 WType.TODAY -> TodaySample(style, look)
                 WType.STATS -> StatsSample(style, art)
+                WType.FOCUS -> FocusSample(style)
                 WType.HEATMAP -> Box(Modifier.padding(14.dp)) { LivePreview(style, layout, habitId, allColor) }
                 WType.TODOS -> TodosSample(style, art, look)
             }
