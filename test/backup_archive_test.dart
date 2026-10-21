@@ -47,7 +47,7 @@ void main() {
 
     final zip = '${phone.path}/backup.zip';
     await BackupArchive.pack(payload, zip);
-    final raw = await BackupArchive.unpack(File(zip).readAsBytesSync(), other.path);
+    final raw = await BackupArchive.unpack(zip, other.path);
     final back = jsonDecode(raw!) as Map<String, dynamic>;
 
     final habit = (back['habits'] as List).single as Map;
@@ -75,7 +75,7 @@ void main() {
 
     final zip = '${phone.path}/backup.zip';
     await BackupArchive.pack({'coverPath': cover.path}, zip);
-    final raw = await BackupArchive.unpack(File(zip).readAsBytesSync(), other.path);
+    final raw = await BackupArchive.unpack(zip, other.path);
     final path = (jsonDecode(raw!) as Map)['coverPath'] as String;
 
     expect(File('${other.path}/covers/1.jpg').readAsBytesSync(), [9]);
@@ -89,7 +89,7 @@ void main() {
     await zip.close();
 
     expect(
-      await BackupArchive.unpack(File(path).readAsBytesSync(), other.path),
+      await BackupArchive.unpack(path, other.path),
       isNull,
     );
   });

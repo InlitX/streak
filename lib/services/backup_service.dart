@@ -265,38 +265,45 @@ class BackupService {
     final result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Select a Streak backup file',
       type: FileType.any,
-      withData: true,
     );
     if (result == null || result.files.isEmpty) {
       throw Exception('No file selected');
     }
 
-    final picked = result.files.single;
-    List<int>? bytes = picked.bytes;
-    if (bytes == null && picked.path != null) {
-      try {
-        bytes = await File(picked.path!).readAsBytes();
-      } catch (e) {
-        debugPrint('Could not read ${picked.path}: $e');
-        throw Exception('That file could not be read');
-      }
+    final path = result.files.single.path;
+    if (path == null) throw Exception('Could not read the selected file');
+    final List<int> head;
+    try {
+      head = await _head(path);
+    } catch (e) {
+      debugPrint('Could not read $path: $e');
+      throw Exception('That file could not be read');
     }
-    if (bytes == null) {
-      throw Exception('Could not read the selected file');
-    }
-    if (ImportService.looksLikeZip(bytes)) {
-      final json = await BackupArchive.unpack(bytes, (await appDataDir()).path);
+    if (ImportService.looksLikeZip(head)) {
+      final json = await BackupArchive.unpack(path, (await appDataDir()).path);
       if (json != null) return parse(json);
     }
-    if (ImportService.looksLikeZip(bytes) ||
-        ImportService.looksLikeSqlite(bytes)) {
+    if (ImportService.looksLikeZip(head) ||
+        ImportService.looksLikeSqlite(head)) {
       throw Exception(
         'That is an export from another app, not a Streak backup. '
         'Use "Import from another app" for it.',
       );
     }
 
-    return parse(const Utf8Decoder(allowMalformed: true).convert(bytes));
+    return parse(
+      const Utf8Decoder(allowMalformed: true)
+          .convert(await File(path).readAsBytes()),
+    );
+  }
+
+  static Future<List<int>> _head(String path) async {
+    final file = await File(path).open();
+    try {
+      return await file.read(16);
+    } finally {
+      await file.close();
+    }
   }
 
   static BackupData parse(String raw) {

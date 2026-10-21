@@ -90,8 +90,8 @@ class BackupArchive {
   static Future<void> pack(Map<String, Object?> payload, String target) =>
       Isolate.run(() => _pack(payload, target));
 
-  static Future<String?> unpack(List<int> bytes, String dataDir) =>
-      Isolate.run(() => _unpack(bytes, dataDir));
+  static Future<String?> unpack(String path, String dataDir) =>
+      Isolate.run(() => _unpack(path, dataDir));
 
   static Future<void> _pack(Map<String, Object?> payload, String target) async {
     final zip = ZipFileEncoder()..create(target);
@@ -132,37 +132,62 @@ class BackupArchive {
     return name;
   }
 
-  static Future<String?> _unpack(List<int> bytes, String dataDir) async {
-    final archive = ZipDecoder().decodeBytes(bytes);
-    final json = archive.findFile(backupJsonName);
-    if (json == null) return null;
-
+  static Future<String?> _unpack(String path, String dataDir) async {
+    final input = InputFileStream(path);
     final placed = <String, String>{};
-    for (final entry in archive.files) {
-      final name = entry.name.replaceAll(r'\', '/');
-      if (!entry.isFile || !name.startsWith('$_files/')) continue;
-      final inside = name.substring(_files.length + 1);
-      if (inside.split('/').any((part) => part.isEmpty || part == '..')) {
-        continue;
+    ZipFile? json;
+    try {
+      for (final header in ZipDirectory.read(input).fileHeaders) {
+        final file = header.file!;
+        final name = file.filename.replaceAll(r'\', '/');
+        if (name == backupJsonName) {
+          json = file;
+          continue;
+        }
+        if (name.endsWith('/') || !name.startsWith('$_files/')) continue;
+        final inside = name.substring(_files.length + 1);
+        if (inside.split('/').any((part) => part.isEmpty || part == '..')) {
+          continue;
+        }
+        final dest =
+            _freeSpot(File('$dataDir/$inside'), file.uncompressedSize ?? -1);
+        dest.parent.createSync(recursive: true);
+        if (!dest.existsSync()) _extract(file, dest.path);
+        placed[name] = dest.path;
       }
-      final content = entry.content as List<int>;
-      final dest = _freeSpot(File('$dataDir/$inside'), content.length);
-      dest.parent.createSync(recursive: true);
-      if (!dest.existsSync()) dest.writeAsBytesSync(content, flush: true);
-      placed[name] = dest.path;
+      if (json == null) return null;
+      final raw = utf8.decode(json.content, allowMalformed: true);
+      Object? swap(Object? value) => switch (value) {
+            Map() => {
+                for (final entry in value.entries)
+                  '${entry.key}': swap(entry.value),
+              },
+            List() => [for (final item in value) swap(item)],
+            String() => _unpacked(value, placed),
+            _ => value,
+          };
+
+      return jsonEncode(swap(jsonDecode(raw)));
+    } finally {
+      input.closeSync();
     }
+  }
 
-    Object? swap(Object? value) => switch (value) {
-          Map() => {
-              for (final entry in value.entries) '${entry.key}': swap(entry.value),
-            },
-          List() => [for (final item in value) swap(item)],
-          String() => _unpacked(value, placed),
-          _ => value,
-        };
-
-    final raw = utf8.decode(json.content as List<int>, allowMalformed: true);
-    return jsonEncode(swap(jsonDecode(raw)));
+  static void _extract(ZipFile file, String path) {
+    final output = OutputFileStream(path);
+    try {
+      final raw = file.rawContent!;
+      switch (file.compressionMethod) {
+        case ZipFile.zipCompressionStore:
+          output.writeInputStream(raw);
+        case ZipFile.zipCompressionDeflate:
+          Inflate.stream(raw, output);
+        default:
+          output.writeBytes(file.content);
+      }
+    } finally {
+      output.closeSync();
+    }
   }
 
   static File _freeSpot(File file, int length) {
