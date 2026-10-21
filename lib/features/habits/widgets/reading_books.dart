@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -97,8 +99,8 @@ class _Book extends StatelessWidget {
       child: GestureDetector(
         onTap: onEditCover,
         child: SizedBox(
-          width: 96,
-          height: 138,
+          width: 104,
+          height: 150,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -109,6 +111,17 @@ class _Book extends StatelessWidget {
                 height: 10,
                 child: CustomPaint(painter: _GroundShadowPainter()),
               ),
+              if (isProgress)
+                Positioned(
+                  right: 15,
+                  top: 110,
+                  child: CustomPaint(
+                    size: const Size(17, 60),
+                    painter: _RibbonPainter(
+                      Color.lerp(habit.color.shownIn(context), Colors.black, 0.28)!,
+                    ),
+                  ),
+                ),
               Positioned(left: 0, right: 0, top: 0, bottom: 7, child: _body(context)),
               if (done)
                 Positioned(
@@ -159,7 +172,12 @@ class _Book extends StatelessWidget {
               fit: StackFit.expand,
               children: [
                 if (isProgress)
-                  _ProgressCover(color: habit.color.shownIn(context), ratio: ratio, count: count)
+                  _ProgressCover(
+                    color: habit.color.shownIn(context),
+                    ratio: ratio,
+                    count: count,
+                    unit: habit.unitLabel,
+                  )
                 else if (_hasPhoto)
                   CoverImage(path: habit.bookCoverPath)
                 else
@@ -193,8 +211,8 @@ class _Book extends StatelessWidget {
                     right: 5,
                     bottom: 5,
                     child: Container(
-                      width: 22,
-                      height: 22,
+                      width: 26,
+                      height: 26,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -208,7 +226,7 @@ class _Book extends StatelessWidget {
                       ),
                       child: Icon(
                         LucideIcons.camera,
-                        size: 12,
+                        size: 13,
                         color: Colors.black.withValues(alpha: 0.55),
                       ),
                     ),
@@ -230,44 +248,63 @@ class _JacketCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final band = Colors.white.withValues(alpha: 0.5);
+    Widget rule(double top) => Positioned(
+          left: 22,
+          right: 12,
+          top: top < 0 ? null : top,
+          bottom: top < 0 ? -top : null,
+          child: Column(
+            children: [
+              Container(height: 1.4, color: band),
+              const SizedBox(height: 2.5),
+              Container(height: 0.8, color: band),
+            ],
+          ),
+        );
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
-            Color.lerp(color, Colors.white, 0.10)!,
+            Color.lerp(color, Colors.white, 0.14)!,
             color,
-            Color.lerp(color, Colors.black, 0.14)!,
+            Color.lerp(color, Colors.black, 0.18)!,
           ],
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 12, 12, 12),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.55)),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(7),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          rule(14),
+          rule(-14),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 26, 10, 26),
+            child: Center(
               child: Text(
                 title,
                 textAlign: TextAlign.center,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontFamily: 'PlayfairDisplay',
+                  fontFamily: 'Nunito',
                   color: Colors.white,
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w700,
-                  height: 1.3,
+                  fontSize: 14,
+                  fontVariations: [FontVariation('wght', 850)],
+                  height: 1.15,
+                  shadows: [
+                    Shadow(
+                      color: Color(0x33000000),
+                      blurRadius: 3,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -278,28 +315,49 @@ class _ProgressCover extends StatelessWidget {
     required this.color,
     required this.ratio,
     required this.count,
+    required this.unit,
   });
 
   final Color color;
   final double ratio;
   final double count;
+  final String unit;
 
   Widget _count(Color c) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(18, 14, 10, 14),
         child: Align(
-          alignment: const Alignment(0, -0.12),
+          alignment: const Alignment(0, -0.1),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(
-              formatAmount(count),
-              style: TextStyle(
-                fontFamily: 'PlayfairDisplay',
-                fontSize: 46,
-                fontWeight: FontWeight.w600,
-                height: 1,
-                letterSpacing: 0.5,
-                color: c,
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  formatAmount(count),
+                  style: TextStyle(
+                    fontFamily: 'Nunito',
+                    fontSize: 46,
+                    fontVariations: const [FontVariation('wght', 900)],
+                    height: 1,
+                    letterSpacing: -1,
+                    color: c,
+                  ),
+                ),
+                if (unit.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    unit.toUpperCase(),
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 10,
+                      fontVariations: const [FontVariation('wght', 800)],
+                      letterSpacing: 1.4,
+                      color: c.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
         ),
@@ -428,6 +486,71 @@ class _PageEdgesPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _PageEdgesPainter old) => false;
+}
+
+class _RibbonPainter extends CustomPainter {
+  _RibbonPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+    final half = w * 0.36;
+    final notch = w * 0.55;
+    double mid(double y) => w / 2 - half * 0.25 + half * 0.6 * math.sin(math.pi * 0.5 * y / h);
+
+    const steps = 12;
+    final ribbon = Path()..moveTo(mid(0) - half, 0);
+    for (var i = 1; i <= steps; i++) {
+      final y = h * i / steps;
+      ribbon.lineTo(mid(y) - half, y);
+    }
+    ribbon.lineTo(mid(h), h - notch);
+    for (var i = steps; i >= 0; i--) {
+      final y = h * i / steps;
+      ribbon.lineTo(mid(y) + half, y);
+    }
+    ribbon.close();
+
+    canvas.drawShadow(ribbon, Colors.black, 2.5, false);
+    final deep = Color.lerp(color, Colors.black, 0.30)!;
+    final sheen = Color.lerp(color, Colors.white, 0.30)!;
+    canvas.drawPath(
+      ribbon,
+      Paint()
+        ..shader = LinearGradient(
+          colors: [deep, color, sheen, color, deep],
+          stops: const [0.0, 0.28, 0.45, 0.7, 1.0],
+        ).createShader(Rect.fromLTWH(mid(h * 0.5) - half, 0, half * 2, h)),
+    );
+
+    canvas.save();
+    canvas.clipPath(ribbon);
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, w, h * 0.14),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.black.withValues(alpha: 0.35), Colors.transparent],
+        ).createShader(Rect.fromLTWH(0, 0, w, h * 0.14)),
+    );
+    final stitch = Paint()
+      ..color = Colors.white.withValues(alpha: 0.35)
+      ..strokeWidth = 0.7;
+    for (final side in [-1.0, 1.0]) {
+      for (var y = h * 0.62; y < h - notch - 1; y += 2.4) {
+        final x = mid(y) + side * half * 0.62;
+        canvas.drawLine(Offset(x, y), Offset(x, y + 1.2), stitch);
+      }
+    }
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _RibbonPainter old) => old.color != color;
 }
 
 class _GroundShadowPainter extends CustomPainter {

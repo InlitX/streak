@@ -17,9 +17,7 @@ import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/widgets/streak_label.dart';
-import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
-import 'package:streak/features/habits/widgets/check_progress.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/compact_activity_strip.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
@@ -505,20 +503,46 @@ class _ActionButton extends StatelessWidget {
               onLongPress: addCustom,
             );
           case QuantKind.reading:
-            return _BookButton(
-              color: progress.solidColor(habit.color.shownIn(context)),
+            final color = progress.solidColor(habit.color.shownIn(context));
+            return _ArtButton(
+              size: const Size(30, 35),
+              painter: (t) => BookPainter(fill: t, color: color, ribbon: true),
+              color: color,
+              ratio: ratio.clamp(0.0, 1.0),
+              done: doneToday,
+              onTap: addProgress,
+              onLongPress: addCustom,
+            );
+          case QuantKind.time:
+            final color = progress.solidColor(habit.color.shownIn(context));
+            return _ArtButton(
+              size: const Size(32, 37),
+              painter: (t) => StopwatchPainter(fill: t, color: color),
+              color: color,
+              ratio: ratio.clamp(0.0, 1.0),
+              done: false,
+              onTap: addProgress,
+              onLongPress: addCustom,
+            );
+          case QuantKind.generic when habit.readsSteps:
+            final color = progress.solidColor(habit.color.shownIn(context));
+            return _ArtButton(
+              size: const Size(28, 38),
+              painter: (t) => FootPainter(fill: t, color: color),
+              color: color,
               ratio: ratio.clamp(0.0, 1.0),
               done: doneToday,
               onTap: addProgress,
               onLongPress: addCustom,
             );
           case QuantKind.generic:
-          case QuantKind.time:
-            return _QuantityButton(
-              color: habit.color.shownIn(context),
-              progress: progress,
-              done: doneToday,
-              circle: circle,
+            final color = progress.solidColor(habit.color.shownIn(context));
+            return _ArtButton(
+              size: const Size(36, 36),
+              painter: (t) => DialPainter(fill: t, color: color),
+              color: color,
+              ratio: ratio.clamp(0.0, 1.0),
+              done: false,
               onTap: addProgress,
               onLongPress: addCustom,
             );
@@ -563,8 +587,10 @@ class _WaterButton extends StatelessWidget {
   }
 }
 
-class _BookButton extends StatelessWidget {
-  const _BookButton({
+class _ArtButton extends StatelessWidget {
+  const _ArtButton({
+    required this.size,
+    required this.painter,
     required this.color,
     required this.ratio,
     required this.done,
@@ -572,6 +598,8 @@ class _BookButton extends StatelessWidget {
     this.onLongPress,
   });
 
+  final Size size;
+  final CustomPainter Function(double t) painter;
   final Color color;
   final double ratio;
   final bool done;
@@ -591,16 +619,12 @@ class _BookButton extends StatelessWidget {
             tween: Tween(begin: 0, end: ratio),
             duration: const Duration(milliseconds: 700),
             curve: Curves.easeOutCubic,
-            builder: (context, t, _) => SizedBox(
-              width: 30,
-              height: 38,
+            builder: (context, t, _) => SizedBox.fromSize(
+              size: size,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  CustomPaint(
-                    size: const Size(30, 38),
-                    painter: BookPainter(fill: t, color: color),
-                  ),
+                  CustomPaint(size: size, painter: painter(t)),
                   if (done)
                     Icon(
                       LucideIcons.check,
@@ -765,108 +789,6 @@ class _RelapseButtonState extends State<_RelapseButton>
             widget.relapsed ? LucideIcons.x : LucideIcons.shield,
             size: 22,
             color: widget.relapsed ? Colors.white : widget.color,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _QuantityButton extends StatefulWidget {
-  const _QuantityButton({
-    required this.color,
-    required this.progress,
-    required this.done,
-    required this.onTap,
-    this.onLongPress,
-    this.circle = false,
-  });
-
-  final Color color;
-  final QuantProgress progress;
-  final bool done;
-  final VoidCallback onTap;
-  final VoidCallback? onLongPress;
-  final bool circle;
-
-  @override
-  State<_QuantityButton> createState() => _QuantityButtonState();
-}
-
-class _QuantityButtonState extends State<_QuantityButton>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pop = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 260),
-  );
-
-  @override
-  void didUpdateWidget(_QuantityButton old) {
-    super.didUpdateWidget(old);
-    if (widget.progress.laps != old.progress.laps ||
-        widget.progress.fraction != old.progress.fraction) {
-      _pop.forward(from: 0);
-    }
-  }
-
-  @override
-  void dispose() {
-    _pop.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final progress = widget.progress;
-    final reached = progress.reachedGoal;
-    final reachedColor = progress.reachedColor(widget.color);
-    final activeColor = progress.activeColor(widget.color);
-    final track = reached ? reachedColor : widget.color.withValues(alpha: 0.14);
-    return GestureDetector(
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
-      child: AnimatedBuilder(
-        animation: _pop,
-        builder: (context, child) {
-          final t = _pop.value;
-          final scale = 1 + 0.18 * (t < 0.5 ? t * 2 : (1 - t) * 2);
-          return Transform.scale(scale: scale, child: child);
-        },
-        child: SizedBox(
-          width: 44,
-          height: 44,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: progress.fraction),
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOutCubic,
-                builder: (context, t, _) => CheckProgress(
-                  value: t,
-                  size: 44,
-                  color: activeColor,
-                  track: track,
-                  circle: widget.circle,
-                ),
-              ),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: widget.done
-                      ? reachedColor
-                      : widget.color.withValues(alpha: 0.14),
-                  shape: widget.circle ? BoxShape.circle : BoxShape.rectangle,
-                  borderRadius: widget.circle ? null : BorderRadius.circular(9),
-                ),
-                child: Icon(
-                  widget.done ? LucideIcons.check : LucideIcons.plus,
-                  size: 15,
-                  color: widget.done ? reachedColor.ink : widget.color,
-                ),
-              ),
-            ],
           ),
         ),
       ),

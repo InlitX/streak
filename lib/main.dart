@@ -16,6 +16,7 @@ import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
+import 'package:streak/features/habits/pages/health_info_page.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
@@ -198,6 +199,7 @@ void _openPage(String page) {
   if (page == 'todos') _openTodos();
   if (page == 'stats') AppNavigator.push(const StatisticsPage(), fade: true);
   if (page == 'focus') _openFocus();
+  if (page == 'health') AppNavigator.push(const HealthInfoPage(), fade: true);
   if (page.startsWith('day:')) _openDay(page.substring(4));
 }
 

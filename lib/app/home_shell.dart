@@ -35,6 +35,7 @@ import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/services/auto_sync.dart';
+import 'package:streak/services/health_steps.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/widget_action_service.dart';
 
@@ -86,6 +87,7 @@ class _HomeShellState extends State<HomeShell>
     focus.onRoundSaved =
         (session) => unawaited(creditFocusRound(habits, focus, session));
     _waitForNextDay();
+    unawaited(HealthSteps.sync(habits));
     final settings = context.read<SettingsController>();
     AutoSync.start(
       enabled: () => settings.syncsFolder,
@@ -231,7 +233,10 @@ class _HomeShellState extends State<HomeShell>
       }
       final habits = context.read<HabitsController>();
       if (Platform.isIOS) _applyWidgetActions(habits);
-      habits.refresh().then((_) => HomeWidgetService.sync(habits.asMap));
+      habits.refresh().then((_) {
+        HomeWidgetService.sync(habits.asMap);
+        return HealthSteps.sync(habits);
+      });
       context.read<TodosController>().refresh();
       drainFocusActions();
       context.read<SettingsController>().runAutoBackup();

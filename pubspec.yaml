@@ -114,6 +114,9 @@ flutter:
     - family: GoogleSansFlex
       fonts:
         - asset: fonts/GoogleSansFlex.ttf
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito.ttf
     - family: PlayfairDisplay
       fonts:
         - asset: fonts/PlayfairDisplay.ttf

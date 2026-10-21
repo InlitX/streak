@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 import 'package:streak/features/habits/widgets/habit_time_fields.dart';
+import 'package:streak/features/habits/widgets/quant_preset_grid.dart';
 import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_surface.dart';
@@ -39,6 +41,7 @@ import 'package:streak/features/habits/widgets/minimal_substeps.dart';
 import 'package:streak/features/habits/widgets/reminder_editor_sheet.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/services/health_steps.dart';
 import 'package:streak/services/notification_service.dart';
 
 class HabitFormPage extends StatefulWidget {
@@ -85,6 +88,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool _focusOnly = false;
   bool _tracking = false;
   bool _anyAmount = false;
+  bool _healthSteps = false;
   bool _anySteps = false;
   int _stepsNeeded = 1;
   int _difficulty = 0;
@@ -170,6 +174,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _focusOnly = habit.focusOnly;
       _tracking = habit.tracking;
       _anyAmount = habit.anyAmount;
+      _healthSteps = habit.readsSteps;
       _anySteps = habit.anySteps;
       _stepsNeeded = habit.stepsNeeded;
       _difficulty = habit.difficulty;
@@ -214,6 +219,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _focusOnly,
         _tracking,
         _anyAmount,
+        _healthSteps,
         _anySteps,
         _stepsNeeded,
         _difficulty,
@@ -268,6 +274,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   void _applyQuantPreset(QuantKind preset) {
     setState(() {
       _quantKind = preset;
+      _healthSteps = false;
       switch (preset) {
         case QuantKind.water:
           _unitLabel.text = context.l10n.quant_unit_ml;
@@ -290,6 +297,16 @@ class _HabitFormPageState extends State<HabitFormPage> {
     });
   }
 
+  void _pickSteps() {
+    setState(() {
+      _quantKind = QuantKind.generic;
+      _healthSteps = true;
+      _unitLabel.text = context.l10n.health_unit_steps;
+      _quantTarget = 10000;
+      _quantIncrement = 1000;
+    });
+  }
+
   Future<void> _submit() async {
     final controller = context.read<HabitsController>();
     final name = _name.text.trim();
@@ -308,6 +325,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
         !fromLastDone &&
         _monthWeekday;
     final focusOnly = _kind == HabitKind.positive && _focusOnly;
+    final healthSteps =
+        quantitative && _quantKind == QuantKind.generic && _healthSteps;
     final substeps = _kind == HabitKind.positive && !focusOnly
         ? _substeps.where((s) => s.title.trim().isNotEmpty).toList()
         : <Substep>[];
@@ -341,6 +360,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
           focusOnly: focusOnly,
           tracking: _tracking,
+          healthSteps: healthSteps,
           anyAmount: quantitative && _anyAmount,
           anySteps: substeps.isNotEmpty && _anySteps,
           stepsNeeded: _stepsNeeded.clamp(1, substeps.isEmpty ? 1 : substeps.length),
@@ -386,6 +406,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         bookCoverPath: quantitative ? bookCover : '',
         focusOnly: focusOnly,
         tracking: _tracking,
+        healthSteps: healthSteps,
         anyAmount: quantitative && _anyAmount,
         anySteps: substeps.isNotEmpty && _anySteps,
         stepsNeeded: _stepsNeeded.clamp(1, substeps.isEmpty ? 1 : substeps.length),
@@ -398,6 +419,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         restDays: template?.restDays ?? const [],
       );
     }
+    if (healthSteps) unawaited(HealthSteps.sync(controller));
     AppNavigator.pop();
   }
 
@@ -585,11 +607,15 @@ class _HabitFormPageState extends State<HabitFormPage> {
           unitController: _unitLabel,
           target: _quantTarget,
           increment: _quantIncrement,
+          steps: _healthSteps,
+          color: _color,
           onPresetSelected: _applyQuantPreset,
+          onSteps: _pickSteps,
           onUnitChanged: () => setState(() {}),
           onTargetChanged: (v) => setState(() => _quantTarget = v),
           onIncrementChanged: (v) => setState(() => _quantIncrement = v),
           showGoal: !_noGoal,
+          step: _quantStep,
         ),
         const SizedBox(height: 12),
         NoGoalToggle(
@@ -864,25 +890,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  for (final preset in [
-                    (QuantKind.water, context.l10n.quant_preset_water),
-                    (QuantKind.reading, context.l10n.quant_preset_reading),
-                    (QuantKind.time, context.l10n.quant_preset_time),
-                    (QuantKind.generic, context.l10n.quant_preset_generic),
-                  ]) ...[
-                    if (preset.$1 != QuantKind.water) const SizedBox(width: 7),
-                    Expanded(
-                      child: CompactPill(
-                        label: preset.$2,
-                        selected: preset.$1 == _quantKind,
-                        expand: true,
-                        onTap: () => _applyQuantPreset(preset.$1),
-                      ),
-                    ),
-                  ],
-                ],
+              QuantPresetGrid(
+                quantKind: _quantKind,
+                steps: _healthSteps,
+                color: _color,
+                plain: true,
+                onSelected: _applyQuantPreset,
+                onSteps: _pickSteps,
               ),
               if (_quantKind != QuantKind.time) ...[
                 const SizedBox(height: 14),
@@ -1158,6 +1172,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   double get _quantStep => switch (_quantKind) {
         QuantKind.water => 50,
         QuantKind.time => 5,
+        QuantKind.generic when _healthSteps => 500,
         _ => 1,
       };
 
@@ -1233,11 +1248,15 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 unitController: _unitLabel,
                 target: _quantTarget,
                 increment: _quantIncrement,
+                steps: _healthSteps,
+                color: _color,
                 onPresetSelected: _applyQuantPreset,
+                onSteps: _pickSteps,
                 onUnitChanged: () => setState(() {}),
                 onTargetChanged: (v) => setState(() => _quantTarget = v),
                 onIncrementChanged: (v) => setState(() => _quantIncrement = v),
                 showGoal: !_noGoal,
+                step: _quantStep,
               ),
               const SizedBox(height: 12),
               NoGoalToggle(

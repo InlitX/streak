@@ -13,6 +13,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
+import 'package:streak/features/habits/widgets/quant_preset_grid.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/substep_draft.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -729,22 +730,30 @@ class QuantitativeFields extends StatelessWidget {
     required this.unitController,
     required this.target,
     required this.increment,
+    required this.steps,
+    required this.color,
     required this.onPresetSelected,
+    required this.onSteps,
     required this.onUnitChanged,
     required this.onTargetChanged,
     required this.onIncrementChanged,
     this.showGoal = true,
+    this.step,
   });
 
   final QuantKind quantKind;
   final TextEditingController unitController;
   final double target;
   final double increment;
+  final bool steps;
+  final Color color;
   final ValueChanged<QuantKind> onPresetSelected;
+  final VoidCallback onSteps;
   final VoidCallback onUnitChanged;
   final ValueChanged<double> onTargetChanged;
   final ValueChanged<double> onIncrementChanged;
   final bool showGoal;
+  final double? step;
 
   double get _step => switch (quantKind) {
         QuantKind.water => 50,
@@ -763,44 +772,12 @@ class QuantitativeFields extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: _PresetChip(
-                    icon: LucideIcons.droplet,
-                    label: context.l10n.quant_preset_water,
-                    selected: quantKind == QuantKind.water,
-                    onTap: () => onPresetSelected(QuantKind.water),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _PresetChip(
-                    icon: LucideIcons.bookOpen,
-                    label: context.l10n.quant_preset_reading,
-                    selected: quantKind == QuantKind.reading,
-                    onTap: () => onPresetSelected(QuantKind.reading),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _PresetChip(
-                    icon: LucideIcons.timer,
-                    label: context.l10n.quant_preset_time,
-                    selected: quantKind == QuantKind.time,
-                    onTap: () => onPresetSelected(QuantKind.time),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _PresetChip(
-                    icon: LucideIcons.gauge,
-                    label: context.l10n.quant_preset_generic,
-                    selected: quantKind == QuantKind.generic,
-                    onTap: () => onPresetSelected(QuantKind.generic),
-                  ),
-                ),
-              ],
+            QuantPresetGrid(
+              quantKind: quantKind,
+              steps: steps,
+              color: color,
+              onSelected: onPresetSelected,
+              onSteps: onSteps,
             ),
             if (!time) ...[
               const SizedBox(height: 16),
@@ -815,7 +792,7 @@ class QuantitativeFields extends StatelessWidget {
               label: context.l10n.quant_daily_goal,
               value: target,
               unit: unit,
-              step: _step,
+              step: step ?? _step,
               min: 0.01,
               clock: time,
               onChanged: onTargetChanged,
@@ -825,70 +802,12 @@ class QuantitativeFields extends StatelessWidget {
               label: context.l10n.quant_tap_amount,
               value: increment,
               unit: unit,
-              step: _step,
+              step: step ?? _step,
               min: 0.01,
               clock: time,
               onChanged: onIncrementChanged,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PresetChip extends StatelessWidget {
-  const _PresetChip({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = context.colors;
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: selected
-                ? scheme.primary.withValues(alpha: 0.16)
-                : scheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-            border: selected ? Border.all(color: scheme.primary, width: 1.4) : null,
-          ),
-          child: Column(
-            children: [
-              Icon(icon, size: 17, color: selected ? scheme.primary : context.tokens.muted),
-              const SizedBox(height: 4),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: selected ? scheme.primary : context.tokens.muted,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

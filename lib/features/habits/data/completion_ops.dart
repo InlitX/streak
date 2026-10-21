@@ -165,6 +165,29 @@ class CompletionOps {
     return completions;
   }
 
+  static Map<String, Completion> raiseCounts(
+    Habit habit,
+    Map<DateTime, double> counts,
+  ) {
+    Map<String, Completion>? completions;
+    for (final MapEntry(key: date, value: count) in counts.entries) {
+      if (_isFuture(date)) continue;
+      final previous = habit.completions[date.dayKey];
+      if (count <= (previous?.count ?? 0)) continue;
+      final today = date.isSameDay(AppClock.today());
+      completions ??= {...habit.completions};
+      completions[date.dayKey] = previous?.copyWith(count: count) ??
+          Completion(
+            date: date.dayKey,
+            count: count,
+            hour: today ? AppClock.wallNow().hour : null,
+            minute: today ? AppClock.wallNow().minute : null,
+            marks: today ? [_nowMinutes()] : const [],
+          );
+    }
+    return completions ?? habit.completions;
+  }
+
   static Map<String, Completion> addProgress(
     Habit habit,
     DateTime date,

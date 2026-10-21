@@ -31,6 +31,7 @@ class MainActivity : FlutterFragmentActivity() {
         focusChannel =
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, FocusBridge.CHANNEL)
                 .also { FocusBridge.attach(applicationContext, it) }
+        HealthBridge.attach(this, MethodChannel(flutterEngine.dartExecutor.binaryMessenger, HealthBridge.CHANNEL))
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -108,7 +109,13 @@ class MainActivity : FlutterFragmentActivity() {
         return habitId
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (HealthBridge.onPermissionResult(requestCode, grantResults)) return
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     private fun takePage(intent: Intent?): String? {
+        if (HealthBridge.isUsageIntent(intent)) return "health"
         val page = intent?.getStringExtra(EXTRA_OPEN_PAGE) ?: return null
         intent.removeExtra(EXTRA_OPEN_PAGE)
         return page

@@ -138,6 +138,7 @@ class HabitsController extends ChangeNotifier {
     String bookCoverPath = '',
     bool focusOnly = false,
     bool tracking = false,
+    bool healthSteps = false,
     bool anyAmount = false,
     bool anySteps = false,
     int stepsNeeded = 1,
@@ -178,6 +179,7 @@ class HabitsController extends ChangeNotifier {
       bookCoverPath: bookCoverPath,
       focusOnly: focusOnly,
       tracking: tracking,
+      healthSteps: healthSteps,
       anyAmount: anyAmount,
       anySteps: anySteps,
       stepsNeeded: stepsNeeded,
@@ -270,6 +272,14 @@ class HabitsController extends ChangeNotifier {
     if (habit == null) return;
     final current = habit.completions[date.dayKey]?.count ?? 0;
     await _apply(habit, CompletionOps.addProgress(habit, date, value - current));
+  }
+
+  Future<void> logSteps(String id, Map<DateTime, double> counts) async {
+    final habit = _habits[id];
+    if (habit == null || !habit.readsSteps) return;
+    final completions = CompletionOps.raiseCounts(habit, counts);
+    if (identical(completions, habit.completions)) return;
+    await _apply(habit, completions);
   }
 
   Future<void> setStep(

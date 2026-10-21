@@ -68,6 +68,7 @@ class Habit {
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
     this.tracking = false,
+    this.healthSteps = false,
     this.anyAmount = false,
     this.anySteps = false,
     this.stepsNeeded = 1,
@@ -203,6 +204,10 @@ class Habit {
   final bool focusOnly;
 
   final bool tracking;
+
+  final bool healthSteps;
+
+  bool get readsSteps => healthSteps && kind == HabitKind.quantitative;
 
   final bool anyAmount;
 
@@ -740,6 +745,7 @@ class Habit {
     int? focusBreakMinutes,
     bool? focusOnly,
     bool? tracking,
+    bool? healthSteps,
     bool? anyAmount,
     bool? anySteps,
     int? stepsNeeded,
@@ -785,6 +791,7 @@ class Habit {
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
       tracking: tracking ?? this.tracking,
+      healthSteps: healthSteps ?? this.healthSteps,
       anyAmount: anyAmount ?? this.anyAmount,
       anySteps: anySteps ?? this.anySteps,
       stepsNeeded: stepsNeeded ?? this.stepsNeeded,
@@ -845,6 +852,7 @@ class Habit {
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
         'tracking': tracking,
+        if (healthSteps) 'healthSteps': true,
         'anyAmount': anyAmount,
         'anySteps': anySteps,
         'stepsNeeded': stepsNeeded,
@@ -911,6 +919,7 @@ class Habit {
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
         focusOnly: (map['focusOnly'] ?? false) as bool,
         tracking: (map['tracking'] ?? false) as bool,
+        healthSteps: map['healthSteps'] == true,
         anyAmount: (map['anyAmount'] ?? false) as bool,
         anySteps: (map['anySteps'] ?? false) as bool,
         stepsNeeded: (map['stepsNeeded'] as num?)?.toInt() ?? 1,

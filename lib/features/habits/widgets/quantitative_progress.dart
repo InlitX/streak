@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -12,6 +11,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_seal.dart';
+import 'package:streak/features/habits/widgets/health_steps_widgets.dart';
 import 'package:streak/features/habits/widgets/reading_books.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
@@ -72,7 +72,17 @@ class QuantitativeProgress extends StatelessWidget {
                 _WaterCups(count: count, target: habit.perDayTarget),
               QuantKind.reading =>
                 ReadingBooks(habit: habit, ratio: ratio, count: count),
-              QuantKind.generic || QuantKind.time => _GenericRing(
+              QuantKind.time => _Stopwatch(
+                  progress: habit.progressFor(count),
+                  color: habit.color.shownIn(context),
+                ),
+              QuantKind.generic when habit.readsSteps && habit.hasGoal =>
+                _StepsTrail(
+                  ratio: ratio,
+                  color: habit.progressFor(count)
+                      .solidColor(habit.color.shownIn(context)),
+                ),
+              QuantKind.generic => _GenericRing(
                   progress: habit.progressFor(count),
                   color: habit.color.shownIn(context),
                 ),
@@ -113,6 +123,10 @@ class QuantitativeProgress extends StatelessWidget {
               context.l10n.quant_daily_goal,
               style: TextStyle(fontSize: 13, color: context.tokens.muted),
             ),
+            if (habit.readsSteps) ...[
+              const SizedBox(height: 10),
+              HealthStepsBadge(color: habit.color.shownIn(context)),
+            ],
             const SizedBox(height: 18),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -282,47 +296,94 @@ class _WaterCups extends StatelessWidget {
 }
 
 
-class _GenericRing extends StatelessWidget {
-  const _GenericRing({required this.progress, required this.color});
+class _StepsTrail extends StatelessWidget {
+  const _StepsTrail({required this.ratio, required this.color});
+
+  final double ratio;
+  final Color color;
+
+  static const _prints = 10;
+  static const _perRow = 5;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = ratio * _prints;
+
+    Widget footprint(int i) {
+      final fill = (progress - i).clamp(0.0, 1.0);
+      final left = i.isEven;
+      return Transform.translate(
+        offset: Offset(0, left ? 5 : -5),
+        child: Transform.rotate(
+          angle: left ? -0.12 : 0.12,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: fill),
+            duration: const Duration(milliseconds: 850),
+            curve: Curves.easeOutCubic,
+            builder: (context, t, _) => SizedBox(
+              width: 32,
+              height: 44,
+              child: CustomPaint(
+                painter: FootPainter(fill: t, color: color, mirror: left),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget row(int start) => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = start; i < start + _perRow; i++) ...[
+              if (i > start) const SizedBox(width: 14),
+              footprint(i),
+            ],
+          ],
+        );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        row(0),
+        const SizedBox(height: 18),
+        row(_perRow),
+      ],
+    );
+  }
+}
+
+class _Stopwatch extends StatelessWidget {
+  const _Stopwatch({required this.progress, required this.color});
 
   final QuantProgress progress;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final reached = progress.reachedGoal;
-    final reachedColor = progress.reachedColor(color);
-    final activeColor = progress.activeColor(color);
+    final solid = progress.solidColor(color);
     return Center(
       child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: progress.fraction),
+        tween: Tween(begin: 0, end: progress.reachedGoal && !progress.exceededGoal
+            ? 1.0
+            : progress.fraction),
         duration: const Duration(milliseconds: 650),
         curve: Curves.easeOutCubic,
         builder: (context, t, _) => SizedBox(
-          width: 138,
-          height: 138,
+          width: 132,
+          height: 152,
           child: Stack(
-            alignment: Alignment.center,
             children: [
-              CustomPaint(
-                size: const Size(138, 138),
-                painter: _RingPainter(
-                  ratio: t,
-                  color: activeColor,
-                  track: reached ? reachedColor : color.withValues(alpha: 0.13),
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: StopwatchPainter(fill: t, color: solid),
                 ),
               ),
-              if (reached)
-                CheckSeal(color: progress.solidColor(color))
-              else
-                Text(
-                  '${(t * 100).round()}%',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.5,
-                    color: color,
-                  ),
+              if (progress.reachedGoal)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: CheckSeal(color: solid),
                 ),
             ],
           ),
@@ -332,56 +393,50 @@ class _GenericRing extends StatelessWidget {
   }
 }
 
-class _RingPainter extends CustomPainter {
-  _RingPainter({required this.ratio, required this.color, required this.track});
+class _GenericRing extends StatelessWidget {
+  const _GenericRing({required this.progress, required this.color});
 
-  final double ratio;
+  final QuantProgress progress;
   final Color color;
-  final Color track;
-
-  static const _stroke = 12.0;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final center = rect.center;
-    final radius = (size.shortestSide - _stroke) / 2;
-    final arc = Rect.fromCircle(center: center, radius: radius);
-
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = _stroke
-        ..color = track,
-    );
-
-    if (ratio <= 0) return;
-
-    const start = -math.pi / 2;
-    final sweep = 2 * math.pi * ratio;
-    final light = Color.lerp(color, Colors.white, 0.35)!;
-    canvas.drawArc(
-      arc,
-      start,
-      sweep,
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = _stroke
-        ..strokeCap = StrokeCap.round
-        ..shader = SweepGradient(
-          startAngle: start,
-          endAngle: start + 2 * math.pi,
-          colors: [light, color, light],
-          stops: const [0.0, 0.5, 1.0],
-          transform: GradientRotation(start),
-        ).createShader(arc),
+  Widget build(BuildContext context) {
+    final reached = progress.reachedGoal;
+    final solid = progress.solidColor(color);
+    return Center(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(
+          begin: 0,
+          end: reached && !progress.exceededGoal ? 1.0 : progress.fraction,
+        ),
+        duration: const Duration(milliseconds: 650),
+        curve: Curves.easeOutCubic,
+        builder: (context, t, _) => SizedBox.square(
+          dimension: 138,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: DialPainter(fill: t, color: solid),
+                ),
+              ),
+              if (reached)
+                CheckSeal(color: solid)
+              else
+                Text(
+                  '${(t * 100).round()}%',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                    color: Color.lerp(solid, Colors.black, 0.25),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-
-  @override
-  bool shouldRepaint(covariant _RingPainter old) =>
-      old.ratio != ratio || old.color != color || old.track != track;
 }
