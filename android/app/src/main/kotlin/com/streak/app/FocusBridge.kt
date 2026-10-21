@@ -45,6 +45,15 @@ object FocusBridge {
                 result.success(true)
             }
             "drain" -> result.success(drain(context))
+            "overlay" -> {
+                FocusOverlay.setEnabled(context, call.argument<Boolean>("on") ?: false)
+                result.success(true)
+            }
+            "overlayAllowed" -> result.success(FocusOverlay.allowed(context))
+            "requestOverlay" -> {
+                FocusOverlay.request(context)
+                result.success(true)
+            }
             else -> result.notImplemented()
         }
     }

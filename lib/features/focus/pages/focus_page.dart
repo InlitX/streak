@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -29,6 +30,7 @@ import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/features/focus/widgets/focus_end_dialog.dart';
 import 'package:streak/features/focus/widgets/focus_insights.dart';
+import 'package:streak/features/focus/widgets/focus_retime_sheet.dart';
 import 'package:streak/features/focus/widgets/focus_task_lists.dart';
 import 'package:streak/features/focus/widgets/focus_video_scene.dart';
 import 'package:streak/features/focus/widgets/music_sheet.dart';
@@ -39,6 +41,7 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/desktop_window.dart';
+import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -349,12 +352,17 @@ class _FocusPageState extends State<FocusPage> {
                   builder: (context, _) => _TopBar(
                     immersive: _immersive,
                     onImmersive: _toggleImmersive,
+                    onTarget: leading || !focus.isActive || focus.isBreak
+                        ? null
+                        : () => showFocusRetimeSheet(context),
                     title: label,
-                    target: leadMinutes <= 0
+                    target: (leading ? leadMinutes : focus.targetMinutes) <= 0
                         ? context.l10n.focus_flowtime
                         : focus.isPomodoro && !leading
                             ? '${context.l10n.minutes_short('${focus.targetMinutes}')}  ·  ${context.l10n.focus_round(focus.round)}'
-                            : context.l10n.minutes_short('$leadMinutes'),
+                            : context.l10n.minutes_short(
+                                '${leading ? leadMinutes : focus.targetMinutes}',
+                              ),
                   ),
                 );
 
@@ -561,12 +569,14 @@ class _TopBar extends StatelessWidget {
     required this.target,
     required this.immersive,
     required this.onImmersive,
+    this.onTarget,
   });
 
   final String title;
   final String target;
   final bool immersive;
   final VoidCallback onImmersive;
+  final VoidCallback? onTarget;
 
   Future<void> _pickStyle(BuildContext context) async {
     final labels = [
@@ -634,6 +644,16 @@ class _TopBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _toggleOverlay(BuildContext context) async {
+    final settings = context.read<SettingsController>();
+    if (settings.focusOverlay) return settings.setFocusOverlay(false);
+    final allowed = await FocusService.overlayAllowed();
+    await settings.setFocusOverlay(true);
+    if (!context.mounted) return;
+    AppSnackbar.info(context, context.l10n.focus_overlay_hint);
+    if (!allowed) await FocusService.requestOverlay();
   }
 
   Future<void> _pickScene(BuildContext context) async {
@@ -902,11 +922,34 @@ class _TopBar extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 1),
-                Text(
-                  target,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    color: Colors.white.withValues(alpha: 0.55),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onTarget,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          target,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            color: Colors.white.withValues(
+                              alpha: onTarget == null ? 0.55 : 0.75,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (onTarget != null) ...[
+                        const SizedBox(width: 2),
+                        Icon(
+                          LucideIcons.chevronDown,
+                          size: 14,
+                          color: Colors.white.withValues(alpha: 0.75),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
@@ -924,6 +967,20 @@ class _TopBar extends StatelessWidget {
               tooltip: context.l10n.focus_options,
               style: MorphMenuStyle.glass(),
               items: [
+                if (onTarget case final retime?)
+                  (
+                    icon: LucideIcons.timerReset,
+                    label: context.l10n.focus_change_timer,
+                    onTap: retime,
+                  ),
+                if (!kIsWeb && Platform.isAndroid)
+                  (
+                    icon: LucideIcons.pictureInPicture2,
+                    label: context.watch<SettingsController>().focusOverlay
+                        ? context.l10n.focus_overlay_off
+                        : context.l10n.focus_overlay_on,
+                    onTap: () => _toggleOverlay(context),
+                  ),
                 (
                   icon: LucideIcons.music,
                   label: context.l10n.focus_sound,

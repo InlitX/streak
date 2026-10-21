@@ -13,6 +13,7 @@
     <!-- Keeps a running focus session alive and visible while the app is in the
          background. Started only while a session is running, stopped with it. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <!-- Optional: only requested when the user picks a folder for automatic

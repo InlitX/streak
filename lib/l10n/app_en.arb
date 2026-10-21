@@ -1495,6 +1495,12 @@
   "@count_times": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "focus_change_timer": "Change timer",
+  "focus_retime_hint": "The time you've already focused is kept.",
+  "focus_retime_apply": "Apply",
+  "focus_overlay_on": "Floating timer",
+  "focus_overlay_off": "Hide floating timer",
+  "focus_overlay_hint": "The timer will float over other apps while you focus.",
   "focus_streak": "Focus streak",
   "focus_by_hour": "When you focus",
   "focus_by_weekday": "Focus by day",

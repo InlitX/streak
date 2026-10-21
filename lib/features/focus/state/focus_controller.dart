@@ -174,6 +174,8 @@ class FocusController extends ChangeNotifier {
   bool get isBreak => _isBreak;
   int get round => _round;
   bool get isPomodoro => _breakMinutes > 0;
+  int get focusMinutes => _focusMinutes;
+  int get breakMinutes => _breakMinutes;
   static const longBreakEvery = 4;
   int get _longBreakMinutes => LocalStore.setting('focusLongBreak', 0);
   bool get isLongBreak =>
@@ -322,6 +324,25 @@ class FocusController extends ChangeNotifier {
       if (isRunning) _since = DateTime.now();
     }
     _targetMinutes++;
+    _celebrated = false;
+    if (isRunning) _startTicker();
+    _persist();
+    _sync();
+    notifyListeners();
+  }
+
+  void retime({required int minutes, int breakMinutes = 0}) {
+    if (!_open || _isBreak) return;
+    _awaiting = false;
+    _switchIn = 0;
+    unawaited(FocusAudio.stopAlert());
+    final at = DateTime.now();
+    final raw = _accumulated + (_since == null ? 0 : at.difference(_since!).inSeconds);
+    _accumulated = isFlow ? raw : raw.clamp(0, targetSeconds);
+    if (_since != null) _since = at;
+    _focusMinutes = minutes;
+    _targetMinutes = minutes;
+    _breakMinutes = minutes <= 0 ? 0 : breakMinutes;
     _celebrated = false;
     if (isRunning) _startTicker();
     _persist();

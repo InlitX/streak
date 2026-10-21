@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:streak/app/app_lock_pin.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -11,6 +13,7 @@ import 'package:streak/features/focus/state/focus_audio.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/services/backup_service.dart';
+import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/home_widget_service.dart';
 
 Locale localeFromCode(String code) {
@@ -119,6 +122,8 @@ class SettingsController extends ChangeNotifier {
     _focusHold = LocalStore.setting('focusHold', false);
     _focusWholeRounds = LocalStore.setting('focusWholeRounds', false);
     _focusLongBreak = LocalStore.setting('focusLongBreak', 0);
+    _focusOverlay = LocalStore.setting('focusOverlay', false);
+    unawaited(FocusService.setOverlay(_focusOverlay));
     _focusImages =
         List<String>.from(LocalStore.setting('focusImages', const <String>[]));
     _hiddenScenes =
@@ -213,6 +218,7 @@ class SettingsController extends ChangeNotifier {
   late bool _focusHold;
   late bool _focusWholeRounds;
   late int _focusLongBreak;
+  late bool _focusOverlay;
   late List<String> _focusImages;
   late List<int> _hiddenScenes;
   late List<String> _hiddenTracks;
@@ -504,6 +510,7 @@ class SettingsController extends ChangeNotifier {
   bool get focusHold => _focusHold;
   bool get focusWholeRounds => _focusWholeRounds;
   int get focusLongBreak => _focusLongBreak;
+  bool get focusOverlay => _focusOverlay;
   List<String> get focusImages => List.unmodifiable(_focusImages);
 
   List<int> get hiddenScenes => List.unmodifiable(_hiddenScenes);
@@ -593,6 +600,13 @@ class SettingsController extends ChangeNotifier {
   Future<void> setFocusWholeRounds(bool value) async {
     _focusWholeRounds = value;
     await LocalStore.writeSetting('focusWholeRounds', value);
+    notifyListeners();
+  }
+
+  Future<void> setFocusOverlay(bool value) async {
+    _focusOverlay = value;
+    await LocalStore.writeSetting('focusOverlay', value);
+    await FocusService.setOverlay(value);
     notifyListeners();
   }
 

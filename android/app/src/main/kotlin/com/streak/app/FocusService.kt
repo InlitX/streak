@@ -77,6 +77,7 @@ class FocusService : Service() {
         if (intent?.action == ACTION_END) announce(current)
         schedule(current)
         wake(current)
+        FocusOverlay.sync(this)
         return START_STICKY
     }
 
@@ -84,6 +85,7 @@ class FocusService : Service() {
         val state = FocusState.read(this) ?: return
         getSystemService(NotificationManager::class.java)?.notify(NOTIFICATION_ID, build(state))
         schedule(state)
+        FocusOverlay.sync(this)
     }
 
     private fun schedule(state: JSONObject) {
@@ -171,6 +173,7 @@ class FocusService : Service() {
     }
 
     private fun stop() {
+        FocusOverlay.remove(this)
         main.removeCallbacks(tick)
         getSystemService(AlarmManager::class.java)?.cancel(action(ACTION_END, REQUEST_END))
         stopForeground(STOP_FOREGROUND_REMOVE)
