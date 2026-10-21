@@ -83,20 +83,6 @@ class FocusService {
 
   static Future<void> hide() => _invoke('hide', const {});
 
-  static Future<void> setOverlay(bool on) => _invoke('overlay', {'on': on});
-
-  static Future<void> requestOverlay() => _invoke('requestOverlay', const {});
-
-  static Future<bool> overlayAllowed() async {
-    if (!_available) return false;
-    try {
-      return await _channel.invokeMethod<bool>('overlayAllowed') ?? false;
-    } catch (e) {
-      debugPrint('Focus service overlayAllowed failed: $e');
-      return false;
-    }
-  }
-
   static Future<List<FocusAction>> drain() async {
     if (!_available) return const [];
     try {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -41,7 +40,6 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/desktop_window.dart';
-import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -646,16 +644,6 @@ class _TopBar extends StatelessWidget {
     );
   }
 
-  Future<void> _toggleOverlay(BuildContext context) async {
-    final settings = context.read<SettingsController>();
-    if (settings.focusOverlay) return settings.setFocusOverlay(false);
-    final allowed = await FocusService.overlayAllowed();
-    await settings.setFocusOverlay(true);
-    if (!context.mounted) return;
-    AppSnackbar.info(context, context.l10n.focus_overlay_hint);
-    if (!allowed) await FocusService.requestOverlay();
-  }
-
   Future<void> _pickScene(BuildContext context) async {
     final settings = context.read<SettingsController>();
 
@@ -972,14 +960,6 @@ class _TopBar extends StatelessWidget {
                     icon: LucideIcons.timerReset,
                     label: context.l10n.focus_change_timer,
                     onTap: retime,
-                  ),
-                if (!kIsWeb && Platform.isAndroid)
-                  (
-                    icon: LucideIcons.pictureInPicture2,
-                    label: context.watch<SettingsController>().focusOverlay
-                        ? context.l10n.focus_overlay_off
-                        : context.l10n.focus_overlay_on,
-                    onTap: () => _toggleOverlay(context),
                   ),
                 (
                   icon: LucideIcons.music,

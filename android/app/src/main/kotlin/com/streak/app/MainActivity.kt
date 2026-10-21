@@ -66,18 +66,6 @@ class MainActivity : FlutterFragmentActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        FocusOverlay.foreground = true
-        FocusOverlay.sync(applicationContext)
-    }
-
-    override fun onStop() {
-        FocusOverlay.foreground = false
-        FocusOverlay.sync(applicationContext)
-        super.onStop()
-    }
-
     override fun onDestroy() {
         FocusBridge.detach(focusChannel)
         super.onDestroy()
