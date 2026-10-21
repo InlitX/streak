@@ -63,6 +63,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
   late final TextEditingController _unitLabel;
   late final TextEditingController _dailyCost;
   final _scroll = ScrollController();
+  final _nameFocus = FocusNode();
+  final _unitFocus = FocusNode();
+  final _noDaysKey = GlobalKey();
   final _lookAnchor = GlobalKey();
 
   String _icon = HabitIcons.defaultIcon;
@@ -122,15 +125,39 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool get _offersDifficulty =>
       _difficulty > 0 || context.watch<SettingsController>().difficultyOption;
 
-  bool get _canSave {
-    if (_name.text.trim().isEmpty) return false;
-    if (_kind == HabitKind.quantitative &&
-        _quantKind != QuantKind.time &&
-        _unitLabel.text.trim().isEmpty) {
-      return false;
+  bool get _needsUnit =>
+      _kind == HabitKind.quantitative &&
+      _quantKind != QuantKind.time &&
+      _unitLabel.text.trim().isEmpty;
+
+  Future<void> _reveal(FocusNode node) async {
+    if (node.context == null && _scroll.hasClients) {
+      await _scroll.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
     }
-    if (_noDays) return false;
-    return true;
+    node.requestFocus();
+  }
+
+  void _save() {
+    if (_name.text.trim().isEmpty) {
+      _reveal(_nameFocus);
+    } else if (_needsUnit) {
+      _reveal(_unitFocus);
+    } else if (_noDays) {
+      final hint = _noDaysKey.currentContext;
+      if (hint != null) {
+        Scrollable.ensureVisible(
+          hint,
+          alignment: 0.5,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    } else {
+      _submit();
+    }
   }
 
   bool get _noDays =>
@@ -263,6 +290,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
     _unitLabel.dispose();
     _dailyCost.dispose();
     _scroll.dispose();
+    _nameFocus.dispose();
+    _unitFocus.dispose();
     super.dispose();
   }
 
@@ -567,7 +596,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ? null
           : ExpressSaveBar(
               label: context.l10n.save,
-              onPressed: _canSave ? _submit : null,
+              onPressed: _save,
             ),
       body: Center(
         child: ConstrainedBox(
@@ -595,6 +624,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         cover: _cover,
         clarity: _coverClarity,
         controller: _name,
+        focusNode: _nameFocus,
         autofocus: _copying,
         onChanged: () => setState(() {}),
         onShuffleIcon: _revealLook,
@@ -621,6 +651,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         QuantitativeFields(
           quantKind: _quantKind,
           unitController: _unitLabel,
+          unitFocus: _unitFocus,
           target: _quantTarget,
           increment: _quantIncrement,
           steps: _healthSteps,
@@ -738,7 +769,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             ),
           ],
         ],
-        if (_noDays) const _NoDaysHint(),
+        if (_noDays) _NoDaysHint(key: _noDaysKey),
       ],
       if (_kind != HabitKind.negative && _planning) ...[
         const SizedBox(height: 26),
@@ -855,7 +886,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
               onPressed: _confirmDelete,
             ),
           TextButton(
-            onPressed: _canSave ? _submit : null,
+            onPressed: _save,
             child: Text(
               context.l10n.save,
               style: sheetActionStyle(context, size: 16),
@@ -865,6 +896,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         ],
       ),
       body: ListView(
+        controller: _scroll,
         padding: context.pagePadding(20, 0, 20, 32),
         children: [
           MinimalTitle(
@@ -886,6 +918,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       AppTextField(
         hint: context.l10n.name_hint,
         controller: _name,
+        focusNode: _nameFocus,
         autofocus: _copying,
         onChanged: (_) => setState(() {}),
       ),
@@ -931,6 +964,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 AppTextField(
                   hint: context.l10n.quant_unit_hint,
                   controller: _unitLabel,
+                  focusNode: _unitFocus,
                   onChanged: (_) => setState(() {}),
                 ),
               ],
@@ -1103,7 +1137,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             selected: _scheduleWeekdays,
             onChanged: (days) => setState(() => _scheduleWeekdays = days),
           ),
-          if (_noDays) const _NoDaysHint(),
+          if (_noDays) _NoDaysHint(key: _noDaysKey),
         ],
       ],
       if (_kind != HabitKind.negative && _planning) ...[
@@ -1258,7 +1292,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 onPressed: _confirmDelete,
               ),
             TextButton(
-              onPressed: _canSave ? _submit : null,
+              onPressed: _save,
               child: Text(
                 context.l10n.save,
                 style:
@@ -1269,6 +1303,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ],
         ),
         body: ListView(
+          controller: _scroll,
           padding: context.pagePadding(16, 16, 16, 16),
           children: [
             HabitPreview(
@@ -1281,6 +1316,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             AppTextField(
               hint: context.l10n.name_hint,
               controller: _name,
+              focusNode: _nameFocus,
               autofocus: _copying,
               onChanged: (_) => setState(() {}),
             ),
@@ -1302,6 +1338,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
               QuantitativeFields(
                 quantKind: _quantKind,
                 unitController: _unitLabel,
+                unitFocus: _unitFocus,
                 target: _quantTarget,
                 increment: _quantIncrement,
                 steps: _healthSteps,
@@ -1423,7 +1460,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   ),
                 ],
               ],
-              if (_noDays) const _NoDaysHint(),
+              if (_noDays) _NoDaysHint(key: _noDaysKey),
             ],
             if (_kind != HabitKind.negative && _planning) ...[
               const SizedBox(height: 20),
@@ -1533,7 +1570,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
 }
 
 class _NoDaysHint extends StatelessWidget {
-  const _NoDaysHint();
+  const _NoDaysHint({super.key});
 
   @override
   Widget build(BuildContext context) {

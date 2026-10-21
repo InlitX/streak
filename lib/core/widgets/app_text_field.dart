@@ -10,6 +10,7 @@ class AppTextField extends StatelessWidget {
     this.maxLines = 1,
     this.keyboardType,
     this.autofocus = false,
+    this.focusNode,
   });
 
   final String? hint;
@@ -18,6 +19,7 @@ class AppTextField extends StatelessWidget {
   final int maxLines;
   final TextInputType? keyboardType;
   final bool autofocus;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class AppTextField extends StatelessWidget {
 
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       onChanged: onChanged,
       maxLines: maxLines,
       keyboardType: keyboardType,

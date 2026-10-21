@@ -893,10 +893,12 @@ class QuantitativeFields extends StatelessWidget {
     required this.onIncrementChanged,
     this.showGoal = true,
     this.step,
+    this.unitFocus,
   });
 
   final QuantKind quantKind;
   final TextEditingController unitController;
+  final FocusNode? unitFocus;
   final double target;
   final double increment;
   final bool steps;
@@ -938,6 +940,7 @@ class QuantitativeFields extends StatelessWidget {
               AppTextField(
                 hint: context.l10n.quant_unit_hint,
                 controller: unitController,
+                focusNode: unitFocus,
                 onChanged: (_) => onUnitChanged(),
               ),
             ],
