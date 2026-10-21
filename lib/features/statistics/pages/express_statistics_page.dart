@@ -33,6 +33,7 @@ import 'package:streak/features/statistics/widgets/period_totals.dart';
 import 'package:streak/features/statistics/widgets/express_line_chart.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
+import 'package:streak/features/statistics/widgets/stat_line_charts.dart';
 import 'package:streak/features/statistics/widgets/year_heatmap.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 
@@ -297,6 +298,27 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
             tint: context.tokens.success,
             shape: ExpressShape.flower,
           ),
+          ExpressStatRow(
+            icon: LucideIcons.calendarDays,
+            label: context.l10n.active_days,
+            value: '${stats.activeDays}',
+            tint: accent,
+            shape: ExpressShape.gem,
+          ),
+          ExpressStatRow(
+            icon: LucideIcons.percent,
+            label: context.l10n.completion_rate,
+            value: '${stats.monthRate}%',
+            tint: context.tokens.info,
+            shape: ExpressShape.clover,
+          ),
+          ExpressStatRow(
+            icon: LucideIcons.calendarRange,
+            label: context.l10n.best_month,
+            value: stats.total == 0 ? '—' : _months(context)[stats.bestMonth],
+            tint: context.tokens.warning,
+            shape: ExpressShape.burst,
+          ),
         ],
       ),
       if (scoped.length == 1 && showsMoney(scoped.first)) ...[
@@ -395,6 +417,29 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
         tint: accent,
         shape: ExpressShape.clover,
         child: WeekdayBars(values: stats.weekday, color: accent, height: 170),
+      ),
+      const SizedBox(height: 12),
+      ExpressStatPanel(
+        title: context.l10n.streak_evolution,
+        icon: LucideIcons.trendingUp,
+        tint: accent,
+        shape: ExpressShape.pebble,
+        child: TrendChart(
+          key: const ValueKey('express-streak'),
+          values: stats.streakSeries,
+          color: accent,
+          startDate: AppClock.today().addDays(1 - HabitStats.window),
+        ),
+      ),
+      const SizedBox(height: 12),
+      ExpressStatPanel(
+        title: context.l10n.completion_time,
+        icon: LucideIcons.clock,
+        tint: accent,
+        shape: ExpressShape.cookie,
+        child: stats.hourSamples >= 5
+            ? HourArea(values: stats.hours, color: accent)
+            : _Placeholder(text: context.l10n.not_enough_data),
       ),
     ];
   }
