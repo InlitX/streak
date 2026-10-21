@@ -15,7 +15,7 @@ import 'package:streak/core/express/express_wave.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
-import 'package:streak/core/widgets/app_confirm_dialog.dart';
+import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
@@ -335,14 +335,10 @@ class ExpressAction extends StatelessWidget {
       await controller.clearRelapse(habit.id, today);
       return;
     }
-    final confirmed = await showAppConfirmDialog(
-      context,
-      title: context.l10n.log_relapse_title,
-      message: context.l10n.log_relapse_body(habit.name),
-      confirmLabel: context.l10n.log_relapse_confirm,
-      icon: LucideIcons.ban,
-    );
-    if (confirmed == true) await controller.logRelapse(habit.id, today);
+    final spent = await askRelapse(context, habit);
+    if (spent != null) {
+      await controller.logRelapse(habit.id, today, spent: spent);
+    }
   }
 
   Future<void> _addAmount(BuildContext context) async {

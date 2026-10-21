@@ -302,6 +302,7 @@ class FolderSync {
         minute: kept.hour != null ? kept.minute : spare.minute,
         marks: kept.marks,
         steps: {...mine.steps, ...other.steps},
+        spent: kept.spent > 0 ? kept.spent : spare.spent,
       );
     }
     return out;

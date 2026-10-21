@@ -8,8 +8,13 @@ import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 IconData habitMarkIcon(Habit habit) =>
     habit.tracking ? LucideIcons.hash : LucideIcons.flame;
 
-String habitMarkLabel(BuildContext context, Habit habit, HeatmapMode mode) =>
-    habit.tracking ? trackedLabel(context, habit, mode) : streakLabel(context, habit);
+String habitMarkLabel(BuildContext context, Habit habit, HeatmapMode mode) {
+  if (habit.tracking) return trackedLabel(context, habit, mode);
+  if (habit.hasCleanGoal && habit.currentStreak < habit.cleanGoal) {
+    return '${habit.currentStreak}/${habit.cleanGoal}';
+  }
+  return streakLabel(context, habit);
+}
 
 String trackedLabel(BuildContext context, Habit habit, HeatmapMode mode) {
   final (_, count) = periodTotal(context, habit, mode);

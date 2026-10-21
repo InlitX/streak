@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/features/habits/widgets/avoid_stats.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -59,6 +60,10 @@ class _MinimalQuantStatsPageState extends State<MinimalQuantStatsPage> {
                   padding: context.pagePadding(20, 0, 20, 40),
                   children: [
                     MinimalTitle(title: habit.name),
+                    if (habit.hasTotalGoal) ...[
+                      TotalGoalCard(habit: habit),
+                      const SizedBox(height: 20),
+                    ],
                     MinimalGrid(
                       children: [
                         MinimalTile(

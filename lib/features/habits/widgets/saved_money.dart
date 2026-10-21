@@ -21,6 +21,14 @@ String habitMoneySaved(BuildContext context, Habit habit) => formatMoney(
       Localizations.localeOf(context).toString(),
     );
 
+String habitMoneySpent(BuildContext context, Habit habit) => formatMoney(
+      habit.moneySpent,
+      context.watch<SettingsController>().currency,
+      Localizations.localeOf(context).toString(),
+    );
+
+bool showsMoney(Habit habit) => habit.hasCost || habit.logsSpent;
+
 Future<void> showCurrencySheet(BuildContext context) {
   final settings = context.read<SettingsController>();
   final options = [...currencySymbols];
@@ -163,16 +171,26 @@ class SavedMoneyStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spent = habit.logsSpent || habit.moneySpent > 0;
     if (context.watch<SettingsController>().isExpressStyle) {
       return ExpressGroup(
         children: [
-          ExpressStatRow(
-            icon: LucideIcons.piggyBank,
-            label: context.l10n.money_saved,
-            value: habitMoneySaved(context, habit),
-            tint: context.tokens.success,
-            shape: ExpressShape.clover,
-          ),
+          if (habit.hasCost)
+            ExpressStatRow(
+              icon: LucideIcons.piggyBank,
+              label: context.l10n.money_saved,
+              value: habitMoneySaved(context, habit),
+              tint: context.tokens.success,
+              shape: ExpressShape.clover,
+            ),
+          if (spent)
+            ExpressStatRow(
+              icon: LucideIcons.wallet,
+              label: context.l10n.money_spent,
+              value: habitMoneySpent(context, habit),
+              tint: context.tokens.danger,
+              shape: ExpressShape.flower,
+            ),
           ExpressStatRow(
             icon: LucideIcons.shieldCheck,
             label: context.l10n.clean_days,
@@ -184,19 +202,40 @@ class SavedMoneyStats extends StatelessWidget {
       );
     }
 
-    return StatPair(
-      left: MiniStat(
-        icon: LucideIcons.piggyBank,
-        color: context.tokens.success,
-        value: habitMoneySaved(context, habit),
-        label: context.l10n.money_saved,
-      ),
+    final pair = StatPair(
+      left: habit.hasCost
+          ? MiniStat(
+              icon: LucideIcons.piggyBank,
+              color: context.tokens.success,
+              value: habitMoneySaved(context, habit),
+              label: context.l10n.money_saved,
+            )
+          : MiniStat(
+              icon: LucideIcons.wallet,
+              color: context.tokens.danger,
+              value: habitMoneySpent(context, habit),
+              label: context.l10n.money_spent,
+            ),
       right: MiniStat(
         icon: LucideIcons.shieldCheck,
         color: habit.color.shownIn(context),
         value: '${habit.cleanDays}',
         label: context.l10n.clean_days,
       ),
+    );
+    if (!habit.hasCost || !spent) return pair;
+    return Column(
+      children: [
+        pair,
+        const SizedBox(height: 12),
+        MiniStat(
+          icon: LucideIcons.wallet,
+          color: context.tokens.danger,
+          value: habitMoneySpent(context, habit),
+          label: context.l10n.money_spent,
+          wide: true,
+        ),
+      ],
     );
   }
 }

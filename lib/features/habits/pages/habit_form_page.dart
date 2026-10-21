@@ -38,6 +38,7 @@ import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/minimal_pickers.dart';
 import 'package:streak/features/habits/widgets/minimal_substeps.dart';
+import 'package:streak/features/habits/widgets/avoid_stats.dart';
 import 'package:streak/features/habits/widgets/reminder_editor_sheet.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -89,6 +90,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool _tracking = false;
   bool _anyAmount = false;
   bool _healthSteps = false;
+  bool _trackSpent = false;
+  int _cleanGoal = 0;
+  double _totalGoal = 0;
   bool _anySteps = false;
   int _stepsNeeded = 1;
   int _difficulty = 0;
@@ -175,6 +179,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _tracking = habit.tracking;
       _anyAmount = habit.anyAmount;
       _healthSteps = habit.readsSteps;
+      _trackSpent = habit.trackSpent;
+      _cleanGoal = habit.cleanGoal;
+      _totalGoal = habit.totalGoal;
       _anySteps = habit.anySteps;
       _stepsNeeded = habit.stepsNeeded;
       _difficulty = habit.difficulty;
@@ -220,6 +227,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _tracking,
         _anyAmount,
         _healthSteps,
+        _trackSpent,
+        _cleanGoal,
+        _totalGoal,
         _anySteps,
         _stepsNeeded,
         _difficulty,
@@ -352,6 +362,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
           coverPath: _cover,
           coverClarity: _coverClarity,
           dailyCost: dailyCost,
+          trackSpent: negative && _trackSpent,
+          cleanGoal: negative ? _cleanGoal : 0,
+          totalGoal: negative ? 0 : _totalGoal,
           perDayTarget: quantitative ? (_noGoal ? 0 : _quantTarget) : widget.habit!.perDayTarget,
           unitLabel: quantitative ? _quantUnit : widget.habit!.unitLabel,
           incrementAmount:
@@ -399,6 +412,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
         coverClarity: _coverClarity,
         kind: _kind,
         dailyCost: dailyCost,
+        trackSpent: negative && _trackSpent,
+        cleanGoal: negative ? _cleanGoal : 0,
+        totalGoal: negative ? 0 : _totalGoal,
         perDayTarget: quantitative ? (_noGoal ? 0 : _quantTarget) : 1,
         unitLabel: quantitative ? _quantUnit : '',
         incrementAmount: quantitative ? _quantIncrement : 1,
@@ -643,6 +659,18 @@ class _HabitFormPageState extends State<HabitFormPage> {
       if (_kind == HabitKind.negative) ...[
         const SizedBox(height: 12),
         CostField(controller: _dailyCost, color: _color),
+        const SizedBox(height: 12),
+        AvoidExtras(
+          trackSpent: _trackSpent,
+          cleanGoal: _cleanGoal,
+          color: _color,
+          onTrackSpent: (v) => setState(() => _trackSpent = v),
+          onCleanGoal: (v) => setState(() => _cleanGoal = v),
+        ),
+      ],
+      if (_kind != HabitKind.negative) ...[
+        const SizedBox(height: 12),
+        _totalGoalField(),
       ],
       if (_kind == HabitKind.positive) ...[
         const SizedBox(height: 12),
@@ -962,6 +990,19 @@ class _HabitFormPageState extends State<HabitFormPage> {
         CompactNote(text: context.l10n.kind_negative_hint, color: _color),
         const SizedBox(height: 10),
         CostField(controller: _dailyCost, color: _color),
+        const SizedBox(height: 10),
+        AvoidExtras(
+          trackSpent: _trackSpent,
+          cleanGoal: _cleanGoal,
+          color: _color,
+          compact: true,
+          onTrackSpent: (v) => setState(() => _trackSpent = v),
+          onCleanGoal: (v) => setState(() => _cleanGoal = v),
+        ),
+      ],
+      if (_kind != HabitKind.negative) ...[
+        const SizedBox(height: 10),
+        _totalGoalField(compact: true),
       ],
       if (_kind == HabitKind.positive) ...[
         const SizedBox(height: 16),
@@ -1165,6 +1206,21 @@ class _HabitFormPageState extends State<HabitFormPage> {
     ];
   }
 
+  Widget _totalGoalField({bool compact = false}) => TotalGoalField(
+        goal: _totalGoal,
+        compact: compact,
+        unit: _kind == HabitKind.quantitative ? _quantUnit : '',
+        label: (value) => goalAmount(
+          context,
+          kind: _kind,
+          time: _quantKind == QuantKind.time,
+          unit: _quantUnit,
+          value: value,
+        ),
+        color: _color,
+        onChanged: (value) => setState(() => _totalGoal = value),
+      );
+
   String get _quantUnit => _quantKind == QuantKind.time
       ? context.l10n.unit_min_short
       : _unitLabel.text.trim();
@@ -1286,6 +1342,18 @@ class _HabitFormPageState extends State<HabitFormPage> {
               NegativeHint(color: _color),
               const SizedBox(height: 12),
               CostField(controller: _dailyCost, color: _color),
+              const SizedBox(height: 12),
+              AvoidExtras(
+                trackSpent: _trackSpent,
+                cleanGoal: _cleanGoal,
+                color: _color,
+                onTrackSpent: (v) => setState(() => _trackSpent = v),
+                onCleanGoal: (v) => setState(() => _cleanGoal = v),
+              ),
+            ],
+            if (_kind != HabitKind.negative) ...[
+              const SizedBox(height: 12),
+              _totalGoalField(),
             ],
             if (_kind == HabitKind.positive) ...[
               const SizedBox(height: 20),

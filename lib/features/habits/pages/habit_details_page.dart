@@ -51,6 +51,7 @@ import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/widgets/glass.dart';
 import 'package:streak/features/habits/widgets/quant_daily_bars.dart';
 import 'package:streak/features/habits/widgets/quantitative_progress.dart';
+import 'package:streak/features/habits/pages/habit_stats_page.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
@@ -296,6 +297,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 if (minimal) ...[
                   MinimalSection(
                     title: context.l10n.streaks,
+                    trailing: habit.kind != HabitKind.quantitative &&
+                            hasHabitStats(habit)
+                        ? QuantStatsLink(habit: habit)
+                        : null,
                     child: MinimalStreakTiles(habit: habit, mode: _mode),
                   ),
                   if (habit.hasCost)
@@ -304,7 +309,13 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                       child: MinimalMoneyTiles(habit: habit),
                     ),
                 ] else ...[
-                  SectionLabel(context.l10n.streaks),
+                  SectionLabel(
+                    context.l10n.streaks,
+                    trailing: habit.kind != HabitKind.quantitative &&
+                            hasHabitStats(habit)
+                        ? QuantStatsLink(habit: habit)
+                        : null,
+                  ),
                   StreakSummary(habit: habit, mode: _mode),
                   if (habit.hasCost) ...[
                     const SizedBox(height: 12),

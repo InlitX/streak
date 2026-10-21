@@ -131,6 +131,9 @@ class HabitsController extends ChangeNotifier {
     int coverClarity = 100,
     HabitKind kind = HabitKind.positive,
     double dailyCost = 0,
+    bool trackSpent = false,
+    int cleanGoal = 0,
+    double totalGoal = 0,
     double perDayTarget = 1,
     String unitLabel = '',
     double incrementAmount = 1,
@@ -172,6 +175,9 @@ class HabitsController extends ChangeNotifier {
       coverClarity: coverClarity,
       kind: kind,
       dailyCost: dailyCost,
+      trackSpent: trackSpent,
+      cleanGoal: cleanGoal,
+      totalGoal: totalGoal,
       perDayTarget: perDayTarget,
       unitLabel: unitLabel,
       incrementAmount: incrementAmount,
@@ -219,10 +225,16 @@ class HabitsController extends ChangeNotifier {
     await _apply(habit, CompletionOps.toggle(habit, date));
   }
 
-  Future<void> logRelapse(String id, DateTime date) async {
+  Future<void> logRelapse(String id, DateTime date, {double? spent}) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await _apply(habit, CompletionOps.logRelapse(habit, date));
+    await _apply(habit, CompletionOps.logRelapse(habit, date, spent: spent));
+  }
+
+  Future<void> setSpent(String id, DateTime date, double spent) async {
+    final habit = _habits[id];
+    if (habit == null) return;
+    await _apply(habit, CompletionOps.setSpent(habit, date, spent));
   }
 
   Future<void> addRelapse(String id, DateTime date) async {

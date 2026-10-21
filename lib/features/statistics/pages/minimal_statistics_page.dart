@@ -214,16 +214,23 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
                       ),
                     ),
                   ),
-                  if (habit != null && habit.hasCost)
+                  if (habit != null && showsMoney(habit))
                     MinimalSection(
                       title: context.l10n.money_saved,
                       child: MinimalGrid(
                         children: [
-                          MinimalTile(
-                            icon: LucideIcons.piggyBank,
-                            label: context.l10n.money_saved,
-                            value: habitMoneySaved(context, habit),
-                          ),
+                          if (habit.hasCost)
+                            MinimalTile(
+                              icon: LucideIcons.piggyBank,
+                              label: context.l10n.money_saved,
+                              value: habitMoneySaved(context, habit),
+                            ),
+                          if (habit.logsSpent || habit.moneySpent > 0)
+                            MinimalTile(
+                              icon: LucideIcons.wallet,
+                              label: context.l10n.money_spent,
+                              value: habitMoneySpent(context, habit),
+                            ),
                           MinimalTile(
                             icon: LucideIcons.shieldCheck,
                             label: context.l10n.clean_days,

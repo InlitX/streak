@@ -165,8 +165,9 @@ class _DayStatus extends StatelessWidget {
 
   Future<void> _relapse(BuildContext context, Habit habit) async {
     final controller = context.read<HabitsController>();
-    if (!await confirmRelapse(context, habit)) return;
-    await controller.logRelapse(habit.id, date);
+    final spent = await askRelapse(context, habit);
+    if (spent == null) return;
+    await controller.logRelapse(habit.id, date, spent: spent);
   }
 
   Future<void> _set(BuildContext context, Habit habit, double value) async {
@@ -305,6 +306,14 @@ class _DayStatus extends StatelessWidget {
                 ),
               ],
             ),
+            if (habit.logsSpent) ...[
+              const SizedBox(height: 12),
+              SpentField(
+                value: habit.completions[date.dayKey]?.spent ?? 0,
+                onChanged: (value) =>
+                    context.read<HabitsController>().setSpent(habit.id, date, value),
+              ),
+            ],
           ],
           if (counted) ...[
             const SizedBox(height: 14),

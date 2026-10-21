@@ -218,6 +218,160 @@ class CostField extends StatelessWidget {
   }
 }
 
+const cleanGoalPresets = [7, 14, 30, 60, 90];
+
+class AvoidExtras extends StatelessWidget {
+  const AvoidExtras({
+    super.key,
+    required this.trackSpent,
+    required this.cleanGoal,
+    required this.color,
+    required this.onTrackSpent,
+    required this.onCleanGoal,
+    this.compact = false,
+  });
+
+  final bool trackSpent;
+  final int cleanGoal;
+  final Color color;
+  final ValueChanged<bool> onTrackSpent;
+  final ValueChanged<int> onCleanGoal;
+  final bool compact;
+
+  Future<void> _pickGoal(BuildContext context) async {
+    final value = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.clean_goal,
+      value: (cleanGoal > 0 ? cleanGoal : 30).toDouble(),
+      unit: context.l10n.days.toLowerCase(),
+      min: 1,
+      accent: color,
+    );
+    if (value != null) onCleanGoal(value.round().clamp(1, 3650));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gap = SizedBox(height: compact ? 10 : 12);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HabitFlagToggle(
+          icon: LucideIcons.wallet,
+          title: context.l10n.avoid_track_spent,
+          hint: context.l10n.avoid_track_spent_sub,
+          value: trackSpent,
+          color: color,
+          onChanged: onTrackSpent,
+          compact: compact,
+        ),
+        gap,
+        HabitFlagToggle(
+          icon: LucideIcons.flag,
+          title: context.l10n.clean_goal,
+          hint: cleanGoal > 0
+              ? context.l10n.count_days(cleanGoal)
+              : context.l10n.clean_goal_sub,
+          value: cleanGoal > 0,
+          color: color,
+          onChanged: (on) => onCleanGoal(on ? 30 : 0),
+          compact: compact,
+        ),
+        if (cleanGoal > 0) ...[
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final days in cleanGoalPresets)
+                ChoiceChip(
+                  label: Text(context.l10n.count_days(days)),
+                  selected: days == cleanGoal,
+                  showCheckmark: false,
+                  selectedColor: color.withValues(alpha: 0.22),
+                  onSelected: (_) => onCleanGoal(days),
+                ),
+              if (!cleanGoalPresets.contains(cleanGoal))
+                ChoiceChip(
+                  label: Text(context.l10n.count_days(cleanGoal)),
+                  selected: true,
+                  showCheckmark: false,
+                  selectedColor: color.withValues(alpha: 0.22),
+                  onSelected: (_) => _pickGoal(context),
+                ),
+              ActionChip(
+                avatar: Icon(LucideIcons.pencil, size: 15, color: color),
+                label: Text(context.l10n.custom),
+                onPressed: () => _pickGoal(context),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class TotalGoalField extends StatelessWidget {
+  const TotalGoalField({
+    super.key,
+    required this.goal,
+    required this.unit,
+    required this.label,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final double goal;
+  final String unit;
+  final String Function(double value) label;
+  final Color color;
+  final ValueChanged<double> onChanged;
+  final bool compact;
+
+  Future<void> _pick(BuildContext context) async {
+    final value = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.total_goal,
+      value: goal > 0 ? goal : 100,
+      unit: unit,
+      min: 1,
+      accent: color,
+    );
+    if (value != null) onChanged(value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HabitFlagToggle(
+          icon: LucideIcons.target,
+          title: context.l10n.total_goal,
+          hint: context.l10n.total_goal_sub,
+          value: goal > 0,
+          color: color,
+          onChanged: (on) => on ? _pick(context) : onChanged(0),
+          compact: compact,
+        ),
+        if (goal > 0) ...[
+          const SizedBox(height: 10),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: ActionChip(
+              avatar: Icon(LucideIcons.pencil, size: 15, color: color),
+              label: Text(label(goal)),
+              onPressed: () => _pick(context),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 class FocusOnlyToggle extends StatelessWidget {
   const FocusOnlyToggle({
     super.key,

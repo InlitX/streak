@@ -856,9 +856,9 @@ class _HomePageState extends State<HomePage> {
     }
     if (habit.kind == HabitKind.negative && !isRelapse(habit, date)) {
       if (date.atMidnight.isAfter(AppClock.today())) return;
-      if (!await confirmRelapse(context, habit)) return;
-      if (!mounted) return;
-      await controller.logRelapse(habit.id, date);
+      final spent = await askRelapse(context, habit);
+      if (spent == null || !mounted) return;
+      await controller.logRelapse(habit.id, date, spent: spent);
       return;
     }
     if (!await allowManualCheck(context, habit: habit, date: date)) return;

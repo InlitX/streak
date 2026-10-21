@@ -60,6 +60,9 @@ class Habit {
     this.coverClarity = 100,
     this.kind = HabitKind.positive,
     this.dailyCost = 0,
+    this.trackSpent = false,
+    this.cleanGoal = 0,
+    this.totalGoal = 0,
     this.unitLabel = '',
     this.incrementAmount = 1,
     this.quantKind = QuantKind.generic,
@@ -193,6 +196,13 @@ class Habit {
 
   final HabitKind kind;
   final double dailyCost;
+
+  final bool trackSpent;
+
+  final int cleanGoal;
+
+  final double totalGoal;
+
   final String unitLabel;
   final double incrementAmount;
   final QuantKind quantKind;
@@ -425,6 +435,37 @@ class Habit {
   }
 
   double get moneySaved => hasCost ? cleanDays * dailyCost : 0;
+
+  bool get logsSpent => kind == HabitKind.negative && trackSpent;
+
+  bool get hasCleanGoal => kind == HabitKind.negative && cleanGoal > 0;
+
+  bool get hasTotalGoal => kind != HabitKind.negative && totalGoal > 0;
+
+  late final double totalDone = _totalDone();
+
+  double _totalDone() {
+    var total = 0.0;
+    for (final entry in completions.values) {
+      if (kind == HabitKind.quantitative) {
+        total += entry.count;
+      } else if (isDoneEntry(entry)) {
+        total++;
+      }
+    }
+    return total;
+  }
+
+  late final double moneySpent = _moneySpent();
+
+  double _moneySpent() {
+    if (kind != HabitKind.negative) return 0;
+    var total = 0.0;
+    for (final entry in completions.values) {
+      total += entry.spent;
+    }
+    return total;
+  }
 
   late final int totalCompletions = _totalCompletions();
 
@@ -737,6 +778,9 @@ class Habit {
     int? coverClarity,
     HabitKind? kind,
     double? dailyCost,
+    bool? trackSpent,
+    int? cleanGoal,
+    double? totalGoal,
     String? unitLabel,
     double? incrementAmount,
     QuantKind? quantKind,
@@ -784,6 +828,9 @@ class Habit {
       coverClarity: coverClarity ?? this.coverClarity,
       kind: kind ?? this.kind,
       dailyCost: dailyCost ?? this.dailyCost,
+      trackSpent: trackSpent ?? this.trackSpent,
+      cleanGoal: cleanGoal ?? this.cleanGoal,
+      totalGoal: totalGoal ?? this.totalGoal,
       unitLabel: unitLabel ?? this.unitLabel,
       incrementAmount: incrementAmount ?? this.incrementAmount,
       quantKind: quantKind ?? this.quantKind,
@@ -844,6 +891,9 @@ class Habit {
         if (monthWeekday) 'monthWeekday': true,
         'kind': kind.index,
         'dailyCost': dailyCost,
+        if (trackSpent) 'trackSpent': true,
+        if (cleanGoal > 0) 'cleanGoal': cleanGoal,
+        if (totalGoal > 0) 'totalGoal': totalGoal,
         'unitLabel': unitLabel,
         'incrementAmount': incrementAmount,
         'quantKind': quantKind.index,
@@ -910,6 +960,9 @@ class Habit {
         monthWeekday: map['monthWeekday'] == true,
         kind: HabitKind.values[(map['kind'] ?? 0) as int],
         dailyCost: ((map['dailyCost'] ?? 0) as num).toDouble(),
+        trackSpent: map['trackSpent'] == true,
+        cleanGoal: (map['cleanGoal'] as num?)?.toInt() ?? 0,
+        totalGoal: (map['totalGoal'] as num?)?.toDouble() ?? 0,
         unitLabel: (map['unitLabel'] ?? '') as String,
         incrementAmount: ((map['incrementAmount'] ?? 1) as num).toDouble(),
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],

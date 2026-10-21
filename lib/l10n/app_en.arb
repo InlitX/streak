@@ -1460,5 +1460,37 @@
   "widget_kind_stats": "Summary",
   "widget_kind_heatmap": "Heatmap",
   "widget_kind_todos": "To-do",
-  "today_view": "View"
+  "today_view": "View",
+  "avoid_track_spent": "Log what you spend",
+  "avoid_track_spent_sub": "When you relapse, note how much it cost you. The cost per day is filled in for you",
+  "clean_goal": "Clean days goal",
+  "clean_goal_sub": "Pick how many days in a row you want to hold out",
+  "clean_goal_left": "{count, plural, =1{1 day to go} other{{count} days to go}}",
+  "@clean_goal_left": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "clean_goal_reached": "Goal reached",
+  "clean_goal_again": "Your streak keeps going. Keep it up",
+  "clean_goal_of": "of {goal}",
+  "@clean_goal_of": {
+    "placeholders": { "goal": { "type": "int" } }
+  },
+  "relapse_spent": "Spent on this relapse",
+  "money_spent": "Money spent",
+  "avoid_month": "Month summary",
+  "avoid_balance": "Balance",
+  "total_goal": "Total goal",
+  "total_goal_sub": "A target for the whole habit, like 1000 pages or 50 times",
+  "total_goal_left": "{amount} to go",
+  "@total_goal_left": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "total_goal_of": "of {amount}",
+  "@total_goal_of": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "count_times": "{count, plural, =1{1 time} other{{count} times}}",
+  "@count_times": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

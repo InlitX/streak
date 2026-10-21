@@ -218,7 +218,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                 ),
               ),
-              if (scoped.length == 1 && scoped.first.hasCost) ...[
+              if (scoped.length == 1 && showsMoney(scoped.first)) ...[
                 const SizedBox(height: 12),
                 StatReveal(child: SavedMoneyStats(habit: scoped.first)),
               ],

@@ -8,6 +8,7 @@ class Completion {
     this.minute,
     this.marks = const [],
     this.steps = const {},
+    this.spent = 0,
   });
 
   final String date;
@@ -21,12 +22,15 @@ class Completion {
 
   final Set<String> steps;
 
+  final double spent;
+
   Completion copyWith({
     double? count,
     int? hour,
     int? minute,
     List<int>? marks,
     Set<String>? steps,
+    double? spent,
   }) =>
       Completion(
         date: date,
@@ -35,6 +39,7 @@ class Completion {
         minute: minute ?? this.minute,
         marks: marks ?? this.marks,
         steps: steps ?? this.steps,
+        spent: spent ?? this.spent,
       );
 
   List<int> get times {
@@ -63,6 +68,7 @@ class Completion {
         if (minute != null) 'minute': minute,
         if (marks.isNotEmpty) 'marks': marks,
         if (steps.isNotEmpty) 'steps': steps.toList(),
+        if (spent > 0) 'spent': spent,
       };
 
   factory Completion.fromMap(Map<String, dynamic> map) => Completion(
@@ -77,5 +83,6 @@ class Completion {
         steps: map['steps'] == null
             ? const {}
             : {...(map['steps'] as List).map((e) => e as String)},
+        spent: (map['spent'] as num?)?.toDouble() ?? 0,
       );
 }

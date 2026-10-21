@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/features/habits/widgets/avoid_stats.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -125,6 +126,10 @@ class _ExpressQuantStatsPageState extends State<ExpressQuantStatsPage> {
                   children: [
                     ExpressHeadline(title: habit.name),
                     const SizedBox(height: 20),
+                    if (habit.hasTotalGoal) ...[
+                      TotalGoalCard(habit: habit),
+                      const SizedBox(height: 20),
+                    ],
                     for (var i = 0; i < sections.length; i++)
                       ExpressReveal(index: i ~/ 2, child: sections[i]),
                   ],

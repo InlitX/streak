@@ -92,7 +92,11 @@ class CompletionOps {
     return completions;
   }
 
-  static Map<String, Completion> logRelapse(Habit habit, DateTime date) {
+  static Map<String, Completion> logRelapse(
+    Habit habit,
+    DateTime date, {
+    double? spent,
+  }) {
     if (_isFuture(date)) return habit.completions;
     final completions = {...habit.completions};
     completions[date.dayKey] = Completion(
@@ -100,8 +104,22 @@ class CompletionOps {
       hour: AppClock.wallNow().hour,
       minute: AppClock.wallNow().minute,
       marks: [_nowMinutes()],
+      spent: spent ?? (habit.logsSpent ? habit.dailyCost : 0),
     );
     return completions;
+  }
+
+  static Map<String, Completion> setSpent(
+    Habit habit,
+    DateTime date,
+    double spent,
+  ) {
+    final entry = habit.completions[date.dayKey];
+    if (entry == null) return habit.completions;
+    return {
+      ...habit.completions,
+      date.dayKey: entry.copyWith(spent: spent < 0 ? 0 : spent),
+    };
   }
 
   static Map<String, Completion> addRelapse(Habit habit, DateTime date) {

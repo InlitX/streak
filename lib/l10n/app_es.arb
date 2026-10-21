@@ -1265,5 +1265,22 @@
   "widget_kind_stats": "Resumen",
   "widget_kind_heatmap": "Mapa de actividad",
   "widget_kind_todos": "Tareas",
-  "today_view": "Vista"
+  "today_view": "Vista",
+  "avoid_track_spent": "Apuntar lo que gastas",
+  "avoid_track_spent_sub": "Al recaer, anota cuánto te ha costado. Se rellena con el coste por día",
+  "clean_goal": "Meta de días limpios",
+  "clean_goal_sub": "Elige cuántos días seguidos quieres aguantar",
+  "clean_goal_left": "{count, plural, =1{Falta 1 día} other{Faltan {count} días}}",
+  "clean_goal_reached": "Meta cumplida",
+  "clean_goal_again": "Tu racha sigue contando. Sigue así",
+  "clean_goal_of": "de {goal}",
+  "relapse_spent": "Gastado en esta recaída",
+  "money_spent": "Dinero gastado",
+  "avoid_month": "Resumen del mes",
+  "avoid_balance": "Balance",
+  "total_goal": "Meta total",
+  "total_goal_sub": "Una cifra para todo el hábito, como 1000 páginas o 50 veces",
+  "total_goal_left": "Faltan {amount}",
+  "total_goal_of": "de {amount}",
+  "count_times": "{count, plural, =1{1 vez} other{{count} veces}}"
 }

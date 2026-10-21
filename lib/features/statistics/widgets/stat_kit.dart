@@ -315,6 +315,7 @@ class MiniStat extends StatelessWidget {
     required this.icon,
     required this.color,
     this.unit,
+    this.wide = false,
   });
 
   final String value;
@@ -322,11 +323,23 @@ class MiniStat extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String? unit;
+  final bool wide;
 
   @override
   Widget build(BuildContext context) {
     final classic = context.watch<SettingsController>().appStyle == 0;
     final dark = Theme.of(context).brightness == Brightness.dark;
+    final badge = classic
+        ? Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.14),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 15, color: color),
+          )
+        : Icon(icon, size: 16, color: color);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: classic
@@ -344,36 +357,43 @@ class MiniStat extends StatelessWidget {
               ],
             )
           : BoxDecoration(
-              color:
-                  context.colors.surfaceContainerHighest.withValues(alpha: 0.5),
+              color: context.colors.surfaceContainerHighest.withValues(
+                alpha: 0.5,
+              ),
               borderRadius: BorderRadius.circular(16),
             ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (classic)
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.14),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 15, color: color),
+      child: wide
+          ? Row(
+              children: [
+                badge,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: statLabel(context),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                _StatValue(value: value, unit: unit),
+              ],
             )
-          else
-            Icon(icon, size: 16, color: color),
-          const SizedBox(height: 10),
-          _StatValue(value: value, unit: unit),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: statLabel(context),
-          ),
-        ],
-      ),
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                badge,
+                const SizedBox(height: 10),
+                _StatValue(value: value, unit: unit),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: statLabel(context),
+                ),
+              ],
+            ),
     );
   }
 }

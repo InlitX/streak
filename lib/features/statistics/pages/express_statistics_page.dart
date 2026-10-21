@@ -299,7 +299,7 @@ class _ExpressStatisticsPageState extends State<ExpressStatisticsPage> {
           ),
         ],
       ),
-      if (scoped.length == 1 && scoped.first.hasCost) ...[
+      if (scoped.length == 1 && showsMoney(scoped.first)) ...[
         const SizedBox(height: 20),
         SavedMoneyStats(habit: scoped.first),
       ],
