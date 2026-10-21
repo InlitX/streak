@@ -219,6 +219,9 @@ object WidgetDraw {
         }
     }
 
+    fun chipFits(context: Context, widthDp: Float, label: String): Boolean =
+        paint(context, 10.5f, 0, 800).measureText(label) <= (widthDp - 8f) * density(context)
+
     fun button(context: Context, sizeDp: Float, color: Color, kind: ButtonKind, fill: Float, ink: Color, round: Boolean): Bitmap {
         val key = "b:$sizeDp:${color.toArgb()}:$kind:${(fill * 100).toInt()}:${ink.toArgb()}:$round"
         return remember(key) {

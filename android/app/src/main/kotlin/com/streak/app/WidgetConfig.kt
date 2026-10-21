@@ -12,6 +12,7 @@ data class WidgetLook(
     val details: Boolean = true,
     val round: Boolean = false,
     val hideDone: Boolean = false,
+    val hideTracking: Boolean = false,
     val compact: Boolean = false,
     val band: Boolean = true,
 )
@@ -89,6 +90,7 @@ object WidgetConfig {
             details = p.getBoolean("details_$k", true),
             round = p.getBoolean("roundButtons_$k", round),
             hideDone = p.getBoolean("hideDone_$k", false),
+            hideTracking = p.getBoolean("hideTracking_$k", false),
             compact = p.getBoolean("compact_$k", false),
             band = p.getBoolean("band_$k", true),
         )
@@ -102,6 +104,7 @@ object WidgetConfig {
             .putBoolean("details_$id", look.details)
             .putBoolean("roundButtons_$id", look.round)
             .putBoolean("hideDone_$id", look.hideDone)
+            .putBoolean("hideTracking_$id", look.hideTracking)
             .putBoolean("compact_$id", look.compact)
             .putBoolean("band_$id", look.band)
             .commit()
@@ -184,6 +187,7 @@ object WidgetConfig {
             .remove("details_$id")
             .remove("roundButtons_$id")
             .remove("hideDone_$id")
+            .remove("hideTracking_$id")
             .remove("compact_$id")
             .remove("band_$id")
             .apply()

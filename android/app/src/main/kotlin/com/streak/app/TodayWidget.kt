@@ -109,6 +109,7 @@ class TodayWidget : GlanceAppWidget() {
             val habits = data?.optJSONArray("habits")
             val due = habits?.let(::dueToday).orEmpty()
                 .filterNot { look.hideDone && it.optJSONArray("completions")?.optBoolean(WidgetPayload.TODAY, false) == true }
+                .filterNot { look.hideTracking && it.optBoolean("tracking", false) }
             if (due.isEmpty()) {
                 EmptyNote(
                     when {
@@ -169,11 +170,15 @@ class TodayWidget : GlanceAppWidget() {
     private fun Week(context: Context, style: WidgetStyle, data: JSONObject?, inner: Float) {
         val days = data?.optJSONArray("days")
         val width = (inner - CHIP_GAP * (WidgetPayload.WEEK - 1)) / WidgetPayload.WEEK
+        val labels = (0 until WidgetPayload.WEEK).map { day ->
+            val info = days?.optJSONObject(day)
+            info?.optString("short").orEmpty() to info?.optString("label").orEmpty()
+        }
+        val tight = labels.any { (short, _) -> !WidgetDraw.chipFits(context, width, short) }
         Row(modifier = GlanceModifier.fillMaxWidth()) {
             for (day in 0 until WidgetPayload.WEEK) {
-                val info = days?.optJSONObject(day)
-                val label = info?.optString("short").orEmpty()
-                    .ifEmpty { info?.optString("label").orEmpty() }
+                val (short, narrow) = labels[day]
+                val label = if (tight || short.isEmpty()) narrow else short
                 Image(
                     provider = ImageProvider(
                         WidgetDraw.chip(context, width, CHIP_DP, kindOf(data, day), label, style.content, progressOf(data, day)),

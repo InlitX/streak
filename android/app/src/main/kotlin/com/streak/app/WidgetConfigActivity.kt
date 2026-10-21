@@ -417,6 +417,12 @@ class WidgetConfigActivity : ComponentActivity() {
                                     look = look.copy(hideDone = it)
                                 }
                                 Line()
+                                if (type == WType.TODAY) {
+                                    ToggleRow(tr("cfg_hide_tracking", "Hide just tracking"), null, look.hideTracking) {
+                                        look = look.copy(hideTracking = it)
+                                    }
+                                    Line()
+                                }
                                 ToggleRow(tr("cfg_compact", "Compact"), tr("cfg_compact_hint", "Smaller rows, streak next to the name"), look.compact) {
                                     look = look.copy(compact = it)
                                 }
