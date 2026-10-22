@@ -1078,6 +1078,166 @@
   "pin_paste": "Вставить код",
   "discard": "Отменить",
   "keep_editing": "Продолжить редактировать",
-  "discard_changes": "Отменить изменения",
-  "discard_changes_body": "Сделанные вами в этой привычке изменения будут утеряны."
+  "discard_changes": "Отменить изменения?",
+  "discard_changes_body": "Сделанные вами в этой привычке изменения будут утеряны.",
+  "onb_kicker": "Добро пожаловать",
+  "refresh_now": "Обновить",
+  "refresh_now_sub": "Добавьте то, что оставили в папке ваши другие устройства",
+  "data_folder": "Папка с данными",
+  "data_folder_documents": "Документы",
+  "data_folder_app": "Рядом с приложением",
+  "data_folder_pick": "Выберите папку",
+  "data_folder_inside": "Выберите папку вне текущей.",
+  "data_folder_taken": "Эта папка уже содержит данные Streak.",
+  "data_folder_denied": "Streak не может записать данные в эту папку.",
+  "data_folder_move_title": "Перенесите свои данные",
+  "data_folder_move_body": "Streak закроется и перенесёт ваши данные в {path}. Откройте приложение снова после закрытия. Если что-то пойдёт не так, данные останутся на прежнем месте.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Переместить и закрыть",
+  "refresh_brought": "Ваши привычки актуальны",
+  "refresh_nothing": "В папке нет ничего нового",
+  "streak_unit_week": "{count} нед.",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count} мес.",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "cost_per_day": "Стоимость в день",
+  "cost_note": "Необязательно. Оставьте пустым, если у этой привычки нет денежных затрат.",
+  "currency": "Валюта",
+  "currency_custom": "Своя",
+  "currency_hint": "Символ или код",
+  "money_saved": "Сэкономленные деньги",
+  "clean_days": "Чистых дней",
+  "quant_average": "Среднее за день",
+  "quant_logged_days": "Отмеченных дней",
+  "quant_best_day": "Лучший день",
+  "quant_goal_days": "Целей достигнуто",
+  "quant_stats_empty": "Добавьте значение — оно будет прибавляться здесь, даже если в этот день цель не достигнута.",
+  "pick_one_day": "Выберите как минимум один день",
+  "reminder_habit_days": "В дни привычки",
+  "reminder_habit_days_hint": "Срабатывает в дни, когда нужно выполнить привычку.",
+  "focus_label": "Подпись",
+  "focus_label_none": "Без подписи",
+  "focus_label_new": "Новая подпись",
+  "focus_label_hint": "Математика, чтение, работа...",
+  "focus_label_remove": "Удалить подпись",
+  "focus_label_remove_body": "{label} пропадает из списка. В прошлых сеансах он остаётся.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "Удалить",
+  "by_label": "По подписи",
+  "tracking_hide": "Скрыть только отслеживаемые",
+  "tracking_hide_sub": "Привычки, которые вы только отслеживаете, в этот список не попадают",
+  "tracking_show": "Показать только отслеживаемые ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminders_ready_title": "Напоминания включены",
+  "reminders_ready_body": "Streak напомнит вам здесь.",
+  "duplicate_habit": "Дублировать привычку",
+  "habit_duplicated": "{name} добавлено",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_hours": "Повторять в течение дня",
+  "repeat_until": "До",
+  "end_of_day": "В конце дня",
+  "every_n_hours": "Каждый {n} ч",
+  "@every_n_hours": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "just_tracking_option": "Предлагать только отслеживаемые",
+  "just_tracking_option_sub": "Добавляет переключатель при создании привычки",
+  "just_tracking": "Только отслеживание",
+  "just_tracking_sub": "Сохраняет свою сетку и числа, но не учитывается в прогрессе и дневном счётчике",
+  "no_goal": "Нет ежедневной цели",
+  "no_goal_sub": "Просто записывайте значение, как свой вес. Любое значение засчитывает день.",
+  "todo_paper": "Цвет",
+  "todo_add": "Добавить",
+  "todo_title_hint": "Заголовок",
+  "todo_body_hint": "Заметка",
+  "todo_background": "Задний фон",
+  "todo_background_pick": "Выберите фото",
+  "todo_deleted": "Заметка удалена",
+  "todo_pin": "Закрепить",
+  "todo_unpin": "Открепить",
+  "todo_select": "Выбрать",
+  "prefs_habits": "Привычки",
+  "focus_continue": "Продолжить",
+  "focus_alert_custom": "Выбрать звук",
+  "focus_options": "Опции",
+  "focus_fullscreen": "Полный экран",
+  "focus_exit_fullscreen": "Выйти из полного экрана",
+  "focus_volume": "Громкость",
+  "last_12_months": "Последние 12 месяцев",
+  "plan_show_habits": "Привычки",
+  "plan_show_both": "Оба",
+  "miss_other": "Другое",
+  "miss_other_hint": "Напишите причину",
+  "today_filter": "Показать",
+  "focus_label_icon": "Иконка (необязательно)",
+  "widget_this_week": "Эта неделя",
+  "widget_last_days": "Последние {count} дней",
+  "@widget_last_days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_week_done": "{done} из {total}",
+  "@widget_week_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_background": "Задний фон",
+  "widget_cfg_show_header": "Заголовок",
+  "any_amount": "Любая сумма имеет значение",
+  "any_amount_sub": "Любое значение засчитывает день как выполненный, даже если оно ниже цели.",
+  "todo_time": "Время",
+  "todo_estimate": "Продолжительность",
+  "todo_estimate_none": "Без продолжительности",
+  "todo_list_item": "Элемент списка",
+  "focus_long_break": "Длительный перерыв",
+  "focus_long_break_sub": "Каждые 4 раунда — более продолжительный перерыв."
 }
