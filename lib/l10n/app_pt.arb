@@ -1313,5 +1313,6 @@
     }
   },
   "island_p_agave": "Agave",
-  "island_only_affordable": "Apenas o que eu consigo pagar"
+  "island_only_affordable": "Apenas o que eu consigo pagar",
+  "island_tap_hint": "Toque em uma figura para ver onde ela se encaixa"
 }
