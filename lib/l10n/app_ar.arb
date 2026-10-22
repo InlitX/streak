@@ -608,5 +608,26 @@
   "quote_12": "اليوم يحسب.",
   "just_tracking_option": "عرض التتبع فقط",
   "just_tracking_option_sub": "يضيف مفتاح التبديل عند إنشاء عادة",
-  "just_tracking": "اتتبع فقط"
+  "just_tracking": "اتتبع فقط",
+  "todo_discard_body": "التغيرات التي سوف تطبقها لهذه مهمه سوف يفقد.",
+  "just_tracking_sub": "أبقي تخطها وأرقامها الخاصة، لكن لا تضمنها مع التقدم وعداد الأيام",
+  "no_goal": "لا أهداف يومية",
+  "no_goal_sub": "فقط سجل القيمة، مثل وزنك، أي علامة في يومك.",
+  "any_amount": "أي قيمة تحسب",
+  "any_amount_sub": "يعد تسجيل أي قيمة بمثابة إتمام اليوم، حتى وإن كانت أقل من الهدف.",
+  "any_step": "أنهي ببضع خطوات",
+  "any_step_sub": "إتمام خطوة واحدة تسجل اليوم بأكمل أنه إنتهى، بدون فعلهم جميعا.",
+  "steps_needed_sub": "اليوم يحسب بـ{needed} من {total} خطوة.",
+  "@steps_needed_sub": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sched_start": "يبدأ في",
+  "from_last_done": "إبدء من المرة الأخيره"
 }
