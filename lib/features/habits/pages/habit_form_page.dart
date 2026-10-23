@@ -119,6 +119,11 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   bool get _planning => context.watch<SettingsController>().planningEnabled;
 
+  bool get _focusTimeHabit =>
+      _kind == HabitKind.quantitative &&
+      _quantKind == QuantKind.time &&
+      context.watch<SettingsController>().focusEnabled;
+
   bool get _offersTracking =>
       _tracking || context.watch<SettingsController>().trackingOption;
 
@@ -728,6 +733,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ],
         ],
       ],
+      if (_focusTimeHabit) ...[
+        const SizedBox(height: 20),
+        ..._focusTimerFields(),
+      ],
       if (_kind != HabitKind.negative) ...[
         const SizedBox(height: 26),
         SectionLabel(context.l10n.frequency),
@@ -1064,6 +1073,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ],
         ],
       ],
+      if (_focusTimeHabit) ...[
+        const SizedBox(height: 16),
+        ..._focusTimerFields(),
+      ],
       if (_kind != HabitKind.negative) ...[
         const SizedBox(height: 16),
         SectionLabel(context.l10n.frequency),
@@ -1239,6 +1252,31 @@ class _HabitFormPageState extends State<HabitFormPage> {
         ),
     ];
   }
+
+  List<Widget> _focusTimerFields() => [
+    SectionLabel(context.l10n.focus),
+    FocusDurationChips(
+      minutes: _focusMinutes,
+      onChanged: (v) => setState(() => _focusMinutes = v),
+    ),
+    if (_focusMinutes > 0) ...[
+      const SizedBox(height: 12),
+      FocusPomodoroCard(
+        enabled: _pomodoro,
+        breakMinutes: _breakMinutes,
+        onToggle: (v) => setState(() => _pomodoro = v),
+        onBreakChanged: (v) => setState(() => _breakMinutes = v),
+      ),
+    ],
+    const SizedBox(height: 8),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        context.l10n.focus_time_habit_hint,
+        style: sheetBodyStyle(context, size: 12.5, color: context.tokens.muted),
+      ),
+    ),
+  ];
 
   Widget _totalGoalField({bool compact = false}) => TotalGoalField(
         goal: _totalGoal,
@@ -1416,6 +1454,10 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   ),
                 ],
               ],
+            ],
+            if (_focusTimeHabit) ...[
+              const SizedBox(height: 20),
+              ..._focusTimerFields(),
             ],
             if (_kind != HabitKind.negative) ...[
               const SizedBox(height: 20),
