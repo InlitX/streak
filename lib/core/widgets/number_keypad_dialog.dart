@@ -17,6 +17,8 @@ Future<double?> showNumberKeypadDialog(
   bool clock = false,
   Color? accent,
   ValueNotifier<bool>? replacing,
+  String? extraLabel,
+  VoidCallback? onExtra,
 }) {
   return showDialog<double>(
     context: context,
@@ -30,6 +32,8 @@ Future<double?> showNumberKeypadDialog(
       clock: clock,
       accent: accent,
       replacing: replacing,
+      extraLabel: extraLabel,
+      onExtra: onExtra,
     ),
   );
 }
@@ -45,6 +49,8 @@ class _NumberKeypadDialog extends StatefulWidget {
     required this.clock,
     required this.accent,
     required this.replacing,
+    this.extraLabel,
+    this.onExtra,
   });
 
   final String title;
@@ -56,6 +62,8 @@ class _NumberKeypadDialog extends StatefulWidget {
   final bool clock;
   final Color? accent;
   final ValueNotifier<bool>? replacing;
+  final String? extraLabel;
+  final VoidCallback? onExtra;
 
   @override
   State<_NumberKeypadDialog> createState() => _NumberKeypadDialogState();
@@ -345,6 +353,20 @@ class _NumberKeypadDialogState extends State<_NumberKeypadDialog> {
                 ),
               ],
             ),
+            if (widget.extraLabel case final extra?) ...[
+              const SizedBox(height: 6),
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  widget.onExtra?.call();
+                },
+                icon: Icon(LucideIcons.play, size: 16, color: accent),
+                label: Text(
+                  extra,
+                  style: sheetActionStyle(context, size: 14, color: accent),
+                ),
+              ),
+            ],
           ],
         ),
       ),
