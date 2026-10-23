@@ -89,6 +89,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool _noGoal = false;
   double _quantIncrement = 1;
   String _bookCover = '';
+  double _bookPages = 0;
   bool _focusOnly = false;
   bool _tracking = false;
   bool _anyAmount = false;
@@ -207,6 +208,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _quantTarget = habit.kind == HabitKind.quantitative && !_noGoal ? habit.perDayTarget : 8;
       _quantIncrement = habit.incrementAmount;
       _bookCover = habit.bookCoverPath;
+      _bookPages = habit.bookPages;
       _focusOnly = habit.focusOnly;
       _tracking = habit.tracking;
       _anyAmount = habit.anyAmount;
@@ -255,6 +257,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _noGoal,
         _quantIncrement,
         _bookCover,
+        _bookPages,
         _focusOnly,
         _tracking,
         _anyAmount,
@@ -405,6 +408,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
               quantitative ? _quantIncrement : widget.habit!.incrementAmount,
           quantKind: quantitative ? _quantKind : widget.habit!.quantKind,
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
+          bookPages: _readsBook ? _bookPages : 0,
           focusOnly: focusOnly,
           tracking: _tracking,
           healthSteps: healthSteps,
@@ -417,7 +421,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           startMinute: negative ? -1 : _startMinute,
           durationMinutes: negative ? 0 : _durationMinutes,
           substeps: substeps,
-        ).rememberGoal(widget.habit!),
+        ).rememberGoal(widget.habit!).keepBook(widget.habit!),
       );
     } else {
       final template = widget.template;
@@ -454,6 +458,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         incrementAmount: quantitative ? _quantIncrement : 1,
         quantKind: quantitative ? _quantKind : QuantKind.generic,
         bookCoverPath: quantitative ? bookCover : '',
+        bookPages: _readsBook ? _bookPages : 0,
         focusOnly: focusOnly,
         tracking: _tracking,
         healthSteps: healthSteps,
@@ -690,6 +695,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
             onPick: _pickBookCover,
             onRemove: () => setState(() => _bookCover = ''),
           ),
+          const SizedBox(height: 12),
+          _bookPagesField(),
         ],
       ],
       if (_kind == HabitKind.negative) ...[
@@ -1026,6 +1033,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
             onPick: _pickBookCover,
             onRemove: () => setState(() => _bookCover = ''),
           ),
+          const SizedBox(height: 10),
+          _bookPagesField(compact: true),
         ],
       ],
       if (_kind == HabitKind.negative) ...[
@@ -1293,6 +1302,17 @@ class _HabitFormPageState extends State<HabitFormPage> {
         onChanged: (value) => setState(() => _totalGoal = value),
       );
 
+  bool get _readsBook =>
+      _kind == HabitKind.quantitative && _quantKind == QuantKind.reading;
+
+  Widget _bookPagesField({bool compact = false}) => BookPagesField(
+        pages: _bookPages,
+        unit: _quantUnit,
+        compact: compact,
+        color: _color,
+        onChanged: (value) => setState(() => _bookPages = value),
+      );
+
   String get _quantUnit => _quantKind == QuantKind.time
       ? context.l10n.unit_min_short
       : _unitLabel.text.trim();
@@ -1410,6 +1430,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   onPick: _pickBookCover,
                   onRemove: () => setState(() => _bookCover = ''),
                 ),
+                const SizedBox(height: 12),
+                _bookPagesField(),
               ],
             ],
             if (_kind == HabitKind.negative) ...[

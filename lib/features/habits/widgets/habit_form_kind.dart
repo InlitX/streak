@@ -372,6 +372,73 @@ class TotalGoalField extends StatelessWidget {
   }
 }
 
+class BookPagesField extends StatelessWidget {
+  const BookPagesField({
+    super.key,
+    required this.pages,
+    required this.unit,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final double pages;
+  final String unit;
+  final Color color;
+  final ValueChanged<double> onChanged;
+  final bool compact;
+
+  Future<void> _pick(BuildContext context) async {
+    final value = await pickBookPages(context, pages: pages, unit: unit, color: color);
+    if (value != null) onChanged(value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        HabitFlagToggle(
+          icon: LucideIcons.bookOpen,
+          title: context.l10n.book_pages,
+          hint: context.l10n.book_pages_sub,
+          value: pages > 0,
+          color: color,
+          onChanged: (on) => on ? _pick(context) : onChanged(0),
+          compact: compact,
+        ),
+        if (pages > 0) ...[
+          const SizedBox(height: 10),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: ActionChip(
+              avatar: Icon(LucideIcons.pencil, size: 15, color: color),
+              label: Text('${formatAmount(pages)} $unit'.trim()),
+              onPressed: () => _pick(context),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+Future<double?> pickBookPages(
+  BuildContext context, {
+  required double pages,
+  required String unit,
+  required Color color,
+  String? title,
+}) =>
+    showNumberKeypadDialog(
+      context,
+      title: title ?? context.l10n.book_pages,
+      value: pages > 0 ? pages : 300,
+      unit: unit,
+      min: 1,
+      accent: color,
+    );
+
 class FocusOnlyToggle extends StatelessWidget {
   const FocusOnlyToggle({
     super.key,
