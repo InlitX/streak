@@ -631,6 +631,7 @@ class SettingsActions {
     const names = <String, String>{
       'en': 'English',
       'es': 'Español',
+      'ca': 'Català',
       'zh': '简体中文',
       'de': 'Deutsch',
       'fr': 'Français',
