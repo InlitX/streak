@@ -109,9 +109,18 @@ class HabitWidget : GlanceAppWidget() {
         val inner = size.width.value - PAD * 2
         val name = inner * 0.40f
         val cell = (inner - name - RIGHT_INSET) / span
-        val look = WidgetConfig.look(context, appWidgetId, round = true)
+        val chosen = WidgetConfig.look(context, appWidgetId, round = true)
+        val shown = (0 until habits.length())
+            .mapNotNull { habits.optJSONObject(it) }
+            .filterNot { chosen.hideDone && series(it, "completions", TODAY_INDEX) == true }
+        val header = HEADER * WidgetDraw.textScale(context)
+        val room = size.height.value - PAD * 2 - header - LIST_GAP
+        val want = minOf(3, shown.size)
+        val tight = want > 0 && want * ROW + (want - 1) * ROW_GAP > room
+        val look = if (tight) chosen.copy(compact = true) else chosen
         val grid = if (look.compact) {
-            Grid(inner, name, cell, minOf(18f, cell - 4f), first, span, 30f, 3f)
+            val row = if (want > 0) ((room - (want - 1) * 3f) / want).coerceIn(22f, 30f) else 30f
+            Grid(inner, name, cell, minOf(18f, cell - 4f, row - 6f), first, span, row, 3f)
         } else {
             Grid(inner, name, cell, minOf(22f, cell - 4f), first, span, ROW, ROW_GAP)
         }
@@ -119,10 +128,6 @@ class HabitWidget : GlanceAppWidget() {
         val keys = List(span) {
             dayAt(data, first + it)?.optString("key") ?: WidgetPayload.todayKey(context)
         }
-
-        val shown = (0 until habits.length())
-            .mapNotNull { habits.optJSONObject(it) }
-            .filterNot { look.hideDone && series(it, "completions", TODAY_INDEX) == true }
         val last = shown.size - 1
         Column(
             modifier = GlanceModifier
@@ -131,7 +136,6 @@ class HabitWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>()),
         ) {
             val edge = GlanceModifier.fillMaxWidth().padding(end = PAD.dp)
-            val header = HEADER * WidgetDraw.textScale(context)
             Box(modifier = edge.height((header + LIST_GAP).dp)) {
                 val top = BAR_H + BAR_GAP + (LETTER_ROW - grid.dot) / 2f - 3f
                 if (look.band) Band(context, style, grid, top, header + LIST_GAP - top, openTop = false, openBottom = shown.isNotEmpty())
