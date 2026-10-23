@@ -71,7 +71,7 @@ class FocusEndDialog extends StatelessWidget {
               const SizedBox(height: 10),
             ],
             _FocusDialogButton(
-              icon: LucideIcons.square,
+              icon: reached ? LucideIcons.square : LucideIcons.x,
               label:
                   reached ? context.l10n.focus_end : context.l10n.focus_end_anyway,
               background: reached
