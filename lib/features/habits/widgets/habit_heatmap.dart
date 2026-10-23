@@ -42,7 +42,7 @@ Color heatmapCellColor(
     return clean;
   }
 
-  if (!beforeCreation && habit.isCoveredOn(date)) {
+  if (!beforeCreation && !habit.isCompletedOn(date) && habit.isCoveredOn(date)) {
     return habit.color.shownIn(context).withValues(alpha: 0.22);
   }
 
