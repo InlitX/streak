@@ -178,6 +178,12 @@ class FocusPomodoroCard extends StatelessWidget {
                       onChanged: style.setFocusLongBreak,
                     ),
                   _PomodoroOption(
+                    title: context.l10n.focus_auto_next,
+                    subtitle: context.l10n.focus_auto_next_sub,
+                    value: style.focusAutoNext,
+                    onChanged: style.setFocusAutoNext,
+                  ),
+                  _PomodoroOption(
                     title: context.l10n.focus_whole_rounds,
                     subtitle: context.l10n.focus_whole_rounds_sub,
                     value: style.focusWholeRounds,

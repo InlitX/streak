@@ -684,6 +684,8 @@
   "focus_long_break_sub": "Every 4 rounds, a longer break.",
   "focus_whole_rounds": "Only count full rounds",
   "focus_whole_rounds_sub": "A round you end early is not saved.",
+  "focus_auto_next": "Keep going on its own",
+  "focus_auto_next_sub": "When a break ends, the next round starts without waiting.",
   "focus_end_drop": "If you end now, this round is not saved.",
   "focus_restart": "Restart",
   "focus_restart_title": "Restart this round?",

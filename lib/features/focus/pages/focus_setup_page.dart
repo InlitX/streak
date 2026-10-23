@@ -272,6 +272,11 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                 ),
               ),
               FocusOptionTag(
+                label: context.l10n.focus_auto_next,
+                on: settings.focusAutoNext,
+                onTap: () => settings.setFocusAutoNext(!settings.focusAutoNext),
+              ),
+              FocusOptionTag(
                 label: context.l10n.focus_whole_rounds,
                 on: settings.focusWholeRounds,
                 onTap: () =>

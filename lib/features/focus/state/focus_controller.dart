@@ -184,6 +184,7 @@ class FocusController extends ChangeNotifier {
   int get focusMinutes => _focusMinutes;
   int get breakMinutes => _breakMinutes;
   static const longBreakEvery = 4;
+  bool get _autoNext => LocalStore.setting('focusAutoNext', false);
   int get _longBreakMinutes => LocalStore.setting('focusLongBreak', 0);
   bool get isLongBreak =>
       _isBreak && _longBreakMinutes > 0 && _round % longBreakEvery == 0;
@@ -540,7 +541,7 @@ class FocusController extends ChangeNotifier {
         completedTick.value++;
         if (!isMobile) unawaited(_announceEnd(breakEnded: _isBreak));
         final always = isPomodoro && LocalStore.setting('focusHold', false);
-        final hold = always || (isPomodoro && _isBreak);
+        final hold = always || (isPomodoro && _isBreak && !_autoNext);
         if (DateTime.now().difference(_phaseEnd).inSeconds < 60) {
           unawaited(
             FocusAudio.alert(
@@ -684,7 +685,7 @@ class FocusController extends ChangeNotifier {
         minuteLabel: '+${strings.minutes_short('1')}',
         endTitle: endTitle,
         endBody: endBody,
-        hold: always || (isPomodoro && _isBreak),
+        hold: always || (isPomodoro && _isBreak && !_autoNext),
         upcoming: isPomodoro ? _upcoming(strings, always: always) : const [],
       );
     } catch (e) {
@@ -697,6 +698,7 @@ class FocusController extends ChangeNotifier {
     required bool always,
   }) {
     final phases = <Map<String, Object>>[];
+    final auto = _autoNext;
     var round = _round;
     var onBreak = _isBreak;
     for (var i = 0; i < 8; i++) {
@@ -718,7 +720,7 @@ class FocusController extends ChangeNotifier {
         'total': minutes * 60,
         'state': '$label  ·  ${strings.focus_round(round)}',
         'phase': onBreak ? 'break' : 'running',
-        'hold': always || onBreak,
+        'hold': always || (onBreak && !auto),
         'endTitle': onBreak ? strings.focus_break_over : strings.focus_done_title,
         'endBody': onBreak ? strings.focus_notif_back : strings.focus_notif_break,
       });

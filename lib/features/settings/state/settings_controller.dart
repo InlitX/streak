@@ -118,6 +118,7 @@ class SettingsController extends ChangeNotifier {
     _focusAlert = LocalStore.setting('focusAlert', '');
     _focusHold = LocalStore.setting('focusHold', false);
     _focusWholeRounds = LocalStore.setting('focusWholeRounds', false);
+    _focusAutoNext = LocalStore.setting('focusAutoNext', false);
     _focusLongBreak = LocalStore.setting('focusLongBreak', 0);
     _focusImages =
         List<String>.from(LocalStore.setting('focusImages', const <String>[]));
@@ -212,6 +213,7 @@ class SettingsController extends ChangeNotifier {
   late String _focusAlert;
   late bool _focusHold;
   late bool _focusWholeRounds;
+  late bool _focusAutoNext;
   late int _focusLongBreak;
   late List<String> _focusImages;
   late List<int> _hiddenScenes;
@@ -503,6 +505,7 @@ class SettingsController extends ChangeNotifier {
   String get focusAlert => _focusAlert;
   bool get focusHold => _focusHold;
   bool get focusWholeRounds => _focusWholeRounds;
+  bool get focusAutoNext => _focusAutoNext;
   int get focusLongBreak => _focusLongBreak;
   List<String> get focusImages => List.unmodifiable(_focusImages);
 
@@ -587,6 +590,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setFocusHold(bool value) async {
     _focusHold = value;
     await LocalStore.writeSetting('focusHold', value);
+    if (value && _focusAutoNext) return setFocusAutoNext(false);
+    notifyListeners();
+  }
+
+  Future<void> setFocusAutoNext(bool value) async {
+    _focusAutoNext = value;
+    await LocalStore.writeSetting('focusAutoNext', value);
+    if (value && _focusHold) return setFocusHold(false);
     notifyListeners();
   }
 

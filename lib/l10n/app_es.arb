@@ -618,6 +618,8 @@
   "focus_long_break_sub": "Cada 4 rondas, un descanso más largo.",
   "focus_whole_rounds": "Contar solo rondas completas",
   "focus_whole_rounds_sub": "Una ronda que terminas antes de tiempo no se guarda.",
+  "focus_auto_next": "Seguir solo",
+  "focus_auto_next_sub": "Al acabar el descanso, la siguiente ronda empieza sin esperar.",
   "focus_end_drop": "Si terminas ahora, esta ronda no se guarda.",
   "focus_restart": "Reiniciar",
   "focus_restart_title": "¿Reiniciar esta ronda?",
