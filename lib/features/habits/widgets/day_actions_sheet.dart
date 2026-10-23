@@ -184,7 +184,7 @@ class _DayStatus extends StatelessWidget {
       title: DateFormat.yMMMMd(Localizations.localeOf(context).toString()).format(date),
       value: current,
       unit: habit.unitLabel,
-      target: habit.hasGoal ? habit.perDayTarget : null,
+      target: habit.goalOn(date) > 0 ? habit.goalOn(date) : null,
       decimals: true,
       clock: habit.isTimeAmount,
       accent: habit.color.shownIn(context),
@@ -202,6 +202,7 @@ class _DayStatus extends StatelessWidget {
     final negative = habit.kind == HabitKind.negative;
     final quantity = habit.kind == HabitKind.quantitative;
     final counted = !negative && !habit.hasSubsteps && (quantity || habit.perDayTarget > 1);
+    final goal = habit.goalOn(date);
     final done = habit.isCompletedOn(date);
     final relapsed = habit.isRelapseOn(date);
     final relapses = relapsed ? count.round().clamp(1, 999) : 0;
@@ -211,8 +212,8 @@ class _DayStatus extends StatelessWidget {
     final status = negative
         ? (relapsed ? context.l10n.day_relapses(relapses) : context.l10n.day_clean)
         : counted
-            ? (habit.hasGoal
-                ? context.l10n.day_amount(amount(count), amount(habit.perDayTarget))
+            ? (goal > 0
+                ? context.l10n.day_amount(amount(count), amount(goal))
                 : amount(count))
             : (done ? context.l10n.done : context.l10n.day_not_done);
     final good = negative ? !relapsed : done;
@@ -321,9 +322,9 @@ class _DayStatus extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               child: TweenAnimationBuilder<double>(
                 tween: Tween(
-                  end: habit.perDayTarget <= 0
+                  end: goal <= 0
                       ? (count > 0 ? 1 : 0)
-                      : (count / habit.perDayTarget).clamp(0, 1).toDouble(),
+                      : (count / goal).clamp(0, 1).toDouble(),
                 ),
                 duration: const Duration(milliseconds: 260),
                 curve: Curves.easeOut,

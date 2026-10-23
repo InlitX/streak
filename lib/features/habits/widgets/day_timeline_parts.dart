@@ -59,9 +59,10 @@ class TimelineBlock extends StatelessWidget {
       final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
           ? ''
           : ' ${habit.unitLabel}';
-      if (!habit.hasGoal) return '${habit.amountText(count)}$unit';
+      final goal = habit.goalOn(date);
+      if (goal <= 0) return '${habit.amountText(count)}$unit';
       return '${habit.amountText(count)}/'
-          '${habit.amountText(habit.perDayTarget)}$unit';
+          '${habit.amountText(goal)}$unit';
     }
     if (habit.hasSubsteps) {
       final steps = habit.completions[date.dayKey]?.steps.length ?? 0;
@@ -491,7 +492,7 @@ class TimelineCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final count = habit.completions[date.dayKey]?.count ?? 0;
-    final progress = habit.progressFor(count);
+    final progress = habit.progressFor(count, goal: habit.pastGoalOn(date));
     final color = _quant ? progress.activeColor(habit.color.shownIn(context)) : habit.color.shownIn(context);
     final circle = context.watch<SettingsController>().isCircleCheck;
 

@@ -392,6 +392,7 @@ class _DayCell extends StatelessWidget {
                                 child: FractionallySizedBox(
                                   heightFactor: habit.progressFor(
                                     habit.completions[date.dayKey]?.count ?? 0,
+                                    goal: habit.pastGoalOn(date),
                                   ).fraction,
                                   widthFactor: 1,
                                   child: ColoredBox(color: habit.color.shownIn(context)),

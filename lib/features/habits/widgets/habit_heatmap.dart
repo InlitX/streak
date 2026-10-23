@@ -7,7 +7,6 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
-import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/widgets/day_stamp.dart';
 import 'package:streak/features/habits/widgets/heatmap_path.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
@@ -53,10 +52,8 @@ Color heatmapCellColor(
     final untouched = date.isAfter(today) || habit.isOffDay(date);
     return untouched ? base.withValues(alpha: 0.4) : base;
   }
-  final target = habit.effectiveTarget <= 0 ? 1.0 : habit.effectiveTarget;
-  final ratio = (count / target).clamp(0.25, 1.0);
-  final full = (habit.hasGoal ? QuantProgress.of(count: count, target: target) : habit.progressFor(count))
-      .solidColor(habit.color.shownIn(context));
+  final ratio = (count / habit.fillTargetOn(date)).clamp(0.25, 1.0);
+  final full = habit.progressOn(date, count).solidColor(habit.color.shownIn(context));
   return Color.lerp(habit.color.shownIn(context).withValues(alpha: 0.4), full, ratio)!;
 }
 
