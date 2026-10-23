@@ -282,6 +282,8 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
     final showSaved = habit.hasCost;
     final showSpent = habit.logsSpent || data.spent > 0;
     final balance = data.saved - data.spent;
+    final expenses = data.expenses;
+    String day(DateTime date) => DateFormat.MMMEd(locale).format(date);
 
     final label = DateFormat.yMMMM(locale).format(month);
     final nav = _MonthNav(
@@ -311,15 +313,35 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
     ];
 
     if (style.isMinimalStyle) {
+      final grid = MinimalGrid(
+        children: [
+          for (final (icon, label, value, tint, _) in stats)
+            MinimalTile(icon: icon, label: label, value: value, tint: tint),
+        ],
+      );
       return MinimalSection(
         title: context.l10n.avoid_month,
         trailing: nav,
-        child: MinimalGrid(
-          children: [
-            for (final (icon, label, value, tint, _) in stats)
-              MinimalTile(icon: icon, label: label, value: value, tint: tint),
-          ],
-        ),
+        child: expenses.isEmpty
+            ? grid
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  grid,
+                  const SizedBox(height: 12),
+                  MinimalList(
+                    children: [
+                      for (final (i, (date, amount)) in expenses.indexed)
+                        MinimalRow(
+                          label: day(date),
+                          value: money(amount),
+                          tint: danger,
+                          last: i == expenses.length - 1,
+                        ),
+                    ],
+                  ),
+                ],
+              ),
       );
     }
 
@@ -334,6 +356,14 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
               value: value,
               tint: tint,
               shape: shape,
+            ),
+          for (final (date, amount) in expenses)
+            ExpressStatRow(
+              icon: LucideIcons.receipt,
+              label: day(date),
+              value: money(amount),
+              tint: danger,
+              shape: ExpressShape.flower,
             ),
         ],
       );
@@ -355,6 +385,16 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
             i + 1 < tiles.length
                 ? StatPair(left: tiles[i], right: tiles[i + 1])
                 : tiles[i],
+          ],
+          for (final (date, amount) in expenses) ...[
+            const SizedBox(height: 8),
+            MiniStat(
+              icon: LucideIcons.receipt,
+              label: day(date),
+              value: money(amount),
+              color: danger,
+              wide: true,
+            ),
           ],
         ],
       );
