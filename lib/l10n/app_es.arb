@@ -625,7 +625,7 @@
   "focus_restart_title": "¿Reiniciar esta ronda?",
   "focus_restart_body": "Se perderá el tiempo que llevas en esta ronda.",
   "focus_saved": "{time} registrados",
-  "focus_total": "Tiempo de concentración",
+  "focus_total": "Concentración",
   "focus_sessions": "Sesiones",
   "focus_stop_title": "¿Terminar la sesión?",
   "focus_stop_body": "Tus minutos se guardan igualmente. El hábito solo se completa si llegas a la meta.",
