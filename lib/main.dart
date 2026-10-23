@@ -201,6 +201,8 @@ void _openPage(String page) {
   if (page == 'stats') AppNavigator.push(const StatisticsPage(), fade: true);
   if (page == 'focus') _openFocus();
   if (page == 'focusPage') _openFocusHome();
+  if (page == 'focusStart') _startFreeFocus();
+  if (page.startsWith('focusStart:')) _startFocus(page.substring(11));
   if (page == 'health') AppNavigator.push(const HealthInfoPage(), fade: true);
   if (page.startsWith('day:')) _openDay(page.substring(4));
 }
@@ -230,6 +232,22 @@ void _openFocus() {
   if (context == null || !context.read<FocusController>().isActive) return;
   if (AppNavigator.isShowing(FocusPage.routeName)) return;
   AppNavigator.push(const FocusPage(), fade: true, name: FocusPage.routeName);
+}
+
+void _startFreeFocus() {
+  final context = AppNavigator.key.currentContext;
+  if (context == null || AppNavigator.isShowing(FocusPage.routeName)) return;
+  final settings = context.read<SettingsController>();
+  AppNavigator.push(
+    context.read<FocusController>().isActive
+        ? const FocusPage()
+        : FocusPage(
+            startMinutes: settings.focusMinutes,
+            breakMinutes: settings.focusBreakMinutes,
+          ),
+    fade: true,
+    name: FocusPage.routeName,
+  );
 }
 
 void _startFocus(String habitId) {

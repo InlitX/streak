@@ -52,6 +52,8 @@ class FocusWidget : GlanceAppWidget() {
         val room = size.width.value - pad * 2
         val density = WidgetDraw.density(context)
         val label = (side * 0.1f).coerceIn(13f, 18f)
+        val button = (side * 0.2f).coerceIn(30f, 42f)
+        val start = single?.optString("id")?.takeIf { it.isNotEmpty() }?.let { "focusStart:$it" } ?: "focusStart"
 
         WidgetSurface(style) {
             Box(
@@ -73,8 +75,8 @@ class FocusWidget : GlanceAppWidget() {
                         .padding(start = pad.dp, end = pad.dp, top = (pad * 1.5f).dp, bottom = pad.dp),
                 ) {
                     val today = duration(totals[0])
-                    val big = WidgetDraw.fit(context, today, (side * 0.22f).coerceIn(24f, 46f), 16f, 800, room)
-                    Drawn(WidgetDraw.text(context, today, big, style.content, 800, room), density, today)
+                    val big = WidgetDraw.fit(context, today, (side * 0.22f).coerceIn(24f, 46f), 16f, 800, room - button - 6f)
+                    Drawn(WidgetDraw.text(context, today, big, style.content, 800, room - button - 6f), density, today)
                     val caption = WidgetText.get(context, "focus_today", "Focus today")
                     Drawn(WidgetDraw.text(context, caption, label, style.content, 800, room), density, caption)
                     Spacer(GlanceModifier.height(6.dp))
@@ -92,6 +94,16 @@ class FocusWidget : GlanceAppWidget() {
                             name,
                         )
                     }
+                }
+                Box(
+                    modifier = GlanceModifier.fillMaxSize().padding(pad.dp),
+                    contentAlignment = Alignment.TopEnd,
+                ) {
+                    Image(
+                        provider = ImageProvider(WidgetDraw.play(context, button, style.content)),
+                        contentDescription = WidgetText.get(context, "focus_start", "Start focus"),
+                        modifier = GlanceModifier.size(button.dp).clickable(openPageAction(context, start)),
+                    )
                 }
             }
         }

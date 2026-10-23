@@ -72,6 +72,7 @@ class HomeWidgetService {
           'today_done': l10n.widget_today_done('{done}', '{total}'),
           'streak_days': l10n.widget_streak_days,
           'focus_today': l10n.widget_focus_today,
+          'focus_start': l10n.focus_start,
           'label_month': l10n.month,
           'todos_open': l10n.widget_todos_open('{count}'),
           'todos_empty': l10n.widget_todos_empty,

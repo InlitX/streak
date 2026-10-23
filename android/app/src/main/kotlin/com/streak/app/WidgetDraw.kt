@@ -342,6 +342,18 @@ object WidgetDraw {
         }
     }
 
+    fun play(context: Context, sizeDp: Float, color: Color): Bitmap =
+        remember("play:$sizeDp:${color.toArgb()}") {
+            val px = (sizeDp * density(context)).toInt().coerceAtLeast(1)
+            val bitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val c = px / 2f
+            val soft = color.copy(alpha = 0.1f).toArgb()
+            canvas.drawCircle(c, c, c, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = soft })
+            glyph(context, canvas, R.drawable.ic_focus_play, c + px * 0.03f, c, px * 0.42f, color.toArgb())
+            bitmap
+        }
+
     fun roundCheck(context: Context, sizeDp: Float, ink: Color, done: Boolean): Bitmap {
         val key = "k:$sizeDp:${ink.toArgb()}:$done"
         return remember(key) {
