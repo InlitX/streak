@@ -377,6 +377,23 @@ void main() {
       expect(LocalStore.readHabits()['run'], isNull);
     });
 
+    test('with keep in sync off something deleted here stays deleted', () async {
+      final dir = await _folder();
+      await LocalStore.writeHabit(_run());
+      await LocalStore.removeHabit('run');
+      await _drop(
+        dir,
+        [_run(done: [_monday])],
+        at: DateTime(2026, 3, 3, 10),
+        changes: {'run': _ago(const Duration(hours: 1))},
+        device: 'phone',
+      );
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run'], isNull);
+    });
+
     test('a copy from an older version does not bring it back either', () async {
       final dir = await _syncing();
       await LocalStore.writeHabit(_run());

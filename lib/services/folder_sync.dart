@@ -122,12 +122,12 @@ class FolderSync {
 
   static Future<int> _take(BackupData data) async {
     final stamps = data.changes;
-    final deletes = LocalStore.setting('autoSync', false);
-    var brought = deletes ? await _forget(data.deleted) : 0;
+    var brought =
+        LocalStore.setting('autoSync', false) ? await _forget(data.deleted) : 0;
 
     for (final theirs in data.habits) {
       final id = theirs.id;
-      if (deletes && _buried(id, stamps[id])) continue;
+      if (_buried(id, stamps[id])) continue;
       final ours = LocalStore.habit(id);
       final newer = _theirsNewer(stamps[id], id);
       final ourCut = LocalStore.clearedAt(id);
@@ -158,14 +158,14 @@ class FolderSync {
       await LocalStore.mergeCategory(category);
     }
     bool orphan(String habitId) =>
-        deletes && LocalStore.habit(habitId) == null && LocalStore.deletedAt(habitId) != null;
-    brought += await _records(data.notes.where((n) => !orphan(n.habitId)), stamps, deletes,
+        LocalStore.habit(habitId) == null && LocalStore.deletedAt(habitId) != null;
+    brought += await _records(data.notes.where((n) => !orphan(n.habitId)), stamps,
         (n) => n.id, LocalStore.note, (n) => n.toMap(), LocalStore.writeNote);
-    brought += await _records(data.focus.where((f) => !orphan(f.habitId)), stamps, deletes,
+    brought += await _records(data.focus.where((f) => !orphan(f.habitId)), stamps,
         (f) => f.id, LocalStore.focusSession, (f) => f.toMap(), LocalStore.writeFocusSession);
-    brought += await _records(data.todos, stamps, deletes, (t) => t.id,
+    brought += await _records(data.todos, stamps, (t) => t.id,
         LocalStore.todo, (t) => t.toMap(), LocalStore.writeTodo);
-    brought += await _records(data.todoTags, stamps, deletes, (t) => t.id,
+    brought += await _records(data.todoTags, stamps, (t) => t.id,
         LocalStore.todoTag, (t) => t.toMap(), LocalStore.writeTodoTag);
     return brought;
   }
@@ -228,7 +228,6 @@ class FolderSync {
   static Future<int> _records<T>(
     Iterable<T> items,
     Map<String, int> stamps,
-    bool deletes,
     String Function(T) idOf,
     T? Function(String) ours,
     Map<String, dynamic> Function(T) mapOf,
@@ -237,7 +236,7 @@ class FolderSync {
     var brought = 0;
     for (final theirs in items) {
       final id = idOf(theirs);
-      if (deletes && _buried(id, stamps[id])) continue;
+      if (_buried(id, stamps[id])) continue;
       final mine = ours(id);
       if (mine != null &&
           (!_theirsNewer(stamps[id], id) || _same(mapOf(mine), mapOf(theirs)))) {
