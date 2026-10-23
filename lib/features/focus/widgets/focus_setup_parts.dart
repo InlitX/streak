@@ -404,9 +404,10 @@ class FocusQuickTimers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timers = FocusTimer.load();
-    if (timers.isEmpty) return const SizedBox.shrink();
+    final saved = FocusTimer.load();
+    if (saved.isEmpty) return const SizedBox.shrink();
     final current = FocusTimer(habit.focusMinutes, habit.focusBreakMinutes);
+    final timers = saved.contains(current) ? saved : [current, ...saved];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: padding,
