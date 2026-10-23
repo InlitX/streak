@@ -205,6 +205,12 @@ class _FocusPageState extends State<FocusPage> {
 
   Future<void> _confirmStop() async {
     final focus = context.read<FocusController>();
+    if (focus.isPomodoro && focus.isBreak) {
+      setState(() => _leaving = true);
+      await focus.stop(completed: true);
+      if (mounted) AppNavigator.pop();
+      return;
+    }
     final habits = context.read<HabitsController>();
     final settings = context.read<SettingsController>();
     final habit = focus.habitId.isEmpty ? null : habits.byId(focus.habitId);
