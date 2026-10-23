@@ -31,6 +31,8 @@ class TodoTagBar extends StatelessWidget {
     required this.project,
     required this.minimal,
     required this.onSelected,
+    this.projects = const [],
+    this.onProject,
   });
 
   final List<TodoTag> tags;
@@ -39,10 +41,13 @@ class TodoTagBar extends StatelessWidget {
   final String? project;
   final bool minimal;
   final ValueChanged<String?> onSelected;
+  final List<TodoTag> projects;
+  final ValueChanged<String?>? onProject;
 
   @override
   Widget build(BuildContext context) {
     final todos = context.watch<TodosController>();
+    final pick = onProject;
     final edge = minimal ? 22.0 : 16.0;
     return SizedBox(
       height: 54,
@@ -51,9 +56,32 @@ class TodoTagBar extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(edge, 0, edge, 10),
         children: [
           _AllChip(
-            selected: selected == null,
-            onTap: () => onSelected(null),
+            selected: selected == null && (pick == null || project == null),
+            onTap: () {
+              onSelected(null);
+              pick?.call(null);
+            },
           ),
+          if (pick != null)
+            for (final item in projects) ...[
+              const SizedBox(width: 8),
+              _PlainChip(
+                label: '${item.name}  ${todos.projectCount(item.id)}',
+                icon: CategoryIcons.resolve(item.icon),
+                color: item.color,
+                selected: project == item.id,
+                onTap: () => pick(project == item.id ? null : item.id),
+              ),
+            ],
+          if (pick != null && projects.isNotEmpty && tags.isNotEmpty)
+            Center(
+              child: Container(
+                width: 1,
+                height: 20,
+                margin: const EdgeInsets.only(left: 12, right: 4),
+                color: context.colors.outlineVariant,
+              ),
+            ),
           for (final tag in tags) ...[
             const SizedBox(width: 8),
             TodoTagChip(

@@ -658,7 +658,7 @@ class _TodosPageState extends State<TodosPage>
     if (!mounted || picked == null) return;
     if (picked == 1) return _compose();
     await createProject(context);
-    if (mounted) setState(() => _folders = true);
+    if (mounted) setState(() => _folders = context.read<SettingsController>().todoPapers);
   }
 
   Future<void> _delete(Todo todo) => _trash([todo]);
@@ -689,7 +689,7 @@ class _TodosPageState extends State<TodosPage>
     if (_projectFilter case final id? when id.isNotEmpty && tags.byId(id) == null) {
       _projectFilter = null;
       _tagFilter = null;
-      _folders = true;
+      _folders = papers;
     }
     final labels = _projectFilter == null
         ? tags.labels
@@ -785,7 +785,7 @@ class _TodosPageState extends State<TodosPage>
                         setState(() => _query = value.trim().toLowerCase()),
                   ),
                 ),
-              if (!_folders && _projectFilter != null)
+              if (papers && !_folders && _projectFilter != null)
                 FadeTransition(
                   opacity: ReverseAnimation(_ghost),
                   child: TodoProjectBar(
@@ -794,7 +794,8 @@ class _TodosPageState extends State<TodosPage>
                   onClear: _closeFolder,
                 ),
                 ),
-              if (!_folders && labels.isNotEmpty)
+              if (!_folders &&
+                  (labels.isNotEmpty || (!papers && tags.projects.isNotEmpty)))
                 FadeTransition(
                   opacity: ReverseAnimation(_ghost),
                   child: TodoTagBar(
@@ -804,6 +805,10 @@ class _TodosPageState extends State<TodosPage>
                   project: _projectFilter,
                   minimal: minimal,
                   onSelected: (id) => setState(() => _tagFilter = id),
+                  projects: tags.projects,
+                  onProject: papers
+                      ? null
+                      : (id) => setState(() => _projectFilter = id),
                 ),
                 ),
               Expanded(
@@ -843,7 +848,8 @@ class _TodosPageState extends State<TodosPage>
                           returning: _returning,
                         ),
                       )
-                    : sections.isEmpty &&
+                    : papers &&
+                        sections.isEmpty &&
                         completed.isEmpty &&
                         _projectFilter != null &&
                         _query.isEmpty &&
