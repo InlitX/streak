@@ -16,6 +16,7 @@ import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_dial.dart';
+import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/focus/widgets/focus_habit_card.dart';
 import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -152,6 +153,19 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
     setState(() => _breakMinutes = value.round().clamp(1, 120));
   }
 
+  Future<void> _customLongBreak() async {
+    final settings = context.read<SettingsController>();
+    final value = await showNumberKeypadDialog(
+      context,
+      title: context.l10n.focus_long_break,
+      value: settings.focusLongBreak.toDouble(),
+      unit: context.l10n.unit_min_short,
+      min: 1,
+    );
+    if (value == null || !mounted) return;
+    settings.setFocusLongBreak(value.round().clamp(1, 120));
+  }
+
   Future<void> _openHabits(List<Habit> habits) async {
     final id = await showFocusHabitPicker(
       context,
@@ -265,6 +279,16 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
               ),
             ],
           ),
+          if (settings.focusLongBreak > 0) ...[
+            const SizedBox(height: 12),
+            FocusChoiceRow(
+              presets: focusLongBreakPresets,
+              value: settings.focusLongBreak,
+              onPick: settings.setFocusLongBreak,
+              onCustom: _customLongBreak,
+              title: context.l10n.focus_long_break,
+            ),
+          ],
         ],
       ],
     );
