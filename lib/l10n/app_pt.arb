@@ -115,7 +115,7 @@
   "appearance": "Aparência",
   "empty_title": "Comece sua primeira sequência",
   "strength": "Força",
-  "default_user": "Inlitx",
+  "default_user": "Usuário",
   "description": "Descrição",
   "sched_days": "Dias",
   "circle": "Círculo",
@@ -409,7 +409,7 @@
     }
   },
   "notif_action_add": "Adicionar quantidade",
-  "minutes_short": "{value} minimo",
+  "minutes_short": "{value} min",
   "@minutes_short": {
     "placeholders": {
       "value": {
@@ -520,7 +520,7 @@
   "about_sub": "Versão, código-fonte e suporte",
   "focus_track_pad": "almofada quente",
   "style_classic_desc": "Lista de hábitos, barra inferior e todas as configurações em uma única tela.",
-  "focus_history": "História",
+  "focus_history": "Histórico",
   "save_note": "Salvar nota",
   "focus_end_complete": "Marcar como concluído",
   "archived_empty": "Nada arquivado",
@@ -592,7 +592,7 @@
   "focus_style_digital": "Círculo",
   "focus_stop_body": "Seus minutos serão salvos. O hábito só estará completo se você atingir a meta.",
   "app_lock_unlock": "Desbloquear",
-  "auto_backup_folder_default": "Dentro do app (apagado se você desinstalá-lo)",
+  "auto_backup_folder_default": "Dentro do app (é excluído se você desinstalá-lo)",
   "tomorrow": "Amanhã",
   "focus_round": "Rodada {n}",
   "@focus_round": {
@@ -612,7 +612,7 @@
   "support_sub": "Reporte um erro ou solicite uma funcionalidade",
   "note_type": "Tipo",
   "focus_scene_custom": "Sua imagem",
-  "journey_sub": "{count, plural, =1{1 photo} other{{count} fotos}}",
+  "journey_sub": "{count, plural, =1{1 foto} other{{count} fotos}}",
   "@journey_sub": {
     "placeholders": {
       "count": {
@@ -651,7 +651,7 @@
   "share_save_failed": "Não foi possível salvar a imagem",
   "focus_done_title": "Sessão concluída",
   "note_pick_photo": "Galeria",
-  "notes_count": "{count, plural, =1{1 note} other{{count} notes}}",
+  "notes_count": "{count, plural, =1{1 nota} other{{count} notas}}",
   "@notes_count": {
     "placeholders": {
       "count": {
@@ -824,7 +824,7 @@
   "todo_someday": "Algum dia",
   "todo_overdue": "Atrasado",
   "pick_a_date": "Escolha uma data",
-  "todo_left": "{count, plural, =0{All done} =1{1 a fazer} other{{count} a fazer}}",
+  "todo_left": "{count, plural, =0{Concluídos} =1{1 a fazer} other{{count} a fazeres}}",
   "@todo_left": {
     "placeholders": {
       "count": {
@@ -832,7 +832,7 @@
       }
     }
   },
-  "todo_completed_count": "{count, plural, =1{Completado(1)} other{Completo ({count})}}",
+  "todo_completed_count": "{count, plural, =1{Concluído(1)} other{Concluídos ({count})}}",
   "@todo_completed_count": {
     "placeholders": {
       "count": {
@@ -841,7 +841,7 @@
     }
   },
   "todo_clear_completed": "Limpar concluído",
-  "todo_clear_completed_body": "{count, plural, =1{Isso exclui a tarefa concluída.} other{Isso exclui a {count} tarefas concluídas.}}",
+  "todo_clear_completed_body": "{count, plural, =1{Isso exclui a tarefa concluída.} other{Isso exclui as {count} tarefas concluídas.}}",
   "@todo_clear_completed_body": {
     "placeholders": {
       "count": {
@@ -865,7 +865,7 @@
   "focus_notif_running": "Focando",
   "focus_paused": "Em pausa",
   "select_all": "Selecionar tudo",
-  "selected_count": "{count, plural, =1{1 selecionado} other{{count} selecionado}}",
+  "selected_count": "{count, plural, =1{1 selecionado} other{{count} selecionados}}",
   "@selected_count": {
     "placeholders": {
       "count": {
@@ -972,7 +972,7 @@
   "currency_hint": "Símbolo ou código",
   "money_saved": "Dinheiro guardado",
   "clean_days": "Dias limpos",
-  "cost_per_day": "Qtd por dia",
+  "cost_per_day": "Custo por dia",
   "quotes_app": "Do aplicativo",
   "currency": "Moeda",
   "a11y_previous_week": "Semanas anteriores",
@@ -1182,7 +1182,7 @@
   "keep_editing": "Continuar editando",
   "gamification": "Gamificação",
   "island_default_name": "Minha ilha",
-  "island_rename": "Nome da sua ilha",
+  "island_rename": "Dê um nome para sua ilha",
   "island_nothing_here": "Ainda não há nada aqui",
   "data_folder": "Pasta de dados",
   "data_folder_documents": "Documentos",
