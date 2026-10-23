@@ -417,7 +417,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           startMinute: negative ? -1 : _startMinute,
           durationMinutes: negative ? 0 : _durationMinutes,
           substeps: substeps,
-        ),
+        ).rememberGoal(widget.habit!),
       );
     } else {
       final template = widget.template;

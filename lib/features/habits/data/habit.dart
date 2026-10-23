@@ -82,6 +82,7 @@ class Habit {
     this.vacations = const [],
     this.restDays = const [],
     this.missReasons = const {},
+    this.pastGoals = const {},
     this.archivedAt,
     this.scheduleStart,
     this.fromLastDone = false,
@@ -271,6 +272,39 @@ class Habit {
 
   final Map<String, String> missReasons;
 
+  final Map<String, double> pastGoals;
+
+  late final List<(int, double)> _goalSteps = [
+    for (final entry in pastGoals.entries) (dayKeyEpoch(entry.key), entry.value),
+  ]..sort((a, b) => a.$1.compareTo(b.$1));
+
+  double? _pastGoalAt(int epochDay) {
+    for (final (until, goal) in _goalSteps) {
+      if (epochDay < until) return goal;
+    }
+    return null;
+  }
+
+  double? pastGoalOn(DateTime date) =>
+      pastGoals.isEmpty ? null : _pastGoalAt(date.epochDay);
+
+  double goalOn(DateTime date) => pastGoalOn(date) ?? perDayTarget;
+
+  double get _shownGoal => acceptsAnyAmount ? 0 : perDayTarget;
+
+  Habit rememberGoal(Habit before) {
+    if (kind != HabitKind.quantitative || before.kind != kind) {
+      return pastGoals.isEmpty ? this : copyWith(pastGoals: const {});
+    }
+    final old = before._shownGoal;
+    if (old == _shownGoal) return this;
+    final today = AppClock.today();
+    if (!startedAt.isBefore(today)) return this;
+    final key = today.dayKey;
+    if (pastGoals.containsKey(key)) return this;
+    return copyWith(pastGoals: {...pastGoals, key: old});
+  }
+
   final DateTime? archivedAt;
 
   bool get isArchived => archivedAt != null;
@@ -390,7 +424,10 @@ class Habit {
   }
 
   bool isDoneEntry(Completion entry) {
-    if (!hasSubsteps) return reaches(entry.count);
+    if (!hasSubsteps) {
+      final past = pastGoals.isEmpty ? null : _pastGoalAt(dayKeyEpoch(entry.date));
+      return reaches(entry.count, goal: past);
+    }
     bool checked(Substep step) => entry.steps.contains(step.id);
     if (!anySteps) return substeps.every(checked);
     return substeps.where(checked).length >= stepsNeeded.clamp(1, substeps.length);
@@ -401,13 +438,34 @@ class Habit {
   bool get acceptsAnyAmount =>
       kind == HabitKind.quantitative && (anyAmount || !hasGoal);
 
-  bool reaches(double count) =>
-      acceptsAnyAmount ? count > 0 : count >= perDayTarget;
+  bool reaches(double count, {double? goal}) {
+    if (goal != null) return goal <= 0 ? count > 0 : count >= goal;
+    return acceptsAnyAmount ? count > 0 : count >= perDayTarget;
+  }
 
-  QuantProgress progressFor(double count) =>
-      acceptsAnyAmount && count > 0 && (!hasGoal || count < perDayTarget)
-          ? const QuantProgress(laps: 1, fraction: 0)
-          : QuantProgress.of(count: count, target: perDayTarget);
+  QuantProgress progressFor(double count, {double? goal}) {
+    if (goal != null) {
+      return goal <= 0
+          ? QuantProgress(laps: count > 0 ? 1 : 0, fraction: 0)
+          : QuantProgress.of(count: count, target: goal);
+    }
+    return acceptsAnyAmount && count > 0 && (!hasGoal || count < perDayTarget)
+        ? const QuantProgress(laps: 1, fraction: 0)
+        : QuantProgress.of(count: count, target: perDayTarget);
+  }
+
+  QuantProgress progressOn(DateTime date, double count) {
+    final past = pastGoalOn(date);
+    if (past != null) return progressFor(count, goal: past);
+    return hasGoal
+        ? QuantProgress.of(count: count, target: effectiveTarget)
+        : progressFor(count);
+  }
+
+  double fillTargetOn(DateTime date) {
+    final target = pastGoalOn(date) ?? effectiveTarget;
+    return target <= 0 ? 1.0 : target;
+  }
 
   bool isRelapseOn(DateTime date) =>
       kind == HabitKind.negative && completions.containsKey(date.dayKey);
@@ -800,6 +858,7 @@ class Habit {
     List<VacationPeriod>? vacations,
     List<int>? restDays,
     Map<String, String>? missReasons,
+    Map<String, double>? pastGoals,
     DateTime? archivedAt,
     bool clearArchived = false,
     DateTime? scheduleStart,
@@ -850,6 +909,7 @@ class Habit {
       vacations: vacations ?? this.vacations,
       restDays: restDays ?? this.restDays,
       missReasons: missReasons ?? this.missReasons,
+      pastGoals: pastGoals ?? this.pastGoals,
       archivedAt: clearArchived ? null : (archivedAt ?? this.archivedAt),
       scheduleStart: clearScheduleStart
           ? null
@@ -913,6 +973,7 @@ class Habit {
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
         if (missReasons.isNotEmpty) 'missReasons': missReasons,
+        if (pastGoals.isNotEmpty) 'pastGoals': pastGoals,
         if (archivedAt != null) 'archivedAt': archivedAt!.toIso8601String(),
       };
 
@@ -995,6 +1056,11 @@ class Habit {
         missReasons: map['missReasons'] == null
             ? const {}
             : Map<String, String>.from(map['missReasons'] as Map),
+        pastGoals: map['pastGoals'] == null
+            ? const {}
+            : (map['pastGoals'] as Map).map(
+                (key, value) => MapEntry(key as String, (value as num).toDouble()),
+              ),
         archivedAt: map['archivedAt'] == null
             ? null
             : DateTime.tryParse(map['archivedAt'] as String),
