@@ -86,18 +86,6 @@ class DayPlan {
   }
 }
 
-String minuteLabel(int minute, {bool hour24 = true}) {
-  final total = minute.clamp(0, Habit.dayMinutes);
-  final h = (total ~/ 60) % 24;
-  final m = total % 60;
-  if (hour24) {
-    return '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
-  }
-  final suffix = h < 12 ? 'AM' : 'PM';
-  final display = h % 12 == 0 ? 12 : h % 12;
-  return '$display:${m.toString().padLeft(2, '0')} $suffix';
-}
-
 String spanLabel(int minutes) {
   final h = minutes ~/ 60;
   final m = minutes % 60;

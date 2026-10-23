@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -13,7 +14,6 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
-import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/widgets/streak_label.dart';
@@ -177,7 +177,7 @@ class HabitCard extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 3),
                                       Text(
-                                        minuteLabel(habit.startMinute),
+                                        context.clockAt(habit.startMinute),
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
@@ -251,7 +252,7 @@ class HabitTimeFields extends StatelessWidget {
             color: color,
             label: context.l10n.habit_time,
             value: _planned
-                ? minuteLabel(startMinute)
+                ? context.clockAt(startMinute)
                 : context.l10n.habit_time_none,
             compact: compact,
             onTap: () => _pickStart(context),
@@ -300,7 +301,7 @@ class HabitTimeFields extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '${minuteLabel(startMinute)} - ${minuteLabel(end)}',
+                  '${context.clockAt(startMinute)} - ${context.clockAt(end)}',
                   style: TextStyle(
                     fontSize: 12.5,
                     fontWeight: FontWeight.w600,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
@@ -15,7 +16,6 @@ import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
-import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/check_history.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
@@ -33,7 +33,7 @@ class MinimalDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final meta = [
       habitFrequencyLabel(context, habit),
-      if (habit.isPlanned) minuteLabel(habit.startMinute),
+      if (habit.isPlanned) context.clockAt(habit.startMinute),
       if (habit.category.isNotEmpty) context.categoryLabel(habit.category),
     ].join('  ·  ');
 

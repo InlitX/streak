@@ -12,13 +12,13 @@ import 'package:streak/core/express/express_streak_row.dart';
 import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/express/express_wave.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
-import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -227,7 +227,7 @@ class _MetaPills extends StatelessWidget {
         if (habit.isPlanned && planning)
           _Pill(
             icon: LucideIcons.clock,
-            text: minuteLabel(habit.startMinute),
+            text: context.clockAt(habit.startMinute),
             tint: muted,
           ),
         if (habitHasExplicitFrequency(habit))

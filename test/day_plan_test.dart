@@ -149,12 +149,9 @@ void main() {
     final habit = _habit(id: 'late', start: 23 * 60 + 30, duration: 120);
 
     expect(habit.endMinute, Habit.dayMinutes);
-    expect(minuteLabel(habit.endMinute), '00:00');
   });
 
-  test('labels read the way a clock does', () {
-    expect(minuteLabel(0), '00:00');
-    expect(minuteLabel(9 * 60 + 5), '09:05');
+  test('spans read the way a clock does', () {
     expect(spanLabel(45), '45m');
     expect(spanLabel(60), '1h');
     expect(spanLabel(95), '1h 35m');

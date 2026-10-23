@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/express/express_button.dart';
@@ -334,7 +335,6 @@ class _SessionTile extends StatelessWidget {
         ? null
         : context.watch<HabitsController>().byId(session.habitId);
     final color = habit?.color.shownIn(context) ?? context.colors.primary;
-    final locale = Localizations.localeOf(context).toString();
     final scheme = context.colors;
     final express = context.watch<SettingsController>().isExpressStyle;
 
@@ -433,7 +433,7 @@ class _SessionTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${DateFormat.Hm(locale).format(session.startedAt)}'
+                        '${context.clockOf(session.startedAt)}'
                         '  ·  '
                         '${session.targetMinutes <= 0 ? context.l10n.focus_flowtime : context.l10n.minutes_short('${session.targetMinutes}')}',
                         style: express

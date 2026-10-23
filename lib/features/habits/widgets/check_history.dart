@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
@@ -26,7 +27,7 @@ List<Completion> checkLog(Habit habit) {
 String _clock(BuildContext context, Completion entry) {
   final stamp = entry.stamp;
   if (stamp == null) return context.l10n.check_no_time;
-  return DateFormat.Hm(context.l10n.localeName).format(stamp);
+  return context.clockOf(stamp);
 }
 
 (String, int) periodTotal(BuildContext context, Habit habit, HeatmapMode mode) {
@@ -67,7 +68,7 @@ String lastCheckLabel(
           : DateFormat.MMMd(context.l10n.localeName).format(day);
   final time = entry.stamp;
   if (time == null || !withTime) return when;
-  return '$when · ${DateFormat.Hm(context.l10n.localeName).format(time)}';
+  return '$when · ${context.clockOf(time)}';
 }
 
 class CheckHistoryTile extends StatelessWidget {
@@ -205,7 +206,7 @@ class _EntryState extends State<_Entry> {
 
   String _at(int minuteOfDay) {
     final day = widget.entry.day ?? AppClock.today();
-    return DateFormat.Hm(context.l10n.localeName).format(
+    return context.clockOf(
       DateTime(day.year, day.month, day.day, minuteOfDay ~/ 60,
           minuteOfDay % 60),
     );
