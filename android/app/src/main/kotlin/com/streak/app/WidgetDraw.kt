@@ -91,9 +91,10 @@ object WidgetDraw {
         weight: Int,
         maxWidthDp: Float = 10_000f,
         strike: Boolean = false,
+        liftDp: Float = 0f,
     ): Bitmap {
         val argb = color.toArgb()
-        val key = "t:$value:$sizeSp:$argb:$weight:${maxWidthDp.toInt()}:$strike:${scale(context)}"
+        val key = "t:$value:$sizeSp:$argb:$weight:${maxWidthDp.toInt()}:$strike:$liftDp:${scale(context)}"
         return remember(key) {
             val paint = paint(context, sizeSp, argb, weight)
             val shown = TextUtils.ellipsize(
@@ -101,7 +102,7 @@ object WidgetDraw {
             ).toString()
             val metrics = paint.fontMetrics
             val width = paint.measureText(shown).coerceAtLeast(1f)
-            val height = metrics.descent - metrics.ascent
+            val height = metrics.descent - metrics.ascent + liftDp * density(context)
             val bitmap = Bitmap.createBitmap(
                 (width + 2).toInt(), height.toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888,
             )
@@ -119,6 +120,8 @@ object WidgetDraw {
         }
     }
 
+    fun descentDp(context: Context, sizeSp: Float, weight: Int): Float =
+        paint(context, sizeSp, 0, weight).fontMetrics.descent / density(context)
 
     fun haloText(
         context: Context,
@@ -140,6 +143,7 @@ object WidgetDraw {
             val blur = paint.textSize * 0.3f
             val metrics = paint.fontMetrics
             val width = paint.measureText(shown).coerceAtLeast(1f)
+            val height = metrics.descent - metrics.ascent + blur
             val bitmap = Bitmap.createBitmap(
                 (width + 1 + blur).toInt(), height.toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888,
             )

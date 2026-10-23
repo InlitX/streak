@@ -22,6 +22,7 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
@@ -68,7 +69,9 @@ class StatsWidget : GlanceAppWidget() {
                         modifier = GlanceModifier.size(side.dp),
                     )
                 }
-                Column(modifier = GlanceModifier.fillMaxSize().padding(pad.dp)) {
+                if (WidgetConfig.look(context, appWidgetId, round = false).today) {
+                    TodayProgress(context, style, data, side, pad, room, label)
+                } else Column(modifier = GlanceModifier.fillMaxSize().padding(pad.dp)) {
                     val number = WidgetText.compact(streak)
                     Drawn(
                         WidgetDraw.text(context, number, (side * 0.3f).coerceIn(30f, 60f), style.content, 800, room),
@@ -100,6 +103,64 @@ class StatsWidget : GlanceAppWidget() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun TodayProgress(
+        context: Context,
+        style: WidgetStyle,
+        data: JSONObject?,
+        side: Float,
+        pad: Float,
+        room: Float,
+        label: Float,
+    ) {
+        val summary = data?.optJSONObject("summary")
+        val done = summary?.optInt("doneToday") ?: 0
+        val total = summary?.optInt("total") ?: 0
+        val density = WidgetDraw.density(context)
+        val ring = (side * 0.26f).coerceIn(34f, 50f)
+        val free = room - ring - 6f
+        val small = label * 0.85f
+
+        Box(modifier = GlanceModifier.fillMaxSize().padding(pad.dp), contentAlignment = Alignment.TopEnd) {
+            Drawn(
+                WidgetDraw.ring(
+                    context,
+                    summary?.optDouble("ratio", 0.0)?.toFloat() ?: 0f,
+                    ring,
+                    ring * 0.13f,
+                    style.content,
+                ),
+                density,
+            )
+        }
+        Column(modifier = GlanceModifier.fillMaxSize().padding(pad.dp)) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                val count = WidgetText.compact(done)
+                val big = WidgetDraw.fit(context, count, (side * 0.3f).coerceIn(30f, 60f), 18f, 800, free * 0.6f)
+                val shown = WidgetDraw.text(context, count, big, style.content, 800, free * 0.6f)
+                Drawn(shown, density, count)
+                val of = " / ${WidgetText.compact(total)}"
+                val left = free - shown.width / density
+                val ofSize = WidgetDraw.fit(context, of, label * 1.1f, label * 0.7f, 700, left)
+                val lift = WidgetDraw.descentDp(context, big, 800) - WidgetDraw.descentDp(context, ofSize, 700)
+                Drawn(
+                    WidgetDraw.text(context, of, ofSize, style.muted, 700, left, liftDp = lift.coerceAtLeast(0f)),
+                    density,
+                    of,
+                )
+            }
+            val caption = WidgetText.get(context, "done_today", "done today").replaceFirstChar { it.uppercase() }
+            Drawn(WidgetDraw.text(context, caption, label, style.content, 800, room), density, caption)
+            Spacer(GlanceModifier.height(6.dp))
+            val halo = if (style.dark) Color.Black else Color.White
+            val week = "${WidgetText.get(context, "label_week", "Week")}  ${WidgetText.compact(summary?.optInt("weekDone") ?: 0)} ✓"
+            Drawn(WidgetDraw.haloText(context, week, small, style.muted, halo, 650, room), density, week)
+            val best = WidgetText.get(context, "best_streak", "🔥 {streak} best streak")
+                .replace("{streak}", WidgetText.compact(summary?.optInt("bestStreak") ?: 0))
+            Drawn(WidgetDraw.haloText(context, best, small, style.muted, halo, 650, room), density, best)
         }
     }
 
