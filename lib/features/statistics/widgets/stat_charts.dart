@@ -52,10 +52,14 @@ class ValueBars extends StatelessWidget {
     this.barWidth = 12,
     this.goal,
     this.stacks,
+    this.selected,
+    this.onSelect,
   });
 
   final List<double> values;
   final List<List<(double, Color)>>? stacks;
+  final int? selected;
+  final ValueChanged<int>? onSelect;
   final Color color;
   final String Function(int index) label;
   final String Function(double value) tooltip;
@@ -109,6 +113,14 @@ class ValueBars extends StatelessWidget {
             ],
           ),
           barTouchData: BarTouchData(
+            touchCallback: onSelect == null
+                ? null
+                : (event, response) {
+                    final spot = response?.spot;
+                    if (event is FlTapUpEvent && spot != null) {
+                      onSelect!(spot.touchedBarGroupIndex);
+                    }
+                  },
             touchTooltipData: BarTouchTooltipData(
               getTooltipColor: (_) => context.colors.surfaceContainerHighest,
               getTooltipItem: (group, _, rod, __) => BarTooltipItem(
@@ -157,7 +169,9 @@ class ValueBars extends StatelessWidget {
                 barRods: [
                   BarChartRodData(
                     toY: values[i],
-                    color: color,
+                    color: selected == null || selected == i
+                        ? color
+                        : color.withValues(alpha: 0.4),
                     rodStackItems: _stack(i),
                     width: barWidth,
                     borderRadius: BorderRadius.vertical(
