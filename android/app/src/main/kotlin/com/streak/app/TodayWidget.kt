@@ -317,7 +317,7 @@ class TodayWidget : GlanceAppWidget() {
                     Drawn(
                         WidgetDraw.button(
                             context, scale.button, color, button,
-                            (count / target).toFloat(), style.content, look.round,
+                            (count / target).toFloat(), style.content, look.round, look.flower, look.tick,
                         ),
                         density,
                     )

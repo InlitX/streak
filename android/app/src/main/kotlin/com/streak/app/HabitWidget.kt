@@ -366,7 +366,7 @@ class HabitWidget : GlanceAppWidget() {
                             contentAlignment = Alignment.Center,
                         ) {
                             Drawn(
-                                WidgetDraw.dot(context, grid.dot, color, mark, (count / target).toFloat(), style.content, look.round),
+                                WidgetDraw.dot(context, grid.dot, color, mark, (count / target).toFloat(), style.content, look.round, look.flower, look.tick),
                                 density,
                             )
                         }

@@ -11,6 +11,8 @@ data class WidgetLook(
     val cards: Boolean = true,
     val details: Boolean = true,
     val round: Boolean = false,
+    val flower: Boolean = false,
+    val tick: Boolean = true,
     val hideDone: Boolean = false,
     val hideTracking: Boolean = false,
     val compact: Boolean = false,
@@ -89,6 +91,8 @@ object WidgetConfig {
             cards = p.getBoolean("cards_$k", true),
             details = p.getBoolean("details_$k", true),
             round = p.getBoolean("roundButtons_$k", round),
+            flower = p.getBoolean("flowerButtons_$k", false),
+            tick = p.getBoolean("tick_$k", true),
             hideDone = p.getBoolean("hideDone_$k", false),
             hideTracking = p.getBoolean("hideTracking_$k", false),
             compact = p.getBoolean("compact_$k", false),
@@ -103,6 +107,8 @@ object WidgetConfig {
             .putBoolean("cards_$id", look.cards)
             .putBoolean("details_$id", look.details)
             .putBoolean("roundButtons_$id", look.round)
+            .putBoolean("flowerButtons_$id", look.flower)
+            .putBoolean("tick_$id", look.tick)
             .putBoolean("hideDone_$id", look.hideDone)
             .putBoolean("hideTracking_$id", look.hideTracking)
             .putBoolean("compact_$id", look.compact)
@@ -187,10 +193,13 @@ object WidgetConfig {
             .remove("cards_$id")
             .remove("details_$id")
             .remove("roundButtons_$id")
+            .remove("flowerButtons_$id")
+            .remove("tick_$id")
             .remove("hideDone_$id")
             .remove("hideTracking_$id")
             .remove("compact_$id")
             .remove("band_$id")
+            .remove("statsToday_$id")
             .apply()
     }
 

@@ -169,7 +169,7 @@ fun TodaySample(s: WidgetStyle, look: WidgetLook = WidgetLook()) {
                             Bmp(WidgetDraw.text(context, habit.streak.toString(), 10.5f, s.content.copy(alpha = 0.6f), 650), context)
                         }
                     }
-                    Bmp(WidgetDraw.button(context, button, habit.color, habit.button, habit.fill, s.content, look.round), context)
+                    Bmp(WidgetDraw.button(context, button, habit.color, habit.button, habit.fill, s.content, look.round, look.flower, look.tick), context)
                 }
                 Spacer(Modifier.height(if (look.compact) 3.dp else 5.dp))
             }
@@ -318,7 +318,7 @@ fun WeekSample(s: WidgetStyle, span: Int = 7, look: WidgetLook = WidgetLook(roun
                             else -> WeekMark.DONE
                         }
                         Box(Modifier.width(cell.dp).height(rowH.dp), contentAlignment = Alignment.Center) {
-                            Bmp(WidgetDraw.dot(context, dot, habit.color, mark, habit.fill, s.content, look.round), context)
+                            Bmp(WidgetDraw.dot(context, dot, habit.color, mark, habit.fill, s.content, look.round, look.flower, look.tick), context)
                         }
                     }
                 }

@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
@@ -222,8 +223,34 @@ object WidgetDraw {
     fun chipFits(context: Context, widthDp: Float, label: String): Boolean =
         paint(context, 10.5f, 0, 800).measureText(label) <= (widthDp - 8f) * density(context)
 
-    fun button(context: Context, sizeDp: Float, color: Color, kind: ButtonKind, fill: Float, ink: Color, round: Boolean): Bitmap {
-        val key = "b:$sizeDp:${color.toArgb()}:$kind:${(fill * 100).toInt()}:${ink.toArgb()}:$round"
+    private fun flower(size: Float, inset: Float): Path {
+        val c = size / 2f
+        val radius = c - inset
+        val steps = 96
+        return Path().apply {
+            for (i in 0..steps) {
+                val angle = Math.PI * 2 * i / steps
+                val r = radius * (0.9f + 0.1f * cos(angle * 8).toFloat())
+                val x = c + r * cos(angle).toFloat()
+                val y = c + r * sin(angle).toFloat()
+                if (i == 0) moveTo(x, y) else lineTo(x, y)
+            }
+            close()
+        }
+    }
+
+    fun button(
+        context: Context,
+        sizeDp: Float,
+        color: Color,
+        kind: ButtonKind,
+        fill: Float,
+        ink: Color,
+        round: Boolean,
+        petals: Boolean = false,
+        tick: Boolean = true,
+    ): Bitmap {
+        val key = "b:$sizeDp:${color.toArgb()}:$kind:${(fill * 100).toInt()}:${ink.toArgb()}:$round:$petals:$tick"
         return remember(key) {
             val d = density(context)
             val px = (sizeDp * d).toInt().coerceAtLeast(1)
@@ -241,31 +268,38 @@ object WidgetDraw {
                 )
             }
             val c = px / 2f
+            fun shape(paint: Paint) =
+                if (petals) canvas.drawPath(flower(px.toFloat(), 0f), paint) else canvas.drawRoundRect(rect, r, r, paint)
             when (kind) {
                 ButtonKind.DONE -> {
-                    canvas.drawRoundRect(rect, r, r, gradient)
-                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.56f, CardBitmaps.inkOn(argb))
+                    shape(gradient)
+                    if (tick) glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.56f, CardBitmaps.inkOn(argb))
                 }
                 ButtonKind.AMOUNT -> {
-                    canvas.drawRoundRect(rect, r, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.2f).toArgb() })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.2f).toArgb() })
                     canvas.save()
                     canvas.clipRect(0f, px * (1f - fill.coerceIn(0f, 1f)), px.toFloat(), px.toFloat())
-                    canvas.drawRoundRect(rect, r, r, gradient)
+                    shape(gradient)
                     canvas.restore()
                     centered(canvas, paint(context, sizeDp * 0.6f, if (fill >= 0.5f) CardBitmaps.inkOn(argb) else android.graphics.Color.WHITE, 700), "+", c, c)
                 }
                 ButtonKind.TODO -> {
-                    canvas.drawRoundRect(rect, r, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.14f).toArgb() })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.14f).toArgb() })
                     val stroke = 2 * d
-                    val inner = RectF(stroke / 2, stroke / 2, px - stroke / 2, px - stroke / 2)
-                    canvas.drawRoundRect(inner, r - stroke / 2, r - stroke / 2, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                         style = Paint.Style.STROKE
                         strokeWidth = stroke
                         this.color = color.copy(alpha = 0.75f).toArgb()
-                    })
+                    }
+                    if (petals) {
+                        canvas.drawPath(flower(px.toFloat(), stroke / 2), ring)
+                    } else {
+                        val inner = RectF(stroke / 2, stroke / 2, px - stroke / 2, px - stroke / 2)
+                        canvas.drawRoundRect(inner, r - stroke / 2, r - stroke / 2, ring)
+                    }
                 }
                 ButtonKind.RELAPSE -> {
-                    canvas.drawRoundRect(rect, r, r, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })
+                    shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })
                     glyph(context, canvas, R.drawable.ic_widget_cross, c, c, px * 0.56f, ink.toArgb())
                 }
             }
@@ -366,8 +400,18 @@ object WidgetDraw {
         }
     }
 
-    fun dot(context: Context, sizeDp: Float, color: Color, mark: WeekMark, fill: Float, ink: Color, round: Boolean): Bitmap {
-        val key = "dot:$sizeDp:${color.toArgb()}:$mark:${(fill * 100).toInt()}:${ink.toArgb()}:$round"
+    fun dot(
+        context: Context,
+        sizeDp: Float,
+        color: Color,
+        mark: WeekMark,
+        fill: Float,
+        ink: Color,
+        round: Boolean,
+        petals: Boolean = false,
+        tick: Boolean = true,
+    ): Bitmap {
+        val key = "dot:$sizeDp:${color.toArgb()}:$mark:${(fill * 100).toInt()}:${ink.toArgb()}:$round:$petals:$tick"
         return remember(key) {
             val d = density(context)
             val px = (sizeDp * d).toInt().coerceAtLeast(1)
@@ -385,13 +429,15 @@ object WidgetDraw {
             }
             val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
             val corner = if (round) c else px * 0.3f
-            fun shape(paint: Paint, inset: Float = 0f) = canvas.drawRoundRect(
-                RectF(inset, inset, px - inset, px - inset), corner - inset, corner - inset, paint,
-            )
+            fun shape(paint: Paint, inset: Float = 0f) = if (petals) {
+                canvas.drawPath(flower(px.toFloat(), inset), paint)
+            } else {
+                canvas.drawRoundRect(RectF(inset, inset, px - inset, px - inset), corner - inset, corner - inset, paint)
+            }
             when (mark) {
                 WeekMark.DONE -> {
                     shape(gradient)
-                    glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.58f, CardBitmaps.inkOn(argb))
+                    if (tick) glyph(context, canvas, R.drawable.ic_widget_check, c, c, px * 0.58f, CardBitmaps.inkOn(argb))
                 }
                 WeekMark.PART -> {
                     shape(Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color.copy(alpha = 0.18f).toArgb() })
