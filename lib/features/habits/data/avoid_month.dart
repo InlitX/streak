@@ -19,6 +19,19 @@ class AvoidMonth {
   static DateTime firstOf(Habit habit) =>
       DateTime(habit.startedAt.year, habit.startedAt.month);
 
+  static List<DateTime> monthsOf(Habit habit) {
+    final today = AppClock.today();
+    final last = DateTime(today.year, today.month);
+    return [
+      for (
+        var month = firstOf(habit);
+        !month.isAfter(last);
+        month = DateTime(month.year, month.month + 1)
+      )
+        month,
+    ];
+  }
+
   factory AvoidMonth.of(Habit habit, DateTime month) {
     final first = DateTime(month.year, month.month);
     final last = DateTime(month.year, month.month + 1, 0);

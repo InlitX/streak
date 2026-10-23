@@ -1489,6 +1489,7 @@
   "relapse_spent": "Spent on this relapse",
   "money_spent": "Money spent",
   "avoid_month": "Month summary",
+  "avoid_by_month": "Relapses by month",
   "avoid_balance": "Balance",
   "total_goal": "Total goal",
   "total_goal_sub": "A target for the whole habit, like 1000 pages or 50 times",

@@ -17,6 +17,7 @@ import 'package:streak/features/habits/data/avoid_month.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
+import 'package:streak/features/statistics/widgets/stat_charts.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 
 String goalAmount(
@@ -295,6 +296,7 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
     final color = habit.color.shownIn(context);
     final success = context.tokens.success;
     final danger = context.tokens.danger;
+    final history = _history(context, habit, month, locale, danger, style);
     final stats = [
       (LucideIcons.shieldCheck, context.l10n.clean_days, '${data.cleanDays}', color, ExpressShape.gem),
       (LucideIcons.triangleAlert, context.l10n.relapses, '${data.relapses}', danger, ExpressShape.cookie),
@@ -319,7 +321,7 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
             MinimalTile(icon: icon, label: label, value: value, tint: tint),
         ],
       );
-      return MinimalSection(
+      return _withHistory(history, MinimalSection(
         title: context.l10n.avoid_month,
         trailing: nav,
         child: expenses.isEmpty
@@ -342,7 +344,7 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
                   ),
                 ],
               ),
-      );
+      ));
     }
 
     final Widget body;
@@ -399,12 +401,93 @@ class _AvoidMonthSectionState extends State<AvoidMonthSection> {
         ],
       );
     }
-    return Column(
+    return _withHistory(history, Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionLabel(context.l10n.avoid_month, trailing: nav),
         body,
       ],
+    ));
+  }
+
+  Widget _withHistory(Widget? history, Widget month) {
+    if (history == null) return month;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [history, const SizedBox(height: 20), month],
+    );
+  }
+
+  Widget? _history(
+    BuildContext context,
+    Habit habit,
+    DateTime month,
+    String locale,
+    Color danger,
+    SettingsController style,
+  ) {
+    final months = AvoidMonth.monthsOf(habit);
+    if (months.length < 2) return null;
+    final counts = [for (final m in months) AvoidMonth.of(habit, m).relapses];
+    final total = counts.fold(0, (sum, n) => sum + n);
+    final shown = months.length > 12 ? months.length - 12 : 0;
+    final average = context.l10n.times_per_month(
+      formatAmount(((total / months.length) * 10).round() / 10),
+    );
+    final last = months.length - shown - 1;
+    final pick = months.indexOf(month) - shown;
+    final bars = ValueBars(
+      values: [for (final n in counts.skip(shown)) n.toDouble()],
+      color: danger,
+      barWidth: 11,
+      selected: pick >= 0 ? pick : null,
+      onSelect: (index) => setState(() => _month = months[shown + index]),
+      label: (index) => last < 7 || (last - index).isEven
+          ? DateFormat.MMM(locale).format(months[shown + index])
+          : '',
+      tooltip: (value) => context.l10n.count_times(value.round()),
+      axisFormat: (value) => '${value.round()}',
+    );
+    final caption = '${context.l10n.average_short} · $average';
+
+    if (style.isMinimalStyle) {
+      return MinimalSection(
+        title: context.l10n.avoid_by_month,
+        trailing: Text(caption, style: statLabel(context)),
+        child: MinimalCard(
+          padding: const EdgeInsets.fromLTRB(10, 18, 10, 10),
+          child: bars,
+        ),
+      );
+    }
+    if (style.isExpressStyle) {
+      return ExpressStatPanel(
+        title: context.l10n.avoid_by_month,
+        icon: LucideIcons.chartColumn,
+        tint: danger,
+        shape: ExpressShape.cookie,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(caption, style: statLabel(context)),
+            const SizedBox(height: 18),
+            bars,
+          ],
+        ),
+      );
+    }
+    return StatCard(
+      title: context.l10n.avoid_by_month,
+      icon: LucideIcons.chartColumn,
+      color: danger,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(caption, style: statLabel(context)),
+          const SizedBox(height: 18),
+          bars,
+        ],
+      ),
     );
   }
 }

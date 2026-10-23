@@ -1288,6 +1288,7 @@
   "relapse_spent": "Gastado en esta recaída",
   "money_spent": "Dinero gastado",
   "avoid_month": "Resumen del mes",
+  "avoid_by_month": "Recaídas por mes",
   "avoid_balance": "Balance",
   "total_goal": "Meta total",
   "total_goal_sub": "Una cifra para todo el hábito, como 1000 páginas o 50 veces",
