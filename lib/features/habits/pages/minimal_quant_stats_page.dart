@@ -60,6 +60,10 @@ class _MinimalQuantStatsPageState extends State<MinimalQuantStatsPage> {
                   padding: context.pagePadding(20, 0, 20, 40),
                   children: [
                     MinimalTitle(title: habit.name),
+                    if (habit.tracksBook) ...[
+                      BookCard(habit: habit),
+                      const SizedBox(height: 20),
+                    ],
                     if (habit.hasTotalGoal) ...[
                       TotalGoalCard(habit: habit),
                       const SizedBox(height: 20),

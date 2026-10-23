@@ -64,6 +64,10 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
           : ListView(
               padding: context.pagePadding(16, 8, 16, 28),
               children: [
+                if (habit.tracksBook) ...[
+                  StatReveal(child: BookCard(habit: habit)),
+                  const SizedBox(height: 12),
+                ],
                 if (habit.hasTotalGoal) ...[
                   StatReveal(child: TotalGoalCard(habit: habit)),
                   const SizedBox(height: 12),

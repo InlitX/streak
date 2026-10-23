@@ -14,7 +14,10 @@ import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/utils/money_format.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/habits/data/avoid_month.dart';
+import 'package:streak/features/habits/data/book_read.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/widgets/express_stat_kit.dart';
 import 'package:streak/features/statistics/widgets/stat_charts.dart';
@@ -91,6 +94,170 @@ class TotalGoalCard extends StatelessWidget {
   }
 }
 
+class BookCard extends StatelessWidget {
+  const BookCard({super.key, required this.habit});
+
+  final Habit habit;
+
+  Future<void> _newBook(BuildContext context) async {
+    final controller = context.read<HabitsController>();
+    final pages = await pickBookPages(
+      context,
+      title: context.l10n.book_new,
+      pages: habit.bookPages,
+      unit: habit.unitLabel,
+      color: habit.color.shownIn(context),
+    );
+    if (pages == null) return;
+    await controller.update(habit.newBook(pages));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final book = habit.book;
+    final color = habit.color.shownIn(context);
+    String amount(double value) => habitGoalAmount(context, habit, value);
+    return _GoalCard(
+      title: context.l10n.book,
+      ratio: book.page / book.pages,
+      reached: false,
+      value: habit.amountText(book.page),
+      of: context.l10n.total_goal_of(habit.amountText(book.pages)),
+      headline: context.l10n.total_goal_left(amount(book.left)),
+      sub: context.l10n.book_reads(book.finished),
+      color: color,
+      footer: _BookReads(
+        reads: book.reads,
+        color: color,
+        amount: amount,
+        onNewBook: () => _newBook(context),
+      ),
+    );
+  }
+}
+
+class _BookReads extends StatelessWidget {
+  const _BookReads({
+    required this.reads,
+    required this.color,
+    required this.amount,
+    required this.onNewBook,
+  });
+
+  final List<BookRead> reads;
+  final Color color;
+  final String Function(double value) amount;
+  final VoidCallback onNewBook;
+
+  String _day(BuildContext context, DateTime date) {
+    final locale = Localizations.localeOf(context).toString();
+    return date.year == AppClock.today().year
+        ? DateFormat.MMMd(locale).format(date)
+        : DateFormat.yMMMd(locale).format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
+    final strong = express
+        ? ExpressType.body.at(14, weight: 700, color: context.colors.onSurface)
+        : TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: context.colors.onSurface,
+          );
+    final muted = express
+        ? ExpressType.body.at(12, weight: 600, color: context.tokens.muted)
+        : TextStyle(fontSize: 12, color: context.tokens.muted);
+
+    final rows = [
+      for (final (i, read) in reads.indexed)
+        Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: read.isFinished ? color : color.withValues(alpha: 0.14),
+                ),
+                child: read.isFinished
+                    ? Icon(LucideIcons.check, size: 16, color: color.ink)
+                    : Text('${i + 1}', style: strong.copyWith(fontSize: 13, color: color)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(
+                      read.isFinished
+                          ? TextSpan(children: [
+                              TextSpan(text: _day(context, read.start)),
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Icon(
+                                    LucideIcons.arrowRight,
+                                    size: 14,
+                                    color: context.tokens.muted,
+                                  ),
+                                ),
+                              ),
+                              TextSpan(text: _day(context, read.end!)),
+                            ])
+                          : TextSpan(text: context.l10n.book_since(_day(context, read.start))),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: strong,
+                    ),
+                    Text(
+                      '${context.l10n.book_read_number(i + 1)} · ${amount(read.pages)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: muted,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                read.isFinished
+                    ? context.l10n.count_days(read.days)
+                    : context.l10n.book_reading_now,
+                style: muted.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: read.isFinished ? null : color,
+                ),
+              ),
+            ],
+          ),
+        ),
+    ].reversed;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 6),
+        ...rows,
+        const SizedBox(height: 8),
+        Align(
+          alignment: AlignmentDirectional.centerEnd,
+          child: TextButton.icon(
+            onPressed: onNewBook,
+            icon: Icon(LucideIcons.bookPlus, size: 17, color: color),
+            label: Text(context.l10n.book_new, style: TextStyle(color: color)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _GoalCard extends StatelessWidget {
   const _GoalCard({
     required this.title,
@@ -101,6 +268,7 @@ class _GoalCard extends StatelessWidget {
     required this.headline,
     required this.sub,
     required this.color,
+    this.footer,
   });
 
   final String title;
@@ -111,6 +279,7 @@ class _GoalCard extends StatelessWidget {
   final String headline;
   final String sub;
   final Color color;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +297,7 @@ class _GoalCard extends StatelessWidget {
         ? ExpressType.body.at(12.5, weight: 600, color: context.tokens.muted)
         : TextStyle(fontSize: 12.5, height: 1.35, color: context.tokens.muted);
 
-    final content = Row(
+    final top = Row(
       children: [
         _GoalRing(
           ratio: ratio,
@@ -160,6 +329,12 @@ class _GoalCard extends StatelessWidget {
         ),
       ],
     );
+    final content = footer == null
+        ? top
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [top, footer!],
+          );
 
     if (style.isMinimalStyle) {
       return MinimalCard(

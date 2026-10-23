@@ -126,6 +126,10 @@ class _ExpressQuantStatsPageState extends State<ExpressQuantStatsPage> {
                   children: [
                     ExpressHeadline(title: habit.name),
                     const SizedBox(height: 20),
+                    if (habit.tracksBook) ...[
+                      BookCard(habit: habit),
+                      const SizedBox(height: 20),
+                    ],
                     if (habit.hasTotalGoal) ...[
                       TotalGoalCard(habit: habit),
                       const SizedBox(height: 20),

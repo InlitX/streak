@@ -123,6 +123,10 @@ class QuantitativeProgress extends StatelessWidget {
               context.l10n.quant_daily_goal,
               style: TextStyle(fontSize: 13, color: context.tokens.muted),
             ),
+            if (habit.tracksBook) ...[
+              const SizedBox(height: 10),
+              _BookLine(habit: habit),
+            ],
             if (habit.readsSteps) ...[
               const SizedBox(height: 10),
               HealthStepsBadge(color: habit.color.shownIn(context)),
@@ -388,6 +392,50 @@ class _Stopwatch extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _BookLine extends StatelessWidget {
+  const _BookLine({required this.habit});
+
+  final Habit habit;
+
+  @override
+  Widget build(BuildContext context) {
+    final book = habit.book;
+    final color = habit.color.shownIn(context);
+    final page = context.l10n.book_page(
+      habit.amountText(book.page),
+      habit.amountText(book.pages),
+    );
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(99),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(LucideIcons.bookOpen, size: 15, color: color),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              book.finished > 0
+                  ? '$page · ${context.l10n.book_reads(book.finished)}'
+                  : page,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
