@@ -254,6 +254,7 @@ class FocusSavedTimers extends StatelessWidget {
                         selected: timer == current,
                         onTap: () => onApply(timer),
                         onLongPress: () => onRemove(timer),
+                        onRemove: () => onRemove(timer),
                       ),
                     if (canSave)
                       _TimerPill(
@@ -284,6 +285,7 @@ class _TimerPill extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.onLongPress,
+    this.onRemove,
     this.dashed = false,
     this.compact = false,
   });
@@ -293,6 +295,7 @@ class _TimerPill extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
+  final VoidCallback? onRemove;
   final bool dashed;
   final bool compact;
 
@@ -343,6 +346,19 @@ class _TimerPill extends StatelessWidget {
                   style: sheetLabelStyle(context, size: 12.5, color: tone),
                 ),
               ],
+              if (selected && onRemove != null)
+                Semantics(
+                  button: true,
+                  label: context.l10n.focus_remove_timer,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onRemove,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Icon(LucideIcons.x, size: 14, color: tone),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
