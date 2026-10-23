@@ -975,6 +975,8 @@
   "app_lock_delay_sub": "How soon it asks again after you leave",
   "focus_only": "Only with a focus session",
   "focus_only_hint": "The habit is checked when you finish a session, not by tapping it.",
+  "focus_edit_session": "Edit session",
+  "focus_session_updated": "Session updated",
   "focus_only_title": "Needs a focus session",
   "focus_only_body": "\"{name}\" is completed by finishing a focus session.",
   "@focus_only_body": {

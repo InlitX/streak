@@ -140,13 +140,14 @@ class FocusController extends ChangeNotifier {
     required DateTime startedAt,
     required int minutes,
     String label = '',
+    bool completed = true,
   }) async {
     final session = FocusSession(
       id: const Uuid().v4(),
       habitId: habitId,
       targetMinutes: minutes,
       seconds: minutes * 60,
-      completed: true,
+      completed: completed,
       startedAt: startedAt,
       label: label,
     );

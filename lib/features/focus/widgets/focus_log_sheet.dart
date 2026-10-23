@@ -11,25 +11,34 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/time_picker.dart';
+import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
-Future<bool?> showFocusLogSheet(BuildContext context, {String? habitId}) {
+Future<bool?> showFocusLogSheet(
+  BuildContext context, {
+  String? habitId,
+  FocusSession? editing,
+}) {
   return showModalBottomSheet<bool>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    builder: (_) => _FocusLog(habitId: habitId ?? ''),
+    builder: (_) => _FocusLog(
+      habitId: editing?.habitId ?? habitId ?? '',
+      editing: editing,
+    ),
   );
 }
 
 class _FocusLog extends StatefulWidget {
-  const _FocusLog({required this.habitId});
+  const _FocusLog({required this.habitId, this.editing});
 
   final String habitId;
+  final FocusSession? editing;
 
   @override
   State<_FocusLog> createState() => _FocusLogState();
@@ -37,16 +46,20 @@ class _FocusLog extends StatefulWidget {
 
 class _FocusLogState extends State<_FocusLog> {
   late String _habitId = widget.habitId;
-  late DateTime _day = AppClock.today();
-  late TimeOfDay _time = TimeOfDay.fromDateTime(AppClock.now());
-  int _minutes = 25;
+  late DateTime _day = widget.editing?.startedAt.atMidnight ?? AppClock.today();
+  late TimeOfDay _time =
+      TimeOfDay.fromDateTime(widget.editing?.startedAt ?? AppClock.now());
+  late int _minutes = widget.editing == null
+      ? 25
+      : (widget.editing!.seconds / 60).round().clamp(1, 24 * 60);
 
   Future<void> _pickDay() async {
     final today = AppClock.now();
+    final first = today.subtract(const Duration(days: 730));
     final picked = await showDatePicker(
       context: context,
       initialDate: _day,
-      firstDate: today.subtract(const Duration(days: 730)),
+      firstDate: _day.isBefore(first) ? _day : first,
       lastDate: today,
     );
     if (picked != null) setState(() => _day = picked.atMidnight);
@@ -60,6 +73,11 @@ class _FocusLogState extends State<_FocusLog> {
   Future<void> _save() async {
     final focus = context.read<FocusController>();
     final habits = context.read<HabitsController>();
+    final old = widget.editing;
+    if (old != null) {
+      await countFocusTime(habits, focus, old, undo: true);
+      await focus.removeSessions({old.id});
+    }
     final session = await focus.addSession(
           habitId: _habitId,
           startedAt: DateTime(
@@ -70,6 +88,8 @@ class _FocusLogState extends State<_FocusLog> {
             _time.minute,
           ),
           minutes: _minutes,
+          label: old?.label ?? '',
+          completed: old?.completed ?? true,
         );
     await creditFocusRound(habits, focus, session, on: session.countedOn);
     if (mounted) Navigator.of(context).pop(true);
@@ -92,7 +112,9 @@ class _FocusLogState extends State<_FocusLog> {
             Padding(
               padding: const EdgeInsets.only(left: 2, bottom: 16),
               child: Text(
-                context.l10n.focus_log,
+                widget.editing == null
+                    ? context.l10n.focus_log
+                    : context.l10n.focus_edit_session,
                 style: sheetTitleStyle(context, size: 18),
               ),
             ),

@@ -90,6 +90,12 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
         context.l10n.focus_history;
   }
 
+  Future<void> _edit(FocusSession session) async {
+    final saved = await showFocusLogSheet(context, editing: session);
+    if (saved != true || !mounted) return;
+    AppSnackbar.success(context, context.l10n.focus_session_updated);
+  }
+
   Future<void> _log() async {
     final added = await showFocusLogSheet(context, habitId: widget.habitId);
     if (added != true || !mounted) return;
@@ -226,6 +232,7 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
                               selected: _selected.contains(session.id),
                               selecting: _selecting,
                               onToggle: () => _toggle(session.id),
+                              onEdit: () => _edit(session),
                             ),
                           const SizedBox(height: 14),
                         ],
@@ -312,12 +319,14 @@ class _SessionTile extends StatelessWidget {
     required this.selected,
     required this.selecting,
     required this.onToggle,
+    required this.onEdit,
   });
 
   final FocusSession session;
   final bool selected;
   final bool selecting;
   final VoidCallback onToggle;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +344,7 @@ class _SessionTile extends StatelessWidget {
         button: true,
         selected: selected,
         child: GestureDetector(
-          onTap: selecting ? onToggle : null,
+          onTap: selecting ? onToggle : onEdit,
           onLongPress: onToggle,
           child: AnimatedContainer(
             duration: express

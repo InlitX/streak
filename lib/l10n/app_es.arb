@@ -858,6 +858,8 @@
   "app_lock_delay_sub": "Cuánto tarda en volver a pedirlo",
   "focus_only": "Solo con una sesión de foco",
   "focus_only_hint": "El hábito se marca al terminar una sesión, no al tocarlo.",
+  "focus_edit_session": "Editar sesión",
+  "focus_session_updated": "Sesión actualizada",
   "focus_only_title": "Necesita una sesión de foco",
   "focus_only_body": "\"{name}\" se completa al terminar una sesión de foco.",
   "@focus_only_body": {
