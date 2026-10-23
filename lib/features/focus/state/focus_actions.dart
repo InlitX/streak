@@ -36,15 +36,16 @@ Future<void> applyFocusAction(FocusAction action) async {
 Future<void> creditFocusRound(
   HabitsController habits,
   FocusController focus,
-  FocusSession session,
-) async {
+  FocusSession session, {
+  DateTime? on,
+}) async {
   final habit = habits.byId(session.habitId);
   if (habit == null) return;
   if (habit.isTimeAmount) return countFocusTime(habits, focus, session);
-  final today = AppClock.now();
+  final day = on ?? AppClock.now();
   if (!session.completed || habit.kind != HabitKind.positive) return;
-  if (habit.isCompletedOn(today)) return;
-  await habits.toggle(habit.id, today, fromFocus: true);
+  if (habit.isCompletedOn(day)) return;
+  await habits.toggle(habit.id, day, fromFocus: true);
 }
 
 Future<void> countFocusTime(

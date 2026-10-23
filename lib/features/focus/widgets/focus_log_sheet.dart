@@ -11,6 +11,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/time_picker.dart';
+import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_duration_fields.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -57,7 +58,9 @@ class _FocusLogState extends State<_FocusLog> {
   }
 
   Future<void> _save() async {
-    await context.read<FocusController>().addSession(
+    final focus = context.read<FocusController>();
+    final habits = context.read<HabitsController>();
+    final session = await focus.addSession(
           habitId: _habitId,
           startedAt: DateTime(
             _day.year,
@@ -68,6 +71,7 @@ class _FocusLogState extends State<_FocusLog> {
           ),
           minutes: _minutes,
         );
+    await creditFocusRound(habits, focus, session, on: session.countedOn);
     if (mounted) Navigator.of(context).pop(true);
   }
 
