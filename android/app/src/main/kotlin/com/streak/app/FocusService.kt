@@ -179,9 +179,9 @@ class FocusService : Service() {
 
     private fun ensureChannel(name: String) {
         val manager = getSystemService(NotificationManager::class.java) ?: return
-        manager.deleteNotificationChannel(LEGACY_CHANNEL_ID)
+        LEGACY_CHANNEL_IDS.forEach(manager::deleteNotificationChannel)
         val label = name.ifEmpty { "Focus" }
-        val channel = NotificationChannel(CHANNEL_ID, label, NotificationManager.IMPORTANCE_HIGH)
+        val channel = NotificationChannel(CHANNEL_ID, label, NotificationManager.IMPORTANCE_DEFAULT)
         channel.setShowBadge(false)
         channel.setSound(null, null)
         channel.enableVibration(false)
@@ -231,7 +231,7 @@ class FocusService : Service() {
             .setColorized(false)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setShowWhen(false)
             .setCategory(NotificationCompat.CATEGORY_STOPWATCH)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -386,8 +386,8 @@ class FocusService : Service() {
     }
 
     companion object {
-        const val CHANNEL_ID = "focus_timer"
-        const val LEGACY_CHANNEL_ID = "focus_session"
+        const val CHANNEL_ID = "focus_quiet"
+        val LEGACY_CHANNEL_IDS = listOf("focus_session", "focus_timer")
         const val NOTIFICATION_ID = 4181
 
         const val ACTION_SHOW = "com.streak.app.FOCUS_SHOW"
