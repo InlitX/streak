@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/amount_format.dart';
+import 'package:streak/features/habits/data/book_read.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/quant_progress.dart';
 import 'package:streak/features/habits/data/reminder.dart';
@@ -67,6 +68,9 @@ class Habit {
     this.incrementAmount = 1,
     this.quantKind = QuantKind.generic,
     this.bookCoverPath = '',
+    this.bookPages = 0,
+    this.bookSince,
+    this.pastReads = const [],
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
@@ -209,6 +213,40 @@ class Habit {
   final QuantKind quantKind;
 
   final String bookCoverPath;
+
+  final double bookPages;
+
+  final DateTime? bookSince;
+
+  final List<BookRead> pastReads;
+
+  bool get tracksBook =>
+      kind == HabitKind.quantitative &&
+      quantKind == QuantKind.reading &&
+      bookPages > 0;
+
+  late final BookProgress book = BookProgress.of(
+    completions: completions.values,
+    pages: bookPages,
+    since: bookSince,
+    past: pastReads,
+  );
+
+  List<BookRead> get finishedReads => tracksBook
+      ? book.reads.where((read) => read.isFinished).toList()
+      : pastReads;
+
+  Habit newBook(double pages) => copyWith(
+        bookPages: pages,
+        bookSince: AppClock.today(),
+        pastReads: finishedReads,
+      );
+
+  Habit keepBook(Habit before) {
+    if (!tracksBook || bookPages == before.bookPages) return this;
+    if (before.bookPages <= 0 && !startedAt.isBefore(AppClock.today())) return this;
+    return copyWith(bookSince: AppClock.today(), pastReads: before.finishedReads);
+  }
 
   final int focusMinutes;
   final int focusBreakMinutes;
@@ -843,6 +881,9 @@ class Habit {
     double? incrementAmount,
     QuantKind? quantKind,
     String? bookCoverPath,
+    double? bookPages,
+    DateTime? bookSince,
+    List<BookRead>? pastReads,
     int? focusMinutes,
     int? focusBreakMinutes,
     bool? focusOnly,
@@ -894,6 +935,9 @@ class Habit {
       incrementAmount: incrementAmount ?? this.incrementAmount,
       quantKind: quantKind ?? this.quantKind,
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
+      bookPages: bookPages ?? this.bookPages,
+      bookSince: bookSince ?? this.bookSince,
+      pastReads: pastReads ?? this.pastReads,
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
       tracking: tracking ?? this.tracking,
@@ -958,6 +1002,10 @@ class Habit {
         'incrementAmount': incrementAmount,
         'quantKind': quantKind.index,
         'bookCoverPath': bookCoverPath,
+        if (bookPages > 0) 'bookPages': bookPages,
+        if (bookSince != null) 'bookSince': bookSince!.dayKey,
+        if (pastReads.isNotEmpty)
+          'pastReads': pastReads.map((read) => read.toMap()).toList(),
         'focusMinutes': focusMinutes,
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
@@ -1028,6 +1076,15 @@ class Habit {
         incrementAmount: ((map['incrementAmount'] ?? 1) as num).toDouble(),
         quantKind: QuantKind.values[(map['quantKind'] ?? 0) as int],
         bookCoverPath: (map['bookCoverPath'] ?? '') as String,
+        bookPages: (map['bookPages'] as num?)?.toDouble() ?? 0,
+        bookSince: map['bookSince'] is String
+            ? parseDayKey(map['bookSince'] as String)
+            : null,
+        pastReads: map['pastReads'] == null
+            ? const []
+            : (map['pastReads'] as List)
+                .map((r) => BookRead.fromMap(Map<String, dynamic>.from(r as Map)))
+                .toList(),
         focusMinutes: ((map['focusMinutes'] ?? 25) as num).toInt(),
         focusBreakMinutes:
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),
