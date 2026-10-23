@@ -2,6 +2,7 @@ package com.streak.app
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
@@ -89,7 +90,10 @@ class StatsWidget : GlanceAppWidget() {
                     if (single != null) {
                         val name = single.optString("name")
                         Drawn(
-                            WidgetDraw.text(context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted, 600, room),
+                            WidgetDraw.haloText(
+                                context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted,
+                                if (style.dark) Color.Black else Color.White, 600, room,
+                            ),
                             density,
                             name,
                         )

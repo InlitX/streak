@@ -119,6 +119,41 @@ object WidgetDraw {
         }
     }
 
+
+    fun haloText(
+        context: Context,
+        value: String,
+        maxSp: Float,
+        color: Color,
+        halo: Color,
+        weight: Int,
+        maxWidthDp: Float,
+    ): Bitmap {
+        val sizeSp = fit(context, value, maxSp, maxSp * 0.7f, weight, maxWidthDp)
+        val argb = color.toArgb()
+        val key = "h:$value:$sizeSp:$argb:${halo.toArgb()}:$weight:${maxWidthDp.toInt()}:${scale(context)}"
+        return remember(key) {
+            val paint = paint(context, sizeSp, argb, weight)
+            val shown = TextUtils.ellipsize(
+                value, paint, maxWidthDp * density(context), TextUtils.TruncateAt.END,
+            ).toString()
+            val blur = paint.textSize * 0.3f
+            val metrics = paint.fontMetrics
+            val width = paint.measureText(shown).coerceAtLeast(1f)
+            val bitmap = Bitmap.createBitmap(
+                (width + 1 + blur).toInt(), height.toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888,
+            )
+            val canvas = Canvas(bitmap)
+            val y = blur / 2 - metrics.ascent
+            paint.setShadowLayer(blur, 0f, 0f, halo.copy(alpha = 0.9f).toArgb())
+            canvas.drawText(shown, 1f, y, paint)
+            canvas.drawText(shown, 1f, y, paint)
+            paint.clearShadowLayer()
+            canvas.drawText(shown, 1f, y, paint)
+            bitmap
+        }
+    }
+
     fun ring(
         context: Context,
         progress: Float,

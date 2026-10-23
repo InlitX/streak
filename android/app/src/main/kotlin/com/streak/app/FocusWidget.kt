@@ -2,6 +2,7 @@ package com.streak.app
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
@@ -78,14 +79,15 @@ class FocusWidget : GlanceAppWidget() {
                     Drawn(WidgetDraw.text(context, caption, label, style.content, 800, room), density, caption)
                     Spacer(GlanceModifier.height(6.dp))
                     val small = label * 0.85f
+                    val halo = if (style.dark) Color.Black else Color.White
                     val week = "${WidgetText.get(context, "label_week", "Week")}  ${duration(totals[1])}"
-                    Drawn(WidgetDraw.text(context, week, small, style.muted, 650, room), density, week)
+                    Drawn(WidgetDraw.haloText(context, week, small, style.muted, halo, 650, room), density, week)
                     val month = "${WidgetText.get(context, "label_month", "Month")}  ${duration(totals[2])}"
-                    Drawn(WidgetDraw.text(context, month, small, style.muted, 650, room), density, month)
+                    Drawn(WidgetDraw.haloText(context, month, small, style.muted, halo, 650, room), density, month)
                     if (single != null) {
                         val name = single.optString("name")
                         Drawn(
-                            WidgetDraw.text(context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted, 600, room),
+                            WidgetDraw.haloText(context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted, halo, 600, room),
                             density,
                             name,
                         )
