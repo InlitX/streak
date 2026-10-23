@@ -60,8 +60,8 @@ void main() {
     expect(find.byType(TimelineBlock), findsNWidgets(2));
     expect(find.byType(TimelineGap), findsOneWidget);
     expect(find.text('3h free'), findsOneWidget);
-    expect(find.text('09:00 - 10:00  ·  1h'), findsOneWidget);
-    expect(find.text('13:00 - 13:30  ·  30m'), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^9:00\sAM - 10:00\sAM  ·  1h$')), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^1:00\sPM - 1:30\sPM  ·  30m$')), findsOneWidget);
 
     final blocks = tester.widgetList<TimelineBlock>(find.byType(TimelineBlock));
     expect(blocks.map((b) => b.habit.name), ['Read', 'Run']);

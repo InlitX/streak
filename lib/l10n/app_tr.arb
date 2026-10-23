@@ -1597,13 +1597,5 @@
   "miss_tired": "Yorgun",
   "miss_forgot": "Unuttum",
   "day_not_done": "Bitmedi",
-  "day_clean": "Temiz",
-  "day_relapses": "",
-  "@day_relapses": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  }
+  "day_clean": "Temiz"
 }
