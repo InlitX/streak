@@ -730,7 +730,7 @@
   "collapse_cards": "Kartları daralt",
   "expand_cards": "Kartları genişlet",
   "view_switcher": "Görünüm değiştirici",
-  "view_switcher_sub": "Bugün ekranında Hafta / Ay / Yıl düğmelerini göster",
+  "view_switcher_sub": "Bugün ekranında Hafta / Ay / Yıl düğmelerini göster. Kapalı olduğunda filtre menüsüne taşınırlar",
   "view_switcher_needs": "Kullanmak için kartlarda aktiviteyi aç",
   "focus": "Odaklanma",
   "focus_enable_sub": "Zamanlayıcı gerektiren alışkanlıklar için bir sayaç",
@@ -1536,5 +1536,74 @@
   "a11y_previous_month": "Önceki ay",
   "a11y_next_month": "Sonraki ay",
   "plan_show_month": "Ayın tamamını göster",
-  "plan_show_week": "Tek bir hafta göster"
+  "plan_show_week": "Tek bir hafta göster",
+  "discard_changes": "Değişiklikleri sil?",
+  "discard_changes_body": "Burada yaptığınız değişiklikler kaybolacaktır.",
+  "discard": "Sil",
+  "keep_editing": "Düzenlemeye devam et",
+  "tracking_hide_sub": "Sadece takip ettiğiniz alışkanlıklar bu listenin dışında kalır",
+  "reminders_ready_title": "Hatırlatmalar aktif",
+  "reminders_ready_body": "Streak size burada hatırlatacaktır.",
+  "no_goal": "Günlük hedef yok",
+  "no_goal_sub": "Sadece değeri kayıt et, mesela kilonuz gibi. Herhangi bir miktar, günü tamamlar.",
+  "steps_needed_sub": "Bugün, {total} adımdan {needed} adımı halletmekle gün tamamlanmış olur.",
+  "@steps_needed_sub": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "from_last_done": "Son seferden itibaren say",
+  "month_weekday": "Her ayın aynı hafta içi günü",
+  "month_weekday_sub": "Sabit bir tarih yerine ayın {when} gününü baz alır.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "nth_weekday": "{n, select, first{birinci} second{ikinci} third{üçüncü} fourth{dördüncü} other{sonuncu}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "from_last_done_sub": "Tamamladığınız gün baz alınarak bekleme süresi yeniden başlar. Kaçırılan gün seriyi yine de bozar.",
+  "prefs_cards": "Kartlar ve Takvim",
+  "prefs_habits": "Alışkanlıklar",
+  "focus_long_break": "Uzun bir ara",
+  "focus_long_break_sub": "Her 4 turda bir, daha uzun bir ara.",
+  "focus_whole_rounds": "Sadece tam turları sayın",
+  "focus_whole_rounds_sub": "Erken bitirdiğiniz tur kaydedilmez.",
+  "focus_end_drop": "Şimdi bitirirseniz, bu tur kaydedilmez.",
+  "focus_track_ticking": "Zaman",
+  "focus_resources": "Ücretsiz sahneler ve sesler",
+  "hide_done": "Tamamlananları gizle",
+  "hide_done_sub": "Bugün bitirdiğiniz şey listeden ayrılır",
+  "miss_other": "Diğer",
+  "miss_other_hint": "Sebep yaz",
+  "miss_busy": "Meşgul",
+  "miss_traveling": "Seyahat Ediyor",
+  "miss_tired": "Yorgun",
+  "miss_forgot": "Unuttum",
+  "day_not_done": "Bitmedi",
+  "day_clean": "Temiz",
+  "day_relapses": "",
+  "@day_relapses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

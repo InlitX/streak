@@ -870,7 +870,7 @@
   "collapse_cards": "折叠卡片",
   "expand_cards": "展开卡片",
   "view_switcher": "视图切换器",
-  "view_switcher_sub": "在「今天」页面显示周 / 月 / 年按钮",
+  "view_switcher_sub": "在「今天」页面显示周 / 月 / 年按钮。关闭后，这些选项会移至筛选菜单",
   "app_lock_failed": "无法验证您的身份",
   "focus_style_flip": "翻页",
   "legend_note_added": "笔记已添加",
@@ -1322,5 +1322,169 @@
   "period_all_time": "全部时间",
   "just_tracking_option": "仅记录",
   "start_view_sub": "「今天」的默认显示方式",
-  "refresh_nothing": "文件夹中没有新内容"
+  "refresh_nothing": "文件夹中没有新内容",
+  "discard": "放弃",
+  "todo_discard_body": "你对此待办所做的更改将会丢失。",
+  "keep_editing": "继续编辑",
+  "discard_changes": "放弃更改？",
+  "discard_changes_body": "你对此待办所做的更改将会丢失。",
+  "no_goal_sub": "只需记录数值，例如体重。填写任意数值都会将当天标记为完成。",
+  "any_amount": "任意数值都算完成",
+  "any_amount_sub": "记录任意数值都会将当天标记为完成，即使未达到目标。",
+  "animations": "动画效果",
+  "animations_sub": "进入动画、页面切换和文字动效",
+  "widgets_sub": "小组件样式，适用于不支持小组件编辑的手机",
+  "widgets_hint": "如果您在添加或长按某个小部件时，主屏幕无法打开编辑器，请在此处更改其样式。这一设置适用于所有未单独进行自定义的同类型小部件。",
+  "widget_kind_habit": "习惯",
+  "widget_kind_today": "今天",
+  "widget_cfg_today_band": "高亮今天",
+  "widget_cfg_show_art": "显示插图",
+  "widget_cfg_show_header": "标题",
+  "widget_cfg_show_icons": "习惯图标",
+  "widget_cfg_show_cards": "每个习惯后的背景",
+  "widget_cfg_show_details": "名称下方显示连续天数",
+  "widget_cfg_buttons": "按钮",
+  "widget_cfg_buttons_round": "圆形",
+  "widget_cfg_buttons_square": "方形",
+  "widget_cfg_hide_done": "隐藏已完成内容",
+  "widget_cfg_compact": "紧凑型",
+  "widget_cfg_compact_hint": "缩小行高，并在名称旁显示连续天数",
+  "widget_cfg_compact_todos_hint": "缩小行高，并在待办旁显示时间",
+  "widget_cfg_show_habits_hint": "可选择一个或多个。只选择一个习惯时，概览会显示其连续天数。",
+  "onb_blurb": "每天一点点坚持，慢慢养成习惯。",
+  "onb_free_title": "永久免费",
+  "onb_free_body": "无广告、无订阅，也没有受限功能。",
+  "onb_kicker": "欢迎使用",
+  "onb_private_title": "隐私且离线",
+  "onb_private_body": "所有数据都保存在你的设备上，无需账号。",
+  "onb_yours_title": "你的数据由你掌控",
+  "onb_yours_body": "随时备份，也可以随时带走你的数据。",
+  "onb_step": "第 {step} / {total} 步",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "data_folder": "数据文件夹",
+  "data_folder_documents": "文档",
+  "data_folder_app": "应用旁边",
+  "data_folder_pick": "选择文件夹",
+  "data_folder_inside": "请选择当前文件夹以外的位置。",
+  "data_folder_taken": "该文件夹中已有 Streak 数据。",
+  "data_folder_denied": "Streak 无法写入该文件夹。",
+  "data_folder_move_title": "移动数据",
+  "data_folder_move_body": "Streak 将关闭并把数据移动到 {path}。关闭后请重新打开应用。如果移动失败，数据仍会保留在原位置。",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "移动并关闭",
+  "clean_goal_again": "连续记录仍在继续，继续保持",
+  "clean_goal_of": "/ {goal}",
+  "@clean_goal_of": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "reminders_ready_body": "Streak 会在这里提醒你。",
+  "pick_one_day": "请至少选择一天",
+  "relapse_spent": "本次破戒花费",
+  "money_spent": "花费",
+  "avoid_month": "月度概览",
+  "total_goal": "总目标",
+  "total_goal_sub": "为整个习惯设置目标，例如 1000 页或 50 次",
+  "total_goal_left": "还差 {amount}",
+  "@total_goal_left": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "total_goal_of": "共 {amount}",
+  "@total_goal_of": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "count_times": "{count} 次",
+  "@count_times": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_change_timer": "更改计时器",
+  "focus_retime_hint": "已专注的时间会保留。",
+  "focus_retime_apply": "应用",
+  "widget_focus_today": "今日专注",
+  "focus_streak": "专注连续天数",
+  "focus_by_hour": "专注时",
+  "focus_by_weekday": "每日专注",
+  "focus_heatmap": "专注活动",
+  "focus_plan_vs_real": "计划与实际",
+  "focus_avg_longer": "平均比计划多 {pct}",
+  "@focus_avg_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_shorter": "平均比计划少 {pct}",
+  "@focus_avg_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_on_plan": "平均与计划一致",
+  "focus_session_longer": "比计划多 {pct}",
+  "@focus_session_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_shorter": "比计划少 {pct}",
+  "@focus_session_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_on_plan": "与计划一致",
+  "focus_pauses_avg": "每次专注的暂停次数",
+  "focus_pause_count": "{count, plural, =0{无暂停} =1{暂停 1 次} other{暂停 {count} 次}}",
+  "@focus_pause_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_vs_previous": "较上一周期 {change}",
+  "@focus_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  }
 }
