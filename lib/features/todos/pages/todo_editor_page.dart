@@ -20,6 +20,7 @@ import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/widgets/habit_time_fields.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/todos/data/todo.dart';
+import 'package:streak/features/todos/data/todo_repeat.dart';
 import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
@@ -27,6 +28,7 @@ import 'package:streak/features/todos/widgets/todo_note_route.dart';
 import 'package:streak/features/todos/widgets/todo_paper.dart';
 import 'package:streak/features/todos/widgets/todo_paper_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_photos.dart';
+import 'package:streak/features/todos/widgets/todo_repeat_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_sticker.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 
@@ -92,6 +94,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   late String _cover = widget.todo?.cover ?? '';
   late bool _done = widget.todo?.done ?? false;
   late bool _pinned = widget.todo?.pinned ?? false;
+  late TodoRepeat? _repeat = widget.todo?.repeat;
   late final List<String> _photos = [...?widget.todo?.photos];
   late List<String> _tags = [...?widget.todo?.tags];
   late String _project = widget.todo?.project ?? widget.project;
@@ -129,6 +132,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
         _cover,
         _done,
         _pinned,
+        _repeat?.toMap(),
         _photos,
         _tags,
         _project,
@@ -215,6 +219,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     final cover = _cover;
     final done = _done;
     final pinned = _pinned;
+    final repeat = date.isEmpty ? null : _repeat;
 
     await _creating;
     final existing = _existing;
@@ -234,6 +239,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
             paper: paper,
             cover: cover,
             pinned: pinned,
+            repeat: repeat,
           )
           .then((todo) => _existing = todo);
       _creating = creating;
@@ -259,6 +265,8 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
       paper: paper,
       cover: cover,
       pinned: pinned,
+      repeat: repeat,
+      clearRepeat: repeat == null,
       done: done,
       doneAt: done && !existing.done ? DateTime.now() : null,
       clearDoneAt: !done,
@@ -304,7 +312,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   Future<void> _pickDate() async {
     final today = AppClock.today();
     final current = switch (_date) {
-      '' => 4,
+      '' => 5,
       _ when _minutes != null => 3,
       _ when _date == today.dayKey => 0,
       _ when _date == today.addDays(1).dayKey => 1,
@@ -327,13 +335,18 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
         context.l10n.tomorrow,
         [context.l10n.pick_a_date, if (picked != null) picked].join(' · '),
         [context.l10n.todo_time, if (time != null) time].join(' · '),
+        [
+          context.l10n.todo_repeat,
+          if (_repeat case final repeat? when _date.isNotEmpty)
+            todoRepeatLabel(context, repeat),
+        ].join(' · '),
         context.l10n.todo_no_date,
       ],
       index: current,
       onSelected: (index) async {
         switch (index) {
           case 0 || 1:
-            _edit(() => _date = today.addDays(index).dayKey);
+            _setDate(today.addDays(index));
           case 2:
             final picked = await showDatePicker(
               context: context,
@@ -341,15 +354,16 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
               firstDate: DateTime(today.year - 1),
               lastDate: DateTime(today.year + 5),
             );
-            if (picked != null && mounted) {
-              _edit(() => _date = picked.dayKey);
-            }
+            if (picked != null && mounted) _setDate(picked);
           case 3:
             await _pickTime();
+          case 4:
+            await _pickRepeat();
           default:
             _edit(() {
               _date = '';
               _minutes = null;
+              _repeat = null;
             });
         }
       },
@@ -369,6 +383,46 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
       _minutes = picked.hour * 60 + picked.minute;
       if (_date.isEmpty) _date = AppClock.today().dayKey;
     });
+  }
+
+  void _setDate(DateTime day) => _edit(() {
+        _date = day.dayKey;
+        _repeat = _repeat?.anchoredTo(day);
+      });
+
+  Future<void> _pickRepeat() {
+    final today = AppClock.today();
+    final due = _date.isEmpty ? today : parseDayKey(_date);
+    final repeat = _repeat;
+    return showTodoRepeatSheet(
+      context,
+      repeat: repeat,
+      due: due,
+      onChanged: (picked) => _edit(() {
+        _repeat = picked;
+        if (_date.isEmpty) _date = due.dayKey;
+      }),
+      onSkip: repeat == null || _date.isEmpty || _done
+          ? null
+          : () => _edit(() {
+                final current = _repeat;
+                if (current == null) return;
+                _date = current.after(due, today: today, skipping: true).dayKey;
+              }),
+    );
+  }
+
+  Future<void> _toggleDone() async {
+    if (_done || _repeat == null || _date.isEmpty) {
+      _edit(() => _done = !_done);
+      return;
+    }
+    await _persist();
+    final todo = _existing;
+    if (todo == null || !mounted) return;
+    _gone = true;
+    await _todos.toggle(todo.id);
+    if (mounted) Navigator.of(context).pop();
   }
 
   Future<void> _pickEstimate() async {
@@ -544,7 +598,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                                     : context.l10n.a11y_mark_done(_title.text),
                                 ink: ink,
                                 active: _done,
-                                onTap: () => _edit(() => _done = !_done),
+                                onTap: _toggleDone,
                               ),
                             if (widget.todo != null)
                               _Tool(
@@ -673,6 +727,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                                     label: _dueLabel(context),
                                     ink: ink,
                                     onTap: _pickDate,
+                                  ),
+                                if (_repeat != null && _date.isNotEmpty)
+                                  _Chip(
+                                    icon: LucideIcons.repeat,
+                                    label: todoRepeatLabel(context, _repeat!),
+                                    ink: ink,
+                                    onTap: _pickRepeat,
                                   ),
                                 if (_estimate != null)
                                   _Chip(

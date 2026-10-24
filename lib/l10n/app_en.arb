@@ -604,6 +604,40 @@
   "todo_date": "Date",
   "todo_no_date": "No date",
   "todo_time": "Time",
+  "todo_repeat": "Repeat",
+  "todo_repeat_never": "Don't repeat",
+  "todo_repeat_workdays": "Monday to Friday",
+  "todo_repeat_days": "{count, plural, =1{Every day} other{Every {count} days}}",
+  "@todo_repeat_days": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Every week} other{Every {count} weeks}}",
+  "@todo_repeat_weeks": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_repeat_months": "{count, plural, =1{Every month} other{Every {count} months}}",
+  "@todo_repeat_months": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_repeat_years": "{count, plural, =1{Every year} other{Every {count} years}}",
+  "@todo_repeat_years": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_repeat_custom": "Custom",
+  "todo_repeat_unit_days": "Days",
+  "todo_repeat_unit_weeks": "Weeks",
+  "todo_repeat_unit_months": "Months",
+  "todo_repeat_unit_years": "Years",
+  "todo_repeat_on_day": "On day {day}",
+  "@todo_repeat_on_day": {
+    "placeholders": { "day": { "type": "int" } }
+  },
+  "todo_repeat_on_weekday": "On the {nth, select, 1{first} 2{second} 3{third} 4{fourth} other{last}} {weekday}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": { "nth": { "type": "String" }, "weekday": { "type": "String" } }
+  },
+  "todo_repeat_from_done": "Count from when I finish it",
+  "todo_repeat_skip": "Skip this one",
   "todo_estimate": "Duration",
   "todo_estimate_none": "No duration",
   "todo_priority": "Priority",

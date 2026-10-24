@@ -117,7 +117,9 @@ class TodoTile extends StatelessWidget {
                         if (project != null) _ProjectMark(project: project),
                         if (due != null)
                           _MetaLabel(
-                            icon: todo.time == null
+                            icon: todo.repeat != null
+                                ? LucideIcons.repeat
+                                : todo.time == null
                                 ? LucideIcons.calendar
                                 : LucideIcons.clock,
                             label: todoDueLabel(context, todo),

@@ -506,7 +506,9 @@ class _Meta extends StatelessWidget {
       children: [
         if (due != null)
           _MetaLine(
-            icon: LucideIcons.calendar,
+            icon: todo.repeat != null
+                ? LucideIcons.repeat
+                : LucideIcons.calendar,
             label: todoDateLabel(context, due),
             color: dueColor,
             weight: FontWeight.w800,
