@@ -19,13 +19,19 @@ class _IslandCoinsState extends State<IslandCoins>
     with SingleTickerProviderStateMixin {
   static const int _count = 9;
 
-  late final AnimationController _run = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1150),
-  );
+  late final AnimationController _run;
 
   final _random = math.Random();
   List<Offset> _spread = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _run = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1150),
+    );
+  }
 
   @override
   void dispose() {
