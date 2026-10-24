@@ -26,6 +26,7 @@ import 'package:streak/features/settings/pages/quotes_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/settings/widgets/color_theme_sheet.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
 import 'package:streak/features/settings/widgets/widget_style_list.dart';
 
@@ -415,6 +416,14 @@ List<Widget> _appearanceTiles(BuildContext context) {
             onSelected: (i) => settings.setThemeMode(ThemeMode.values[i]),
           ),
         ),
+        ExpressTile(
+          icon: LucideIcons.swatchBook,
+          title: context.l10n.color_theme,
+          subtitle: context.l10n.color_theme_sub,
+          value: colorThemeLabel(context, settings.colorTheme),
+          onTap: () => showColorThemeSheet(context),
+        ),
+        if (settings.colorTheme == null)
         ExpressTile(
           icon: LucideIcons.palette,
           title: context.l10n.accent_color,
