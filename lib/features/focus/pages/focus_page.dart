@@ -72,6 +72,7 @@ class _FocusPageState extends State<FocusPage> {
   int _leadValue = 0;
   bool _immersive = false;
   bool _big = false;
+  DateTime _tapsFrom = DateTime(0);
 
   @override
   void initState() {
@@ -89,6 +90,7 @@ class _FocusPageState extends State<FocusPage> {
   Future<void> _begin() async {
     await NotificationService().requestNotifications();
     if (!mounted) return;
+    _tapsFrom = DateTime.now().add(const Duration(milliseconds: 800));
     _runLead(() {
       _focus.start(
         habitId: widget.startHabitId ?? '',
@@ -165,6 +167,7 @@ class _FocusPageState extends State<FocusPage> {
 
   void _toggleRunning() {
     if (!_focus.isActive || _leadValue > 0) return;
+    if (DateTime.now().isBefore(_tapsFrom)) return;
     if (_focus.isFinished) {
       _confirmStop();
       return;
