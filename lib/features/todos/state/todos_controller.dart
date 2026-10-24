@@ -6,6 +6,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
+import 'package:streak/features/todos/data/todo_repeat.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:uuid/uuid.dart';
@@ -97,6 +98,7 @@ class TodosController extends ChangeNotifier {
     int paper = -1,
     String cover = '',
     bool pinned = false,
+    TodoRepeat? repeat,
   }) async {
     final todo = Todo(
       id: const Uuid().v4(),
@@ -112,6 +114,7 @@ class TodosController extends ChangeNotifier {
       paper: paper,
       cover: cover,
       pinned: pinned,
+      repeat: repeat,
       createdAt: DateTime.now(),
     );
     _todos.add(todo);
@@ -147,6 +150,9 @@ class TodosController extends ChangeNotifier {
   Future<void> toggle(String id) async {
     final index = _counts.at[id];
     if (index == null) return;
+    if (!_todos[index].done && _todos[index].repeats) {
+      return _finishRepeating(index);
+    }
     final done = !_todos[index].done;
     final updated = _todos[index].copyWith(
       done: done,
@@ -158,6 +164,19 @@ class TodosController extends ChangeNotifier {
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(updated);
     await _notifications.scheduleTodo(updated);
+  }
+
+  Future<void> _finishRepeating(int index) async {
+    final todo = _todos[index];
+    final next = todo.nextTime(AppClock.today());
+    final record = todo.doneRecord(const Uuid().v4(), DateTime.now());
+    _todos[index] = next;
+    _todos.add(record);
+    notifyListeners();
+    TodosWidgetService.syncSoon(_todos);
+    await LocalStore.writeTodo(next);
+    await LocalStore.writeTodo(record);
+    await _notifications.scheduleTodo(next);
   }
 
   Future<void> toggleStep(String id, String stepId) async {

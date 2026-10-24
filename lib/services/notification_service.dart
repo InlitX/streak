@@ -27,6 +27,7 @@ import 'package:streak/services/todos_widget_service.dart';
 import 'package:streak/services/widget_icon_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:uuid/uuid.dart';
 
 class NotificationService {
   NotificationService._internal();
@@ -1129,6 +1130,17 @@ class NotificationActions {
     final todos = LocalStore.readTodos();
     final index = todos.indexWhere((todo) => todo.id == id);
     if (index == -1 || todos[index].done) return;
+    if (todos[index].repeats) {
+      final next = todos[index].nextTime(AppClock.today());
+      final record = todos[index].doneRecord(const Uuid().v4(), DateTime.now());
+      todos[index] = next;
+      todos.add(record);
+      await LocalStore.writeTodo(next);
+      await LocalStore.writeTodo(record);
+      await NotificationService().scheduleTodo(next);
+      await TodosWidgetService.sync(todos);
+      return;
+    }
     final done = todos[index].copyWith(done: true, doneAt: DateTime.now());
     todos[index] = done;
     await LocalStore.writeTodo(done);

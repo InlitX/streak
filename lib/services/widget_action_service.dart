@@ -10,6 +10,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:uuid/uuid.dart';
 
 class WidgetActionService {
   const WidgetActionService._();
@@ -37,8 +38,7 @@ class WidgetActionService {
       try {
         final uri = Uri.parse(raw);
         if (uri.queryParameters.containsKey('todoId')) {
-          final todo = _applyTodo(todos, uri);
-          if (todo != null) ticked.add(todo);
+          ticked.addAll(_applyTodo(todos, uri));
           continue;
         }
         final id = _apply(habits, uri);
@@ -65,15 +65,24 @@ class WidgetActionService {
     }
     for (final todo in ticked) {
       await LocalStore.writeTodo(todo);
+      await NotificationService().scheduleTodo(todo);
     }
     return touched.isNotEmpty || ticked.isNotEmpty;
   }
 
-  static Todo? _applyTodo(List<Todo> todos, Uri uri) {
+  static List<Todo> _applyTodo(List<Todo> todos, Uri uri) {
     final id = uri.queryParameters['todoId'];
-    if (id == null) return null;
+    if (id == null) return const [];
     final index = todos.indexWhere((todo) => todo.id == id);
-    if (index == -1) return null;
+    if (index == -1) return const [];
+
+    if (!todos[index].done && todos[index].repeats) {
+      final next = todos[index].nextTime(AppClock.today());
+      final record = todos[index].doneRecord(const Uuid().v4(), DateTime.now());
+      todos[index] = next;
+      todos.add(record);
+      return [next, record];
+    }
 
     final done = !todos[index].done;
     final updated = todos[index].copyWith(
@@ -82,7 +91,7 @@ class WidgetActionService {
       clearDoneAt: !done,
     );
     todos[index] = updated;
-    return updated;
+    return [updated];
   }
 
   static Future<List<String>> _read() async {
