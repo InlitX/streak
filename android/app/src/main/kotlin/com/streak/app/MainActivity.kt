@@ -32,6 +32,7 @@ class MainActivity : FlutterFragmentActivity() {
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, FocusBridge.CHANNEL)
                 .also { FocusBridge.attach(applicationContext, it) }
         HealthBridge.attach(this, MethodChannel(flutterEngine.dartExecutor.binaryMessenger, HealthBridge.CHANNEL))
+        SoundBridge.attach(applicationContext, MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SoundBridge.CHANNEL))
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -68,6 +69,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun onDestroy() {
         FocusBridge.detach(focusChannel)
+        SoundBridge.detach()
         super.onDestroy()
     }
 
