@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+
+String reminderSpan(BuildContext context, Reminder reminder) {
+  final start = context.clockAt(reminder.hour * 60 + reminder.minute);
+  final until = reminder.untilMinute;
+  if (!reminder.isHourly || until == null) return start;
+  return '$start - ${context.clockAt(until)}';
+}
 
 class ReminderTile extends StatelessWidget {
   const ReminderTile({
@@ -62,7 +70,7 @@ class ReminderTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  reminder.spanLabel,
+                  reminderSpan(context, reminder),
                   style: TextStyle(
                     color: scheme.onSurface,
                     fontSize: 16,

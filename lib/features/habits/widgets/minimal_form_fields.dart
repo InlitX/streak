@@ -8,6 +8,7 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/widgets/reminder_tile.dart';
 
 Color minimalOutline(BuildContext context) =>
     context.tokens.muted.withValues(alpha: 0.28);
@@ -445,7 +446,7 @@ class CompactReminderRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      reminder.spanLabel,
+                      reminderSpan(context, reminder),
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,

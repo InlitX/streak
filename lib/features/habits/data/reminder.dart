@@ -37,20 +37,6 @@ class Reminder {
 
   bool get isHourly => everyHours >= 1;
 
-  String get timeLabel => _clock(hour, minute);
-
-  String get spanLabel {
-    final until = untilMinute;
-    if (!isHourly || until == null) return timeLabel;
-    return '$timeLabel - ${_clock(until ~/ 60, until % 60)}';
-  }
-
-  static String _clock(int hour, int minute) {
-    final period = hour >= 12 ? 'PM' : 'AM';
-    final display = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-    return '$display:${minute.toString().padLeft(2, '0')} $period';
-  }
-
   Map<String, dynamic> toMap() => {
         'id': id,
         'hour': hour,
