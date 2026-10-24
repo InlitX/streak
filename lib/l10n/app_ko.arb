@@ -518,7 +518,7 @@
   "collapse_cards": "카드 접기",
   "expand_cards": "카드 펼치기",
   "view_switcher": "전환기 표시",
-  "view_switcher_sub": "'오늘' 페이지에 주 / 월 / 년 버튼 표시",
+  "view_switcher_sub": "'오늘' 페이지에 주 / 월 / 년 버튼을 표시해요. 끄면 필터 메뉴로 이동해요",
   "focus": "집중",
   "focus_enable_sub": "집중해야 하는 습관을 위한 타이머",
   "focus_free_session": "자율 시간",
@@ -1162,7 +1162,7 @@
   "island_p_stone_pile": "돌무더기",
   "island_p_bench": "벤치",
   "island_reset_sub": "모두 사라지고 모든 포인트가 잔액으로 되돌아가요.",
-  "last_check": "최근 체크",
+  "last_check": "최근 기록",
   "heatmap_rolling_sub": "이 연간 표는 12월 31일 대신 오늘 끝나요",
   "island_reset_go": "처음부터 재시작",
   "island_how_focus": "집중 시간 1분마다 1",
@@ -1570,5 +1570,196 @@
         "type": "String"
       }
     }
-  }
+  },
+  "discard_changes": "변경 사항을 버릴까요?",
+  "discard_changes_body": "이 습관을 변경한 내용이 사라져요.",
+  "discard": "버리기",
+  "todo_discard_body": "이 할 일을 변경한 내용이 사라져요.",
+  "keep_editing": "계속 편집",
+  "prefs_habits": "습관",
+  "last_12_months": "최근 12개월",
+  "consistency_vs_previous": "{change} vs 이전",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "miss_reason_title": "놓친 이유가 무엇인가요?",
+  "miss_reasons": "놓친 이유",
+  "miss_other": "기타",
+  "miss_other_hint": "이유를 쓰세요",
+  "miss_overslept": "늦잠",
+  "miss_busy": "바쁨",
+  "miss_traveling": "여행",
+  "miss_sick": "아픔",
+  "miss_tired": "피로",
+  "miss_forgot": "잊음",
+  "today_fold_done": "완료 ({count})",
+  "@today_fold_done": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_other": "다른 날 ({count})",
+  "@today_fold_other": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_hidden": "숨김 ({count})",
+  "@today_fold_hidden": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_cfg_buttons": "버튼",
+  "widget_cfg_buttons_round": "원",
+  "widget_cfg_buttons_square": "사각형",
+  "widget_cfg_buttons_flower": "꽃",
+  "widget_cfg_tick": "체크 표시",
+  "widget_cfg_tick_hint": "끔: 완료하면 색으로만 채워요",
+  "health_manage": "권한 관리",
+  "performance": "성능",
+  "performance_sub": "구형 또는 저사양 폰을 위해 가볍게 동작",
+  "glass_effects": "유리 효과",
+  "glass_effects_sub": "막대 끝 뒤나 화면 가장자리의 흐림 효과예요. 가장 큰 영향을 미쳐요",
+  "animations": "애니메이션",
+  "animations_sub": "입장, 페이지 전환, 텍스트 이동",
+  "widget_kind_habit": "습관",
+  "widget_kind_today": "오늘",
+  "widget_kind_stats": "요약",
+  "widget_kind_heatmap": "히트맵",
+  "widget_kind_todos": "할 일",
+  "widget_kind_focus": "집중",
+  "today_view": "보기",
+  "widgets_sub": "위젯 편집 기능이 없는 폰을 위한 위젯 스타일",
+  "widgets_hint": "홈 화면에서 위젯을 추가하거나 길게 누를 때 편집기를 열어주지 않는다면, 여기서 스타일을 바꾸세요. 별도 설정이 없는 동일 유형의 모든 위젯에 적용돼요.",
+  "widget_streak_days": "연속 기록",
+  "widget_this_week": "이번 주",
+  "widget_last_days": "최근 {count}일",
+  "@widget_last_days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_week_done": "{done} / {total}",
+  "@widget_week_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_content": "콘텐츠",
+  "widget_cfg_background": "배경",
+  "widget_cfg_show_art": "일러스트 표시",
+  "widget_cfg_show_header": "헤더",
+  "widget_cfg_show_icons": "습관 아이콘",
+  "widget_cfg_show_cards": "각 습관 뒤 배경",
+  "widget_cfg_show_details": "이름 밑 연속 기록",
+  "widget_cfg_hide_done": "완료 항목 숨김",
+  "widget_cfg_compact": "좁게",
+  "widget_cfg_compact_hint": "행 작게, 이름 옆에 연속 기록 표시",
+  "widget_cfg_compact_todos_hint": "행 작게, 작업 옆에 시간 표시",
+  "quant_mode_add": "추가",
+  "quant_mode_replace": "교체",
+  "health_permission": "권한",
+  "quant_preset_steps": "걸음",
+  "health_steps_denied": "권한이 없으면 Streak에서 걸음 수를 셀 수 없어요",
+  "health_unit_steps": "보",
+  "focus_vs_previous": "{change} vs 이전 기간",
+  "@focus_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_pause_count": "{count, plural, =0{정지 없음} =1{1회 정지} other{{count}회 정지}}",
+  "@focus_pause_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_pauses_avg": "세션 당 정지",
+  "focus_plan_vs_real": "계획 vs 현실",
+  "focus_avg_longer": "평균적으로, 계획보다 {pct} 길어요",
+  "@focus_avg_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_shorter": "평균적으로, 계획보다 {pct} 짧아요",
+  "@focus_avg_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_on_plan": "평균적으로, 딱 계획에 맞아요",
+  "focus_session_longer": "계획보다 {pct} 길어요",
+  "@focus_session_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_shorter": "계획보다 {pct} 짧아요",
+  "@focus_session_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_on_plan": "딱 계획에 맞아요",
+  "focus_busiest": "{hour}에 가장 많이 집중했어요",
+  "@focus_busiest": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_plan_hint": "시작부터 종료까지, 멈춘 시점을 포함해 헤아려요. 지금부터 시작하는 세션에만 해당돼요.",
+  "widget_focus_today": "오늘 집중",
+  "focus_retime_apply": "적용",
+  "focus_retime_hint": "이미 집중했던 시간은 그대로 유지해요.",
+  "focus_streak": "집중 연속 기록",
+  "focus_heatmap": "집중 활동",
+  "focus_by_hour": "집중 시간대",
+  "focus_by_weekday": "집중 요일",
+  "focus_change_timer": "타이머 변경",
+  "count_times": "{count, plural, =1{1회} other{{count}회}}",
+  "@count_times": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_resources": "무료 장면 및 음향",
+  "focus_end_reached_free": "목표를 달성했어요.",
+  "prefs_cards": "카드와 달력",
+  "no_goal": "일일 목표가 없어요",
+  "no_goal_sub": "몸무게 등을 기록해보세요. 어떤 숫자로든 하루를 나타내 봐요."
 }
