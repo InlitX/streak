@@ -40,10 +40,12 @@ import 'package:streak/features/habits/widgets/minimal_pickers.dart';
 import 'package:streak/features/habits/widgets/minimal_substeps.dart';
 import 'package:streak/features/habits/widgets/avoid_stats.dart';
 import 'package:streak/features/habits/widgets/reminder_editor_sheet.dart';
+import 'package:streak/features/habits/widgets/reminder_sound_picker.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/health_steps.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:streak/services/reminder_sounds.dart';
 
 class HabitFormPage extends StatefulWidget {
   const HabitFormPage({super.key, this.habit, this.template});
@@ -82,6 +84,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   String _cover = '';
   int _coverClarity = 100;
   late List<Reminder> _reminders;
+  ReminderSound _sound = defaultReminderSound;
 
   HabitKind _kind = HabitKind.positive;
   QuantKind _quantKind = QuantKind.generic;
@@ -202,6 +205,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _cover = habit.coverPath;
       _coverClarity = habit.coverClarity;
       _reminders = List.of(habit.reminders);
+      _sound = ReminderSound(habit.soundName, habit.soundUri);
       _kind = habit.kind;
       _quantKind = habit.quantKind;
       _noGoal = habit.kind == HabitKind.quantitative && habit.perDayTarget <= 0;
@@ -251,6 +255,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _cover,
         _coverClarity,
         [for (final reminder in _reminders) reminder.toMap()],
+        _sound.uri,
         _kind.name,
         _quantKind.name,
         _quantTarget,
@@ -396,6 +401,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
           fromLastDone: fromLastDone,
           monthWeekday: monthWeekday,
           reminders: _reminders,
+          soundUri: _sound.uri,
+          soundName: _sound.title,
           coverPath: _cover,
           coverClarity: _coverClarity,
           dailyCost: dailyCost,
@@ -446,6 +453,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
         fromLastDone: fromLastDone,
         monthWeekday: monthWeekday,
         reminders: _reminders,
+        soundUri: _sound.uri,
+        soundName: _sound.title,
         coverPath: cover,
         coverClarity: _coverClarity,
         kind: _kind,
@@ -574,6 +583,21 @@ class _HabitFormPageState extends State<HabitFormPage> {
       alignment: 0.1,
     );
   }
+
+  List<Widget> _soundRow({bool compact = false}) => [
+        if (ReminderSounds.supported && _reminders.isNotEmpty) ...[
+          SizedBox(height: compact ? 7 : 8),
+          ReminderSoundRow(
+            name: _sound.title,
+            compact: compact,
+            onTap: () => pickReminderSound(
+              context,
+              uri: _sound.uri,
+              onChanged: (sound) => setState(() => _sound = sound),
+            ),
+          ),
+        ],
+      ];
 
   Widget _buildExpress(BuildContext context) {
     return Scaffold(
@@ -813,6 +837,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ),
         ),
       AddReminderButton(onTap: _addReminder),
+      ..._soundRow(),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 26),
         SectionLabel(context.l10n.checklist),
@@ -1189,6 +1214,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           ),
         ),
       CompactAddButton(label: context.l10n.add_reminder, onTap: _addReminder),
+      ..._soundRow(compact: true),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 16),
         SectionLabel(context.l10n.checklist),
@@ -1553,6 +1579,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 ),
               ),
             AddReminderButton(onTap: _addReminder),
+            ..._soundRow(),
             if (_kind == HabitKind.positive && !_focusOnly) ...[
               const SizedBox(height: 20),
               SectionLabel(context.l10n.checklist),
