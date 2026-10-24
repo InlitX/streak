@@ -3,7 +3,7 @@ description: "Streak: a minimal habit tracker that helps you build lasting strea
 
 publish_to: 'none'
 
-version: 2.4.0+15
+version: 2.5.0+16
 
 environment:
   sdk: ^3.9.2

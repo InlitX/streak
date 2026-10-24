@@ -1,0 +1,12 @@
+Streak 2.5.0 🚀
+
+- Changing the daily goal keeps your past days
+- Track rereads of a book
+- Steps from Health Connect on Android 14 and newer
+- Money spent on relapses and relapses by month
+- Focus: rounds that go on their own, editable sessions, planned vs real time
+- Focus time widget with a start button
+- Today mode, flower shape and checkmark in widgets
+- A new to-do editor
+- Catalan and Turkish
+- Many fixes

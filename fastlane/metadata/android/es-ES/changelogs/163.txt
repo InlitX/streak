@@ -1,0 +1,12 @@
+Streak 2.5.0 🚀
+
+- Cambiar el objetivo diario respeta tus días pasados
+- Cuenta cuántas veces relees un libro
+- Pasos de Health Connect en Android 14 o superior
+- Dinero gastado en recaídas y recaídas por mes
+- Focus: rondas seguidas solas, sesiones editables, previsto frente a real
+- Widget de tiempo de Focus con botón para empezar
+- Modo Hoy, forma de flor y marca de check en widgets
+- Nuevo editor de tareas
+- Catalán y turco
+- Muchas correcciones
