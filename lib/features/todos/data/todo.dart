@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/features/todos/data/todo_repeat.dart';
 
 enum TodoPriority { none, low, medium, high }
 
@@ -21,6 +22,7 @@ class Todo {
     this.paper = -1,
     this.cover = '',
     this.pinned = false,
+    this.repeat,
     this.doneAt,
   });
 
@@ -38,6 +40,7 @@ class Todo {
   final int paper;
   final String cover;
   final bool pinned;
+  final TodoRepeat? repeat;
   final DateTime createdAt;
   final DateTime? doneAt;
 
@@ -63,6 +66,29 @@ class Todo {
     return day.add(Duration(minutes: minutes!));
   }
 
+  bool get repeats => repeat != null && due != null;
+
+  Todo nextTime(DateTime today, {bool skipping = false}) => copyWith(
+        date: repeat!.after(due!, today: today, skipping: skipping).dayKey,
+        steps: [for (final step in steps) step.copyWith(done: false)],
+      );
+
+  Todo doneRecord(String id, DateTime at) => Todo(
+        id: id,
+        text: text,
+        done: true,
+        date: date,
+        minutes: minutes,
+        estimate: estimate,
+        priority: priority,
+        tags: tags,
+        project: project,
+        steps: steps,
+        paper: paper,
+        createdAt: createdAt,
+        doneAt: at,
+      );
+
   Todo copyWith({
     String? text,
     bool? done,
@@ -77,7 +103,9 @@ class Todo {
     int? paper,
     String? cover,
     bool? pinned,
+    TodoRepeat? repeat,
     DateTime? doneAt,
+    bool clearRepeat = false,
     bool clearDoneAt = false,
     bool clearMinutes = false,
     bool clearEstimate = false,
@@ -97,6 +125,7 @@ class Todo {
         paper: paper ?? this.paper,
         cover: cover ?? this.cover,
         pinned: pinned ?? this.pinned,
+        repeat: clearRepeat ? null : (repeat ?? this.repeat),
         createdAt: createdAt,
         doneAt: clearDoneAt ? null : (doneAt ?? this.doneAt),
       );
@@ -116,6 +145,7 @@ class Todo {
         'paper': paper,
         'cover': cover,
         'pinned': pinned,
+        if (repeat != null) 'repeat': repeat!.toMap(),
         'createdAt': createdAt.toIso8601String(),
         'doneAt': doneAt?.toIso8601String(),
       };
@@ -142,6 +172,9 @@ class Todo {
         paper: ((map['paper'] ?? -1) as num).toInt(),
         cover: (map['cover'] ?? '') as String,
         pinned: (map['pinned'] ?? false) as bool,
+        repeat: map['repeat'] is Map
+            ? TodoRepeat.fromMap(Map<String, dynamic>.from(map['repeat'] as Map))
+            : null,
         createdAt: DateTime.tryParse((map['createdAt'] ?? '') as String) ??
             DateTime.now(),
         doneAt: DateTime.tryParse((map['doneAt'] ?? '') as String),
