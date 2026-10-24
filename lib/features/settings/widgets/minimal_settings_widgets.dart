@@ -170,6 +170,7 @@ Future<void> showOptionSheet(
   required List<String> options,
   required int index,
   required ValueChanged<int> onSelected,
+  List<IconData>? icons,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -208,6 +209,16 @@ Future<void> showOptionSheet(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             child: Row(
                               children: [
+                                if (icons != null) ...[
+                                  Icon(
+                                    icons[i],
+                                    size: 19,
+                                    color: i == index
+                                        ? context.colors.primary
+                                        : context.tokens.muted,
+                                  ),
+                                  const SizedBox(width: 14),
+                                ],
                                 Expanded(
                                   child: Text(
                                     options[i],

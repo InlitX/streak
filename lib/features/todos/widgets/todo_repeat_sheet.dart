@@ -73,6 +73,14 @@ class _RepeatSheetState extends State<_RepeatSheet> {
     TodoRepeat(unit: RepeatUnit.years),
   ];
 
+  static const _icons = [
+    LucideIcons.sun,
+    LucideIcons.briefcase,
+    LucideIcons.calendarRange,
+    LucideIcons.calendarDays,
+    LucideIcons.calendar,
+  ];
+
   void _set(TodoRepeat? repeat) {
     final anchored = repeat?.anchoredTo(widget.due);
     setState(() => _repeat = anchored);
@@ -100,8 +108,9 @@ class _RepeatSheetState extends State<_RepeatSheet> {
   Widget build(BuildContext context) {
     final repeat = _repeat;
     final presets = [
-      (context.l10n.todo_repeat_never, null),
-      for (final preset in _presets) (todoRepeatLabel(context, preset), preset),
+      (context.l10n.todo_repeat_never, LucideIcons.ban, null),
+      for (final (index, preset) in _presets.indexed)
+        (todoRepeatLabel(context, preset), _icons[index], preset),
     ];
     return SafeArea(
       top: false,
@@ -114,9 +123,10 @@ class _RepeatSheetState extends State<_RepeatSheet> {
             children: [
               Text(context.l10n.todo_repeat, style: sheetTitleStyle(context)),
               const SizedBox(height: 10),
-              for (final (label, preset) in presets)
+              for (final (label, icon, preset) in presets)
                 _OptionRow(
                   label: label,
+                  icon: icon,
                   selected: preset == null ? repeat == null : _matches(preset),
                   onTap: () => _set(preset),
                 ),
@@ -194,11 +204,13 @@ class _RepeatSheetState extends State<_RepeatSheet> {
 class _OptionRow extends StatelessWidget {
   const _OptionRow({
     required this.label,
+    required this.icon,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
+  final IconData icon;
   final bool selected;
   final VoidCallback onTap;
 
@@ -215,6 +227,12 @@ class _OptionRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 13),
           child: Row(
             children: [
+              Icon(
+                icon,
+                size: 19,
+                color: selected ? accent : context.tokens.muted,
+              ),
+              const SizedBox(width: 14),
               Expanded(
                 child: Text(
                   label,

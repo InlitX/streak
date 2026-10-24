@@ -330,6 +330,14 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     await showOptionSheet(
       context,
       title: context.l10n.todo_date,
+      icons: const [
+        LucideIcons.sun,
+        LucideIcons.sunrise,
+        LucideIcons.calendarDays,
+        LucideIcons.clock,
+        LucideIcons.repeat,
+        LucideIcons.calendarX,
+      ],
       options: [
         context.l10n.today,
         context.l10n.tomorrow,
