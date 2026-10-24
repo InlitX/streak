@@ -7,6 +7,7 @@
     <string name="widget_today_label">Streak today</string>
     <string name="widget_stats_label">Streak summary</string>
     <string name="widget_focus_label">Streak focus</string>
+    <string name="widget_focus_board_label">Streak focus board</string>
     <string name="widget_todos_label">Streak to-do</string>
     <string name="widget_todos_description">See what is left to do today</string>
 </resources>

@@ -23,6 +23,7 @@ class HomeWidgetService {
     'StatsWidgetProvider',
     'HeatmapWidgetProvider',
     'FocusWidgetProvider',
+    'FocusBoardWidgetProvider',
   ];
 
   static const _heatmapWeeks = 53;
@@ -223,23 +224,41 @@ class HomeWidgetService {
     final today = now.subtract(Duration(hours: AppClock.cutoffHour)).atMidnight;
     final todayIndex = today.epochDay;
     final weekIndex = today.startOfWeek(weekStart).epochDay;
-    final totals = <String, List<int>>{'': [0, 0, 0]};
+    final totals = <String, List<int>>{'': List.filled(11, 0)};
+    final days = <String, Set<int>>{};
     for (final FocusSession session in LocalStore.readFocusSessions()) {
       final day = session.countedOn;
       final epoch = day.epochDay;
+      final back = todayIndex - epoch;
+      if (session.seconds > 0) {
+        for (final key in {'', session.habitId}) {
+          days.putIfAbsent(key, () => {}).add(epoch);
+        }
+      }
       final slots = [
         epoch == todayIndex,
         epoch - weekIndex >= 0 && epoch - weekIndex < 7,
         day.year == today.year && day.month == today.month,
       ];
-      if (!slots.contains(true)) continue;
+      final recent = back >= 0 && back < 7;
+      if (!slots.contains(true) && !recent) continue;
       for (final key in {'', session.habitId}) {
-        final sums = totals.putIfAbsent(key, () => [0, 0, 0]);
+        final sums = totals.putIfAbsent(key, () => List.filled(11, 0));
         for (var i = 0; i < 3; i++) {
           if (slots[i]) sums[i] += session.seconds;
         }
+        if (recent) sums[10 - back] += session.seconds;
       }
     }
+    days.forEach((key, set) {
+      var day = set.contains(todayIndex) ? todayIndex : todayIndex - 1;
+      var count = 0;
+      while (set.contains(day)) {
+        count++;
+        day--;
+      }
+      totals.putIfAbsent(key, () => List.filled(11, 0))[3] = count;
+    });
     return totals;
   }
 

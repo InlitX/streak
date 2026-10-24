@@ -198,6 +198,19 @@
                 android:resource="@xml/focus_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".FocusBoardWidgetProvider"
+            android:label="@string/widget_focus_board_label"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="es.antonborri.home_widget.action.UPDATE_WIDGET" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/focus_board_widget_info" />
+        </receiver>
+
         <!-- Per-widget appearance (and habit, for the heatmap) config screen. -->
         <activity
             android:name=".WidgetConfigActivity"

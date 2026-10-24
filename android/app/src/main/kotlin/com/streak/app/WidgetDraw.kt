@@ -405,6 +405,45 @@ object WidgetDraw {
         }
     }
 
+    fun weekBars(
+        context: Context,
+        widthDp: Float,
+        heightDp: Float,
+        values: IntArray,
+        labels: List<String>,
+        ink: Color,
+    ): Bitmap {
+        val key = "weekBars:$widthDp:$heightDp:${values.joinToString(",")}:$labels:${ink.toArgb()}:${scale(context)}"
+        return remember(key) {
+            val d = density(context)
+            val w = (widthDp * d).toInt().coerceAtLeast(1)
+            val h = (heightDp * d).toInt().coerceAtLeast(1)
+            val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val text = paint(context, 10f, ink.copy(alpha = 0.6f).toArgb(), 700)
+            val strip = if (labels.isEmpty()) 0f else text.fontMetrics.let { it.descent - it.ascent } + 3f * d
+            val chart = h - strip
+            val slot = w / values.size.toFloat()
+            val bar = minOf(slot * 0.56f, 14f * d)
+            val r = bar / 2f
+            val most = values.maxOrNull()?.takeIf { it > 0 } ?: 1
+            val track = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = ink.copy(alpha = 0.12f).toArgb() }
+            val fill = Paint(Paint.ANTI_ALIAS_FLAG)
+            values.forEachIndexed { i, value ->
+                val cx = slot * i + slot / 2f
+                val left = cx - bar / 2f
+                canvas.drawRoundRect(RectF(left, 0f, left + bar, chart), r, r, track)
+                if (value > 0) {
+                    val top = chart - maxOf(bar, chart * value / most.toFloat())
+                    fill.color = ink.copy(alpha = if (i == values.lastIndex) 1f else 0.55f).toArgb()
+                    canvas.drawRoundRect(RectF(left, top, left + bar, chart), r, r, fill)
+                }
+                labels.getOrNull(i)?.let { centered(canvas, text, it, cx, h - strip / 2f + d) }
+            }
+            bitmap
+        }
+    }
+
     fun pill(context: Context, sizeDp: Float, letter: String, ink: Color): Bitmap {
         val key = "pill:$sizeDp:$letter:${ink.toArgb()}:${scale(context)}"
         return remember(key) {

@@ -176,6 +176,7 @@ class WidgetConfigActivity : ComponentActivity() {
             TodayWidgetProvider::class.java,
             StatsWidgetProvider::class.java,
             FocusWidgetProvider::class.java,
+            FocusBoardWidgetProvider::class.java,
             HeatmapWidgetProvider::class.java,
             HabitWidgetProvider::class.java,
         )
@@ -242,13 +243,15 @@ class WidgetConfigActivity : ComponentActivity() {
         }
     }
 
-    private val filters get() = type == WType.HABIT || type == WType.TODAY || type == WType.STATS || type == WType.FOCUS
+    private val board get() = providerClass.contains("FocusBoard")
+
+    private val filters get() =type == WType.HABIT || type == WType.TODAY || type == WType.STATS || type == WType.FOCUS
 
     private fun widgetFor(t: WType): GlanceAppWidget = when (t) {
         WType.TODOS -> TodosWidget()
         WType.TODAY -> TodayWidget()
         WType.STATS -> StatsWidget()
-        WType.FOCUS -> FocusWidget()
+        WType.FOCUS -> if (board) FocusBoardWidget() else FocusWidget()
         WType.HEATMAP, WType.HABIT -> HabitWidget()
     }
 
@@ -343,7 +346,7 @@ class WidgetConfigActivity : ComponentActivity() {
             WidgetStyle.from(shown, opacity, border, borderWidth)
         }
 
-        val hasArt = type == WType.STATS || type == WType.TODOS || type == WType.FOCUS
+        val hasArt = type == WType.STATS || type == WType.TODOS || (type == WType.FOCUS && !board)
         val hasPicker = filters && habits.size > 1
         val hasContent = type == WType.HEATMAP || type == WType.TODOS || type == WType.HABIT ||
             type == WType.TODAY || hasArt || hasPicker
@@ -796,7 +799,8 @@ class WidgetConfigActivity : ComponentActivity() {
         look: WidgetLook,
     ) = Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         val frame = when (type) {
-            WType.STATS, WType.FOCUS -> Modifier.size(158.dp)
+            WType.FOCUS -> if (board) Modifier.fillMaxWidth().height(150.dp) else Modifier.size(158.dp)
+            WType.STATS -> Modifier.size(158.dp)
             WType.TODAY, WType.HABIT -> Modifier.fillMaxWidth().height(176.dp)
             else -> Modifier.fillMaxWidth().height(150.dp)
         }
@@ -828,7 +832,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 Image(bmp, null, Modifier.matchParentSize(), contentScale = ContentScale.Crop)
                 Box(Modifier.matchParentSize().background(style.scrim))
             }
-            if (type == WType.FOCUS && art) {
+            if (type == WType.FOCUS && art && !board) {
                 Image(
                     painterResource(
                         if (style.content.luminance() < 0.5f) R.drawable.widget_focus_target_light
@@ -852,7 +856,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 WType.HABIT -> WeekSample(style, span, look)
                 WType.TODAY -> TodaySample(style, look)
                 WType.STATS -> if (look.today) TodayProgressSample(style) else StatsSample(style, art)
-                WType.FOCUS -> FocusSample(style)
+                WType.FOCUS -> if (board) FocusBoardSample(style) else FocusSample(style)
                 WType.HEATMAP -> Box(Modifier.padding(14.dp)) { LivePreview(style, layout, habitId, allColor) }
                 WType.TODOS -> TodosSample(style, art, look)
             }

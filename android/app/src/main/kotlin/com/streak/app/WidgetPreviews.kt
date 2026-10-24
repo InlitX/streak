@@ -105,6 +105,28 @@ fun FocusSample(s: WidgetStyle) {
 }
 
 @Composable
+fun FocusBoardSample(s: WidgetStyle) {
+    val context = LocalContext.current
+    val label = 14f
+    Row(Modifier.fillMaxSize().padding(16.dp)) {
+        Column(Modifier.weight(0.55f).fillMaxHeight()) {
+            Bmp(WidgetDraw.text(context, "1h 25m", 32f, s.content, 800), context)
+            Bmp(WidgetDraw.text(context, sample(context, "focus_today", "Focus today"), label, s.content, 800), context)
+            Spacer(Modifier.weight(1f))
+            Bmp(WidgetDraw.text(context, "${sample(context, "label_week", "Week")}  6h 40m", label * 0.85f, s.muted, 650), context)
+            Bmp(WidgetDraw.text(context, "${sample(context, "label_month", "Month")}  24h", label * 0.85f, s.muted, 650), context)
+        }
+        Spacer(Modifier.width(16.dp))
+        Column(Modifier.weight(0.45f).fillMaxHeight()) {
+            Bmp(WidgetDraw.text(context, "12", label * 1.9f, s.content, 800), context)
+            Bmp(WidgetDraw.text(context, sample(context, "streak_days", "Streak days"), label * 0.85f, s.muted, 650), context)
+            Spacer(Modifier.weight(1f))
+            Bmp(WidgetDraw.weekBars(context, 120f, 52f, intArrayOf(30, 55, 20, 70, 0, 45, 85), emptyList(), s.content), context)
+        }
+    }
+}
+
+@Composable
 fun StatsSample(s: WidgetStyle, art: Boolean) {
     val context = LocalContext.current
     val side = 158f
