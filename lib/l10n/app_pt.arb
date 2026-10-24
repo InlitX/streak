@@ -37,9 +37,9 @@
       }
     }
   },
-  "days_active": "Dias ativos",
+  "days_active": "Dias ativo",
   "remove_photo": "Excluir foto",
-  "about_inline": "\"O Streak é um aplicativo de código aberto para acompanhar seus hábitos. Sem contas, sem limites e sem pagamentos. Tudo fica no seu celular.\n\nQualquer pessoa pode ver o código, melhorá-lo ou usá-lo livremente.\"",
+  "about_inline": "O Streak é um aplicativo de código aberto para acompanhar seus hábitos. Sem contas, sem limites e sem pagamentos. Tudo fica no seu celular.\n\nQualquer pessoa pode ver o código, melhorá-lo ou usá-lo livremente.",
   "accent_color": "Cor de destaque",
   "add_step": "Adicionar etapa",
   "every_day": "Todos os dias",
@@ -178,7 +178,7 @@
   "onb1_title": "Crie sequências consistentes",
   "frequency": "Frequência",
   "import_replace": "Substituir tudo",
-  "no_habits_yet": "Nenhum hábito ainda",
+  "no_habits_yet": "Ainda não há hábitos",
   "made_by": "Feito com ❤️ por @InlitX",
   "reminder_message_hint": "Deixe em branco para usar uma frase motivacional",
   "delete_habit_body": "Excluir \"{name}\"? Esta ação não pode ser desfeita.",
@@ -304,7 +304,7 @@
   "share": "Compartilhar",
   "sun": "Dom",
   "motiv_start": "Comece o dia com força 💪",
-  "about_body": "\"O Streak nasceu de uma ideia simples: por que pagar para acompanhar seus próprios hábitos?\n\nEste aplicativo tem código totalmente aberto. Qualquer pessoa pode ver exatamente como ele funciona, sugerir melhorias ou até criar sua própria versão. Sem caixas-pretas. Sem surpresas.\n\nSua privacidade é total: tudo fica no seu celular. Sem contas, sem servidores, sem anúncios. Nem um único byte sai do seu dispositivo.\n\nSem limites. Crie quantos hábitos quiser. Sem assinaturas, sem versão premium e sem janelas pedindo pagamento. Nunca.\n\nSe o aplicativo for útil para você, é possível apoiar o projeto dando uma estrela no GitHub ou pagando um café para o desenvolvedor. Mas isso é totalmente opcional: o aplicativo é seu de qualquer forma.\"",
+  "about_body": "O Streak nasceu de uma ideia simples: por que pagar para acompanhar seus próprios hábitos?\n\nEste aplicativo tem código totalmente aberto. Qualquer pessoa pode ver exatamente como ele funciona, sugerir melhorias ou até criar sua própria versão. Sem caixas-pretas. Sem surpresas.\n\nSua privacidade é total — tudo fica no seu celular. Sem contas, sem servidores, sem anúncios. Nem um único byte sai do seu dispositivo.\n\nSem limites. Crie quantos hábitos quiser. Sem assinaturas, sem \"versão pro\" e sem janelas pedindo pagamento. Nunca.\n\nSe o aplicativo for útil para você, é possível apoiar o projeto dando uma estrela no GitHub ou pagando um café para o desenvolvedor. Mas isso é totalmente opcional — o aplicativo é seu de qualquer forma.",
   "done_today": "Concluído hoje",
   "time": "Horário",
   "every_n_days": "A cada {n} dias",
@@ -525,7 +525,7 @@
   "focus_end_complete": "Marcar como concluído",
   "archived_empty": "Nada arquivado",
   "focus_scene_black": "Preto",
-  "share_swipe_hint": "Deslize o cartão para navegar pelo tempo.",
+  "share_swipe_hint": "Deslize o cartão para navegar pelo tempo",
   "focus_free_session": "Sessão gratuita",
   "day_start_midnight": "Meia noite",
   "share_size": "Tamanho",
@@ -659,7 +659,7 @@
       }
     }
   },
-  "app_lock_failed": "Não foi possível Verificar sua identidade",
+  "app_lock_failed": "Não foi possível verificar sua identidade",
   "focus_style_flip": "Virar",
   "legend_note_added": "Nota adicionada",
   "style_minimal": "Minimalista",
@@ -691,7 +691,7 @@
   "focus_start": "Iniciar sessão",
   "focus_stop_title": "Encerrar sessão?",
   "vacation_day_off": "Remover dia de férias",
-  "app_lock": "Proteger app",
+  "app_lock": "Bloqueio do aplicativo",
   "deleted_forever": "Hábito excluído",
   "focus_loop": "Na ordem",
   "focus_daily_goal": "Objetivo",
@@ -1028,34 +1028,34 @@
   "just_tracking_option": "Somente rastreamento",
   "just_tracking_option_sub": "Adiciona a opção ao criar um hábito",
   "just_tracking": "Somente rastreamento",
-  "style_express_desc": "Formas arredondadas, movimento estático, e tipografia larga.",
+  "style_express_desc": "Formas arredondadas, movimento elástico, e tipografia larga.",
   "report_issue_sub": "Me informe sobre um bug ou peça uma funcionalidade",
   "focus_daily_goal_sub": "Minutos de focos que você precisa para cada dia",
   "app_icon_sub": "O ícone na sua homescreen",
   "quotes_sub": "Quais frases aparecem em Hoje",
   "period_last_week": "Semana passada",
-  "readable_copy": "Copia legível",
+  "readable_copy": "Cópia legível",
   "notes_empty_all": "Sem notas ainda",
   "average_short": "Méd",
   "celebration_sub": "O que você vê quando marca um hábito",
   "readable_copy_sub": "Também escreve seus hábitos como arquivos markdown",
   "period_this_week": "Essa semana",
   "notes_all": "Todas as notas",
-  "check_style_sub": "Caixas de seleção quadradas ou circulares",
-  "theme_sub": "Claro, escuro ou do sistema",
+  "check_style_sub": "Caixas de seleção quadradas ou redondas",
+  "theme_sub": "Claro, escuro ou o do sistema",
   "quant_add_title": "Adicionar quantidade",
-  "github_star_sub": "Dê ao projeto uma estrela para que mais pessoas o encontre",
-  "language_sub": "O idioma de todo o aplicativo",
-  "app_background_sub": "O que você ve atrás dos cartões",
+  "github_star_sub": "Dê uma estrela ao projeto para que mais pessoas o descubram",
+  "language_sub": "O idioma do aplicativo inteiro",
+  "app_background_sub": "O que você vê atrás dos cartões",
   "pane_hint": "Abre alguma coisa da lista para ver aqui",
   "quotes_off": "Desligado",
   "accent_color_sub": "Usado nos botões e destaques",
   "quant_preset_time": "Tempo",
-  "sort_completed_last_sub": "Envia o que voce já finalizou para o final da lista",
-  "week_start_sub": "A primeira coluna de toda a seção",
+  "sort_completed_last_sub": "Envia o que você já concluiu para o final da lista",
+  "week_start_sub": "A primeira coluna de cada grade",
   "period_this_month": "Este mês",
   "app_lock_delay_sub": "Quanto tempo depois de você sair ele pergunta novamente",
-  "just_tracking_sub": "Mantenha sua própria grade e números, mas deixe fora do Progresso e da contagem diária",
+  "just_tracking_sub": "Manter a sua própria grade e números, mas não os incluir no Progresso nem na contagem do dia",
   "period_this_year": "Este ano",
   "style_express": "Expresso",
   "card_activity_sub": "Mostra o último dia no cartao, pronto para marcar",
@@ -1069,7 +1069,7 @@
       }
     }
   },
-  "view_switcher_needs": "Ligue as atividades nos cartões para usar",
+  "view_switcher_needs": "Habilite a atividade nos cards para usá-lo",
   "celebration_none": "Nenhuma",
   "period_last_year": "Ano passado",
   "period_week_of": "Semana de {date}",
@@ -1150,7 +1150,7 @@
   "todo_project_name": "Nome do projeto",
   "todo_project_edit": "Editar projeto",
   "todo_project_arrange": "Reorganizar",
-  "todo_project_arrange_hint": "Solte os arquivos na posição que você quiser",
+  "todo_project_arrange_hint": "Solte os arquivos na posição que você quiser.",
   "todo_project_pick": "Escolha um projeto",
   "todo_project_none": "Sem projeto",
   "todo_project_delete_body": "O projeto vai embora. As atividades ficam.",
@@ -1903,6 +1903,55 @@
   "@focus_busiest": {
     "placeholders": {
       "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_auto_next": "Continuar sozinho",
+  "focus_auto_next_sub": "Quando uma pausa termina, a próxima rodada começa sem esperar.",
+  "focus_time_habit_hint": "Cada sessão de foco adiciona seus minutos ao dia em que foi concluída.",
+  "focus_edit_session": "Editar sessão",
+  "focus_session_updated": "Sessão atualizada",
+  "widget_cfg_buttons_flower": "Flor",
+  "widget_cfg_tick": "Marca de conclusão",
+  "widget_cfg_tick_hint": "Desligado: os botões \"concluído\" são preenchidos apenas com cor",
+  "avoid_by_month": "Recaídas por mês",
+  "book": "Livro",
+  "book_pages": "Páginas no livro",
+  "book_pages_sub": "A contagem começa hoje. Na página seguinte, adiciona-se uma leitura e recomeça",
+  "book_new": "Novo livro",
+  "book_reads": "{count, plural, =0{Primeira leitura} =1{Leu uma vez} other{Leu {count} vezes}}",
+  "@book_reads": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "book_read_number": "Leu {number}",
+  "@book_read_number": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "book_since": "Desde {day}",
+  "@book_since": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "book_reading_now": "Lendo",
+  "book_page": "Página {page} de {pages}",
+  "@book_page": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      },
+      "pages": {
         "type": "String"
       }
     }
