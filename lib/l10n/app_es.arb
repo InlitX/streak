@@ -703,6 +703,8 @@
   "unscheduled_title": "Día no programado",
   "unscheduled_body": "Este hábito no está programado el {day}. ¿Registrarlo de todos modos como extra?",
   "unscheduled_confirm": "Registrar",
+  "paused_day_title": "Día en pausa",
+  "paused_day_body": "Este hábito está en pausa el {day}. ¿Registrarlo de todos modos?",
   "rest_days_none": "Ninguno",
   "last_90_days": "Últimos 90 días",
   "last_12_months": "Últimos 12 meses",

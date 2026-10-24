@@ -18,12 +18,19 @@ Future<bool> confirmUnscheduledDay(
   }
 
   final locale = Localizations.localeOf(context).toString();
+  final onVacation = habit.vacations.any((v) => v.contains(date));
   final confirmed = await showAppConfirmDialog(
     context,
-    title: context.l10n.unscheduled_title,
-    message: context.l10n.unscheduled_body(
-      DateFormat.EEEE(locale).format(date),
-    ),
+    title: onVacation
+        ? context.l10n.paused_day_title
+        : context.l10n.unscheduled_title,
+    message: onVacation
+        ? context.l10n.paused_day_body(
+            DateFormat.MMMMEEEEd(locale).format(date),
+          )
+        : context.l10n.unscheduled_body(
+            DateFormat.EEEE(locale).format(date),
+          ),
     confirmLabel: context.l10n.unscheduled_confirm,
     icon: LucideIcons.calendarOff,
     danger: false,
