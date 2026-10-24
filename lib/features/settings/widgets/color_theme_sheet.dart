@@ -8,10 +8,29 @@ import 'package:streak/app/theme/color_themes.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/custom_theme_sheet.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
 
 String colorThemeLabel(BuildContext context, ColorTheme? theme) =>
-    theme?.name ?? context.l10n.color_theme_default;
+    switch (theme?.id) {
+      null => context.l10n.color_theme_default,
+      ColorTheme.customId => context.l10n.color_theme_custom,
+      _ => theme!.name,
+    };
+
+Future<void> _openCustom(BuildContext context, SettingsController s) async {
+  final saved = s.customTheme;
+  final from = s.colorTheme;
+  if (saved == null) {
+    await s.setCustomTheme(
+      from?.light ?? _defaultColors(Brightness.light, s.accentColor),
+      from?.dark ?? _defaultColors(Brightness.dark, s.accentColor),
+    );
+  } else if (from?.id != ColorTheme.customId) {
+    await s.setCustomTheme(saved.light, saved.dark);
+  }
+  if (context.mounted) await showCustomThemeSheet(context);
+}
 
 Future<void> showColorThemeSheet(BuildContext context) {
   return showSheet(
@@ -50,6 +69,14 @@ Future<void> showColorThemeSheet(BuildContext context) {
                       selected: current?.id == theme.id,
                       onTap: () => s.setColorTheme(theme),
                     ),
+                  _ThemeCard(
+                    name: context.l10n.color_theme_custom,
+                    colors: (s.customTheme ?? current)?.of(brightness) ??
+                        _defaultColors(brightness, s.accentColor),
+                    selected: current?.id == ColorTheme.customId,
+                    editable: true,
+                    onTap: () => _openCustom(sheet, s),
+                  ),
                 ],
               );
             },
@@ -85,11 +112,13 @@ class _ThemeCard extends StatelessWidget {
     required this.colors,
     required this.selected,
     required this.onTap,
+    this.editable = false,
   });
 
   final String name;
   final ThemeColors colors;
   final bool selected;
+  final bool editable;
   final VoidCallback onTap;
 
   @override
@@ -155,7 +184,9 @@ class _ThemeCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 SizedBox(
                   width: 24,
-                  child: selected
+                  child: editable
+                      ? Icon(LucideIcons.pencil, size: 18, color: colors.accent)
+                      : selected
                       ? Icon(LucideIcons.check, size: 20, color: colors.accent)
                       : null,
                 ),

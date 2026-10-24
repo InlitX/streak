@@ -19,6 +19,7 @@ const backupSettingKeys = {
   'compactCards',
   'consistencyPeriod',
   'currency',
+  'customTheme',
   'customQuotes',
   'dayCutoff',
   'difficultyOption',

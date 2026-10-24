@@ -28,6 +28,53 @@ class ThemeColors {
   final Color warning;
   final Color danger;
   final Color info;
+
+  static const keys = [
+    'background',
+    'card',
+    'text',
+    'accent',
+    'success',
+    'warning',
+    'danger',
+    'info',
+  ];
+
+  Color operator [](String key) => switch (key) {
+        'background' => background,
+        'card' => card,
+        'text' => text,
+        'accent' => accent,
+        'success' => success,
+        'warning' => warning,
+        'danger' => danger,
+        _ => info,
+      };
+
+  Map<String, int> toMap() => {
+        for (final key in keys) key: this[key].toARGB32(),
+      };
+
+  factory ThemeColors.fromMap(Map<String, dynamic> map, ThemeColors base) {
+    Color pick(String key) =>
+        map[key] is int ? Color(map[key] as int) : base[key];
+    final card = pick('card');
+    final text = pick('text');
+    return ThemeColors(
+      background: pick('background'),
+      card: card,
+      high: Color.lerp(card, text, 0.08)!,
+      highest: Color.lerp(card, text, 0.18)!,
+      outline: Color.lerp(card, text, 0.24)!,
+      text: text,
+      muted: Color.lerp(text, card, 0.38)!,
+      accent: pick('accent'),
+      success: pick('success'),
+      warning: pick('warning'),
+      danger: pick('danger'),
+      info: pick('info'),
+    );
+  }
 }
 
 class ColorTheme {
@@ -51,6 +98,24 @@ class ColorTheme {
       if (theme.id == id) return theme;
     }
     return null;
+  }
+
+  static const customId = 'custom';
+
+  static ColorTheme? custom(Map<String, dynamic> saved) {
+    if (saved.isEmpty) return null;
+    ThemeColors side(String key, ThemeColors base) => ThemeColors.fromMap(
+          saved[key] is Map
+              ? Map<String, dynamic>.from(saved[key] as Map)
+              : const {},
+          base,
+        );
+    return ColorTheme(
+      id: customId,
+      name: '',
+      light: side('light', catppuccin.light),
+      dark: side('dark', catppuccin.dark),
+    );
   }
 
   static const all = [catppuccin, tokyoNight, nord, gruvbox, rosePine];

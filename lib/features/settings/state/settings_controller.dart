@@ -63,6 +63,7 @@ class SettingsController extends ChangeNotifier {
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
     _colorTheme = LocalStore.setting('colorTheme', '');
+    _customTheme = ColorTheme.custom(LocalStore.settingMap('customTheme'));
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _todayCategory = LocalStore.setting('todayCategory', '');
     _minimalShortcut = LocalStore.setting('minimalShortcut', '');
@@ -166,6 +167,7 @@ class SettingsController extends ChangeNotifier {
   late int _appIcon;
   late int _accentColor;
   late String _colorTheme;
+  ColorTheme? _customTheme;
   late int _heatmapMode;
   late String _todayCategory;
   late String _minimalShortcut;
@@ -280,7 +282,20 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  ColorTheme? get colorTheme => ColorTheme.byId(_colorTheme);
+  ColorTheme? get colorTheme => _colorTheme == ColorTheme.customId
+      ? _customTheme
+      : ColorTheme.byId(_colorTheme);
+
+  ColorTheme? get customTheme => _customTheme;
+
+  Future<void> setCustomTheme(ThemeColors light, ThemeColors dark) async {
+    final saved = {'light': light.toMap(), 'dark': dark.toMap()};
+    _customTheme = ColorTheme.custom(saved);
+    _colorTheme = ColorTheme.customId;
+    await LocalStore.writeSetting('customTheme', saved);
+    await LocalStore.writeSetting('colorTheme', _colorTheme);
+    notifyListeners();
+  }
 
   Future<void> setColorTheme(ColorTheme? theme) async {
     _colorTheme = theme?.id ?? '';
