@@ -58,6 +58,17 @@ void main() {
     expect(habit.book.pages, 300);
   });
 
+  test('pages read today before a new book stay with the old one', () {
+    final habit = _book({2: 95, 0: 5}).newBook(300);
+    expect(habit.book.finished, 1);
+    expect(habit.book.page, 0);
+    final later = habit.copyWith(completions: {
+      ...habit.completions,
+      today.dayKey: Completion(date: today.dayKey, count: 25),
+    });
+    expect(later.book.page, 20);
+  });
+
   test('changing the pages in the form starts a new book', () {
     final before = _book({10: 100, 5: 30});
     final after = before.copyWith(bookPages: 200).keepBook(before);

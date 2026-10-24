@@ -43,18 +43,20 @@ class BookProgress {
     required Iterable<Completion> completions,
     required double pages,
     required DateTime? since,
+    double skip = 0,
     required List<BookRead> past,
   }) {
     if (pages <= 0) return BookProgress(reads: past, page: 0, pages: 0);
     final from = since?.epochDay;
     final today = AppClock.today().epochDay;
-    final days = [
-      for (final entry in completions)
-        if (entry.count > 0)
-          (day: dayKeyEpoch(entry.date), count: entry.count),
-    ]
-      ..removeWhere((e) => e.day > today || (from != null && e.day < from))
-      ..sort((a, b) => a.day.compareTo(b.day));
+    final days = <({int day, double count})>[];
+    for (final entry in completions) {
+      final day = dayKeyEpoch(entry.date);
+      if (day > today || (from != null && day < from)) continue;
+      final count = day == from ? entry.count - skip : entry.count;
+      if (count > 0) days.add((day: day, count: count));
+    }
+    days.sort((a, b) => a.day.compareTo(b.day));
 
     final reads = [...past];
     var page = 0.0;

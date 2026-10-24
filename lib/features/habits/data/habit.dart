@@ -70,6 +70,7 @@ class Habit {
     this.bookCoverPath = '',
     this.bookPages = 0,
     this.bookSince,
+    this.bookSkip = 0,
     this.pastReads = const [],
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
@@ -218,6 +219,8 @@ class Habit {
 
   final DateTime? bookSince;
 
+  final double bookSkip;
+
   final List<BookRead> pastReads;
 
   bool get tracksBook =>
@@ -229,6 +232,7 @@ class Habit {
     completions: completions.values,
     pages: bookPages,
     since: bookSince,
+    skip: bookSkip,
     past: pastReads,
   );
 
@@ -236,16 +240,23 @@ class Habit {
       ? book.reads.where((read) => read.isFinished).toList()
       : pastReads;
 
+  double get _readToday => completions[AppClock.today().dayKey]?.count ?? 0;
+
   Habit newBook(double pages) => copyWith(
         bookPages: pages,
         bookSince: AppClock.today(),
+        bookSkip: _readToday,
         pastReads: finishedReads,
       );
 
   Habit keepBook(Habit before) {
     if (!tracksBook || bookPages == before.bookPages) return this;
     if (before.bookPages <= 0 && !startedAt.isBefore(AppClock.today())) return this;
-    return copyWith(bookSince: AppClock.today(), pastReads: before.finishedReads);
+    return copyWith(
+      bookSince: AppClock.today(),
+      bookSkip: _readToday,
+      pastReads: before.finishedReads,
+    );
   }
 
   final int focusMinutes;
@@ -883,6 +894,7 @@ class Habit {
     String? bookCoverPath,
     double? bookPages,
     DateTime? bookSince,
+    double? bookSkip,
     List<BookRead>? pastReads,
     int? focusMinutes,
     int? focusBreakMinutes,
@@ -937,6 +949,7 @@ class Habit {
       bookCoverPath: bookCoverPath ?? this.bookCoverPath,
       bookPages: bookPages ?? this.bookPages,
       bookSince: bookSince ?? this.bookSince,
+      bookSkip: bookSkip ?? this.bookSkip,
       pastReads: pastReads ?? this.pastReads,
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
@@ -1004,6 +1017,7 @@ class Habit {
         'bookCoverPath': bookCoverPath,
         if (bookPages > 0) 'bookPages': bookPages,
         if (bookSince != null) 'bookSince': bookSince!.dayKey,
+        if (bookSkip > 0) 'bookSkip': bookSkip,
         if (pastReads.isNotEmpty)
           'pastReads': pastReads.map((read) => read.toMap()).toList(),
         'focusMinutes': focusMinutes,
@@ -1080,6 +1094,7 @@ class Habit {
         bookSince: map['bookSince'] is String
             ? parseDayKey(map['bookSince'] as String)
             : null,
+        bookSkip: (map['bookSkip'] as num?)?.toDouble() ?? 0,
         pastReads: map['pastReads'] == null
             ? const []
             : (map['pastReads'] as List)
