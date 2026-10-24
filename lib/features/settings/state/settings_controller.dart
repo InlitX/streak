@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak/app/app_lock_pin.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/app/theme/app_palette.dart';
+import 'package:streak/app/theme/color_themes.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/cover_storage.dart';
@@ -61,6 +62,7 @@ class SettingsController extends ChangeNotifier {
     _profilePhoto = LocalStore.setting('profilePhoto', '');
     _appIcon = LocalStore.setting('appIcon', 0);
     _accentColor = LocalStore.setting('accentColor', AppPalette.brand.toARGB32());
+    _colorTheme = LocalStore.setting('colorTheme', '');
     _heatmapMode = LocalStore.setting('heatmapMode', 0);
     _todayCategory = LocalStore.setting('todayCategory', '');
     _minimalShortcut = LocalStore.setting('minimalShortcut', '');
@@ -163,6 +165,7 @@ class SettingsController extends ChangeNotifier {
   late String _profilePhoto;
   late int _appIcon;
   late int _accentColor;
+  late String _colorTheme;
   late int _heatmapMode;
   late String _todayCategory;
   late String _minimalShortcut;
@@ -274,6 +277,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setAccentColor(Color color) async {
     _accentColor = color.toARGB32();
     await LocalStore.writeSetting('accentColor', _accentColor);
+    notifyListeners();
+  }
+
+  ColorTheme? get colorTheme => ColorTheme.byId(_colorTheme);
+
+  Future<void> setColorTheme(ColorTheme? theme) async {
+    _colorTheme = theme?.id ?? '';
+    await LocalStore.writeSetting('colorTheme', _colorTheme);
     notifyListeners();
   }
 

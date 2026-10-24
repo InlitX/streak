@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/app/theme/color_themes.dart';
 import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/utils/responsive.dart';
@@ -15,10 +18,52 @@ class AppTheme {
   static bool isClassic(BuildContext context) =>
       Theme.of(context).textTheme.bodyMedium?.fontFamily == classicFont;
 
-  static ThemeData light([Color? accent, int style = 0]) =>
-      _build(Brightness.light, accent ?? AppPalette.brand, style);
-  static ThemeData dark([Color? accent, int style = 0]) =>
-      _build(Brightness.dark, accent ?? AppPalette.brand, style);
+  static ThemeData light([Color? accent, int style = 0, ColorTheme? colors]) =>
+      _build(Brightness.light, accent ?? AppPalette.brand, style, colors);
+  static ThemeData dark([Color? accent, int style = 0, ColorTheme? colors]) =>
+      _build(Brightness.dark, accent ?? AppPalette.brand, style, colors);
+
+  static Color _readableOn(Color fill, Color dark) {
+    double contrast(Color a, Color b) {
+      final x = a.computeLuminance();
+      final y = b.computeLuminance();
+      return (math.max(x, y) + 0.05) / (math.min(x, y) + 0.05);
+    }
+
+    return contrast(fill, dark) >= contrast(fill, Colors.white)
+        ? dark
+        : Colors.white;
+  }
+
+  static ColorScheme _paint(ColorScheme scheme, ThemeColors c) {
+    final ink = scheme.brightness == Brightness.dark ? c.background : c.text;
+    return scheme.copyWith(
+      primary: c.accent,
+      onPrimary: _readableOn(c.accent, ink),
+      surface: c.background,
+      onSurface: c.text,
+      onSurfaceVariant: c.muted,
+      surfaceContainerLowest: c.background,
+      surfaceContainerLow: c.card,
+      surfaceContainer: c.card,
+      surfaceContainerHigh: c.high,
+      surfaceContainerHighest: c.highest,
+      outline: c.muted,
+      outlineVariant: c.outline,
+      error: c.danger,
+      onError: _readableOn(c.danger, ink),
+    );
+  }
+
+  static AppTokens _tokens(bool isDark, ThemeColors? c) => c == null
+      ? (isDark ? AppTokens.dark : AppTokens.light)
+      : AppTokens(
+          success: c.success,
+          warning: c.warning,
+          danger: c.danger,
+          info: c.info,
+          muted: c.muted,
+        );
 
   static BorderSide cardEdge(bool isDark) => BorderSide(
         color: isDark
@@ -85,9 +130,14 @@ class AppTheme {
     );
   }
 
-  static ThemeData _express(Brightness brightness, Color accent) {
+  static ThemeData _express(
+    Brightness brightness,
+    Color accent,
+    ThemeColors? colors,
+  ) {
     final isDark = brightness == Brightness.dark;
-    final scheme = expressScheme(brightness, accent);
+    final base = expressScheme(brightness, colors?.accent ?? accent);
+    final scheme = colors == null ? base : _paint(base, colors);
     final text = ExpressType.theme(scheme.onSurface);
     final container = scheme.surfaceContainer;
 
@@ -100,7 +150,7 @@ class AppTheme {
       textTheme: text,
       visualDensity: VisualDensity.standard,
       splashFactory: NoSplash.splashFactory,
-      extensions: [isDark ? AppTokens.dark : AppTokens.light],
+      extensions: [_tokens(isDark, colors)],
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
@@ -163,14 +213,20 @@ class AppTheme {
     );
   }
 
-  static ThemeData _build(Brightness brightness, Color seed, int style) {
-    if (style == 2) return _express(brightness, seed);
+  static ThemeData _build(
+    Brightness brightness,
+    Color seed,
+    int style,
+    ColorTheme? theme,
+  ) {
+    final colors = theme?.of(brightness);
+    if (style == 2) return _express(brightness, seed, colors);
     final isDark = brightness == Brightness.dark;
     final minimal = style == 1;
-    final accent = adaptAccent(seed, isDark);
+    final accent = colors?.accent ?? adaptAccent(seed, isDark);
     final font = minimal ? _fontFamily : classicFont;
 
-    final scheme = ColorScheme.fromSeed(
+    final base = ColorScheme.fromSeed(
       seedColor: accent,
       brightness: brightness,
     ).copyWith(
@@ -192,10 +248,12 @@ class AppTheme {
           ? (minimal ? const Color(0xFF272727) : AppPalette.darkBorder)
           : (minimal ? const Color(0xFFE4E4E8) : const Color(0xFFD9D9E0)),
     );
+    final scheme = colors == null ? base : _paint(base, colors);
 
-    final cardColor = isDark
-        ? (minimal ? AppPalette.paperDarkCard : AppPalette.darkCard)
-        : (minimal ? const Color(0xFFF6F6F8) : Colors.white);
+    final cardColor = colors?.card ??
+        (isDark
+            ? (minimal ? AppPalette.paperDarkCard : AppPalette.darkCard)
+            : (minimal ? const Color(0xFFF6F6F8) : Colors.white));
 
     return ThemeData(
       useMaterial3: true,
@@ -206,7 +264,7 @@ class AppTheme {
       fontFamily: font,
       visualDensity: VisualDensity.standard,
       splashFactory: NoSplash.splashFactory,
-      extensions: [isDark ? AppTokens.dark : AppTokens.light],
+      extensions: [_tokens(isDark, colors)],
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,

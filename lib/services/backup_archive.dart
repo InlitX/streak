@@ -15,6 +15,7 @@ const backupSettingKeys = {
   'cardActivity',
   'celebration',
   'checkStyle',
+  'colorTheme',
   'compactCards',
   'consistencyPeriod',
   'currency',
