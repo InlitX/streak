@@ -195,6 +195,16 @@ class _BackgroundOption extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
+  BoxDecoration _themed(ColorScheme scheme) => index == 1
+      ? BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [scheme.surfaceContainerHigh, scheme.surface],
+          ),
+        )
+      : BoxDecoration(color: scheme.surface);
+
   BoxDecoration _preview(bool isDark) {
     if (isDark) {
       switch (index) {
@@ -232,7 +242,12 @@ class _BackgroundOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = context.colors.primary;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final outline = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFD8D8E0);
+    final themed = context.watch<SettingsController>().colorTheme != null;
+    final outline = themed
+        ? context.colors.outlineVariant
+        : isDark
+            ? const Color(0xFF2C2C2E)
+            : const Color(0xFFD8D8E0);
     final dotColor = isDark
         ? Colors.white.withValues(alpha: 0.12)
         : Colors.black.withValues(alpha: 0.1);
@@ -245,7 +260,10 @@ class _BackgroundOption extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1,
               child: Container(
-                decoration: _preview(isDark).copyWith(
+                decoration: (themed
+                        ? _themed(context.colors)
+                        : _preview(isDark))
+                    .copyWith(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: selected ? accent : outline,
