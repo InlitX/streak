@@ -383,7 +383,7 @@ class HabitsController extends ChangeNotifier {
         periods.add(VacationPeriod(start: period.start, end: previous));
       }
       if (period.end == null) {
-        periods.add(VacationPeriod(start: next));
+        if (!next.isAfter(AppClock.today())) periods.add(VacationPeriod(start: next));
       } else if (period.end!.isAfter(day)) {
         periods.add(VacationPeriod(start: next, end: period.end));
       }
