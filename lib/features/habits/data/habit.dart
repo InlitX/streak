@@ -72,6 +72,8 @@ class Habit {
     this.bookSince,
     this.bookSkip = 0,
     this.pastReads = const [],
+    this.soundUri = '',
+    this.soundName = '',
     this.focusMinutes = 25,
     this.focusBreakMinutes = 0,
     this.focusOnly = false,
@@ -258,6 +260,9 @@ class Habit {
       pastReads: before.finishedReads,
     );
   }
+
+  final String soundUri;
+  final String soundName;
 
   final int focusMinutes;
   final int focusBreakMinutes;
@@ -896,6 +901,8 @@ class Habit {
     DateTime? bookSince,
     double? bookSkip,
     List<BookRead>? pastReads,
+    String? soundUri,
+    String? soundName,
     int? focusMinutes,
     int? focusBreakMinutes,
     bool? focusOnly,
@@ -951,6 +958,8 @@ class Habit {
       bookSince: bookSince ?? this.bookSince,
       bookSkip: bookSkip ?? this.bookSkip,
       pastReads: pastReads ?? this.pastReads,
+      soundUri: soundUri ?? this.soundUri,
+      soundName: soundName ?? this.soundName,
       focusMinutes: focusMinutes ?? this.focusMinutes,
       focusOnly: focusOnly ?? this.focusOnly,
       tracking: tracking ?? this.tracking,
@@ -1020,6 +1029,8 @@ class Habit {
         if (bookSkip > 0) 'bookSkip': bookSkip,
         if (pastReads.isNotEmpty)
           'pastReads': pastReads.map((read) => read.toMap()).toList(),
+        if (soundUri.isNotEmpty) 'soundUri': soundUri,
+        if (soundUri.isNotEmpty) 'soundName': soundName,
         'focusMinutes': focusMinutes,
         'focusBreakMinutes': focusBreakMinutes,
         'focusOnly': focusOnly,
@@ -1100,6 +1111,8 @@ class Habit {
             : (map['pastReads'] as List)
                 .map((r) => BookRead.fromMap(Map<String, dynamic>.from(r as Map)))
                 .toList(),
+        soundUri: (map['soundUri'] ?? '') as String,
+        soundName: (map['soundName'] ?? '') as String,
         focusMinutes: ((map['focusMinutes'] ?? 25) as num).toInt(),
         focusBreakMinutes:
             ((map['focusBreakMinutes'] ?? 0) as num).toInt(),

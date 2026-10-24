@@ -71,6 +71,7 @@ class HabitsController extends ChangeNotifier {
         for (final habit in _habits.values)
           if (!habit.isArchived) habit.id,
       });
+      await _notifications.dropUnusedSoundChannels(_habits.values);
     } catch (e) {
       debugPrint('Could not clear stale reminders: $e');
     }
@@ -127,6 +128,8 @@ class HabitsController extends ChangeNotifier {
     bool fromLastDone = false,
     bool monthWeekday = false,
     required List<Reminder> reminders,
+    String soundUri = '',
+    String soundName = '',
     String coverPath = '',
     int coverClarity = 100,
     HabitKind kind = HabitKind.positive,
@@ -172,6 +175,8 @@ class HabitsController extends ChangeNotifier {
       fromLastDone: fromLastDone,
       monthWeekday: monthWeekday,
       reminders: reminders,
+      soundUri: soundUri,
+      soundName: soundName,
       coverPath: coverPath,
       coverClarity: coverClarity,
       kind: kind,
@@ -213,10 +218,18 @@ class HabitsController extends ChangeNotifier {
   }
 
   Future<void> update(Habit habit) async {
+    final soundChanged = _habits[habit.id]?.soundUri != habit.soundUri;
     _habits[habit.id] = habit;
     await LocalStore.writeHabit(habit);
     notifyListeners();
     await _notifications.scheduleFor(habit);
+    if (soundChanged) {
+      try {
+        await _notifications.dropUnusedSoundChannels(_habits.values);
+      } catch (e) {
+        debugPrint('Could not drop sound channels: $e');
+      }
+    }
     HomeWidgetService.syncSoon(() => asMap);
   }
 
