@@ -1398,5 +1398,34 @@
     }
   },
   "onb_blurb": "Kleine tägliche Einträge, die zu Gewohnheiten werden, die du beibehältst.",
-  "todo_tag_icon": "Icon"
+  "todo_tag_icon": "Icon",
+  "discard_changes": "Änderungen verwerfen?",
+  "discard_changes_body": "Die Änderungen, die du an dieser Gewohnheit vorgenommen hast, gehen verloren.",
+  "discard": "Verwerfen",
+  "todo_discard_body": "Die Änderungen, die du an diesem To-Do vorgenommen hast, gehen verloren.",
+  "data_folder_taken": "Dieser Ordner enthält bereits Streak-Daten.",
+  "data_folder_denied": "Streak kann in diesem Ordner nicht schreiben.",
+  "data_folder_move_body": "Streak wird sich schließen und deine Daten nach {path} verschieben. Öffne Streak danach wieder. Wenn etwas schiefgeht, bleiben deine Daten wo sie jetzt sind.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Verschieben und schließen",
+  "pick_one_day": "Wähle zumindest einen Tag",
+  "reminders_ready_title": "Erinnerungen sind aktiv",
+  "reminders_ready_body": "Streak wird dich hier erinnern.",
+  "reminder_sound_default": "Standard",
+  "duplicate_habit": "Gewohnheit duplizieren",
+  "habit_duplicated": "{name} hinzugefügt",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "end_of_day": "Ende des Tages"
 }
