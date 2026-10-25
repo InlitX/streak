@@ -605,7 +605,7 @@
   "journey": "Jornada",
   "focus_target_reached": "Meta alcançada",
   "share_friends_message": "Estou mantendo meu hábitos frequentes com o Streak — um rastreador de hábitos pequeno, gratuito e offline, sem contas nem anúncios. Venha você também: https://inlitx.github.io/streak/",
-  "note_kind_completed": "Concluído",
+  "note_kind_completed": "Completado",
   "focus_break": "Descanso",
   "undo": "Desfazer",
   "focus_style": "Estilo de temporizador",
@@ -630,7 +630,7 @@
   "focus_images_limit": "Até 10 imagens",
   "edit_note": "Editar nota",
   "notes_hint": "Abra um hábito e mantenha pressionado um dia do calendário para ver ou adicionar notas",
-  "focus_total": "Tempo de concentração",
+  "focus_total": "Tempo de foco",
   "share_size_large": "Altura",
   "share_size_small": "Quadrado",
   "yesterday": "Ontem",
@@ -674,7 +674,7 @@
   "style_minimal_desc": "Grade de hábitos e configurações agrupadas em quatro seções.",
   "focus_keep_awake": "Mantenha a tela ligada",
   "data_sub": "Backups, arquivamento e importação",
-  "note_time_optional": "Tempo (opcional)",
+  "note_time_optional": "Horário (opcional)",
   "focus_pause": "Pausa",
   "unit_hours": "horas",
   "focus_end_tasks": "{count} tarefas ainda não foram verificadas.",
@@ -814,7 +814,7 @@
   "todo_empty_body": "Anote o que você quer realizar nos próximos dias.",
   "todo_date": "Data",
   "todo_no_date": "Sem data",
-  "todo_time": "Tempo",
+  "todo_time": "Horário",
   "todo_priority": "Prioridade",
   "priority_none": "Sem prioridade",
   "priority_low": "Baixa",
@@ -920,7 +920,7 @@
     }
   },
   "day_timeline_anytime": "A qualquer momento",
-  "day_timeline_empty": "Nada planejado para este dia",
+  "day_timeline_empty": "Nada agendado para este dia",
   "day_timeline_empty_sub": "Dê um horário específico ao seu hábito e ele aparecerá aqui.",
   "clear": "Limpar",
   "start_view": "Tela de início abre em",
@@ -1955,5 +1955,99 @@
         "type": "String"
       }
     }
-  }
+  },
+  "reminder_sound": "Som",
+  "reminder_sound_default": "Padrão",
+  "reminder_sound_hint": "Toque em um som para ouvi-lo. Os lembretes deste hábito vão usá-lo.",
+  "todo_repeat": "Repetir",
+  "todo_repeat_never": "Não repetir",
+  "todo_repeat_workdays": "Segunda a Sexta",
+  "todo_repeat_days": "{count, plural, =1{Todo dia} other{Todos os {count} dias}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Toda semana} other{Todas as {count} semanas}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Todo mês} other{Todos os {count} meses}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{Todo ano} other{Todos os {count} anos}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "Personalizado",
+  "todo_repeat_unit_days": "Dias",
+  "todo_repeat_unit_weeks": "Semanas",
+  "todo_repeat_unit_months": "Meses",
+  "todo_repeat_unit_years": "Anos",
+  "todo_repeat_on_day": "No dia {day}",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "No {nth, select, 1{primeiro} 2{segundo} 3{terceiro} 4{quarto} other{último}} {weekday}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "Contar a partir de quando eu terminar",
+  "todo_repeat_skip": "Pular esta",
+  "paused_day_title": "Dia pausado",
+  "paused_day_body": "Este hábito está pausado no dia {day}. Registrar mesmo assim?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "color_theme": "Cor do tema",
+  "color_theme_sub": "Paletas completas como Catppuccin ou Nord",
+  "color_theme_default": "Tema padrão",
+  "color_theme_hint": "Cada tema possui sua própria cor de fundo, texto e cor de destaque. Ele segue os modos claro e escuro.",
+  "color_theme_custom": "Suas cores",
+  "color_theme_custom_hint": "{mode, select, dark{Essas são as cores do modo escuro. Alterne para o modo claro para editá-las.} other{Essas são as cores do modo claro. Alterne para o modo escuro para editá-las.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "color_part_background": "Fundo",
+  "color_part_card": "Cartões",
+  "color_part_text": "Texto",
+  "color_part_accent": "Destaque",
+  "color_part_success": "Concluído",
+  "color_part_warning": "Aviso",
+  "color_part_danger": "Erro",
+  "color_part_info": "Informação"
 }
