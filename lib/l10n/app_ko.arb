@@ -1954,5 +1954,99 @@
   "by_label": "라벨별",
   "sched_start": "시작일",
   "habit_time_sub": "계획 탭에서는 이 시간에 습관을 배치해요. 오늘 탭에서는 여전히 하루 종일 표시돼요.",
-  "from_last_done_sub": "습관을 완료할 때마다 대기 시간을 초기화해요. 여전히 하루를 건너뛰면 연속 기록이 깨져요."
+  "from_last_done_sub": "습관을 완료할 때마다 대기 시간을 초기화해요. 여전히 하루를 건너뛰면 연속 기록이 깨져요.",
+  "reminder_sound": "소리",
+  "reminder_sound_default": "기본값",
+  "reminder_sound_hint": "소리를 눌러 들어보세요. 이 습관의 알림이 사용할 소리예요.",
+  "todo_repeat": "반복",
+  "todo_repeat_never": "반복 안 함",
+  "todo_repeat_workdays": "평일 동안",
+  "todo_repeat_days": "{count, plural, =1{매일} other{매 {count}일}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{매주} other{매 {count}주}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{매월} other{매 {count}개월}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{매년} other{매 {count}년}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "맞춤",
+  "todo_repeat_unit_days": "일",
+  "todo_repeat_unit_weeks": "주",
+  "todo_repeat_unit_months": "개월",
+  "todo_repeat_unit_years": "년",
+  "color_part_background": "배경",
+  "color_part_card": "카드",
+  "color_part_text": "글자",
+  "color_part_accent": "강조",
+  "color_part_success": "완료",
+  "color_part_warning": "주의",
+  "color_part_danger": "오류",
+  "color_part_info": "정보",
+  "todo_repeat_on_day": "{day}일에",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "{nth, select, 1{첫째} 2{둘째} 3{셋째} 4{넷째} other{마지막}} {weekday}에",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "완료한 날부터 세기",
+  "todo_repeat_skip": "이번에는 건너뛰기",
+  "color_theme": "색상 테마",
+  "color_theme_sub": "Catppuccino나 Nord같은 전체 팔레트",
+  "color_theme_default": "Streak",
+  "color_theme_custom": "내 색상",
+  "color_theme_custom_hint": "{mode, select, dark{다크 모드에 적용되는 색상이에요. 라이트 모드로 전환해야 라이트 모드의 색상을 편집할 수 있어요.} other{라이트 모드에 적용되는 색상이에요. 다크 모드로 전환해야 다크 모드의 색상을 편집할 수 있어요.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "color_theme_hint": "각 테마로 배경색, 글자색, 강조색을 적용할 수 있어요. 라이트 및 다크 모드 설정을 따라요.",
+  "paused_day_title": "멈춰둔 날",
+  "paused_day_body": "{day}에는 멈춰두었던 습관이에요. 그래도 기록할까요?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  }
 }
