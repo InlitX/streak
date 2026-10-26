@@ -629,5 +629,37 @@
     }
   },
   "sched_start": "يبدأ في",
-  "from_last_done": "إبدء من المرة الأخيره"
+  "from_last_done": "إبدء من المرة الأخيره",
+  "reminder_sound": "الصوت",
+  "reminder_sound_default": "التفاصيل",
+  "reminder_sound_hint": "إضغط على الصوت لسماعه. هذا التنبيه سوف يستعمله.",
+  "month_weekday": "نفس يوم الإسبوع كل شهر",
+  "nth_weekday": "{n, select, first{first} second{second} third{third} fourth{fourth} other{last}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "from_last_done_sub": "كل مرة تفعلها، الإنتظار يبدء من جديد. لا يزال يكسر سلسلة الإنجازات.",
+  "quotes": "إقتبس",
+  "quotes_which": "أي إقتباس",
+  "quotes_app": "من التطبيق",
+  "quotes_mine": "لي",
+  "quotes_both": "الإثنين",
+  "quotes_off": "مطفئ",
+  "month_weekday_sub": "يقع في يوم {when} من الشهر، ليس تاريخ محدد.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_my_list": "إقتباساتي",
+  "quotes_add": "أضف إقتباس"
 }
