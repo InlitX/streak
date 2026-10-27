@@ -62,18 +62,40 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
     _emit();
   }
 
+  void _move(int from, int to) {
+    setState(() => _steps.insert(to > from ? to - 1 : to, _steps.removeAt(from)));
+    _emit();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CompactNote(text: context.l10n.checklist_hint, color: widget.color),
+        ReorderableListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          buildDefaultDragHandles: false,
+          padding: EdgeInsets.zero,
+          onReorder: _move,
+          proxyDecorator: (child, _, __) =>
+              Material(type: MaterialType.transparency, child: child),
+          children: [
         for (var i = 0; i < _steps.length; i++)
           Padding(
             key: ValueKey(_steps[i].id),
             padding: const EdgeInsets.only(top: 8),
             child: Row(
               children: [
+                ReorderableDragStartListener(
+                  index: i,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 8, 10),
+                    child: Icon(LucideIcons.gripVertical,
+                        size: 17, color: context.tokens.muted),
+                  ),
+                ),
                 Expanded(
                   child: AppTextField(
                     hint: context.l10n.step_hint,
@@ -97,6 +119,8 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
               ],
             ),
           ),
+          ],
+        ),
         const SizedBox(height: 10),
         CompactAddButton(
           label: context.l10n.add_step,
