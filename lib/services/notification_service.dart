@@ -99,7 +99,7 @@ class NotificationService {
   }
 
   static void Function(String habitId)? onOpenHabit;
-  static void Function()? onOpenTodos;
+  static void Function([String? todoId])? onOpenTodos;
   static void Function()? onHabitsChanged;
   static void Function()? onTodosChanged;
 
@@ -133,7 +133,7 @@ class NotificationService {
         NotificationActions.apply(actionId!, id)
             .then((_) => onTodosChanged?.call());
       } else {
-        onOpenTodos?.call();
+        openFromPayload(id);
       }
       return;
     }
@@ -142,7 +142,15 @@ class NotificationService {
           .then((_) => onHabitsChanged?.call());
       return;
     }
-    onOpenHabit?.call(id);
+    openFromPayload(id);
+  }
+
+  static void openFromPayload(String payload) {
+    if (payload.startsWith(_todoPayload)) {
+      onOpenTodos?.call(payload.substring(_todoPayload.length));
+    } else {
+      onOpenHabit?.call(payload);
+    }
   }
 
   static tz.Location _localZone(String reported) {

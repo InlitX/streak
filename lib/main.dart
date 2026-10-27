@@ -131,7 +131,7 @@ Future<void> _startup() async {
     final pending = NotificationService().pendingHabitId;
     if (pending != null) {
       NotificationService().pendingHabitId = null;
-      _openHabit(pending);
+      NotificationService.openFromPayload(pending);
     }
     if (isMobile) {
       final launched =
@@ -192,8 +192,8 @@ void _reloadTodos() {
   AppNavigator.key.currentContext?.read<TodosController>().reload();
 }
 
-void _openTodos() {
-  AppNavigator.push(const TodosPage(), fade: true);
+void _openTodos([String? todoId]) {
+  AppNavigator.push(TodosPage(openId: todoId), fade: true);
 }
 
 void _openPage(String page) {
