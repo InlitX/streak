@@ -1300,5 +1300,6 @@
   "focus_label_remove": "Supprimer l'étiquette",
   "focus_label_remove_confirm": "Supprimer",
   "by_label": "Par étiquette",
-  "reminders_ready_title": "Les rappels sont activés"
+  "reminders_ready_title": "Les rappels sont activés",
+  "focus_end_add_time": "Ajouter un temps de concentration"
 }
