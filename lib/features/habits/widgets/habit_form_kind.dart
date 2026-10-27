@@ -857,6 +857,11 @@ class _SubstepsEditorState extends State<SubstepsEditor> {
     _emit();
   }
 
+  void _move(int from, int to) {
+    setState(() => _steps.insert(to > from ? to - 1 : to, _steps.removeAt(from)));
+    _emit();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -883,12 +888,29 @@ class _SubstepsEditorState extends State<SubstepsEditor> {
               ],
             ),
             if (_steps.isNotEmpty) const SizedBox(height: 14),
+            ReorderableListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              buildDefaultDragHandles: false,
+              padding: EdgeInsets.zero,
+              onReorder: _move,
+              proxyDecorator: (child, _, __) =>
+                  Material(type: MaterialType.transparency, child: child),
+              children: [
             for (var i = 0; i < _steps.length; i++)
               Padding(
                 key: ValueKey(_steps[i].id),
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
                   children: [
+                    ReorderableDragStartListener(
+                      index: i,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 8, 10),
+                        child: Icon(LucideIcons.gripVertical,
+                            size: 17, color: context.tokens.muted),
+                      ),
+                    ),
                     Expanded(
                       child: AppTextField(
                         hint: context.l10n.step_hint,
@@ -907,6 +929,8 @@ class _SubstepsEditorState extends State<SubstepsEditor> {
                   ],
                 ),
               ),
+              ],
+            ),
             const SizedBox(height: 4),
             Semantics(
               button: true,
