@@ -186,7 +186,7 @@ class ExpressTile extends StatelessWidget {
     final scheme = context.colors;
     final accent = tint ?? scheme.primary;
     final radius = ExpressSlot.of(context, BorderRadius.circular(20));
-    final stacked = stackedRows(context) && value != null;
+    final stacked = stackedValue(context, value);
     final bare = bareRows(context);
 
     return ExpressSquish(

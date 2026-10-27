@@ -159,7 +159,7 @@ class NavRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stacked = stackedRows(context) && value != null;
+    final stacked = stackedValue(context, value);
     final shown = value == null
         ? null
         : Text(

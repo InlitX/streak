@@ -77,7 +77,7 @@ class SoftRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final muted = context.tokens.muted;
-    final stacked = stackedRows(context) && value != null;
+    final stacked = stackedValue(context, value);
     final bare = bareRows(context);
 
     return Semantics(
