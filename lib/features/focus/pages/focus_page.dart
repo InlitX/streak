@@ -152,7 +152,7 @@ class _FocusPageState extends State<FocusPage> {
   }
 
   Future<void> _restart() async {
-    if (_focus.elapsedSeconds >= 60) {
+    if (_focus.elapsedSeconds > 0) {
       final confirmed = await showAppConfirmDialog(
         context,
         title: context.l10n.focus_restart_title,
