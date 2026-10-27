@@ -39,7 +39,9 @@ import 'package:streak/features/todos/widgets/todo_tile.dart';
 import 'package:streak/features/todos/widgets/todos_page_parts.dart';
 
 class TodosPage extends StatefulWidget {
-  const TodosPage({super.key});
+  const TodosPage({super.key, this.openId});
+
+  final String? openId;
 
   @override
   State<TodosPage> createState() => _TodosPageState();
@@ -99,6 +101,14 @@ class _TodosPageState extends State<TodosPage>
     super.initState();
     _ghost = AnimationController(vsync: this);
     BackHandlers.add(_backOut);
+    final todo = widget.openId == null
+        ? null
+        : context.read<TodosController>().byId(widget.openId!);
+    if (todo != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _open(todo);
+      });
+    }
   }
 
   @override
