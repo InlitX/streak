@@ -364,14 +364,14 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
               ],
       ),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
+            Positioned.fill(
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   final dial = (constraints.maxWidth * 0.6).clamp(190.0, 280.0);
                   return ListView(
-                    padding: EdgeInsets.fromLTRB(side, 0, side, 16),
+                    padding: EdgeInsets.fromLTRB(side, 0, side, 92),
                     children: [
                       Entrance(
                         delay: _entrance,
@@ -451,7 +451,11 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                 },
               ),
             ),
-            Padding(
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: Entrance(
                 delay: _entrance + const Duration(milliseconds: 120),
@@ -494,6 +498,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> {
                         ),
                       ),
               ),
+            ),
             ),
           ],
         ),
