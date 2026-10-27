@@ -26,6 +26,7 @@ class _FocusTaskListState extends State<FocusTaskList> {
   final _focusNodes = <String, FocusNode>{};
   Timer? _debounce;
   String? _newStepId;
+  bool _showDone = false;
 
   @override
   void dispose() {
@@ -93,6 +94,17 @@ class _FocusTaskListState extends State<FocusTaskList> {
     final checked =
         widget.habit.completions[today.dayKey]?.steps ?? const <String>{};
     final habits = context.read<HabitsController>();
+    final done =
+        widget.habit.substeps.where((s) => checked.contains(s.id)).toList();
+    final steps = [
+      ...widget.habit.substeps.where((s) => !checked.contains(s.id)),
+      if (_showDone) ...done,
+    ];
+    final toggle = FocusDoneToggle(
+      count: done.length,
+      open: _showDone,
+      onTap: () => setState(() => _showDone = !_showDone),
+    );
 
     if (_newStepId != null &&
         widget.habit.substeps.any((s) => s.id == _newStepId)) {
@@ -111,7 +123,8 @@ class _FocusTaskListState extends State<FocusTaskList> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                for (final step in widget.habit.substeps)
+                for (final step in steps) ...[
+                  if (_showDone && step == done.first) toggle,
                   Padding(
                     key: ValueKey(step.id),
                     padding: const EdgeInsets.only(bottom: 4),
@@ -195,6 +208,8 @@ class _FocusTaskListState extends State<FocusTaskList> {
                       ],
                     ),
                   ),
+                ],
+                if (done.isNotEmpty && !_showDone) toggle,
               ],
             ),
           ),
@@ -232,9 +247,21 @@ class FocusFreeTaskList extends StatefulWidget {
 }
 
 class _FocusFreeTaskListState extends State<FocusFreeTaskList> {
+  bool _showDone = false;
+
   @override
   Widget build(BuildContext context) {
     final focus = widget.focus;
+    final done = focus.tasks.where((t) => t.done).toList();
+    final tasks = [
+      ...focus.tasks.where((t) => !t.done),
+      if (_showDone) ...done,
+    ];
+    final toggle = FocusDoneToggle(
+      count: done.length,
+      open: _showDone,
+      onTap: () => setState(() => _showDone = !_showDone),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +271,8 @@ class _FocusFreeTaskListState extends State<FocusFreeTaskList> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                for (final task in focus.tasks)
+                for (final task in tasks) ...[
+                  if (_showDone && task == done.first) toggle,
                   Padding(
                     key: ValueKey(task.id),
                     padding: const EdgeInsets.only(bottom: 4),
@@ -320,6 +348,8 @@ class _FocusFreeTaskListState extends State<FocusFreeTaskList> {
                       ],
                     ),
                   ),
+                ],
+                if (done.isNotEmpty && !_showDone) toggle,
               ],
             ),
           ),
@@ -340,6 +370,53 @@ class _FocusFreeTaskListState extends State<FocusFreeTaskList> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FocusDoneToggle extends StatelessWidget {
+  const FocusDoneToggle({
+    super.key,
+    required this.count,
+    required this.open,
+    required this.onTap,
+  });
+
+  final int count;
+  final bool open;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Colors.white.withValues(alpha: 0.6);
+    return Semantics(
+      button: true,
+      expanded: open,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            children: [
+              Icon(
+                open ? LucideIcons.chevronDown : LucideIcons.chevronRight,
+                size: 18,
+                color: color,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                context.l10n.todo_completed_count(count),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
