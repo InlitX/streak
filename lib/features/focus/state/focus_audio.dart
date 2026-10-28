@@ -64,14 +64,15 @@ const builtInTracks = <String, String>{
   'rain.mp3': 'Rain',
   'brown_noise.mp3': 'Brown noise',
   'fire.mp3': 'Fire',
-  'ticking.mp3': 'Ticking clock',
+  'ticking.wav': 'Ticking clock',
   'one_love.mp3': 'One Love',
   'i_can_find_you.mp3': 'I Can Find You',
 };
 
-const loopingTracks = {'ticking.mp3'};
+const loopingTracks = {'ticking.wav'};
 
 String builtInTrackId(String id) {
+  if (id == 'ticking.mp3') return 'ticking.wav';
   final mp3 = id.replaceFirst(RegExp(r'\.ogg$'), '.mp3');
   return builtInTracks.containsKey(mp3) ? mp3 : id;
 }

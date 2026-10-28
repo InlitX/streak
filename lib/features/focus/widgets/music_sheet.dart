@@ -43,7 +43,7 @@ List<FocusTrack> focusTracksOf(BuildContext context, SettingsController s) => [
             name: switch (entry.key) {
               'brown_noise.mp3' => context.l10n.focus_track_brown,
               'fire.mp3' => context.l10n.focus_track_fire,
-              'ticking.mp3' => context.l10n.focus_track_ticking,
+              'ticking.wav' => context.l10n.focus_track_ticking,
               _ => entry.value,
             },
             asset: true,
