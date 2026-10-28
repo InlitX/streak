@@ -142,6 +142,10 @@ class FocusAudio {
     _wire();
     position.value = Duration.zero;
     length.value = Duration.zero;
+    final mode = Platform.isAndroid && track.loops
+        ? PlayerMode.lowLatency
+        : PlayerMode.mediaPlayer;
+    if (_player.mode != mode) await _player.setPlayerMode(mode);
     await _player.setReleaseMode(
       _repeatOne || track.loops ? ReleaseMode.loop : ReleaseMode.stop,
     );
