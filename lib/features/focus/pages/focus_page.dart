@@ -919,10 +919,7 @@ class _TopBar extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 1),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: onTarget,
-                  child: Row(
+                Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(
@@ -932,30 +929,14 @@ class _TopBar extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12.5,
-                            color: Colors.white.withValues(
-                              alpha: onTarget == null ? 0.55 : 0.75,
-                            ),
+                            color: Colors.white.withValues(alpha: 0.75),
                           ),
                         ),
                       ),
-                      if (onTarget != null) ...[
-                        const SizedBox(width: 2),
-                        Icon(
-                          LucideIcons.chevronDown,
-                          size: 14,
-                          color: Colors.white.withValues(alpha: 0.75),
-                        ),
-                      ],
                     ],
                   ),
-                ),
               ],
             ),
-          ),
-          IconButton(
-            icon: Icon(LucideIcons.circleHelp, color: Colors.white.withValues(alpha: 0.8)),
-            tooltip: context.l10n.focus_resources,
-            onPressed: () => SettingsActions.openUrl(context, '$kSiteUrl/resources/'),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 6),
@@ -991,6 +972,11 @@ class _TopBar extends StatelessWidget {
                       ? context.l10n.focus_exit_fullscreen
                       : context.l10n.focus_fullscreen,
                   onTap: onImmersive,
+                ),
+                (
+                  icon: LucideIcons.circleHelp,
+                  label: context.l10n.focus_resources,
+                  onTap: () => SettingsActions.openUrl(context, '$kSiteUrl/resources/'),
                 ),
               ],
             ),
