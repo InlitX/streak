@@ -83,7 +83,7 @@ Streak is an open source habit tracker for Android, Windows and Linux. Make as
 many habits as you want, log them with one tap, and watch the grid, the streak
 counters and the statistics fill up.
 
-Everything stays on your device. No account, no ads, nothing to sync.
+Everything stays on your device. No account, no ads.
 
 ---
 
@@ -177,7 +177,6 @@ Everything stays on your device. No account, no ads, nothing to sync.
 - **Automatic backups**, daily or weekly, to a folder of your choosing
 - **App lock** with a PIN or your fingerprint, for phones without one
 - **Archive** habits without losing a day of their history
-- Everything is offline: no account, no server, nothing to sync
 - Seven languages, with more open on Weblate
 
 </td>

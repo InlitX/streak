@@ -186,7 +186,6 @@ exigir.
 - **Copias automáticas**, diarias o semanales, en la carpeta que elijas
 - **Bloqueo de la app** con PIN o huella, para móviles que no lo traen
 - **Archiva** hábitos sin perder un solo día de su historial
-- Todo sin conexión: sin cuenta, sin servidor, nada que sincronizar
 - Siete idiomas, con más abiertos en Weblate
 
 </td>
