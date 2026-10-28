@@ -362,7 +362,7 @@ class _FocusPageState extends State<FocusPage> {
                     onTarget: leading || !focus.isActive || focus.isBreak
                         ? null
                         : () => showFocusRetimeSheet(context),
-                    title: label,
+                    title: title,
                     target: (leading ? leadMinutes : focus.targetMinutes) <= 0
                         ? context.l10n.focus_flowtime
                         : focus.isPomodoro && !leading
