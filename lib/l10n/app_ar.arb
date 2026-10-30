@@ -739,5 +739,32 @@
   "notes": "ملحوظات",
   "todo_style_sub": "قائمة بسيطة، أم مجلدات تضم أوراق مثل Google .Keep",
   "todos_enable_sub": "قائمة سريعة بجانب عاداتك",
-  "todo_new": "مهمة جديدة"
+  "todo_new": "مهمة جديدة",
+  "notes_enable_sub": "أرفق ملاحظة بأي يوم من أيام العادة",
+  "add_note": "أضف ملاحظة",
+  "edit_note": "تعديل ملاحظة",
+  "view_notes": "أظهر الملاحظات",
+  "edit_entry": "عدل مدخله",
+  "note_type": "إكتب",
+  "note_kind_note": "ملاحظة",
+  "note_kind_planned": "مخطط له",
+  "note_kind_completed": "إكتمل",
+  "note_hint": "إكتب ملاحظتك…",
+  "note_time_optional": "وقت (إختياري)",
+  "save_note": "إحفظ الملاحظة",
+  "notes_empty": "لا توجد ملاحظات لهذا اليوم بعد",
+  "delete_note": "إحذف ملاحظة",
+  "legend_note_added": "أضف ملاحظة",
+  "tomorrow": "غدًا",
+  "notes_count": "{count, plural, =1{1 note} other{{count} notes}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "مهمة",
+  "todo_view_list": "بسيط",
+  "todo_view_papers": "مجلدات"
 }
