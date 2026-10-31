@@ -113,6 +113,7 @@ class HabitWidget : GlanceAppWidget() {
         val shown = (0 until habits.length())
             .mapNotNull { habits.optJSONObject(it) }
             .filterNot { chosen.hideDone && series(it, "completions", TODAY_INDEX) == true }
+            .filterNot { chosen.todayOnly && series(it, "scheduled", TODAY_INDEX) == false }
         val header = HEADER * WidgetDraw.textScale(context)
         val room = size.height.value - PAD * 2 - header - LIST_GAP
         val want = minOf(3, shown.size)

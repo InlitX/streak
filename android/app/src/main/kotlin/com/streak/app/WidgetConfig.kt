@@ -15,6 +15,7 @@ data class WidgetLook(
     val tick: Boolean = true,
     val hideDone: Boolean = false,
     val hideTracking: Boolean = false,
+    val todayOnly: Boolean = false,
     val compact: Boolean = false,
     val band: Boolean = true,
     val today: Boolean = false,
@@ -96,6 +97,7 @@ object WidgetConfig {
             tick = p.getBoolean("tick_$k", true),
             hideDone = p.getBoolean("hideDone_$k", false),
             hideTracking = p.getBoolean("hideTracking_$k", false),
+            todayOnly = p.getBoolean("todayOnly_$k", false),
             compact = p.getBoolean("compact_$k", false),
             band = p.getBoolean("band_$k", true),
             today = p.getBoolean("statsToday_$k", false),
@@ -113,6 +115,7 @@ object WidgetConfig {
             .putBoolean("tick_$id", look.tick)
             .putBoolean("hideDone_$id", look.hideDone)
             .putBoolean("hideTracking_$id", look.hideTracking)
+            .putBoolean("todayOnly_$id", look.todayOnly)
             .putBoolean("compact_$id", look.compact)
             .putBoolean("band_$id", look.band)
             .putBoolean("statsToday_$id", look.today)
@@ -200,6 +203,7 @@ object WidgetConfig {
             .remove("tick_$id")
             .remove("hideDone_$id")
             .remove("hideTracking_$id")
+            .remove("todayOnly_$id")
             .remove("compact_$id")
             .remove("band_$id")
             .remove("statsToday_$id")

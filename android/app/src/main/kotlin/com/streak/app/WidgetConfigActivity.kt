@@ -417,6 +417,10 @@ class WidgetConfigActivity : ComponentActivity() {
                                         look = look.copy(band = it)
                                     }
                                     Line()
+                                    ToggleRow(tr("cfg_today_only", "Only today's"), null, look.todayOnly) {
+                                        look = look.copy(todayOnly = it)
+                                    }
+                                    Line()
                                 }
                                 ToggleRow(tr("cfg_hide_done", "Hide completed"), null, look.hideDone) {
                                     look = look.copy(hideDone = it)
