@@ -177,7 +177,9 @@ class _CalendarCell extends StatelessWidget {
     final beforeCreation = date.atMidnight.isBefore(habit.startedAt);
     final outOfScope = future || beforeCreation;
     final completed = habit.isCompletedOn(date);
-    final relapsed = negative && !completed && !outOfScope;
+    final relapsed = !completed &&
+        !outOfScope &&
+        (negative || (habit.capsAmount && (habit.completions[date.dayKey]?.count ?? 0) > 0));
     final paused = isCurrentMonth && !outOfScope && habit.isNeutralOn(date);
     final tappable = isCurrentMonth && !future;
     final danger = context.tokens.danger;

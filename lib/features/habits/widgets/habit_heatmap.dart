@@ -52,6 +52,7 @@ Color heatmapCellColor(
     final untouched = date.isAfter(today) || habit.isOffDay(date);
     return untouched ? base.withValues(alpha: 0.4) : base;
   }
+  if (habit.capsAmount && !habit.isCompletedOn(date)) return context.tokens.danger;
   final ratio = (count / habit.fillTargetOn(date)).clamp(0.25, 1.0);
   final full = habit.progressOn(date, count).solidColor(habit.color.shownIn(context));
   return Color.lerp(habit.color.shownIn(context).withValues(alpha: 0.4), full, ratio)!;
