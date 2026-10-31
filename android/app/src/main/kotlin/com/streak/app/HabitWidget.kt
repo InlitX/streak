@@ -350,6 +350,7 @@ class HabitWidget : GlanceAppWidget() {
                         val mark = when {
                             future -> if (planned) WeekMark.EMPTY else WeekMark.OFF
                             kind == KIND_NEGATIVE && count > 0 -> WeekMark.RELAPSE
+                            habit.optBoolean("atMost", false) && count > 0 && !completed -> WeekMark.RELAPSE
                             completed -> WeekMark.DONE
                             quantified && count > 0 -> WeekMark.PART
                             !planned -> WeekMark.OFF

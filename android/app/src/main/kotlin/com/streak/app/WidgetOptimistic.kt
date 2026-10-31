@@ -79,7 +79,11 @@ object WidgetOptimistic {
             }
             KIND_QUANTITATIVE -> {
                 newCount = max(0.0, count + delta)
-                done = if (habit.optBoolean("anyAmount", false)) newCount > 0 else newCount >= target
+                done = when {
+                    habit.optBoolean("atMost", false) -> newCount > 0 && newCount <= target
+                    habit.optBoolean("anyAmount", false) -> newCount > 0
+                    else -> newCount >= target
+                }
             }
             else -> {
                 done = count < target

@@ -295,6 +295,7 @@ class HomeWidgetService {
         'perDayTarget': habit.effectiveTarget,
         'clock': habit.isTimeAmount,
         'anyAmount': habit.acceptsAnyAmount,
+        'atMost': habit.capsAmount,
         'incrementAmount': habit.incrementAmount,
         'counts': window
             .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
