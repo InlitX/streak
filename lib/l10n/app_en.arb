@@ -471,6 +471,8 @@
   "no_goal_sub": "Just log the value, like your weight. Any amount marks the day.",
   "any_amount": "Any amount counts",
   "any_amount_sub": "Logging any amount marks the day as done, even below the goal.",
+  "at_most": "At most",
+  "at_most_sub": "The goal is a limit. A day is done when you log something and stay at or under it.",
   "any_step": "Done with some steps",
   "any_step_sub": "Checking one step marks the day as done, without doing them all.",
   "steps_needed_sub": "The day counts as done with {needed} of {total} steps.",

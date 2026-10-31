@@ -434,6 +434,8 @@
   "no_goal_sub": "Solo apuntas el valor, como tu peso. Cualquier cantidad marca el día.",
   "any_amount": "Cualquier cantidad cuenta",
   "any_amount_sub": "Apuntar cualquier cantidad da el día por hecho, aunque no llegues a la meta.",
+  "at_most": "Como máximo",
+  "at_most_sub": "La meta es un límite. El día cuenta si apuntas algo y no lo pasas.",
   "any_step": "Hecho con algunos pasos",
   "any_step_sub": "Marcar un paso ya da el día por hecho, sin tener que hacerlos todos.",
   "steps_needed_sub": "El día cuenta como hecho con {needed} de {total} pasos.",
