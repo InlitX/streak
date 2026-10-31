@@ -89,6 +89,9 @@ if (document.querySelector('[data-count="downloads"]')) {
     .then((res) => (res.ok ? res.json() : null))
     .then((releases) => {
       if (!Array.isArray(releases)) return;
+      const latest = releases.find((release) => !release.draft && !release.prerelease);
+      const version = document.querySelector('.ver b');
+      if (latest && version) version.textContent = `v${latest.tag_name.replace(/^v/, '')}`;
       let total = 0;
       releases.forEach((release) => {
         (release.assets || []).forEach((asset) => { total += asset.download_count || 0; });
