@@ -137,9 +137,11 @@ class FolderSync {
       final merged = ours == null
           ? theirs.copyWith(completions: theirDays)
           : (newer ? theirs : ours).copyWith(
-              completions: mergeCompletions(
+              completions: _newestDays(
+                id,
                 _since(ours.completions, cut, ourCut),
                 theirDays,
+                data.days,
               ),
               missReasons: newer
                   ? {...ours.missReasons, ...theirs.missReasons}
@@ -152,6 +154,12 @@ class FolderSync {
       brought++;
       await LocalStore.writeHabit(merged);
       if (newer) await _adopt(id, stamps[id]);
+    }
+    if (LocalStore.setting('autoSync', false)) {
+      await LocalStore.stampDays({
+        for (final MapEntry(:key, :value) in data.days.entries)
+          if (value > (LocalStore.days[key] ?? 0)) key: value,
+      });
     }
 
     for (final category in data.categories) {
@@ -247,6 +255,25 @@ class FolderSync {
       await _adopt(id, stamps[id]);
     }
     return brought;
+  }
+
+  static Map<String, Completion> _newestDays(
+    String id,
+    Map<String, Completion> ours,
+    Map<String, Completion> theirs,
+    Map<String, int> stamps,
+  ) {
+    final out = mergeCompletions(ours, theirs);
+    if (!LocalStore.setting('autoSync', false)) return out;
+    for (final day in {...ours.keys, ...theirs.keys}) {
+      final mine = LocalStore.days['$id|$day'];
+      final other = stamps['$id|$day'];
+      if (mine == null && other == null) continue;
+      final theirsWin = other != null && (mine == null || other > mine);
+      final pick = theirsWin ? theirs[day] : ours[day];
+      pick == null ? out.remove(day) : out[day] = pick;
+    }
+    return out;
   }
 
   static int? _later(int? a, int? b) =>

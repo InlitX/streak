@@ -37,6 +37,7 @@ Future<void> _drop(
   Map<String, int>? changes,
   Map<String, int>? deleted,
   Map<String, int>? cleared,
+  Map<String, int>? days,
   String device = '',
 }) async {
   final payload = {
@@ -47,6 +48,7 @@ Future<void> _drop(
     'changes': ?changes,
     'deleted': ?deleted,
     'cleared': ?cleared,
+    'days': ?days,
     'habits': habits.map((h) => h.toMap()).toList(),
     'todos': todos.map((t) => t.toMap()).toList(),
   };
@@ -541,6 +543,96 @@ void main() {
 
       expect(LocalStore.readHabits()['run']!.completions, isEmpty);
       expect(LocalStore.clearedAt('run'), isNotNull);
+    });
+  });
+  group('unchecking travels', () {
+    Habit steps(Set<String> done) => _run().copyWith(
+          completions: {
+            _monday.dayKey: Completion(date: _monday.dayKey, steps: done),
+          },
+        );
+
+    test('a step unchecked on the other device is unchecked here', () async {
+      final dir = await _syncing();
+      await LocalStore.quietly(() => LocalStore.writeHabit(steps({'s1', 's2'})));
+      await _drop(
+        dir,
+        [steps({'s1'})],
+        at: DateTime(2026, 3, 3, 10),
+        days: {'run|${_monday.dayKey}': _ago(Duration.zero)},
+        device: 'phone',
+      );
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run']!.completions[_monday.dayKey]!.steps, {'s1'});
+    });
+
+    test('a day unchecked on the other device is unchecked here', () async {
+      final dir = await _syncing();
+      await LocalStore.quietly(() => LocalStore.writeHabit(_run(done: [_monday, _tuesday])));
+      await _drop(
+        dir,
+        [_run(done: [_tuesday])],
+        at: DateTime(2026, 3, 3, 10),
+        days: {'run|${_monday.dayKey}': _ago(Duration.zero)},
+        device: 'phone',
+      );
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run']!.completions.keys, [_tuesday.dayKey]);
+    });
+
+    test('a step checked here after the other device unchecked it stays', () async {
+      final dir = await _syncing();
+      await LocalStore.writeHabit(steps({'s1', 's2'}));
+      await _drop(
+        dir,
+        [steps({'s1'})],
+        at: DateTime(2026, 3, 3, 10),
+        days: {'run|${_monday.dayKey}': _ago(const Duration(hours: 1))},
+        device: 'phone',
+      );
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run']!.completions[_monday.dayKey]!.steps, {'s1', 's2'});
+    });
+
+    test('a copy without day marks still only adds days', () async {
+      final dir = await _syncing();
+      await LocalStore.quietly(() => LocalStore.writeHabit(_run(done: [_monday])));
+      await _drop(dir, [_run(done: [_tuesday])], at: DateTime(2026, 3, 3, 10), device: 'phone');
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run']!.completions.keys,
+          containsAll([_monday.dayKey, _tuesday.dayKey]));
+    });
+
+    test('with keep in sync off an uncheck does not travel', () async {
+      final dir = await _folder();
+      await LocalStore.quietly(() => LocalStore.writeHabit(_run(done: [_monday])));
+      await _drop(
+        dir,
+        [_run()],
+        at: DateTime(2026, 3, 3, 10),
+        days: {'run|${_monday.dayKey}': _ago(Duration.zero)},
+        device: 'phone',
+      );
+
+      await FolderSync.pull();
+
+      expect(LocalStore.readHabits()['run']!.completions.keys, [_monday.dayKey]);
+    });
+
+    test('unchecking here marks that day', () async {
+      await _folder();
+      await LocalStore.quietly(() => LocalStore.writeHabit(_run(done: [_monday])));
+      await LocalStore.writeHabit(_run());
+
+      expect(LocalStore.days.keys, ['run|${_monday.dayKey}']);
     });
   });
 }
