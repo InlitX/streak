@@ -179,6 +179,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   void initState() {
     super.initState();
     final habit = widget.habit ?? widget.template;
+    if (habit == null) _color = context.read<SettingsController>().accentColor;
     _name = TextEditingController(text: habit?.name ?? '');
     _name.selection = TextSelection.collapsed(offset: _name.text.length);
     _description = TextEditingController(text: habit?.description ?? '');
