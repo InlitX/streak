@@ -1569,6 +1569,8 @@
   "book_pages": "Pages in the book",
   "book_pages_sub": "Counts from today. On the last page it adds a read and starts over",
   "book_new": "New book",
+  "book_at_page": "Page I'm on",
+  "book_read_before": "Times already read",
   "book_reads": "{count, plural, =0{First read} =1{Read once} other{Read {count} times}}",
   "@book_reads": {
     "placeholders": { "count": { "type": "int" } }

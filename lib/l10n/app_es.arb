@@ -1338,6 +1338,8 @@
   "book_pages": "Páginas del libro",
   "book_pages_sub": "Cuenta desde hoy. Al llegar a la última página suma una lectura y vuelve a empezar",
   "book_new": "Libro nuevo",
+  "book_at_page": "Página por la que voy",
+  "book_read_before": "Veces que ya lo he leído",
   "book_reads": "{count, plural, =0{Primera lectura} =1{Leído una vez} other{Leído {count} veces}}",
   "book_read_number": "Lectura {number}",
   "book_since": "Desde el {day}",
