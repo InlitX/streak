@@ -833,6 +833,8 @@
   "today_only_sub": "Esconde los hábitos que no tocan hoy",
   "hide_done": "Ocultar los hechos",
   "hide_done_sub": "Lo que terminas hoy sale de la lista",
+  "hide_clean": "Ocultar los días limpios",
+  "hide_clean_sub": "Los hábitos de evitar solo salen el día que recaes",
   "past_first": "Abrir primero los días pasados",
   "past_first_sub": "Tocar un día pasado lo muestra antes, para no cambiar nada sin querer",
   "miss_reason_title": "¿Por qué no lo hiciste?",

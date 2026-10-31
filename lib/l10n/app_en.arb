@@ -965,6 +965,8 @@
   "today_only_sub": "Hides the habits that are not scheduled for today",
   "hide_done": "Hide completed",
   "hide_done_sub": "What you finish today leaves the list",
+  "hide_clean": "Hide clean days",
+  "hide_clean_sub": "Avoid habits only show up on the days you slip",
   "past_first": "Open past days first",
   "past_first_sub": "Tapping a past day shows it first, so nothing changes by mistake",
   "miss_reason_title": "Why did you miss it?",
