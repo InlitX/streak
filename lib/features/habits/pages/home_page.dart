@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/widgets/fold_header.dart';
+import 'package:streak/core/widgets/pointer_menu.dart';
 import 'package:streak/core/widgets/sheet_action.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -80,10 +82,13 @@ class _HomePageState extends State<HomePage> {
   bool _peek = false;
   Set<String> _peeked = const {};
   final Map<String, Timer> _timers = {};
+  Offset? _clickAt;
+  DateTime _clickedAt = DateTime(0);
 
   @override
   void initState() {
     super.initState();
+    GestureBinding.instance.pointerRouter.addGlobalRoute(_trackClick);
     final settings = context.read<SettingsController>();
     _mode = HeatmapMode.values[settings.openingMode.clamp(0, 2)];
     if (settings.todayCategory.isNotEmpty) _category = settings.todayCategory;
@@ -92,6 +97,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(_trackClick);
     BackHandlers.remove(_backOut);
     for (final timer in _timers.values) {
       timer.cancel();
@@ -141,12 +147,28 @@ class _HomePageState extends State<HomePage> {
     _coins.value++;
   }
 
+  void _trackClick(PointerEvent event) {
+    if (event is! PointerDownEvent) return;
+    if (event.buttons != kSecondaryMouseButton) return;
+    _clickAt = event.position;
+    _clickedAt = DateTime.now();
+  }
+
   void _showHabitActions(HabitsController controller, Habit habit) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (sheetContext) {
+    final at = DateTime.now().difference(_clickedAt).inMilliseconds < 800
+        ? _clickAt
+        : null;
+    _clickedAt = DateTime(0);
+    Future<void> show(WidgetBuilder builder) => at == null
+        ? showModalBottomSheet<void>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            builder: builder,
+          )
+        : showPointerMenu(context, at: at, builder: builder);
+    show(
+      (sheetContext) {
         void run(VoidCallback action) {
           Navigator.of(sheetContext).pop();
           action();
