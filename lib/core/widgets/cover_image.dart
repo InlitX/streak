@@ -40,7 +40,7 @@ class CoverImage extends StatelessWidget {
               : (MediaQuery.sizeOf(context).width * ratio).round(),
           gaplessPlayback: true,
         );
-        return CoverBlur(clarity: clarity, child: image);
+        return ClipRect(child: CoverBlur(clarity: clarity, child: image));
       },
     );
   }
