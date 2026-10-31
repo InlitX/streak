@@ -999,11 +999,11 @@ class _HomePageState extends State<HomePage> {
 
   String _foldLabel(List<Habit> hidden, DateTime today) {
     final count = hidden.length;
-    if (hidden.every((habit) => habit.isDoneForNow)) {
-      return context.l10n.today_fold_done(count);
-    }
     if (hidden.every((habit) => !habit.isScheduledOn(today))) {
       return context.l10n.today_fold_other(count);
+    }
+    if (hidden.every((habit) => habit.isDoneForNow)) {
+      return context.l10n.today_fold_done(count);
     }
     return context.l10n.today_fold_hidden(count);
   }
