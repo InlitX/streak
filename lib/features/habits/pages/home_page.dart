@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ import 'package:streak/features/habits/widgets/today_progress.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/vacation_sheet.dart';
+import 'package:streak/features/habits/widgets/habit_links_sheet.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -235,6 +237,13 @@ class _HomePageState extends State<HomePage> {
             () => run(() => _exportHabit(controller, habit)),
             false,
           ),
+          if (Platform.isAndroid)
+            (
+              LucideIcons.link,
+              context.l10n.habit_links,
+              () => run(() => showHabitLinksSheet(context, habit: habit)),
+              false,
+            ),
           (
             LucideIcons.archive,
             context.l10n.archive_habit,

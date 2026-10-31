@@ -322,6 +322,19 @@
   "habit_archived": "Habit archived",
   "duplicate_habit": "Duplicate habit",
   "export_habit": "Export this habit",
+  "habit_links": "Links for automations",
+  "habit_links_off": "Let apps like Tasker, a shortcut or an NFC tag mark your habits by opening a link. It stays off until you turn it on.",
+  "habit_links_on": "Any app on this phone can open these links, for all your habits. Tap one to copy it.",
+  "habit_link_done": "Mark as done",
+  "habit_link_undo": "Clear the day",
+  "habit_link_add": "Add {amount}",
+  "@habit_link_add": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "habit_link_relapse": "Log a relapse",
+  "habit_link_focus": "Start a focus session",
+  "habit_link_open": "Open the habit",
+  "habit_link_day": "For another day, add &day=2026-10-31 at the end.",
   "habit_duplicated": "{name} added",
   "@habit_duplicated": {
     "placeholders": {
