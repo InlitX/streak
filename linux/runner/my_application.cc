@@ -55,9 +55,57 @@ static void set_window_icon(GtkWindow* window) {
   gtk_window_set_icon_from_file(window, icon, nullptr);
 }
 
+static gchar* window_state_path() {
+  return g_build_filename(g_get_user_config_dir(), "streak", "window.ini",
+                          nullptr);
+}
+
+static gboolean window_delete_cb(GtkWidget* widget, GdkEvent* event,
+                                 gpointer user_data) {
+  GdkWindow* surface = gtk_widget_get_window(widget);
+  if (surface != nullptr &&
+      (gdk_window_get_state(surface) & GDK_WINDOW_STATE_FULLSCREEN)) {
+    return FALSE;
+  }
+  GtkWindow* window = GTK_WINDOW(widget);
+  g_autofree gchar* path = window_state_path();
+  g_autofree gchar* directory = g_path_get_dirname(path);
+  g_autoptr(GKeyFile) file = g_key_file_new();
+  g_key_file_load_from_file(file, path, G_KEY_FILE_NONE, nullptr);
+  const gboolean maximized = gtk_window_is_maximized(window);
+  g_key_file_set_boolean(file, "window", "maximized", maximized);
+  if (!maximized) {
+    int width = 0;
+    int height = 0;
+    gtk_window_get_size(window, &width, &height);
+    g_key_file_set_integer(file, "window", "width", width);
+    g_key_file_set_integer(file, "window", "height", height);
+  }
+  g_mkdir_with_parents(directory, 0700);
+  g_key_file_save_to_file(file, path, nullptr);
+  return FALSE;
+}
+
 static void size_window(GtkWindow* window) {
   int width = kDefaultWidth;
   int height = kDefaultHeight;
+  g_autofree gchar* path = window_state_path();
+  g_autoptr(GKeyFile) file = g_key_file_new();
+  if (g_key_file_load_from_file(file, path, G_KEY_FILE_NONE, nullptr)) {
+    const int saved_width =
+        g_key_file_get_integer(file, "window", "width", nullptr);
+    const int saved_height =
+        g_key_file_get_integer(file, "window", "height", nullptr);
+    if (saved_width >= kMinWidth && saved_height >= kMinHeight) {
+      width = saved_width;
+      height = saved_height;
+    }
+    if (g_key_file_get_boolean(file, "window", "maximized", nullptr)) {
+      gtk_window_maximize(window);
+    }
+  }
+  g_signal_connect(window, "delete-event", G_CALLBACK(window_delete_cb),
+                   nullptr);
   GdkDisplay* display = gdk_display_get_default();
   GdkMonitor* monitor = gdk_display_get_primary_monitor(display);
   if (monitor == nullptr && gdk_display_get_n_monitors(display) > 0) {
