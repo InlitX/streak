@@ -664,9 +664,15 @@ class _HomePageState extends State<HomePage> {
               final scheduled = settings.todayOnly
                   ? all.where((h) => h.isScheduledOn(today)).toList()
                   : all;
-              final listed = settings.hideTracking
+              final tracked = settings.hideTracking
                   ? scheduled.where((h) => !h.tracking).toList()
                   : scheduled;
+              final listed = settings.hideClean
+                  ? tracked
+                      .where((h) =>
+                          h.kind != HabitKind.negative || h.isRelapseOn(today))
+                      .toList()
+                  : tracked;
               final filtered = _category == null
                   ? listed
                   : listed.where((h) => h.category == _category).toList();

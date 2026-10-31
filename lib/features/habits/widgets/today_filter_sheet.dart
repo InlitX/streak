@@ -6,13 +6,17 @@ import 'package:streak/core/express/express_switch.dart';
 import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
 
 bool todayFiltered(SettingsController settings) =>
-    settings.todayOnly || settings.hideDone || settings.hideTracking;
+    settings.todayOnly ||
+    settings.hideDone ||
+    settings.hideTracking ||
+    settings.hideClean;
 
 Future<void> showTodayFilterSheet(
   BuildContext context, {
@@ -53,6 +57,9 @@ class _TodayFilterSheetState extends State<_TodayFilterSheet> {
     final settings = context.watch<SettingsController>();
     final tracked = context.select<HabitsController, bool>(
       (habits) => habits.habits.any((habit) => habit.tracking),
+    );
+    final avoids = context.select<HabitsController, bool>(
+      (habits) => habits.habits.any((habit) => habit.kind == HabitKind.negative),
     );
     return SafeArea(
       top: false,
@@ -121,6 +128,16 @@ class _TodayFilterSheetState extends State<_TodayFilterSheet> {
                 subtitle: context.l10n.tracking_hide_sub,
                 value: settings.hideTracking,
                 onChanged: settings.setHideTracking,
+              ),
+            ],
+            if (avoids || settings.hideClean) ...[
+              const SizedBox(height: 18),
+              _FilterRow(
+                icon: LucideIcons.shieldCheck,
+                title: context.l10n.hide_clean,
+                subtitle: context.l10n.hide_clean_sub,
+                value: settings.hideClean,
+                onChanged: settings.setHideClean,
               ),
             ],
           ],
