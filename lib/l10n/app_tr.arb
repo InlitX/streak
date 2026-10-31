@@ -1387,7 +1387,7 @@
   "island_goal": "Her parça inşa edildiğinde görünüşü böyle olur.",
   "island_reset_go": "Baştan başla",
   "island_beta": "Bu, oyunlaştırmaya yönelik ilk deneme ve hâlâ beta aşamasında. Nasıl kullandığına bağlı olarak büyüyebilir, şekil değiştirebilir ya da tamamen başka bir şeyle değiştirilebilir.",
-  "last_check": "Son işaret",
+  "last_check": "Son kayıt",
   "check_history": "İşaret geçmişi",
   "check_history_sub": "{count} gün işaretlendi",
   "@check_history_sub": {
@@ -1537,9 +1537,9 @@
   "a11y_next_month": "Sonraki ay",
   "plan_show_month": "Ayın tamamını göster",
   "plan_show_week": "Tek bir hafta göster",
-  "discard_changes": "Değişiklikleri sil?",
+  "discard_changes": "Değişiklikleri iptal et?",
   "discard_changes_body": "Burada yaptığınız değişiklikler kaybolacaktır.",
-  "discard": "Sil",
+  "discard": "İptal Et",
   "keep_editing": "Düzenlemeye devam et",
   "tracking_hide_sub": "Sadece takip ettiğiniz alışkanlıklar bu listenin dışında kalır",
   "reminders_ready_title": "Hatırlatmalar aktif",
@@ -1589,7 +1589,7 @@
   "focus_track_ticking": "Zaman",
   "focus_resources": "Ücretsiz sahneler ve sesler",
   "hide_done": "Tamamlananları gizle",
-  "hide_done_sub": "Bugün bitirdiğiniz şey listeden ayrılır",
+  "hide_done_sub": "Bugün tamamladıkların listede görünmez",
   "miss_other": "Diğer",
   "miss_other_hint": "Sebep yaz",
   "miss_busy": "Meşgul",
@@ -1597,5 +1597,141 @@
   "miss_tired": "Yorgun",
   "miss_forgot": "Unuttum",
   "day_not_done": "Bitmedi",
-  "day_clean": "Temiz"
+  "day_clean": "Temiz",
+  "todo_discard_body": "Burada yaptığınız değişiklikler kaybolacaktır.",
+  "reminder_sound": "Ses",
+  "reminder_sound_default": "Varsayılan",
+  "reminder_sound_hint": "Bir sesi duymak için dokunun. Bu alışkanlığın hatırlatıcılar bu sesi kullanıcaktır.",
+  "todo_repeat": "Tekrarla",
+  "todo_repeat_never": "Tekrarlama",
+  "todo_repeat_workdays": "Pazartesi'den Cuma'ya",
+  "todo_repeat_days": "{count, plural, =1{Her gün} other{Her {count} günde bir}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Her hafta} other{Her {count} haftada bir}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Her ay} other{Her {count} ayda bir}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{Her yıl} other{Her {count} yılda bir}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "Özel",
+  "todo_repeat_unit_days": "Günler",
+  "todo_repeat_unit_weeks": "Haftalar",
+  "todo_repeat_unit_months": "Aylar",
+  "todo_repeat_unit_years": "Yıllar",
+  "todo_repeat_from_done": "Tamamlandığı andan itibaren say",
+  "todo_repeat_skip": "Bunu geç",
+  "focus_auto_next": "Kendiliğinden devam et",
+  "focus_auto_next_sub": "Mola bitince sonraki tur beklemeden başlar.",
+  "focus_end_reached_free": "Hedefe ulaşıldı.",
+  "paused_day_title": "Gün duraklatıldı",
+  "paused_day_body": "Bu alışkanlık {day} tarihinde duraklatıldı. Yine de kaydedilsin mi?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "last_12_months": "Son 12 ay",
+  "consistency_vs_previous": "{change} öncekiye göre",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_time_sub": "Alışkanlığı Plan bölümünde bu saate yerleştirir. Alışkanlık, Bugün bölümünde gün boyunca görünmeye devam eder.",
+  "past_first": "Önce geçmiş günleri aç",
+  "color_part_background": "Arkaplan",
+  "color_part_card": "Kartlar",
+  "color_part_text": "Metin",
+  "color_part_accent": "Vurgu",
+  "color_part_success": "Başarılı",
+  "color_part_warning": "Uyarı",
+  "color_part_danger": "Hata",
+  "color_part_info": "Bilgi",
+  "widget_week_done": "{total} öğeden {done} tanesi tamamlandı",
+  "@widget_week_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_content": "İçerik",
+  "widget_cfg_background": "Arkaplan",
+  "widget_cfg_show_art": "Resimleri göster",
+  "widget_cfg_show_header": "Başlık",
+  "widget_cfg_show_icons": "Alışkanlık simgeleri",
+  "widget_cfg_show_cards": "Her alışkanlığın arka planı",
+  "widget_cfg_show_details": "İsmin altında seri bilgisi",
+  "widget_cfg_buttons": "Düğmeler",
+  "widget_cfg_buttons_round": "Yuvarlak",
+  "widget_cfg_buttons_square": "Kare",
+  "widget_cfg_buttons_flower": "Çiçek",
+  "widget_cfg_tick": "Onay işareti",
+  "widget_cfg_tick_hint": "Kapalı: Tamamlandı düğmeleri yalnızca renkle doldurulur",
+  "widget_cfg_hide_done": "Tamamlananları gizle",
+  "widget_cfg_compact": "Kompakt",
+  "widget_cfg_compact_hint": "Daha küçük satırlar, seri bilgisi ismin yanında",
+  "widget_cfg_compact_todos_hint": "Daha küçük satırlar, saati görevin yanında göster",
+  "widget_cfg_today_band": "Bugünü vurgula",
+  "tracked_week": "Bu hafta {n}",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "Bu ay {n}",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "Bu yıl {n}",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "quant_mode_add": "Ekle",
+  "quant_mode_replace": "Değiştir",
+  "quant_preset_steps": "Adım",
+  "health_steps_denied": "Streak, izin vermediğiniz zaman adımlarınızı okuyamaz",
+  "health_permission": "İzin",
+  "health_unit_steps": "adım"
 }
