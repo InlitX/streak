@@ -140,6 +140,7 @@ class FocusAudio {
 
   static Future<void> _start(FocusTrack track) async {
     _wire();
+    await _cancelDuck();
     position.value = Duration.zero;
     length.value = Duration.zero;
     final mode = Platform.isAndroid && track.loops
@@ -212,16 +213,21 @@ class FocusAudio {
   }
 
   static Future<void> pause() async {
+    await _cancelDuck();
     await _player.pause();
     playing.value = false;
   }
 
-  static Future<void> resume() async {
+  static Future<void> resume({bool fade = false}) async {
+    await _cancelDuck();
+    if (fade) await _player.setVolume(0);
     await _player.resume();
     playing.value = true;
+    if (fade) await _fade(0, volume.value, _duck);
   }
 
   static Future<void> stop() async {
+    await _cancelDuck();
     await _player.stop();
     playing.value = false;
     current.value = '';
@@ -232,12 +238,83 @@ class FocusAudio {
   static const silentAlert = 'none';
 
   static Timer? _alertCutoff;
+  static bool _effectsReady = false;
+  static bool _ducked = false;
+  static int _duck = 0;
 
-  static Future<void> alert(String sound, {bool loop = false}) async {
+  static Future<void> _readyEffects() async {
+    if (_effectsReady) return;
+    _effectsReady = true;
+    _effects.onPlayerComplete.listen((_) {
+      if (_resumeAfter) _restore();
+    });
+    if (Platform.isAndroid) {
+      await _effects.setAudioContext(
+        AudioContext(
+          android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
+        ),
+      );
+    }
+  }
+
+  static const fadeSeconds = 3;
+  static bool _resumeAfter = true;
+
+  static Future<void> _fade(double from, double to, int token) async {
+    const steps = 40;
+    for (var i = 1; i <= steps; i++) {
+      await Future<void>.delayed(
+        const Duration(milliseconds: fadeSeconds * 1000 ~/ steps),
+      );
+      if (token != _duck) return;
+      final t = i / steps;
+      final eased = from < to ? t * t : 1 - (1 - t) * (1 - t);
+      await _player.setVolume(from + (to - from) * eased);
+    }
+  }
+
+  static Future<void> _duckMusic() async {
+    if (_ducked || !playing.value) return;
+    _ducked = true;
+    final token = _duck;
+    await _fade(volume.value, 0, token);
+    if (token == _duck) await _player.pause();
+  }
+
+  static Future<void> _restore() async {
+    if (!_ducked) return;
+    _ducked = false;
+    final token = ++_duck;
+    await _player.setVolume(0);
+    await _player.resume();
+    await _fade(0, volume.value, token);
+  }
+
+  static Future<void> _cancelDuck() async {
+    _duck++;
+    if (!_ducked) return;
+    _ducked = false;
+    await _player.setVolume(volume.value);
+  }
+
+  static Future<void> fadeOut(String sound) async {
     if (sound == silentAlert) return;
+    _resumeAfter = true;
+    await _duckMusic();
+  }
+
+  static Future<void> alert(
+    String sound, {
+    bool loop = false,
+    bool resume = true,
+  }) async {
+    if (sound == silentAlert) return;
+    _resumeAfter = resume;
     _alertCutoff?.cancel();
     if (loop) _alertCutoff = Timer(const Duration(minutes: 2), stopAlert);
     try {
+      await _readyEffects();
+      await _duckMusic();
       await _effects.stop();
       await _effects.setReleaseMode(loop ? ReleaseMode.loop : ReleaseMode.stop);
       await _effects.play(
@@ -246,16 +323,19 @@ class FocusAudio {
             : DeviceFileSource(sound),
         volume: 0.9,
       );
-    } catch (_) {}
+    } catch (_) {
+      await _restore();
+    }
   }
 
-  static Future<void> stopAlert() async {
+  static Future<void> stopAlert({bool resume = true}) async {
     _alertCutoff?.cancel();
     _alertCutoff = null;
     try {
       await _effects.stop();
       await _effects.setReleaseMode(ReleaseMode.stop);
     } catch (_) {}
+    if (resume) await _restore();
   }
 
   static Future<int?> durationOf(String path) async {
