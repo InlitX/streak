@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:streak/app/app_lock_pin.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/app/theme/app_palette.dart';
@@ -120,6 +121,7 @@ class SettingsController extends ChangeNotifier {
     _focusDailyGoal = LocalStore.setting('focusDailyGoal', 0);
     _focusKeepAwake = LocalStore.setting('focusKeepAwake', true);
     _focusLeadIn = LocalStore.setting('focusLeadIn', true);
+    _habitLinks = LocalStore.setting('habitLinks', false);
     _focusAlert = LocalStore.setting('focusAlert', '');
     _focusHold = LocalStore.setting('focusHold', false);
     _focusWholeRounds = LocalStore.setting('focusWholeRounds', false);
@@ -219,6 +221,7 @@ class SettingsController extends ChangeNotifier {
   late int _focusDailyGoal;
   late bool _focusKeepAwake;
   late bool _focusLeadIn;
+  late bool _habitLinks;
   late String _focusAlert;
   late bool _focusHold;
   late bool _focusWholeRounds;
@@ -541,6 +544,7 @@ class SettingsController extends ChangeNotifier {
   int get focusDailyGoal => _focusDailyGoal;
   bool get focusKeepAwake => _focusKeepAwake;
   bool get focusLeadIn => _focusLeadIn;
+  bool get habitLinks => _habitLinks;
   String get focusAlert => _focusAlert;
   bool get focusHold => _focusHold;
   bool get focusWholeRounds => _focusWholeRounds;
@@ -618,6 +622,13 @@ class SettingsController extends ChangeNotifier {
     _focusLeadIn = value;
     await LocalStore.writeSetting('focusLeadIn', value);
     notifyListeners();
+  }
+
+  Future<void> setHabitLinks(bool value) async {
+    _habitLinks = value;
+    notifyListeners();
+    await LocalStore.writeSetting('habitLinks', value);
+    await HomeWidget.saveWidgetData<bool>('links_enabled', value);
   }
 
   Future<void> setFocusAlert(String value) async {
