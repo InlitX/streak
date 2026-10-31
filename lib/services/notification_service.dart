@@ -202,6 +202,7 @@ class NotificationService {
     final linux = LinuxInitializationSettings(
       defaultActionName: 'Open',
       defaultIcon: AssetsLinuxIcon('assets/icon.png'),
+      defaultSound: ThemeLinuxSound('message-new-instant'),
     );
     await _plugin.initialize(
       InitializationSettings(
@@ -637,6 +638,9 @@ class NotificationService {
     return ids;
   }
 
+  static final _windowsSound =
+      WindowsNotificationAudio.preset(sound: WindowsNotificationSound.reminder);
+
   Future<List<WindowsImage>> _windowsLogo(Habit? habit) async {
     if (habit == null) return const [];
     final logo =
@@ -659,6 +663,7 @@ class NotificationService {
     if (!Platform.isWindows) return null;
     final amount = takesAmount(habit);
     return WindowsNotificationDetails(
+      audio: _windowsSound,
       images: await _windowsLogo(habit),
       inputs: [
         if (amount)
@@ -829,6 +834,7 @@ class NotificationService {
       final details = Platform.isWindows
           ? NotificationDetails(
               windows: WindowsNotificationDetails(
+                audio: _windowsSound,
                 images: await _windowsLogo(LocalStore.habit(habitId)),
               ),
             )
@@ -917,6 +923,7 @@ class NotificationService {
         iOS: const DarwinNotificationDetails(categoryIdentifier: _categoryTodo),
         windows: Platform.isWindows
             ? WindowsNotificationDetails(
+                audio: _windowsSound,
                 actions: [
                   WindowsAction(
                     content: strings.notif_action_done,
