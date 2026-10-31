@@ -22,6 +22,9 @@ class FlutterWindow : public Win32Window {
 
  private:
   void SetFullscreen(bool on);
+  void RestorePlacement();
+  void SavePlacement();
+  void Reveal();
 
   flutter::DartProject project_;
 
@@ -29,6 +32,7 @@ class FlutterWindow : public Win32Window {
   std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>>
       window_channel_;
   bool fullscreen_ = false;
+  bool maximized_ = false;
   LONG windowed_style_ = 0;
   WINDOWPLACEMENT windowed_placement_ = {sizeof(WINDOWPLACEMENT)};
 };

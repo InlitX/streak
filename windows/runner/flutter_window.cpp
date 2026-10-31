@@ -9,6 +9,8 @@
 namespace {
 constexpr UINT_PTR kShowFallbackTimer = 1;
 constexpr UINT kShowFallbackMs = 4000;
+constexpr wchar_t kWindowKey[] = L"Software\\Streak";
+constexpr wchar_t kPlacementValue[] = L"WindowPlacement";
 }
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
@@ -20,6 +22,7 @@ bool FlutterWindow::OnCreate() {
   if (!Win32Window::OnCreate()) {
     return false;
   }
+  RestorePlacement();
 
   RECT frame = GetClientArea();
 
@@ -47,7 +50,7 @@ bool FlutterWindow::OnCreate() {
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
     KillTimer(this->GetHandle(), kShowFallbackTimer);
-    this->Show();
+    this->Reveal();
   });
 
   SetTimer(GetHandle(), kShowFallbackTimer, kShowFallbackMs, nullptr);
@@ -81,6 +84,46 @@ void FlutterWindow::SetFullscreen(bool on) {
                    SWP_FRAMECHANGED);
 }
 
+void FlutterWindow::RestorePlacement() {
+  WINDOWPLACEMENT placement = {};
+  DWORD size = sizeof(placement);
+  if (RegGetValueW(HKEY_CURRENT_USER, kWindowKey, kPlacementValue,
+                   RRF_RT_REG_BINARY, nullptr, &placement,
+                   &size) != ERROR_SUCCESS ||
+      size != sizeof(placement) || placement.length != sizeof(placement)) {
+    return;
+  }
+  const RECT& rect = placement.rcNormalPosition;
+  if (rect.right <= rect.left || rect.bottom <= rect.top) {
+    return;
+  }
+  maximized_ = placement.showCmd == SW_SHOWMAXIMIZED ||
+               (placement.showCmd == SW_SHOWMINIMIZED &&
+                (placement.flags & WPF_RESTORETOMAXIMIZED));
+  placement.showCmd = SW_HIDE;
+  placement.flags = 0;
+  SetWindowPlacement(GetHandle(), &placement);
+}
+
+void FlutterWindow::SavePlacement() {
+  HWND hwnd = GetHandle();
+  if (hwnd == nullptr || !IsWindowVisible(hwnd)) {
+    return;
+  }
+  WINDOWPLACEMENT placement = {sizeof(placement)};
+  if (fullscreen_) {
+    placement = windowed_placement_;
+  } else if (!GetWindowPlacement(hwnd, &placement)) {
+    return;
+  }
+  RegSetKeyValueW(HKEY_CURRENT_USER, kWindowKey, kPlacementValue, REG_BINARY,
+                  &placement, sizeof(placement));
+}
+
+void FlutterWindow::Reveal() {
+  ShowWindow(GetHandle(), maximized_ ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL);
+}
+
 void FlutterWindow::OnDestroy() {
   window_channel_ = nullptr;
   if (flutter_controller_) {
@@ -94,6 +137,9 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (message == WM_CLOSE) {
+    SavePlacement();
+  }
   if (flutter_controller_) {
     std::optional<LRESULT> result =
         flutter_controller_->HandleTopLevelWindowProc(hwnd, message, wparam,
@@ -110,7 +156,7 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
     case WM_TIMER:
       if (wparam == kShowFallbackTimer) {
         KillTimer(hwnd, kShowFallbackTimer);
-        Show();
+        Reveal();
       }
       break;
   }
