@@ -379,7 +379,9 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _scheduleUnit == ScheduleUnit.months &&
         !fromLastDone &&
         _monthWeekday;
-    final focusOnly = _kind == HabitKind.positive && _focusOnly;
+    final focusOnly = (_kind == HabitKind.positive ||
+            quantitative && _quantKind == QuantKind.time) &&
+        _focusOnly;
     final healthSteps =
         quantitative && _quantKind == QuantKind.generic && _healthSteps;
     final substeps = _kind == HabitKind.positive && !focusOnly
@@ -1308,6 +1310,12 @@ class _HabitFormPageState extends State<HabitFormPage> {
 
   List<Widget> _focusTimerFields() => [
     SectionLabel(context.l10n.focus),
+    FocusOnlyToggle(
+      value: _focusOnly,
+      color: _color,
+      onChanged: (v) => setState(() => _focusOnly = v),
+    ),
+    const SizedBox(height: 12),
     FocusDurationChips(
       minutes: _focusMinutes,
       onChanged: (v) => setState(() => _focusMinutes = v),
