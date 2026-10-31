@@ -219,6 +219,7 @@
       }
     }
   },
+  "month_fixed_day_hint": "For the same date every month, pick Interval and set it to every 1 month",
   "times_per_month": "{n} times per month",
   "@times_per_month": {
     "placeholders": {

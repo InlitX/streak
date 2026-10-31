@@ -185,6 +185,7 @@
   "sched_days": "Días",
   "sched_interval": "Intervalo",
   "times_per_week": "{n} veces por semana",
+  "month_fixed_day_hint": "Para la misma fecha cada mes, elige Intervalo y ponlo cada 1 mes",
   "times_per_month": "{n} veces por mes",
   "freq_per_week_short": "{n}×/semana",
   "freq_per_month_short": "{n}×/mes",
