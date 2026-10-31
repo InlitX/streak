@@ -16,7 +16,7 @@ Future<bool> allowManualCheck(
   required Habit habit,
   required DateTime date,
 }) async {
-  if (habit.needsFocusSession && habit.isCompletedOn(date)) {
+  if (habit.needsFocusSession && !habit.isTimeAmount && habit.isCompletedOn(date)) {
     final cleared = await showAppConfirmDialog(
       context,
       title: context.l10n.focus_only_clear_title,

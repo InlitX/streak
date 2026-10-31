@@ -19,6 +19,7 @@ import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/heatmap_path.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
@@ -121,6 +122,8 @@ class _QuantTile extends StatelessWidget {
 
   Future<void> _add(BuildContext context, DateTime today) async {
     final controller = context.read<HabitsController>();
+    if (!await allowManualCheck(context, habit: habit, date: today)) return;
+    if (!context.mounted) return;
     final allowed =
         await confirmUnscheduledDay(context, habit: habit, date: today);
     if (!allowed) return;

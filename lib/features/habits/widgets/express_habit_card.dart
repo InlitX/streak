@@ -25,6 +25,7 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/frequency_chip.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/habits/widgets/streak_label.dart';
@@ -344,6 +345,8 @@ class ExpressAction extends StatelessWidget {
   Future<void> _addAmount(BuildContext context) async {
     final controller = context.read<HabitsController>();
     final today = AppClock.now();
+    if (!await allowManualCheck(context, habit: habit, date: today)) return;
+    if (!context.mounted) return;
     if (!await confirmUnscheduledDay(context, habit: habit, date: today)) {
       return;
     }
