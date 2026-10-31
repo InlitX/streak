@@ -1,0 +1,15 @@
+Streak 2.6.0 🎃
+
+Happy Halloween!
+
+- Color themes: Catppuccin, Tokyo Night, Nord, Gruvbox, Rose Pine or your own
+- Repeating to-dos
+- Amount habits can be a limit
+- Links that mark a habit from other apps
+- Monthly habits on a fixed day
+- A sound for each habit and a chime when done
+- Export a single habit and reorder steps
+- A tidier Focus screen, music fades for the alert
+- Focus board widget and "Only today's" option
+- Unchecking a day now syncs
+- Many fixes and updated languages

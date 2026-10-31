@@ -1,0 +1,15 @@
+Streak 2.6.0 🎃
+
+¡Feliz Halloween!
+
+- Temas de color y colores propios
+- Tareas que se repiten
+- Los hábitos de cantidad pueden ser un límite
+- Enlaces que marcan un hábito desde otras apps
+- Hábitos mensuales en un día fijo
+- Un sonido para cada hábito y un aviso al completarlo
+- Exportar un solo hábito y reordenar pasos
+- Focus más limpio, la música baja con el aviso
+- Widget de Focus y opción "Solo los de hoy"
+- Desmarcar un día ya se sincroniza
+- Muchas correcciones e idiomas actualizados
