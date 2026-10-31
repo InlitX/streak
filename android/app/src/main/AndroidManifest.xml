@@ -221,6 +221,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LinkActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="streak" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".HeatmapWidgetProvider"
             android:label="@string/widget_heatmap_label"

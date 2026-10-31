@@ -33,6 +33,7 @@ class MainActivity : FlutterFragmentActivity() {
                 .also { FocusBridge.attach(applicationContext, it) }
         HealthBridge.attach(this, MethodChannel(flutterEngine.dartExecutor.binaryMessenger, HealthBridge.CHANNEL))
         SoundBridge.attach(applicationContext, MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SoundBridge.CHANNEL))
+        live = this
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -68,6 +69,7 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     override fun onDestroy() {
+        if (live === this) live = null
         FocusBridge.detach(focusChannel)
         SoundBridge.detach()
         super.onDestroy()
@@ -153,6 +155,19 @@ class MainActivity : FlutterFragmentActivity() {
                 else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP,
             )
+        }
+    }
+
+    companion object {
+        private var live: MainActivity? = null
+
+        fun deliverLink(link: String, fallback: () -> Unit) {
+            val target = live?.channel ?: return fallback()
+            target.invokeMethod("link", link, object : MethodChannel.Result {
+                override fun success(result: Any?) {}
+                override fun error(code: String, message: String?, details: Any?) = fallback()
+                override fun notImplemented() = fallback()
+            })
         }
     }
 }
