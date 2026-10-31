@@ -278,6 +278,7 @@
   "undo": "Deshacer",
   "habit_archived": "Hábito archivado",
   "duplicate_habit": "Duplicar hábito",
+  "export_habit": "Exportar este hábito",
   "habit_duplicated": "{name} añadido",
   "share_blur": "Desenfoque",
   "delete_habit_body": "¿Eliminar \"{name}\"? Esto no se puede deshacer.",

@@ -320,6 +320,7 @@
   "undo": "Undo",
   "habit_archived": "Habit archived",
   "duplicate_habit": "Duplicate habit",
+  "export_habit": "Export this habit",
   "habit_duplicated": "{name} added",
   "@habit_duplicated": {
     "placeholders": {
