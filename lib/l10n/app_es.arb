@@ -684,6 +684,8 @@
   "focus_track_pad": "Fondo cálido",
   "focus_add_track": "Añadir pista",
   "focus_resources": "Recursos",
+  "focus_simple_view": "Vista simple",
+  "focus_double_tap_tip": "Toca dos veces el reloj para volver",
   "focus_shuffle": "Aleatorio",
   "focus_loop": "En orden",
   "focus_repeat_one": "Repetir una",

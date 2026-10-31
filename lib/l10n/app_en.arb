@@ -780,6 +780,8 @@
   "focus_track_pad": "Warm pad",
   "focus_add_track": "Add track",
   "focus_resources": "Resources",
+  "focus_simple_view": "Simple view",
+  "focus_double_tap_tip": "Double tap the clock to go back",
   "focus_shuffle": "Shuffle",
   "focus_loop": "In order",
   "focus_repeat_one": "Repeat one",
