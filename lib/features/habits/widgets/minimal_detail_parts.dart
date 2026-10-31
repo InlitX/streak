@@ -53,8 +53,6 @@ class MinimalDetailHeader extends StatelessWidget {
               children: [
                 Text(
                   habit.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   style: MinimalType.display(
                     28,
                     color: context.colors.onSurface,

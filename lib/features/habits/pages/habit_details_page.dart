@@ -186,7 +186,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 HabitGlyph(glyph: habit.icon, color: habit.color.shownIn(context), size: 22),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(habit.name, overflow: TextOverflow.ellipsis),
+                  child: _ClassicTitle(habit.name),
                 ),
               ],
             ),
@@ -588,8 +588,6 @@ class _ExpressHeader extends StatelessWidget {
           Expanded(
             child: Text(
               habit.name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
@@ -914,6 +912,35 @@ class _FocusTile extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _ClassicTitle extends StatelessWidget {
+  const _ClassicTitle(this.name);
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, box) {
+        final painter = TextPainter(
+          text: TextSpan(text: name, style: DefaultTextStyle.of(context).style),
+          maxLines: 1,
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout(maxWidth: box.maxWidth);
+        final fits = !painter.didExceedMaxLines;
+        painter.dispose();
+        if (fits) return Text(name, maxLines: 1);
+        return Text(
+          name,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 18, height: 1.15),
+        );
+      },
     );
   }
 }
