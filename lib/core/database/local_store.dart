@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -26,6 +27,7 @@ class LocalStore {
   static const _changesKey = 'syncChanges';
   static const _deletedKey = 'syncDeleted';
   static const _clearedKey = 'syncCleared';
+  static const _daysKey = 'syncDays';
   static const _deviceKey = 'deviceId';
   static const _quietZone = #streakQuiet;
   static const _forgetAfter = Duration(days: 120);
@@ -48,6 +50,7 @@ class LocalStore {
   static Map<String, int>? _changes;
   static Map<String, int>? _deleted;
   static Map<String, int>? _cleared;
+  static Map<String, int>? _days;
   static Completer<void>? _idle;
 
   static Map<String, int> _stamps(String key) => {
@@ -60,6 +63,8 @@ class LocalStore {
   static Map<String, int> get deleted => _deleted ??= _forgetOld(_stamps(_deletedKey));
 
   static Map<String, int> get cleared => _cleared ??= _stamps(_clearedKey);
+
+  static Map<String, int> get days => _days ??= _forgetOld(_stamps(_daysKey));
 
   static Map<String, int> _forgetOld(Map<String, int> marks) {
     final limit = DateTime.now().subtract(_forgetAfter).millisecondsSinceEpoch;
@@ -96,6 +101,24 @@ class LocalStore {
       cleared[id] = at;
     }
     await _settings.put(_clearedKey, Map<String, int>.of(cleared));
+  }
+
+  static Future<void> stampDays(Map<String, int> marks) async {
+    if (marks.isEmpty) return;
+    days.addAll(marks);
+    await _settings.put(_daysKey, Map<String, int>.of(days));
+  }
+
+  static Future<void> _touchDays(Habit habit) async {
+    if (_quiet || !_tracking) return;
+    final before = LocalStore.habit(habit.id)?.completions ?? const {};
+    final now = DateTime.now().millisecondsSinceEpoch;
+    await stampDays({
+      for (final day in {...before.keys, ...habit.completions.keys})
+        if (jsonEncode(before[day]?.toMap()) !=
+            jsonEncode(habit.completions[day]?.toMap()))
+          '${habit.id}|$day': now,
+    });
   }
 
   static Future<void> _touch(Iterable<String> ids) async {
@@ -169,6 +192,7 @@ class LocalStore {
     _changes = null;
     _deleted = null;
     _cleared = null;
+    _days = null;
     _categories = await Hive.openBox(_categoriesBox);
     _notes = await Hive.openBox(_notesBox);
     _focus = await Hive.openBox(_focusBox);
@@ -388,6 +412,7 @@ class LocalStore {
   static String? habitName(String id) => habit(id)?.name;
 
   static Future<void> writeHabit(Habit habit) async {
+    await _touchDays(habit);
     await _habits.put(habit.id, habit.toJson());
     _habitsStamp = _stampOf(_habits);
     await _touch([habit.id]);
@@ -517,5 +542,6 @@ class LocalStore {
     _changes = null;
     _deleted = null;
     _cleared = null;
+    _days = null;
   }
 }
