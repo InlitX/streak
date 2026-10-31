@@ -41,6 +41,7 @@ class BackupData {
     this.changes = const {},
     this.deleted = const {},
     this.cleared = const {},
+    this.days = const {},
   });
 
   final List<Habit> habits;
@@ -56,6 +57,7 @@ class BackupData {
   final Map<String, int> changes;
   final Map<String, int> deleted;
   final Map<String, int> cleared;
+  final Map<String, int> days;
 
   bool get isEmpty =>
       habits.isEmpty && notes.isEmpty && focus.isEmpty && todos.isEmpty;
@@ -72,6 +74,7 @@ class BackupService {
         'changes': LocalStore.changes,
         'deleted': LocalStore.deleted,
         'cleared': LocalStore.cleared,
+        'days': LocalStore.days,
         'habits': habits.map((h) => h.toMap()).toList(),
         'categories':
             LocalStore.readCategories().map((c) => c.toMap()).toList(),
@@ -389,6 +392,7 @@ class BackupService {
       changes: _stamps(root['changes']),
       deleted: _stamps(root['deleted']),
       cleared: _stamps(root['cleared']),
+      days: _stamps(root['days']),
     );
 
     if (data.isEmpty && data.deleted.isEmpty) {
