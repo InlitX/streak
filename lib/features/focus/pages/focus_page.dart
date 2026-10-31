@@ -350,7 +350,6 @@ class _FocusPageState extends State<FocusPage> {
               Positioned.fill(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: _toggleRunning,
                   onDoubleTap: _toggleBig,
                 ),
               ),
