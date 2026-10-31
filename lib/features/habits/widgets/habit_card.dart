@@ -75,6 +75,7 @@ class HabitCard extends StatelessWidget {
         child: InkWell(
           onTap: onOpen,
           hoverColor: Colors.transparent,
+          onSecondaryTap: onLongPress,
           onLongPress: onLongPress == null
               ? null
               : () {
