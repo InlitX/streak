@@ -104,11 +104,14 @@ class _MusicSheet extends StatelessWidget {
       top: false,
       bottom: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 2, 20, 0),
+        padding: const EdgeInsets.only(top: 2),
         child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.only(
-            bottom: 16 + MediaQuery.paddingOf(context).bottom,
+          padding: EdgeInsets.fromLTRB(
+            20,
+            0,
+            20,
+            16 + MediaQuery.paddingOf(context).bottom,
           ),
           children: [
             Row(
@@ -283,9 +286,12 @@ class _TrackList extends StatelessWidget {
           colors: [Colors.white, Colors.white, Colors.transparent],
           stops: [0, 0.86, 1],
         ).createShader(bounds),
-        child: ListView(
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: ListView(
           padding: const EdgeInsets.only(bottom: _row / 2),
           children: children,
+        ),
         ),
       ),
     );
