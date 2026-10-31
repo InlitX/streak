@@ -64,16 +64,18 @@ void main() {
     expect(tester.hasRunningAnimations, isFalse);
   });
 
-  testWidgets('with animations off it falls back to an ellipsis',
+  testWidgets('with animations off it stays still and the finger moves it',
       (tester) async {
     await _pump(tester, 'Read twenty pages before going to sleep',
         animations: false);
     await tester.pump();
+    await tester.pump(const Duration(seconds: 6));
 
-    expect(find.byType(SingleChildScrollView), findsNothing);
-    expect(
-      tester.widget<Text>(find.byType(Text)).overflow,
-      TextOverflow.ellipsis,
-    );
+    expect(_offset(tester), 0);
+    expect(tester.hasRunningAnimations, isFalse);
+
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(-60, 0));
+    await tester.pump();
+    expect(_offset(tester), greaterThan(0));
   });
 }

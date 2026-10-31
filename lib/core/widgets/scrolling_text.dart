@@ -57,6 +57,7 @@ class _ScrollingLineState extends State<ScrollingLine>
     _heading = heading;
     if (heading != ScrollDirection.forward) return;
     if (_overflow <= 0 || _controller.isAnimating) return;
+    if (MediaQuery.disableAnimationsOf(context)) return;
     _round = widget.rounds - 1;
     _controller.forward(from: 0);
   }
@@ -105,9 +106,8 @@ class _ScrollingLineState extends State<ScrollingLine>
       ),
     ]).animate(_controller);
     _round = 0;
-    _controller
-      ..duration = Duration(milliseconds: (crossing + pause) * 2)
-      ..forward(from: 0);
+    _controller.duration = Duration(milliseconds: (crossing + pause) * 2);
+    if (!MediaQuery.disableAnimationsOf(context)) _controller.forward(from: 0);
   }
 
   void _follow() {
@@ -122,13 +122,16 @@ class _ScrollingLineState extends State<ScrollingLine>
 
   @override
   Widget build(BuildContext context) {
+    final still = MediaQuery.disableAnimationsOf(context);
+    if (still) _controller.stop();
     final line = SingleChildScrollView(
       controller: _scroll,
       scrollDirection: Axis.horizontal,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: still
+          ? const ClampingScrollPhysics()
+          : const NeverScrollableScrollPhysics(),
       child: widget.child,
     );
-    if (MediaQuery.disableAnimationsOf(context)) return line;
 
     _scheduleTune();
     if (_overflow <= 0) return line;
@@ -162,14 +165,6 @@ class ScrollingText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.disableAnimationsOf(context)) {
-      return Text(
-        text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: style,
-      );
-    }
     return ScrollingLine(
       speed: speed,
       pause: pause,
