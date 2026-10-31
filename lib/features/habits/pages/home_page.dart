@@ -703,7 +703,7 @@ class _HomePageState extends State<HomePage> {
                   ? _ReorderBanner(text: context.l10n.reorder_hint)
                   : express
                   ? ExpressTodayHeader(
-                      habits: active,
+                      habits: counted,
                       done: done,
                       total: total,
                       ratio: ratio,
