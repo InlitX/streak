@@ -71,6 +71,8 @@ class Habit {
     this.bookPages = 0,
     this.bookSince,
     this.bookSkip = 0,
+    this.bookStart = 0,
+    this.readsBefore = 0,
     this.pastReads = const [],
     this.soundUri = '',
     this.soundName = '',
@@ -224,6 +226,10 @@ class Habit {
 
   final double bookSkip;
 
+  final double bookStart;
+
+  final int readsBefore;
+
   final List<BookRead> pastReads;
 
   bool get tracksBook =>
@@ -236,6 +242,8 @@ class Habit {
     pages: bookPages,
     since: bookSince,
     skip: bookSkip,
+    atPage: bookStart,
+    before: readsBefore,
     past: pastReads,
   );
 
@@ -249,6 +257,14 @@ class Habit {
         bookPages: pages,
         bookSince: AppClock.today(),
         bookSkip: _readToday,
+        bookStart: 0,
+        pastReads: finishedReads,
+      );
+
+  Habit atPage(double page) => copyWith(
+        bookSince: AppClock.today(),
+        bookSkip: _readToday,
+        bookStart: page,
         pastReads: finishedReads,
       );
 
@@ -258,6 +274,7 @@ class Habit {
     return copyWith(
       bookSince: AppClock.today(),
       bookSkip: _readToday,
+      bookStart: 0,
       pastReads: before.finishedReads,
     );
   }
@@ -916,6 +933,8 @@ class Habit {
     double? bookPages,
     DateTime? bookSince,
     double? bookSkip,
+    double? bookStart,
+    int? readsBefore,
     List<BookRead>? pastReads,
     String? soundUri,
     String? soundName,
@@ -974,6 +993,8 @@ class Habit {
       bookPages: bookPages ?? this.bookPages,
       bookSince: bookSince ?? this.bookSince,
       bookSkip: bookSkip ?? this.bookSkip,
+      bookStart: bookStart ?? this.bookStart,
+      readsBefore: readsBefore ?? this.readsBefore,
       pastReads: pastReads ?? this.pastReads,
       soundUri: soundUri ?? this.soundUri,
       soundName: soundName ?? this.soundName,
@@ -1045,6 +1066,8 @@ class Habit {
         if (bookPages > 0) 'bookPages': bookPages,
         if (bookSince != null) 'bookSince': bookSince!.dayKey,
         if (bookSkip > 0) 'bookSkip': bookSkip,
+        if (bookStart > 0) 'bookStart': bookStart,
+        if (readsBefore > 0) 'readsBefore': readsBefore,
         if (pastReads.isNotEmpty)
           'pastReads': pastReads.map((read) => read.toMap()).toList(),
         if (soundUri.isNotEmpty) 'soundUri': soundUri,
@@ -1125,6 +1148,8 @@ class Habit {
             ? parseDayKey(map['bookSince'] as String)
             : null,
         bookSkip: (map['bookSkip'] as num?)?.toDouble() ?? 0,
+        bookStart: (map['bookStart'] as num?)?.toDouble() ?? 0,
+        readsBefore: (map['readsBefore'] as num?)?.toInt() ?? 0,
         pastReads: map['pastReads'] == null
             ? const []
             : (map['pastReads'] as List)

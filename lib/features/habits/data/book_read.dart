@@ -26,13 +26,19 @@ class BookRead {
 }
 
 class BookProgress {
-  const BookProgress({required this.reads, required this.page, required this.pages});
+  const BookProgress({
+    required this.reads,
+    required this.page,
+    required this.pages,
+    this.before = 0,
+  });
 
   final List<BookRead> reads;
   final double page;
   final double pages;
+  final int before;
 
-  int get finished => reads.where((read) => read.isFinished).length;
+  int get finished => before + reads.where((read) => read.isFinished).length;
 
   double get left => pages - page;
 
@@ -44,9 +50,13 @@ class BookProgress {
     required double pages,
     required DateTime? since,
     double skip = 0,
+    double atPage = 0,
+    int before = 0,
     required List<BookRead> past,
   }) {
-    if (pages <= 0) return BookProgress(reads: past, page: 0, pages: 0);
+    if (pages <= 0) {
+      return BookProgress(reads: past, page: 0, pages: 0, before: before);
+    }
     final from = since?.epochDay;
     final today = AppClock.today().epochDay;
     final days = <({int day, double count})>[];
@@ -59,8 +69,8 @@ class BookProgress {
     days.sort((a, b) => a.day.compareTo(b.day));
 
     final reads = [...past];
-    var page = 0.0;
-    DateTime? start;
+    var page = atPage.clamp(0, pages - 1).toDouble();
+    DateTime? start = page > 0 ? since : null;
     for (final (:day, :count) in days) {
       final date = epochDayDate(day);
       start ??= date;
@@ -72,6 +82,6 @@ class BookProgress {
       }
     }
     if (start != null) reads.add(BookRead(start: start, pages: pages));
-    return BookProgress(reads: reads, page: page, pages: pages);
+    return BookProgress(reads: reads, page: page, pages: pages, before: before);
   }
 }

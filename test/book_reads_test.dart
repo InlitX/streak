@@ -89,4 +89,28 @@ void main() {
     expect(back.bookSince, today);
     expect(back.book.finished, 1);
   });
+
+  test('a book already started goes on from the page given', () {
+    final habit = _book({10: 100, 5: 30}).atPage(171).copyWith(bookPages: 320);
+    expect(habit.book.page, 171);
+    expect(habit.book.current?.start, today);
+    expect(habit.book.finished, 1);
+  });
+
+  test('the page given adds up with what comes after', () {
+    final habit = _book({}, size: 320)
+        .atPage(310)
+        .copyWith(completions: {
+      today.dayKey: Completion(date: today.dayKey, count: 15),
+    });
+    expect(habit.book.finished, 1);
+    expect(habit.book.page, 5);
+  });
+
+  test('reads from before the app count and survive a backup', () {
+    final habit = _book({10: 100}).copyWith(readsBefore: 2).atPage(40);
+    final back = Habit.fromJson(habit.toJson());
+    expect(back.book.finished, 3);
+    expect(back.book.page, 40);
+  });
 }
