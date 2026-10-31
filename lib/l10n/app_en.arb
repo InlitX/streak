@@ -1031,6 +1031,8 @@
   "language_sub": "The language of the whole app",
   "week_start_sub": "The first column of every grid",
   "celebration_sub": "What you see when you tick a habit",
+  "check_sound": "Sound when completing",
+  "check_sound_sub": "A soft chime when you finish a habit. Silent when your phone is on silent.",
   "start_view_sub": "The view Today opens in",
   "quotes_sub": "Which quotes show up on Today",
   "focus_daily_goal_sub": "Minutes of focus you aim for each day",

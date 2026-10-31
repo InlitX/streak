@@ -890,6 +890,8 @@
   "language_sub": "El idioma de toda la app",
   "week_start_sub": "La primera columna de cada rejilla",
   "celebration_sub": "Lo que ves al marcar un hábito",
+  "check_sound": "Sonido al completar",
+  "check_sound_sub": "Una campanita suave al terminar un hábito. No suena con el móvil en silencio.",
   "start_view_sub": "La vista con la que abre Hoy",
   "quotes_sub": "Qué frases salen en Hoy",
   "focus_daily_goal_sub": "Minutos de foco que buscas cada día",
