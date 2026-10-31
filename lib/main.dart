@@ -123,6 +123,12 @@ Future<void> _startup() async {
       final page = call.arguments as String?;
       if (page != null) _openPage(page);
     }
+    if (call.method == 'link') {
+      final link = Uri.tryParse(call.arguments as String? ?? '');
+      final context = AppNavigator.key.currentContext;
+      if (link == null || context == null) throw StateError('No app to take the link');
+      await context.read<HabitsController>().applyLink(link);
+    }
     return null;
   });
 

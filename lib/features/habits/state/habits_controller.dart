@@ -5,6 +5,7 @@ import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/habit_links.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/data/vacation.dart';
@@ -289,6 +290,13 @@ class HabitsController extends ChangeNotifier {
     final habit = _habits[id];
     if (habit == null) return;
     await _apply(habit, CompletionOps.clearRelapse(habit, date));
+  }
+
+  Future<void> applyLink(Uri link) async {
+    final habit = _habits[link.queryParameters['habit']];
+    if (habit == null) return;
+    final completions = HabitLinks.apply(habit, link);
+    if (completions != null) await _apply(habit, completions);
   }
 
   Future<void> addProgress(

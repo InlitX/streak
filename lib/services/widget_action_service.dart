@@ -7,6 +7,7 @@ import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/habit_links.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/notification_service.dart';
@@ -39,6 +40,11 @@ class WidgetActionService {
         final uri = Uri.parse(raw);
         if (uri.queryParameters.containsKey('todoId')) {
           ticked.addAll(_applyTodo(todos, uri));
+          continue;
+        }
+        if (HabitLinks.marksHabit(uri)) {
+          final id = _applyLink(habits, uri);
+          if (id != null) touched.add(id);
           continue;
         }
         final id = _apply(habits, uri);
@@ -131,6 +137,15 @@ class WidgetActionService {
     final index = int.tryParse(uri.queryParameters['dayIndex'] ?? '');
     if (index == null) return null;
     return AppClock.now().subtract(Duration(days: 6 - index)).atMidnight;
+  }
+
+  static String? _applyLink(Map<String, Habit> habits, Uri uri) {
+    final habit = habits[uri.queryParameters['habit']];
+    if (habit == null) return null;
+    final completions = HabitLinks.apply(habit, uri);
+    if (completions == null) return null;
+    habits[habit.id] = habit.copyWith(completions: completions);
+    return habit.id;
   }
 
   static String? _apply(Map<String, Habit> habits, Uri uri) {
