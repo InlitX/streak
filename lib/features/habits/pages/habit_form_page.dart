@@ -1166,6 +1166,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
             max: _interval == HabitInterval.weekly ? 6 : 25,
             onChanged: (v) => setState(() => _frequency = v.round()),
           ),
+          if (_interval == HabitInterval.monthly) const MonthFixedDayHint(),
         ] else if (_interval == HabitInterval.everyXDays) ...[
           const SizedBox(height: 10),
           ScheduleUnitRow(selected: _scheduleUnit, onChanged: _pickUnit),

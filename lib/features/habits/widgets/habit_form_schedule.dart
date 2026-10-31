@@ -102,6 +102,7 @@ class IntervalSelector extends StatelessWidget {
             max: _max,
             onChanged: onFrequencyChanged,
           ),
+          if (interval == HabitInterval.monthly) const MonthFixedDayHint(),
         ] else if (interval == HabitInterval.everyXDays) ...[
           const SizedBox(height: 10),
           ScheduleUnitRow(selected: unit, onChanged: onUnitChanged),
@@ -416,6 +417,34 @@ class AddReminderButton extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MonthFixedDayHint extends StatelessWidget {
+  const MonthFixedDayHint({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = context.tokens.muted;
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 1),
+            child: Icon(LucideIcons.info, size: 15, color: color),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              context.l10n.month_fixed_day_hint,
+              style: TextStyle(fontSize: 12.5, height: 1.3, color: color),
+            ),
+          ),
+        ],
       ),
     );
   }
