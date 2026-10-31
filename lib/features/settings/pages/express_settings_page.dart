@@ -596,6 +596,13 @@ List<Widget> _preferenceTiles(BuildContext context) {
             onSelected: settings.setCelebration,
           ),
         ),
+        _Toggle(
+          icon: LucideIcons.volume2,
+          title: context.l10n.check_sound,
+          subtitle: context.l10n.check_sound_sub,
+          value: settings.checkSound,
+          onChanged: settings.setCheckSound,
+        ),
       ],
     ),
     const SizedBox(height: 24),

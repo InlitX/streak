@@ -416,6 +416,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     ),
                   ),
                   settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.volume2,
+                    title: context.l10n.check_sound,
+                    subtitle: context.l10n.check_sound_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.checkSound ? 1 : 0,
+                      onChanged: (i) => settings.setCheckSound(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
                   NavRow(
                     icon: LucideIcons.quote,
                     title: context.l10n.quotes,

@@ -14,6 +14,7 @@ const backupSettingKeys = {
   'bgImage',
   'cardActivity',
   'celebration',
+  'checkSound',
   'checkStyle',
   'colorTheme',
   'compactCards',

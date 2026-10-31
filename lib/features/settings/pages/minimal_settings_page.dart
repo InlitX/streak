@@ -469,6 +469,15 @@ class _PreferencesPage extends StatelessWidget {
                 onSelected: settings.setCelebration,
               ),
             ),
+            SoftRow(
+              icon: LucideIcons.volume2,
+              title: context.l10n.check_sound,
+              subtitle: context.l10n.check_sound_sub,
+              trailing: _SoftSwitch(
+                value: settings.checkSound,
+                onChanged: settings.setCheckSound,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 22),

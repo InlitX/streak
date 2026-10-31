@@ -80,6 +80,7 @@ class SettingsController extends ChangeNotifier {
     _swipeCards = LocalStore.setting('swipeCards', false);
     _cardActivity = LocalStore.setting('cardActivity', true);
     _viewSwitcher = LocalStore.setting('viewSwitcher', true);
+    _checkSound = LocalStore.setting('checkSound', false);
     _compactCards = LocalStore.setting('compactCards', false);
     _glassEffects = LocalStore.setting('glassEffects', true);
     _animations = LocalStore.setting('animations', true);
@@ -182,6 +183,7 @@ class SettingsController extends ChangeNotifier {
   late bool _swipeCards;
   late bool _cardActivity;
   late bool _viewSwitcher;
+  late bool _checkSound;
   late bool _compactCards;
   late bool _glassEffects;
   late bool _animations;
@@ -412,6 +414,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setCardActivity(bool value) async {
     _cardActivity = value;
     await LocalStore.writeSetting('cardActivity', value);
+    notifyListeners();
+  }
+
+  bool get checkSound => _checkSound;
+
+  Future<void> setCheckSound(bool value) async {
+    _checkSound = value;
+    await LocalStore.writeSetting('checkSound', value);
     notifyListeners();
   }
 
