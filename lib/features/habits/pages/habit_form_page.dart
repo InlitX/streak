@@ -96,6 +96,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   bool _focusOnly = false;
   bool _tracking = false;
   bool _anyAmount = false;
+  bool _atMost = false;
   bool _healthSteps = false;
   bool _trackSpent = false;
   int _cleanGoal = 0;
@@ -216,6 +217,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       _focusOnly = habit.focusOnly;
       _tracking = habit.tracking;
       _anyAmount = habit.anyAmount;
+      _atMost = habit.atMost;
       _healthSteps = habit.readsSteps;
       _trackSpent = habit.trackSpent;
       _cleanGoal = habit.cleanGoal;
@@ -266,6 +268,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _focusOnly,
         _tracking,
         _anyAmount,
+        _atMost,
         _healthSteps,
         _trackSpent,
         _cleanGoal,
@@ -419,7 +422,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
           focusOnly: focusOnly,
           tracking: _tracking,
           healthSteps: healthSteps,
-          anyAmount: quantitative && _anyAmount,
+          anyAmount: quantitative && _anyAmount && !_atMost,
+          atMost: quantitative && _atMost,
           anySteps: substeps.isNotEmpty && _anySteps,
           stepsNeeded: _stepsNeeded.clamp(1, substeps.isEmpty ? 1 : substeps.length),
           difficulty: _difficulty,
@@ -471,7 +475,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
         focusOnly: focusOnly,
         tracking: _tracking,
         healthSteps: healthSteps,
-        anyAmount: quantitative && _anyAmount,
+        anyAmount: quantitative && _anyAmount && !_atMost,
+        atMost: quantitative && _atMost,
         anySteps: substeps.isNotEmpty && _anySteps,
         stepsNeeded: _stepsNeeded.clamp(1, substeps.isEmpty ? 1 : substeps.length),
         difficulty: _difficulty,
@@ -705,7 +710,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onChanged: (v) => setState(() => _noGoal = v),
         ),
         if (!_noGoal) const SizedBox(height: 12),
-        if (!_noGoal) AnyAmountToggle(
+        if (!_noGoal) AtMostToggle(
+          value: _atMost,
+          color: _color,
+          onChanged: (v) => setState(() => _atMost = v),
+        ),
+        if (!_noGoal && !_atMost) const SizedBox(height: 12),
+        if (!_noGoal && !_atMost) AnyAmountToggle(
           value: _anyAmount,
           color: _color,
           onChanged: (v) => setState(() => _anyAmount = v),
@@ -1044,7 +1055,14 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onChanged: (v) => setState(() => _noGoal = v),
         ),
         if (!_noGoal) const SizedBox(height: 16),
-        if (!_noGoal) AnyAmountToggle(
+        if (!_noGoal) AtMostToggle(
+          value: _atMost,
+          color: _color,
+          compact: true,
+          onChanged: (v) => setState(() => _atMost = v),
+        ),
+        if (!_noGoal && !_atMost) const SizedBox(height: 16),
+        if (!_noGoal && !_atMost) AnyAmountToggle(
           value: _anyAmount,
           color: _color,
           compact: true,
@@ -1442,7 +1460,13 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 onChanged: (v) => setState(() => _noGoal = v),
               ),
               if (!_noGoal) const SizedBox(height: 12),
-              if (!_noGoal) AnyAmountToggle(
+              if (!_noGoal) AtMostToggle(
+                value: _atMost,
+                color: _color,
+                onChanged: (v) => setState(() => _atMost = v),
+              ),
+              if (!_noGoal && !_atMost) const SizedBox(height: 12),
+              if (!_noGoal && !_atMost) AnyAmountToggle(
                 value: _anyAmount,
                 color: _color,
                 onChanged: (v) => setState(() => _anyAmount = v),

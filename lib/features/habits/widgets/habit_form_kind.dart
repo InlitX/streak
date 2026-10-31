@@ -517,6 +517,32 @@ class NoGoalToggle extends StatelessWidget {
       );
 }
 
+class AtMostToggle extends StatelessWidget {
+  const AtMostToggle({
+    super.key,
+    required this.value,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final bool value;
+  final Color color;
+  final ValueChanged<bool> onChanged;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) => HabitFlagToggle(
+        icon: LucideIcons.gauge,
+        title: context.l10n.at_most,
+        hint: context.l10n.at_most_sub,
+        value: value,
+        color: color,
+        onChanged: onChanged,
+        compact: compact,
+      );
+}
+
 class AnyAmountToggle extends StatelessWidget {
   const AnyAmountToggle({
     super.key,
