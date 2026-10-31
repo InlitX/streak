@@ -107,7 +107,9 @@ class ExpressHabitList extends StatelessWidget {
         return HabitEntrance(
           key: ValueKey('$mode-${habit.id}'),
           index: index,
-          child: SlotTransition(
+          child: Opacity(
+            opacity: extra ? 0.6 : 1,
+            child: SlotTransition(
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: const EdgeInsets.only(bottom: Express.groupGap),
@@ -135,6 +137,7 @@ class ExpressHabitList extends StatelessWidget {
                 ),
               ),
             ),
+          ),
           ),
         );
       },

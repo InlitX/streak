@@ -107,7 +107,9 @@ class ClassicHabitList extends StatelessWidget {
         return HabitEntrance(
           key: ValueKey(habit.id),
           index: index,
-          child: SlotTransition(
+          child: Opacity(
+            opacity: extra ? 0.6 : 1,
+            child: SlotTransition(
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: EdgeInsets.only(bottom: compact ? 3 : 12),
@@ -141,6 +143,7 @@ class ClassicHabitList extends StatelessWidget {
                 ),
               ),
             ),
+          ),
           ),
         );
       },

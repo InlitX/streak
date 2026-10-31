@@ -77,7 +77,9 @@ class MinimalHabitList extends StatelessWidget {
           child: HabitEntrance(
           key: ValueKey(habit.id),
           index: i,
-          child: SlotTransition(
+          child: Opacity(
+            opacity: i > habits.length ? 0.6 : 1,
+            child: SlotTransition(
             leaving: leaving.contains(habit.id),
             child: Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -112,6 +114,7 @@ class MinimalHabitList extends StatelessWidget {
             ),
           ),
           ),
+          ),
         );
       },
     );
@@ -133,7 +136,9 @@ class MinimalHabitList extends StatelessWidget {
           child: HabitEntrance(
           key: ValueKey(group[i].id),
           index: index - 1,
-          child: Padding(
+          child: Opacity(
+            opacity: extra ? 0.6 : 1,
+            child: Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: IntrinsicHeight(
               child: Row(
@@ -149,6 +154,7 @@ class MinimalHabitList extends StatelessWidget {
                 ],
               ),
             ),
+          ),
           ),
           ),
         );
