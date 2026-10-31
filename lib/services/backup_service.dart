@@ -87,6 +87,25 @@ class BackupService {
         },
       };
 
+  static Map<String, Object?> _habitPayload(Habit habit) => {
+        'app': 'streak',
+        'version': _kBackupVersion,
+        'exportedAt': DateTime.now().toIso8601String(),
+        'habits': [habit.toMap()],
+        'categories': LocalStore.readCategories()
+            .where((c) => c.id == habit.category || c.name == habit.category)
+            .map((c) => c.toMap())
+            .toList(),
+        'notes': LocalStore.readNotes()
+            .where((n) => n.habitId == habit.id)
+            .map((n) => n.toMap())
+            .toList(),
+        'focus': LocalStore.readFocusSessions()
+            .where((f) => f.habitId == habit.id)
+            .map((f) => f.toMap())
+            .toList(),
+      };
+
   static bool _hasContent(List<Habit> habits) =>
       habits.isNotEmpty ||
       LocalStore.readNotes().isNotEmpty ||
@@ -233,12 +252,21 @@ class BackupService {
     }
   }
 
-  static Future<bool> export(List<Habit> habits, {Rect? origin}) async {
+  static Future<bool> export(
+    List<Habit> habits, {
+    Rect? origin,
+    Habit? only,
+  }) async {
     final stamp = DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
-    final name = 'streak_backup_$stamp.zip';
+    final name = only == null
+        ? 'streak_backup_$stamp.zip'
+        : 'streak_habit_$stamp.zip';
     final dir = await Directory.systemTemp.createTemp('streak_backup');
     final zip = '${dir.path}/$name';
-    await BackupArchive.pack(_payload(habits), zip);
+    await BackupArchive.pack(
+      only == null ? _payload(habits) : _habitPayload(only),
+      zip,
+    );
 
     if (!isMobile) {
       final path = await FilePicker.platform.saveFile(

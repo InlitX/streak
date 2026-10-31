@@ -524,11 +524,12 @@ class HabitsController extends ChangeNotifier {
     await HomeWidgetService.sync(asMap);
   }
 
-  Future<bool> exportBackup({Rect? origin}) async {
+  Future<bool> exportBackup({Rect? origin, Habit? only}) async {
     try {
       return await BackupService.export(
         _habits.values.toList(),
         origin: origin,
+        only: only,
       );
     } catch (_) {
       return false;
