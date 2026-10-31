@@ -30,6 +30,7 @@ class FocusClock extends StatelessWidget {
     required this.size,
     this.row = false,
     this.paused = false,
+    this.resting = false,
   });
 
   final ClockStyle style;
@@ -40,8 +41,10 @@ class FocusClock extends StatelessWidget {
   final double size;
   final bool row;
   final bool paused;
+  final bool resting;
 
-  static String clockText(int seconds) => formatDuration(seconds);
+  static String clockText(int seconds) =>
+      formatDuration(seconds).replaceFirst(RegExp(r'^0(?=\d)'), '');
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +56,7 @@ class FocusClock extends StatelessWidget {
           label: label,
           size: size,
           paused: paused,
+          resting: resting,
         ),
       ClockStyle.flip => _FlipClock(seconds: seconds, size: size, row: row),
       ClockStyle.dots => _DotsClock(seconds: seconds, size: size),
@@ -61,6 +65,7 @@ class FocusClock extends StatelessWidget {
           label: label,
           size: size,
           paused: paused,
+          resting: resting,
         ),
     };
   }
@@ -72,12 +77,14 @@ class _PlainClock extends StatelessWidget {
     required this.label,
     required this.size,
     required this.paused,
+    this.resting = false,
   });
 
   final int seconds;
   final String label;
   final double size;
   final bool paused;
+  final bool resting;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +94,7 @@ class _PlainClock extends StatelessWidget {
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        fontSize: size * 0.065,
+        fontSize: size * (resting ? 0.085 : 0.065),
         fontWeight: FontWeight.w600,
         height: 1.3,
         color: Colors.white.withValues(alpha: paused ? 0.9 : 0.6),
@@ -116,7 +123,9 @@ class _PlainClock extends StatelessWidget {
             SizedBox(height: size * 0.05),
             SizedBox(
               width: size * 0.85,
-              child: paused ? _Pulse(child: caption) : caption,
+              child: paused || resting
+                  ? _Pulse(key: ValueKey(paused), slow: !paused, child: caption)
+                  : caption,
             ),
           ],
         ],
@@ -133,6 +142,7 @@ class _RingClock extends StatelessWidget {
     required this.label,
     required this.size,
     required this.paused,
+    this.resting = false,
   });
 
   final int seconds;
@@ -141,6 +151,7 @@ class _RingClock extends StatelessWidget {
   final String label;
   final double size;
   final bool paused;
+  final bool resting;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +162,7 @@ class _RingClock extends StatelessWidget {
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        fontSize: size * 0.048,
+        fontSize: size * (resting ? 0.066 : 0.048),
         fontWeight: FontWeight.w700,
         letterSpacing: 3,
         height: 1.35,
@@ -197,7 +208,9 @@ class _RingClock extends StatelessWidget {
               SizedBox(height: size * 0.045),
               SizedBox(
                 width: size * 0.6,
-                child: paused ? _Pulse(child: caption) : caption,
+                child: paused || resting
+                    ? _Pulse(key: ValueKey(paused), slow: !paused, child: caption)
+                    : caption,
               ),
             ],
           ),
@@ -208,9 +221,10 @@ class _RingClock extends StatelessWidget {
 }
 
 class _Pulse extends StatefulWidget {
-  const _Pulse({required this.child});
+  const _Pulse({super.key, required this.child, this.slow = false});
 
   final Widget child;
+  final bool slow;
 
   @override
   State<_Pulse> createState() => _PulseState();
@@ -219,7 +233,7 @@ class _Pulse extends StatefulWidget {
 class _PulseState extends State<_Pulse> with SingleTickerProviderStateMixin {
   late final _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: Duration(milliseconds: widget.slow ? 2200 : 900),
     lowerBound: 0.35,
   )..repeat(reverse: true);
 
@@ -309,7 +323,7 @@ class _DotsClock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = FocusClock.clockText(seconds);
+    final text = formatDuration(seconds);
     final width = _DotTextPainter.widthFor(text, 1, 0.62);
 
     return SizedBox(
