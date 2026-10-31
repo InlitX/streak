@@ -76,6 +76,7 @@ const backupSettingKeys = {
   'hideDone',
   'pastFirst',
   'hideTracking',
+  'hideClean',
   'todoLowFirst',
   'todosEnabled',
   'trackingOption',

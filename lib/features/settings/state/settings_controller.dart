@@ -91,6 +91,7 @@ class SettingsController extends ChangeNotifier {
     _hideDone = LocalStore.setting('hideDone', false);
     _pastFirst = LocalStore.setting('pastFirst', false);
     _hideTracking = LocalStore.setting('hideTracking', false);
+    _hideClean = LocalStore.setting('hideClean', false);
     _notesEnabled = LocalStore.setting('notesEnabled', true);
     _trackingOption = LocalStore.setting('trackingOption', false);
     _showTodayProgress = LocalStore.setting('showTodayProgress', true);
@@ -194,6 +195,7 @@ class SettingsController extends ChangeNotifier {
   late bool _hideDone;
   late bool _pastFirst;
   late bool _hideTracking;
+  late bool _hideClean;
   late bool _notesEnabled;
   late bool _islandEnabled;
   late bool _trackingOption;
@@ -478,6 +480,7 @@ class SettingsController extends ChangeNotifier {
   bool get hideDone => _hideDone;
   bool get pastFirst => _pastFirst;
   bool get hideTracking => _hideTracking;
+  bool get hideClean => _hideClean;
   bool get notesEnabled => _notesEnabled;
 
   bool get focusEnabled => _focusEnabled;
@@ -929,6 +932,12 @@ class SettingsController extends ChangeNotifier {
   Future<void> setHideTracking(bool value) async {
     _hideTracking = value;
     await LocalStore.writeSetting('hideTracking', value);
+    notifyListeners();
+  }
+
+  Future<void> setHideClean(bool value) async {
+    _hideClean = value;
+    await LocalStore.writeSetting('hideClean', value);
     notifyListeners();
   }
 
