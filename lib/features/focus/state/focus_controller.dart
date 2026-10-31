@@ -304,7 +304,7 @@ class FocusController extends ChangeNotifier {
   void continueNow({DateTime? at}) {
     if (!_awaiting && !(isPomodoro && reachedTarget)) return;
     _awaiting = false;
-    unawaited(FocusAudio.stopAlert());
+    unawaited(FocusAudio.stopAlert(resume: _isBreak));
     _advancePhase(at: at);
   }
 
@@ -522,7 +522,7 @@ class FocusController extends ChangeNotifier {
         if (_soundOnBreak) await FocusAudio.pause();
       } else if (_soundOnBreak) {
         _soundOnBreak = false;
-        await FocusAudio.resume();
+        await FocusAudio.resume(fade: true);
       }
     } catch (e) {
       debugPrint('Focus sound hold failed: $e');
@@ -537,6 +537,11 @@ class FocusController extends ChangeNotifier {
         _sync();
         return _tick();
       }
+      if (!_celebrated &&
+          !isFlow &&
+          remainingSeconds <= FocusAudio.fadeSeconds) {
+        unawaited(FocusAudio.fadeOut(LocalStore.setting('focusAlert', '')));
+      }
       if (!_celebrated && reachedTarget) {
         _celebrated = true;
         completedTick.value++;
@@ -548,8 +553,11 @@ class FocusController extends ChangeNotifier {
             FocusAudio.alert(
               LocalStore.setting('focusAlert', ''),
               loop: always,
+              resume: !isPomodoro || _isBreak,
             ),
           );
+        } else {
+          unawaited(FocusAudio.stopAlert());
         }
         if (hold) {
           _awaiting = true;
