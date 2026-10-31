@@ -63,6 +63,7 @@ Future<void> countFocusTime(
       habit.id,
       piece.countedOn,
       undo ? -minutes : minutes,
+      chime: false,
     );
     if (!undo) await focus.markCounted(piece.id);
   }
