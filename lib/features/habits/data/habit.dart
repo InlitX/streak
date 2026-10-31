@@ -80,6 +80,7 @@ class Habit {
     this.tracking = false,
     this.healthSteps = false,
     this.anyAmount = false,
+    this.atMost = false,
     this.anySteps = false,
     this.stepsNeeded = 1,
     this.difficulty = 0,
@@ -275,6 +276,8 @@ class Habit {
   bool get readsSteps => healthSteps && kind == HabitKind.quantitative;
 
   final bool anyAmount;
+
+  final bool atMost;
 
   final bool anySteps;
 
@@ -492,12 +495,19 @@ class Habit {
   bool get acceptsAnyAmount =>
       kind == HabitKind.quantitative && (anyAmount || !hasGoal);
 
+  bool get capsAmount => atMost && kind == HabitKind.quantitative && hasGoal;
+
   bool reaches(double count, {double? goal}) {
+    if (capsAmount) {
+      final limit = goal ?? perDayTarget;
+      return count > 0 && (limit <= 0 || count <= limit);
+    }
     if (goal != null) return goal <= 0 ? count > 0 : count >= goal;
     return acceptsAnyAmount ? count > 0 : count >= perDayTarget;
   }
 
   QuantProgress progressFor(double count, {double? goal}) {
+    if (capsAmount) return _capped(count, goal ?? perDayTarget);
     if (goal != null) {
       return goal <= 0
           ? QuantProgress(laps: count > 0 ? 1 : 0, fraction: 0)
@@ -510,11 +520,17 @@ class Habit {
 
   QuantProgress progressOn(DateTime date, double count) {
     final past = pastGoalOn(date);
+    if (capsAmount) return _capped(count, past ?? effectiveTarget);
     if (past != null) return progressFor(count, goal: past);
     return hasGoal
         ? QuantProgress.of(count: count, target: effectiveTarget)
         : progressFor(count);
   }
+
+  QuantProgress _capped(double count, double limit) =>
+      reaches(count, goal: limit)
+          ? const QuantProgress(laps: 1, fraction: 0)
+          : QuantProgress(laps: 0, fraction: count > 0 ? 1 : 0);
 
   double fillTargetOn(DateTime date) {
     final target = pastGoalOn(date) ?? effectiveTarget;
@@ -909,6 +925,7 @@ class Habit {
     bool? tracking,
     bool? healthSteps,
     bool? anyAmount,
+    bool? atMost,
     bool? anySteps,
     int? stepsNeeded,
     int? difficulty,
@@ -965,6 +982,7 @@ class Habit {
       tracking: tracking ?? this.tracking,
       healthSteps: healthSteps ?? this.healthSteps,
       anyAmount: anyAmount ?? this.anyAmount,
+      atMost: atMost ?? this.atMost,
       anySteps: anySteps ?? this.anySteps,
       stepsNeeded: stepsNeeded ?? this.stepsNeeded,
       difficulty: difficulty ?? this.difficulty,
@@ -1037,6 +1055,7 @@ class Habit {
         'tracking': tracking,
         if (healthSteps) 'healthSteps': true,
         'anyAmount': anyAmount,
+        if (atMost) 'atMost': true,
         'anySteps': anySteps,
         'stepsNeeded': stepsNeeded,
         'difficulty': difficulty,
@@ -1120,6 +1139,7 @@ class Habit {
         tracking: (map['tracking'] ?? false) as bool,
         healthSteps: map['healthSteps'] == true,
         anyAmount: (map['anyAmount'] ?? false) as bool,
+        atMost: map['atMost'] == true,
         anySteps: (map['anySteps'] ?? false) as bool,
         stepsNeeded: (map['stepsNeeded'] as num?)?.toInt() ?? 1,
         difficulty: ((map['difficulty'] ?? 0) as num).toInt().clamp(0, 3),

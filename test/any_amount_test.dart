@@ -53,6 +53,33 @@ void main() {
     expect(Habit.fromMap(map..remove('anyAmount')).anyAmount, isFalse);
   });
 
+  Habit calories(double logged) => testHabit(
+        id: 'kcal',
+        name: 'Calories',
+        kind: HabitKind.quantitative,
+        perDayTarget: 1800,
+      ).copyWith(
+        atMost: true,
+        completions: {
+          today.dayKey: Completion(date: today.dayKey, count: logged),
+        },
+      );
+
+  test('a limit is done at or under it and broken over it', () {
+    expect(calories(1500).isCompletedOn(today), isTrue);
+    expect(calories(1800).isCompletedOn(today), isTrue);
+    expect(calories(1900).isCompletedOn(today), isFalse);
+    expect(calories(0).isCompletedOn(today), isFalse);
+    expect(calories(1500).currentStreak, 1);
+    expect(calories(1500).progressFor(1500).reachedGoal, isTrue);
+    expect(calories(1900).progressFor(1900).reachedGoal, isFalse);
+  });
+
+  test('a limit survives a backup', () {
+    expect(Habit.fromMap(calories(1500).toMap()).atMost, isTrue);
+    expect(Habit.fromMap(_sleep(anyAmount: false).toMap()).atMost, isFalse);
+  });
+
   Habit workout({required bool anySteps}) => testHabit(
         id: 'gym',
         name: 'Workout',
