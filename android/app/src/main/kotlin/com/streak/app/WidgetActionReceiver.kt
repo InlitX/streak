@@ -89,7 +89,7 @@ class WidgetActionReceiver : BroadcastReceiver() {
                 GlanceWidgets.updateAll(context)
             } catch (e: Exception) {
             } finally {
-                pending.finish()
+                GlanceWidgets.release(pending)
             }
         }
     }

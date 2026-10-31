@@ -24,7 +24,7 @@ class WidgetRefreshReceiver : BroadcastReceiver() {
                 repaint(context)
             } catch (e: Exception) {
             } finally {
-                pending.finish()
+                GlanceWidgets.release(pending)
             }
         }
         WidgetActionWorker.refresh(context)

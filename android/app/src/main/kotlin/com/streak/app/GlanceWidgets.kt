@@ -45,8 +45,15 @@ object GlanceWidgets {
                     }
                 }
             } finally {
-                pending.finish()
+                release(pending)
             }
+        }
+    }
+
+    fun release(pending: BroadcastReceiver.PendingResult) {
+        try {
+            pending.finish()
+        } catch (e: IllegalStateException) {
         }
     }
 
