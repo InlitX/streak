@@ -15,6 +15,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/utils/share_origin.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/express/express_button.dart';
@@ -207,6 +208,12 @@ class _HomePageState extends State<HomePage> {
             false,
           ),
           (
+            LucideIcons.fileDown,
+            context.l10n.export_habit,
+            () => run(() => _exportHabit(controller, habit)),
+            false,
+          ),
+          (
             LucideIcons.archive,
             context.l10n.archive_habit,
             () => run(() => _confirmDelete(controller, habit)),
@@ -286,6 +293,17 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  Future<void> _exportHabit(HabitsController controller, Habit habit) async {
+    final ok = await controller.exportBackup(
+      origin: shareOrigin(context),
+      only: habit,
+    );
+    if (!mounted) return;
+    ok
+        ? AppSnackbar.success(context, context.l10n.backup_saved)
+        : AppSnackbar.warning(context, context.l10n.export_cancelled);
   }
 
   Future<void> _confirmDelete(HabitsController controller, Habit habit) async {
