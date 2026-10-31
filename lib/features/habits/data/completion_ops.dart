@@ -183,6 +183,9 @@ class CompletionOps {
     return completions;
   }
 
+  static Map<String, Completion> clearDay(Habit habit, DateTime date) =>
+      clearRelapse(habit, date);
+
   static Map<String, Completion> raiseCounts(
     Habit habit,
     Map<DateTime, double> counts,
