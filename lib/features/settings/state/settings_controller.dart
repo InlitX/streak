@@ -121,6 +121,7 @@ class SettingsController extends ChangeNotifier {
     _focusDailyGoal = LocalStore.setting('focusDailyGoal', 0);
     _focusKeepAwake = LocalStore.setting('focusKeepAwake', true);
     _focusLeadIn = LocalStore.setting('focusLeadIn', true);
+    _focusFullscreen = LocalStore.setting('focusFullscreen', false);
     _habitLinks = LocalStore.setting('habitLinks', false);
     _focusAlert = LocalStore.setting('focusAlert', '');
     _focusHold = LocalStore.setting('focusHold', false);
@@ -221,6 +222,7 @@ class SettingsController extends ChangeNotifier {
   late int _focusDailyGoal;
   late bool _focusKeepAwake;
   late bool _focusLeadIn;
+  late bool _focusFullscreen;
   late bool _habitLinks;
   late String _focusAlert;
   late bool _focusHold;
@@ -544,6 +546,7 @@ class SettingsController extends ChangeNotifier {
   int get focusDailyGoal => _focusDailyGoal;
   bool get focusKeepAwake => _focusKeepAwake;
   bool get focusLeadIn => _focusLeadIn;
+  bool get focusFullscreen => _focusFullscreen;
   bool get habitLinks => _habitLinks;
   String get focusAlert => _focusAlert;
   bool get focusHold => _focusHold;
@@ -622,6 +625,11 @@ class SettingsController extends ChangeNotifier {
     _focusLeadIn = value;
     await LocalStore.writeSetting('focusLeadIn', value);
     notifyListeners();
+  }
+
+  Future<void> setFocusFullscreen(bool value) async {
+    _focusFullscreen = value;
+    await LocalStore.writeSetting('focusFullscreen', value);
   }
 
   Future<void> setHabitLinks(bool value) async {

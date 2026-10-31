@@ -83,6 +83,11 @@ class _FocusPageState extends State<FocusPage> {
     if (context.read<SettingsController>().focusKeepAwake) {
       WakelockPlus.enable();
     }
+    if ((Platform.isWindows || Platform.isLinux) &&
+        context.read<SettingsController>().focusFullscreen) {
+      _immersive = true;
+      DesktopWindow.setFullscreen(true);
+    }
     if (widget.startMinutes != null) {
       _leadValue = 3;
       _begin();
@@ -211,6 +216,7 @@ class _FocusPageState extends State<FocusPage> {
   void _toggleImmersive() {
     setState(() => _immersive = !_immersive);
     DesktopWindow.setFullscreen(_immersive);
+    context.read<SettingsController>().setFocusFullscreen(_immersive);
     SystemChrome.setEnabledSystemUIMode(
       _immersive || _big ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge,
     );
