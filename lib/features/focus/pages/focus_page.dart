@@ -72,6 +72,8 @@ class _FocusPageState extends State<FocusPage> {
   int _leadValue = 0;
   bool _immersive = false;
   bool _big = false;
+  bool _tip = false;
+  Timer? _tipTimer;
   DateTime _tapsFrom = DateTime(0);
 
   @override
@@ -146,6 +148,7 @@ class _FocusPageState extends State<FocusPage> {
     if (_immersive) DesktopWindow.setFullscreen(false);
     WakelockPlus.disable();
     _lead?.cancel();
+    _tipTimer?.cancel();
     _confetti.dispose();
     _focus.completedTick.removeListener(_celebrate);
     super.dispose();
@@ -181,10 +184,22 @@ class _FocusPageState extends State<FocusPage> {
   }
 
   void _toggleBig() {
-    setState(() => _big = !_big);
+    _tipTimer?.cancel();
+    setState(() {
+      _big = !_big;
+      _tip = false;
+    });
     SystemChrome.setEnabledSystemUIMode(
       _big || _immersive ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge,
     );
+  }
+
+  void _openSimple() {
+    _toggleBig();
+    setState(() => _tip = true);
+    _tipTimer = Timer(const Duration(seconds: 4), () {
+      if (mounted) setState(() => _tip = false);
+    });
   }
 
   double _clockSize(BoxConstraints box, bool landscape) {
@@ -359,6 +374,7 @@ class _FocusPageState extends State<FocusPage> {
                   builder: (context, _) => _TopBar(
                     immersive: _immersive,
                     onImmersive: _toggleImmersive,
+                    onBig: _openSimple,
                     onTarget: leading || !focus.isActive || focus.isBreak
                         ? null
                         : () => showFocusRetimeSheet(context),
@@ -397,6 +413,7 @@ class _FocusPageState extends State<FocusPage> {
                           label: paused ? context.l10n.focus_paused : label,
                           size: _clockSize(constraints, landscape),
                           paused: paused,
+                          resting: onBreak && switchIn == 0 && !leading,
                         ),
                       ),
                     );
@@ -427,13 +444,25 @@ class _FocusPageState extends State<FocusPage> {
                 if (_big) {
                   final face = Column(
                     children: [
-                      _ZenLabel(
-                        text: label,
-                        color: habit?.color.shownIn(context) ?? context.colors.primary,
+                      SizedBox(
+                        width: double.infinity,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          child: _tip
+                              ? const _ZenTip()
+                              : _ZenLabel(
+                                  text: title,
+                                  color: habit?.color.shownIn(context) ?? context.colors.primary,
+                                ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Expanded(
-                        child: FittedBox(fit: BoxFit.contain, child: clock),
+                        child: FractionallySizedBox(
+                          widthFactor: 0.92,
+                          heightFactor: 0.92,
+                          child: FittedBox(fit: BoxFit.contain, child: clock),
+                        ),
                       ),
                     ],
                   );
@@ -576,6 +605,7 @@ class _TopBar extends StatelessWidget {
     required this.target,
     required this.immersive,
     required this.onImmersive,
+    required this.onBig,
     this.onTarget,
   });
 
@@ -583,6 +613,7 @@ class _TopBar extends StatelessWidget {
   final String target;
   final bool immersive;
   final VoidCallback onImmersive;
+  final VoidCallback onBig;
   final VoidCallback? onTarget;
 
   Future<void> _pickStyle(BuildContext context) async {
@@ -966,12 +997,18 @@ class _TopBar extends StatelessWidget {
                   label: context.l10n.focus_style,
                   onTap: () => _pickStyle(context),
                 ),
+                if (!isMobile)
+                  (
+                    icon: immersive ? LucideIcons.minimize2 : LucideIcons.maximize2,
+                    label: immersive
+                        ? context.l10n.focus_exit_fullscreen
+                        : context.l10n.focus_fullscreen,
+                    onTap: onImmersive,
+                  ),
                 (
-                  icon: immersive ? LucideIcons.minimize2 : LucideIcons.maximize2,
-                  label: immersive
-                      ? context.l10n.focus_exit_fullscreen
-                      : context.l10n.focus_fullscreen,
-                  onTap: onImmersive,
+                  icon: LucideIcons.scan,
+                  label: context.l10n.focus_simple_view,
+                  onTap: onBig,
                 ),
                 (
                   icon: LucideIcons.circleHelp,
@@ -1155,6 +1192,71 @@ class _ZenLabel extends StatelessWidget {
   }
 }
 
+class _ZenTip extends StatefulWidget {
+  const _ZenTip();
+
+  @override
+  State<_ZenTip> createState() => _ZenTipState();
+}
+
+class _ZenTipState extends State<_ZenTip> with SingleTickerProviderStateMixin {
+  late final _blink = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  );
+  late final _opacity = TweenSequence<double>([
+    TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.45), weight: 1),
+    TweenSequenceItem(tween: Tween(begin: 0.45, end: 1.0), weight: 1),
+  ]).animate(CurvedAnimation(parent: _blink, curve: Curves.easeInOut));
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) _blink.repeat(count: 2);
+    });
+  }
+
+  @override
+  void dispose() {
+    _blink.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(99),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(LucideIcons.pointer, size: 16, color: Colors.white),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                context.l10n.focus_double_tap_tip,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ZenControls extends StatelessWidget {
   const _ZenControls({
     required this.vertical,
@@ -1185,6 +1287,7 @@ class _ZenControls extends StatelessWidget {
         icon: _toggleIcon(running: running, awaiting: awaiting, finished: finished),
         label: _toggleLabel(context, running: running, awaiting: awaiting, finished: finished),
         onTap: onToggle,
+        big: true,
       ),
       if (skip != null)
         _ZenButton(
@@ -1224,11 +1327,13 @@ class _ZenButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.big = false,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final bool big;
 
   @override
   Widget build(BuildContext context) {
@@ -1239,13 +1344,13 @@ class _ZenButton extends StatelessWidget {
         scale: 0.9,
         onTap: onTap,
         child: Container(
-          width: 52,
-          height: 52,
+          width: big ? 60 : 52,
+          height: big ? 60 : 52,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(18),
+            color: Colors.white.withValues(alpha: big ? 0.14 : 0.08),
+            borderRadius: BorderRadius.circular(big ? 21 : 18),
           ),
-          child: Icon(icon, size: 20, color: Colors.white),
+          child: Icon(icon, size: big ? 24 : 20, color: Colors.white),
         ),
       ),
     );
