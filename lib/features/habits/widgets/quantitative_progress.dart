@@ -15,6 +15,7 @@ import 'package:streak/features/habits/widgets/health_steps_widgets.dart';
 import 'package:streak/features/habits/widgets/reading_books.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 
 class QuantitativeProgress extends StatelessWidget {
@@ -125,7 +126,10 @@ class QuantitativeProgress extends StatelessWidget {
             ),
             if (habit.tracksBook) ...[
               const SizedBox(height: 10),
-              _BookLine(habit: habit),
+              GestureDetector(
+                onTap: () => _editBook(context, habit),
+                child: _BookLine(habit: habit),
+              ),
             ],
             if (habit.readsSteps) ...[
               const SizedBox(height: 10),
@@ -395,6 +399,44 @@ class _Stopwatch extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _editBook(BuildContext context, Habit habit) => showOptionSheet(
+      context,
+      title: context.l10n.book,
+      options: [context.l10n.book_at_page, context.l10n.book_read_before],
+      icons: const [LucideIcons.bookOpen, LucideIcons.repeat],
+      index: -1,
+      onSelected: (choice) => unawaited(
+        choice == 0 ? _setPage(context, habit) : _setReads(context, habit),
+      ),
+    );
+
+Future<void> _setPage(BuildContext context, Habit habit) async {
+  final controller = context.read<HabitsController>();
+  final page = await showNumberKeypadDialog(
+    context,
+    title: context.l10n.book_at_page,
+    value: habit.book.page,
+    unit: habit.unitLabel,
+    accent: habit.color.shownIn(context),
+  );
+  if (page == null) return;
+  await controller.update(habit.atPage(page.clamp(0, habit.bookPages - 1)));
+}
+
+Future<void> _setReads(BuildContext context, Habit habit) async {
+  final controller = context.read<HabitsController>();
+  final counted = habit.book.finished - habit.readsBefore;
+  final reads = await showNumberKeypadDialog(
+    context,
+    title: context.l10n.book_read_before,
+    value: habit.book.finished.toDouble(),
+    accent: habit.color.shownIn(context),
+  );
+  if (reads == null) return;
+  final before = reads.round() - counted;
+  await controller.update(habit.copyWith(readsBefore: before < 0 ? 0 : before));
 }
 
 class _BookLine extends StatelessWidget {
