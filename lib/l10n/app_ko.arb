@@ -1468,7 +1468,7 @@
   "focus_label_new": "새 라벨",
   "focus_label_hint": "수학, 독서, 운동...",
   "focus_label_remove": "라벨 제거",
-  "focus_label_remove_body": "{label} 라벨을 목록에서 없애요. 이전 세션에서는 유지돼요.",
+  "focus_label_remove_body": "{label} 라벨을 목록에서 없애요. 이전 집중 시간에서는 유지돼요.",
   "@focus_label_remove_body": {
     "placeholders": {
       "label": {
@@ -1548,7 +1548,7 @@
   "hide_done": "완료할 일 숨김",
   "hide_done_sub": "오늘 마친 일을 목록에서 숨기기",
   "focus_volume": "볼륨",
-  "from_last_done": "마지막 시간으로부터 계속 세기",
+  "from_last_done": "지난 완료 시점부터 세기",
   "data_folder_app": "앱에 함께",
   "pick_one_day": "최소 하루 이상 선택하세요",
   "month_weekday": "매달의 시작을 같은 요일로",
@@ -1757,9 +1757,296 @@
       }
     }
   },
-  "focus_resources": "무료 장면 및 음향",
+  "focus_resources": "리소스",
   "focus_end_reached_free": "목표를 달성했어요.",
   "prefs_cards": "카드와 달력",
-  "no_goal": "일일 목표가 없어요",
-  "no_goal_sub": "몸무게 등을 기록해보세요. 어떤 숫자로든 하루를 나타내 봐요."
+  "no_goal": "일일 목표 없음",
+  "no_goal_sub": "몸무게 등을 그냥 기록해보세요. 어떤 숫자로든 하루를 나타내 봐요.",
+  "any_step": "일부만 해도 완료",
+  "any_step_sub": "모든 단계를 끝내지 않아도 단계 하나를 체크하면 완료한 것으로 표시해요.",
+  "reminders_ready_title": "알림을 켰어요",
+  "reminders_ready_body": "여기서 Streak가 알려 드릴게요.",
+  "end_of_day": "하루가 끝날 때까지",
+  "repeat_until": "반복 종료",
+  "any_amount": "모든 수량 인정",
+  "any_amount_sub": "목표량에 못 미쳐도 어떤 수량이든 기록하면 완료한 것으로 표시해요.",
+  "focus_mode_timer": "타이머",
+  "focus_ends_at": "{time} 종료",
+  "@focus_ends_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_no_limit": "시간 무제한",
+  "focus_style_plain": "간단",
+  "focus_label_icon": "아이콘 (선택)",
+  "focus_save_timer": "타이머 저장",
+  "focus_remove_timer": "이 저장한 타이머를 제거할까요?",
+  "focus_days_row": "{count, plural, =1{1일 연속} other{{count}일 연속}}",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_today_done": "{done} / {total} 완료",
+  "@widget_today_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "book_reads": "{count, plural, =0{1회독 중} =1{1회독 완료} other{{count}회독 완료}}",
+  "@book_reads": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "book_new": "새 책",
+  "book_reading_now": "독서중",
+  "book_page": "{page}/{pages}쪽",
+  "@book_page": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      },
+      "pages": {
+        "type": "String"
+      }
+    }
+  },
+  "book_read_number": "{number}회독",
+  "@book_read_number": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "book_since": "{day}부터",
+  "@book_since": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "book": "책",
+  "book_pages": "책의 쪽수",
+  "book_pages_sub": "오늘부터 세요. 마지막 페이지에 도달하면 회독수를 추가하고 처음으로 돌아가요",
+  "total_goal_left": "{amount} 남음",
+  "@total_goal_left": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "total_goal_of": "/ {amount}",
+  "@total_goal_of": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "total_goal": "총 목표",
+  "total_goal_sub": "전체 습관을 위한 목표예요. 1000쪽이나 50회처럼 설정해요",
+  "day_relapses": "{count, plural, =1{실수 1회} other{실수 {count}회}}",
+  "@day_relapses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "avoid_by_month": "월별 실수",
+  "avoid_balance": "잔액",
+  "avoid_month": "월별 요약",
+  "relapse_spent": "이번 실수로 쓴 돈",
+  "money_spent": "쓴 돈",
+  "clean_goal_of": "/ {goal}",
+  "@clean_goal_of": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "clean_goal_reached": "목표를 달성했어요",
+  "clean_goal_again": "연속 기록이 이어지고 있어요. 계속 힘내봐요",
+  "clean_goal_left": "{count, plural, =1{1일 남음} other{{count}일 남음}}",
+  "@clean_goal_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clean_goal_sub": "며칠 연속으로 절제할지 골라요",
+  "clean_goal": "절제 목표 일수",
+  "avoid_track_spent": "지출 기록",
+  "avoid_track_spent_sub": "실수로 인해 발생한 비용을 기록하세요. 일일 비용은 자동으로 기록돼요",
+  "focus_track_ticking": "똑딱이는 시계",
+  "day_log_relapse": "실수 기록",
+  "day_not_done": "미완료",
+  "day_clean": "절제",
+  "day_amount": "{value} / {goal}",
+  "@day_amount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "auto_sync": "기기 동기화 유지",
+  "auto_sync_sub": "변경 시마다 저장하고 몇 분마다 폴더 확인",
+  "sync_guide": "두 기기를 동기화하는 법",
+  "focus_edit_session": "집중 시간 편집",
+  "focus_session_updated": "집중 시간을 변경했어요",
+  "focus_label_sub": "주제 등으로 집중 시간을 정렬하세요. 길게 눌러 제거하세요.",
+  "focus_time_habit_hint": "각 집중 시간에서 집중한 시간이 완료한 날짜에 더해져요.",
+  "widget_cfg_today_band": "오늘 강조",
+  "widget_cfg_days": "표시 일수",
+  "health_intro": "Streak에서는 걷기 습관을 자동으로 채울 수 있게 걸음 수만 읽어요.",
+  "health_point_read": "걸음 수만 읽어요. 다른 어떤 신체 활동도 읽지 않으며, 헬스 커넥트에 쓰지도 않아요.",
+  "health_point_local": "걸음 수는 기기에만 저장돼요. Streak는 절대 인터넷에 연결하지 않아요.",
+  "health_point_off": "습관이나 헬스 커넥트에서 언제든 끌 수 있어요.",
+  "tracking_hide": "확인만 할 습관 숨기기",
+  "tracking_show": "확인만 할 습관 표시 ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tracking_hide_sub": "확인만 할 습관을 이 목록에 표시하지 않아요",
+  "steps_needed_sub": "{needed} / {total}단계를 끝내면 완료한 것으로 해요.",
+  "@steps_needed_sub": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "past_first": "지난 날은 열기 먼저",
+  "past_first_sub": "지난 날을 누르면 먼저 페이지를 열어서, 실수로 체크를 바꾸지 않게 해요",
+  "focus_auto_next_sub": "휴식 시간이 끝나면 대기 없이 다음 회차를 시작해요.",
+  "focus_auto_next": "스스로 계속 진행",
+  "reminder_habit_days": "습관이 있는 날",
+  "reminder_habit_days_hint": "습관을 실천해야 하는 날에 알려요.",
+  "by_label": "라벨별",
+  "sched_start": "시작일",
+  "habit_time_sub": "계획 탭에서는 이 시간에 습관을 배치해요. 오늘 탭에서는 여전히 하루 종일 표시돼요.",
+  "from_last_done_sub": "습관을 완료할 때마다 대기 시간을 초기화해요. 여전히 하루를 건너뛰면 연속 기록이 깨져요.",
+  "reminder_sound": "소리",
+  "reminder_sound_default": "기본값",
+  "reminder_sound_hint": "소리를 눌러 들어보세요. 이 습관의 알림이 사용할 소리예요.",
+  "todo_repeat": "반복",
+  "todo_repeat_never": "반복 안 함",
+  "todo_repeat_workdays": "평일 동안",
+  "todo_repeat_days": "{count, plural, =1{매일} other{매 {count}일}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{매주} other{매 {count}주}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{매월} other{매 {count}개월}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{매년} other{매 {count}년}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "맞춤",
+  "todo_repeat_unit_days": "일",
+  "todo_repeat_unit_weeks": "주",
+  "todo_repeat_unit_months": "개월",
+  "todo_repeat_unit_years": "년",
+  "color_part_background": "배경",
+  "color_part_card": "카드",
+  "color_part_text": "글자",
+  "color_part_accent": "강조",
+  "color_part_success": "완료",
+  "color_part_warning": "주의",
+  "color_part_danger": "오류",
+  "color_part_info": "정보",
+  "todo_repeat_on_day": "{day}일에",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "{nth, select, 1{첫째} 2{둘째} 3{셋째} 4{넷째} other{마지막}} {weekday}에",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "완료한 날부터 세기",
+  "todo_repeat_skip": "이번에는 건너뛰기",
+  "color_theme": "색상 테마",
+  "color_theme_sub": "Catppuccino나 Nord같은 전체 팔레트",
+  "color_theme_default": "Streak",
+  "color_theme_custom": "내 색상",
+  "color_theme_custom_hint": "{mode, select, dark{다크 모드에 적용되는 색상이에요. 라이트 모드로 전환해야 라이트 모드의 색상을 편집할 수 있어요.} other{라이트 모드에 적용되는 색상이에요. 다크 모드로 전환해야 다크 모드의 색상을 편집할 수 있어요.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "color_theme_hint": "각 테마로 배경색, 글자색, 강조색을 적용할 수 있어요. 라이트 및 다크 모드 설정을 따라요.",
+  "paused_day_title": "멈춰둔 날",
+  "paused_day_body": "{day}에는 멈춰두었던 습관이에요. 그래도 기록할까요?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  }
 }

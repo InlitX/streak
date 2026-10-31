@@ -629,5 +629,142 @@
     }
   },
   "sched_start": "يبدأ في",
-  "from_last_done": "إبدء من المرة الأخيره"
+  "from_last_done": "إبدء من المرة الأخيره",
+  "reminder_sound": "الصوت",
+  "reminder_sound_default": "التفاصيل",
+  "reminder_sound_hint": "إضغط على الصوت لسماعه. هذا التنبيه سوف يستعمله.",
+  "month_weekday": "نفس يوم الإسبوع كل شهر",
+  "nth_weekday": "{n, select, first{first} second{second} third{third} fourth{fourth} other{last}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "from_last_done_sub": "كل مرة تفعلها، الإنتظار يبدء من جديد. لا يزال يكسر سلسلة الإنجازات.",
+  "quotes": "إقتبس",
+  "quotes_which": "أي إقتباس",
+  "quotes_app": "من التطبيق",
+  "quotes_mine": "لي",
+  "quotes_both": "الإثنين",
+  "quotes_off": "مطفئ",
+  "month_weekday_sub": "يقع في يوم {when} من الشهر، ليس تاريخ محدد.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "quotes_my_list": "إقتباساتي",
+  "quotes_add": "أضف إقتباس",
+  "quotes_edit": "عدِّل إقتباس",
+  "quotes_hint": "إكتب إقتباسك",
+  "quotes_empty": "لا إقتباسات من إنشائك",
+  "quotes_empty_sub": "إكتب إقتباسك الخاص وسوف تظهر هنا اليوم.",
+  "motiv_start": "إبدأ اليوم أقوى 💪",
+  "motiv_progress": "﴿وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ﴾ [النجم: ٣٩]",
+  "motiv_almost": "من سار على الدرب وصل",
+  "motiv_perfect": "يوم مثالي! 🔥",
+  "app_background": "الخلفية",
+  "widgets": "تطبيق مصغر",
+  "customize_widgets": "تخصيص التطبيق المصغر",
+  "customize_widgets_sub": "الخلفية، عتامة، الحد",
+  "widget_background": "لون الخلفية",
+  "widget_opacity": "العتامة",
+  "widget_border": "الحد",
+  "widget_preview": "معاينة",
+  "bg_solid": "صلب",
+  "bg_gradient": "تدرُّج",
+  "bg_dots": "نقاط",
+  "bg_oled": "OLED",
+  "weekdays": "أيام الإسبوع",
+  "weekends": "نهاية الإسبوع",
+  "reminder_message": "رسالة (إختياري)",
+  "reminder_message_hint": "إتركه فارغًا لإقتباس تحفيزي",
+  "new_category": "فئة جديدة",
+  "edit_category": "تعديل الفئة",
+  "add_category": "جديد",
+  "delete_category": "حذف الفئة",
+  "edit": "تعديل",
+  "cover_image": "صورة الغلاف",
+  "book_cover": "غلاف الكتاب",
+  "add_image": "أضف صورة",
+  "when_best": "متى تكون أكثر إلتزامًا؟",
+  "streak_evolution": "تطور سلسلة الإنجازات",
+  "consistency": "الإستمارية",
+  "consistency_trend": "منحنى الإستمرارية",
+  "by_habit": "بالعادة",
+  "ranking": "التقييم",
+  "active_days": "أيام النشاط",
+  "perfect_days": "أيام مثالية",
+  "per_week": "إسبوعيا",
+  "best_month": "أفضل شهر",
+  "streak_on": "🔥 {n} أيام متتالية. لا تكسرها!",
+  "@streak_on": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_off": "💪 اليوم يمكنك بدأ سلسلة إنجازات جديدة",
+  "not_enough_data": "البيانات لا تكفي بعد",
+  "about_inline": "ستريك هو تطبيق مفتوح المصدر لِتَتبع عاداتك. لا حساب، لاحدود، لا دفع. كل شيء يبقى في هاتفك.\n\nأي شخص يمكنه رؤية الإطلاع على الشيفرة البرمجية، وتحسينها، أو إستخدامه بحرية.",
+  "about_subtitle": "للأيام اللتيأنت إخترت إظهارها.",
+  "about_story": "ذا التطبيق ولد بسبب الإحباط التي تسببه تطبيقات تتبع العادات هناك. فمعضمها تضع حد لعدد العادات التي يمكنك إنشاؤها، وإخفاء ميزات رئيسية وبسيطة خلف جدران الدفع، تتبعك ولا تعلم ماذا يفعل ببياناتك، أو تقصفك بإعلانات لا مفر منها، لذا قررت أن أبني ستريك: مجاني بالكامل، لا إعلانات، لا دفع، لاتتبع. كل شيء يعمل محليا ⁧⁧⁧⁧— بياناتك ملكٌ لك. مفتوح المصدر، لا فخوخ أو شيء مخفي.",
+  "made_by": "صنع بكل ❤️ بواسطة @InlitX",
+  "share": "مشاركة",
+  "share_progress": "مشاركت تقدمك",
+  "share_failed": "لم يستطع إنشاء الصورة",
+  "share_swipe_hint": "إسحب البطاقة لتّنقل عبر الزمن",
+  "share_background": "خلفية",
+  "share_size": "حجم",
+  "share_size_large": "طول",
+  "share_size_small": "مربع",
+  "share_show_stats": "أظهر الإحصائيات",
+  "share_save": "حفظ",
+  "share_saved": "حُفِظ في المعرض",
+  "share_save_failed": "لم يستطع حفظ الصورة",
+  "about_developer": "المطور",
+  "about_legal": "© InlitX. تطبيق ستريك هو برنامج حر بموجب رخصة GNU GPLv3، مع الشروط الإضافية في قسمه 7، ويأتي بدون أي ضمان، إضغط لقراءة الرخصة.",
+  "about_credits": "الحقوق",
+  "about_credits_body": "طور بإستخدام Flutter. الأيقونات بواسطة Lucide. الرسوم البيانية بواسطة fl_chart. الخطوط المستخدمة هي Figtree وPlayfair.",
+  "dev_handle": "@InlitX",
+  "dev_role": "مطور مستقل · ستريك",
+  "notes": "ملحوظات",
+  "todo_style_sub": "قائمة بسيطة، أم مجلدات تضم أوراق مثل Google .Keep",
+  "todos_enable_sub": "قائمة سريعة بجانب عاداتك",
+  "todo_new": "مهمة جديدة",
+  "notes_enable_sub": "أرفق ملاحظة بأي يوم من أيام العادة",
+  "add_note": "أضف ملاحظة",
+  "edit_note": "تعديل ملاحظة",
+  "view_notes": "أظهر الملاحظات",
+  "edit_entry": "عدل مدخله",
+  "note_type": "إكتب",
+  "note_kind_note": "ملاحظة",
+  "note_kind_planned": "مخطط له",
+  "note_kind_completed": "إكتمل",
+  "note_hint": "إكتب ملاحظتك…",
+  "note_time_optional": "وقت (إختياري)",
+  "save_note": "إحفظ الملاحظة",
+  "notes_empty": "لا توجد ملاحظات لهذا اليوم بعد",
+  "delete_note": "إحذف ملاحظة",
+  "legend_note_added": "أضف ملاحظة",
+  "tomorrow": "غدًا",
+  "notes_count": "{count, plural, =1{1 note} other{{count} notes}}",
+  "@notes_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todos": "مهمة",
+  "todo_view_list": "بسيط",
+  "todo_view_papers": "مجلدات"
 }

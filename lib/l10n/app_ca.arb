@@ -1772,5 +1772,281 @@
   "widget_kind_stats": "Resum",
   "widget_kind_heatmap": "Mapa de calor",
   "widget_kind_todos": "Tasques pendents",
-  "today_view": "Visualitza"
+  "today_view": "Visualitza",
+  "todo_discard_body": "Els changes de la vostra manera d'estar will be lost.",
+  "reminder_sound": "So",
+  "reminder_sound_default": "Per defecte",
+  "reminder_sound_hint": "Toca un so per escoltar-lo. Els recordatoris d'aquest hàbit l'utilitzaran.",
+  "todo_repeat": "Repeteix",
+  "todo_repeat_never": "No repeteixis",
+  "todo_repeat_workdays": "De dilluns a divendres",
+  "todo_repeat_days": "{count, plural, =1{Cada dia} other{Cada {count} dia}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Cada setmana} other{Cada {count} setmanes}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Cada mes} other{Cada {count} mesos}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{Cada any} other{Cada {count} anys}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "Personalitzat",
+  "todo_repeat_unit_days": "Dies",
+  "todo_repeat_unit_weeks": "Setmanes",
+  "todo_repeat_unit_months": "Mesos",
+  "todo_repeat_unit_years": "Anys",
+  "todo_repeat_on_day": "El dia {day}",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "El {nth, select, 1{primer} 2{segon} 3{tercer} 4{quart} other{últim}} {weekday}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "Comença a comptar des del moment en què l'acabi",
+  "todo_repeat_skip": "Salta't aquest",
+  "focus_auto_next": "Continuar pel seu compte",
+  "focus_auto_next_sub": "Quan acaba una pausa, la ronda següent comença sense esperar.",
+  "focus_end_reached_free": "Objectiu assolit.",
+  "paused_day_title": "Dia en pausa",
+  "paused_day_body": "Aquest hàbit està en pausa el {day}. Vols registrar-lo igualment?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "color_theme": "Tema de colors",
+  "color_theme_sub": "Paletes completes com Catppuccino o Nord",
+  "color_theme_default": "Streak",
+  "color_theme_hint": "Cada tema inclou el seu propi fons, text i color d'accent. Admet els modes clar i fosc.",
+  "color_theme_custom": "Els teus colors",
+  "color_theme_custom_hint": "{mode, select, dark{Aquests són els colors per al mode fosc. Canvia al mode clar per editar-los.} other{Aquests són els colors per al mode clar. Canvia al mode fosc per editar-los.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "color_part_background": "Fons",
+  "color_part_card": "Targetes",
+  "color_part_text": "Text",
+  "color_part_accent": "Accent",
+  "color_part_success": "Fet",
+  "color_part_warning": "Avís",
+  "color_part_danger": "Error",
+  "color_part_info": "Informació",
+  "focus_time_habit_hint": "Cada sessió de concentració suma els seus minuts al dia en què es va dur a terme.",
+  "focus_edit_session": "Edita la sessió",
+  "focus_session_updated": "Sessió actualitzada",
+  "widget_cfg_buttons_flower": "Flor",
+  "widget_cfg_tick": "Marca de verificació",
+  "widget_cfg_tick_hint": "Desactivat: els botons de confirmació només estan omplerts de color",
+  "quant_preset_steps": "Passos",
+  "health_steps_denied": "Streak no pot llegir els teus passos sense permís",
+  "health_permission": "Permís",
+  "health_unit_steps": "passos",
+  "health_intro": "Streak només llegeix el teu recompte de passos, de manera que els teus hàbits de passos s'omplen sols.",
+  "health_point_read": "Només llegeix passos. No llegeix mai res més i no escriu mai a Health Connect.",
+  "health_point_local": "Els teus passos es queden al telèfon. Streak no es connecta mai a Internet.",
+  "health_point_off": "Pots desactivar-ho en qualsevol moment, a l'hàbit o a Health Connect.",
+  "health_manage": "Gestiona el permís",
+  "widget_kind_focus": "Focus",
+  "avoid_track_spent": "Registra el que gastes",
+  "avoid_track_spent_sub": "Quan tinguis una recaiguda, anota quant t'ha costat. El cost per dia ja ve indicat",
+  "clean_goal": "Objectiu de dies nets",
+  "clean_goal_sub": "Tria quants dies seguits vols aguantar",
+  "clean_goal_left": "{count, plural, =1{Falta 1 dia} other{Falten {count} dies}}",
+  "@clean_goal_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clean_goal_reached": "Objectiu assolit",
+  "clean_goal_again": "La teva ratxa continua. Continua així",
+  "clean_goal_of": "de {goal}",
+  "@clean_goal_of": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "relapse_spent": "Gastat en aquesta recaiguda",
+  "money_spent": "Diners gastats",
+  "avoid_month": "Resum del mes",
+  "avoid_by_month": "Recaigudes per mes",
+  "avoid_balance": "Balanç",
+  "total_goal": "Total de d'objectius",
+  "total_goal_sub": "Un objectiu per a tot l'hàbit, com ara 1000 pàgines o 50 vegades",
+  "total_goal_left": "{amount} per anar",
+  "@total_goal_left": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "total_goal_of": "de {amount}",
+  "@total_goal_of": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "book": "Llibre",
+  "book_pages": "Pàgines del llibre",
+  "book_pages_sub": "Recompte d'avui. A l'última pàgina, afegeix una lectura i torna a començar",
+  "book_new": "Llibre nou",
+  "book_reads": "{count, plural, =0{Primera lectura} =1{Llegit una vegada} other{Llegit {count} vegades}}",
+  "@book_reads": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "book_read_number": "Llegit {number}",
+  "@book_read_number": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "book_since": "Des del {day}",
+  "@book_since": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "book_reading_now": "Llegint",
+  "book_page": "Pàgina {page} de {pages}",
+  "@book_page": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      },
+      "pages": {
+        "type": "String"
+      }
+    }
+  },
+  "count_times": "{count, plural, =1{1 vegada} other{{count} vegades}}",
+  "@count_times": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_change_timer": "Canviar el temporitzador",
+  "focus_retime_hint": "El temps que ja has dedicat a concentrar-te es manté.",
+  "focus_retime_apply": "Aplica",
+  "widget_focus_today": "Enfocament d'avui",
+  "focus_streak": "Ratxa de concentració",
+  "focus_by_hour": "Quan et concentres",
+  "focus_by_weekday": "Concentració durant el dia",
+  "focus_heatmap": "Activitat d'enfocament",
+  "focus_plan_vs_real": "Planificat enfront de real",
+  "focus_avg_longer": "De mitjana, {pct} més llarg del previst",
+  "@focus_avg_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_shorter": "De mitjana, {pct} més curt del previst",
+  "@focus_avg_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_avg_on_plan": "De mitjana, exactament segons el pla",
+  "focus_session_longer": "{pct} més llarg del previst",
+  "@focus_session_longer": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_shorter": "{pct} més curt del previst",
+  "@focus_session_shorter": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_session_on_plan": "Tal com estava previst",
+  "focus_pauses_avg": "Pausas per sessió",
+  "focus_pause_count": "{count, plural, =0{Cap pausa} =1{1 pausa} other{{count} pauses}}",
+  "@focus_pause_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_vs_previous": "{change} respecte al període anterior",
+  "@focus_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_plan_hint": "Compta des del principi fins al final, pauses incloses. Només sessions iniciades a partir d'ara.",
+  "focus_busiest": "Més concentrat a les {hour}",
+  "@focus_busiest": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  }
 }

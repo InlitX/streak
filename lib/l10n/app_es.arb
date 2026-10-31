@@ -172,13 +172,25 @@
   "focus_label_hint": "Mates, lectura, trabajo...",
   "focus_label_remove": "Quitar etiqueta",
   "focus_label_remove_body": "{label} sale de la lista. Tus sesiones de antes la conservan.",
-  "@focus_label_remove_body": {"placeholders": {"label": {"type": "String"}}},
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "focus_label_remove_confirm": "Quitar",
   "by_label": "Por etiqueta",
   "tracking_hide": "Ocultar seguimiento",
   "tracking_hide_sub": "Los hábitos de solo seguimiento no salen en esta lista",
   "tracking_show": "Mostrar seguimiento ({count})",
-  "@tracking_show": {"placeholders": {"count": {"type": "int"}}},
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "daily": "Diario",
   "weekly": "Semanal",
   "monthly": "Mensual",
@@ -455,9 +467,24 @@
   "from_last_done": "Contar desde la última vez",
   "month_weekday": "Mismo día de la semana cada mes",
   "month_weekday_sub": "Cae el {when} del mes, no en una fecha fija.",
-  "@month_weekday_sub": {"placeholders": {"when": {"type": "String"}}},
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "nth_weekday": "{n, select, first{primer} second{segundo} third{tercer} fourth{cuarto} other{último}} {day}",
-  "@nth_weekday": {"placeholders": {"n": {"type": "String"}, "day": {"type": "String"}}},
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "from_last_done_sub": "Cada vez que lo haces, la espera empieza de nuevo. Un día que se te pase sigue rompiendo la racha.",
   "quotes": "Frases",
   "quotes_which": "Qué frases",
@@ -794,7 +821,7 @@
     }
   },
   "yesterday": "Ayer",
-  "notes_hint": "Mantén pulsado un día para ver o añadir notas",
+  "notes_hint": "Abra un hábito y mantenga presionado un día en su calendario para ver o agregar notas",
   "app_style": "Estilo de la app",
   "app_style_sub": "Elige cómo se ve y se siente toda la app.",
   "style_classic": "Clásico",
@@ -866,15 +893,27 @@
   "today_filter": "Mostrar",
   "today_fold_done": "Hechos ({count})",
   "@today_fold_done": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "today_fold_other": "Otros días ({count})",
   "@today_fold_other": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "today_fold_hidden": "Ocultos ({count})",
   "@today_fold_hidden": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "card_activity": "Actividad en las tarjetas",
   "card_activity_sub": "Enseña los últimos días en la tarjeta, listos para marcar",
@@ -1111,11 +1150,29 @@
   "a11y_decrease": "Disminuir",
   "a11y_pick_color": "Elegir color",
   "tracked_week": "{n} esta semana",
-  "@tracked_week": {"placeholders": {"n": {"type": "int"}}},
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "tracked_month": "{n} este mes",
-  "@tracked_month": {"placeholders": {"n": {"type": "int"}}},
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "tracked_year": "{n} este año",
-  "@tracked_year": {"placeholders": {"n": {"type": "int"}}},
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "period_this_week": "Esta semana",
   "period_last_week": "La semana pasada",
   "period_this_month": "Este mes",
@@ -1249,7 +1306,7 @@
   "island_reset_go": "Empezar de nuevo",
   "island_beta": "Esta es una primera versión de la gamificación y todavía está en beta. Puede crecer, cambiar de forma o sustituirse por completo, según cómo la useis.",
   "gamification_beta": "Gamificación (beta)",
-  "last_check": "Última marca",
+  "last_check": "Último registro",
   "check_history": "Historial de marcas",
   "check_history_sub": "{count} días marcados",
   "@check_history_sub": {

@@ -1,6 +1,6 @@
 {
   "widget_cfg_brightness": "Luminosité",
-  "focus_end_keep": "Conituez",
+  "focus_end_keep": "Continuer",
   "motiv_almost": "Presque ! Percévérez",
   "share_friends_sub": "Envoyer leur l'application",
   "about_story": "Cette application est née d'une frustration avec les traqueurs d'habitude. La plupart limitent combien d'habitudes vous pouvez créer, cachent les caractéristiques de base derrière un accès payant, vous traquent ou vous bombardent avec des pubs. J'ai donc décidé de construire Streak : complètement libre, pas de pubs, pas de paiements, pas de suivi. Tout fonctionne localement — vos données sont à vous. Open source, sans piège.",
@@ -33,7 +33,7 @@
   "close": "Fermer",
   "current": "Actuel",
   "wipe_data_sub": "Habitudes, notes, sessions focus et paramètres",
-  "focus_your_tracks": "Vos tracks",
+  "focus_your_tracks": "Vos musiques",
   "streak_off": "💪 Aujourd'hui, vous pouvez commencer un nouveau streak",
   "completion_rate_short": "Constance",
   "widget_today_progress": "Aujourd'hui {done}/{total}",
@@ -62,7 +62,7 @@
   "monthly": "Mensuellement",
   "share_background": "Arrière-fond",
   "focus_sessions": "Sessions",
-  "focus_amount_added": "{amount} ajouté à {habit}",
+  "focus_amount_added": "{amount} ajouté.s à {habit}",
   "@focus_amount_added": {
     "placeholders": {
       "amount": {
@@ -127,7 +127,7 @@
   "weekends": "Weekends",
   "per_week": "Par semaine",
   "get_started": "Commencer",
-  "focus_end_anyway": "Confirmez la fin",
+  "focus_end_anyway": "Confirmer la fin",
   "snooze_custom_hint": "Minutes",
   "bg_solid": "Uni",
   "focus_custom_duration": "Personalisé",
@@ -175,7 +175,7 @@
   "completion_time": "Temps d'achèvement",
   "category_fitness": "Fitness",
   "import_question_body": "Remplacez toutes vos habitudes actuelles avec la sauvegarde, ou fusionnez-les ensemble ?",
-  "focus_end_complete": "Notez comme complété",
+  "focus_end_complete": "Noter comme complété",
   "widget_done_today": "fait aujourd'hui",
   "archived_empty": "Rien archivé",
   "focus_scene_black": "Noir",
@@ -193,7 +193,7 @@
   "total": "Total",
   "best": "Meilleur",
   "share_size": "Taille",
-  "focus_track_too_long": "Les tracks doivent être de minimum 20 minutes",
+  "focus_track_too_long": "Les morceaux doivent durer moins de 20 minutes",
   "dev_role": "Créateur indépendant · Streak",
   "icon": "Icône",
   "vacation_off_desc": "Mettre en pause cette habitude. Les jours sautés ne casseront pas ta série.",
@@ -264,7 +264,7 @@
   "export_backup_sub": "Sauvegarder toutes les habitudes dans un fichier",
   "preferences": "Préférences",
   "icon_neutral": "Vert",
-  "focus_personalize": "Personalisé",
+  "focus_personalize": "Personnalisé",
   "focus_history_empty": "Pas de sessions pour le moment",
   "off": "Désactivé",
   "widget_cfg_color": "Couleur",
@@ -395,7 +395,7 @@
   "focus_style_digital": "Cercle",
   "focus_stop_body": "Vos minutes sont de toute façon enregistrés. Votre habitude est complété si vous atteignez votre objectif.",
   "app_lock_unlock": "Déverrouiller",
-  "auto_backup_folder_default": "Fichier de l'application",
+  "auto_backup_folder_default": "Dans l'application (supprimés si vous la désinstallez)",
   "tomorrow": "Demain",
   "perfect_days": "Des journées parfaites",
   "kind_quantitative": "Quantité",
@@ -460,7 +460,7 @@
   "mon": "Lun",
   "quant_unit_ml": "ml",
   "wipe_data_warning": "Ceci efface toutes les habitudes, notes, séances de focus et paramètres de ce téléphone. Ca ne pourra pas être annulé à moins que vous ayez un fichier de sauvegarde à importer après.",
-  "auto_backup_where": "Une sauvegarde entière est écrite quand tu ouvres l'app. Les cinq dernières sont gardées.",
+  "auto_backup_where": "Lorsque vous ouvrez l'application, Streak effectue une sauvegarde complète: un fichier .zip contenant tout le contenu, photos et musique comprises, ainsi qu'un fichier .json. L'application génère également une copie lisible que vous pouvez ouvrir dans n'importe quel éditeur. Les dernières sauvegardes sont conservées.",
   "streaks": "Streaks",
   "widget_demo_run": "Courir",
   "widget_cfg_style_classic": "Classique",
@@ -586,7 +586,7 @@
   "auto_backup_folder_set": "Fichier sauvegardé",
   "widget_open_to_sync": "Ouvre Streak pour synchroniser",
   "archive_habit": "Archiver l'habitude",
-  "focus_track_limit": "Jusqu'à 30 tracks",
+  "focus_track_limit": "Jusqu'à 30 musiques",
   "check_style": "Vérifier le style",
   "style_minimal_desc": "Grille d'habitudes et paramètres groupés en quatre sections.",
   "focus_keep_awake": "Gardez l'écran allumé",
@@ -692,7 +692,7 @@
   "new_label": "Nouveau",
   "empty_body": "Ajoute une habitude, puis coche tes jours. Un petit pas à la fois.",
   "app_tagline": "Suivi des habitudes",
-  "stats": "Stats",
+  "stats": "Statistiques",
   "cancel": "Annuler",
   "good_morning": "Bonjour",
   "all_done_today": "Tout est fait aujourd'hui !",
@@ -825,14 +825,14 @@
     }
   },
   "plan_day": "Plan pour aujourd'hui",
-  "celebration": "Effect d'achèvement",
+  "celebration": "Effet d'achèvement",
   "habit_time": "Heure du jour",
   "vacation_all": "Mettre en pause toutes les habitudes",
   "start_view": "Aujourd'hui s'ouvre sur",
   "last_90_days": "Derniers 90 jours",
   "a11y_next_week": "Semaine prochaine",
   "day_timeline": "Jour",
-  "celebration_confetti": "Confetti",
+  "celebration_confetti": "Confettis",
   "select_all": "Tout séléctionner",
   "widget_todos_empty": "Plus rien pour aujourd'hui",
   "unscheduled_confirm": "Enregistrer quand même",
@@ -1030,7 +1030,7 @@
   "period_last_week": "La semaine dernière",
   "notes_empty_all": "Aucune notes",
   "island_t_autumn": "automne",
-  "gamification": "Gamification",
+  "gamification": "Ludification",
   "island_built": "{done} sur {total} construit",
   "@island_built": {
     "placeholders": {
@@ -1244,5 +1244,62 @@
   "difficulty_option": "Difficulté de l'habitude",
   "todo_save_another": "Sauvegarder et ajouter une autre",
   "todo_add_subtask": "Ajouter une sous-tâche",
-  "pin_paste": "Coller le code"
+  "pin_paste": "Coller le code",
+  "focus_track_fire": "Feu",
+  "focus_volume": "Volume",
+  "focus_notif_break": "C'est l'heure de faire une pause.",
+  "focus_break_over": "Fin de la pause",
+  "discard_changes": "Abandonner les changements ?",
+  "discard_changes_body": "Les modifications que vous avez apportées à cette habitude seront perdues.",
+  "discard": "Abandonner",
+  "todo_discard_body": "Les modifications que vous avez apportées à cette tâche seront perdues.",
+  "keep_editing": "Continuer les modifications",
+  "onb_blurb": "De petits moments quotidiens qui deviennent des habitudes que vous conservez.",
+  "onb_private_body": "Tout reste sur votre appareil. Pas besoin de compte.",
+  "refresh_now": "Rafraîchir",
+  "refresh_now_sub": "Importez ce que vos autres appareils ont laissé dans le dossier",
+  "data_folder": "Dossier de données",
+  "data_folder_documents": "Documents",
+  "data_folder_pick": "Choisir un dossier",
+  "data_folder_inside": "Choisissez un dossier autre que celui dans lequel vous vous trouvez actuellement.",
+  "data_folder_taken": "Ce dossier contient déjà des données Streak.",
+  "data_folder_denied": "Streak ne peut pas écrire dans ce dossier.",
+  "data_folder_move_title": "Déplacer vos données",
+  "data_folder_move_body": "Streak va se fermer et déplacer vos données vers {path}. Rouvrez-le une fois qu'il se sera fermé. En cas de problème, vos données resteront à leur emplacement actuel.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Déplacer et fermer",
+  "refresh_brought": "Vos habitudes sont à jour",
+  "refresh_nothing": "Rien de nouveau dans ce dossier",
+  "streak_unit_week": "{count}sem",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}mo",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "pick_one_day": "Choisir au moins un jour",
+  "focus_label": "Étiquette",
+  "focus_label_none": "Pas d'étiquette",
+  "focus_label_new": "Nouvelle étiquette",
+  "focus_label_hint": "Maths, lecture, travail...",
+  "focus_label_remove": "Supprimer l'étiquette",
+  "focus_label_remove_confirm": "Supprimer",
+  "by_label": "Par étiquette",
+  "reminders_ready_title": "Les rappels sont activés",
+  "focus_end_add_time": "Ajouter un temps de concentration"
 }

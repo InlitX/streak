@@ -118,7 +118,7 @@
   "default_user": "Usuário",
   "description": "Descrição",
   "sched_days": "Dias",
-  "circle": "Círculo",
+  "circle": "Redondo",
   "buy_coffee": "Apoiar o app",
   "sort_completed_last": "Concluídos por último",
   "name": "Nome",
@@ -526,7 +526,7 @@
   "archived_empty": "Nada arquivado",
   "focus_scene_black": "Preto",
   "share_swipe_hint": "Deslize o cartão para navegar pelo tempo",
-  "focus_free_session": "Sessão gratuita",
+  "focus_free_session": "Sessão livre",
   "day_start_midnight": "Meia noite",
   "share_size": "Tamanho",
   "focus_track_too_long": "As faixas devem ter menos de 20 minutos",
@@ -605,8 +605,8 @@
   "journey": "Jornada",
   "focus_target_reached": "Meta alcançada",
   "share_friends_message": "Estou mantendo meu hábitos frequentes com o Streak — um rastreador de hábitos pequeno, gratuito e offline, sem contas nem anúncios. Venha você também: https://inlitx.github.io/streak/",
-  "note_kind_completed": "Concluído",
-  "focus_break": "Pausa",
+  "note_kind_completed": "Completado",
+  "focus_break": "Descanso",
   "undo": "Desfazer",
   "focus_style": "Estilo de temporizador",
   "support_sub": "Reporte um erro ou solicite uma funcionalidade",
@@ -625,12 +625,12 @@
   "auto_backup_where": "Ao abrir o aplicativo, o Streak salva um backup completo: um .zip com tudo, fotos e músicas incluídos, e um .json. Ele também salva uma cópia legível dos seus hábitos, que você pode abrir em qualquer editor. Os últimos 5 backups são mantidos.",
   "archived_habits_sub": "Recuperar ou excluir para sempre",
   "note_kind_note": "Nota",
-  "focus_pomodoro_sub": "Sequência focada com pausas curtas",
+  "focus_pomodoro_sub": "Sequência focada com poucos descansos",
   "focus_duration": "Duração",
   "focus_images_limit": "Até 10 imagens",
   "edit_note": "Editar nota",
   "notes_hint": "Abra um hábito e mantenha pressionado um dia do calendário para ver ou adicionar notas",
-  "focus_total": "Tempo de concentração",
+  "focus_total": "Tempo de foco",
   "share_size_large": "Altura",
   "share_size_small": "Quadrado",
   "yesterday": "Ontem",
@@ -674,7 +674,7 @@
   "style_minimal_desc": "Grade de hábitos e configurações agrupadas em quatro seções.",
   "focus_keep_awake": "Mantenha a tela ligada",
   "data_sub": "Backups, arquivamento e importação",
-  "note_time_optional": "Tempo (opcional)",
+  "note_time_optional": "Horário (opcional)",
   "focus_pause": "Pausa",
   "unit_hours": "horas",
   "focus_end_tasks": "{count} tarefas ainda não foram verificadas.",
@@ -785,7 +785,7 @@
   "clear_progress": "Limpar progresso",
   "clear_progress_sub": "Histórico, notas e sessões de foco",
   "clear_progress_warning": "Isso apaga todos os dias registrados, anotações e sessões de foco, mas mantém seus hábitos, seus horários e suas configurações. A ação não pode ser desfeita, a menos que você tenha um arquivo de backup para importar posteriormente.",
-  "clear_progress_confirm": "Limpar progresso",
+  "clear_progress_confirm": "Limpar",
   "clear_progress_done": "Progresso limpo",
   "quote_1": "Pequenos passos, todos os dias.",
   "quote_2": "A consistência supera a intensidade.",
@@ -814,7 +814,7 @@
   "todo_empty_body": "Anote o que você quer realizar nos próximos dias.",
   "todo_date": "Data",
   "todo_no_date": "Sem data",
-  "todo_time": "Tempo",
+  "todo_time": "Horário",
   "todo_priority": "Prioridade",
   "priority_none": "Sem prioridade",
   "priority_low": "Baixa",
@@ -920,7 +920,7 @@
     }
   },
   "day_timeline_anytime": "A qualquer momento",
-  "day_timeline_empty": "Nada planejado para este dia",
+  "day_timeline_empty": "Nada agendado para este dia",
   "day_timeline_empty_sub": "Dê um horário específico ao seu hábito e ele aparecerá aqui.",
   "clear": "Limpar",
   "start_view": "Tela de início abre em",
@@ -1008,7 +1008,7 @@
   },
   "quotes_mine": "Minhas",
   "cost_note": "Opcional. Deixe vazio se esse hábito não custar dinheiro.",
-  "todo_search": "Procurar afazeres",
+  "todo_search": "Pesquisar tarefas",
   "todo_search_empty": "Nenhuma correspondência",
   "heatmap_path": "Conecte os dias",
   "heatmap_path_sub": "Desenha a matriz como um grande percurso",
@@ -1058,7 +1058,7 @@
   "just_tracking_sub": "Manter a sua própria grade e números, mas não os incluir no Progresso nem na contagem do dia",
   "period_this_year": "Este ano",
   "style_express": "Expresso",
-  "card_activity_sub": "Mostra o último dia no cartao, pronto para marcar",
+  "card_activity_sub": "Mostra o último dia no cartão, pronto para marcar",
   "period_last_month": "Mês passado",
   "today_only_sub": "Esconda os hábitos que não estão agendados para hoje",
   "focus_period_sessions": "{count, plural, =0{Nenhuma sessão} =1{1 sessão} other{{count} sessões}}",
@@ -1070,7 +1070,7 @@
     }
   },
   "view_switcher_needs": "Habilite a atividade nos cards para usá-lo",
-  "celebration_none": "Nenhuma",
+  "celebration_none": "Nenhum",
   "period_last_year": "Ano passado",
   "period_week_of": "Semana de {date}",
   "@period_week_of": {
@@ -1243,7 +1243,7 @@
   "repeat_until": "Até",
   "end_of_day": "Final do dia",
   "category_order_empty": "Dê a um hábito uma categoria e ele aparece aqui",
-  "hide_done": "Ocultação concluída",
+  "hide_done": "Esconder concluídos",
   "hide_done_sub": "O que você termina hoje sai da lista",
   "past_first": "Abrir dias anteriores primeiro",
   "past_first_sub": "Ao tocar em um dia anterior, ele aparece primeiro, então nada muda por engano",
@@ -1409,16 +1409,16 @@
   "prefs_cards": "Cartões e calendário",
   "prefs_habits": "Hábitos",
   "focus_countdown": "Contagem regressiva de 3 segundos",
-  "focus_skip_break": "Pular pausa",
+  "focus_skip_break": "Pular descanso",
   "focus_continue": "Continuar",
   "focus_alert": "Alerta de fim de ciclo",
   "focus_alert_chime": "Sinal sonoro",
   "focus_alert_custom": "Escolher um som",
   "focus_alert_none": "Silencioso",
   "focus_hold": "Esperar até eu encerrar",
-  "focus_hold_sub": "A pausa também aguarda até você tocar em Continuar. Após uma pausa, o Foco sempre aguarda.",
-  "focus_long_break": "Pausa longa",
-  "focus_long_break_sub": "A cada 4 ciclos, uma pausa mais longa.",
+  "focus_hold_sub": "O descanso também aguarda até você tocar em Continuar. Após um descanso, o Foco sempre aguarda.",
+  "focus_long_break": "Descanso longo",
+  "focus_long_break_sub": "A cada 4 ciclos, um descanso mais longo.",
   "focus_whole_rounds": "Contar apenas ciclos completos",
   "focus_whole_rounds_sub": "Um ciclo encerrado antes do fim não é salvo.",
   "focus_end_drop": "Se você encerrar agora, este ciclo não será salvo.",
@@ -1435,10 +1435,10 @@
   "focus_resources": "Cenários e sons gratuitos",
   "focus_repeat_one": "Repetir uma faixa",
   "focus_volume": "Volume",
-  "focus_notif_break": "Hora de fazer uma pausa.",
-  "focus_break_over": "Pausa encerrada",
+  "focus_notif_break": "Hora de descansar.",
+  "focus_break_over": "O descanso acabou",
   "focus_notif_back": "De volta ao foco.",
-  "focus_break_in": "Pausa em {n}",
+  "focus_break_in": "Descanso em {n}",
   "@focus_break_in": {
     "placeholders": {
       "n": {
@@ -1908,7 +1908,7 @@
     }
   },
   "focus_auto_next": "Continuar sozinho",
-  "focus_auto_next_sub": "Quando uma pausa termina, a próxima rodada começa sem esperar.",
+  "focus_auto_next_sub": "Quando um descanso termina, a próxima rodada começa sem esperar.",
   "focus_time_habit_hint": "Cada sessão de foco adiciona seus minutos ao dia em que foi concluída.",
   "focus_edit_session": "Editar sessão",
   "focus_session_updated": "Sessão atualizada",
@@ -1955,5 +1955,99 @@
         "type": "String"
       }
     }
-  }
+  },
+  "reminder_sound": "Som",
+  "reminder_sound_default": "Padrão",
+  "reminder_sound_hint": "Toque em um som para ouvi-lo. Os lembretes deste hábito vão usá-lo.",
+  "todo_repeat": "Repetir",
+  "todo_repeat_never": "Não repetir",
+  "todo_repeat_workdays": "Segunda a Sexta",
+  "todo_repeat_days": "{count, plural, =1{Todo dia} other{Todos os {count} dias}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Toda semana} other{Todas as {count} semanas}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Todo mês} other{Todos os {count} meses}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{Todo ano} other{Todos os {count} anos}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "Personalizado",
+  "todo_repeat_unit_days": "Dias",
+  "todo_repeat_unit_weeks": "Semanas",
+  "todo_repeat_unit_months": "Meses",
+  "todo_repeat_unit_years": "Anos",
+  "todo_repeat_on_day": "No dia {day}",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "No {nth, select, 1{primeiro} 2{segundo} 3{terceiro} 4{quarto} other{último}} {weekday}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "Contar a partir de quando eu terminar",
+  "todo_repeat_skip": "Pular esta",
+  "paused_day_title": "Dia pausado",
+  "paused_day_body": "Este hábito está pausado no dia {day}. Registrar mesmo assim?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "color_theme": "Cor do tema",
+  "color_theme_sub": "Paletas completas como Catppuccin ou Nord",
+  "color_theme_default": "Tema padrão",
+  "color_theme_hint": "Cada tema possui sua própria cor de fundo, texto e cor de destaque. Ele segue os modos claro e escuro.",
+  "color_theme_custom": "Suas cores",
+  "color_theme_custom_hint": "{mode, select, dark{Essas são as cores do modo escuro. Alterne para o modo claro para editá-las.} other{Essas são as cores do modo claro. Alterne para o modo escuro para editá-las.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "color_part_background": "Fundo",
+  "color_part_card": "Cartões",
+  "color_part_text": "Texto",
+  "color_part_accent": "Destaque",
+  "color_part_success": "Concluído",
+  "color_part_warning": "Aviso",
+  "color_part_danger": "Erro",
+  "color_part_info": "Informação"
 }
