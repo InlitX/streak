@@ -109,6 +109,7 @@ class HomeWidgetService {
           'cfg_tick_hint': l10n.widget_cfg_tick_hint,
           'cfg_hide_done': l10n.widget_cfg_hide_done,
           'cfg_hide_tracking': l10n.tracking_hide,
+          'cfg_today_only': l10n.today_only,
           'cfg_compact': l10n.widget_cfg_compact,
           'cfg_compact_hint': l10n.widget_cfg_compact_hint,
           'cfg_compact_todos_hint': l10n.widget_cfg_compact_todos_hint,
