@@ -316,10 +316,10 @@ class Habit {
       isTimeAmount ? formatMinutes(value) : formatAmount(value);
 
   bool get needsFocusSession =>
-      focusOnly && kind == HabitKind.positive && substeps.isEmpty;
+      focusOnly && (kind == HabitKind.positive || isTimeAmount) && substeps.isEmpty;
 
   bool blocksManualCheck(DateTime date, {bool fromFocus = false}) =>
-      needsFocusSession && !fromFocus && !isCompletedOn(date);
+      needsFocusSession && !fromFocus && (isTimeAmount || !isCompletedOn(date));
 
   final List<Substep> substeps;
 
