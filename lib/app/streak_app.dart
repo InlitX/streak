@@ -12,6 +12,7 @@ import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/widgets/sheet_swipe_close.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/onboarding/pages/onboarding_page.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -55,7 +56,7 @@ class StreakApp extends StatelessWidget {
             child: AppBackground(
               child: _DesktopFrame(
                 shell: settings.onboardingDone,
-                child: child ?? const SizedBox.shrink(),
+                child: SheetSwipeClose(child: child ?? const SizedBox.shrink()),
               ),
             ),
           ),

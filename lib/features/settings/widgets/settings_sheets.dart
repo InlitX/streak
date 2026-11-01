@@ -16,6 +16,7 @@ Future<void> showSheet(BuildContext context, WidgetBuilder builder) {
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
+    useSafeArea: true,
     builder: builder,
   );
 }
