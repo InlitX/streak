@@ -267,6 +267,13 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   ),
                   const SizedBox(height: 20),
                 ],
+                if (settings.focusEnabled && habit.needsFocusSession) ...[
+                  if (minimal)
+                    MinimalFocusRow(habit: habit)
+                  else
+                    _FocusTile(habit: habit),
+                  const SizedBox(height: 20),
+                ],
                 if (habit.kind == HabitKind.quantitative) ...[
                   QuantitativeProgress(habit: habit),
                   const SizedBox(height: 20),
@@ -287,7 +294,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   ),
                   const SizedBox(height: 20),
                 ],
-                if (settings.focusEnabled) ...[
+                if (settings.focusEnabled && !habit.needsFocusSession) ...[
                   if (minimal)
                     MinimalFocusRow(habit: habit)
                   else
