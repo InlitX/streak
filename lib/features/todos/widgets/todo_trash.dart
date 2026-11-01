@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
@@ -38,6 +39,15 @@ void discardTodos(BuildContext context, List<Todo> todos) {
 
 void discardTodo(BuildContext context, Todo todo) =>
     discardTodos(context, [todo]);
+
+Future<bool> confirmTrash(BuildContext context, int count) async =>
+    await showAppConfirmDialog(
+      context,
+      title: context.l10n.todo_delete_title(count),
+      message: context.l10n.todo_delete_body,
+      confirmLabel: context.l10n.delete,
+    ) ==
+    true;
 
 Future<void> throwInTrash(
   BuildContext context, {

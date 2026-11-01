@@ -31,6 +31,7 @@ import 'package:streak/features/todos/widgets/todo_photos.dart';
 import 'package:streak/features/todos/widgets/todo_repeat_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_sticker.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
+import 'package:streak/features/todos/widgets/todo_trash.dart';
 
 Color notePageColor(BuildContext context, int paper) {
   if (paper < 0) return Colors.transparent;
@@ -286,6 +287,10 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     Navigator.of(context).pop(widget.todo != null);
   }
 
+  Future<void> _confirmDelete() async {
+    if (await confirmTrash(context, 1)) await _delete();
+  }
+
   Future<void> _close() async {
     if (_snapshot() == _opened) {
       Navigator.of(context).pop();
@@ -379,6 +384,17 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   }
 
   Future<void> _pickTime() async {
+    if (_date.isEmpty) {
+      final today = AppClock.today();
+      final day = await showDatePicker(
+        context: context,
+        initialDate: today,
+        firstDate: DateTime(today.year - 1),
+        lastDate: DateTime(today.year + 5),
+      );
+      if (day == null || !mounted) return;
+      _setDate(day);
+    }
     final now = AppClock.now();
     final picked = await pickTime(
       context,
@@ -387,10 +403,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
           : TimeOfDay(hour: _minutes! ~/ 60, minute: _minutes! % 60),
     );
     if (picked == null || !mounted) return;
-    _edit(() {
-      _minutes = picked.hour * 60 + picked.minute;
-      if (_date.isEmpty) _date = AppClock.today().dayKey;
-    });
+    _edit(() => _minutes = picked.hour * 60 + picked.minute);
   }
 
   void _setDate(DateTime day) => _edit(() {
@@ -410,12 +423,15 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
         _repeat = picked;
         if (_date.isEmpty) _date = due.dayKey;
       }),
+      onDueChanged: _setDate,
       onSkip: repeat == null || _date.isEmpty || _done
           ? null
           : () => _edit(() {
                 final current = _repeat;
                 if (current == null) return;
-                _date = current.after(due, today: today, skipping: true).dayKey;
+                _date = current
+                    .after(parseDayKey(_date), today: today, skipping: true)
+                    .dayKey;
               }),
     );
   }
@@ -613,7 +629,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                                 icon: LucideIcons.trash2,
                                 label: context.l10n.delete,
                                 ink: ink,
-                                onTap: _delete,
+                                onTap: _confirmDelete,
                               ),
                             const SizedBox(width: 6),
                             _SaveButton(
@@ -824,19 +840,12 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                             const Spacer(),
                             _Tool(
                               icon: _date.isEmpty
-                                  ? LucideIcons.bell
-                                  : LucideIcons.bellRing,
+                                  ? LucideIcons.calendar
+                                  : LucideIcons.calendarCheck,
                               label: context.l10n.todo_date,
                               ink: ink,
                               active: _date.isNotEmpty,
                               onTap: _pickDate,
-                            ),
-                            _Tool(
-                              icon: LucideIcons.clock,
-                              label: context.l10n.todo_time,
-                              ink: ink,
-                              active: _minutes != null,
-                              onTap: _pickTime,
                             ),
                           ],
                         ),

@@ -11,6 +11,11 @@
   "discard_changes_body": "The changes you made to this habit will be lost.",
   "discard": "Discard",
   "todo_discard_body": "The changes you made to this to-do will be lost.",
+  "todo_delete_title": "{count, plural, =1{Delete this to-do?} other{Delete {count} to-dos?}}",
+  "@todo_delete_title": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "todo_delete_body": "You'll have a few seconds to undo it.",
   "keep_editing": "Keep editing",
   "delete": "Delete",
   "good_morning": "Good morning",
@@ -641,6 +646,7 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "todo_repeat_custom": "Custom",
+  "todo_repeat_starts": "Starts on",
   "todo_repeat_unit_days": "Days",
   "todo_repeat_unit_weeks": "Weeks",
   "todo_repeat_unit_months": "Months",
@@ -669,7 +675,7 @@
   "todo_project_empty": "Nothing in this folder yet",
   "todo_background": "Background",
   "todo_background_pick": "Choose a photo",
-  "todo_deleted": "Note deleted",
+  "todo_deleted": "To-do deleted",
   "todo_mark_done": "Mark as done",
   "todo_mark_open": "Mark as not done",
   "todo_pin": "Pin",
@@ -679,7 +685,7 @@
   "@todo_selected": {
     "placeholders": { "count": { "type": "int" } }
   },
-  "todo_deleted_many": "{count, plural, =1{Note deleted} other{{count} notes deleted}}",
+  "todo_deleted_many": "{count, plural, =1{To-do deleted} other{{count} to-dos deleted}}",
   "@todo_deleted_many": {
     "placeholders": { "count": { "type": "int" } }
   },

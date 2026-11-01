@@ -73,7 +73,7 @@ void main() {
 
     await tester.tap(find.widgetWithIcon(FilledButton, LucideIcons.plus));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(LucideIcons.bell));
+    await tester.tap(find.byIcon(LucideIcons.calendar));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Pick a date'));
     await tester.pumpAndSettle();

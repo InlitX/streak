@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/responsive.dart';
@@ -9,6 +10,7 @@ import 'package:streak/core/widgets/sheet_action.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/todos/data/todo_repeat.dart';
+import 'package:streak/features/todos/widgets/todo_labels.dart';
 
 String todoRepeatLabel(BuildContext context, TodoRepeat repeat) {
   if (repeat.isWorkdays) return context.l10n.todo_repeat_workdays;
@@ -26,6 +28,7 @@ Future<void> showTodoRepeatSheet(
   required TodoRepeat? repeat,
   required DateTime due,
   required ValueChanged<TodoRepeat?> onChanged,
+  required ValueChanged<DateTime> onDueChanged,
   VoidCallback? onSkip,
 }) {
   return showModalBottomSheet<void>(
@@ -40,6 +43,7 @@ Future<void> showTodoRepeatSheet(
       initial: repeat,
       due: due,
       onChanged: onChanged,
+      onDueChanged: onDueChanged,
       onSkip: onSkip,
     ),
   );
@@ -50,12 +54,14 @@ class _RepeatSheet extends StatefulWidget {
     required this.initial,
     required this.due,
     required this.onChanged,
+    required this.onDueChanged,
     required this.onSkip,
   });
 
   final TodoRepeat? initial;
   final DateTime due;
   final ValueChanged<TodoRepeat?> onChanged;
+  final ValueChanged<DateTime> onDueChanged;
   final VoidCallback? onSkip;
 
   @override
@@ -64,6 +70,7 @@ class _RepeatSheet extends StatefulWidget {
 
 class _RepeatSheetState extends State<_RepeatSheet> {
   late TodoRepeat? _repeat = widget.initial;
+  late DateTime _due = widget.due;
 
   static const _presets = [
     TodoRepeat(unit: RepeatUnit.days),
@@ -82,9 +89,23 @@ class _RepeatSheetState extends State<_RepeatSheet> {
   ];
 
   void _set(TodoRepeat? repeat) {
-    final anchored = repeat?.anchoredTo(widget.due);
+    final anchored = repeat?.anchoredTo(_due);
     setState(() => _repeat = anchored);
     widget.onChanged(anchored);
+  }
+
+  Future<void> _pickStart() async {
+    final today = AppClock.today();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _due,
+      firstDate: DateTime(today.year - 1),
+      lastDate: DateTime(today.year + 5),
+    );
+    if (picked == null || !mounted) return;
+    _due = picked;
+    widget.onDueChanged(picked);
+    _set(_repeat);
   }
 
   bool _matches(TodoRepeat preset) {
@@ -94,7 +115,7 @@ class _RepeatSheetState extends State<_RepeatSheet> {
   }
 
   void _toggleWeekday(TodoRepeat repeat, int weekday) {
-    final days = repeat.weekdays.isEmpty ? [widget.due.weekday] : [...repeat.weekdays];
+    final days = repeat.weekdays.isEmpty ? [_due.weekday] : [...repeat.weekdays];
     if (days.contains(weekday)) {
       if (days.length == 1) return;
       days.remove(weekday);
@@ -131,6 +152,13 @@ class _RepeatSheetState extends State<_RepeatSheet> {
                   onTap: () => _set(preset),
                 ),
               if (repeat != null) ...[
+                const SizedBox(height: 8),
+                SheetAction(
+                  icon: LucideIcons.calendarDays,
+                  label: context.l10n.todo_repeat_starts,
+                  badge: todoDateLabel(context, _due),
+                  onTap: _pickStart,
+                ),
                 const SizedBox(height: 18),
                 Text(
                   context.l10n.todo_repeat_custom,
@@ -142,22 +170,11 @@ class _RepeatSheetState extends State<_RepeatSheet> {
                   every: repeat.every,
                   onChanged: (every) => _set(repeat.copyWith(every: every)),
                 ),
-                const SizedBox(height: 12),
-                _UnitRow(
-                  unit: repeat.unit,
-                  onChanged: (unit) => _set(
-                    TodoRepeat(
-                      unit: unit,
-                      every: repeat.every,
-                      fromDone: repeat.fromDone,
-                    ),
-                  ),
-                ),
                 if (repeat.unit == RepeatUnit.weeks) ...[
                   const SizedBox(height: 14),
                   _WeekdayRow(
                     picked: repeat.weekdays.isEmpty
-                        ? [widget.due.weekday]
+                        ? [_due.weekday]
                         : repeat.weekdays,
                     onTap: (weekday) => _toggleWeekday(repeat, weekday),
                   ),
@@ -165,7 +182,7 @@ class _RepeatSheetState extends State<_RepeatSheet> {
                 if (repeat.unit == RepeatUnit.months) ...[
                   const SizedBox(height: 14),
                   _MonthRow(
-                    due: widget.due,
+                    due: _due,
                     byWeekday: repeat.byWeekday,
                     onChanged: (byWeekday) =>
                         _set(repeat.copyWith(byWeekday: byWeekday)),
@@ -279,36 +296,6 @@ class _EveryRow extends StatelessWidget {
           onPressed: every < 99 ? () => onChanged(every + 1) : null,
           icon: const Icon(LucideIcons.plus, size: 18),
         ),
-      ],
-    );
-  }
-}
-
-class _UnitRow extends StatelessWidget {
-  const _UnitRow({required this.unit, required this.onChanged});
-
-  final RepeatUnit unit;
-  final ValueChanged<RepeatUnit> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final labels = [
-      context.l10n.todo_repeat_unit_days,
-      context.l10n.todo_repeat_unit_weeks,
-      context.l10n.todo_repeat_unit_months,
-      context.l10n.todo_repeat_unit_years,
-    ];
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        for (final option in RepeatUnit.values)
-          ChoiceChip(
-            label: Text(labels[option.index]),
-            selected: option == unit,
-            showCheckmark: false,
-            onSelected: (_) => onChanged(option),
-          ),
       ],
     );
   }
