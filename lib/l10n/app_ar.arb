@@ -766,5 +766,17 @@
   },
   "todos": "مهمة",
   "todo_view_list": "بسيط",
-  "todo_view_papers": "مجلدات"
+  "todo_view_papers": "مجلدات",
+  "todo_delete_title": "{count, plural, =1{Delete this to-do?} other{Delete {count} to-dos?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_delete_body": "لديك بضع ثواني لإلغائه.",
+  "month_fixed_day_hint": "للتكرار في التاريخ نفسه من كل شهر، اختر «الفاصل الزمني» واضبطه على «كل شهر واحد»",
+  "export_habit": "تصدير هذه العادة",
+  "habit_links": "روابط الأتمتة"
 }
