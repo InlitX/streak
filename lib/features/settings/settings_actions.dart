@@ -135,6 +135,7 @@ class SettingsActions {
     context.read<TodosController>().reload();
     context.read<TodoTagsController>().reload();
     context.read<CategoriesController>().reload();
+    context.read<IslandController>().reload();
     await HomeWidgetService.sync(habits.asMap);
   }
 

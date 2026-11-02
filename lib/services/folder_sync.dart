@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/features/habits/data/completion.dart';
+import 'package:streak/features/island/data/island_piece.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/notification_service.dart';
 
@@ -165,6 +166,7 @@ class FolderSync {
     for (final category in data.categories) {
       await LocalStore.mergeCategory(category);
     }
+    brought += await _island(data.settings);
     bool orphan(String habitId) =>
         LocalStore.habit(habitId) == null && LocalStore.deletedAt(habitId) != null;
     brought += await _records(data.notes.where((n) => !orphan(n.habitId)), stamps,
@@ -176,6 +178,24 @@ class FolderSync {
     brought += await _records(data.todoTags, stamps, (t) => t.id,
         LocalStore.todoTag, (t) => t.toMap(), LocalStore.writeTodoTag);
     return brought;
+  }
+
+  static Future<int> _island(Map<String, Object?> theirs) async {
+    final owned = {
+      ...LocalStore.setting<List<dynamic>>('islandOwned', const []).whereType<String>(),
+    };
+    final prices = {for (final piece in islandPieces) piece.id: piece.price};
+    var added = 0;
+    var price = 0;
+    for (final id in (theirs['islandOwned'] as List? ?? const []).whereType<String>()) {
+      if (!owned.add(id)) continue;
+      added++;
+      price += prices[id] ?? 0;
+    }
+    if (added == 0) return 0;
+    await LocalStore.writeSetting('islandOwned', owned.toList());
+    await LocalStore.writeSetting('islandSpent', LocalStore.setting('islandSpent', 0) + price);
+    return 1;
   }
 
   static Future<int> _forget(Map<String, int> deleted) async {
