@@ -1394,7 +1394,7 @@
   "todo_body_hint": "노트",
   "todo_background": "배경",
   "todo_background_pick": "사진 선택",
-  "todo_deleted": "노트를 삭제했어요",
+  "todo_deleted": "할 일을 삭제했어요",
   "todo_pin": "고정",
   "todo_unpin": "고정 해제",
   "todo_select": "선택",
@@ -1406,7 +1406,7 @@
       }
     }
   },
-  "todo_deleted_many": "{count, plural, other{노트 {count}개를 삭제했어요}}",
+  "todo_deleted_many": "{count, plural, other{할 일 {count}개를 삭제했어요}}",
   "@todo_deleted_many": {
     "placeholders": {
       "count": {
@@ -2048,5 +2048,44 @@
         "type": "String"
       }
     }
-  }
+  },
+  "book_at_page": "현재 페이지",
+  "book_read_before": "이미 읽은 횟수",
+  "focus_simple_view": "간단히 보기",
+  "focus_double_tap_tip": "뒤로 가려면 시계를 두 번 누르세요",
+  "habit_link_open": "습관 열기",
+  "habit_link_focus": "집중 시간 시작",
+  "habit_link_relapse": "실수 기록",
+  "habit_link_add": "{amount} 추가",
+  "@habit_link_add": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_link_done": "완료 표시",
+  "check_sound": "완료 소리",
+  "check_sound_sub": "습관을 완료했을 때 부드러운 차임 소리를 재생해요. 폰이 무음이면 재생하지 않아요.",
+  "todo_delete_title": "{count, plural, =1{이 할 일을 삭제할까요?} other{할 일 {count}개를 삭제할까요?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_delete_body": "몇 초 동안 취소할 수 있어요.",
+  "month_fixed_day_hint": "매달 같은 날짜로 설정하려면, 간격을 고르고 1개월로 설정하세요",
+  "export_habit": "이 습관 내보내기",
+  "habit_links": "자동화용 링크",
+  "habit_links_off": "Tasker같은 앱, 바로가기, NFC 태그가 링크를 열어 습관을 체크할 수 있도록 하세요. 설정을 켜기 전에는 꺼진 채 유지돼요.",
+  "habit_links_on": "이 폰의 모든 앱에서 링크를 열어 모든 습관을 확인할 수 있어요. 하나 눌러서 복사하세요.",
+  "habit_link_undo": "하루 지우기",
+  "habit_link_day": "다른 날을 지정하려면, 끝에 &day=2026-10-31을 붙이세요.",
+  "at_most": "최대",
+  "at_most_sub": "목표가 제한에 해당해요. 무언가 기록한 뒤 목표 이하를 유지하면 하루가 완료돼요.",
+  "todo_repeat_starts": "시작",
+  "hide_clean": "절제한 날 숨김",
+  "hide_clean_sub": "절제 습관은 실수한 날만 표시하기"
 }
