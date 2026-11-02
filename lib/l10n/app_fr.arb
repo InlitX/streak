@@ -1301,5 +1301,19 @@
   "focus_label_remove_confirm": "Supprimer",
   "by_label": "Par étiquette",
   "reminders_ready_title": "Les rappels sont activés",
-  "focus_end_add_time": "Ajouter un temps de concentration"
+  "focus_end_add_time": "Ajouter un temps de concentration",
+  "todo_delete_body": "Vous aurez quelques secondes pour annuler.",
+  "onb_yours_title": "Vos données vous appartiennent",
+  "onb_yours_body": "Sauvegardez ou exportez où vous voulez.",
+  "onb_step": "Étape {step} sur {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }
