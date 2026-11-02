@@ -238,6 +238,7 @@ class NotificationService {
     }
 
     if (isPortable) await _plugin.cancelAll();
+    if (_keepsPayloads) await _loadPayloads();
     await _repairStore();
 
     _ready = true;
@@ -970,6 +971,10 @@ class NotificationService {
   Future<void> cancelAll() async {
     if (_queuesInApp) _inApp.cancelAll();
     await _plugin.cancelAll();
+    if (_keepsPayloads) {
+      _payloads.clear();
+      await _savePayloads();
+    }
   }
 
   Future<void> _cancelExcept(String habitId, Set<int> keep) async {
@@ -1017,7 +1022,33 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: matchDateTimeComponents,
     );
+    if (_keepsPayloads && payload != null) {
+      _payloads['$id'] = payload;
+      await _savePayloads();
+    }
   }
+
+  static const _payloadsKey = 'windowsReminderPayloads';
+
+  final _payloads = <String, String>{};
+
+  bool get _keepsPayloads => Platform.isWindows && !isPortable;
+
+  Future<void> _loadPayloads() async {
+    if (LocalStore.setting<Object?>(_payloadsKey, null) == null) {
+      await _plugin.cancelAll();
+      await _savePayloads();
+      await LocalStore.writeSetting('habitRemindersArmedOn', '');
+      await LocalStore.writeSetting('todoRemindersArmedOn', '');
+      return;
+    }
+    for (final MapEntry(:key, :value) in LocalStore.settingMap(_payloadsKey).entries) {
+      if (value is String) _payloads[key] = value;
+    }
+  }
+
+  Future<void> _savePayloads() =>
+      LocalStore.writeSetting(_payloadsKey, Map<String, String>.of(_payloads));
 
   static const _windowsReadyId = -987653;
 
@@ -1046,12 +1077,22 @@ class NotificationService {
   Future<void> _cancel(int id) async {
     if (_queuesInApp) _inApp.cancel(id);
     await _plugin.cancel(id);
+    if (_keepsPayloads && _payloads.remove('$id') != null) await _savePayloads();
   }
 
-  Future<List<PendingNotificationRequest>> _pending() =>
-      _queuesInApp
-          ? Future.value(_inApp.pending)
-          : _plugin.pendingNotificationRequests();
+  Future<List<PendingNotificationRequest>> _pending() async {
+    if (_queuesInApp) return _inApp.pending;
+    final pending = await _plugin.pendingNotificationRequests();
+    if (!_keepsPayloads) return pending;
+    final live = {for (final n in pending) '${n.id}'};
+    final before = _payloads.length;
+    _payloads.removeWhere((id, _) => !live.contains(id));
+    if (_payloads.length != before) await _savePayloads();
+    return [
+      for (final n in pending)
+        PendingNotificationRequest(n.id, n.title, n.body, n.payload ?? _payloads['${n.id}']),
+    ];
+  }
 
   int _notificationId(String habitId, String reminderId, int slot) =>
       ReminderSchedule.notificationId(habitId, reminderId, slot);
