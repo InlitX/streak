@@ -400,9 +400,16 @@ class DialPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final r = size.shortestSide / 2;
     final center = size.center(Offset.zero);
-    final pale = Color.lerp(color, Colors.white, 0.80)!;
+    final light = color.computeLuminance() > 0.82;
+    final pale = light
+        ? Color.lerp(color, Colors.black, 0.30)!
+        : Color.lerp(color, Colors.white, 0.80)!;
     final face = Color.lerp(color, Colors.white, 0.93)!;
     final ink = Color.lerp(color, Colors.black, 0.30)!;
+    final unlit = light
+        ? Colors.black.withValues(alpha: 0.18)
+        : Colors.white.withValues(alpha: 0.75);
+    final needle = light ? Color.lerp(color, Colors.black, 0.45)! : color;
     final amount = fill.clamp(0.0, 1.0);
 
     canvas.drawCircle(center, r, Paint()..color = pale);
@@ -416,7 +423,7 @@ class DialPainter extends CustomPainter {
       final lit = (amount * count - i).clamp(0.0, 1.0);
       final a = 2 * math.pi * (i + 0.5) / count;
       final dir = Offset(math.sin(a), -math.cos(a));
-      tick.color = Color.lerp(Colors.white.withValues(alpha: 0.75), color, lit)!;
+      tick.color = Color.lerp(unlit, color, lit)!;
       canvas.drawLine(
         center + dir * r * (small ? 0.70 : 0.74),
         center + dir * r * (small ? 0.84 : 0.86),
@@ -454,7 +461,7 @@ class DialPainter extends CustomPainter {
       center + dir * knob * 0.56,
       center + dir * knob * 0.76,
       Paint()
-        ..color = amount > 0 ? color : pale
+        ..color = amount > 0 ? needle : pale
         ..strokeWidth = math.max(1.8, r * 0.11)
         ..strokeCap = StrokeCap.round,
     );
