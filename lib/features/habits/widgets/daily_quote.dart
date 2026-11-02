@@ -91,14 +91,16 @@ class _DailyQuoteState extends State<DailyQuote> {
         switchOutCurve: Curves.easeIn,
         child: Row(
           key: ValueKey(quotes[index]),
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(LucideIcons.sparkles, size: 14, color: context.colors.primary),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(LucideIcons.sparkles, size: 14, color: context.colors.primary),
+            ),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
                 quotes[index],
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
