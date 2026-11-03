@@ -12,7 +12,7 @@
   "good_afternoon": "Добрый день",
   "good_evening": "Добрый вечер",
   "no_habits_yet": "Пока нет привычек",
-  "all_done_today": "Всё выполнено сегодня!",
+  "all_done_today": "На сегодня всё сделано!",
   "x_of_y_completed": "Выполнено {done} из {total}",
   "@x_of_y_completed": {
     "placeholders": {
@@ -32,7 +32,7 @@
   "onb1_body": "Отмечайте привычку одним нажатием и наблюдайте, как растёт ваш прогресс день за днём.",
   "onb2_title": "Не сбивайтесь с пути",
   "onb2_body": "Ежедневные, еженедельные или ежемесячные цели с умными напоминаниями, чтобы ничего не пропустить.",
-  "onb3_title": "Отслеживайте прогресс",
+  "onb3_title": "Отслеживайте свой прогресс",
   "onb3_body": "Подробная статистика и годовая сетка точно покажут, как далеко вы продвинулись.",
   "skip": "Пропустить",
   "next": "Далее",
@@ -66,9 +66,9 @@
   "auto_backup_off": "Выкл",
   "auto_backup_daily": "Каждый день",
   "auto_backup_weekly": "Каждую неделю",
-  "auto_backup_where": "Полная резервная копия создаётся при открытии приложения. Хранятся последние 5 копий.",
+  "auto_backup_where": "Когда вы открываете приложение, Streak сохраняет полную резервную копию: .zip со всеми данными, включая фото и музыку, и .json. Также создаётся читаемая копия, которую можно открыть в любом редакторе. Хранятся несколько последних копий.",
   "auto_backup_folder": "Папка",
-  "auto_backup_folder_default": "Папка приложения",
+  "auto_backup_folder_default": "Внутри приложения (удаляется при удалении приложения)",
   "auto_backup_folder_set": "Папка сохранена",
   "auto_backup_folder_failed": "В эту папку нельзя записать данные",
   "auto_backup_no_permission": "Нет разрешения на доступ к хранилищу",
@@ -99,7 +99,7 @@
   "new_habit": "Новая привычка",
   "edit_habit": "Изменить привычку",
   "name": "Название",
-  "name_hint": "например, Утренняя пробежка",
+  "name_hint": "Например, Утренняя пробежка",
   "description": "Описание",
   "description_hint": "Необязательная заметка",
   "icon": "Значок",
@@ -671,7 +671,7 @@
   "celebration": "Эффект завершения",
   "celebration_confetti": "Конфетти",
   "celebration_fireworks": "Фейерверк",
-  "celebration_surprise": "Удиви меня",
+  "celebration_surprise": "«Удиви меня»",
   "focus_notif_channel": "Сессии фокусировки",
   "focus_notif_running": "Фокусировка",
   "focus_paused": "Пауза",
@@ -687,7 +687,7 @@
       }
     }
   },
-  "focus_daily_goal": "Дневная цель фокусировки",
+  "focus_daily_goal": "Цель фокусировки",
   "focus_goal_today": "{done} из {goal} сегодня",
   "@focus_goal_today": {
     "placeholders": {
@@ -780,7 +780,7 @@
     }
   },
   "yesterday": "Вчера",
-  "notes_hint": "Долгое нажатие на день покажет заметки или позволит добавить их",
+  "notes_hint": "Откройте привычку и долго нажмите на день в календаре, чтобы посмотреть или добавить заметки",
   "app_style": "Стиль приложения",
   "app_style_sub": "Выберите, как приложение выглядит и ощущается.",
   "style_classic": "Классический",
@@ -789,7 +789,7 @@
   "style_minimal_desc": "Сетка привычек и настройки, сгруппированные в четыре раздела.",
   "appearance_sub": "Тема, акцент и фон",
   "preferences_sub": "Язык, неделя и сортировка",
-  "data_sub": "Резервные копии и импорт",
+  "data_sub": "Резервные копии, архивы и импорт",
   "about_sub": "Версия, исходный код и поддержка",
   "support_sub": "Сообщить об ошибке или предложить функцию",
   "check_style": "Стиль отметки",
@@ -826,7 +826,7 @@
   "done": "Готово",
   "accent_color": "Акцентный цвет",
   "sort_completed_last": "Выполненные — в конец",
-  "today_only": "Только сегодняшние привычки",
+  "today_only": "Только сегодняшние",
   "card_activity": "Активность на карточках",
   "focus_only": "Только через сессию фокусировки",
   "focus_only_hint": "Привычка отмечается по завершении сессии, а не нажатием.",
@@ -901,7 +901,7 @@
       }
     }
   },
-  "widget_done_today": "выполнено сегодня",
+  "widget_done_today": "Выполнено сегодня",
   "widget_best_streak": "🔥 Лучшая серия: {streak}",
   "@widget_best_streak": {
     "placeholders": {
@@ -1082,7 +1082,7 @@
   "discard_changes_body": "Сделанные вами в этой привычке изменения будут утеряны.",
   "onb_kicker": "Добро пожаловать",
   "refresh_now": "Обновить",
-  "refresh_now_sub": "Добавьте то, что оставили в папке ваши другие устройства",
+  "refresh_now_sub": "Загрузите то, что другие устройства оставили в папке",
   "data_folder": "Папка с данными",
   "data_folder_documents": "Документы",
   "data_folder_app": "Рядом с приложением",
@@ -1133,11 +1133,11 @@
   "pick_one_day": "Выберите как минимум один день",
   "reminder_habit_days": "В дни привычки",
   "reminder_habit_days_hint": "Срабатывает в дни, когда нужно выполнить привычку.",
-  "focus_label": "Подпись",
-  "focus_label_none": "Без подписи",
-  "focus_label_new": "Новая подпись",
+  "focus_label": "Метка",
+  "focus_label_none": "Без метки",
+  "focus_label_new": "Новая метка",
   "focus_label_hint": "Математика, чтение, работа...",
-  "focus_label_remove": "Удалить подпись",
+  "focus_label_remove": "Удалить метку",
   "focus_label_remove_body": "{label} пропадает из списка. В прошлых сеансах он остаётся.",
   "@focus_label_remove_body": {
     "placeholders": {
@@ -1209,7 +1209,7 @@
   "miss_other": "Другое",
   "miss_other_hint": "Напишите причину",
   "today_filter": "Показать",
-  "focus_label_icon": "Иконка (необязательно)",
+  "focus_label_icon": "Значок (необязательно)",
   "widget_this_week": "Эта неделя",
   "widget_last_days": "Последние {count} дней",
   "@widget_last_days": {
@@ -1241,7 +1241,7 @@
   "focus_long_break": "Длительный перерыв",
   "focus_long_break_sub": "Каждые 4 раунда — более продолжительный перерыв.",
   "onb_blurb": "Небольшие ежедневные отметки, которые превращаются в привычки.",
-  "onb_free_title": "Бесплатно навсегда",
+  "onb_free_title": "Бесплатно, навсегда",
   "onb_free_body": "Без рекламы, без подписок, без заблокированных функций.",
   "onb_private_title": "Конфиденциально и офлайн",
   "onb_private_body": "Всё остаётся на вашем устройстве. Аккаунт не нужен.",
@@ -1300,5 +1300,354 @@
   "habit_links_on": "Любое приложение на этом телефоне может открывать эти ссылки — для всех ваших привычек. Нажмите на ссылку, чтобы скопировать её.",
   "habit_link_undo": "Очистить день",
   "reminder_sound": "Звук",
-  "habit_link_day": "Для другого дня добавьте в конец &day=2026-10-31."
+  "habit_link_day": "Для другого дня добавьте в конец &day=2026-10-31.",
+  "color_part_background": "Фон",
+  "color_part_accent": "Акцент",
+  "color_part_card": "Карточки",
+  "color_part_danger": "Опасность",
+  "color_part_info": "Инфо",
+  "color_part_success": "Успех",
+  "color_part_warning": "Предупреждение",
+  "color_part_text": "Текст",
+  "color_theme": "Цветовая схема",
+  "color_theme_custom": "Ваши цвета",
+  "color_theme_default": "Streak",
+  "color_theme_hint": "Каждая тема задаёт свои цвета фона, текста и акцента. Подстраивается под светлую и тёмную тему.",
+  "color_theme_sub": "Полные палитры вроде Catppuccin или Nord",
+  "color_theme_custom_hint": "{mode, select, dark{Это цвета тёмной темы. Переключитесь на светлую, чтобы изменить их.} other{Это цвета светлой темы. Переключитесь на тёмную, чтобы изменить их.}}",
+  "@color_theme_custom_hint": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "app_background_sub": "То, что вы видите позади карточек",
+  "check_style_sub": "Квадратные или круглые метки",
+  "app_icon_sub": "Иконка на вашем домашнем экране",
+  "language_sub": "Язык всего приложения",
+  "celebration_sub": "То, что вы видите, когда отмечаете привычку",
+  "check_sound": "Звук при завершении",
+  "quotes_sub": "Какие цитаты показываются на «Сегодня»",
+  "check_sound_sub": "Мягкий звук при выполнении привычки. Беззвучно, если телефон в беззвучном режиме.",
+  "start_view_sub": "Вкладка «Сегодня» открывается в виде",
+  "week_start_sub": "Первый столбец каждой сетки",
+  "focus_edit_session": "Изменить сессию",
+  "focus_session_updated": "Сессия обновлена",
+  "focus_time_habit_hint": "Каждая сессия фокусировки добавляет свои минуты к тому дню, когда она была выполнена.",
+  "focus_mode_timer": "Таймер",
+  "widget_todos_open": "Задач  {count}",
+  "@widget_todos_open": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_todos_empty": "На сегодня ничего не осталось",
+  "widget_streak_days": "Дней подряд",
+  "widget_cfg_days": "Показывать дней",
+  "widget_today_done": "{done} из {total} выполнено",
+  "@widget_today_done": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "widget_cfg_todos_all": "Показывать каждую задачу",
+  "widget_cfg_todos_hint": "Выкл: только сегодня, просроченные и недатированные задачи",
+  "widget_cfg_show_art": "Показать рисунок",
+  "widget_cfg_show_icons": "Иконка привычки",
+  "widget_cfg_show_cards": "Фон позади каждой привычки",
+  "widget_cfg_show_details": "Серия под названием",
+  "widget_cfg_buttons": "Кнопки",
+  "widget_cfg_buttons_round": "Круглые",
+  "widget_cfg_buttons_square": "Квадратные",
+  "widget_cfg_buttons_flower": "Цветочные",
+  "widget_cfg_tick": "Галочки",
+  "widget_cfg_tick_hint": "Выкл: отмеченные кнопки заполняются только цветом",
+  "widget_cfg_hide_done": "Спрятать выполненные",
+  "widget_cfg_compact": "Компактный",
+  "widget_cfg_compact_hint": "Ряды меньше, серия рядом с названием",
+  "widget_cfg_compact_todos_hint": "Ряды меньше, время рядом с задачей",
+  "widget_cfg_today_band": "Выделять сегодняшний день",
+  "widget_cfg_show_habits": "Показывать привычки",
+  "widget_cfg_show_habits_hint": "Выберите одну или несколько. Если выбрана одна, в сводке показывается серия.",
+  "a11y_previous_month": "Предыдущий месяц",
+  "a11y_next_month": "Следующий месяц",
+  "plan_show_month": "Показать весь месяц",
+  "plan_show_week": "Показать одну неделю",
+  "period_this_week": "Эта неделя",
+  "tracked_week": "{n} на этой неделе",
+  "@tracked_week": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_month": "{n} в этом месяце",
+  "@tracked_month": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "tracked_year": "{n} в этом году",
+  "@tracked_year": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "period_last_week": "Прошлая неделя",
+  "notes_empty_all": "Пока нет заметок",
+  "style_express": "Экспресс",
+  "style_express_desc": "Скруглённые формы, пружинистое движение и более широкий шрифт.",
+  "celebration_none": "Нет",
+  "quant_mode_add": "Добавить",
+  "quant_mode_replace": "Заменить",
+  "quant_add_title": "Добавить сумму",
+  "island": "Остров",
+  "average_short": "Сред.",
+  "todo_delete_title": "{count, plural, =1{Удалить эту задачу?} other{Удалить {count} задач(-и)?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_delete_body": "У вас будет несколько секунды, чтобы отменить это.",
+  "animations": "Анимации",
+  "animations_sub": "Появление, смена страниц и движение текста",
+  "month_fixed_day_hint": "Для одного и того же числа каждый месяц выберите «Интервал» и задайте 1 месяц",
+  "reminder_sound_hint": "Нажмите на звук, чтобы услышать его. Напоминания этой привычки будут использовать его.",
+  "at_most": "Не более",
+  "at_most_sub": "Цель — это лимит. День выполнен, когда вы что-то отмечаете и остаётесь в пределах лимита.",
+  "month_weekday": "Каждый месяц один и тот же день недели",
+  "month_weekday_sub": "Приходится на {when} месяца, а не на фиксированную дату.",
+  "@month_weekday_sub": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "nth_weekday": "{n, select, first{первый} second{второй} third{третий} fourth{четвёртый} other{последний}} {day}",
+  "@nth_weekday": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat": "Повторять",
+  "todo_repeat_never": "Не повторять",
+  "todo_repeat_workdays": "С понедельника по пятницу",
+  "todo_repeat_days": "{count, plural, =1{Каждый день} other{Каждые{count} дн.}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_weeks": "{count, plural, =1{Каждую неделю} other{Каждые {count} нед.}}",
+  "@todo_repeat_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Каждый месяц} other{Каждые {count} мес.}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_years": "{count, plural, =1{Каждый год} other{Каждые {count} г.}}",
+  "@todo_repeat_years": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "Своё",
+  "todo_repeat_starts": "Начать с",
+  "todo_repeat_unit_days": "Дней",
+  "todo_repeat_unit_weeks": "Недель",
+  "todo_repeat_unit_months": "Месяцев",
+  "todo_repeat_unit_years": "Лет",
+  "todo_repeat_on_day": "В {day}-й день",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "В {nth, select, 1{первый} 2{второй} 3{третий} 4{четвёртый} other{последний}} {weekday}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "Считать от момента выполнения",
+  "todo_sort_high_first": "С высоким приоритетом первые",
+  "todo_sort_low_first": "С низким приоритетом первые",
+  "todo_sort": "Порядок приоритета",
+  "todo_project_empty": "В этой папке пока ничего нет",
+  "todo_mark_done": "Выполнить",
+  "todo_mark_open": "«Не» выполнить",
+  "todo_selected": "{count, plural, =1{1 выбрана} other{{count} выбрано}}",
+  "@todo_selected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_deleted_many": "{count, plural, =1{Задача удалена} other{{count} задач удалено}}",
+  "@todo_deleted_many": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "Искать задачи",
+  "todo_search_empty": "Нет совпадений",
+  "prefs_cards": "Карточки и календарь",
+  "focus_skip_break": "Пропустить перерыв",
+  "focus_countdown": "3-секундный обратный отсчёт",
+  "focus_alert": "Сигнал конца раунда",
+  "focus_alert_chime": "Звонок",
+  "focus_alert_none": "Без звука",
+  "focus_hold_sub": "Перерыв тоже ждёт, пока вы не нажмёте «Продолжить». После перерыва Фокус всегда ждёт.",
+  "focus_hold": "Ждать, пока я не остановлю",
+  "focus_restart": "Перезапустить",
+  "focus_restart_title": "Перезапустить этот раунд?",
+  "focus_restart_body": "То время, которое вы фокусировались в этом раунде, будет потеряно.",
+  "focus_end_reached_free": "Цель достигнута.",
+  "focus_track_fire": "Fire",
+  "focus_end_drop": "Если вы закончите сейчас, этот раунд не сохранится.",
+  "focus_auto_next_sub": "Когда перерыв закончится, следующий раунд начнется без ожидания.",
+  "focus_simple_view": "Простой вид",
+  "focus_auto_next": "Продолжать автоматически",
+  "focus_track_ticking": "Тикающие часы",
+  "focus_resources": "Ресурсы",
+  "focus_double_tap_tip": "Дважды нажмите на часы, чтобы вернуться назад",
+  "focus_notif_break": "Время для перерыва.",
+  "focus_break_over": "Перерыв окончен",
+  "focus_notif_back": "Вернуться к фокусировке.",
+  "plan_show_todos": "Задач",
+  "swipe_cards_sub": "Свайп влево выполняет привычку, вправо — отменяет.",
+  "swipe_cards": "Свайп привычек",
+  "github_star_sub": "Дайте проекту звезду, чтобы его нашло больше людей",
+  "emoji_own": "Введите или вставьте любой смайлик",
+  "report_issue_sub": "Расскажите об ошибке или предложите функцию",
+  "category_order_empty": "Присвойте привычке категорию, и она появится здесь",
+  "heatmap_path": "Соединять дни",
+  "today_only_sub": "Скрывает привычки, которые не запланированы на сегодня",
+  "hide_done": "Скрывать выполненные",
+  "hide_done_sub": "То, что вы выполнили сегодня, уйдёт из списка",
+  "hide_clean": "Скрывать «чистые дни»",
+  "heatmap_path_sub": "Рисует сетку как один длинный путь",
+  "sort_completed_last_sub": "Отправляет в конец списка то, что вы закончили",
+  "hide_clean_sub": "Привычки избегания показываются только в дни срывов",
+  "past_first": "Сначала открывать прошедшие дни",
+  "past_first_sub": "Нажатие на прошедший день сначала показывает его, чтобы ничего не изменить случайно",
+  "miss_reason_title": "Почему вы это пропустили?",
+  "miss_reasons": "Почему пропустили",
+  "miss_overslept": "Проспали",
+  "miss_busy": "Были заняты",
+  "miss_traveling": "Были в поездке",
+  "miss_sick": "Болели",
+  "miss_tired": "Устали",
+  "miss_forgot": "Забыли",
+  "day_not_done": "Не сделано",
+  "day_clean": "Без срыва",
+  "day_relapses": "{count, plural, =1{1 срыв} other{Срывов: {count}}}",
+  "@day_relapses": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "day_log_relapse": "Отметить срыв",
+  "day_amount": "{value} из {goal}",
+  "@day_amount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "today_fold_done": "Выполнено ({count})",
+  "@today_fold_done": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "theme_sub": "Светлая, тёмная или системная",
+  "accent_color_sub": "Используется на кнопках и выделениях",
+  "focus_daily_goal_sub": "Сколько минут фокусировки в день вы хотите набирать",
+  "focus_save_timer": "Сохранить таймер",
+  "focus_remove_timer": "Удалить сохранённый таймер?",
+  "focus_days_row": "",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vacation_all": "Пауза для всех привычек",
+  "vacation_all_sub": "Пока она включена, пропуски не засчитываются",
+  "period_this_month": "Этот месяц",
+  "period_last_month": "Прошлый месяц",
+  "period_this_year": "Этот год",
+  "period_all_time": "За всё время",
+  "period_last_year": "Прошлый год",
+  "notes_all": "Все заметки",
+  "island_shop": "Магазин",
+  "island_open": "Открыть остров",
+  "times_completed": "Выполнено раз",
+  "quant_preset_time": "Час",
+  "widget_cfg_content": "Содержимое",
+  "focus_whole_rounds": "Учитывать только полные раунды",
+  "focus_period_sessions": "{count, plural, =0{Нет сессий} =1{1 сессия} other{{count} сессий}}",
+  "@focus_period_sessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "view_switcher_needs": "Включите активность на карточках, чтобы использовать это"
 }
