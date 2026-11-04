@@ -19,6 +19,7 @@ data class WidgetLook(
     val compact: Boolean = false,
     val band: Boolean = true,
     val today: Boolean = false,
+    val colors: Boolean = true,
 )
 
 object WidgetConfig {
@@ -101,6 +102,7 @@ object WidgetConfig {
             compact = p.getBoolean("compact_$k", false),
             band = p.getBoolean("band_$k", true),
             today = p.getBoolean("statsToday_$k", false),
+            colors = p.getBoolean("habitColors_$k", true),
         )
     }
 
@@ -119,6 +121,7 @@ object WidgetConfig {
             .putBoolean("compact_$id", look.compact)
             .putBoolean("band_$id", look.band)
             .putBoolean("statsToday_$id", look.today)
+            .putBoolean("habitColors_$id", look.colors)
             .commit()
     }
 
@@ -207,6 +210,7 @@ object WidgetConfig {
             .remove("compact_$id")
             .remove("band_$id")
             .remove("statsToday_$id")
+            .remove("habitColors_$id")
             .apply()
     }
 

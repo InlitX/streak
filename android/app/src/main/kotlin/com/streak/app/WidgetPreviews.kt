@@ -105,14 +105,26 @@ fun FocusSample(s: WidgetStyle) {
 }
 
 @Composable
-fun FocusBoardSample(s: WidgetStyle) {
+fun FocusBoardSample(s: WidgetStyle, colors: Boolean) {
     val context = LocalContext.current
     val label = 14f
+    val halo = if (s.dark) Color.Black else Color.White
+    val habits = listOf(
+        Triple(0xFF5B8DEF.toInt(), "Study", intArrayOf(20, 25, 10, 30, 0, 25, 40)),
+        Triple(0xFFE5577A.toInt(), "Read", intArrayOf(10, 15, 10, 20, 0, 20, 25)),
+        Triple(0xFF7BC74D.toInt(), "Guitar", intArrayOf(0, 15, 0, 20, 0, 0, 20)),
+    )
+    val stacks = if (colors) habits.map { it.first to it.third } else emptyList()
     Row(Modifier.fillMaxSize().padding(16.dp)) {
         Column(Modifier.weight(0.55f).fillMaxHeight()) {
             Bmp(WidgetDraw.text(context, "1h 25m", 32f, s.content, 800), context)
             Bmp(WidgetDraw.text(context, sample(context, "focus_today", "Focus today"), label, s.content, 800), context)
             Spacer(Modifier.weight(1f))
+            habits.take(1).forEachIndexed { i, (color, name, _) ->
+                val dot = if (colors) color else s.muted.toArgb()
+                Bmp(WidgetDraw.legend(context, dot, name, if (i == 0) "2h 30m" else "1h 40m", label * 0.85f, s.muted, halo, 150f), context)
+            }
+            Spacer(Modifier.height(4.dp))
             Bmp(WidgetDraw.text(context, "${sample(context, "label_week", "Week")}  6h 40m", label * 0.85f, s.muted, 650), context)
             Bmp(WidgetDraw.text(context, "${sample(context, "label_month", "Month")}  24h", label * 0.85f, s.muted, 650), context)
         }
@@ -121,7 +133,7 @@ fun FocusBoardSample(s: WidgetStyle) {
             Bmp(WidgetDraw.text(context, "12", label * 1.9f, s.content, 800), context)
             Bmp(WidgetDraw.text(context, sample(context, "streak_days", "Streak days"), label * 0.85f, s.muted, 650), context)
             Spacer(Modifier.weight(1f))
-            Bmp(WidgetDraw.weekBars(context, 120f, 52f, intArrayOf(30, 55, 20, 70, 0, 45, 85), emptyList(), s.content), context)
+            Bmp(WidgetDraw.weekBars(context, 120f, 52f, intArrayOf(30, 55, 20, 70, 0, 45, 85), emptyList(), s.content, stacks), context)
         }
     }
 }

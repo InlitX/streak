@@ -204,7 +204,7 @@ class WidgetConfigActivity : ComponentActivity() {
         if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
         if (type == WType.STATS || type == WType.TODOS || type == WType.FOCUS) WidgetConfig.setArt(this, appWidgetId, art)
         if (type == WType.HABIT) WidgetConfig.setSpan(this, appWidgetId, span)
-        if (type == WType.HABIT || type == WType.TODAY || type == WType.TODOS || type == WType.STATS) WidgetConfig.setLook(this, appWidgetId, look)
+        if (type == WType.HABIT || type == WType.TODAY || type == WType.TODOS || type == WType.STATS || type == WType.FOCUS) WidgetConfig.setLook(this, appWidgetId, look)
         if (filters) WidgetConfig.setHabits(this, appWidgetId, chosen)
         if (type == WType.HEATMAP) {
             HeatmapConfig.setHabit(this, appWidgetId, habitId)
@@ -349,7 +349,7 @@ class WidgetConfigActivity : ComponentActivity() {
         val hasArt = type == WType.STATS || type == WType.TODOS || (type == WType.FOCUS && !board)
         val hasPicker = filters && habits.size > 1
         val hasContent = type == WType.HEATMAP || type == WType.TODOS || type == WType.HABIT ||
-            type == WType.TODAY || hasArt || hasPicker
+            type == WType.TODAY || hasArt || hasPicker || board
 
         CompositionLocalProvider(LocalTextStyle provides TextStyle(fontFamily = rounded, color = ink)) {
             Column(modifier = Modifier.fillMaxSize().background(screenBg)) {
@@ -483,6 +483,13 @@ class WidgetConfigActivity : ComponentActivity() {
                                     )
                                 }
                                 Line()
+                            }
+                            if (type == WType.FOCUS && board) {
+                                ToggleRow(
+                                    tr("cfg_habit_colors", "Habit colors"),
+                                    tr("cfg_habit_colors_hint", "Each bar shows the time of each habit in its color"),
+                                    look.colors,
+                                ) { look = look.copy(colors = it) }
                             }
                             if (hasArt) {
                                 if (type == WType.TODOS) Line()
@@ -860,7 +867,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 WType.HABIT -> WeekSample(style, span, look)
                 WType.TODAY -> TodaySample(style, look)
                 WType.STATS -> if (look.today) TodayProgressSample(style) else StatsSample(style, art)
-                WType.FOCUS -> if (board) FocusBoardSample(style) else FocusSample(style)
+                WType.FOCUS -> if (board) FocusBoardSample(style, look.colors) else FocusSample(style)
                 WType.HEATMAP -> Box(Modifier.padding(14.dp)) { LivePreview(style, layout, habitId, allColor) }
                 WType.TODOS -> TodosSample(style, art, look)
             }

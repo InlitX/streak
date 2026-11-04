@@ -114,6 +114,8 @@ class HomeWidgetService {
           'cfg_compact_hint': l10n.widget_cfg_compact_hint,
           'cfg_compact_todos_hint': l10n.widget_cfg_compact_todos_hint,
           'cfg_today_band': l10n.widget_cfg_today_band,
+          'cfg_habit_colors': l10n.widget_cfg_habit_colors,
+          'cfg_habit_colors_hint': l10n.widget_cfg_habit_colors_hint,
           'cfg_days': l10n.widget_cfg_days,
           'cfg_show_activity': l10n.widget_cfg_show_activity,
           'cfg_show_habits': l10n.widget_cfg_show_habits,
