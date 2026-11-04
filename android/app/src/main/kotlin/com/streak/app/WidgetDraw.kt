@@ -412,8 +412,10 @@ object WidgetDraw {
         values: IntArray,
         labels: List<String>,
         ink: Color,
+        stacks: List<Pair<Int, IntArray>> = emptyList(),
     ): Bitmap {
-        val key = "weekBars:$widthDp:$heightDp:${values.joinToString(",")}:$labels:${ink.toArgb()}:${scale(context)}"
+        val parts = stacks.joinToString(";") { "${it.first}=${it.second.joinToString(",")}" }
+        val key = "weekBars:$widthDp:$heightDp:${values.joinToString(",")}:$labels:${ink.toArgb()}:$parts:${scale(context)}"
         return remember(key) {
             val d = density(context)
             val w = (widthDp * d).toInt().coerceAtLeast(1)
@@ -435,11 +437,66 @@ object WidgetDraw {
                 canvas.drawRoundRect(RectF(left, 0f, left + bar, chart), r, r, track)
                 if (value > 0) {
                     val top = chart - maxOf(bar, chart * value / most.toFloat())
+                    val shape = RectF(left, top, left + bar, chart)
                     fill.color = ink.copy(alpha = if (i == values.lastIndex) 1f else 0.55f).toArgb()
-                    canvas.drawRoundRect(RectF(left, top, left + bar, chart), r, r, fill)
+                    if (stacks.isEmpty()) {
+                        canvas.drawRoundRect(shape, r, r, fill)
+                    } else {
+                        val alpha = if (i == values.lastIndex) 255 else 200
+                        canvas.save()
+                        canvas.clipPath(Path().apply { addRoundRect(shape, r, r, Path.Direction.CW) })
+                        canvas.drawRect(shape, fill)
+                        var bottom = chart
+                        for ((color, days) in stacks) {
+                            val part = days.getOrElse(i) { 0 }
+                            if (part <= 0) continue
+                            val tall = (chart - top) * part.coerceAtMost(value) / value.toFloat()
+                            fill.color = ColorUtils.setAlphaComponent(color, alpha)
+                            canvas.drawRect(left, bottom - tall, left + bar, bottom, fill)
+                            bottom -= tall
+                        }
+                        canvas.restore()
+                    }
                 }
                 labels.getOrNull(i)?.let { centered(canvas, text, it, cx, h - strip / 2f + d) }
             }
+            bitmap
+        }
+    }
+
+    fun legend(
+        context: Context,
+        color: Int,
+        name: String,
+        time: String,
+        sizeSp: Float,
+        ink: Color,
+        halo: Color,
+        maxWidthDp: Float,
+    ): Bitmap {
+        val key = "legend:$color:$name:$time:$sizeSp:${ink.toArgb()}:${halo.toArgb()}:${maxWidthDp.toInt()}:${scale(context)}"
+        return remember(key) {
+            val d = density(context)
+            val paint = paint(context, sizeSp, ink.toArgb(), 650)
+            val blur = paint.textSize * 0.3f
+            val dot = paint.textSize * 0.62f
+            val gap = paint.textSize * 0.45f
+            val tail = "  $time"
+            val room = maxWidthDp * d - dot - gap - paint.measureText(tail) - blur
+            val shown = TextUtils.ellipsize(name, paint, room.coerceAtLeast(0f), TextUtils.TruncateAt.END).toString() + tail
+            val metrics = paint.fontMetrics
+            val width = dot + gap + paint.measureText(shown) + blur + 1
+            val height = metrics.descent - metrics.ascent + blur
+            val bitmap = Bitmap.createBitmap(width.toInt().coerceAtLeast(1), height.toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val y = blur / 2 - metrics.ascent
+            val cy = blur / 2 + (metrics.descent - metrics.ascent) / 2f
+            canvas.drawCircle(blur / 2 + dot / 2f, cy, dot / 2f, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
+            val x = blur / 2 + dot + gap
+            paint.setShadowLayer(blur, 0f, 0f, halo.copy(alpha = 0.9f).toArgb())
+            canvas.drawText(shown, x, y, paint)
+            paint.clearShadowLayer()
+            canvas.drawText(shown, x, y, paint)
             bitmap
         }
     }

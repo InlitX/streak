@@ -3,6 +3,7 @@ package com.streak.app
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -46,6 +47,8 @@ class FocusBoardWidget : GlanceAppWidget() {
         val single = WidgetPayload.single(context, appWidgetId, data)
         val totals = totals(data, WidgetConfig.habits(context, appWidgetId))
         val labels = labels(data)
+        val look = WidgetConfig.look(context, appWidgetId, false)
+        val ranked = ranked(data)
 
         val size = LocalSize.current
         val height = size.height.value
@@ -73,11 +76,24 @@ class FocusBoardWidget : GlanceAppWidget() {
                     val caption = WidgetText.get(context, "focus_today", "Focus today")
                     Drawn(WidgetDraw.text(context, caption, label, style.content, 800, left), density, caption)
                     Spacer(GlanceModifier.defaultWeight())
+                    val scale = WidgetDraw.textScale(context)
+                    val taken = (big + label) * 1.3f * scale + small * 3.2f * scale
+                    val fits = ((height - pad * 2 - taken - 8f) / (small * 1.6f * scale)).toInt()
+                    val legend = ranked.filter { it.third[1] > 0 }.take(fits.coerceIn(0, 3))
+                    legend.forEach { (habit, color, values) ->
+                        val dot = if (look.colors) color else style.muted.toArgb()
+                        Drawn(
+                            WidgetDraw.legend(context, dot, habit.optString("name"), duration(values[1]), small, style.muted, halo, left),
+                            density,
+                            habit.optString("name"),
+                        )
+                    }
+                    if (legend.isNotEmpty()) Spacer(GlanceModifier.height(4.dp))
                     val week = "${WidgetText.get(context, "label_week", "Week")}  ${duration(totals[1])}"
                     Drawn(WidgetDraw.haloText(context, week, small, style.muted, halo, 650, left), density, week)
                     val month = "${WidgetText.get(context, "label_month", "Month")}  ${duration(totals[2])}"
                     Drawn(WidgetDraw.haloText(context, month, small, style.muted, halo, 650, left), density, month)
-                    if (single != null) {
+                    if (single != null && legend.isEmpty()) {
                         val name = single.optString("name")
                         Drawn(WidgetDraw.haloText(context, name, small, style.muted, halo, 600, left), density, name)
                     }
@@ -106,14 +122,31 @@ class FocusBoardWidget : GlanceAppWidget() {
                     val header = maxOf(button, (label * 1.9f + small) * 1.3f * WidgetDraw.textScale(context))
                     val chart = (height - pad * 2 - header - 10f).coerceAtLeast(24f)
                     val values = IntArray(7) { totals[4 + it] }
+                    val stacks = if (look.colors) {
+                        ranked.map { it.second to IntArray(7) { day -> it.third[4 + day] } }
+                            .filter { stack -> stack.second.any { it > 0 } }
+                            .sortedByDescending { it.second.sum() }
+                    } else {
+                        emptyList()
+                    }
                     Image(
-                        provider = ImageProvider(WidgetDraw.weekBars(context, right, chart, values, labels, style.content)),
+                        provider = ImageProvider(WidgetDraw.weekBars(context, right, chart, values, labels, style.content, stacks)),
                         contentDescription = null,
                         modifier = GlanceModifier.width(right.dp).height(chart.dp),
                     )
                 }
             }
         }
+    }
+
+    private fun ranked(data: JSONObject?): List<Triple<JSONObject, Int, IntArray>> {
+        val focus = data?.optJSONObject("focus") ?: return emptyList()
+        val habits = data.optJSONArray("habits") ?: return emptyList()
+        return (0 until habits.length()).mapNotNull { i ->
+            val habit = habits.optJSONObject(i) ?: return@mapNotNull null
+            val values = focus.optJSONArray(habit.optString("id")) ?: return@mapNotNull null
+            Triple(habit, habit.optInt("color"), IntArray(11) { values.optInt(it) })
+        }.sortedByDescending { it.third[1] }
     }
 
     private fun labels(data: JSONObject?): List<String> {
