@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_lock_pin.dart';
+import 'package:streak/app/lock_design.dart';
 import 'package:streak/app/pin_pad.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -80,14 +81,27 @@ class _PinSetupPageState extends State<PinSetupPage> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               child: code == null
-                  ? PinPad(
-                      key: ValueKey('${first != null}$_attempt'),
-                      title: first == null
-                          ? context.l10n.pin_choose
-                          : context.l10n.pin_repeat,
-                      subtitle: first == null ? context.l10n.pin_choose_sub : '',
-                      length: first?.length,
-                      onSubmit: _submit,
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const LockMark(icon: LucideIcons.lockKeyhole, size: 64),
+                        const SizedBox(height: 14),
+                        LockSteps(step: first == null ? 0 : 1),
+                        const SizedBox(height: 18),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: PinPad(
+                            key: ValueKey('${first != null}$_attempt'),
+                            title: first == null
+                                ? context.l10n.pin_choose
+                                : context.l10n.pin_repeat,
+                            subtitle:
+                                first == null ? context.l10n.pin_choose_sub : '',
+                            length: first?.length,
+                            onSubmit: _submit,
+                          ),
+                        ),
+                      ],
                     )
                   : _RecoveryCode(
                       code: code,
@@ -164,7 +178,12 @@ class _PinCheckPageState extends State<PinCheckPage> {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            child: PinPad(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const LockMark(icon: LucideIcons.lock, size: 64),
+                const SizedBox(height: 18),
+                PinPad(
               title: context.l10n.pin_enter,
               subtitle: wait > 0
                   ? context.l10n.pin_wait('$wait')
@@ -174,6 +193,8 @@ class _PinCheckPageState extends State<PinCheckPage> {
               length: AppLockPin.length,
               enabled: wait == 0,
               onSubmit: _submit,
+                ),
+              ],
             ),
           ),
         ),
@@ -193,12 +214,14 @@ class _RecoveryCode extends StatelessWidget {
     final scheme = context.colors;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 360),
+      constraints: const BoxConstraints(maxWidth: 380),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(LucideIcons.keyRound, size: 34, color: scheme.primary),
-          const SizedBox(height: 16),
+          const LockMark(icon: LucideIcons.keyRound),
+          const SizedBox(height: 14),
+          const LockSteps(step: 2),
+          const SizedBox(height: 18),
           Text(
             context.l10n.pin_recovery_title,
             textAlign: TextAlign.center,
@@ -211,27 +234,20 @@ class _RecoveryCode extends StatelessWidget {
             style: sheetBodyStyle(context, size: 14),
           ),
           const SizedBox(height: 22),
-          Container(
+          RecoveryCodeBlocks(code: code),
+          const SizedBox(height: 12),
+          SizedBox(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            decoration: BoxDecoration(
-              color: scheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(18),
+            height: 48,
+            child: FilledButton.tonalIcon(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: code.replaceAll(' ', '')));
+                AppSnackbar.success(context, context.l10n.pin_copied);
+              },
+              style: FilledButton.styleFrom(shape: const StadiumBorder()),
+              icon: const Icon(LucideIcons.copy, size: 17),
+              label: Text(context.l10n.pin_copy, style: sheetActionStyle(context)),
             ),
-            child: SelectableText(
-              code,
-              textAlign: TextAlign.center,
-              style: sheetFigureStyle(context, size: 24),
-            ),
-          ),
-          const SizedBox(height: 14),
-          OutlinedButton.icon(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: code.replaceAll(' ', '')));
-              AppSnackbar.success(context, context.l10n.pin_copied);
-            },
-            icon: const Icon(LucideIcons.copy, size: 17),
-            label: Text(context.l10n.pin_copy, style: sheetActionStyle(context)),
           ),
           const SizedBox(height: 10),
           SizedBox(
@@ -239,6 +255,7 @@ class _RecoveryCode extends StatelessWidget {
             height: 52,
             child: FilledButton(
               onPressed: onDone,
+              style: FilledButton.styleFrom(shape: const StadiumBorder()),
               child: Text(
                 context.l10n.done,
                 style: sheetActionStyle(context, color: scheme.onPrimary),

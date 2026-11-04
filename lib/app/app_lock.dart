@@ -6,9 +6,11 @@ import 'package:local_auth/local_auth.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_lock_pin.dart';
+import 'package:streak/app/lock_design.dart';
 import 'package:streak/app/pin_pad.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 
 class AppLockService {
@@ -173,37 +175,26 @@ class _LockScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: context.colors.primary.withValues(alpha: 0.12),
-              ),
-              child: Icon(
-                LucideIcons.fingerprint,
-                size: 42,
-                color: context.colors.primary,
-              ),
-            ),
-            const SizedBox(height: 26),
+            const LockMark(icon: LucideIcons.fingerprint, size: 92),
+            const SizedBox(height: 24),
             Text(
               context.l10n.app_lock_title,
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w800,
-                color: context.colors.onSurface,
-              ),
+              textAlign: TextAlign.center,
+              style: sheetTitleStyle(context),
             ),
-            const SizedBox(height: 26),
-            FilledButton.icon(
-              onPressed: onUnlock,
-              icon: const Icon(LucideIcons.lockOpen, size: 18),
-              label: Text(context.l10n.app_lock_unlock),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+            const SizedBox(height: 28),
+            SizedBox(
+              height: 52,
+              child: FilledButton.icon(
+                onPressed: onUnlock,
+                icon: const Icon(LucideIcons.lockOpen, size: 18),
+                label: Text(
+                  context.l10n.app_lock_unlock,
+                  style: sheetActionStyle(context, color: context.colors.onPrimary),
+                ),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  shape: const StadiumBorder(),
                 ),
               ),
             ),
@@ -316,8 +307,11 @@ class _PinLockScreenState extends State<_PinLockScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(LucideIcons.lock, size: 28, color: context.colors.primary),
-                const SizedBox(height: 14),
+                LockMark(
+                  icon: _recovering ? LucideIcons.keyRound : LucideIcons.lock,
+                  size: 64,
+                ),
+                const SizedBox(height: 18),
                 PinPad(
                   key: ValueKey(_recovering),
                   title: _recovering ? l10n.pin_recovery_hint : l10n.pin_enter,

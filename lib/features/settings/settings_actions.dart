@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/app_lock.dart';
+import 'package:streak/app/lock_design.dart';
 import 'package:streak/app/pin_setup_page.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/database/local_store.dart';
@@ -444,10 +445,8 @@ class SettingsActions {
   static Future<void> chooseLockMethod(BuildContext context) async {
     final settings = context.read<SettingsController>();
     final reason = context.l10n.app_lock_sub;
-    await showOptionSheet(
+    await showLockMethodSheet(
       context,
-      title: context.l10n.app_lock_method,
-      options: [context.l10n.app_lock_biometric, context.l10n.pin_lock],
       index: settings.appLockMode,
       onSelected: (i) async {
         if (i == settings.appLockMode) return;
