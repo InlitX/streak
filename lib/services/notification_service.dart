@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/services.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:streak/core/i18n/app_locale.dart';
-import 'package:streak/core/constants/motivational_quotes.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/utils/amount_format.dart';
@@ -331,15 +331,14 @@ class NotificationService {
   }
 
   String _bodyFor(Habit habit, Reminder? reminder, AppLocalizations strings) {
-    final lang = strings.localeName == 'es' ? 'es' : 'en';
     final message = reminder?.message.trim() ?? '';
     final quotesOff = LocalStore.setting('quoteSource', 0) == 3;
     var body = message.isNotEmpty
         ? message
-        : (quotesOff ? '' : MotivationalQuotes.random(lang));
+        : (quotesOff ? '' : _quoteOf(strings));
     final name = LocalStore.setting('profileName', '').trim();
     if (name.isNotEmpty && body.isNotEmpty) {
-      body = (lang == 'es' ? 'Hola $name, ' : 'Hi $name, ') + body;
+      body = strings.notif_greeting(name) + body;
     }
     final streak = habit.currentStreak;
     if (streak > 0) {
@@ -351,6 +350,29 @@ class NotificationService {
       body = '$body\n$line';
     }
     return body;
+  }
+
+  static final _random = Random();
+
+  String _quoteOf(AppLocalizations strings) {
+    final quotes = [
+      strings.notif_quote_1,
+      strings.notif_quote_2,
+      strings.notif_quote_3,
+      strings.notif_quote_4,
+      strings.notif_quote_5,
+      strings.notif_quote_6,
+      strings.notif_quote_7,
+      strings.notif_quote_8,
+      strings.notif_quote_9,
+      strings.notif_quote_10,
+      strings.notif_quote_11,
+      strings.notif_quote_12,
+      strings.notif_quote_13,
+      strings.notif_quote_14,
+      strings.notif_quote_15,
+    ];
+    return quotes[_random.nextInt(quotes.length)];
   }
 
   bool _quietToday(Habit habit) =>
