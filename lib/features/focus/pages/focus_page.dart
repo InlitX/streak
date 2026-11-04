@@ -88,6 +88,10 @@ class _FocusPageState extends State<FocusPage> {
       _immersive = true;
       DesktopWindow.setFullscreen(true);
     }
+    if (context.read<SettingsController>().focusSimple) {
+      _big = true;
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
     if (widget.startMinutes != null) {
       _leadValue = 3;
       _begin();
@@ -194,6 +198,7 @@ class _FocusPageState extends State<FocusPage> {
       _big = !_big;
       _tip = false;
     });
+    context.read<SettingsController>().setFocusSimple(_big);
     SystemChrome.setEnabledSystemUIMode(
       _big || _immersive ? SystemUiMode.immersiveSticky : SystemUiMode.edgeToEdge,
     );
@@ -595,7 +600,11 @@ class _FocusPageState extends State<FocusPage> {
             ),
             if (_leadValue > 0 && settings.focusLeadIn)
               Positioned.fill(
-                child: _LeadIn(value: _leadValue),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onDoubleTap: _toggleBig,
+                  child: _LeadIn(value: _leadValue),
+                ),
               ),
           ],
         ),
