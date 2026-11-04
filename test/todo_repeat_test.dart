@@ -6,6 +6,22 @@ void main() {
   DateTime next(TodoRepeat repeat, DateTime due, DateTime today) =>
       repeat.anchoredTo(due).after(due, today: today);
 
+  test('the last day of the month follows short months', () {
+    const last = TodoRepeat(unit: RepeatUnit.months, lastDay: true);
+    expect(
+      next(last, DateTime(2026, 11, 30), DateTime(2026, 11, 30)),
+      DateTime(2026, 12, 31),
+    );
+    expect(
+      next(last, DateTime(2027, 1, 31), DateTime(2027, 1, 31)),
+      DateTime(2027, 2, 28),
+    );
+    expect(
+      TodoRepeat.fromMap(last.toMap()),
+      last,
+    );
+  });
+
   test('daily moves past an overdue day to tomorrow', () {
     const daily = TodoRepeat(unit: RepeatUnit.days);
     expect(

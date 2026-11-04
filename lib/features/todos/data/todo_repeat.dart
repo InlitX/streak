@@ -12,6 +12,7 @@ class TodoRepeat {
     this.byWeekday = false,
     this.day = 0,
     this.fromDone = false,
+    this.lastDay = false,
   });
 
   final RepeatUnit unit;
@@ -20,6 +21,7 @@ class TodoRepeat {
   final bool byWeekday;
   final int day;
   final bool fromDone;
+  final bool lastDay;
 
   static const workdays = [1, 2, 3, 4, 5];
 
@@ -36,6 +38,7 @@ class TodoRepeat {
     bool? byWeekday,
     int? day,
     bool? fromDone,
+    bool? lastDay,
   }) =>
       TodoRepeat(
         unit: unit ?? this.unit,
@@ -44,6 +47,7 @@ class TodoRepeat {
         byWeekday: byWeekday ?? this.byWeekday,
         day: day ?? this.day,
         fromDone: fromDone ?? this.fromDone,
+        lastDay: lastDay ?? this.lastDay,
       );
 
   TodoRepeat anchoredTo(DateTime due) => copyWith(
@@ -79,6 +83,7 @@ class TodoRepeat {
         return monday.addDays(7 * span + days.first - 1);
       case RepeatUnit.months:
         final month = DateTime(from.year, from.month + span);
+        if (lastDay) return DateTime(month.year, month.month + 1, 0);
         if (byWeekday) {
           return _nthWeekday(
             month,
@@ -122,6 +127,7 @@ class TodoRepeat {
         if (byWeekday) 'byWeekday': true,
         if (day > 0) 'day': day,
         if (fromDone) 'fromDone': true,
+        if (lastDay) 'lastDay': true,
       };
 
   factory TodoRepeat.fromMap(Map<String, dynamic> map) => TodoRepeat(
@@ -137,6 +143,7 @@ class TodoRepeat {
         byWeekday: map['byWeekday'] == true,
         day: ((map['day'] ?? 0) as num).toInt().clamp(0, 31),
         fromDone: map['fromDone'] == true,
+        lastDay: map['lastDay'] == true,
       );
 
   @override
@@ -147,6 +154,7 @@ class TodoRepeat {
       other.byWeekday == byWeekday &&
       other.day == day &&
       other.fromDone == fromDone &&
+      other.lastDay == lastDay &&
       other.weekdays.length == weekdays.length &&
       other.weekdays.every(weekdays.contains);
 
@@ -157,6 +165,7 @@ class TodoRepeat {
         byWeekday,
         day,
         fromDone,
+        lastDay,
         Object.hashAllUnordered(weekdays),
       );
 }
