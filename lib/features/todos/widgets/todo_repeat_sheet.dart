@@ -114,6 +114,17 @@ class _RepeatSheetState extends State<_RepeatSheet> {
     return repeat.copyWith(day: 0) == preset;
   }
 
+  void _pickMonthMode(TodoRepeat repeat, int mode) {
+    if (mode == 2) {
+      final last = DateTime(_due.year, _due.month + 1, 0);
+      if (last != _due) {
+        _due = last;
+        widget.onDueChanged(last);
+      }
+    }
+    _set(repeat.copyWith(byWeekday: mode == 1, lastDay: mode == 2));
+  }
+
   void _toggleWeekday(TodoRepeat repeat, int weekday) {
     final days = repeat.weekdays.isEmpty ? [_due.weekday] : [...repeat.weekdays];
     if (days.contains(weekday)) {
@@ -183,9 +194,8 @@ class _RepeatSheetState extends State<_RepeatSheet> {
                   const SizedBox(height: 14),
                   _MonthRow(
                     due: _due,
-                    byWeekday: repeat.byWeekday,
-                    onChanged: (byWeekday) =>
-                        _set(repeat.copyWith(byWeekday: byWeekday)),
+                    mode: repeat.lastDay ? 2 : (repeat.byWeekday ? 1 : 0),
+                    onChanged: (mode) => _pickMonthMode(repeat, mode),
                   ),
                 ],
                 const SizedBox(height: 8),
@@ -304,13 +314,13 @@ class _EveryRow extends StatelessWidget {
 class _MonthRow extends StatelessWidget {
   const _MonthRow({
     required this.due,
-    required this.byWeekday,
+    required this.mode,
     required this.onChanged,
   });
 
   final DateTime due;
-  final bool byWeekday;
-  final ValueChanged<bool> onChanged;
+  final int mode;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -323,15 +333,21 @@ class _MonthRow extends StatelessWidget {
       children: [
         ChoiceChip(
           label: Text(context.l10n.todo_repeat_on_day(due.day)),
-          selected: !byWeekday,
+          selected: mode == 0,
           showCheckmark: false,
-          onSelected: (_) => onChanged(false),
+          onSelected: (_) => onChanged(0),
         ),
         ChoiceChip(
           label: Text(context.l10n.todo_repeat_on_weekday('$nth', weekday)),
-          selected: byWeekday,
+          selected: mode == 1,
           showCheckmark: false,
-          onSelected: (_) => onChanged(true),
+          onSelected: (_) => onChanged(1),
+        ),
+        ChoiceChip(
+          label: Text(context.l10n.todo_repeat_last_day),
+          selected: mode == 2,
+          showCheckmark: false,
+          onSelected: (_) => onChanged(2),
         ),
       ],
     );
