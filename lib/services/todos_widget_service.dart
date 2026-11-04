@@ -49,6 +49,7 @@ class TodosWidgetService {
         todos,
         today,
         lowFirst: LocalStore.setting('todoLowFirst', false),
+        sort: todoSortOf(LocalStore.setting('todoSortBy', 0)),
       ))
         ...section.todos,
     ].take(_maxTodos).toList()

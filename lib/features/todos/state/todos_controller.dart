@@ -23,6 +23,7 @@ class TodosController extends ChangeNotifier {
 
   late List<Todo> _todos;
   bool _lowFirst = LocalStore.setting('todoLowFirst', false);
+  TodoSort _sort = todoSortOf(LocalStore.setting('todoSortBy', 0));
 
   List<Todo>? _view;
   List<TodoSection>? _sections;
@@ -52,19 +53,23 @@ class TodosController extends ChangeNotifier {
     final today = AppClock.today();
     if (_sections == null || _sectionsDay != today.epochDay) {
       _sectionsDay = today.epochDay;
-      _sections = groupPending(_todos, today, lowFirst: _lowFirst);
+      _sections = groupPending(_todos, today, lowFirst: _lowFirst, sort: _sort);
     }
     return _sections!;
   }
 
   bool get lowFirst => _lowFirst;
 
-  Future<void> setLowFirst(bool value) async {
-    if (_lowFirst == value) return;
-    _lowFirst = value;
+  TodoSort get sort => _sort;
+
+  Future<void> setOrder(TodoSort sort, {bool lowFirst = false}) async {
+    if (_sort == sort && _lowFirst == lowFirst) return;
+    _sort = sort;
+    _lowFirst = lowFirst;
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
-    await LocalStore.writeSetting('todoLowFirst', value);
+    await LocalStore.writeSetting('todoLowFirst', lowFirst);
+    await LocalStore.writeSetting('todoSortBy', sort.index);
   }
 
   List<Todo> get completed => _completed ??= sortCompleted(_todos);

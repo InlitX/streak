@@ -652,9 +652,28 @@ class _TodosPageState extends State<TodosPage>
         options: [
           context.l10n.todo_sort_high_first,
           context.l10n.todo_sort_low_first,
+          context.l10n.todo_sort_time,
+          context.l10n.todo_sort_name,
         ],
-        index: todos.lowFirst ? 1 : 0,
-        onSelected: (index) => todos.setLowFirst(index == 1),
+        icons: const [
+          LucideIcons.arrowUpNarrowWide,
+          LucideIcons.arrowDownWideNarrow,
+          LucideIcons.clock,
+          LucideIcons.arrowDownAZ,
+        ],
+        index: switch (todos.sort) {
+          TodoSort.urgency => todos.lowFirst ? 1 : 0,
+          TodoSort.time => 2,
+          TodoSort.name => 3,
+        },
+        onSelected: (index) => todos.setOrder(
+          switch (index) {
+            2 => TodoSort.time,
+            3 => TodoSort.name,
+            _ => TodoSort.urgency,
+          },
+          lowFirst: index == 1,
+        ),
       );
 
   Future<void> _add() async {
