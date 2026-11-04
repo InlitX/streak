@@ -11,6 +11,7 @@ import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/substep.dart';
+import 'package:streak/features/habits/widgets/flag_group.dart';
 import 'package:streak/features/habits/widgets/habit_form_schedule.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/quant_preset_grid.dart';
@@ -252,9 +253,7 @@ class AvoidExtras extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = SizedBox(height: compact ? 10 : 12);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlagGroup(
       children: [
         HabitFlagToggle(
           icon: LucideIcons.wallet,
@@ -265,7 +264,9 @@ class AvoidExtras extends StatelessWidget {
           onChanged: onTrackSpent,
           compact: compact,
         ),
-        gap,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
         HabitFlagToggle(
           icon: LucideIcons.flag,
           title: context.l10n.clean_goal,
@@ -277,9 +278,9 @@ class AvoidExtras extends StatelessWidget {
           onChanged: (on) => onCleanGoal(on ? 30 : 0),
           compact: compact,
         ),
-        if (cleanGoal > 0) ...[
-          const SizedBox(height: 10),
-          Wrap(
+        if (cleanGoal > 0)
+          FlagDetail(
+            child: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -306,7 +307,9 @@ class AvoidExtras extends StatelessWidget {
               ),
             ],
           ),
-        ],
+          ),
+          ],
+        ),
       ],
     );
   }
@@ -344,9 +347,11 @@ class TotalGoalField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlagGroup(
       children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
         HabitFlagToggle(
           icon: LucideIcons.target,
           title: context.l10n.total_goal,
@@ -356,9 +361,9 @@ class TotalGoalField extends StatelessWidget {
           onChanged: (on) => on ? _pick(context) : onChanged(0),
           compact: compact,
         ),
-        if (goal > 0) ...[
-          const SizedBox(height: 10),
-          Align(
+        if (goal > 0)
+          FlagDetail(
+            child: Align(
             alignment: AlignmentDirectional.centerStart,
             child: ActionChip(
               avatar: Icon(LucideIcons.pencil, size: 15, color: color),
@@ -366,7 +371,9 @@ class TotalGoalField extends StatelessWidget {
               onPressed: () => _pick(context),
             ),
           ),
-        ],
+          ),
+          ],
+        ),
       ],
     );
   }
@@ -395,9 +402,11 @@ class BookPagesField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlagGroup(
       children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
         HabitFlagToggle(
           icon: LucideIcons.bookOpen,
           title: context.l10n.book_pages,
@@ -407,9 +416,9 @@ class BookPagesField extends StatelessWidget {
           onChanged: (on) => on ? _pick(context) : onChanged(0),
           compact: compact,
         ),
-        if (pages > 0) ...[
-          const SizedBox(height: 10),
-          Align(
+        if (pages > 0)
+          FlagDetail(
+            child: Align(
             alignment: AlignmentDirectional.centerStart,
             child: ActionChip(
               avatar: Icon(LucideIcons.pencil, size: 15, color: color),
@@ -417,7 +426,9 @@ class BookPagesField extends StatelessWidget {
               onPressed: () => _pick(context),
             ),
           ),
-        ],
+          ),
+          ],
+        ),
       ],
     );
   }
@@ -592,9 +603,11 @@ class AnyStepsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final shown = needed.clamp(1, total < 1 ? 1 : total);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlagGroup(
       children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
         HabitFlagToggle(
           icon: LucideIcons.listChecks,
           title: context.l10n.any_step,
@@ -606,9 +619,9 @@ class AnyStepsToggle extends StatelessWidget {
           onChanged: onChanged,
           compact: compact,
         ),
-        if (value && total > 2) ...[
-          const SizedBox(height: 10),
-          Wrap(
+        if (value && total > 2)
+          FlagDetail(
+            child: Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -622,7 +635,9 @@ class AnyStepsToggle extends StatelessWidget {
                 ),
             ],
           ),
-        ],
+          ),
+          ],
+        ),
       ],
     );
   }
@@ -706,9 +721,11 @@ class DifficultyPicker extends StatelessWidget {
     ];
     final labels = [for (final option in options) option.$1];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlagGroup(
       children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
         HabitFlagToggle(
           icon: LucideIcons.mountain,
           title: context.l10n.difficulty,
@@ -718,23 +735,22 @@ class DifficultyPicker extends StatelessWidget {
           compact: compact,
           onChanged: (on) => onChanged(on ? 2 : 0),
         ),
-        if (value > 0) ...[
-          const SizedBox(height: 10),
-          if (settings.isMinimalStyle)
-            MinimalSegmented(
+        if (value > 0)
+          FlagDetail(
+            child: settings.isMinimalStyle
+                ? MinimalSegmented(
               expand: true,
               index: value - 1,
               options: labels,
               onChanged: (i) => onChanged(i + 1),
             )
-          else if (settings.isExpressStyle)
-            ExpressTabs(
+          : settings.isExpressStyle
+            ? ExpressTabs(
               labels: labels,
               index: value - 1,
               onChanged: (i) => onChanged(i + 1),
             )
-          else
-            Row(
+          : Row(
               children: [
                 for (var i = 0; i < options.length; i++) ...[
                   if (i > 0) const SizedBox(width: 8),
@@ -750,73 +766,10 @@ class DifficultyPicker extends StatelessWidget {
                 ],
               ],
             ),
-        ],
-      ],
-    );
-  }
-}
-
-class HabitFlagToggle extends StatelessWidget {
-  const HabitFlagToggle({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.hint,
-    required this.value,
-    required this.color,
-    required this.onChanged,
-    this.compact = false,
-  });
-
-  final IconData icon;
-  final String title;
-  final String hint;
-  final bool value;
-  final Color color;
-  final ValueChanged<bool> onChanged;
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(compact ? 12 : 14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.25)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: color),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: compact ? 13 : 14,
-                    fontWeight: FontWeight.w700,
-                    color: context.colors.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  hint,
-                  style: TextStyle(
-                    fontSize: compact ? 11.5 : 12.5,
-                    height: 1.35,
-                    color: context.tokens.muted,
-                  ),
-                ),
-              ],
-            ),
           ),
-          const SizedBox(width: 8),
-          Switch(value: value, onChanged: onChanged),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 }
