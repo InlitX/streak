@@ -152,6 +152,53 @@ class FocusHeat extends StatelessWidget {
 }
 
 class FocusPlanFacts extends StatelessWidget {
+  List<Widget> _perHabit(BuildContext context) {
+    final habits = context.read<HabitsController>();
+    final rows = [
+      for (final MapEntry(key: id, value: overrun) in stats.overrunByHabit.entries)
+        if (habits.byId(id) case final habit?) (habit, overrun),
+    ]..sort((a, b) => b.$2.abs().compareTo(a.$2.abs()));
+    if (rows.length < 2) return const [];
+    return [
+      const SizedBox(height: 12),
+      for (final (habit, overrun) in rows.take(6))
+        Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: habit.color.shownIn(context),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  habit.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: body.copyWith(color: context.colors.onSurface),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                _onPlan(overrun)
+                    ? '='
+                    : '${overrun > 0 ? '+' : '-'}${focusPercent(context, overrun)}',
+                style: body.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
+            ],
+          ),
+        ),
+    ];
+  }
+
   const FocusPlanFacts({
     super.key,
     required this.stats,
@@ -175,6 +222,7 @@ class FocusPlanFacts extends StatelessWidget {
           '${focusPauses(context, stats.pausesPerSession)}',
           style: body,
         ),
+        ..._perHabit(context),
         const SizedBox(height: 8),
         Text(
           context.l10n.focus_plan_hint,

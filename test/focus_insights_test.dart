@@ -67,6 +67,16 @@ void main() {
     expect(stats.pausesPerSession, 1);
   });
 
+  test('planned against real is kept per habit so they do not cancel out', () {
+    final stats = _stats([
+      _session('a', day: today, habitId: 'h1', target: 30, span: 45 * 60),
+      _session('b', day: today, habitId: 'h2', target: 30, span: 15 * 60),
+    ]);
+    expect(stats.overrun, closeTo(0, 0.0001));
+    expect(stats.overrunByHabit['h1'], closeTo(0.5, 0.0001));
+    expect(stats.overrunByHabit['h2'], closeTo(-0.5, 0.0001));
+  });
+
   test('each bar is split by habit', () {
     final stats = _stats([
       _session('a', day: today, habitId: 'h1', minutes: 20),

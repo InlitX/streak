@@ -27,6 +27,7 @@ class FocusStats {
     this.previousSeconds = 0,
     this.measured = 0,
     this.overrun = 0,
+    this.overrunByHabit = const {},
     this.pausesPerSession = 0,
   });
 
@@ -48,6 +49,7 @@ class FocusStats {
   final int previousSeconds;
   final int measured;
   final double overrun;
+  final Map<String, double> overrunByHabit;
   final double pausesPerSession;
 
   double? get change => previousSeconds <= 0
@@ -146,6 +148,8 @@ class FocusStats {
     var planned = 0;
     var spent = 0;
     var pauses = 0;
+    final plannedBy = <String, int>{};
+    final spentBy = <String, int>{};
 
     for (final session in scoped) {
       final day = session.countedOn;
@@ -183,6 +187,10 @@ class FocusStats {
         planned += session.targetMinutes * 60;
         spent += session.span;
         pauses += session.pauses;
+        plannedBy[session.habitId] =
+            (plannedBy[session.habitId] ?? 0) + session.targetMinutes * 60;
+        spentBy[session.habitId] =
+            (spentBy[session.habitId] ?? 0) + session.span;
       }
       perHabit[session.habitId] =
           (perHabit[session.habitId] ?? 0) + session.seconds;
@@ -211,6 +219,10 @@ class FocusStats {
       previousSeconds: previousSeconds,
       measured: measured,
       overrun: planned == 0 ? 0 : spent / planned - 1,
+      overrunByHabit: {
+        for (final MapEntry(key: id, value: plan) in plannedBy.entries)
+          if (plan > 0) id: spentBy[id]! / plan - 1,
+      },
       pausesPerSession: measured == 0 ? 0 : pauses / measured,
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/statistics/widgets/stat_axis.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
@@ -51,6 +52,7 @@ class ValueBars extends StatelessWidget {
     this.height = 150,
     this.barWidth = 12,
     this.goal,
+    this.average,
     this.stacks,
     this.selected,
     this.onSelect,
@@ -67,6 +69,7 @@ class ValueBars extends StatelessWidget {
   final double height;
   final double barWidth;
   final double? goal;
+  final double? average;
 
   List<BarChartRodStackItem> _stack(int index) {
     final pieces = stacks;
@@ -108,6 +111,21 @@ class ValueBars extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 2, right: 2),
                     style: statLabel(context),
                     labelResolver: (_) => tooltip(goal),
+                  ),
+                ),
+              if (average case final mean? when mean > 0)
+                HorizontalLine(
+                  y: mean,
+                  color: context.tokens.muted.withValues(alpha: 0.55),
+                  strokeWidth: 1,
+                  dashArray: const [4, 4],
+                  label: HorizontalLineLabel(
+                    show: true,
+                    alignment: Alignment.topRight,
+                    padding: const EdgeInsets.only(bottom: 2, right: 2),
+                    style: statLabel(context),
+                    labelResolver: (_) =>
+                        '${context.l10n.average_short} ${tooltip(mean)}',
                   ),
                 ),
             ],
