@@ -156,4 +156,22 @@ void main() {
     expect(spanLabel(60), '1h');
     expect(spanLabel(95), '1h 35m');
   });
+
+  test('a habit can sit in the timeline more than once a day', () {
+    final study = _habit(id: 'study', start: 7 * 60, duration: 30)
+        .copyWith(moreTimes: [(18 * 60, 20), (12 * 60, 45)]);
+    final plan = DayPlan.of([study], _day);
+
+    final blocks = plan.slots.where((s) => s.habit != null).toList();
+    expect(blocks.map((s) => (s.start, s.minutes)), [
+      (7 * 60, 30),
+      (12 * 60, 45),
+      (18 * 60, 20),
+    ]);
+    expect(plan.anytime, isEmpty);
+
+    final back = Habit.fromMap(study.toMap());
+    expect(back.moreTimes, [(18 * 60, 20), (12 * 60, 45)]);
+    expect(Habit.fromMap(_habit(id: 'one', start: 60).toMap()).moreTimes, isEmpty);
+  });
 }

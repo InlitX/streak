@@ -237,6 +237,8 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                   padding: const EdgeInsets.symmetric(vertical: 3),
                   child: TimelineBlock(
                     habit: habit,
+                    start: slot.start,
+                    minutes: slot.minutes,
                     date: _day,
                     done: habit.isCompletedOn(_day),
                     onOpen: () => AppNavigator.push(

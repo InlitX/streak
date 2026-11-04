@@ -88,6 +88,7 @@ class Habit {
     this.difficulty = 0,
     this.startMinute = -1,
     this.durationMinutes = 0,
+    this.moreTimes = const [],
     this.substeps = const [],
     this.vacations = const [],
     this.restDays = const [],
@@ -318,10 +319,14 @@ class Habit {
 
   final int startMinute;
   final int durationMinutes;
+  final List<(int, int)> moreTimes;
 
   static const dayMinutes = 24 * 60;
 
   bool get isPlanned => startMinute >= 0;
+
+  List<(int, int)> get planTimes =>
+      isPlanned ? [(startMinute, durationMinutes), ...moreTimes] : const [];
 
   int get endMinute =>
       (startMinute + durationMinutes).clamp(startMinute, dayMinutes);
@@ -950,6 +955,7 @@ class Habit {
     int? difficulty,
     int? startMinute,
     int? durationMinutes,
+    List<(int, int)>? moreTimes,
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
     List<int>? restDays,
@@ -1010,6 +1016,7 @@ class Habit {
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       startMinute: startMinute ?? this.startMinute,
       durationMinutes: durationMinutes ?? this.durationMinutes,
+      moreTimes: moreTimes ?? this.moreTimes,
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
       restDays: restDays ?? this.restDays,
@@ -1084,6 +1091,8 @@ class Habit {
         'difficulty': difficulty,
         'startMinute': startMinute,
         'durationMinutes': durationMinutes,
+        if (moreTimes.isNotEmpty)
+          'moreTimes': [for (final (start, minutes) in moreTimes) [start, minutes]],
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
@@ -1170,6 +1179,11 @@ class Habit {
         difficulty: ((map['difficulty'] ?? 0) as num).toInt().clamp(0, 3),
         startMinute: ((map['startMinute'] ?? -1) as num).toInt(),
         durationMinutes: ((map['durationMinutes'] ?? 0) as num).toInt(),
+        moreTimes: [
+          for (final time in (map['moreTimes'] as List?) ?? const [])
+            if (time is List && time.length == 2)
+              ((time[0] as num).toInt(), (time[1] as num).toInt()),
+        ],
         substeps: map['substeps'] == null
             ? const []
             : (map['substeps'] as List)

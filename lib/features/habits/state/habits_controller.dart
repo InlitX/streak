@@ -181,6 +181,7 @@ class HabitsController extends ChangeNotifier {
     int focusBreakMinutes = 0,
     int startMinute = -1,
     int durationMinutes = 0,
+    List<(int, int)> moreTimes = const [],
     List<Substep> substeps = const [],
     List<int> restDays = const [],
   }) async {
@@ -229,6 +230,7 @@ class HabitsController extends ChangeNotifier {
       focusBreakMinutes: focusBreakMinutes,
       startMinute: startMinute,
       durationMinutes: durationMinutes,
+      moreTimes: moreTimes,
       substeps: substeps,
       restDays: restDays,
     );

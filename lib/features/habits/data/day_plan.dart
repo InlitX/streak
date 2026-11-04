@@ -50,8 +50,13 @@ class DayPlan {
     final due = habits.where((h) => isDueOn(h, day)).toList();
 
     final planned = [
-      for (final habit in due.where((h) => h.isPlanned))
-        DaySlot(start: habit.startMinute, end: habit.endMinute, habit: habit),
+      for (final habit in due)
+        for (final (start, minutes) in habit.planTimes)
+          DaySlot(
+            start: start,
+            end: (start + minutes).clamp(start, Habit.dayMinutes),
+            habit: habit,
+          ),
       for (final todo in todos.where((t) => t.minutes != null))
         DaySlot(
           start: todo.minutes!,

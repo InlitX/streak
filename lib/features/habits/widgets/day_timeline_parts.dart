@@ -26,6 +26,8 @@ class TimelineBlock extends StatelessWidget {
   const TimelineBlock({
     super.key,
     required this.habit,
+    required this.start,
+    required this.minutes,
     required this.date,
     required this.done,
     required this.onOpen,
@@ -34,6 +36,8 @@ class TimelineBlock extends StatelessWidget {
   });
 
   final Habit habit;
+  final int start;
+  final int minutes;
   final DateTime date;
   final bool done;
   final VoidCallback onOpen;
@@ -41,16 +45,16 @@ class TimelineBlock extends StatelessWidget {
   final VoidCallback onAddNote;
 
   double get _tileHeight {
-    if (habit.durationMinutes <= 0) return _tile;
-    final grown = _tile + (habit.durationMinutes - 15) * 0.85;
+    if (minutes <= 0) return _tile;
+    final grown = _tile + (minutes - 15) * 0.85;
     return grown.clamp(_tile, 148.0);
   }
 
   String _subtitle(BuildContext context) {
-    final start = context.clockAt(habit.startMinute);
-    if (habit.durationMinutes <= 0) return start;
-    return '$start - ${context.clockAt(habit.endMinute)}'
-        '  ·  ${spanLabel(habit.durationMinutes)}';
+    final from = context.clockAt(start);
+    if (minutes <= 0) return from;
+    return '$from - ${context.clockAt(start + minutes)}'
+        '  ·  ${spanLabel(minutes)}';
   }
 
   String? _progressLabel(BuildContext context) {
@@ -88,7 +92,7 @@ class TimelineBlock extends StatelessWidget {
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerRight,
               child: Text(
-                context.clockAt(habit.startMinute),
+                context.clockAt(start),
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,

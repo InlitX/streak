@@ -110,6 +110,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
   int _breakMinutes = 5;
   int _startMinute = -1;
   int _durationMinutes = 0;
+  List<(int, int)> _moreTimes = const [];
   late List<Substep> _substeps;
   late final String _opened;
 
@@ -232,6 +233,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
       if (_pomodoro) _breakMinutes = habit.focusBreakMinutes;
       _startMinute = habit.startMinute;
       _durationMinutes = habit.durationMinutes;
+      _moreTimes = habit.moreTimes;
       _substeps = List.of(habit.substeps);
     } else {
       _reminders = [];
@@ -283,6 +285,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         _breakMinutes,
         _startMinute,
         _durationMinutes,
+        [for (final (start, minutes) in _moreTimes) '$start-$minutes'],
         [for (final step in _substeps) step.toMap()],
       ]);
 
@@ -435,6 +438,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
           focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
           startMinute: negative ? -1 : _startMinute,
           durationMinutes: negative ? 0 : _durationMinutes,
+          moreTimes: negative || _startMinute < 0 ? const [] : _moreTimes,
           substeps: substeps,
         ).rememberGoal(widget.habit!).keepBook(widget.habit!),
       );
@@ -488,6 +492,7 @@ class _HabitFormPageState extends State<HabitFormPage> {
         focusBreakMinutes: _pomodoro ? _breakMinutes : 0,
         startMinute: negative ? -1 : _startMinute,
         durationMinutes: negative ? 0 : _durationMinutes,
+        moreTimes: negative || _startMinute < 0 ? const [] : _moreTimes,
         substeps: substeps,
         restDays: template?.restDays ?? const [],
       );
@@ -837,6 +842,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
             _startMinute = start;
             _durationMinutes = duration;
           }),
+          more: _moreTimes,
+          onMore: (times) => setState(() => _moreTimes = times),
         ),
       ],
       const SizedBox(height: 26),
@@ -1221,6 +1228,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
             _startMinute = start;
             _durationMinutes = duration;
           }),
+          more: _moreTimes,
+          onMore: (times) => setState(() => _moreTimes = times),
         ),
       ],
       const SizedBox(height: 16),
@@ -1596,6 +1605,8 @@ class _HabitFormPageState extends State<HabitFormPage> {
                   _startMinute = start;
                   _durationMinutes = duration;
                 }),
+                more: _moreTimes,
+                onMore: (times) => setState(() => _moreTimes = times),
               ),
             ],
             const SizedBox(height: 20),
