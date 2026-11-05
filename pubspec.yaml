@@ -16,7 +16,14 @@ dependencies:
   archive: ^3.6.1
   crypto: ^3.0.7
   ffi: ^2.2.0
-  file_picker: ^10.3.7
+  # file_picker replaced wholesale by the SIG fork: upstream is not federated,
+  # so the ohos adaptation cannot endorse it; file_picker_ohos is a drop-in
+  # fork of 10.3.8 carrying android/ios/web/macos/windows/linux + ohos.
+  # Imports use package:file_picker_ohos/file_picker_ohos.dart.
+  file_picker_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/fluttertpc_file_picker.git
+      ref: 98af21560ef18e2bc428389e07c12ab7c17b98fb # br_v10.3.8_ohos
   fl_chart: ^0.69.2
   flutter_colorpicker: ^1.1.0
   flutter_local_notifications: ^19.5.0
@@ -50,6 +57,79 @@ dev_dependencies:
 dependency_overrides:
   permission_handler_windows:
     path: desktop/permission_handler_windows
+  # --- OpenHarmony-SIG ohos plugin adapters (pinned refs, see notes.md) ---
+  # SIG repo layout: each adaptation lives on a br_<pkg>-v<ver>_ohos release branch;
+  # the app package pulls its *_ohos endorser via an in-repo git dependency.
+  path_provider:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/path_provider/path_provider
+      ref: d4e49daa0acbd0bc419d58b1da27d64d44fab54b # br_path_provider-v2.1.5_ohos
+  path_provider_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/path_provider/path_provider_ohos
+      ref: d4e49daa0acbd0bc419d58b1da27d64d44fab54b
+  url_launcher:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/url_launcher/url_launcher
+      ref: ae4494a78db5a9e0fe760b0eba9231605ae45716 # br_url_launcher-v6.3.2_ohos
+  url_launcher_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/url_launcher/url_launcher_ohos
+      ref: ae4494a78db5a9e0fe760b0eba9231605ae45716
+  image_picker:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/image_picker/image_picker
+      ref: 1af98579e1a95d4fca19e422d26f5b6856ac38ba # br_image_picker-v1.2.1_ohos
+  image_picker_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_packages.git
+      path: packages/image_picker/image_picker_ohos
+      ref: 1af98579e1a95d4fca19e422d26f5b6856ac38ba
+  permission_handler:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
+      path: permission_handler
+      ref: c93847f008e387647311f4036bc705a4fc0b9560 # br_v12.0.1_ohos
+  permission_handler_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_permission_handler.git
+      path: permission_handler_ohos
+      ref: c93847f008e387647311f4036bc705a4fc0b9560
+  package_info_plus:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      path: packages/package_info_plus/package_info_plus
+      ref: bc4df814a726042a9dad1a267ebb1d2973544e24 # br_package_info_plus-v9.0.0_ohos
+  share_plus:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_plus_plugins.git
+      path: packages/share_plus/share_plus
+      ref: 55de300a8627c55cd45ac86e6a26bcae8e0ca4cf # br_share_plus-v10.1.1_ohos
+  wakelock_plus:
+    git:
+      url: https://gitcode.com/openharmony-sig/fluttertpc_wakelock_plus.git
+      path: wakelock_plus
+      ref: 7009f270c6bb1bb4aaf373e226a873a126f9b9f4 # br_v1.4.0_ohos
+  audioplayers:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_audioplayers.git
+      path: packages/audioplayers
+      ref: 3a3e22642fac78dedb5fd4364b5ca29bcb144365 # tag 6.5.1-ohos-1.0.0
+  audioplayers_ohos:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_audioplayers.git
+      path: packages/audioplayers_ohos
+      ref: 3a3e22642fac78dedb5fd4364b5ca29bcb144365
+  audioplayers_android:
+    git:
+      url: https://gitcode.com/openharmony-sig/flutter_audioplayers.git
+      path: packages/audioplayers_android
+      ref: 3a3e22642fac78dedb5fd4364b5ca29bcb144365
 
 # Run: dart run flutter_launcher_icons
 flutter_launcher_icons:
