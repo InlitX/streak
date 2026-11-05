@@ -64,13 +64,13 @@ void main() {
   });
 
   test('isMobile is true for ohos', () {
+    addTearDown(() => setOhosForTest(false));
     setOhosForTest(true);
     expect(isMobile, isTrue);
     expect(hasReminders, isFalse);
     expect(hasAppIcons, isFalse);
     expect(hasHomeWidgets, isFalse);
     expect(hasBiometricLock, isFalse);
-    setOhosForTest(false);
   });
 
   test('guards stay inert off-ohos', () {
