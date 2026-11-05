@@ -77,6 +77,7 @@ class AppSnackbar {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          // persist dropped: not in fork 3.35.8; stock-Flutter builds would default persist:true
           width: wide ? paneWidth : null,
           margin: wide ? null : const EdgeInsets.all(16),
           duration: Duration(milliseconds: label == null ? 3000 : 2500),
