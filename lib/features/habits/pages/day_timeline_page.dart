@@ -288,7 +288,7 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
   @override
   Widget build(BuildContext context) {
     final page = _page;
-    if (page != null && !TickerMode.valuesOf(context).enabled) return page;
+    if (page != null && !TickerMode.of(context)) return page;
     final habits = context.watch<HabitsController>().habits;
     final weekStart = context.watch<SettingsController>().weekStart;
     final dueTodos = _todosOf(context);

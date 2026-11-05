@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';

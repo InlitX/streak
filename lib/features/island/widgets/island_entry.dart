@@ -19,7 +19,7 @@ class IslandEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!context.watch<SettingsController>().islandEnabled ||
-        !TickerMode.valuesOf(context).enabled) {
+        !TickerMode.of(context)) {
       return const SizedBox.shrink();
     }
     final island = context.watch<IslandController>();

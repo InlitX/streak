@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';

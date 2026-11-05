@@ -63,7 +63,7 @@ class _MinimalStatisticsPageState extends State<MinimalStatisticsPage> {
   HabitStats _stats = HabitStats.empty;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
-    if (!TickerMode.valuesOf(context).enabled) return _stats;
+    if (!TickerMode.of(context)) return _stats;
     final key = (habits: all, id: _habitId, year: _year);
     if (_key != key) {
       _key = key;

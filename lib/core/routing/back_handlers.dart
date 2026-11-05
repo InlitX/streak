@@ -18,5 +18,5 @@ class BackHandlers {
 
   static bool isVisible(BuildContext context) =>
       (ModalRoute.of(context)?.isCurrent ?? true) &&
-      TickerMode.valuesOf(context).enabled;
+      TickerMode.of(context);
 }

@@ -4,7 +4,7 @@ import 'dart:ui' show Color;
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_ohos/file_picker_ohos.dart';
 import 'package:streak/app/theme/app_palette.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/data/completion.dart';

@@ -58,7 +58,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   HabitStats get debugStats => _stats;
 
   HabitStats _statsFor(List<Habit> scoped, List<Habit> all) {
-    if (!TickerMode.valuesOf(context).enabled) return _stats;
+    if (!TickerMode.of(context)) return _stats;
     final key = (habits: all, id: _habitId, year: _year);
     if (_statsKey != key) {
       _statsKey = key;

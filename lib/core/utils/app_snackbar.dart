@@ -80,7 +80,6 @@ class AppSnackbar {
           width: wide ? paneWidth : null,
           margin: wide ? null : const EdgeInsets.all(16),
           duration: Duration(milliseconds: label == null ? 3000 : 2500),
-          persist: false,
           action: label == null
               ? null
               : SnackBarAction(
