@@ -956,6 +956,7 @@
   "default_user": "Inlitx",
   "your_name": "Your name",
   "edit_name": "Edit name",
+  "edit_profile": "Edit profile",
   "change_photo": "Change photo",
   "remove_photo": "Remove photo",
   "notif_greeting": "Hi {name}, ",

@@ -852,6 +852,7 @@
   "default_user": "Inlitx",
   "your_name": "Tu nombre",
   "edit_name": "Editar nombre",
+  "edit_profile": "Editar perfil",
   "change_photo": "Cambiar foto",
   "remove_photo": "Quitar foto",
   "notif_greeting": "Hola {name}, ",
