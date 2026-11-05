@@ -178,13 +178,35 @@ Consistent with fact (c): zero ohos plugin implementations are linked, so the fi
 
 ## Phase-1 acceptance (2026-11-05, device 5ZFYD25B20000755)
 
-**Verdict: BLOCKED — current HEAD (412c1b9) hangs on startup on the device (white screen, main() never reaches `runApp`).** The 8-item checklist could not be executed; the app never renders its first frame. Host Phase A (already recorded in task-7a-report.md) passed: suite rerun **+547 ~2 -2** (gate held on current HEAD, the 2 failures being the documented pre-existing environmental todos_page tests), stock-Flutter bisect skipped (`D:\flutter-stable` deleted by disk cleanup, verdict unknown), spike worktree removed.
+**Verdict: PASS — 8/8 checklist items executed on device after fix round 1 (fix commit `c235b7c`).** The first Phase-B attempt was BLOCKED: the current-HEAD build hung on startup (white screen, main() never reached `runApp`; root cause below). Controller approved the app-side guard fix; after applying it and migrating the hive boxes, the full checklist passed on the rebuilt HAP. Host Phase A had already passed: suite rerun **+547 ~2 -2** (gate held on current HEAD and re-verified on the fix commit, the 2 failures being the documented pre-existing environmental todos_page tests), stock-Flutter bisect skipped (`D:\flutter-stable` deleted by disk cleanup, verdict unknown), spike worktree removed.
+
+### Fix round 1 (commit `c235b7c`) + hive path migration
+
+- Fix applied in `lib/main.dart` `_startup()`: the guard is now `if (isMobile && !isOhos)` — the edgeToEdge await is skipped entirely on ohos (the embedder never replies on the success path; the upstream fork fix is deferred to phase 2 and ledgered). Suite re-run on the fix commit: **+547 ~2 -2** (unchanged). Committed as `fix(ohos): don't await SystemChrome edgeToEdge on ohos`.
+- **Hive path migration (manual, device-side)**: the fixed build reads data from `files/flutter/` (`getApplicationDocumentsDirectory` → `PathUtils.getDataDirectory`), while the Task-3 build had written the 7 boxes to the `files/` root (`getApplicationSupportPath` → `context.filesDir`). With the app force-stopped, the 7 `.hive` boxes (habits/settings/categories/notes/focus/todos/todo_tags) were copied from `files/` into `files/flutter/` via hdc; sizes verified identical (habits.hive 20215 B, settings.hive 1802 B, categories.hive 679 B). `files/covers/` could not be copied (hdc shell runs as uid 2000 and cannot write into the 770 app-owned dirs) — also unnecessary: habit records store absolute cover paths and the old `files/covers/1793875090946.jpg` still exists, so 喝水 renders with its cover. **Phase-2 cleanup: the stale root-level box set in `files/` is now a duplicate and should be deleted.**
 
 ### What was run (Phase B, device)
 
 - Rebuilt from HEAD: `flutter build hap --debug` GREEN (log `D:\ohos-tmp\t7b_build.log`, assembleHap 46.1s), installed `ohos/entry/build/default/outputs/default/entry-default-signed.hap` → "install bundle successfully" (21:05 device time). Data untouched: the hung process never reached `LocalStore.init()`, and the app was force-stopped afterward; the 喝水 habit survives.
 - Launch attempt 1 surfaced a pre-existing zombie process (pid 55058, started 18:58 = the Task-3 process, which survived the same-version install and rendered blank over stale files). Force-stop + relaunch produced a fresh pid 58662 with identical white screen — proving the hang is in the current HEAD code, not stale state.
-- Checklist items 1-8 (create habit 验收T7 / check-in / statistics / kill-relaunch persistence / focus wakelock / settings scan / share card / health row): **all ❌ not executable — app never reaches first frame.** No 验收T7 habit exists (nothing to delete); 喝水 untouched.
+- Checklist items 1-8 in that first attempt: **all ❌ not executable — the app never reached its first frame.** They were executed for real on the fix-round-1 build (results below).
+
+### Final acceptance results (fix-round-1 build, device)
+
+All evidence in `D:\ohos-tmp\` (`t7b2_*.jpeg` screenshots, `t7b2_hilog_focus.txt`):
+
+1. **Create habit 验收T7** (普通 type): saved via IME (inputText + candidate-tap needed for CJK on HarmonyOS), appears on home — ✅ (t7b2_03–04)
+2. **Check-in today**: streak flame 1, day 5 cell highlighted, 100% progress — ✅ (t7b2_05)
+3. **Statistics page**: charts render; hilog clean of `MissingPluginException` — ✅ (t7b2_06)
+4. **Kill + relaunch persistence**: force-stop, relaunch — habits and check-ins persist from `files/flutter/` — ✅ (t7b2_07)
+5. **Focus session**: starts and runs; wakelock active (hilog: `OnSetWindowKeepScreenOn isKeepScreenOn: 1`, `PowerRunningLock "SL active"`); end dialog + toast — ✅ (t7b2_08–09, t7b2_hilog_focus.txt)
+6. **Settings scan**: biometric method row absent, app-icon row absent (外观)， home-widget nav row absent, check_sound and quiet_when_done rows absent (偏好设置 full scroll). The app_lock toggle itself stays visible by design (`hasBiometricLock=false` only hides the method row) — appLock was deliberately NOT toggled on to avoid creating a PIN on the user's device — ✅ (t7b2_10–12h)
+7. **Share card**: preview renders; app-level 保存 is a silent no-op (no gallery write, no crash — `_store` returns false on ohos); 分享 opens the HarmonyOS system share sheet with the rendered card (分享 1 项， 46.58 KB) — ✅ (t7b2_13–15b)
+8. **Health/steps row**: 新建习惯 → 可量化 shows preset tiles 水/阅读/时间/自定义 only — the 步数 (Health Connect) tile is hidden because `HealthSteps.access()` returns unsupported on ohos (`quant_preset_grid.dart` hides it when unsupported); no crash — ✅ (t7b2_17–18)
+
+Cleanup: 验收T7 removed via long-press → **归档习惯** → confirm (archive is the app's only removal path; no hard-delete exists in the UI). Home afterwards shows 喝水 only: flame 1, day 5 checked, cover intact — 喝水 data undisturbed throughout (t7b2_21–24).
+
+Incidental observations (cosmetic, phase-2 candidates): the habit-form discard dialog reuses todo copy ("你对此待办所做的更改将会丢失”)； the long-press sheet shows "Duplicate habit" / "Export this habit" in English on zh locale (`app_zh.arb` lacks `duplicate_habit`/`export_habit`).
 
 ### Root cause (source-verified)
 
@@ -194,7 +216,7 @@ Commit **83c9c53** (19:01, after Task 3's verified 18:56 build) added `await ini
 - process idle: pid 58662 at 0.0% CPU / 1.5 s total CPU (`top`) — parked, not compiling; screenshots `t7b_02_home.jpeg`/`t7b_01d_home.jpeg` show the persistent white screen (evidence `D:\ohos-tmp\t7b_*.jpeg`).
 - embedder source: `PlatformChannel.ets` `case "SystemChrome.setEnabledSystemUIMode"` — success path has no `result.success(null)`; siblings (`setEnabledSystemUIOverlays`, `setSystemUIOverlayStyle`, `SystemNavigator.pop`, …) all reply. Fork bug, not app logic.
 
-### Proposed fix (needs controller approval; NOT applied — would add an 8th modified file, violating this task's git contract)
+### Fix (APPLIED — fix round 1, commit `c235b7c`; controller-approved option 1)
 
 In `lib/main.dart` `_startup()`, stop awaiting the never-replying call on ohos, e.g. change
 
@@ -204,8 +226,8 @@ if (isMobile) {
 }
 ```
 
-to fire-and-forget (unawaited with catchError) or `if (isMobile && !isOhos) await ...`. One-line app-side workaround for an embedder defect; upstream candidates: fix `PlatformChannel.ets` (add `result.success(null)` after `showSystemUiMode`) in the SIG/fork embedder, or pin a fixed engine release.
+to fire-and-forget (unawaited with catchError) or `if (isMobile && !isOhos) await ...`. The latter was chosen (smallest diff). One-line app-side workaround for an embedder defect; the upstream fix — add `result.success(null)` after `showSystemUiMode` in `PlatformChannel.ets` — stays deferred to phase 2 and is ledgered.
 
-### Device state after phase (clean)
+### Device state after phase (final)
 
-App force-stopped; the new HAP remains installed; 喝水 + user data untouched (hung process never reached the database); no 验收T7 habit was created; `hdc list targets` still shows 5ZFYD25B20000755. Repo untouched except notes.md: build artifacts only under `D:\ohos-tmp\` (t7b_build.log, t7b_hilog_full.txt, t7b_*.jpeg screenshots).
+验收T7 archived via the app UI (history preserved, restorable from settings); home shows 喝水 only — flame 1, day 5 checked, cover intact; user data otherwise undisturbed. The fix-round-1 HAP remains installed and now reads/writes `files/flutter/`; `hdc list targets` still shows 5ZFYD25B20000755. Repo: `lib/main.dart` fix committed (`c235b7c`); notes.md committed separately (this commit); scratch artifacts only under `D:\ohos-tmp\` (t7b_build.log, t7b_hilog_full.txt, t7b2_*.jpeg screenshots, t7b2_hilog_focus.txt).
