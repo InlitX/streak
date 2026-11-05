@@ -84,7 +84,10 @@ String? _writeStartupLog(Object error, StackTrace stack) {
 }
 
 Future<void> _startup() async {
-  if (isMobile) {
+  // ohos: the fork embedder handles SystemChrome.setEnabledSystemUIMode but never
+  // replies on the success path (PlatformChannel.ets), so awaiting it hangs main()
+  // before runApp (white screen). Skip the await on ohos; upstream fix deferred.
+  if (isMobile && !isOhos) {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
