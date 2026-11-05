@@ -198,9 +198,9 @@ class _ProfileRow extends StatelessWidget {
         Expanded(
           child: Semantics(
             button: true,
-            label: context.l10n.edit_name,
+            label: context.l10n.edit_profile,
             child: GestureDetector(
-              onTap: () => SettingsActions.editName(context),
+              onTap: () => SettingsActions.editProfile(context),
               behavior: HitTestBehavior.opaque,
               child: Row(
                 children: [
@@ -210,17 +210,19 @@ class _ProfileRow extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'PlayfairDisplay',
-                        fontSize: 30,
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        height: 1.1,
-                        letterSpacing: -0.6,
+                        height: 1.2,
                         color: context.colors.onSurface,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 9),
-                  Icon(LucideIcons.pencil, size: 14, color: context.tokens.muted),
+                  const SizedBox(width: 8),
+                  Icon(
+                    LucideIcons.pencil,
+                    size: 13,
+                    color: context.tokens.muted.withValues(alpha: 0.7),
+                  ),
                 ],
               ),
             ),

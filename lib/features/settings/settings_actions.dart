@@ -573,6 +573,17 @@ class SettingsActions {
     await settings.setVacationAll(true, await habits.pauseAll());
   }
 
+  static Future<void> editProfile(BuildContext context) {
+    return showOptionSheet(
+      context,
+      title: context.l10n.edit_profile,
+      options: [context.l10n.change_photo, context.l10n.edit_name],
+      icons: const [LucideIcons.image, LucideIcons.userPen],
+      index: -1,
+      onSelected: (i) => i == 0 ? pickProfilePhoto(context) : editName(context),
+    );
+  }
+
   static Future<void> editName(BuildContext context) async {
     final settings = context.read<SettingsController>();
     final name = await showDialog<String>(

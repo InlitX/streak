@@ -317,36 +317,47 @@ class _ProfileHero extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Semantics(
-              button: true,
-              label: context.l10n.edit_name,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => SettingsActions.editName(context),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: ExpressType.display.at(
-                          26,
-                          height: 1.1,
-                          spacing: -0.4,
-                          color: context.colors.onSurface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: ExpressType.display.at(
+                    26,
+                    height: 1.1,
+                    spacing: -0.4,
+                    color: context.colors.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Semantics(
+                  button: true,
+                  child: Material(
+                    color: context.colors.primary.withValues(alpha: 0.12),
+                    shape: const StadiumBorder(),
+                    child: InkWell(
+                      customBorder: const StadiumBorder(),
+                      onTap: () => SettingsActions.editProfile(context),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 7,
+                        ),
+                        child: Text(
+                          context.l10n.edit_profile,
+                          style: ExpressType.body.at(
+                            13,
+                            weight: 700,
+                            color: context.colors.primary,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 9),
-                    Icon(
-                      LucideIcons.pencil,
-                      size: 15,
-                      color: context.tokens.muted,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
