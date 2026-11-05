@@ -6,15 +6,29 @@ import 'package:streak/core/database/data_location.dart';
 
 const appDataFolder = 'Streak';
 
-bool get isMobile => Platform.isAndroid || Platform.isIOS;
+bool _ohos = false;
 
-bool get hasAppIcons => isMobile;
+bool get isOhos => _ohos;
+
+@visibleForTesting
+void setOhosForTest(bool value) => _ohos = value;
+
+Future<void> initPlatformFlavor() async {
+  _ohos = Platform.operatingSystem == 'ohos'; // spike branch (a): distinct OS
+}
+
+bool get isMobile => Platform.isAndroid || Platform.isIOS || _ohos;
+
+bool get hasAppIcons => isMobile && !_ohos; // streak/app_icon channel: no ohos handler
 
 bool get hasHomeWidgets =>
-    defaultTargetPlatform == TargetPlatform.android ||
-    defaultTargetPlatform == TargetPlatform.iOS;
+    !isOhos &&
+    (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS);
 
-bool get hasBiometricLock => !Platform.isLinux;
+bool get hasBiometricLock => !Platform.isLinux && !_ohos;
+
+bool get hasReminders => !_ohos;
 
 bool get isFlatpak => Platform.environment.containsKey('FLATPAK_ID');
 

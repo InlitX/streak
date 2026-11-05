@@ -62,4 +62,20 @@ void main() {
     seed(inDocuments());
     expect(await resolve(), support.path);
   });
+
+  test('isMobile is true for ohos', () {
+    setOhosForTest(true);
+    expect(isMobile, isTrue);
+    expect(hasReminders, isFalse);
+    expect(hasAppIcons, isFalse);
+    expect(hasHomeWidgets, isFalse);
+    expect(hasBiometricLock, isFalse);
+    setOhosForTest(false);
+  });
+
+  test('guards stay inert off-ohos', () {
+    setOhosForTest(false);
+    expect(hasReminders, isTrue); // host behavior unchanged
+    expect(hasBiometricLock, isTrue); // matches !Platform.isLinux on Windows host
+  });
 }

@@ -39,6 +39,7 @@ import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initPlatformFlavor();
   try {
     await _startup();
   } catch (e, s) {
