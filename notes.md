@@ -174,4 +174,38 @@ Consistent with fact (c): zero ohos plugin implementations are linked, so the fi
 - **SnackBar persist** (lib/core/utils/app_snackbar.dart): `persist: false` dropped because the fork lacks the parameter; stock-Flutter ≥3.38 builds would default `persist: true`. Marked with a comment at the call site.
 - **Direct-dep downgrades on host platforms** (suite-pinned, acceptable): file_picker 10.3.10→fork 10.3.8, audioplayers 6.7.1→6.5.1, share_plus 10.1.4→10.1.1, wakelock_plus 1.5.2→1.4.0, permission_handler 12.0.3→12.0.1, package_info_plus 9.0.1→9.0.0, image_picker 1.2.2→1.2.1.
 - **Machine-global git config** (set during pub troubleshooting, decide keep/revert at branch end): `http.version HTTP/1.1` (gitcode CDN dies under HTTP/2), `core.longpaths true` (monorepo checkout). Also per-shell needs for any ohos pub get: `GIT_LFS_SKIP_SMUDGE=1`, TEMP/TMP on D:, junctions re-created in `windows/flutter/ephemeral/.plugin_symlinks` after each pub get while Developer Mode is off.
-- **Deferred test failures**: 2 todos_page widget tests fail identically with and without overrides (environmental; hypothesis: text-metric layout diff). Recheck in Task 7. NOTE: notes.md records stock Flutter 3.47.9 at D:\flutter-stable — Ruling 7 predates it; a stock-vs-fork bisect of the 2 failures is now possible.
+- **Deferred test failures**: 2 todos_page widget tests fail identically with and without overrides (environmental; hypothesis: text-metric layout diff). Recheck in Task 7. NOTE (corrected 2026-11-05): `D:\flutter-stable` NO LONGER EXISTS — the stock Flutter 3.47.9 recorded under Task 3 was removed by disk cleanup; the stock-vs-fork bisect of the 2 failures was skipped (verdict unknown) and stays queued for whenever the stock SDK is reinstalled.
+
+## Phase-1 acceptance (2026-11-05, device 5ZFYD25B20000755)
+
+**Verdict: BLOCKED — current HEAD (412c1b9) hangs on startup on the device (white screen, main() never reaches `runApp`).** The 8-item checklist could not be executed; the app never renders its first frame. Host Phase A (already recorded in task-7a-report.md) passed: suite rerun **+547 ~2 -2** (gate held on current HEAD, the 2 failures being the documented pre-existing environmental todos_page tests), stock-Flutter bisect skipped (`D:\flutter-stable` deleted by disk cleanup, verdict unknown), spike worktree removed.
+
+### What was run (Phase B, device)
+
+- Rebuilt from HEAD: `flutter build hap --debug` GREEN (log `D:\ohos-tmp\t7b_build.log`, assembleHap 46.1s), installed `ohos/entry/build/default/outputs/default/entry-default-signed.hap` → "install bundle successfully" (21:05 device time). Data untouched: the hung process never reached `LocalStore.init()`, and the app was force-stopped afterward; the 喝水 habit survives.
+- Launch attempt 1 surfaced a pre-existing zombie process (pid 55058, started 18:58 = the Task-3 process, which survived the same-version install and rendered blank over stale files). Force-stop + relaunch produced a fresh pid 58662 with identical white screen — proving the hang is in the current HEAD code, not stale state.
+- Checklist items 1-8 (create habit 验收T7 / check-in / statistics / kill-relaunch persistence / focus wakelock / settings scan / share card / health row): **all ❌ not executable — app never reaches first frame.** No 验收T7 habit exists (nothing to delete); 喝水 untouched.
+
+### Root cause (source-verified)
+
+Commit **83c9c53** (19:01, after Task 3's verified 18:56 build) added `await initPlatformFlavor()` to `main()`, which classifies ohos as mobile. `_startup()` then executes `await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)` (lib/main.dart:87-89) on ohos. The fork embedder (3.35.8-ohos-1.0.4) handles that method but **never replies on the success path** — `PlatformChannel.ets` L500-509 (`engine/src/flutter/shell/platform/ohos/flutter_embedding/flutter/src/main/ets/embedding/engine/systemchannels/PlatformChannel.ets`): the `SystemChrome.setEnabledSystemUIMode` case calls `showSystemUiMode(mode)` and then breaks without `result.success(null)` (every sibling case replies). Dart's Future therefore never completes; main() parks before `runApp`. All evidence agrees:
+
+- hilog (pid 58662, saved `D:\ohos-tmp\t7b_hilog_full.txt`, lines 2364-2367): 21:11:15.382 `Received 'SystemChrome.setEnabledSystemUIMode' message.` → `setEnabledSystemUIMode args:SystemUiMode.edgeToEdge` → `PlatformPluginCallback --> mode: SystemUiMode.edgeToEdge` → 21:11:15.383 `FlutterManager --> Failed to check window decor visibility support. Cause code: 801 (Capability not supported)` — then **Dart platform-channel traffic stops permanently** (no `plugins.flutter.io/path_provider` message ever appears; LocalStore.init never runs).
+- process idle: pid 58662 at 0.0% CPU / 1.5 s total CPU (`top`) — parked, not compiling; screenshots `t7b_02_home.jpeg`/`t7b_01d_home.jpeg` show the persistent white screen (evidence `D:\ohos-tmp\t7b_*.jpeg`).
+- embedder source: `PlatformChannel.ets` `case "SystemChrome.setEnabledSystemUIMode"` — success path has no `result.success(null)`; siblings (`setEnabledSystemUIOverlays`, `setSystemUIOverlayStyle`, `SystemNavigator.pop`, …) all reply. Fork bug, not app logic.
+
+### Proposed fix (needs controller approval; NOT applied — would add an 8th modified file, violating this task's git contract)
+
+In `lib/main.dart` `_startup()`, stop awaiting the never-replying call on ohos, e.g. change
+
+```dart
+if (isMobile) {
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+}
+```
+
+to fire-and-forget (unawaited with catchError) or `if (isMobile && !isOhos) await ...`. One-line app-side workaround for an embedder defect; upstream candidates: fix `PlatformChannel.ets` (add `result.success(null)` after `showSystemUiMode`) in the SIG/fork embedder, or pin a fixed engine release.
+
+### Device state after phase (clean)
+
+App force-stopped; the new HAP remains installed; 喝水 + user data untouched (hung process never reached the database); no 验收T7 habit was created; `hdc list targets` still shows 5ZFYD25B20000755. Repo untouched except notes.md: build artifacts only under `D:\ohos-tmp\` (t7b_build.log, t7b_hilog_full.txt, t7b_*.jpeg screenshots).
