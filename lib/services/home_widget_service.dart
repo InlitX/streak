@@ -39,6 +39,7 @@ class HomeWidgetService {
   static bool _grouped = false;
 
   static Future<void> prepare() async {
+    if (isOhos) return;
     if (!Platform.isIOS || _grouped) return;
     await HomeWidget.setAppGroupId(appGroup);
     _grouped = true;
@@ -51,6 +52,7 @@ class HomeWidgetService {
     AppLocalizations l10n,
     Map<String, Habit> Function() habits,
   ) async {
+    if (isOhos) return;
     if (!hasHomeWidgets) return;
     if (_lastLocale == l10n.localeName) return;
     _lastLocale = l10n.localeName;
@@ -143,6 +145,7 @@ class HomeWidgetService {
   static Timer? _pendingSync;
 
   static void syncSoon(Map<String, Habit> Function() habits) {
+    if (isOhos) return;
     _pendingSync?.cancel();
     _pendingSync = Timer(const Duration(milliseconds: 700), () {
       _pendingSync = null;
@@ -154,6 +157,7 @@ class HomeWidgetService {
     Map<String, Habit> habits, {
     bool renderIcons = true,
   }) async {
+    if (isOhos) return;
     _pendingSync?.cancel();
     _pendingSync = null;
     if (!hasHomeWidgets) return;
@@ -180,6 +184,7 @@ class HomeWidgetService {
     required int opacity,
     required bool border,
   }) async {
+    if (isOhos) return;
     if (!hasHomeWidgets) return;
     try {
       await prepare();

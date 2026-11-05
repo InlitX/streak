@@ -32,6 +32,8 @@ class HealthSteps {
       return await _channel.invokeMethod<bool>('request') ?? false;
     } on PlatformException {
       return false;
+    } on MissingPluginException {
+      return false;
     }
   }
 
@@ -40,6 +42,8 @@ class HealthSteps {
     try {
       return await _channel.invokeMethod<bool>('openSettings') ?? false;
     } on PlatformException {
+      return false;
+    } on MissingPluginException {
       return false;
     }
   }

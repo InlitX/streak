@@ -415,7 +415,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                       onSelected: settings.setCelebration,
                     ),
                   ),
-                  settingsDivider(context),
+                  if (hasReminders) settingsDivider(context),
+                  if (hasReminders)
                   SettingRow(
                     icon: LucideIcons.volume2,
                     title: context.l10n.check_sound,
@@ -625,7 +626,8 @@ class _ClassicPreferencesPage extends StatelessWidget {
                       onChanged: (i) => settings.setDifficultyOption(i == 1),
                     ),
                   ),
-                  settingsDivider(context),
+                  if (hasReminders) settingsDivider(context),
+                  if (hasReminders)
                   SettingRow(
                     icon: LucideIcons.bellOff,
                     title: context.l10n.quiet_when_done,

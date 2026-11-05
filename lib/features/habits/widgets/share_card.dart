@@ -16,6 +16,7 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/share_origin.dart';
 import 'package:streak/core/widgets/entrance.dart';
@@ -155,6 +156,7 @@ class _SharePageState extends State<SharePage> {
 
   Future<bool> _store(Uint8List bytes) async {
     if (!Platform.isLinux) {
+      if (isOhos) return false;
       if (!await Gal.hasAccess(toAlbum: true)) {
         await Gal.requestAccess(toAlbum: true);
       }

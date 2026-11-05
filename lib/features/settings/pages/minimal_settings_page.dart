@@ -469,6 +469,7 @@ class _PreferencesPage extends StatelessWidget {
                 onSelected: settings.setCelebration,
               ),
             ),
+            if (hasReminders)
             SoftRow(
               icon: LucideIcons.volume2,
               title: context.l10n.check_sound,
@@ -664,6 +665,7 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: settings.setShowTodayProgress,
               ),
             ),
+            if (hasReminders)
             SoftRow(
               icon: LucideIcons.bellOff,
               title: context.l10n.quiet_when_done,

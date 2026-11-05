@@ -596,6 +596,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
             onSelected: settings.setCelebration,
           ),
         ),
+        if (hasReminders)
         _Toggle(
           icon: LucideIcons.volume2,
           title: context.l10n.check_sound,
@@ -785,6 +786,7 @@ List<Widget> _preferenceTiles(BuildContext context) {
           value: settings.showTodayProgress,
           onChanged: settings.setShowTodayProgress,
         ),
+        if (hasReminders)
         _Toggle(
           icon: LucideIcons.bellOff,
           title: context.l10n.quiet_when_done,

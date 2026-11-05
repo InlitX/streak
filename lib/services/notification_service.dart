@@ -174,6 +174,7 @@ class NotificationService {
   }
 
   Future<void> initialize() async {
+    if (isOhos) return;
     if (_ready) return;
 
     tz.initializeTimeZones();
@@ -258,6 +259,7 @@ class NotificationService {
   }
 
   Future<bool> requestNotifications() async {
+    if (isOhos) return false;
     if (Platform.isLinux || Platform.isWindows) return true;
     try {
       if (await Permission.notification.isGranted) return true;
@@ -269,6 +271,7 @@ class NotificationService {
   }
 
   Future<bool> requestPermissions() async {
+    if (isOhos) return false;
     if (!await requestNotifications()) return false;
     if (Platform.isAndroid) {
       final exact = await Permission.scheduleExactAlarm.status;
@@ -281,6 +284,7 @@ class NotificationService {
   }
 
   Future<void> scheduleFor(Habit habit) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     if (habit.isOnVacation || habit.isArchived) {
       await cancelFor(habit.id);
@@ -394,6 +398,7 @@ class NotificationService {
   }
 
   Future<void> dismissShown(Habit habit) async {
+    if (isOhos) return;
     if (!Platform.isAndroid || !_quietToday(habit)) return;
     try {
       final shown = await _plugin
@@ -726,6 +731,7 @@ class NotificationService {
   }
 
   Future<void> dropUnusedSoundChannels(Iterable<Habit> habits) async {
+    if (isOhos) return;
     if (!Platform.isAndroid) return;
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
@@ -803,6 +809,7 @@ class NotificationService {
   }
 
   Future<void> snooze(Habit habit) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     final reminder = habit.reminders.isEmpty ? null : habit.reminders.first;
     final strings = await localizations();
@@ -825,6 +832,7 @@ class NotificationService {
     required String body,
     required Duration after,
   }) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     await _cancel(_focusEndId);
     if (after.inSeconds <= 0) return;
@@ -852,6 +860,7 @@ class NotificationService {
     required String body,
     String habitId = '',
   }) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     try {
       final details = Platform.isWindows
@@ -869,6 +878,7 @@ class NotificationService {
   }
 
   Future<void> cancelFocusEnd() async {
+    if (isOhos) return;
     try {
       await _cancel(_focusEndId);
     } catch (_) {}
@@ -877,6 +887,7 @@ class NotificationService {
   int _snoozeId(String habitId) => -(habitId.hashCode.abs() % 1000000) - 1;
 
   Future<void> confirm(Habit habit, String text, int id) async {
+    if (isOhos) return;
     if (!Platform.isAndroid) return;
     await _plugin.show(
       id,
@@ -900,6 +911,7 @@ class NotificationService {
   }
 
   Future<void> scheduleTodo(Todo todo) async {
+    if (isOhos) return;
     try {
       await _scheduleTodo(todo);
     } catch (e) {
@@ -961,6 +973,7 @@ class NotificationService {
   }
 
   Future<void> cancelTodo(String todoId) async {
+    if (isOhos) return;
     try {
       if (!_ready) await initialize();
       await _cancel(ReminderSchedule.todoNotificationId(todoId));
@@ -970,17 +983,20 @@ class NotificationService {
   }
 
   Future<void> rescheduleTodos(List<Todo> todos) async {
+    if (isOhos) return;
     for (final todo in todos.toList()) {
       await scheduleTodo(todo);
     }
   }
 
   Future<void> cancelFor(String habitId) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     await _cancelExcept(habitId, const {});
   }
 
   Future<void> cancelOrphans(Set<String> liveHabitIds) async {
+    if (isOhos) return;
     if (!_ready) await initialize();
     for (final n in await _pending()) {
       final payload = n.payload;
@@ -991,6 +1007,7 @@ class NotificationService {
   }
 
   Future<void> cancelAll() async {
+    if (isOhos) return;
     if (_queuesInApp) _inApp.cancelAll();
     await _plugin.cancelAll();
     if (_keepsPayloads) {
