@@ -1548,7 +1548,7 @@
   "focus_restart_title": "Перезапустить этот раунд?",
   "focus_restart_body": "То время, которое вы фокусировались в этом раунде, будет потеряно.",
   "focus_end_reached_free": "Цель достигнута.",
-  "focus_track_fire": "Fire",
+  "focus_track_fire": "Огонь",
   "focus_end_drop": "Если вы закончите сейчас, этот раунд не сохранится.",
   "focus_auto_next_sub": "Когда перерыв закончится, следующий раунд начнется без ожидания.",
   "focus_simple_view": "Простой вид",
@@ -1641,5 +1641,140 @@
       }
     }
   },
-  "view_switcher_needs": "Включите активность на карточках, чтобы использовать это"
+  "view_switcher_needs": "Включите активность на карточках, чтобы использовать это",
+  "todo_repeat_skip": "Пропустить этот",
+  "focus_whole_rounds_sub": "Раунд законченный ранее не сохранился.",
+  "focus_break_in": "Разорвать в {n}",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "Фокус на {n}",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "paused_day_title": "День приостановлен",
+  "paused_day_body": "Эта привычка приостановлена в {day}. Записать ее принудительно?",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "consistency_vs_previous": "{change} против предыдущая",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "plan_todos": "Задачи в Плане",
+  "plan_todos_sub": "Отобразить задачи, запланированные на этот день, под списком привычек",
+  "habit_time_sub": "В данный момент помещает привычку в раздел «План». Она по-прежнему отображается в разделе «Сегодня» в течение всего дня.",
+  "day_timeline_empty_todos": "Укажите дату для задачи, и она появится здесь.",
+  "today_fold_other": "В остальные дни {count}",
+  "@today_fold_other": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "today_fold_hidden": "Скрыто {count}",
+  "@today_fold_hidden": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "card_activity_sub": "Отображает количество дней, оставшихся на карте, готовых к отметке",
+  "readable_copy": "Текст для чтения",
+  "readable_copy_sub": "Кроме того, сохраняет ваши привычки в виде файлов Markdown",
+  "auto_sync": "Обеспечьте синхронизацию устройств",
+  "auto_sync_sub": "Сохраняет изменения после каждого изменения и проверяет папку каждые несколько минут",
+  "sync_guide": "Как синхронизировать два устройства",
+  "app_lock_delay_sub": "Как скоро он снова спросит об этом после того, как ты уйдешь",
+  "focus_only_clear_title": "Снять эту отметку?",
+  "focus_only_clear_body": "Только в ходе целевой сессии можно повторно проверить «{name}».",
+  "@focus_only_clear_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_ends_at": "Заканчивается в {time}",
+  "@focus_ends_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_no_limit": "Без лимита времени",
+  "focus_style_plain": "Просто",
+  "focus_label_sub": "Отсортируйте свои сессии, например, по темам. Нажмите на одну из них, чтобы удалить её.",
+  "period_week_of": "Неделя с {date}",
+  "@period_week_of": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pane_hint": "Откройте какой-нибудь пункт из списка, чтобы увидеть его здесь",
+  "island_enable_sub": "Превратите свои привычки в средиземноморский архипелаг, который вы создаете шаг за шагом",
+  "island_build": "Создать",
+  "island_done": "Построен",
+  "island_complete": "Архипелаг завершен",
+  "island_tap_hint": "Нажмите на фигуру, чтобы увидеть, что туда помещается",
+  "island_empty": "Отметьте выполнение привычки — и острова начнут расти",
+  "island_how": "Как начисляются баллы",
+  "island_how_check": "10 очков за каждую отмеченную привычку",
+  "island_how_focus": "1 за каждую минуту фокусировки",
+  "island_how_perfect": "Еще 25 — и день станет идеальным",
+  "island_how_note": "Монеты берутся из вашей истории, поэтому после восстановления резервной копии они появляются снова.",
+  "island_built": "{done} из {total} построено",
+  "@island_built": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "island_need": "Осталось набрать {count} очков",
+  "@island_need": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "island_placed": "{name} сейчас находится на острове",
+  "@island_placed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "island_p_agave": "Агава",
+  "island_p_altar": "Храм",
+  "island_p_archway": "Арка",
+  "island_p_banner": "Баннер",
+  "island_p_bench": "Скамейка",
+  "island_p_blue_railing": "Синие перила"
 }
