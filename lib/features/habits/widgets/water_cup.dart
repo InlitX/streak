@@ -274,10 +274,11 @@ class FootPainter extends CustomPainter {
 }
 
 class StopwatchPainter extends CustomPainter {
-  StopwatchPainter({required this.fill, required this.color});
+  StopwatchPainter({required this.fill, required this.color, this.under});
 
   final double fill;
   final Color color;
+  final Color? under;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -345,6 +346,9 @@ class StopwatchPainter extends CustomPainter {
 
     const start = -math.pi / 2;
     final sweep = 2 * math.pi * fill.clamp(0.0, 1.0);
+    if (under != null) {
+      canvas.drawCircle(center, inner, Paint()..color = under!);
+    }
     if (fill > 0) {
       final disc = Rect.fromCircle(center: center, radius: inner);
       canvas.drawArc(disc, start, sweep, true, Paint()..color = color);
@@ -387,14 +391,15 @@ class StopwatchPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant StopwatchPainter old) =>
-      old.fill != fill || old.color != color;
+      old.fill != fill || old.color != color || old.under != under;
 }
 
 class DialPainter extends CustomPainter {
-  DialPainter({required this.fill, required this.color});
+  DialPainter({required this.fill, required this.color, this.under});
 
   final double fill;
   final Color color;
+  final Color? under;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -406,9 +411,10 @@ class DialPainter extends CustomPainter {
         : Color.lerp(color, Colors.white, 0.80)!;
     final face = Color.lerp(color, Colors.white, 0.93)!;
     final ink = Color.lerp(color, Colors.black, 0.30)!;
-    final unlit = light
-        ? Colors.black.withValues(alpha: 0.18)
-        : Colors.white.withValues(alpha: 0.75);
+    final unlit = under ??
+        (light
+            ? Colors.black.withValues(alpha: 0.18)
+            : Colors.white.withValues(alpha: 0.75));
     final needle = light ? Color.lerp(color, Colors.black, 0.45)! : color;
     final amount = fill.clamp(0.0, 1.0);
 
@@ -469,5 +475,5 @@ class DialPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant DialPainter old) =>
-      old.fill != fill || old.color != color;
+      old.fill != fill || old.color != color || old.under != under;
 }

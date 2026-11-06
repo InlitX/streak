@@ -384,7 +384,11 @@ class _Stopwatch extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: CustomPaint(
-                  painter: StopwatchPainter(fill: t, color: solid),
+                  painter: StopwatchPainter(
+                    fill: t,
+                    color: solid,
+                    under: progress.exceededGoal ? progress.reachedColor(color) : null,
+                  ),
                 ),
               ),
               if (progress.reachedGoal)
@@ -508,7 +512,11 @@ class _GenericRing extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: CustomPaint(
-                  painter: DialPainter(fill: t, color: solid),
+                  painter: DialPainter(
+                    fill: t,
+                    color: solid,
+                    under: progress.exceededGoal ? progress.reachedColor(color) : null,
+                  ),
                 ),
               ),
               if (reached)
