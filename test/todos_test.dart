@@ -182,4 +182,14 @@ void main() {
     expect(todo.copyWith(clearMinutes: true).minutes, isNull);
     expect(todo.copyWith(minutes: 60).minutes, 60);
   });
+
+  test('a focus only to-do needs a session until it is done', () {
+    final todo = _todo('write').copyWith(estimate: 25, focusOnly: true);
+
+    expect(todo.blocksManualCheck, isTrue);
+    expect(Todo.fromMap(todo.toMap()).focusOnly, isTrue);
+    expect(todo.copyWith(done: true).blocksManualCheck, isFalse);
+    expect(todo.copyWith(clearEstimate: true).blocksManualCheck, isFalse);
+    expect(Todo.fromMap(_todo('plain').toMap()).focusOnly, isFalse);
+  });
 }

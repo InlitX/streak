@@ -87,6 +87,7 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
   Future<void> _toggleTodo(Todo todo) async {
     final todos = context.read<TodosController>();
     if (todo.done) return todos.toggle(todo.id);
+    if (!await allowManualTodo(context, todo) || !mounted) return;
     if (!_completing.add(todo.id)) return;
     setState(() {});
     await Future<void>.delayed(const Duration(milliseconds: 380));

@@ -10,6 +10,7 @@ import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
+import 'package:streak/features/todos/data/todo.dart';
 
 Future<bool> allowManualCheck(
   BuildContext context, {
@@ -56,6 +57,34 @@ Future<bool> allowManualCheck(
             startHabitId: habit.id,
             startMinutes: habit.focusMinutes,
             breakMinutes: habit.focusBreakMinutes,
+          ),
+    name: FocusPage.routeName,
+  );
+  return false;
+}
+
+Future<bool> allowManualTodo(BuildContext context, Todo todo) async {
+  if (!todo.blocksManualCheck) return true;
+  final confirmed = await showAppConfirmDialog(
+    context,
+    title: context.l10n.focus_only_title,
+    message: context.l10n.todo_focus_only_body(
+      todo.title,
+      '${todo.estimate}',
+    ),
+    confirmLabel: context.l10n.focus_only_start,
+    icon: LucideIcons.timer,
+    danger: false,
+  );
+  if (confirmed != true || !context.mounted) return false;
+
+  AppNavigator.push(
+    context.read<FocusController>().isActive
+        ? const FocusPage()
+        : FocusPage(
+            startMinutes: todo.estimate,
+            startLabel: todo.title,
+            startTodoId: todo.id,
           ),
     name: FocusPage.routeName,
   );

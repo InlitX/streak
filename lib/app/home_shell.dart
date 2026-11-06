@@ -84,8 +84,11 @@ class _HomeShellState extends State<HomeShell>
     _toSettings.addListener(_openSettings);
     final focus = context.read<FocusController>();
     final habits = context.read<HabitsController>();
-    focus.onRoundSaved =
-        (session) => unawaited(creditFocusRound(habits, focus, session));
+    final todos = context.read<TodosController>();
+    focus.onRoundSaved = (session) {
+      unawaited(creditFocusTodo(todos, focus.todoId, session));
+      unawaited(creditFocusRound(habits, focus, session));
+    };
     _waitForNextDay();
     unawaited(HealthSteps.sync(habits));
     final settings = context.read<SettingsController>();

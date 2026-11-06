@@ -34,6 +34,7 @@ class FocusController extends ChangeNotifier {
     final map = LocalStore.settingMap('focusActive');
     if (map.isEmpty) return;
     _habitId = (map['habitId'] ?? '') as String;
+    _todoId = (map['todoId'] ?? '') as String;
     _label = map['label'] is String ? map['label'] as String : '';
     _targetMinutes = ((map['target'] ?? 25) as num).toInt();
     _focusMinutes = ((map['focus'] ?? _targetMinutes) as num).toInt();
@@ -59,6 +60,7 @@ class FocusController extends ChangeNotifier {
   void _persist() {
     LocalStore.writeSetting('focusActive', {
       'habitId': _habitId,
+      'todoId': _todoId,
       'label': _label,
       'target': _targetMinutes,
       'focus': _focusMinutes,
@@ -77,6 +79,7 @@ class FocusController extends ChangeNotifier {
   final List<FocusTask> _tasks = [];
 
   String _habitId = '';
+  String _todoId = '';
   String _label = '';
   int _targetMinutes = 25;
   int _focusMinutes = 25;
@@ -178,6 +181,7 @@ class FocusController extends ChangeNotifier {
   int get pendingTasks => _tasks.where((t) => !t.done).length;
 
   String get habitId => _habitId;
+  String get todoId => _todoId;
   String get label => _label;
   bool get isBreak => _isBreak;
   int get round => _round;
@@ -253,10 +257,12 @@ class FocusController extends ChangeNotifier {
     required int targetMinutes,
     int breakMinutes = 0,
     String label = '',
+    String todoId = '',
   }) {
     _habitId = habitId;
+    _todoId = todoId;
     _label = label;
-    if (label.isNotEmpty) unawaited(rememberLabel(habitId, label));
+    if (label.isNotEmpty && todoId.isEmpty) unawaited(rememberLabel(habitId, label));
     _targetMinutes = targetMinutes;
     _focusMinutes = targetMinutes;
     _breakMinutes = targetMinutes <= 0 ? 0 : breakMinutes;
@@ -432,6 +438,7 @@ class FocusController extends ChangeNotifier {
     _began = null;
     _pauses = 0;
     _habitId = '';
+    _todoId = '';
     _label = '';
     _tasks.clear();
     _celebrated = false;

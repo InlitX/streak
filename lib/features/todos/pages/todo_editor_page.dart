@@ -32,6 +32,7 @@ import 'package:streak/features/todos/widgets/todo_repeat_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_sticker.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_trash.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 
 Color notePageColor(BuildContext context, int paper) {
   if (paper < 0) return Colors.transparent;
@@ -90,6 +91,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   late String _date = widget.todo?.date ?? widget.date;
   late int? _minutes = widget.todo?.minutes;
   late int? _estimate = widget.todo?.estimate;
+  late bool _focusOnly = widget.todo?.focusOnly ?? false;
   late TodoPriority _priority = widget.todo?.priority ?? TodoPriority.none;
   late int _paper = widget.todo?.paper ?? -1;
   late String _cover = widget.todo?.cover ?? '';
@@ -128,6 +130,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
         _date,
         _minutes,
         _estimate,
+        _focusOnly,
         _priority.name,
         _paper,
         _cover,
@@ -213,6 +216,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     final date = _date;
     final minutes = _minutes;
     final estimate = _estimate;
+    final focusOnly = _focusOnly && estimate != null;
     final priority = _priority;
     final tags = [..._tags];
     final project = _project;
@@ -232,6 +236,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
             date: date,
             minutes: minutes,
             estimate: estimate,
+            focusOnly: focusOnly,
             priority: priority,
             photos: photos,
             tags: tags,
@@ -258,6 +263,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
       clearMinutes: minutes == null,
       estimate: estimate,
       clearEstimate: estimate == null,
+      focusOnly: focusOnly,
       priority: priority,
       photos: photos,
       tags: tags,
@@ -437,6 +443,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   }
 
   Future<void> _toggleDone() async {
+    if (!_done && _focusOnly && (_estimate ?? 0) > 0) {
+      await _persist();
+      final todo = _existing;
+      if (todo == null || !mounted) return;
+      await allowManualTodo(context, todo);
+      return;
+    }
     if (_done || _repeat == null || _date.isEmpty) {
       _edit(() => _done = !_done);
       return;
@@ -452,8 +465,16 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   Future<void> _pickEstimate() async {
     final minutes = await showDurationSheet(context, minutes: _estimate ?? 0);
     if (minutes == null || !mounted) return;
-    _edit(() => _estimate = minutes == 0 ? null : minutes);
+    _edit(() {
+      _estimate = minutes == 0 ? null : minutes;
+      if (_estimate == null) _focusOnly = false;
+    });
   }
+
+  void _toggleFocusOnly() => _edit(() {
+        _focusOnly = !_focusOnly;
+        if (_focusOnly) _estimate ??= 25;
+      });
 
   Future<void> _pickPriority() => showTodoPriorityPicker(
         context,
@@ -761,7 +782,9 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                                   ),
                                 if (_estimate != null)
                                   _Chip(
-                                    icon: LucideIcons.hourglass,
+                                    icon: _focusOnly
+                                        ? LucideIcons.timer
+                                        : LucideIcons.hourglass,
                                     label: formatMinutes(_estimate!.toDouble()),
                                     ink: ink,
                                     onTap: _pickEstimate,
@@ -829,6 +852,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
                               ink: ink,
                               active: _estimate != null,
                               onTap: _pickEstimate,
+                            ),
+                            _Tool(
+                              icon: LucideIcons.timer,
+                              label: context.l10n.todo_focus_only,
+                              ink: ink,
+                              active: _focusOnly,
+                              onTap: _toggleFocusOnly,
                             ),
                             _Tool(
                               icon: LucideIcons.flag,

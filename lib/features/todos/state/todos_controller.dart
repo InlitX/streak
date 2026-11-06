@@ -104,6 +104,7 @@ class TodosController extends ChangeNotifier {
     String cover = '',
     bool pinned = false,
     TodoRepeat? repeat,
+    bool focusOnly = false,
   }) async {
     final todo = Todo(
       id: const Uuid().v4(),
@@ -120,6 +121,7 @@ class TodosController extends ChangeNotifier {
       cover: cover,
       pinned: pinned,
       repeat: repeat,
+      focusOnly: focusOnly,
       createdAt: DateTime.now(),
     );
     _todos.add(todo);
@@ -152,9 +154,10 @@ class TodosController extends ChangeNotifier {
       a.done != b.done ||
       a.text != b.text;
 
-  Future<void> toggle(String id) async {
+  Future<void> toggle(String id, {bool fromFocus = false}) async {
     final index = _counts.at[id];
     if (index == null) return;
+    if (_todos[index].blocksManualCheck && !fromFocus) return;
     if (!_todos[index].done && _todos[index].repeats) {
       return _finishRepeating(index);
     }

@@ -34,6 +34,7 @@ import 'package:streak/core/widgets/glass.dart';
 import 'package:streak/features/todos/widgets/todo_paper.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
 import 'package:streak/features/todos/widgets/todo_projects.dart';
+import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_tile.dart';
 import 'package:streak/features/todos/widgets/todos_page_parts.dart';
@@ -168,6 +169,7 @@ class _TodosPageState extends State<TodosPage>
   Future<void> _toggle(Todo todo) async {
     final todos = context.read<TodosController>();
     if (todo.done) return todos.toggle(todo.id);
+    if (!await allowManualTodo(context, todo) || !mounted) return;
     if (!_completing.add(todo.id)) return;
     setState(() {});
     await Future<void>.delayed(const Duration(milliseconds: 380));
@@ -331,7 +333,7 @@ class _TodosPageState extends State<TodosPage>
   Future<void> _finish(List<Todo> todos) async {
     final controller = context.read<TodosController>();
     setState(_selected.clear);
-    for (final todo in todos.where((todo) => !todo.done)) {
+    for (final todo in todos.where((todo) => !todo.done && !todo.blocksManualCheck)) {
       await controller.toggle(todo.id);
     }
   }

@@ -37,6 +37,7 @@ import 'package:streak/features/focus/widgets/timer_clocks.dart';
 import 'package:streak/core/widgets/morph_menu.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/services/desktop_window.dart';
@@ -50,12 +51,14 @@ class FocusPage extends StatefulWidget implements FullWidthPage {
     this.startMinutes,
     this.breakMinutes,
     this.startLabel = '',
+    this.startTodoId = '',
   });
 
   final String? startHabitId;
   final int? startMinutes;
   final int? breakMinutes;
   final String startLabel;
+  final String startTodoId;
 
   static const routeName = 'focus';
 
@@ -108,6 +111,7 @@ class _FocusPageState extends State<FocusPage> {
         targetMinutes: widget.startMinutes!,
         breakMinutes: widget.breakMinutes ?? 0,
         label: widget.startLabel,
+        todoId: widget.startTodoId,
       );
       unawaited(_startSavedTrack());
     });
@@ -281,8 +285,11 @@ class _FocusPageState extends State<FocusPage> {
 
     setState(() => _leaving = true);
     final habitId = focus.habitId;
+    final todoId = focus.todoId;
     final completed = reached || result == 'done';
     final session = await focus.stop(completed: completed);
+    if (!mounted) return;
+    await creditFocusTodo(context.read<TodosController>(), todoId, session);
     if (!mounted) return;
 
     final target = habitId.isEmpty ? null : habits.byId(habitId);
