@@ -112,6 +112,24 @@ Date,Meditate,Exercise
       expect(med.isCompletedOn(DateTime(2024, 1, 3)), isFalse);
     });
 
+    test('parses a Habit Builder backup', () {
+      final day = DateTime(2024, 3, 5, 9).millisecondsSinceEpoch;
+      final archive = Archive()
+        ..addFile(ArchiveFile.string('habits.csv',
+            'id,name,color,order,archived,notes\n1,Read,Red,1,false,\n2,Run,Blue,0,false,Morning\n'))
+        ..addFile(ArchiveFile.string(
+            'actions.csv', 'id,habit_id,timestamp\n1,1,$day\n2,2,$day\n3,1,$day\n'))
+        ..addFile(ArchiveFile.string('metadata.txt', 'backup_version=1'));
+      final zipped = ZipEncoder().encode(archive)!;
+
+      final o = ImportService.parseBytes(zipped, fileName: 'backup.zip');
+      expect(o.source, 'Habit Builder');
+      expect(o.habits.map((h) => h.name), ['Run', 'Read']);
+      expect(o.habits.first.description, 'Morning');
+      expect(_byName(o, 'Read').isCompletedOn(DateTime(2024, 3, 5)), isTrue);
+      expect(_byName(o, 'Read').isCompletedOn(DateTime(2024, 3, 6)), isFalse);
+    });
+
     test('imports habits from Habits.csv even with zero history', () {
       final archive = Archive()
         ..addFile(ArchiveFile(

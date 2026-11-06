@@ -118,6 +118,8 @@ class ImportService {
     if (looksLikeSqlite(bytes)) throw const ImportException(_kDatabaseHint);
 
     if (name.endsWith('.zip') || looksLikeZip(bytes)) {
+      final habitBuilder = _parseHabitBuilderZip(bytes);
+      if (habitBuilder != null) return _build(habitBuilder, 'Habit Builder');
       final raw = _parseLoopZip(bytes);
       return _build(raw, 'Loop Habit Tracker');
     }
@@ -410,6 +412,71 @@ class ImportService {
     }
     final perWeek = (numerator * 7 / denominator).round().clamp(1, 6);
     return (HabitInterval.weekly, perWeek, 2);
+  }
+
+  static List<_RawHabit>? _parseHabitBuilderZip(List<int> bytes) {
+    final Archive archive;
+    try {
+      archive = ZipDecoder().decodeBytes(bytes);
+    } catch (_) {
+      return null;
+    }
+    final files = <String, List<int>>{};
+    for (final f in archive.files) {
+      final content = f.isFile ? f.content : null;
+      if (content is List<int>) files[f.name.replaceAll('\\', '/')] = content;
+    }
+    final metadata = _entry(files, 'metadata.txt');
+    final habitsCsv = _entry(files, 'habits.csv');
+    final actionsCsv = _entry(files, 'actions.csv');
+    if (metadata == null || habitsCsv == null || actionsCsv == null) return null;
+    if (!_decode(metadata).contains('backup_version')) return null;
+
+    final habitRows = _rows(_decode(habitsCsv));
+    if (habitRows.length < 2) {
+      throw const ImportException('No habits found in that file.');
+    }
+    final head = habitRows.first.map((c) => c.trim().toLowerCase()).toList();
+    final idIdx = head.indexOf('id');
+    final nameIdx = head.indexOf('name');
+    final orderIdx = head.indexOf('order');
+    final archivedIdx = head.indexOf('archived');
+    final notesIdx = head.indexOf('notes');
+    String cell(List<String> row, int i) =>
+        i >= 0 && i < row.length ? row[i].trim() : '';
+
+    final byId = <String, ({int order, _RawHabit habit})>{};
+    for (final row in habitRows.skip(1)) {
+      final id = cell(row, idIdx);
+      if (id.isEmpty) continue;
+      byId[id] = (
+        order: int.tryParse(cell(row, orderIdx)) ?? byId.length,
+        habit: _RawHabit(
+          cell(row, nameIdx),
+          archived: cell(row, archivedIdx).toLowerCase() == 'true',
+          description: cell(row, notesIdx),
+        ),
+      );
+    }
+
+    final actionRows = _rows(_decode(actionsCsv));
+    if (actionRows.isNotEmpty) {
+      final aHead = actionRows.first.map((c) => c.trim().toLowerCase()).toList();
+      final habitIdx = aHead.indexOf('habit_id');
+      final timeIdx = aHead.indexOf('timestamp');
+      for (final row in actionRows.skip(1)) {
+        final entry = byId[cell(row, habitIdx)];
+        final ms = int.tryParse(cell(row, timeIdx));
+        if (entry == null || ms == null) continue;
+        final day = DateTime.fromMillisecondsSinceEpoch(ms);
+        entry.habit.mark(day, 1);
+        entry.habit.seen(day);
+      }
+    }
+
+    final ordered = byId.values.toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+    return [for (final e in ordered) e.habit];
   }
 
   static List<int>? _entry(Map<String, List<int>> files, String basename,
