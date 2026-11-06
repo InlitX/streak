@@ -150,6 +150,23 @@ void main() {
       expect(data.single.habits.single.id, 'run');
     });
 
+    test('a file that could not be read is tried again, even unchanged', () async {
+      final dir = await _folder();
+      await _drop(dir, [_run()],
+          at: DateTime(2026, 3, 3, 10), stamp: '2026-03-03_10-00-00');
+      final file = File('${dir.path}/streak_backup_2026-03-03_10-00-00.json');
+      final good = file.readAsStringSync();
+      final modified = file.lastModifiedSync();
+
+      file.writeAsStringSync('{ half downloaded');
+      file.setLastModifiedSync(modified);
+      expect(FolderSync.incoming(dir, null), isEmpty);
+
+      file.writeAsStringSync(good);
+      file.setLastModifiedSync(modified);
+      expect(FolderSync.incoming(dir, null), hasLength(1));
+    });
+
     test('an empty folder is simply nothing to do', () async {
       final dir = await _folder();
       expect(FolderSync.incoming(dir, null), isEmpty);

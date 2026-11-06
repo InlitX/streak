@@ -79,9 +79,24 @@ class TodosController extends ChangeNotifier {
   int get doneCount => _counts.done;
 
   void reload() {
+    final before = {for (final todo in _todos) todo.id: todo};
     _todos = LocalStore.readTodos();
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
+    unawaited(_rescheduleChanged(before));
+  }
+
+  Future<void> _rescheduleChanged(Map<String, Todo> before) async {
+    final now = {for (final todo in _todos) todo.id};
+    for (final id in before.keys) {
+      if (!now.contains(id)) await _notifications.cancelTodo(id);
+    }
+    for (final todo in _todos) {
+      final old = before[todo.id];
+      if (old == null || _remindsDifferently(old, todo)) {
+        await _notifications.scheduleTodo(todo);
+      }
+    }
   }
 
   Future<void> refresh() async {

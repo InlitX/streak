@@ -93,7 +93,7 @@ class FolderSync {
         data = BackupService.parse(file.readAsStringSync());
       } catch (e) {
         debugPrint('Skipping $name: $e');
-        _peeked[file.path] = (modified: modified, at: null, device: '');
+        _peeked.remove(file.path);
         continue;
       }
       final empty = data.isEmpty && data.deleted.isEmpty;
