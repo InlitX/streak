@@ -146,7 +146,9 @@ class HomeWidgetService {
     _pendingSync?.cancel();
     _pendingSync = Timer(const Duration(milliseconds: 700), () {
       _pendingSync = null;
-      sync(habits());
+      try {
+        sync(habits());
+      } catch (_) {}
     });
   }
 
