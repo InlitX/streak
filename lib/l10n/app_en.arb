@@ -118,6 +118,7 @@
   "import_backup_sub": "Restore habits from a file",
   "import_from_app": "Import from another app",
   "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_card_body": "Bring your habits and history from other apps",
   "import_from_app_done": "Imported {habits} habits ({days} days) from {source}",
   "@import_from_app_done": {
     "placeholders": {
@@ -395,6 +396,19 @@
       "n": { "type": "String" }
     }
   },
+  "every_n_minutes": "Every {n} min",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": { "type": "String" }
+    }
+  },
+  "every_hours_minutes": "Every {h} h {m} min",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": { "type": "String" },
+      "m": { "type": "String" }
+    }
+  },
   "repeat_weekly": "Specific days",
   "repeat_interval": "Every N days",
   "every_n_days": "Every {n} days",
@@ -662,6 +676,14 @@
   "todo_repeat_from_done": "Count from when I finish it",
   "todo_repeat_skip": "Skip this one",
   "todo_estimate": "Duration",
+  "todo_focus_only": "Only with a focus session",
+  "todo_focus_only_body": "\"{name}\" is completed by finishing a {minutes} minute focus session.",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "minutes": { "type": "String" }
+    }
+  },
   "todo_estimate_none": "No duration",
   "todo_priority": "Priority",
   "todo_paper": "Color",

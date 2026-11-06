@@ -97,6 +97,7 @@
   "import_backup_sub": "Restaura los hábitos desde un archivo",
   "import_from_app": "Importar desde otra app",
   "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_card_body": "Trae tus hábitos y tu historial de otras apps",
   "import_from_app_done": "Importados {habits} hábitos ({days} días) desde {source}",
   "@import_from_app_done": {
     "placeholders": {
@@ -338,6 +339,19 @@
       "n": {
         "type": "String"
       }
+    }
+  },
+  "every_n_minutes": "Cada {n} min",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": { "type": "String" }
+    }
+  },
+  "every_hours_minutes": "Cada {h} h {m} min",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": { "type": "String" },
+      "m": { "type": "String" }
     }
   },
   "repeat_weekly": "Días concretos",
@@ -614,6 +628,14 @@
   "todo_repeat_from_done": "Contar desde que la termino",
   "todo_repeat_skip": "Saltar esta vez",
   "todo_estimate": "Duración",
+  "todo_focus_only": "Solo con una sesión de foco",
+  "todo_focus_only_body": "\"{name}\" se completa al terminar una sesión de foco de {minutes} minutos.",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "minutes": { "type": "String" }
+    }
+  },
   "todo_estimate_none": "Sin duración",
   "todo_priority": "Prioridad",
   "todo_paper": "Color",
