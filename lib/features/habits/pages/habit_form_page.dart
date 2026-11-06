@@ -13,6 +13,7 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/amount_format.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
@@ -846,19 +847,21 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onMore: (times) => setState(() => _moreTimes = times),
         ),
       ],
-      const SizedBox(height: 26),
-      SectionLabel(context.l10n.reminders),
-      for (final reminder in _reminders)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: ReminderTile(
-            reminder: reminder,
-            followsHabit: _remindersFollowHabit,
-            onEdit: () => _editReminder(reminder),
-            onDelete: () => setState(() => _reminders.remove(reminder)),
+      if (hasReminders) ...[
+        const SizedBox(height: 26),
+        SectionLabel(context.l10n.reminders),
+        for (final reminder in _reminders)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ReminderTile(
+              reminder: reminder,
+              followsHabit: _remindersFollowHabit,
+              onEdit: () => _editReminder(reminder),
+              onDelete: () => setState(() => _reminders.remove(reminder)),
+            ),
           ),
-        ),
-      AddReminderButton(onTap: _addReminder),
+        AddReminderButton(onTap: _addReminder),
+      ],
       ..._soundRow(),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 26),
@@ -1232,19 +1235,21 @@ class _HabitFormPageState extends State<HabitFormPage> {
           onMore: (times) => setState(() => _moreTimes = times),
         ),
       ],
-      const SizedBox(height: 16),
-      SectionLabel(context.l10n.reminders),
-      for (final reminder in _reminders)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 7),
-          child: CompactReminderRow(
-            reminder: reminder,
-            followsHabit: _remindersFollowHabit,
-            onEdit: () => _editReminder(reminder),
-            onDelete: () => setState(() => _reminders.remove(reminder)),
+      if (hasReminders) ...[
+        const SizedBox(height: 16),
+        SectionLabel(context.l10n.reminders),
+        for (final reminder in _reminders)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 7),
+            child: CompactReminderRow(
+              reminder: reminder,
+              followsHabit: _remindersFollowHabit,
+              onEdit: () => _editReminder(reminder),
+              onDelete: () => setState(() => _reminders.remove(reminder)),
+            ),
           ),
-        ),
-      CompactAddButton(label: context.l10n.add_reminder, onTap: _addReminder),
+        CompactAddButton(label: context.l10n.add_reminder, onTap: _addReminder),
+      ],
       ..._soundRow(compact: true),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 16),
@@ -1609,20 +1614,22 @@ class _HabitFormPageState extends State<HabitFormPage> {
                 onMore: (times) => setState(() => _moreTimes = times),
               ),
             ],
-            const SizedBox(height: 20),
-            SectionLabel(context.l10n.reminders),
-            for (final reminder in _reminders)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: ReminderTile(
-                  reminder: reminder,
-                  followsHabit: _remindersFollowHabit,
-                  onEdit: () => _editReminder(reminder),
-                  onDelete: () =>
-                      setState(() => _reminders.remove(reminder)),
+            if (hasReminders) ...[
+              const SizedBox(height: 20),
+              SectionLabel(context.l10n.reminders),
+              for (final reminder in _reminders)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: ReminderTile(
+                    reminder: reminder,
+                    followsHabit: _remindersFollowHabit,
+                    onEdit: () => _editReminder(reminder),
+                    onDelete: () =>
+                        setState(() => _reminders.remove(reminder)),
+                  ),
                 ),
-              ),
-            AddReminderButton(onTap: _addReminder),
+              AddReminderButton(onTap: _addReminder),
+            ],
             ..._soundRow(),
             if (_kind == HabitKind.positive && !_focusOnly) ...[
               const SizedBox(height: 20),

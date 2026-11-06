@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -398,7 +399,12 @@ class SettingsActions {
     await context.read<SettingsController>().reloadFromStore();
     if (!context.mounted) return;
     AppSnackbar.success(context, context.l10n.wipe_data_done);
-    if (isMobile) await openAppSettings();
+    if (isMobile) {
+      // ohos: permission_handler_ohos may not implement openAppSettings.
+      try {
+        await openAppSettings();
+      } on MissingPluginException catch (_) {}
+    }
   }
 
   static Future<void> toggleAppLock(BuildContext context, bool value) async {

@@ -283,13 +283,14 @@ class _SharePageState extends State<SharePage> {
                         onTap: _busy ? null : _share,
                       ),
                       if (!Platform.isLinux) const SizedBox(width: 40),
-                      _CircleAction(
-                        style: style,
-                        shapeIndex: 3,
-                        icon: LucideIcons.download,
-                        label: context.l10n.share_save,
-                        onTap: _busy ? null : _save,
-                      ),
+                      if (!isOhos)
+                        _CircleAction(
+                          style: style,
+                          shapeIndex: 3,
+                          icon: LucideIcons.download,
+                          label: context.l10n.share_save,
+                          onTap: _busy ? null : _save,
+                        ),
                     ],
                   ),
                 ),

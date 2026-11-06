@@ -143,7 +143,7 @@ Future<void> _startup() async {
       NotificationService().pendingHabitId = null;
       NotificationService.openFromPayload(pending);
     }
-    if (isMobile) {
+    if (isMobile && !isOhos) {
       final launched =
           await _appChannel.invokeMethod<String>('consumeLaunchHabit');
       if (launched != null) _openHabit(launched);
