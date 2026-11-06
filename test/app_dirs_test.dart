@@ -76,6 +76,6 @@ void main() {
   test('guards stay inert off-ohos', () {
     setOhosForTest(false);
     expect(hasReminders, isTrue); // host behavior unchanged
-    expect(hasBiometricLock, isTrue); // matches !Platform.isLinux on Windows host
+    expect(hasBiometricLock, Platform.isLinux ? isFalse : isTrue);
   });
 }
