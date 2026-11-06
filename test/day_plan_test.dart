@@ -174,4 +174,18 @@ void main() {
     expect(back.moreTimes, [(18 * 60, 20), (12 * 60, 45)]);
     expect(Habit.fromMap(_habit(id: 'one', start: 60).toMap()).moreTimes, isEmpty);
   });
+
+  test('free time starts when a to-do was finished early', () {
+    final read = _habit(id: 'read', start: 14 * 60, duration: 30);
+    final early = _todo('report', minutes: 9 * 60, estimate: 120)
+        .copyWith(doneAt: DateTime(2026, 8, 12, 10));
+    final late = _todo('late', minutes: 9 * 60, estimate: 90)
+        .copyWith(doneAt: DateTime(2026, 8, 12, 12));
+    final otherDay = _todo('old', minutes: 9 * 60, estimate: 120)
+        .copyWith(doneAt: DateTime(2026, 8, 11, 9, 30));
+
+    expect(DayPlan.of([read], _day, todos: [early]).slots[1].minutes, 4 * 60);
+    expect(DayPlan.of([read], _day, todos: [late]).slots[1].minutes, 210);
+    expect(DayPlan.of([read], _day, todos: [otherDay]).slots[1].minutes, 3 * 60);
+  });
 }
