@@ -9,6 +9,8 @@
 namespace {
 constexpr UINT_PTR kShowFallbackTimer = 1;
 constexpr UINT kShowFallbackMs = 4000;
+constexpr UINT_PTR kRefitTimer = 2;
+constexpr UINT kRefitMs = 600;
 constexpr wchar_t kWindowKey[] = L"Software\\Streak";
 constexpr wchar_t kPlacementValue[] = L"WindowPlacement";
 }
@@ -122,6 +124,23 @@ void FlutterWindow::SavePlacement() {
 
 void FlutterWindow::Reveal() {
   ShowWindow(GetHandle(), maximized_ ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL);
+  SetTimer(GetHandle(), kRefitTimer, kRefitMs, nullptr);
+}
+
+void FlutterWindow::Refit() {
+  if (!flutter_controller_ || !flutter_controller_->view()) {
+    return;
+  }
+  HWND view = flutter_controller_->view()->GetNativeWindow();
+  RECT frame = GetClientArea();
+  const int width = frame.right - frame.left;
+  const int height = frame.bottom - frame.top;
+  if (width < 2 || height < 2) {
+    return;
+  }
+  MoveWindow(view, frame.left, frame.top, width, height - 1, FALSE);
+  MoveWindow(view, frame.left, frame.top, width, height, TRUE);
+  flutter_controller_->ForceRedraw();
 }
 
 void FlutterWindow::OnDestroy() {
@@ -157,6 +176,10 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
       if (wparam == kShowFallbackTimer) {
         KillTimer(hwnd, kShowFallbackTimer);
         Reveal();
+      }
+      if (wparam == kRefitTimer) {
+        KillTimer(hwnd, kRefitTimer);
+        Refit();
       }
       break;
   }

@@ -25,6 +25,7 @@ class FlutterWindow : public Win32Window {
   void RestorePlacement();
   void SavePlacement();
   void Reveal();
+  void Refit();
 
   flutter::DartProject project_;
 
