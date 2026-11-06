@@ -25,6 +25,7 @@ import 'package:streak/features/settings/pages/archived_habits_page.dart';
 import 'package:streak/features/settings/pages/quotes_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/import_apps_card.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/color_theme_sheet.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
@@ -863,14 +864,10 @@ List<Widget> _preferenceTiles(BuildContext context) {
 
 List<Widget> _dataTiles(BuildContext context) {
   return [
+    ImportAppsCard(onTap: () => SettingsActions.importFromApp(context)),
+    const SizedBox(height: 12),
     ExpressGroup(
       children: [
-        ExpressTile(
-          icon: LucideIcons.import,
-          title: context.l10n.import_from_app,
-          subtitle: context.l10n.import_from_app_sub,
-          onTap: () => SettingsActions.importFromApp(context),
-        ),
         ExpressTile(
           icon: LucideIcons.upload,
           title: context.l10n.import_backup,

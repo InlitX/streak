@@ -21,6 +21,7 @@ import 'package:streak/features/settings/pages/quotes_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/settings_rows.dart';
+import 'package:streak/features/settings/widgets/import_apps_card.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/color_theme_sheet.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
@@ -138,11 +139,13 @@ class _ClassicSection extends StatelessWidget {
     required this.title,
     required this.label,
     required this.children,
+    this.lead,
   });
 
   final String title;
   final String label;
   final List<Widget> children;
+  final Widget? lead;
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +155,8 @@ class _ClassicSection extends StatelessWidget {
         padding: context.pagePadding(16, 8, 16, 24),
         children: [
           Entrance(child: SectionLabel(label)),
+          if (lead != null) Entrance(index: 1, child: lead!),
+          if (lead != null) const SizedBox(height: 12),
           Entrance(index: 1, child: Card(child: Column(children: children))),
         ],
       ),
@@ -817,15 +822,10 @@ class _ClassicDataPage extends StatelessWidget {
     return _ClassicSection(
       title: context.l10n.data,
       label: context.l10n.data_sub,
+      lead: ImportAppsCard(
+        onTap: () => SettingsActions.importFromApp(context),
+      ),
       children: [
-        NavRow(
-          icon: LucideIcons.import,
-          title: context.l10n.import_from_app,
-          subtitle: context.l10n.import_from_app_sub,
-          badge: 'Beta',
-          onTap: () => SettingsActions.importFromApp(context),
-        ),
-        settingsDivider(context),
         NavRow(
           icon: LucideIcons.upload,
           title: context.l10n.import_backup,
