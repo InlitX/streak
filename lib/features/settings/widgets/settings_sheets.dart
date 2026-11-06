@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streak/core/i18n/app_locale.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/settings/settings_actions.dart';
@@ -17,6 +18,10 @@ Future<void> showSheet(BuildContext context, WidgetBuilder builder) {
     showDragHandle: true,
     isScrollControlled: true,
     useSafeArea: true,
+    constraints: BoxConstraints(
+      maxWidth: phoneWidth,
+      maxHeight: MediaQuery.sizeOf(context).height * 0.8,
+    ),
     builder: builder,
   );
 }
