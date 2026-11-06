@@ -808,7 +808,7 @@
   "todo_project_empty": "Encara no hi ha res en aquesta carpeta",
   "todo_background": "Fons",
   "todo_background_pick": "Tria una foto",
-  "todo_deleted": "Nota eliminada",
+  "todo_deleted": "Tasques pendents eliminades",
   "todo_mark_done": "Marca com a relitzat",
   "todo_mark_open": "Marca com a no realitzat",
   "todo_pin": "Fixa",
@@ -822,7 +822,7 @@
       }
     }
   },
-  "todo_deleted_many": "{count, plural, =1{Nota eliminada} other{{count} notes eliminades}}",
+  "todo_deleted_many": "{count, plural, =1{Tasques pendents eliminades} other{{count} tasques pendents eliminades}}",
   "@todo_deleted_many": {
     "placeholders": {
       "count": {
@@ -955,7 +955,7 @@
   "focus_track_ticking": "Rellotge que fa tic-tac",
   "focus_track_pad": "Fons càlid",
   "focus_add_track": "Afegeix pista",
-  "focus_resources": "Escenes i sons gratuïts",
+  "focus_resources": "Recursos",
   "focus_shuffle": "Aleatori",
   "focus_loop": "En ordre",
   "focus_repeat_one": "Repetir una vegada",
@@ -2048,5 +2048,44 @@
         "type": "String"
       }
     }
-  }
+  },
+  "todo_delete_title": "{count, plural, =1{Elimina aquest to-do?} other{Elimina {count} to-dos?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_delete_body": "Tindràs uns quants segons per desfer-ho.",
+  "month_fixed_day_hint": "Per a la mateixa data cada mes, seleccioneu «Interval» i configureu-lo a cada 1 mes",
+  "export_habit": "Exporta aquest hàbit",
+  "habit_links": "Enllaços per a automatitzacions",
+  "habit_links_off": "Deixa que aplicacions com Tasker, una drecera o una etiqueta NFC marquin els teus hàbits obrint un enllaç. Roman desactivat fins que l'actives.",
+  "habit_links_on": "Qualsevol aplicació d'aquest telèfon pot obrir aquests enllaços, per a tots els teus hàbits. Toca'n un per copiar-lo.",
+  "habit_link_done": "Marca com a fet",
+  "habit_link_undo": "Aclareix el dia",
+  "habit_link_add": "Afegeix {amount}",
+  "@habit_link_add": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_link_relapse": "Registrar recaiguda",
+  "habit_link_focus": "Inicia una sessió de concentració",
+  "habit_link_open": "Obre l'hàbit",
+  "habit_link_day": "Per a un altre dia, afegeix day=2026-10-31 al final.",
+  "at_most": "Com a màxim",
+  "at_most_sub": "L'objectiu és un límit. El dia es dona per acabat quan registres alguna cosa i et mantens en aquesta xifra o per sota.",
+  "todo_repeat_starts": "Comença el",
+  "focus_simple_view": "Vista senzilla",
+  "focus_double_tap_tip": "Toca dues vegades el rellotge per tornar enrere",
+  "hide_clean": "Amaga els dies nets",
+  "hide_clean_sub": "Els hàbits d'evitar només apareixen els dies que deixes de fer-ho",
+  "check_sound": "So en completar",
+  "check_sound_sub": "Un so suau quan completes un hàbit. Silenciós quan el telèfon està en silenci.",
+  "book_at_page": "Pàgina en què em trobo",
+  "book_read_before": "Vegades ja llegit"
 }
