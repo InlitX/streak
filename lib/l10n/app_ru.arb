@@ -1619,14 +1619,6 @@
   "focus_daily_goal_sub": "Сколько минут фокусировки в день вы хотите набирать",
   "focus_save_timer": "Сохранить таймер",
   "focus_remove_timer": "Удалить сохранённый таймер?",
-  "focus_days_row": "",
-  "@focus_days_row": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "vacation_all": "Пауза для всех привычек",
   "vacation_all_sub": "Пока она включена, пропуски не засчитываются",
   "period_this_month": "Этот месяц",
