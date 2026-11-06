@@ -1,0 +1,10 @@
+Streak 2.7.0
+
+- Import from Habit Builder, and a new import card
+- To-dos that only complete with a Focus session
+- Custom repeat interval for reminders
+- Plan: free time starts when you finish early
+- A habit can show up several times a day in Plan
+- Sort to-dos four ways, repeat on the last day of the month
+- Focus: average line, planned vs real per habit, habit colors in the widget
+- Fixes and updated languages

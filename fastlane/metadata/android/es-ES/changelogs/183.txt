@@ -1,0 +1,10 @@
+Streak 2.7.0
+
+- Importar desde Habit Builder y una tarjeta nueva de importación
+- Tareas que solo se completan con una sesión de Focus
+- Intervalo personalizado en los recordatorios
+- Plan: el tiempo libre empieza cuando acabas antes
+- Un hábito puede salir varias veces al día en Plan
+- Ordenar tareas de cuatro formas, repetir el último día del mes
+- Focus: línea de media, planificado frente a real por hábito, colores en el widget
+- Correcciones e idiomas actualizados
