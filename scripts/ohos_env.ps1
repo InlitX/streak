@@ -4,6 +4,8 @@
 #   . .\scripts\ohos_env.ps1
 # Values located 2026-11-05 (HarmonyOS port phase 1, Task 1).
 
+# Save the dot-sourcing shell's error mode; restored at the end of this script.
+$ohosPrevErrorActionPreference = $ErrorActionPreference
 $ErrorActionPreference = 'Stop'
 
 # --- Toolchain roots ---
@@ -34,4 +36,10 @@ $ohosPathEntries = @(
 if (-not (Test-Path 'D:\flutter-ohos\flutter\bin')) {
   Write-Warning 'ohos flutter fork not found at D:\flutter-ohos\flutter - clone it first (plan Task 1 Step 1).'
 }
-$env:Path = ($ohosPathEntries -join ';') + ';' + $env:Path
+# Idempotent prepend: skip entries already on Path (re-dot-source safety).
+$existingPath = $env:Path -split ';' | ForEach-Object { $_.TrimEnd('\') }
+$newPathEntries = @($ohosPathEntries | Where-Object { $existingPath -notcontains $_.TrimEnd('\') })
+if ($newPathEntries.Count -gt 0) {
+  $env:Path = ($newPathEntries -join ';') + ';' + $env:Path
+}
+$ErrorActionPreference = $ohosPrevErrorActionPreference
