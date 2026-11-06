@@ -142,7 +142,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 18,
         minute: 30,
-        everyHours: 2,
+        everyMinutes: 120,
       );
 
       expect(slots, [18 * 60 + 30, 20 * 60 + 30, 22 * 60 + 30]);
@@ -152,7 +152,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 23,
         minute: 0,
-        everyHours: 3,
+        everyMinutes: 180,
       );
 
       expect(slots, [23 * 60]);
@@ -162,7 +162,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 0,
         minute: 0,
-        everyHours: 1,
+        everyMinutes: 60,
         cap: ReminderSchedule.hourlyCap(1),
       );
 
@@ -173,7 +173,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 9,
         minute: 0,
-        everyHours: 1,
+        everyMinutes: 60,
         until: 17 * 60,
       );
 
@@ -186,7 +186,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 20,
         minute: 0,
-        everyHours: 1,
+        everyMinutes: 60,
         until: 8 * 60,
       );
 
@@ -199,7 +199,7 @@ void main() {
       final slots = ReminderSchedule.hourlySlots(
         hour: 0,
         minute: 0,
-        everyHours: 1,
+        everyMinutes: 60,
         cap: ReminderSchedule.hourlyCap(5),
       );
 
@@ -208,7 +208,7 @@ void main() {
 
     test('without hours it keeps the single time', () {
       expect(
-        ReminderSchedule.hourlySlots(hour: 9, minute: 5, everyHours: 0),
+        ReminderSchedule.hourlySlots(hour: 9, minute: 5, everyMinutes: 0),
         [9 * 60 + 5],
       );
     });

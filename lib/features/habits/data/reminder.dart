@@ -6,7 +6,7 @@ class Reminder {
     required this.days,
     this.message = '',
     this.everyDays = 1,
-    this.everyHours = 0,
+    this.everyMinutes = 0,
     this.untilMinute,
     this.anchorEpochDay,
     this.snoozeMinutes = defaultSnoozeMinutes,
@@ -25,7 +25,7 @@ class Reminder {
 
   final int everyDays;
 
-  final int everyHours;
+  final int everyMinutes;
 
   final int? untilMinute;
 
@@ -35,7 +35,7 @@ class Reminder {
 
   bool get isInterval => everyDays >= 2;
 
-  bool get isHourly => everyHours >= 1;
+  bool get isHourly => everyMinutes >= 1;
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -44,7 +44,8 @@ class Reminder {
         'selectedDays': days,
         'message': message,
         'everyDays': everyDays,
-        'everyHours': everyHours,
+        'everyMinutes': everyMinutes,
+        'everyHours': everyMinutes ~/ 60,
         'untilMinute': untilMinute,
         'anchorEpochDay': anchorEpochDay,
         'snoozeMinutes': snoozeMinutes,
@@ -57,7 +58,8 @@ class Reminder {
         days: List<int>.from((map['selectedDays'] ?? map['days']) as List),
         message: (map['message'] ?? '') as String,
         everyDays: (map['everyDays'] ?? 1) as int,
-        everyHours: (map['everyHours'] ?? 0) as int,
+        everyMinutes: (map['everyMinutes'] ??
+            ((map['everyHours'] ?? 0) as int) * 60) as int,
         untilMinute: map['untilMinute'] as int?,
         anchorEpochDay: map['anchorEpochDay'] as int?,
         snoozeMinutes:

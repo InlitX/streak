@@ -12,6 +12,7 @@ import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/time_picker.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
+import 'package:streak/features/habits/widgets/reminder_tile.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -37,9 +38,11 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
   late final TextEditingController _message;
 
   final _snoozeField = TextEditingController();
+  final _hoursField = TextEditingController();
+  final _minutesField = TextEditingController();
   late bool _intervalMode;
   late int _everyDays;
-  late int _everyHours;
+  late int _everyMinutes;
   TimeOfDay? _until;
   late int _snooze;
 
@@ -54,7 +57,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
     _message = TextEditingController(text: initial?.message ?? '');
     _intervalMode = !widget.followsHabit && (initial?.isInterval ?? false);
     _everyDays = (initial != null && initial.isInterval) ? initial.everyDays : 2;
-    _everyHours = initial?.everyHours ?? 0;
+    _everyMinutes = initial?.everyMinutes ?? 0;
     final until = initial?.untilMinute;
     if (until != null) _until = TimeOfDay(hour: until ~/ 60, minute: until % 60);
     _snooze = initial?.snoozeMinutes ?? Reminder.defaultSnoozeMinutes;
@@ -64,6 +67,8 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
   void dispose() {
     _message.dispose();
     _snoozeField.dispose();
+    _hoursField.dispose();
+    _minutesField.dispose();
     super.dispose();
   }
 
@@ -76,6 +81,10 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
   }
 
   bool get _needsDays => !_intervalMode && !widget.followsHabit;
+
+  static const _everyChoices = [0, 60, 120, 180, 240, 360, 480, 720];
+
+  bool get _customEvery => !_everyChoices.contains(_everyMinutes);
 
   bool get _customSnooze => !Reminder.snoozeChoices.contains(_snooze);
 
@@ -112,6 +121,54 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
     setState(() {
       _snooze = picked.clamp(1, Reminder.maxSnoozeMinutes);
     });
+  }
+
+  Future<void> _pickCustomEvery() async {
+    _hoursField.text = _everyMinutes >= 60 ? '${_everyMinutes ~/ 60}' : '';
+    _minutesField.text = _everyMinutes % 60 > 0 ? '${_everyMinutes % 60}' : '';
+    final picked = await showDialog<int>(
+      context: context,
+      builder: (dialogContext) {
+        Widget field(TextEditingController c, String unit, {bool focus = false}) =>
+            Expanded(
+              child: TextField(
+                controller: c,
+                autofocus: focus,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
+                  hintText: '0',
+                  suffixText: unit,
+                ),
+              ),
+            );
+        return AlertDialog(
+          title: Text(dialogContext.l10n.repeat_hours),
+          content: Row(
+            children: [
+              field(_hoursField, dialogContext.l10n.unit_hours, focus: true),
+              const SizedBox(width: 12),
+              field(_minutesField, dialogContext.l10n.unit_minutes),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(dialogContext.l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(
+                (int.tryParse(_hoursField.text) ?? 0) * 60 +
+                    (int.tryParse(_minutesField.text) ?? 0),
+              ),
+              child: Text(dialogContext.l10n.save),
+            ),
+          ],
+        );
+      },
+    );
+    if (picked == null) return;
+    setState(() => _everyMinutes = picked.clamp(5, 23 * 60 + 59));
   }
 
   Future<void> _pickTime() async {
@@ -158,8 +215,8 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
         days: _days.toList()..sort(),
         message: _message.text.trim(),
         everyDays: _intervalMode ? _everyDays : 1,
-        everyHours: _intervalMode ? 0 : _everyHours,
-        untilMinute: _intervalMode || _everyHours == 0 || _until == null
+        everyMinutes: _intervalMode ? 0 : _everyMinutes,
+        untilMinute: _intervalMode || _everyMinutes == 0 || _until == null
             ? null
             : _until!.hour * 60 + _until!.minute,
         anchorEpochDay: anchor,
@@ -344,14 +401,21 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                   spacing: minimal ? 7 : 8,
                   runSpacing: minimal ? 7 : 8,
                   children: [
-                    for (final hours in const [0, 1, 2, 3, 4, 6, 8, 12])
+                    for (final minutes in _everyChoices)
                       CompactPill(
-                        label: hours == 0
+                        label: minutes == 0
                             ? context.l10n.off
-                            : context.l10n.every_n_hours('$hours'),
-                        selected: _everyHours == hours,
-                        onTap: () => setState(() => _everyHours = hours),
+                            : reminderEveryLabel(context, minutes),
+                        selected: _everyMinutes == minutes,
+                        onTap: () => setState(() => _everyMinutes = minutes),
                       ),
+                    CompactPill(
+                      label: _customEvery
+                          ? reminderEveryLabel(context, _everyMinutes)
+                          : context.l10n.snooze_custom,
+                      selected: _customEvery,
+                      onTap: _pickCustomEvery,
+                    ),
                   ],
                 ),
               ],
@@ -364,7 +428,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
               minimal: minimal,
               onTap: _pickTime,
             ),
-            if (!_intervalMode && _everyHours > 0) ...[
+            if (!_intervalMode && _everyMinutes > 0) ...[
               const SizedBox(height: 20),
               Text(context.l10n.repeat_until,
                   style: sheetBodyStyle(context, size: 13)),

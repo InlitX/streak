@@ -437,7 +437,7 @@ class NotificationService {
     final slots = ReminderSchedule.hourlySlots(
       hour: reminder.hour,
       minute: reminder.minute,
-      everyHours: reminder.everyHours,
+      everyMinutes: reminder.everyMinutes,
       until: reminder.untilMinute,
       cap: cap,
     );
@@ -593,7 +593,7 @@ class NotificationService {
         ? ReminderSchedule.hourlySlots(
             hour: reminder.hour,
             minute: reminder.minute,
-            everyHours: reminder.everyHours,
+            everyMinutes: reminder.everyMinutes,
             until: reminder.untilMinute,
           )
         : [reminder.hour * 60 + reminder.minute];
@@ -765,7 +765,7 @@ class NotificationService {
           styleInformation: BigTextStyleInformation(body),
           largeIcon: const DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
           timeoutAfter: reminder != null && reminder.isHourly
-              ? reminder.everyHours * Duration.millisecondsPerHour
+              ? reminder.everyMinutes * Duration.millisecondsPerMinute
               : null,
           actions: [
             if (habit.kind != HabitKind.negative)

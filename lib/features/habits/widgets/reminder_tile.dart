@@ -6,6 +6,14 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 
+String reminderEveryLabel(BuildContext context, int minutes) {
+  final hours = minutes ~/ 60;
+  final rest = minutes % 60;
+  if (rest == 0) return context.l10n.every_n_hours('$hours');
+  if (hours == 0) return context.l10n.every_n_minutes('$rest');
+  return context.l10n.every_hours_minutes('$hours', '$rest');
+}
+
 String reminderSpan(BuildContext context, Reminder reminder) {
   final start = context.clockAt(reminder.hour * 60 + reminder.minute);
   final until = reminder.untilMinute;
@@ -30,7 +38,7 @@ class ReminderTile extends StatelessWidget {
   String _daysLabel(BuildContext context) {
     final days = _dayNames(context);
     if (!reminder.isHourly) return days;
-    return '$days · ${context.l10n.every_n_hours('${reminder.everyHours}')}';
+    return '$days · ${reminderEveryLabel(context, reminder.everyMinutes)}';
   }
 
   String _dayNames(BuildContext context) {

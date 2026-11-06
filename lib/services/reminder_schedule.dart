@@ -23,15 +23,15 @@ class ReminderSchedule {
   static List<int> hourlySlots({
     required int hour,
     required int minute,
-    required int everyHours,
+    required int everyMinutes,
     int? until,
     int cap = 24,
   }) {
     final start = hour * 60 + minute;
-    if (everyHours < 1) return [start];
+    if (everyMinutes < 1) return [start];
     final end = until != null && until > start ? until : _dayMinutes - 1;
     final slots = <int>[];
-    for (var at = start; at <= end && slots.length < cap; at += everyHours * 60) {
+    for (var at = start; at <= end && slots.length < cap; at += everyMinutes) {
       slots.add(at);
     }
     return slots;

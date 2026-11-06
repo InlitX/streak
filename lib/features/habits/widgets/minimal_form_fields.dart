@@ -408,7 +408,7 @@ class CompactReminderRow extends StatelessWidget {
   String _daysLabel(BuildContext context) {
     final days = _dayNames(context);
     if (!reminder.isHourly) return days;
-    return '$days · ${context.l10n.every_n_hours('${reminder.everyHours}')}';
+    return '$days · ${reminderEveryLabel(context, reminder.everyMinutes)}';
   }
 
   String _dayNames(BuildContext context) {
