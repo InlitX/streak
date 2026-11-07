@@ -36,17 +36,29 @@ List<String> get todoIconNames => [
       ...CategoryIcons.names.where((name) => !todoIconLead.contains(name)),
     ];
 
+class _TagDraft {
+  TodoTag? tag;
+}
+
 Future<TodoTag?> showTodoTagEditor(
   BuildContext context, {
   TodoTag? initial,
   bool project = false,
-}) =>
-    showModalBottomSheet<TodoTag>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (_) => _TagEditorSheet(initial: initial, project: project),
-    );
+}) async {
+  final draft = _TagDraft();
+  final result = await showModalBottomSheet<TodoTag>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (_) => _TagEditorSheet(
+      initial: initial,
+      project: project,
+      draft: draft,
+    ),
+  );
+  if (result != null || initial != null) return result;
+  return draft.tag;
+}
 
 Future<void> showTodoProjectPicker(
   BuildContext context, {
@@ -215,10 +227,15 @@ class _SheetHeading extends StatelessWidget {
 }
 
 class _TagEditorSheet extends StatefulWidget {
-  const _TagEditorSheet({this.initial, this.project = false});
+  const _TagEditorSheet({
+    this.initial,
+    this.project = false,
+    required this.draft,
+  });
 
   final TodoTag? initial;
   final bool project;
+  final _TagDraft draft;
 
   @override
   State<_TagEditorSheet> createState() => _TagEditorSheetState();
@@ -252,18 +269,26 @@ class _TagEditorSheetState extends State<_TagEditorSheet> {
     super.dispose();
   }
 
-  void _save() {
-    Navigator.of(context).pop(
-      TodoTag(
-        id: widget.initial?.id ?? const Uuid().v4(),
+  late final String _id = widget.initial?.id ?? const Uuid().v4();
+
+  TodoTag _build() => TodoTag(
+        id: _id,
         name: _name.text.trim(),
         color: _color,
         icon: _icon,
         order: widget.initial?.order ?? 0,
         kind: _project ? TodoTagKind.project : TodoTagKind.label,
-      ),
-    );
+      );
+
+  void _remember() => widget.draft.tag = _canSave ? _build() : null;
+
+  void _pick(VoidCallback change) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(change);
+    _remember();
   }
+
+  void _save() => Navigator.of(context).pop(_build());
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +321,10 @@ class _TagEditorSheetState extends State<_TagEditorSheet> {
                     ? context.l10n.todo_project_name
                     : context.l10n.todo_tag_name,
                 autofocus: widget.initial == null,
-                onChanged: (_) => setState(() {}),
+                onChanged: (_) {
+                  setState(() {});
+                  _remember();
+                },
               ),
               const SizedBox(height: 18),
               Text(context.l10n.todo_tag_icon,
@@ -312,7 +340,7 @@ class _TagEditorSheetState extends State<_TagEditorSheet> {
                       selected: _icon == name,
                       label: name,
                       child: GestureDetector(
-                        onTap: () => setState(() => _icon = name),
+                        onTap: () => _pick(() => _icon = name),
                         child: Container(
                           width: 44,
                           height: 44,
@@ -338,7 +366,7 @@ class _TagEditorSheetState extends State<_TagEditorSheet> {
                     Semantics(
                       button: true,
                       child: GestureDetector(
-                        onTap: () => setState(() => _showAllIcons = true),
+                        onTap: () => _pick(() => _showAllIcons = true),
                         child: Container(
                           height: 44,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -372,7 +400,7 @@ class _TagEditorSheetState extends State<_TagEditorSheet> {
                       button: true,
                       selected: _color.toARGB32() == color.toARGB32(),
                       child: GestureDetector(
-                        onTap: () => setState(() => _color = color),
+                        onTap: () => _pick(() => _color = color),
                         child: Container(
                           width: 38,
                           height: 38,
