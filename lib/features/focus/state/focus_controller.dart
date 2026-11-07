@@ -281,6 +281,17 @@ class FocusController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void switchHabit(String habitId) {
+    if (!_open || !_isBreak || habitId == _habitId) return;
+    _habitId = habitId;
+    _todoId = '';
+    _label = '';
+    _tasks.clear();
+    _persist();
+    _sync();
+    notifyListeners();
+  }
+
   void pause({DateTime? at}) {
     unawaited(FocusAudio.stopAlert());
     if (_since == null) return;

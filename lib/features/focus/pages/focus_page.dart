@@ -28,6 +28,7 @@ import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/features/focus/widgets/focus_backgrounds.dart';
 import 'package:streak/features/focus/widgets/focus_end_dialog.dart';
+import 'package:streak/features/focus/widgets/focus_habit_card.dart';
 import 'package:streak/features/focus/widgets/focus_insights.dart';
 import 'package:streak/features/focus/widgets/focus_retime_sheet.dart';
 import 'package:streak/features/focus/widgets/focus_task_lists.dart';
@@ -313,6 +314,17 @@ class _FocusPageState extends State<FocusPage> {
     AppNavigator.pop();
   }
 
+  Future<void> _switchHabit(HabitsController habits) async {
+    final id = await showFocusHabitPicker(
+      context,
+      habits: habits.habits,
+      selectedId: _focus.habitId,
+    );
+    if (id == null || !mounted) return;
+    _focus.switchHabit(id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
@@ -395,6 +407,9 @@ class _FocusPageState extends State<FocusPage> {
                     onTarget: leading || !focus.isActive || focus.isBreak
                         ? null
                         : () => showFocusRetimeSheet(context),
+                    onHabit: leading || !focus.isActive || !focus.isBreak
+                        ? null
+                        : () => _switchHabit(habits),
                     title: title,
                     target: (leading ? leadMinutes : focus.targetMinutes) <= 0
                         ? context.l10n.focus_flowtime
@@ -628,6 +643,7 @@ class _TopBar extends StatelessWidget {
     required this.onImmersive,
     required this.onBig,
     this.onTarget,
+    this.onHabit,
   });
 
   final String title;
@@ -636,6 +652,7 @@ class _TopBar extends StatelessWidget {
   final VoidCallback onImmersive;
   final VoidCallback onBig;
   final VoidCallback? onTarget;
+  final VoidCallback? onHabit;
 
   Future<void> _pickStyle(BuildContext context) async {
     final labels = [
@@ -1002,6 +1019,12 @@ class _TopBar extends StatelessWidget {
                     icon: LucideIcons.timerReset,
                     label: context.l10n.focus_change_timer,
                     onTap: retime,
+                  ),
+                if (onHabit case final change?)
+                  (
+                    icon: LucideIcons.arrowLeftRight,
+                    label: context.l10n.focus_change_habit,
+                    onTap: change,
                   ),
                 (
                   icon: LucideIcons.music,
