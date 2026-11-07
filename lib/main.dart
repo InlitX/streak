@@ -33,6 +33,7 @@ import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/home_widget_service.dart';
 import 'package:streak/services/image_cleanup_service.dart';
 import 'package:streak/services/notification_service.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:streak/services/portable_traces.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:streak/services/widget_action_service.dart';
@@ -152,6 +153,7 @@ Future<void> _startup() async {
 }
 
 void _run() {
+  AppShortcuts.install();
   runApp(
     MultiProvider(
       providers: [

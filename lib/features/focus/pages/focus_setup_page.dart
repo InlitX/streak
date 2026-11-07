@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -37,7 +38,10 @@ class FocusSetupPage extends StatefulWidget {
   State<FocusSetupPage> createState() => _FocusSetupPageState();
 }
 
-class _FocusSetupPageState extends State<FocusSetupPage> {
+class _FocusSetupPageState extends State<FocusSetupPage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.confirm: _start};
+
   late String _habitId = widget.habitId ?? '';
   String _label = '';
   int _minutes = 25;

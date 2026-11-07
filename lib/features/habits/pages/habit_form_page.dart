@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
@@ -60,7 +61,10 @@ class HabitFormPage extends StatefulWidget {
   State<HabitFormPage> createState() => _HabitFormPageState();
 }
 
-class _HabitFormPageState extends State<HabitFormPage> {
+class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.save: _save};
+
   late final TextEditingController _name;
   late final TextEditingController _description;
   late final TextEditingController _unitLabel;

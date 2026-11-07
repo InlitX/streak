@@ -8,6 +8,7 @@ import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_dirs.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -363,6 +364,15 @@ class _ClassicPreferencesPage extends StatelessWidget {
                     onTap: () => showLanguageSheet(context),
                   ),
                   settingsDivider(context),
+                  if (!isMobile) ...[
+                    NavRow(
+                      icon: LucideIcons.keyboard,
+                      title: context.l10n.shortcuts_title,
+                      subtitle: context.l10n.shortcuts_sub,
+                      onTap: AppShortcuts.showHelp,
+                    ),
+                    settingsDivider(context),
+                  ],
                   SettingRow(
                     icon: LucideIcons.calendarDays,
                     title: context.l10n.week_starts_on,

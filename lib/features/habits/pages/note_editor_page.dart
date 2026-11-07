@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -41,7 +42,10 @@ class NoteEditorPage extends StatefulWidget {
   State<NoteEditorPage> createState() => _NoteEditorPageState();
 }
 
-class _NoteEditorPageState extends State<NoteEditorPage> {
+class _NoteEditorPageState extends State<NoteEditorPage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.save: _save};
+
   late final TextEditingController _text =
       TextEditingController(text: widget.note?.text ?? '');
   late NoteType _type = widget.note?.type ?? NoteType.note;

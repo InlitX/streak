@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,15 @@ class _Item {
   }
 }
 
-class _TodoEditorPageState extends State<TodoEditorPage> {
+class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        AppShortcut.save: () => Navigator.of(context).pop(),
+        AppShortcut.create: () {},
+        AppShortcut.createFolder: () {},
+        AppShortcut.find: () {},
+      };
+
   late final _title = TextEditingController(text: widget.todo?.title ?? '');
   late final _body = TextEditingController(text: widget.todo?.body ?? '');
   final _titleFocus = FocusNode();

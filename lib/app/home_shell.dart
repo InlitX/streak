@@ -19,6 +19,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/back_handlers.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/page_motion.dart';
 import 'package:streak/core/widgets/glass.dart';
@@ -58,8 +59,32 @@ final _paneTab = ValueNotifier(_Tab.today);
 final _toSettings = ValueNotifier(0);
 
 class _HomeShellState extends State<HomeShell>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin, ShortcutHost {
   _Tab _tab = _Tab.today;
+  List<_Tab> _tabsNow = const [_Tab.today];
+
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        for (var i = 0; i < 5; i++)
+          AppShortcut.values[AppShortcut.tab1.index + i]: () => _goTo(i),
+        AppShortcut.nextTab: () => _step(1),
+        AppShortcut.previousTab: () => _step(-1),
+        AppShortcut.settings: () {
+          if (_tabsNow.contains(_Tab.settings)) {
+            _select(_tabsNow, _Tab.settings);
+          }
+        },
+      };
+
+  void _goTo(int index) {
+    if (index < _tabsNow.length) _select(_tabsNow, _tabsNow[index]);
+  }
+
+  void _step(int by) {
+    final at = _tabsNow.indexOf(_tab);
+    if (at < 0) return;
+    _select(_tabsNow, _tabsNow[(at + by) % _tabsNow.length]);
+  }
 
   final _visited = <_Tab>{_Tab.today};
 
@@ -285,6 +310,7 @@ class _HomeShellState extends State<HomeShell>
       _Tab.settings,
     ];
     final current = tabs.contains(_tab) ? _tab : _Tab.today;
+    _tabsNow = tabs;
 
     if (railed) {
       return _guard(

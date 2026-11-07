@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +68,10 @@ class FocusPage extends StatefulWidget implements FullWidthPage {
   State<FocusPage> createState() => _FocusPageState();
 }
 
-class _FocusPageState extends State<FocusPage> {
+class _FocusPageState extends State<FocusPage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.toggle: _toggleRunning};
+
   bool _leaving = false;
   final _confetti = ValueNotifier(0);
   late final FocusController _focus = context.read<FocusController>();

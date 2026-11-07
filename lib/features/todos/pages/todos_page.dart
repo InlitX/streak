@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -49,7 +50,21 @@ class TodosPage extends StatefulWidget {
 }
 
 class _TodosPageState extends State<TodosPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        AppShortcut.create: _compose,
+        AppShortcut.createFolder: _newProject,
+        AppShortcut.find: () {
+          if (!_searching) _toggleSearch();
+        },
+      };
+
+  Future<void> _newProject() async {
+    await createProject(context);
+    if (mounted) setState(() => _folders = context.read<SettingsController>().todoPapers);
+  }
+
   bool _showCompleted = false;
   bool _searching = false;
   late bool _folders = context.read<TodoTagsController>().projects.isNotEmpty &&

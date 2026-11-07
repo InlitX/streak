@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -71,7 +72,15 @@ class HomePage extends StatefulWidget {
 
 const _sinkDelay = Duration(milliseconds: 2500);
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with ShortcutHost {
+  @override
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        AppShortcut.create: () => AppNavigator.push(
+              const HabitFormPage(),
+              fullscreenDialog: true,
+            ),
+      };
+
   final _confetti = ValueNotifier(0);
   final _scrolled = ValueNotifier(false);
   String? _category;
