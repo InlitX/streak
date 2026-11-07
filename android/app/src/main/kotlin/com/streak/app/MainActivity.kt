@@ -62,6 +62,11 @@ class MainActivity : FlutterFragmentActivity() {
                         result.success(true)
                     }
                     "widgetPreview" -> result.success(widgetPreview(call.argument<String>("kind")))
+                    "systemAccent" -> result.success(
+                        if (android.os.Build.VERSION.SDK_INT >= 31)
+                            resources.getColor(android.R.color.system_accent1_500, theme)
+                        else null,
+                    )
                     else -> result.notImplemented()
                 }
             }

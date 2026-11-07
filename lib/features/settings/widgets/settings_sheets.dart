@@ -8,6 +8,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
 import 'package:streak/features/settings/settings_actions.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -39,10 +40,14 @@ Future<void> showAccentSheet(BuildContext context) {
           children: [
             SheetTitle(context.l10n.accent_color),
             const SizedBox(height: 16),
-            Consumer<SettingsController>(
-              builder: (_, s, __) => ColorPicker(
-                selected: s.accentColor,
-                onSelected: s.setAccentColor,
+            FutureBuilder<Color?>(
+              future: AppIconService.systemAccent(),
+              builder: (_, snapshot) => Consumer<SettingsController>(
+                builder: (_, s, __) => ColorPicker(
+                  selected: s.accentColor,
+                  onSelected: s.setAccentColor,
+                  system: snapshot.data,
+                ),
               ),
             ),
           ],

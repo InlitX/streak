@@ -10,10 +10,12 @@ class ColorPicker extends StatefulWidget {
     super.key,
     required this.selected,
     required this.onSelected,
+    this.system,
   });
 
   final Color selected;
   final ValueChanged<Color> onSelected;
+  final Color? system;
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -22,8 +24,9 @@ class ColorPicker extends StatefulWidget {
 class _ColorPickerState extends State<ColorPicker> {
   late bool _custom = _isCustom(widget.selected);
 
-  bool _isCustom(Color color) => !AppPalette.habitColors
-      .any((c) => c.toARGB32() == color.toARGB32());
+  bool _isCustom(Color color) =>
+      widget.system?.toARGB32() != color.toARGB32() &&
+      !AppPalette.habitColors.any((c) => c.toARGB32() == color.toARGB32());
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +61,15 @@ class _ColorPickerState extends State<ColorPicker> {
                 spacing: spacing,
                 runSpacing: spacing,
                 children: [
+                  if (widget.system case final color?)
+                    _Swatch(
+                      color: color,
+                      size: swatch,
+                      selected:
+                          widget.selected.toARGB32() == color.toARGB32(),
+                      onTap: () => widget.onSelected(color),
+                      icon: LucideIcons.sparkles,
+                    ),
                   for (final color in AppPalette.habitColors)
                     _Swatch(
                       color: color,
@@ -148,12 +160,14 @@ class _Swatch extends StatelessWidget {
     required this.size,
     required this.selected,
     required this.onTap,
+    this.icon,
   });
 
   final Color color;
   final double size;
   final bool selected;
   final VoidCallback onTap;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +198,9 @@ class _Swatch extends StatelessWidget {
           ),
           child: selected
               ? Icon(LucideIcons.check, color: checkColor, size: 18)
-              : null,
+              : icon == null
+                  ? null
+                  : Icon(icon, color: checkColor, size: 16),
         ),
       ),
     );

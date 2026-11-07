@@ -8,6 +8,16 @@ class AppIconService {
 
   static const _names = ['default', 'neutral', 'accent'];
 
+  static Future<Color?> systemAccent() async {
+    if (!hasAppIcons) return null;
+    try {
+      final value = await _channel.invokeMethod<int>('systemAccent');
+      return value == null ? null : Color(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
   static Future<void> apply(int index) async {
     if (!hasAppIcons) return;
     final name = _names[index.clamp(0, _names.length - 1)];
