@@ -93,7 +93,7 @@ class _Pill extends StatelessWidget {
           end: Offset.zero,
         ).animate(animation),
         child: Material(
-          color: scheme.surface,
+          color: scheme.surfaceContainerHighest,
           elevation: 6,
           shadowColor: Colors.black.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(18),

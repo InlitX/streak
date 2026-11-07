@@ -66,6 +66,7 @@ class _TodosPageState extends State<TodosPage>
   final _completing = <String>{};
   final _body = GlobalKey();
   final _fab = GlobalKey();
+  final _folded = <TodoGroup>{};
   final _cards = <String, GlobalKey>{};
   final _trashing = <String>{};
   final _selected = <String>{};
@@ -551,8 +552,15 @@ class _TodosPageState extends State<TodosPage>
                 label: todoGroupLabel(context, section.group),
                 count: section.todos.length,
                 danger: section.group == TodoGroup.overdue,
+                folded: _folded.contains(section.group),
+                onTap: () => setState(() {
+                  if (!_folded.remove(section.group)) {
+                    _folded.add(section.group);
+                  }
+                }),
               ),
         ),
+        if (!_folded.contains(section.group))
         for (final (index, todo) in section.todos.indexed)
           (
             key: ValueKey(todo.id),
@@ -679,6 +687,11 @@ class _TodosPageState extends State<TodosPage>
       );
 
   Future<void> _add() async {
+    if (!_folders) return _compose();
+    return _addMenu();
+  }
+
+  Future<void> _addMenu() async {
     if (!_folders && _projectFilter != null) return _compose();
     final anchor = _rectOf(_fab.currentContext);
     if (anchor == null) return;
@@ -932,8 +945,9 @@ class _TodosPageState extends State<TodosPage>
                     icon: LucideIcons.plus,
                     label: context.l10n.todo_new,
                     onPressed: _add,
+                    onLongPress: _addMenu,
                   )
-                : TodoAddButton(onTap: _add),
+                : TodoAddButton(onTap: _add, onLongPress: _addMenu),
             ),
             ),
           ),

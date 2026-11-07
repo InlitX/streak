@@ -244,24 +244,46 @@ class TodoSectionHeader extends StatelessWidget {
     required this.label,
     required this.count,
     required this.danger,
+    this.folded = false,
+    this.onTap,
   });
 
   final String label;
   final int count;
   final bool danger;
+  final bool folded;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 6, bottom: 2),
-      child: SectionLabel(
-        label,
-        trailing: Text(
-          '$count',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: danger ? context.tokens.danger : context.tokens.muted,
+    final color = danger ? context.tokens.danger : context.tokens.muted;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 6, bottom: 2),
+        child: SectionLabel(
+          label,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '$count',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+              if (onTap != null) ...[
+                const SizedBox(width: 4),
+                Icon(
+                  folded ? LucideIcons.chevronDown : LucideIcons.chevronUp,
+                  size: 14,
+                  color: color,
+                ),
+              ],
+            ],
           ),
         ),
       ),
@@ -290,9 +312,10 @@ class TodoCompletedHeader extends StatelessWidget {
 }
 
 class TodoAddButton extends StatefulWidget {
-  const TodoAddButton({super.key, required this.onTap});
+  const TodoAddButton({super.key, required this.onTap, this.onLongPress});
 
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   State<TodoAddButton> createState() => _TodoAddButtonState();
@@ -320,6 +343,7 @@ class _TodoAddButtonState extends State<TodoAddButton> {
         onPointerCancel: (_) => _set(false),
         child: GestureDetector(
           onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
           child: AnimatedScale(
             scale: _down ? 0.9 : 1,
             duration: Duration(milliseconds: _down ? 90 : 320),

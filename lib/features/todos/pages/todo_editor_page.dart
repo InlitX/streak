@@ -92,6 +92,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
   late int? _minutes = widget.todo?.minutes;
   late int? _estimate = widget.todo?.estimate;
   late bool _focusOnly = widget.todo?.focusOnly ?? false;
+  bool _focusSetEstimate = false;
   late TodoPriority _priority = widget.todo?.priority ?? TodoPriority.none;
   late int _paper = widget.todo?.paper ?? -1;
   late String _cover = widget.todo?.cover ?? '';
@@ -466,6 +467,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
     final minutes = await showDurationSheet(context, minutes: _estimate ?? 0);
     if (minutes == null || !mounted) return;
     _edit(() {
+      _focusSetEstimate = false;
       _estimate = minutes == 0 ? null : minutes;
       if (_estimate == null) _focusOnly = false;
     });
@@ -473,7 +475,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> {
 
   void _toggleFocusOnly() => _edit(() {
         _focusOnly = !_focusOnly;
-        if (_focusOnly) _estimate ??= 25;
+        if (_focusOnly) {
+          _focusSetEstimate = _estimate == null;
+          _estimate ??= 25;
+        } else if (_focusSetEstimate) {
+          _estimate = null;
+          _focusSetEstimate = false;
+        }
       });
 
   Future<void> _pickPriority() => showTodoPriorityPicker(
@@ -984,12 +992,16 @@ class _Tool extends StatelessWidget {
         excludeSemantics: true,
         child: Tooltip(
           message: label,
+          preferBelow: false,
           child: Material(
             color: ink.withValues(alpha: active ? 0.16 : 0.07),
             borderRadius: BorderRadius.circular(13),
             child: InkWell(
               borderRadius: BorderRadius.circular(13),
-              onTap: onTap,
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                onTap();
+              },
               child: SizedBox.square(
                 dimension: 40,
                 child: Icon(
