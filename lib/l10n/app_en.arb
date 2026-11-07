@@ -779,6 +779,7 @@
   "focus_stop_body": "Your minutes are saved either way. The habit is only completed if you reach the target.",
   "focus_end": "End",
   "focus_pick_habit": "What are you focusing on?",
+  "focus_change_habit": "Change habit",
   "focus_scene_custom": "Your image",
   "unit_hours": "hours",
   "unit_minutes": "minutes",
