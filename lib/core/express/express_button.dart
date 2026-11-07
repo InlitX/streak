@@ -196,11 +196,13 @@ class ExpressFab extends StatefulWidget {
     required this.icon,
     required this.label,
     required this.onPressed,
+    this.onLongPress,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onPressed;
+  final VoidCallback? onLongPress;
 
   @override
   State<ExpressFab> createState() => _ExpressFabState();
@@ -242,6 +244,7 @@ class _ExpressFabState extends State<ExpressFab>
         onTapUp: (_) => _set(false),
         onTapCancel: () => _set(false),
         onTap: _tap,
+        onLongPress: widget.onLongPress,
         child: AnimatedScale(
           scale: _down ? 0.9 : 1,
           duration: _down ? Express.fast : Express.quick,
