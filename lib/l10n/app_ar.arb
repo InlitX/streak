@@ -162,7 +162,7 @@
   "check_style": "نمط خانة الاختيار",
   "style_minimal_desc": "شبكة العادات والإعدادات مجموعة في أربعة أقسام.",
   "clear_progress_confirm": "امسح التقدم",
-  "data_sub": "النسخ الاحتياطي والاستيراد",
+  "data_sub": "النسخ الاحتياطية والأرشيف والاستيراد",
   "wipe_data_sure_body": "الفرصة الأخيرة. بدون نسخة احتياطية، ستضيع هذه البيانات إلى الأبد.",
   "archive": "الأرشيف",
   "completions": "الإنجازات",
@@ -318,7 +318,7 @@
   "category_learning": "التعلم",
   "delete": "حذف",
   "data": "البيانات",
-  "auto_backup_weekly": "إسبوعيا",
+  "auto_backup_weekly": "أسبوعيا",
   "onb1_title": "ابني همم حقيقية",
   "frequency": "التكرار",
   "no_habits_yet": "لا توجد عادات بعد",
@@ -650,7 +650,7 @@
   "quotes_which": "أي إقتباس",
   "quotes_app": "من التطبيق",
   "quotes_mine": "لي",
-  "quotes_both": "الإثنين",
+  "quotes_both": "كلاهما",
   "quotes_off": "مطفئ",
   "month_weekday_sub": "يقع في يوم {when} من الشهر، ليس تاريخ محدد.",
   "@month_weekday_sub": {
@@ -683,7 +683,7 @@
   "bg_dots": "نقاط",
   "bg_oled": "OLED",
   "weekdays": "أيام الإسبوع",
-  "weekends": "نهاية الإسبوع",
+  "weekends": "عطلات نهاية الأسبوع",
   "reminder_message": "رسالة (إختياري)",
   "reminder_message_hint": "إتركه فارغًا لإقتباس تحفيزي",
   "new_category": "فئة جديدة",
@@ -778,5 +778,456 @@
   "todo_delete_body": "لديك بضع ثواني لإلغائه.",
   "month_fixed_day_hint": "للتكرار في التاريخ نفسه من كل شهر، اختر «الفاصل الزمني» واضبطه على «كل شهر واحد»",
   "export_habit": "تصدير هذه العادة",
-  "habit_links": "روابط الأتمتة"
+  "habit_links": "روابط الأتمتة",
+  "habit_links_off": "اسمح لتطبيقات مثل Tasker، أو اختصار، أو علامة NFC بتسجيل عاداتك عن طريق فتح رابط. تظل الميزة معطلة حتى تقوم بتشغيلها.",
+  "habit_links_on": "يمكن لأي تطبيق على هذا الهاتف فتح هذه الروابط لجميع عاداتك. اضغط على أحدها لنسخه.",
+  "habit_link_done": "تحديد كمكتمل",
+  "habit_link_add": "إضافة {amount}",
+  "@habit_link_add": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_link_relapse": "تسجيل انتكاسة",
+  "habit_link_focus": "بدء جلسة تركيز",
+  "habit_link_open": "فتح العادة",
+  "habit_link_day": "ليوم آخر، أضف day=2026-10-31& في النهاية.",
+  "at_most": "على الأكثر",
+  "at_most_sub": "الهدف هو حد أقصى. يكتمل اليوم عندما تسجل شيئاً وتظل عنده أو أدنى منه.",
+  "todo_style": "نمط قائمة المهام",
+  "todo_hint": "ما الذي يجب إنجازه؟",
+  "todo_subtasks": "المهام الفرعية",
+  "todo_subtask_hint": "مهمة فرعية",
+  "todo_empty_title": "لا يوجد شيء في القائمة",
+  "todo_empty_body": "دوّن ما تريد إنجازه خلال الأيام القليلة القادمة.",
+  "todo_date": "التاريخ",
+  "todo_no_date": "بدون تاريخ",
+  "todo_time": "الوقت",
+  "todo_repeat": "تكرار",
+  "todo_repeat_never": "عدم التكرار",
+  "todo_repeat_workdays": "من الاثنين إلى الجمعة",
+  "todo_repeat_days": "{count, plural, =1{Every day} other{Every {count} days}}",
+  "@todo_repeat_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_months": "{count, plural, =1{Every month} other{Every {count} months}}",
+  "@todo_repeat_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_custom": "مخصص",
+  "todo_repeat_starts": "يبدأ في",
+  "todo_repeat_unit_days": "الأيام",
+  "todo_repeat_unit_weeks": "الأسابيع",
+  "todo_repeat_unit_months": "الأشهر",
+  "todo_repeat_unit_years": "السنوات",
+  "todo_repeat_on_day": "في اليوم {day}",
+  "@todo_repeat_on_day": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_repeat_on_weekday": "في {weekday} {nth, select, 1{الأول} 2{الثاني} 3{الثالث} 4{الرابع} other{الأخير}}",
+  "@todo_repeat_on_weekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_from_done": "بدء الحساب عند الإنجاز",
+  "todo_repeat_skip": "تخطي هذا",
+  "todo_estimate": "المدة",
+  "todo_estimate_none": "بدون مدة",
+  "todo_priority": "الأولوية",
+  "todo_paper": "اللون",
+  "todo_add": "إضافة",
+  "todo_list_item": "عنصر القائمة",
+  "todo_title_hint": "العنوان",
+  "todo_body_hint": "ملاحظة",
+  "todo_sort": "ترتيب حسب الأولوية",
+  "todo_sort_high_first": "الأولوية الأعلى أولاً",
+  "todo_sort_low_first": "الأولوية الأدنى أولاً",
+  "todo_project_empty": "لا شيء في هذا المجلد بعد",
+  "todo_background": "الخلفية",
+  "todo_background_pick": "اختر صورة",
+  "todo_deleted": "تم حذف المهمة",
+  "todo_mark_done": "تحديد كمكتمل",
+  "todo_mark_open": "تحديد كغير مكتمل",
+  "todo_pin": "تثبيت",
+  "todo_unpin": "إلغاء التثبيت",
+  "todo_select": "تحديد",
+  "todo_selected": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "@todo_selected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_deleted_many": "{count, plural, =1{To-do deleted} other{{count} to-dos deleted}}",
+  "@todo_deleted_many": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "priority_none": "بدون أولوية",
+  "priority_low": "منخفضة",
+  "priority_medium": "متوسطة",
+  "priority_high": "عالية",
+  "todo_overdue": "متأخرة",
+  "todo_upcoming": "القادمة",
+  "todo_someday": "يوماً ما",
+  "habit_link_undo": "مسح اليوم",
+  "pick_a_date": "اختر تاريخاً",
+  "todo_left": "{count, plural, =0{الكل مكتمل} =1{مهمة واحدة متبقية} other{{count} مهام متبقية}}",
+  "@todo_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_completed_count": "{count, plural, =1{المكتملة (1)} other{المكتملة ({count})}}",
+  "@todo_completed_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_search": "البحث في المهام",
+  "todo_search_empty": "لا توجد نتائج مطابقة لذلك",
+  "todo_clear_completed": "اكتمل المسح",
+  "todo_clear_completed_body": "{count, plural, =1{سيؤدي هذا إلى حذف المهمة المكتملة.} other{سيؤدي هذا إلى حذف المهام المكتملة الـ {count}.}}",
+  "@todo_clear_completed_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prefs_general": "عام",
+  "prefs_cards": "البطاقات والتقويم",
+  "prefs_habits": "العادات",
+  "prefs_features": "الميزات",
+  "prefs_privacy": "الخصوصية",
+  "collapse_cards": "طي البطاقات",
+  "expand_cards": "توسيع البطاقات",
+  "view_switcher": "تبديل العرض",
+  "view_switcher_sub": "إظهار أزرار الأسبوع / الشهر / السنة في عرض \"اليوم\". عند إيقافها، تنتقل إلى قائمة التصفية",
+  "view_switcher_needs": "تفعيل النشاط على البطاقات لاستخدامها",
+  "focus": "التركيز",
+  "focus_enable_sub": "مؤقت للعادات التي تحتاج إلى ذلك",
+  "focus_free_session": "جلسة حرة",
+  "focus_duration": "المدة",
+  "focus_start": "بدأ جلسة",
+  "focus_style": "نمط المؤقت",
+  "focus_style_digital": "دائرة",
+  "focus_style_flip": "قلب",
+  "focus_style_dots": "نقاط",
+  "focus_countdown": "عد تنازلي 3 ثواني",
+  "focus_skip_break": "تخطي الراحة",
+  "focus_continue": "إستمرار",
+  "focus_alert": "تنبيه نهاية الجولة",
+  "focus_alert_chime": "رنين",
+  "focus_alert_custom": "اختر نغمة رنين",
+  "focus_alert_none": "صامت",
+  "focus_hold": "انتظر حتى أقوم بإيقافه",
+  "focus_hold_sub": "الاستراحة تنتظر أيضاً حتى تنقر على \"متابعة\". بعد الاستراحة، ينتظر وضع التركيز دائماً.",
+  "focus_long_break": "استراحة طويلة",
+  "focus_long_break_sub": "استراحة طويلة بعد كل 4 جولات.",
+  "focus_whole_rounds": "احتساب الجولات الكاملة فقط",
+  "focus_whole_rounds_sub": "الجولة التي تنتهي مبكراً لا يتم حفظها.",
+  "focus_auto_next": "الاستمرار تلقائياً",
+  "focus_auto_next_sub": "عند انتهاء الاستراحة، تبدأ الجولة التالية دون انتظار.",
+  "focus_end_drop": "إذا أنهيت الآن، فلن يتم حفظ هذه الجولة.",
+  "focus_restart": "إعادة البدء",
+  "focus_restart_title": "إعادة تشغيل هذه الجولة؟",
+  "focus_restart_body": "سيُفقد الوقت الذي ركّزته في هذه الجولة.",
+  "focus_saved": "تم تسجيل {time}",
+  "@focus_saved": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_total": "وقت التركيز",
+  "focus_sessions": "الجلسات",
+  "focus_stop_title": "إنهاء الجلسة؟",
+  "focus_end": "إنهاء",
+  "focus_stop_body": "يتم حفظ دقائقك في كلتا الحالتين. لا تُعتبر العادة مكتملة إلا إذا وصلت إلى الهدف.",
+  "focus_pick_habit": "على ماذا تركز؟",
+  "focus_scene_custom": "صورتك",
+  "unit_hours": "الساعات",
+  "unit_minutes": "الدقائق",
+  "unit_seconds": "الثواني",
+  "focus_target_reached": "تم بلوغ الهدف",
+  "focus_pause": "إيقاف مؤقت",
+  "focus_resume": "استئناف",
+  "focus_sound": "نغمة",
+  "focus_options": "خيارات",
+  "focus_fullscreen": "ملء الشاشة",
+  "focus_exit_fullscreen": "الخروج من ملء الشاشة",
+  "focus_custom_duration": "مخصص",
+  "focus_end_short": "ينقصك {time} للوصول إلى الهدف.",
+  "@focus_end_short": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_end_tasks": "تبقت {count} مهمة غير معلنة.",
+  "@focus_end_tasks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_end_reached": "تم بلوغ الهدف. سيتم تسجيل العادة كمنجزة.",
+  "focus_end_reached_free": "تم بلوغ الهدف.",
+  "focus_end_keep": "إستمر",
+  "focus_end_anyway": "توقف على أي حال",
+  "focus_end_complete": "تحديد كمنجز",
+  "focus_end_add_time": "إضافة وقت مركز",
+  "focus_amount_added": "تمت إضافة {amount} إلى {habit}",
+  "@focus_amount_added": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_personalize": "مخصص",
+  "focus_track_brown": "ضوضاء بنية",
+  "focus_track_fire": "نار",
+  "focus_track_ticking": "عقارب الساعة",
+  "focus_track_pad": "وسادة دافئة",
+  "focus_resources": "الموارد",
+  "focus_simple_view": "عرض بسيط",
+  "focus_double_tap_tip": "انقر نقراً مزدوجاً على الساعة للرجوع",
+  "focus_shuffle": "خلط",
+  "focus_loop": "بالترتيب",
+  "focus_repeat_one": "تكرار واحد",
+  "focus_done_title": "اكتملت الجلسة",
+  "unit_hour_short": "س",
+  "unit_min_short": "دق",
+  "focus_notif_body": "انتهت جلسة التركيز. أحسنت العمل!",
+  "focus_notif_break": "وقت الاستراحة.",
+  "celebration_surprise": "فاجئني",
+  "focus_pomodoro": "بومودورو",
+  "focus_scene_black": "أسود",
+  "focus_break": "إستراحة",
+  "focus_break_in": "استراحة خلال {n}",
+  "@focus_break_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_back_in": "تركيز خلال {n}",
+  "@focus_back_in": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_built_in": "المتصمنة",
+  "focus_break_over": "انتهت الاستراحة",
+  "focus_notif_back": "العودة إلى التركيز.",
+  "celebration": "تأثير الإنجاز",
+  "celebration_confetti": "قصاصات ورقية",
+  "celebration_fireworks": "ألعاب نارية",
+  "focus_notif_channel": "جلسات التركيز",
+  "focus_notif_running": "جاري التركيز",
+  "focus_paused": "متوقف مؤقتا",
+  "focus_pomodoro_sub": "ربط جولات التركيز باستراحات قصيرة",
+  "focus_round": "الجولة {n}",
+  "@focus_round": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_daily_goal": "هدف التركيز",
+  "focus_goal_today": "{done} من {goal} اليوم",
+  "@focus_goal_today": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_keep_awake": "إبقاء الشاشة مضاءة",
+  "focus_images_limit": "حتى 10 صور",
+  "select_all": "تحديد الكل",
+  "selected_count": "{count, plural, =1{تم تحديد عنصر واحد} other{تم تحديد {count} عناصر}}",
+  "@selected_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_delete_sessions": "حذف الجلسات؟",
+  "focus_delete_sessions_body": "{count, plural, =1{سيتم حذف جلسة تركيز واحدة. لا يمكن التراجع عن هذا الإجراء.} other{سيتم حذف {count} جلسات تركيز. لا يمكن التراجع عن هذا الإجراء.}}",
+  "@focus_delete_sessions_body": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focus_sessions_deleted": "{count, plural, =1{تم حذف جلسة واحدة} other{تم حذف {count} جلسات}}",
+  "@focus_sessions_deleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unscheduled_title": "اليوم غير مجدول",
+  "unscheduled_body": "هذه العادة غير مجولة في {day}. هل تريد تسجيلها على أي حال كإضافية؟",
+  "@unscheduled_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "unscheduled_confirm": "التسجيل على أي حال",
+  "paused_day_title": "اليوم متوقف مؤقتاً",
+  "paused_day_body": "هذه العادة متوقفة في {day}. هل تريد تسجيلها على أي حال؟",
+  "@paused_day_body": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "rest_days_none": "لا شيء",
+  "last_90_days": "آخر 90 يوماً",
+  "last_12_months": "آخر 12 شهراً",
+  "consistency_vs_previous": "{change} مقارنة بالسابق",
+  "@consistency_vs_previous": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_clear_today": "مسح جلسات اليوم",
+  "focus_defaults": "الإعدادات الافتراضية للجلسات",
+  "plan_day": "خطة اليوم والمهام الفعالة",
+  "plan_day_sub": "تحديد وقت محدد للعادات وعرضها على خط الزمن.",
+  "plan_todos": "المهام في الخطة",
+  "plan_todos_sub": "عرض المهام المجدولة لذلك اليوم أسفل العادات.",
+  "plan_show_habits": "العادات",
+  "plan_show_both": "كلاهما",
+  "plan_show_todos": "المهام",
+  "swipe_cards": "السحب على بطاقات العادات",
+  "swipe_cards_sub": "السحب لليسار لإتمام العادة ولليمين للتراجع عنها.",
+  "habit_time": "وقت اليوم",
+  "habit_time_none": "في أي وقت",
+  "habit_time_sub": "يضع العادة في الخطة في هذا الوقت. وتظل تظهر طوال اليوم في قائمة اليوم.",
+  "habit_duration": "المدة",
+  "habit_duration_none": "بلا مدة",
+  "day_timeline": "يوم",
+  "day_timeline_free": "{span} حر",
+  "@day_timeline_free": {
+    "placeholders": {
+      "span": {
+        "type": "String"
+      }
+    }
+  },
+  "day_timeline_anytime": "في أي وقت",
+  "day_timeline_empty": "لا توجد أي خطط لهذا اليوم",
+  "day_timeline_empty_sub": "قم بتحديد وقت محدد من اليوم للعادة لتظهر هنا.",
+  "day_timeline_empty_todos": "قم بتعيين تاريخ لهذه المهمة لتظهر هنا.",
+  "clear": "مسح",
+  "start_view": "يفتح قسم اليوم على",
+  "start_view_last": "آخر استخدام",
+  "focus_stats": "إحصائيات التركيز",
+  "focus_average": "متوسط الجلسة",
+  "focus_log": "تسجيل جلسة",
+  "focus_log_date": "التاريخ",
+  "focus_log_saved": "تمت إضافة الجلسة",
+  "perfect_streak": "سلسلة الأيام المثالية",
+  "focus_history": "السجل",
+  "focus_history_empty": "لا توجد جلسات بعد",
+  "focus_history_empty_sub": "تظهر هنا كل جلسة تركيز تكملها.",
+  "focus_history_day": "{count, plural, =1{جلسة واحدة} other{{count} جلسات}}",
+  "@focus_history_day": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "heatmap_path": "ربط الأيام",
+  "heatmap_path_sub": "رسم الشبكة بمسار واحد متصل",
+  "sort_completed_last": "آخر ما تم إنجازه",
+  "sort_completed_last_sub": "إرسال العناصر المكتملة إلى أسفل القائمة",
+  "today_only": "مهام اليوم فقط",
+  "today_only_sub": "إخفاء العادات غير المجدولة لهذا اليوم",
+  "hide_done": "إخفاء المكتملة",
+  "hide_done_sub": "ما تنهيه اليوم يغادر القائمة",
+  "hide_clean": "إخفاء الأيام الخالية",
+  "hide_clean_sub": "إظهار أيام الانتكاسة فقط",
+  "past_first": "فتح الأيام السابقة أولاً",
+  "past_first_sub": "النقر على يوم سابق يجعله يظهر أولاً، حتى لا يتغير شيء عن طريق الخطأ",
+  "miss_reason_title": "لماذا فاتتك؟",
+  "miss_reasons": "سبب تفويتها",
+  "miss_other": "اخر",
+  "miss_other_hint": "اكتب سبب",
+  "miss_overslept": "النوم المفرط",
+  "miss_busy": "مشغول",
+  "miss_traveling": "مسافر",
+  "miss_sick": "مريض",
+  "miss_tired": "منهك",
+  "miss_forgot": "نسيت",
+  "day_not_done": "لم يتم إنجازها",
+  "day_clean": "خالي",
+  "day_log_relapse": "تسجيل إنتكاسة",
+  "day_amount": "{value} من {goal}",
+  "@day_amount": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "today_filter": "إظهار"
 }

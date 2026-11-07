@@ -1443,7 +1443,7 @@
   "todo_project_empty": "아직 이 폴더에 아무것도 없어요",
   "onb_kicker": "환영해요",
   "focus_track_fire": "불",
-  "todo_sort": "우선순위 순서",
+  "todo_sort": "할 일 정렬",
   "todo_sort_high_first": "높은 우선순위 먼저",
   "todo_sort_low_first": "낮은 우선순위 먼저",
   "todo_list_item": "목록 항목",
@@ -2087,5 +2087,61 @@
   "at_most_sub": "목표가 제한에 해당해요. 무언가 기록한 뒤 목표 이하를 유지하면 하루가 완료돼요.",
   "todo_repeat_starts": "시작",
   "hide_clean": "절제한 날 숨김",
-  "hide_clean_sub": "절제 습관은 실수한 날만 표시하기"
+  "hide_clean_sub": "절제 습관은 실수한 날만 표시하기",
+  "todo_sort_time": "시간순",
+  "todo_sort_name": "가나다순",
+  "app_lock_biometric_sub": "지문, 얼굴이나 폰에서 이미 사용하던 잠금 방식",
+  "every_hours_minutes": "{h}시간 {m}분마다",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "every_n_minutes": "{n}분마다",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_focus_only": "집중 시간으로만",
+  "todo_focus_only_body": "\"{name}\" 할 일은 {minutes}분 집중 시간을 끝내야 완료돼요.",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "edit_profile": "프로필 편집",
+  "widget_cfg_habit_colors": "습관 색상",
+  "widget_cfg_habit_colors_hint": "막대의 색상으로 각 습관의 시간 표시",
+  "habit_time_more": "시간 더 추가",
+  "habit_time_again": "다시",
+  "import_card_body": "다른 앱에서 습관과 기록 가져오기",
+  "notif_quote_1": "연속 기록을 유지하기에 좋은 날이네요! 🔥",
+  "notif_quote_5": "꾸준함이 재능을 이겨요.",
+  "notif_quote_4": "작은 발걸음이, 큰 변화가 돼요. 가보죠!",
+  "notif_quote_6": "완벽할 필요 없어요, 실행만 하면 돼요.",
+  "notif_quote_12": "오늘의 규율이 내일의 자유예요.",
+  "notif_quote_13": "계속 해내봐요. 그게 마법이 될 거예요.",
+  "notif_quote_14": "가장 어려운 부분이야말로 의미를 만들어요.",
+  "notif_quote_15": "한 번에 한 습관씩, 그렇게 삶이 바뀌어요.",
+  "notif_quote_9": "당신을 위해 해내세요. 그럴 자격이 있어요.",
+  "notif_quote_3": "미래의 나 자신이 고마워할 거예요.",
+  "notif_quote_2": "하루에 한 걸음, 되고픈 모습에 더 가까워져요.",
+  "notif_quote_10": "지금이 적기예요.",
+  "notif_quote_11": "기록 하나하나에도 의미가 있어요. 하나 더해봐요.",
+  "notif_quote_7": "오늘의 2분이 내일의 1시간보다 더 나아요.",
+  "notif_quote_8": "연속 기록은 매일 하루씩 쌓여요.",
+  "todo_repeat_last_day": "마지막 날에"
 }
