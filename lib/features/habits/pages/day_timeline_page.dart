@@ -294,7 +294,13 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     final weekStart = context.watch<SettingsController>().weekStart;
     final dueTodos = _todosOf(context);
     final plan = DayPlan.of(
-      context.watch<SettingsController>().planHabits ? habits : const [],
+      context.watch<SettingsController>().planHabits
+          ? habits
+                .where((h) =>
+                    !(context.watch<SettingsController>().hideTracking &&
+                        h.tracking))
+                .toList()
+          : const [],
       _day,
       todos: dueTodos,
     );
