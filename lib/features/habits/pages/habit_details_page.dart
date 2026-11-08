@@ -241,7 +241,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                     const SizedBox(width: 16),
                   ],
           ),
-          body: _DetailBackground(
+          body: _SolidNavBar(child: _DetailBackground(
             coverPath: habit.coverPath,
             clarity: habit.coverClarity,
             child: ListView(
@@ -382,9 +382,34 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   _VacationTile(habit: habit),
               ],
             ),
-          ),
+          )),
         );
       },
+    );
+  }
+}
+
+class _SolidNavBar extends StatelessWidget {
+  const _SolidNavBar({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: MediaQuery.removeViewPadding(
+            context: context,
+            removeBottom: true,
+            child: child,
+          ),
+        ),
+        ColoredBox(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: SizedBox(width: double.infinity, height: context.bottomInset),
+        ),
+      ],
     );
   }
 }
