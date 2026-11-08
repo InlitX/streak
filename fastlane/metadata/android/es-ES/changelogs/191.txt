@@ -1,0 +1,10 @@
+Streak 2.8.0
+
+- Tira semanal en Hoy con una hoja por día (apagada por defecto)
+- Atajos de teclado en escritorio
+- Usar el color de acento del sistema
+- Focus: cambiar de hábito durante el descanso
+- Tareas: añadir con un toque, plegar secciones, arreglos en etiquetas
+- Plan oculta los hábitos de solo seguimiento si ese filtro está activo
+- Texto de botones legible y zona sólida bajo los botones de navegación
+- Correcciones e idiomas actualizados

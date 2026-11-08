@@ -1,0 +1,10 @@
+Streak 2.8.0
+
+- Weekly strip in Today with a sheet for each day (off by default)
+- Keyboard shortcuts on desktop
+- Use the system accent color
+- Focus: change habit during a break
+- To-dos: add in one tap, fold sections, tag fixes
+- Plan hides just-tracking habits when that filter is on
+- Readable button text and a solid area behind the navigation buttons
+- Fixes and updated languages
