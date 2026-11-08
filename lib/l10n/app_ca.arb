@@ -802,7 +802,7 @@
   "todo_list_item": "Element de la llista",
   "todo_title_hint": "Títol",
   "todo_body_hint": "Nota",
-  "todo_sort": "Ordre de prioritat",
+  "todo_sort": "Ordena les tasques",
   "todo_sort_high_first": "Primer, allò d'alta prioritat",
   "todo_sort_low_first": "Primer, la prioritat baixa",
   "todo_project_empty": "Encara no hi ha res en aquesta carpeta",
@@ -2087,5 +2087,61 @@
   "check_sound": "So en completar",
   "check_sound_sub": "Un so suau quan completes un hàbit. Silenciós quan el telèfon està en silenci.",
   "book_at_page": "Pàgina en què em trobo",
-  "book_read_before": "Vegades ja llegit"
+  "book_read_before": "Vegades ja llegit",
+  "import_card_body": "Porta els teus hàbits i el teu historial d'altres aplicacions",
+  "every_n_minutes": "Cada {n} min",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "every_hours_minutes": "Cada {h} h {m} min",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_focus_only": "Només amb una sessió de concentració",
+  "todo_focus_only_body": "«{name}» es completa acabant una sessió de concentració de {minutes} minuts.",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_time_more": "Afegeix un altre moment",
+  "habit_time_again": "De nou",
+  "edit_profile": "Edita el perfil",
+  "widget_cfg_habit_colors": "Colors de l'hàbit",
+  "widget_cfg_habit_colors_hint": "Cada barra mostra el temps de cada hàbit en el seu color",
+  "notif_quote_1": "Avui és un dia fantàstic per mantenir viva la ratxa! 🔥",
+  "notif_quote_2": "Un dia més, un pas més a prop de qui vols ser.",
+  "notif_quote_3": "Un dia més i un pas més a prop de qui vols ser.",
+  "notif_quote_4": "Petits passos, grans canvis. Som-hi!",
+  "notif_quote_5": "La constància supera el talent.",
+  "notif_quote_6": "No cal que sigui perfecte, només cal que passi.",
+  "notif_quote_7": "Dos minuts ara valen més que una hora demà.",
+  "notif_quote_8": "Les ratxes es construeixen dia a dia.",
+  "notif_quote_9": "Fes-ho per a tu. T'ho mereixes.",
+  "notif_quote_10": "El moment perfecte és ara.",
+  "notif_quote_11": "Cada marca compta. Afegeix-ne una més.",
+  "notif_quote_12": "La disciplina d'avui és la llibertat de demà.",
+  "notif_quote_13": "Continua present. Aquí és on hi ha la màgia.",
+  "notif_quote_14": "La part difícil és el que fa que valgui la pena.",
+  "notif_quote_15": "Un hàbit a la vegada; així és com canvia una vida.",
+  "app_lock_biometric_sub": "L'empremta dactilar, la cara o el bloqueig que ja utilitzes en aquest telèfon",
+  "todo_repeat_last_day": "L'últim dia",
+  "todo_sort_time": "Per data i hora",
+  "todo_sort_name": "De la A a la Z"
 }
