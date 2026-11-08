@@ -780,6 +780,8 @@
   "focus_end": "End",
   "focus_pick_habit": "What are you focusing on?",
   "focus_change_habit": "Change habit",
+  "today_week_strip": "Week strip",
+  "today_week_strip_sub": "The seven days of the week at the top of Today. Tap a day to see its habits.",
   "shortcuts_title": "Keyboard shortcuts",
   "shortcuts_sub": "Every shortcut at a glance",
   "shortcuts_hint": "Open this list any time with {keys}",

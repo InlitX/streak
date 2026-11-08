@@ -717,6 +717,8 @@
   "focus_end": "Terminar",
   "focus_pick_habit": "¿En qué te vas a concentrar?",
   "focus_change_habit": "Cambiar de hábito",
+  "today_week_strip": "Tira de la semana",
+  "today_week_strip_sub": "Los siete días de la semana arriba en Hoy. Toca un día para ver sus hábitos.",
   "shortcuts_title": "Atajos de teclado",
   "shortcuts_sub": "Todos los atajos de un vistazo",
   "shortcuts_hint": "Abre esta lista cuando quieras con {keys}",
