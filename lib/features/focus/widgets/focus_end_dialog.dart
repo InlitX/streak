@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 
@@ -63,9 +64,7 @@ class FocusEndDialog extends StatelessWidget {
                     ? context.l10n.focus_end_add_time
                     : context.l10n.focus_end_complete,
                 background: color,
-                foreground: color.computeLuminance() > 0.6
-                    ? Colors.black
-                    : Colors.white,
+                foreground: color.ink,
                 onTap: () => Navigator.of(context).pop('done'),
               ),
               const SizedBox(height: 10),
@@ -78,9 +77,7 @@ class FocusEndDialog extends StatelessWidget {
                   ? color
                   : context.colors.surfaceContainerHighest,
               foreground: reached
-                  ? (color.computeLuminance() > 0.6
-                      ? Colors.black
-                      : Colors.white)
+                  ? color.ink
                   : context.colors.onSurface,
               onTap: () => Navigator.of(context).pop('end'),
             ),

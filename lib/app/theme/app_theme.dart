@@ -114,7 +114,7 @@ class AppTheme {
 
     return base.copyWith(
       primary: accent,
-      onPrimary: accent.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+      onPrimary: accent.computeLuminance() > 0.179 ? Colors.black : Colors.white,
       surface: dark ? const Color(0xFF121212) : const Color(0xFFF2F2F2),
       surfaceContainerLowest:
           dark ? const Color(0xFF171717) : const Color(0xFFFFFFFF),
@@ -231,7 +231,7 @@ class AppTheme {
       brightness: brightness,
     ).copyWith(
       primary: accent,
-      onPrimary: accent.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+      onPrimary: accent.computeLuminance() > 0.179 ? Colors.black : Colors.white,
       surface: isDark
           ? (minimal ? AppPalette.paperDark : AppPalette.darkSurface)
           : (minimal ? const Color(0xFFFFFFFF) : const Color(0xFFFAFAFC)),
