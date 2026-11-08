@@ -2143,5 +2143,31 @@
   "app_lock_biometric_sub": "L'empremta dactilar, la cara o el bloqueig que ja utilitzes en aquest telèfon",
   "todo_repeat_last_day": "L'últim dia",
   "todo_sort_time": "Per data i hora",
-  "todo_sort_name": "De la A a la Z"
+  "todo_sort_name": "De la A a la Z",
+  "focus_change_habit": "Canviar d'hàbit",
+  "shortcuts_title": "Dreceres de teclat",
+  "shortcuts_sub": "Totes les dreceres d'un cop d'ull",
+  "shortcuts_hint": "Obre aquesta llista en qualsevol moment amb {keys}",
+  "@shortcuts_hint": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
+  "shortcuts_group_nav": "Navegar",
+  "shortcuts_group_create": "Crea i edita",
+  "shortcuts_group_focus": "Focus",
+  "shortcuts_go_tab": "Vés a la pestanya 1 a la 5",
+  "shortcuts_next_tab": "Pestanya següent",
+  "shortcuts_prev_tab": "Pestanya anterior",
+  "shortcuts_settings": "Obre la configuració",
+  "shortcuts_back": "Torna enrere o tanca",
+  "shortcuts_help": "Mostra aquesta llista",
+  "shortcuts_new": "Nou hàbit o tasca pendent",
+  "shortcuts_new_project": "Nou projecte",
+  "shortcuts_search": "Cerca tasques",
+  "shortcuts_save": "Desa",
+  "shortcuts_toggle": "Inicia o posa en pausa el temporitzador",
+  "shortcuts_start": "Inicia la sessió"
 }
