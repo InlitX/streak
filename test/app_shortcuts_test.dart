@@ -89,6 +89,10 @@ void main() {
     await chord(tester, LogicalKeyboardKey.keyN);
     expect(find.byType(HabitFormPage), findsOneWidget);
 
+    await chord(tester, LogicalKeyboardKey.keyN);
+    expect(find.byType(HabitFormPage), findsOneWidget,
+        reason: 'no apila otro formulario');
+
     await chord(tester, LogicalKeyboardKey.keyS);
     expect(find.byType(HabitFormPage), findsOneWidget,
         reason: 'sin nombre no guarda');

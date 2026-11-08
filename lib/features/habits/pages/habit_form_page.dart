@@ -63,7 +63,12 @@ class HabitFormPage extends StatefulWidget {
 
 class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   @override
-  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.save: _save};
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        AppShortcut.save: _save,
+        AppShortcut.create: () {},
+        AppShortcut.createFolder: () {},
+        AppShortcut.find: () {},
+      };
 
   late final TextEditingController _name;
   late final TextEditingController _description;

@@ -44,7 +44,12 @@ class NoteEditorPage extends StatefulWidget {
 
 class _NoteEditorPageState extends State<NoteEditorPage> with ShortcutHost {
   @override
-  Map<AppShortcut, VoidCallback> get shortcuts => {AppShortcut.save: _save};
+  Map<AppShortcut, VoidCallback> get shortcuts => {
+        AppShortcut.save: _save,
+        AppShortcut.create: () {},
+        AppShortcut.createFolder: () {},
+        AppShortcut.find: () {},
+      };
 
   late final TextEditingController _text =
       TextEditingController(text: widget.note?.text ?? '');
