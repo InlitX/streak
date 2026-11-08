@@ -806,6 +806,13 @@ List<Widget> _preferenceTiles(BuildContext context) {
           onChanged: settings.setShowTodayProgress,
         ),
         _Toggle(
+          icon: LucideIcons.calendarRange,
+          title: context.l10n.today_week_strip,
+          subtitle: context.l10n.today_week_strip_sub,
+          value: settings.todayWeekStrip,
+          onChanged: settings.setTodayWeekStrip,
+        ),
+        _Toggle(
           icon: LucideIcons.bellOff,
           title: context.l10n.quiet_when_done,
           subtitle: context.l10n.quiet_when_done_sub,

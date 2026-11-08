@@ -531,6 +531,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.calendarRange,
+                    title: context.l10n.today_week_strip,
+                    subtitle: context.l10n.today_week_strip_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.todayWeekStrip ? 1 : 0,
+                      onChanged: (i) => settings.setTodayWeekStrip(i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.moveHorizontal,
                     title: context.l10n.swipe_cards,
                     subtitle: context.l10n.swipe_cards_sub,

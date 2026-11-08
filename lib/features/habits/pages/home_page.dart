@@ -41,6 +41,8 @@ import 'package:streak/features/habits/widgets/classic_habit_list.dart';
 import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/express_habit_list.dart';
 import 'package:streak/features/habits/widgets/express_today_hero.dart';
+import 'package:streak/features/habits/widgets/today_day_sheet.dart';
+import 'package:streak/features/habits/widgets/today_week_strip.dart';
 import 'package:streak/features/habits/widgets/today_filter_sheet.dart';
 import 'package:streak/features/habits/widgets/grid_habit_cards.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
@@ -793,6 +795,23 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                       ],
                     );
 
+              final strip = settings.todayWeekStrip && !_reordering
+                  ? TodayWeekStrip(
+                      habits: all,
+                      onSelected: (day) => showTodayDaySheet(
+                        context,
+                        day: day,
+                        onToggle: _toggle,
+                      ),
+                    )
+                  : null;
+              final headed = strip == null
+                  ? header
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [strip, header],
+                    );
+
               final ValueChanged<Habit>? swipe = settings.swipeCards
                   ? (habit) => _toggle(habit, today)
                   : null;
@@ -818,7 +837,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                         habits: visible,
                         mode: _mode,
                         reordering: _reordering,
-                        header: header,
+                        header: headed,
                         fold: fold,
                         more: more,
                         onReorder: (oldIndex, newIndex) =>
@@ -835,7 +854,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                     ? MinimalHabitList(
                         habits: visible,
                         mode: _mode,
-                        header: header,
+                        header: headed,
                         fold: fold,
                         more: more,
                         onOpen: _openDetails,
@@ -850,7 +869,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                         habits: visible,
                         mode: _mode,
                         reordering: _reordering,
-                        header: header,
+                        header: headed,
                         fold: fold,
                         more: more,
                         onReorder: (oldIndex, newIndex) =>

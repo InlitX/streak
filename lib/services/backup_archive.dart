@@ -68,6 +68,7 @@ const backupSettingKeys = {
   'quoteSource',
   'readableCopy',
   'showTodayProgress',
+  'todayWeekStrip',
   'sortCompletedLast',
   'startView',
   'swipeCards',

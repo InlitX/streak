@@ -676,6 +676,15 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.calendarRange,
+              title: context.l10n.today_week_strip,
+              subtitle: context.l10n.today_week_strip_sub,
+              trailing: _SoftSwitch(
+                value: settings.todayWeekStrip,
+                onChanged: settings.setTodayWeekStrip,
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.bellOff,
               title: context.l10n.quiet_when_done,
               subtitle: context.l10n.quiet_when_done_sub,
