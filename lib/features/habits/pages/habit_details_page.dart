@@ -33,6 +33,7 @@ import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/activity_calendar.dart';
 import 'package:streak/features/habits/widgets/day_actions_sheet.dart';
 import 'package:streak/features/habits/widgets/miss_reasons.dart';
+import 'package:streak/features/habits/widgets/past_check_notice.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/features/habits/widgets/minimal_detail_parts.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -134,7 +135,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           final allowed =
               await confirmUnscheduledDay(context, habit: habit, date: date);
           if (!allowed) return;
+          final wasDone = habit.isCompletedOn(date);
           await controller.toggle(habit.id, date);
+          if (!context.mounted) return;
+          announcePastCheck(context, controller, habit, date, wasDone);
         }
 
         void toggle(DateTime date) {
