@@ -2143,5 +2143,31 @@
   "notif_quote_11": "기록 하나하나에도 의미가 있어요. 하나 더해봐요.",
   "notif_quote_7": "오늘의 2분이 내일의 1시간보다 더 나아요.",
   "notif_quote_8": "연속 기록은 매일 하루씩 쌓여요.",
-  "todo_repeat_last_day": "마지막 날에"
+  "todo_repeat_last_day": "마지막 날에",
+  "focus_change_habit": "습관 변경",
+  "shortcuts_title": "키보드 단축키",
+  "shortcuts_sub": "모든 단축키를 한눈에",
+  "shortcuts_hint": "언제든 {keys} 키를 눌러 이 목록을 여세요",
+  "@shortcuts_hint": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
+  "shortcuts_group_nav": "탐색",
+  "shortcuts_group_create": "생성 및 편집",
+  "shortcuts_group_focus": "집중",
+  "shortcuts_go_tab": "탭 1에서 5까지 이동",
+  "shortcuts_next_tab": "다음 탭",
+  "shortcuts_prev_tab": "이전 탭",
+  "shortcuts_settings": "설정 열기",
+  "shortcuts_back": "뒤로 또는 닫기",
+  "shortcuts_help": "이 목록 표시",
+  "shortcuts_new": "새 습관 또는 할 일",
+  "shortcuts_new_project": "새 프로젝트",
+  "shortcuts_search": "할 일 검색",
+  "shortcuts_save": "저장",
+  "shortcuts_toggle": "타이머 시작 또는 중지",
+  "shortcuts_start": "집중 시간 시작"
 }
