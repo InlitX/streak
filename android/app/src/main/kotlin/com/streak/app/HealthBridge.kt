@@ -67,7 +67,7 @@ object HealthBridge {
         if (status(activity) == "granted") return result.success(true)
         pending?.success(false)
         pending = result
-        activity.requestPermissions(arrayOf(HealthPermissions.READ_STEPS), REQUEST_CODE)
+        try { activity.requestPermissions(arrayOf(HealthPermissions.READ_STEPS), REQUEST_CODE) } catch (e: Exception) { pending = null; result.success(false) }
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
