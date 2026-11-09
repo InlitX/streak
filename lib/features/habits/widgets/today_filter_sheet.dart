@@ -5,6 +5,7 @@ import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_switch.dart';
 import 'package:streak/core/express/express_tabs.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -22,20 +23,34 @@ Future<void> showTodayFilterSheet(
   BuildContext context, {
   HeatmapMode? mode,
   ValueChanged<HeatmapMode>? onMode,
+  String query = '',
+  ValueChanged<String>? onQuery,
 }) {
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
-    builder: (_) => _TodayFilterSheet(mode: mode, onMode: onMode),
+    builder: (_) => _TodayFilterSheet(
+      mode: mode,
+      onMode: onMode,
+      query: query,
+      onQuery: onQuery,
+    ),
   );
 }
 
 class _TodayFilterSheet extends StatefulWidget {
-  const _TodayFilterSheet({this.mode, this.onMode});
+  const _TodayFilterSheet({
+    this.mode,
+    this.onMode,
+    this.query = '',
+    this.onQuery,
+  });
 
   final HeatmapMode? mode;
   final ValueChanged<HeatmapMode>? onMode;
+  final String query;
+  final ValueChanged<String>? onQuery;
 
   @override
   State<_TodayFilterSheet> createState() => _TodayFilterSheetState();
@@ -43,6 +58,13 @@ class _TodayFilterSheet extends StatefulWidget {
 
 class _TodayFilterSheetState extends State<_TodayFilterSheet> {
   late HeatmapMode? _mode = widget.mode;
+  late final _query = TextEditingController(text: widget.query);
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
 
   void _pick(int index) {
     final mode = HeatmapMode.values[index];
@@ -64,7 +86,12 @@ class _TodayFilterSheetState extends State<_TodayFilterSheet> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        padding: EdgeInsets.fromLTRB(
+          20,
+          0,
+          20,
+          20 + MediaQuery.viewInsetsOf(context).bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,6 +101,14 @@ class _TodayFilterSheetState extends State<_TodayFilterSheet> {
               style: sheetTitleStyle(context, size: 18),
             ),
             const SizedBox(height: 18),
+            if (widget.onQuery != null) ...[
+              AppTextField(
+                hint: context.l10n.habits_search,
+                controller: _query,
+                onChanged: widget.onQuery,
+              ),
+              const SizedBox(height: 18),
+            ],
             if (mode != null) ...[
               if (settings.isExpressStyle)
                 ExpressTabs(

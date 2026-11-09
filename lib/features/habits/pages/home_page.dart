@@ -34,6 +34,7 @@ import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/state/categories_controller.dart';
 import 'package:streak/features/habits/widgets/category_editor_sheet.dart';
+import 'package:streak/features/habits/widgets/past_check_notice.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/island/data/island_ledger.dart';
 import 'package:streak/features/island/widgets/island_coins.dart';
@@ -86,6 +87,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
   final _confetti = ValueNotifier(0);
   final _scrolled = ValueNotifier(false);
   String? _category;
+  String _search = '';
   late HeatmapMode _mode;
   bool _reordering = false;
 
@@ -146,6 +148,8 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
       context,
       mode: modes ? _mode : null,
       onMode: _changeMode,
+      query: _search,
+      onQuery: (value) => setState(() => _search = value),
     );
   }
 
@@ -491,7 +495,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                   icon: LucideIcons.listFilter,
                   tooltip: context.l10n.today_filter,
                   style: MorphMenuStyle.paper(context),
-                  active: todayFiltered(settings),
+                  active: todayFiltered(settings) || _search.isNotEmpty,
                   onTap: () => _openFilter(settings),
                 ),
                 const SizedBox(width: 10),
@@ -715,9 +719,15 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                           h.kind != HabitKind.negative || h.isRelapseOn(today))
                       .toList()
                   : tracked;
-              final filtered = _category == null
+              final inCategory = _category == null
                   ? listed
                   : listed.where((h) => h.category == _category).toList();
+              final needle = _search.trim().toLowerCase();
+              final filtered = needle.isEmpty
+                  ? inCategory
+                  : inCategory
+                      .where((h) => h.name.toLowerCase().contains(needle))
+                      .toList();
 
               final hidingDone = settings.hideDone && !_reordering;
               final shown = hidingDone
@@ -763,7 +773,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                       categories: categories,
                       category: _category,
                       onCategory: _pickCategory,
-                      filtered: todayFiltered(settings),
+                      filtered: todayFiltered(settings) || _search.isNotEmpty,
                       onFilter: openFilter,
                       allDone: allDone,
                     )
@@ -786,7 +796,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                             categories: categories,
                             selected: _category,
                             onSelected: _pickCategory,
-                            filtered: todayFiltered(settings),
+                            filtered: todayFiltered(settings) || _search.isNotEmpty,
                             onFilter: minimal ? null : openFilter,
                           ),
                         ],
@@ -957,6 +967,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
 
     await controller.toggle(id, date);
     if (!mounted) return;
+    announcePastCheck(context, controller, habit, date, wasDone);
 
     final updated = controller.byId(id);
     if (today &&
