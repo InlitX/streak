@@ -40,13 +40,25 @@ class _YearHeatmapState extends State<YearHeatmap> {
 
   bool _rollingFor(bool on) => on && widget.year == AppClock.now().year;
 
+  bool get _wholeHistory =>
+      widget.habit != null && widget.year == AppClock.now().year;
+
   DateTime _startFrom(bool rolling, int weekStart) {
+    final habit = widget.habit;
     if (rolling) {
-      return AppClock.today()
+      final recent = AppClock.today()
           .startOfWeek(weekStart)
           .addDays(-(7 * 52));
+      if (!_wholeHistory) return recent;
+      final first = habit!.startedAt.startOfWeek(weekStart);
+      final floor = recent.addDays(-7 * 467);
+      if (!first.isBefore(recent)) return recent;
+      return first.isBefore(floor) ? floor : first;
     }
-    return DateTime(widget.year, 1, 1).startOfWeek(weekStart);
+    final firstYear = _wholeHistory
+        ? habit!.startedAt.year.clamp(widget.year - 9, widget.year)
+        : widget.year;
+    return DateTime(firstYear, 1, 1).startOfWeek(weekStart);
   }
 
   @override
@@ -92,14 +104,17 @@ class _YearHeatmapState extends State<YearHeatmap> {
     final rolling = _rollingFor(settings.heatmapRolling);
     final start = _startFrom(rolling, settings.weekStart);
     final lastOfYear = DateTime(widget.year, 12, 31);
-    final columns =
-        rolling ? 53 : (lastOfYear.epochDay - start.epochDay) ~/ 7 + 1;
+    final columns = rolling
+        ? (today.startOfWeek(settings.weekStart).epochDay - start.epochDay) ~/ 7 + 1
+        : (lastOfYear.epochDay - start.epochDay) ~/ 7 + 1;
     final empty = context.colors.surfaceContainerHighest;
     final max = widget.maxCount <= 0 ? 1 : widget.maxCount;
     final locale = Localizations.localeOf(context).languageCode;
 
     Color cellColor(DateTime date) {
-      if (!rolling && date.year != widget.year) return Colors.transparent;
+      if (!rolling && (date.year > widget.year || (!_wholeHistory && date.year != widget.year))) {
+        return Colors.transparent;
+      }
       final habit = widget.habit;
       if (habit != null) return heatmapCellColor(context, habit, date);
       if (date.isAfter(today)) return empty.withValues(alpha: 0.4);
@@ -121,7 +136,7 @@ class _YearHeatmapState extends State<YearHeatmap> {
             children: List.generate(columns, (col) {
               final colDate = start.addDays(col * 7);
               final prevDate = start.addDays((col - 1) * 7);
-                      final isNewMonth = (rolling || colDate.year == widget.year) &&
+                      final isNewMonth = (rolling || _wholeHistory || colDate.year == widget.year) &&
                   (col == 0 || colDate.month != prevDate.month);
               return Padding(
                 padding: const EdgeInsets.only(right: _gap),
@@ -136,7 +151,10 @@ class _YearHeatmapState extends State<YearHeatmap> {
                               maxWidth: 40,
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                DateFormat.MMM(locale).format(colDate),
+                                (_wholeHistory && colDate.month == 1
+                                    ? DateFormat('MMM yy', locale)
+                                    : DateFormat.MMM(locale))
+                                    .format(colDate),
                                 textScaler: MediaQuery.textScalerOf(context)
                                     .clamp(maxScaleFactor: 1.2),
                                 style: TextStyle(

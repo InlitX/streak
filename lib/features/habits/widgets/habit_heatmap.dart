@@ -509,7 +509,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   }
 
   Widget _yearGrid(BuildContext context) {
-    const columns = 53;
+    final history = (_today.epochDay - _weekOf(widget.habit.startedAt).epochDay) ~/ 7 + 1;
+    final columns = history < 53 ? 53 : (history > 520 ? 520 : history);
     final path = heatmapPathOn(context);
     final gap = path ? heatmapPathGap : 3.0;
     const cell = 13.0;
