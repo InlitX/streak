@@ -222,7 +222,11 @@ class ImportService {
           unitLabel: measurable ? r.unit : '',
           completions: completions,
           createdAt: createdAt,
-          archivedAt: r.archived ? DateTime.now() : null,
+          archivedAt: r.archived
+              ? (r.days.isEmpty
+                  ? DateTime.now()
+                  : r.days.keys.reduce((a, b) => a.isAfter(b) ? a : b))
+              : null,
         ),
       );
     }
@@ -474,9 +478,17 @@ class ImportService {
       }
     }
 
-    final ordered = byId.values.toList()
-      ..sort((a, b) => a.order.compareTo(b.order));
-    return [for (final e in ordered) e.habit];
+    final ordered = byId.entries.toList()
+      ..sort((a, b) {
+        final archived = (a.value.habit.archived ? 1 : 0) -
+            (b.value.habit.archived ? 1 : 0);
+        if (archived != 0) return archived;
+        if (a.value.habit.archived) {
+          return (int.tryParse(a.key) ?? 0).compareTo(int.tryParse(b.key) ?? 0);
+        }
+        return a.value.order.compareTo(b.value.order);
+      });
+    return [for (final e in ordered) e.value.habit];
   }
 
   static List<int>? _entry(Map<String, List<int>> files, String basename,
