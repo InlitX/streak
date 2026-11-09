@@ -7,6 +7,7 @@ import 'package:streak/core/utils/cover_storage.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_groups.dart';
 import 'package:streak/features/todos/data/todo_repeat.dart';
+import 'package:streak/services/check_sound.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/todos_widget_service.dart';
 import 'package:uuid/uuid.dart';
@@ -182,6 +183,7 @@ class TodosController extends ChangeNotifier {
       doneAt: done ? DateTime.now() : null,
       clearDoneAt: !done,
     );
+    if (done) CheckSound.play();
     _todos[index] = updated;
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
@@ -193,6 +195,7 @@ class TodosController extends ChangeNotifier {
     final todo = _todos[index];
     final next = todo.nextTime(AppClock.today());
     final record = todo.doneRecord(const Uuid().v4(), DateTime.now());
+    CheckSound.play();
     _todos[index] = next;
     _todos.add(record);
     notifyListeners();
