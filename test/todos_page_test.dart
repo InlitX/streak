@@ -8,6 +8,7 @@ import 'package:streak/features/todos/data/todo_tag.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/widgets/todo_tag_sheet.dart';
 import 'package:streak/features/todos/widgets/todo_tile.dart';
+import 'package:streak/features/todos/widgets/todos_page_parts.dart';
 
 import 'support/app_harness.dart';
 
@@ -36,7 +37,7 @@ void main() {
     expect(find.text('OVERDUE'), findsOneWidget);
     expect(find.text('TODAY'), findsOneWidget);
     expect(find.text('SOMEDAY'), findsOneWidget);
-    expect(find.text('Completed (1)'), findsOneWidget);
+    expect(find.text('COMPLETED'), findsOneWidget);
     expect(find.byType(TodoTile), findsNWidgets(3));
   });
 
@@ -47,10 +48,11 @@ void main() {
 
     expect(find.text('Water the plants'), findsNothing);
 
-    await tester.tap(find.text('Completed (1)'));
+    await tester.tap(find.text('COMPLETED'));
     await tester.pumpAndSettle();
 
     expect(find.text('Water the plants'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('checking a to-do moves it down to completed', (tester) async {
@@ -61,7 +63,14 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Mark Buy a lamp as done'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Completed (2)'), findsOneWidget);
+    expect(find.text('COMPLETED'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(TodoSectionHeader),
+        matching: find.text('2'),
+      ),
+      findsOneWidget,
+    );
     expect(find.text('SOMEDAY'), findsNothing);
     await tester.pump(const Duration(seconds: 1));
     handle.dispose();
