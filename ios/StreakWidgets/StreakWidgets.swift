@@ -9,6 +9,8 @@ struct StreakWidgets: WidgetBundle {
     StatsWidget()
     TodosWidget()
     HeatmapWidget()
+    FocusWidget()
+    FocusActivityWidget()
   }
 }
 

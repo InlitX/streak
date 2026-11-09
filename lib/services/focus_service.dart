@@ -24,7 +24,7 @@ class FocusService {
 
   static Future<void> Function()? onPending;
 
-  static bool get _available => !kIsWeb && Platform.isAndroid;
+  static bool get _available => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   static void listen() {
     if (!_available) return;

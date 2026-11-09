@@ -25,6 +25,11 @@
 		5B1D00010000000000000037 /* StatsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D00010000000000000027 /* StatsWidget.swift */; };
 		5B1D00010000000000000038 /* TodosWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D00010000000000000028 /* TodosWidget.swift */; };
 		5B1D00010000000000000039 /* HeatmapWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D00010000000000000029 /* HeatmapWidget.swift */; };
+		5B1D0001000000000000003A /* FocusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000002A /* FocusWidget.swift */; };
+		5B1D0001000000000000003B /* FocusAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000002B /* FocusAttributes.swift */; };
+		5B1D0001000000000000004B /* FocusAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000002B /* FocusAttributes.swift */; };
+		5B1D0001000000000000003C /* FocusActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000002C /* FocusActivityWidget.swift */; };
+		5B1D0001000000000000004D /* FocusLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000002D /* FocusLiveActivity.swift */; };
 		5B1D00010000000000000015 /* StreakWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5B1D0001000000000000000B /* StreakWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -96,6 +101,10 @@
 		5B1D00010000000000000027 /* StatsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsWidget.swift; sourceTree = "<group>"; };
 		5B1D00010000000000000028 /* TodosWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodosWidget.swift; sourceTree = "<group>"; };
 		5B1D00010000000000000029 /* HeatmapWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatmapWidget.swift; sourceTree = "<group>"; };
+		5B1D0001000000000000002A /* FocusWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusWidget.swift; sourceTree = "<group>"; };
+		5B1D0001000000000000002B /* FocusAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAttributes.swift; sourceTree = "<group>"; };
+		5B1D0001000000000000002C /* FocusActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusActivityWidget.swift; sourceTree = "<group>"; };
+		5B1D0001000000000000002D /* FocusLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusLiveActivity.swift; sourceTree = "<group>"; };
 		5B1D0001000000000000000B /* StreakWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StreakWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B1D00010000000000000018 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B1D00010000000000000019 /* StreakWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StreakWidgets.entitlements; sourceTree = "<group>"; };
@@ -171,6 +180,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */,
+				5B1D0001000000000000002D /* FocusLiveActivity.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				5B1D0001000000000000001A /* Runner.entitlements */,
 			);
@@ -190,6 +200,9 @@
 				5B1D00010000000000000027 /* StatsWidget.swift */,
 				5B1D00010000000000000028 /* TodosWidget.swift */,
 				5B1D00010000000000000029 /* HeatmapWidget.swift */,
+				5B1D0001000000000000002A /* FocusWidget.swift */,
+				5B1D0001000000000000002B /* FocusAttributes.swift */,
+				5B1D0001000000000000002C /* FocusActivityWidget.swift */,
 				5B1D00010000000000000018 /* Info.plist */,
 				5B1D00010000000000000019 /* StreakWidgets.entitlements */,
 			);
@@ -376,6 +389,8 @@
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				7884E8682EC3CC0700C636F2 /* SceneDelegate.swift in Sources */,
+				5B1D0001000000000000004B /* FocusAttributes.swift in Sources */,
+				5B1D0001000000000000004D /* FocusLiveActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +408,9 @@
 				5B1D00010000000000000037 /* StatsWidget.swift in Sources */,
 				5B1D00010000000000000038 /* TodosWidget.swift in Sources */,
 				5B1D00010000000000000039 /* HeatmapWidget.swift in Sources */,
+				5B1D0001000000000000003A /* FocusWidget.swift in Sources */,
+				5B1D0001000000000000003B /* FocusAttributes.swift in Sources */,
+				5B1D0001000000000000003C /* FocusActivityWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -39,6 +39,8 @@ import flutter_local_notifications
       name: "streak/app_icon", binaryMessenger: registrar.messenger())
     links.channel = channel
     self.channel = channel
+    FlutterMethodChannel(name: "streak/focus", binaryMessenger: registrar.messenger())
+      .setMethodCallHandler { call, result in FocusLiveActivity.handle(call, result) }
     channel.setMethodCallHandler { [weak self] call, result in
       let arguments = call.arguments as? [String: Any]
       switch call.method {

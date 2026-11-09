@@ -88,6 +88,8 @@
 	<string>Streak saves the cards and photos you export to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Streak reads photos you pick for your notes, habit covers and profile.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
