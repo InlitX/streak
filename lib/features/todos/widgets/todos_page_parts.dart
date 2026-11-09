@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
-import 'package:streak/core/widgets/fold_header.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -304,9 +303,11 @@ class TodoCompletedHeader extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => FoldHeader(
-        label: context.l10n.todo_completed_count(count),
-        expanded: expanded,
+  Widget build(BuildContext context) => TodoSectionHeader(
+        label: context.l10n.todo_completed,
+        count: count,
+        danger: false,
+        folded: !expanded,
         onTap: onTap,
       );
 }

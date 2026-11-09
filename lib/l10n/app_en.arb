@@ -727,6 +727,7 @@
   "@todo_completed_count": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "todo_completed": "Completed",
   "todo_search": "Search to-dos",
   "todo_search_empty": "Nothing matches that",
   "todo_clear_completed": "Clear completed",

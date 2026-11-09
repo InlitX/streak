@@ -667,6 +667,7 @@
   "pick_a_date": "Elegir fecha",
   "todo_left": "{count, plural, =0{Todo hecho} =1{1 pendiente} other{{count} pendientes}}",
   "todo_completed_count": "{count, plural, =1{Completadas (1)} other{Completadas ({count})}}",
+  "todo_completed": "Completadas",
   "todo_search": "Buscar tareas",
   "todo_search_empty": "No hay nada que coincida",
   "todo_clear_completed": "Borrar completadas",
