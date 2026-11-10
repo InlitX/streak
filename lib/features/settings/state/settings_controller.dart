@@ -100,6 +100,8 @@ class SettingsController extends ChangeNotifier {
     _quietWhenDone = LocalStore.setting('quietWhenDone', true);
     _difficultyOption = LocalStore.setting('difficultyOption', false);
     Habit.weighDifficulty = _difficultyOption;
+    _secondChances = LocalStore.setting('secondChances', true);
+    Habit.secondChances = _secondChances;
     _appLockMode = LocalStore.setting('appLockMode', 0);
     _islandEnabled = LocalStore.setting('islandEnabled', true);
     _quoteSource = LocalStore.setting('quoteSource', 0);
@@ -208,6 +210,7 @@ class SettingsController extends ChangeNotifier {
   late bool _todayWeekStrip;
   late bool _quietWhenDone;
   late bool _difficultyOption;
+  late bool _secondChances;
   late int _appLockMode;
   late int _quoteSource;
   late List<String> _customQuotes;
@@ -870,6 +873,15 @@ class SettingsController extends ChangeNotifier {
   }
 
   bool get difficultyOption => _difficultyOption;
+
+  bool get secondChances => _secondChances;
+
+  Future<void> setSecondChances(bool value) async {
+    _secondChances = value;
+    Habit.secondChances = value;
+    await LocalStore.writeSetting('secondChances', value);
+    notifyListeners();
+  }
 
   Future<void> setDifficultyOption(bool value) async {
     _difficultyOption = value;

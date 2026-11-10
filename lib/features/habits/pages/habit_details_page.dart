@@ -55,6 +55,7 @@ import 'package:streak/features/habits/widgets/quantitative_progress.dart';
 import 'package:streak/features/habits/pages/habit_stats_page.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/share_card.dart';
+import 'package:streak/features/habits/widgets/second_chances.dart';
 import 'package:streak/features/habits/widgets/streak_summary.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
@@ -314,6 +315,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                         : null,
                     child: MinimalStreakTiles(habit: habit, mode: _mode),
                   ),
+                  if (habit.usesChances) SecondChancesCard(habit: habit),
                   if (habit.hasCost)
                     MinimalSection(
                       title: context.l10n.money_saved,
@@ -328,6 +330,10 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                         : null,
                   ),
                   StreakSummary(habit: habit, mode: _mode),
+                  if (habit.usesChances) ...[
+                    const SizedBox(height: 10),
+                    SecondChancesCard(habit: habit),
+                  ],
                   if (habit.hasCost) ...[
                     const SizedBox(height: 12),
                     SavedMoneyCard(habit: habit),

@@ -799,6 +799,13 @@ List<Widget> _preferenceTiles(BuildContext context) {
           onChanged: settings.setDifficultyOption,
         ),
         _Toggle(
+          icon: LucideIcons.heartHandshake,
+          title: context.l10n.second_chances,
+          subtitle: context.l10n.second_chances_sub,
+          value: settings.secondChances,
+          onChanged: (value) => SettingsActions.setSecondChances(context, value),
+        ),
+        _Toggle(
           icon: LucideIcons.chartPie,
           title: context.l10n.today_progress_option,
           subtitle: context.l10n.today_progress_option_sub,

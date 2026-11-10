@@ -1158,6 +1158,7 @@ class NotificationActions {
     try {
       await LocalStore.init();
       AppClock.cutoffHour = LocalStore.setting('dayCutoff', 0);
+      Habit.secondChances = LocalStore.setting('secondChances', true);
       if (actionId == NotificationService.actionTodoDone) {
         await _finishTodo(habitId);
         return;

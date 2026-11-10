@@ -237,10 +237,12 @@ class HabitStats {
     final cutoff = AppClock.cutoffHour;
     final weigh = Habit.weighDifficulty;
     final weekStart = Habit.weekStart;
+    final chances = Habit.secondChances;
     return Isolate.run(() {
       AppClock.cutoffHour = cutoff;
       Habit.weighDifficulty = weigh;
       Habit.weekStart = weekStart;
+      Habit.secondChances = chances;
       return compute(habits, year);
     });
   }

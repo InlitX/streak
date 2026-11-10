@@ -66,6 +66,12 @@ class SettingsActions {
     habits.recount();
   }
 
+  static Future<void> setSecondChances(BuildContext context, bool value) async {
+    final habits = context.read<HabitsController>();
+    await context.read<SettingsController>().setSecondChances(value);
+    habits.recount();
+  }
+
   static Future<void> importBackup(BuildContext context) async {
     final controller = context.read<HabitsController>();
     final replace = await _askImportMode(context);

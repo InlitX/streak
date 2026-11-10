@@ -26,6 +26,7 @@ import 'package:streak/core/widgets/page_motion.dart';
 import 'package:streak/core/widgets/glass.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/day_timeline_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -122,6 +123,7 @@ class _HomeShellState extends State<HomeShell>
       AppSnackbar.success(context, context.l10n.focus_goal_reached(habit.name));
     };
     _waitForNextDay();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _announceChances());
     unawaited(HealthSteps.sync(habits));
     final settings = context.read<SettingsController>();
     AutoSync.start(
@@ -131,6 +133,23 @@ class _HomeShellState extends State<HomeShell>
       },
       save: () => settings.runAutoBackup(force: true, archive: false),
     );
+  }
+
+  void _announceChances() {
+    if (!mounted || ModalRoute.of(context)?.isCurrent == false) return;
+    final recent = AppClock.today().epochDay - 7;
+    var latest = LocalStore.setting('chanceNoticeDay', 0);
+    if (latest < recent) latest = recent - 1;
+    Habit? saved;
+    for (final habit in context.read<HabitsController>().habits) {
+      final days = habit.savedDays;
+      if (days.isEmpty || days.last.epochDay <= latest) continue;
+      latest = days.last.epochDay;
+      saved = habit;
+    }
+    if (saved == null) return;
+    unawaited(LocalStore.writeSetting('chanceNoticeDay', latest));
+    AppSnackbar.info(context, context.l10n.chance_used_notice(saved.name));
   }
 
   void _waitForNextDay() {
@@ -269,6 +288,7 @@ class _HomeShellState extends State<HomeShell>
       final habits = context.read<HabitsController>();
       if (Platform.isIOS) _applyWidgetActions(habits);
       habits.refresh().then((_) {
+        _announceChances();
         HomeWidgetService.sync(habits.asMap);
         return HealthSteps.sync(habits);
       });

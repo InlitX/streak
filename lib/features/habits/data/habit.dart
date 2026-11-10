@@ -305,6 +305,9 @@ class Habit {
 
   static bool weighDifficulty = false;
   static int weekStart = DateTime.monday;
+  static bool secondChances = false;
+  static const chanceEvery = 30;
+  static const chanceCap = 3;
 
   int get difficultyWeight => !weighDifficulty
       ? 2
@@ -694,9 +697,63 @@ class Habit {
     return count;
   }
 
+  bool get usesChances =>
+      secondChances &&
+      kind != HabitKind.negative &&
+      !tracking &&
+      (interval == HabitInterval.daily ||
+          interval == HabitInterval.weekdays ||
+          interval == HabitInterval.everyXDays);
+
+  late final ({int current, int best, int left, List<DateTime> saved})?
+      _chances = _chanceRun();
+
+  int get chancesLeft => _chances?.left ?? 0;
+
+  List<DateTime> get savedDays => _chances?.saved ?? const [];
+
+  ({int current, int best, int left, List<DateTime> saved})? _chanceRun() {
+    if (!usesChances) return null;
+    final today = AppClock.today();
+    final daily = interval == HabitInterval.daily;
+    var run = 0;
+    var best = 0;
+    var bank = 0;
+    var missed = false;
+    var saved = <DateTime>[];
+    for (var day = startedAt; !day.isAfter(today); day = day.addDays(1)) {
+      if (isNeutralOn(day) || (!daily && !isScheduledOn(day))) continue;
+      if (daily ? isCompletedOn(day) : isSatisfiedOn(day)) {
+        run++;
+        if (run > best) best = run;
+        if (run % chanceEvery == 0 && bank < chanceCap) bank++;
+        missed = false;
+        continue;
+      }
+      if (day.isAtSameMomentAs(today)) continue;
+      if (!missed && bank > 0) {
+        bank--;
+        missed = true;
+        saved.add(day);
+        continue;
+      }
+      run = 0;
+      bank = 0;
+      missed = false;
+      saved = [];
+    }
+    return (
+      current: run,
+      best: best,
+      left: bank,
+      saved: saved,
+    );
+  }
+
   late final int currentStreak = _currentStreak();
 
   int _currentStreak() {
+    if (_chances case final chances?) return chances.current;
     final floor = startedAt;
 
     if (kind == HabitKind.negative) {
@@ -850,6 +907,7 @@ class Habit {
   }
 
   int _longestStreak() {
+    if (_chances case final chances?) return chances.best;
     if (kind == HabitKind.negative) return _dailyBest();
 
     if (completions.isEmpty) return 0;

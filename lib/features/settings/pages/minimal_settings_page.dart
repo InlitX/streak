@@ -667,6 +667,16 @@ class _PreferencesPage extends StatelessWidget {
               ),
             ),
             SoftRow(
+              icon: LucideIcons.heartHandshake,
+              title: context.l10n.second_chances,
+              subtitle: context.l10n.second_chances_sub,
+              trailing: _SoftSwitch(
+                value: settings.secondChances,
+                onChanged: (value) =>
+                    SettingsActions.setSecondChances(context, value),
+              ),
+            ),
+            SoftRow(
               icon: LucideIcons.chartPie,
               title: context.l10n.today_progress_option,
               subtitle: context.l10n.today_progress_option_sub,

@@ -653,6 +653,18 @@ class _ClassicPreferencesPage extends StatelessWidget {
                   ),
                   settingsDivider(context),
                   SettingRow(
+                    icon: LucideIcons.heartHandshake,
+                    title: context.l10n.second_chances,
+                    subtitle: context.l10n.second_chances_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.secondChances ? 1 : 0,
+                      onChanged: (i) =>
+                          SettingsActions.setSecondChances(context, i == 1),
+                    ),
+                  ),
+                  settingsDivider(context),
+                  SettingRow(
                     icon: LucideIcons.bellOff,
                     title: context.l10n.quiet_when_done,
                     subtitle: context.l10n.quiet_when_done_sub,

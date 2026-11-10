@@ -16,6 +16,7 @@ Future<bool?> showAppConfirmDialog(
   Widget? body,
   IconData icon = LucideIcons.trash2,
   bool danger = true,
+  bool single = false,
 }) {
   return showDialog<bool>(
     context: context,
@@ -108,6 +109,9 @@ Future<bool?> showAppConfirmDialog(
                       style: sheetActionStyle(dialogContext),
                     ),
                   );
+                  if (single) {
+                    return SizedBox(width: double.infinity, child: confirm);
+                  }
                   if (stacked) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
