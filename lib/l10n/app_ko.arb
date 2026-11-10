@@ -2169,5 +2169,7 @@
   "shortcuts_search": "할 일 검색",
   "shortcuts_save": "저장",
   "shortcuts_toggle": "타이머 시작 또는 중지",
-  "shortcuts_start": "집중 시간 시작"
+  "shortcuts_start": "집중 시간 시작",
+  "today_week_strip_sub": "오늘 탭의 상단에 한 주의 7일을 표시해요. 날짜를 눌러 습관을 확인하세요.",
+  "today_week_strip": "주간 띠"
 }
