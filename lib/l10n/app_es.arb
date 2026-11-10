@@ -482,6 +482,7 @@
   "any_step_sub": "Marcar un paso ya da el día por hecho, sin tener que hacerlos todos.",
   "steps_needed_sub": "El día cuenta como hecho con {needed} de {total} pasos.",
   "sched_start": "Empieza el",
+  "avoid_since": "Desde el",
   "from_last_done": "Contar desde la última vez",
   "month_weekday": "Mismo día de la semana cada mes",
   "month_weekday_sub": "Cae el {when} del mes, no en una fecha fija.",

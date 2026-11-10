@@ -184,6 +184,7 @@ class HabitsController extends ChangeNotifier {
     List<(int, int)> moreTimes = const [],
     List<Substep> substeps = const [],
     List<int> restDays = const [],
+    DateTime? createdAt,
   }) async {
     final id = _uuid.v4();
     final habit = Habit(
@@ -233,6 +234,7 @@ class HabitsController extends ChangeNotifier {
       moreTimes: moreTimes,
       substeps: substeps,
       restDays: restDays,
+      createdAt: createdAt,
     );
     _habits[id] = habit;
     await LocalStore.writeHabit(habit);

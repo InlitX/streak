@@ -230,18 +230,20 @@ class ScheduleStartRow extends StatelessWidget {
     super.key,
     required this.start,
     required this.onChanged,
+    this.since = false,
   });
 
   final DateTime start;
   final ValueChanged<DateTime> onChanged;
+  final bool since;
 
   Future<void> _pick(BuildContext context) async {
     final today = AppClock.today();
     final picked = await showDatePicker(
       context: context,
       initialDate: start,
-      firstDate: DateTime(today.year - 1),
-      lastDate: DateTime(today.year + 1, 12, 31),
+      firstDate: DateTime(today.year - (since ? 30 : 1)),
+      lastDate: since ? today : DateTime(today.year + 1, 12, 31),
     );
     if (picked != null) onChanged(picked);
   }
@@ -264,7 +266,7 @@ class ScheduleStartRow extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  context.l10n.sched_start,
+                  since ? context.l10n.avoid_since : context.l10n.sched_start,
                   style: TextStyle(
                     color: scheme.onSurface,
                     fontWeight: FontWeight.w600,

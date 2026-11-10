@@ -522,6 +522,7 @@
     "placeholders": { "needed": { "type": "int" }, "total": { "type": "int" } }
   },
   "sched_start": "Starts on",
+  "avoid_since": "Since",
   "from_last_done": "Count from the last time",
   "month_weekday": "Same weekday every month",
   "month_weekday_sub": "Falls on the {when} of the month, not on a fixed date.",

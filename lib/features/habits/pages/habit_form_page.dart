@@ -88,6 +88,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   List<int> _scheduleWeekdays = const [1, 3, 5];
   int _scheduleEvery = 2;
   DateTime? _scheduleStart;
+  DateTime? _avoidSince;
   bool _fromLastDone = false;
   bool _monthWeekday = false;
   ScheduleUnit _scheduleUnit = ScheduleUnit.days;
@@ -209,6 +210,9 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       }
       _scheduleEvery = habit.scheduleEvery;
       _scheduleStart = habit.scheduleStart;
+      if (widget.isEditing && habit.kind == HabitKind.negative) {
+        _avoidSince = habit.createdAt.atMidnight;
+      }
       _fromLastDone = habit.fromLastDone;
       _monthWeekday = habit.monthWeekday;
       if (_copying && habit.interval == HabitInterval.everyXDays) {
@@ -264,6 +268,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         _scheduleWeekdays,
         _scheduleEvery,
         _scheduleStart?.toIso8601String(),
+        _avoidSince?.toIso8601String(),
         _fromLastDone,
         _monthWeekday,
         _scheduleUnit.name,
@@ -449,6 +454,11 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           durationMinutes: negative ? 0 : _durationMinutes,
           moreTimes: negative || _startMinute < 0 ? const [] : _moreTimes,
           substeps: substeps,
+          createdAt: negative &&
+                  _avoidSince != null &&
+                  _avoidSince != widget.habit!.createdAt.atMidnight
+              ? _avoidSince
+              : null,
         ).rememberGoal(widget.habit!).keepBook(widget.habit!),
       );
     } else {
@@ -504,6 +514,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         moreTimes: negative || _startMinute < 0 ? const [] : _moreTimes,
         substeps: substeps,
         restDays: template?.restDays ?? const [],
+        createdAt: negative ? _avoidSince : null,
       );
     }
     if (healthSteps) unawaited(HealthSteps.sync(controller));
@@ -753,6 +764,8 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         ],
       ],
       if (_kind == HabitKind.negative) ...[
+        const SizedBox(height: 12),
+        _avoidSinceRow(),
         const SizedBox(height: 12),
         CostField(controller: _dailyCost, color: _color),
         const SizedBox(height: 12),
@@ -1103,6 +1116,8 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         const SizedBox(height: 10),
         CompactNote(text: context.l10n.kind_negative_hint, color: _color),
         const SizedBox(height: 10),
+        _avoidSinceRow(),
+        const SizedBox(height: 10),
         CostField(controller: _dailyCost, color: _color),
         const SizedBox(height: 10),
         AvoidExtras(
@@ -1358,6 +1373,12 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
     ),
   ];
 
+  Widget _avoidSinceRow() => ScheduleStartRow(
+        start: _avoidSince ?? AppClock.today(),
+        since: true,
+        onChanged: (day) => setState(() => _avoidSince = day),
+      );
+
   Widget _totalGoalField({bool compact = false}) => TotalGoalField(
         goal: _totalGoal,
         compact: compact,
@@ -1514,6 +1535,8 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
             if (_kind == HabitKind.negative) ...[
               const SizedBox(height: 12),
               NegativeHint(color: _color),
+              const SizedBox(height: 12),
+              _avoidSinceRow(),
               const SizedBox(height: 12),
               CostField(controller: _dailyCost, color: _color),
               const SizedBox(height: 12),
