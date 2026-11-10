@@ -17,8 +17,6 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.cornerRadius
-import androidx.glance.appwidget.lazy.LazyColumn
-import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -129,7 +127,6 @@ class HabitWidget : GlanceAppWidget() {
         val keys = List(span) {
             dayAt(data, first + it)?.optString("key") ?: WidgetPayload.todayKey(context)
         }
-        val last = shown.size - 1
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -144,9 +141,10 @@ class HabitWidget : GlanceAppWidget() {
             }
             if (shown.isEmpty()) {
                 EmptyNote(WidgetText.get(context, "todos_empty", "Nothing left for today"), style)
-            } else LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                items(shown.size) { index ->
-                    Box(edge) { HabitRow(context, style, grid, density, shown[index], keys, index == last, pastFirst, look) }
+            } else Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                val fit = shown.take(10)
+                fit.forEachIndexed { index, habit ->
+                    Box(edge) { HabitRow(context, style, grid, density, habit, keys, index == fit.size - 1, pastFirst, look) }
                 }
             }
         }

@@ -19,8 +19,6 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.cornerRadius
-import androidx.glance.appwidget.lazy.LazyColumn
-import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -121,12 +119,14 @@ class TodayWidget : GlanceAppWidget() {
                     style,
                 )
             } else {
-                if (look.header && size.height.value >= WEEK_MIN_HEIGHT && base == ROOMY) {
+                val week = look.header && size.height.value >= WEEK_MIN_HEIGHT && base == ROOMY
+                if (week) {
                     Box(edge) { Week(context, style, data, inner) }
                     Spacer(GlanceModifier.height(12.dp))
                 }
-                LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                    items(due.size) { i -> Box(edge) { HabitRow(context, style, scale, inner, density, due[i], look) } }
+                val fit = due.take(10)
+                Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                    for (habit in fit) Box(edge) { HabitRow(context, style, scale, inner, density, habit, look) }
                 }
             }
         }
