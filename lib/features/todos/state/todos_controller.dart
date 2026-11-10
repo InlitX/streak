@@ -121,6 +121,7 @@ class TodosController extends ChangeNotifier {
     bool pinned = false,
     TodoRepeat? repeat,
     bool focusOnly = false,
+    int? remindBefore,
   }) async {
     final todo = Todo(
       id: const Uuid().v4(),
@@ -138,6 +139,7 @@ class TodosController extends ChangeNotifier {
       pinned: pinned,
       repeat: repeat,
       focusOnly: focusOnly,
+      remindBefore: remindBefore,
       createdAt: DateTime.now(),
     );
     _todos.add(todo);
@@ -167,6 +169,7 @@ class TodosController extends ChangeNotifier {
   static bool _remindsDifferently(Todo a, Todo b) =>
       a.date != b.date ||
       a.minutes != b.minutes ||
+      a.remindBefore != b.remindBefore ||
       a.done != b.done ||
       a.text != b.text;
 

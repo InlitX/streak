@@ -25,6 +25,7 @@ class Todo {
     this.repeat,
     this.doneAt,
     this.focusOnly = false,
+    this.remindBefore,
   });
 
   final String id;
@@ -45,6 +46,7 @@ class Todo {
   final DateTime createdAt;
   final DateTime? doneAt;
   final bool focusOnly;
+  final int? remindBefore;
 
   bool get blocksManualCheck => focusOnly && !done && (estimate ?? 0) > 0;
 
@@ -110,10 +112,12 @@ class Todo {
     TodoRepeat? repeat,
     DateTime? doneAt,
     bool? focusOnly,
+    int? remindBefore,
     bool clearRepeat = false,
     bool clearDoneAt = false,
     bool clearMinutes = false,
     bool clearEstimate = false,
+    bool clearRemindBefore = false,
   }) =>
       Todo(
         id: id,
@@ -134,6 +138,8 @@ class Todo {
         createdAt: createdAt,
         doneAt: clearDoneAt ? null : (doneAt ?? this.doneAt),
         focusOnly: focusOnly ?? this.focusOnly,
+        remindBefore:
+            clearRemindBefore ? null : (remindBefore ?? this.remindBefore),
       );
 
   Map<String, dynamic> toMap() => {
@@ -155,6 +161,7 @@ class Todo {
         'createdAt': createdAt.toIso8601String(),
         'doneAt': doneAt?.toIso8601String(),
         if (focusOnly) 'focusOnly': true,
+        if (remindBefore != null) 'remindBefore': remindBefore,
       };
 
   factory Todo.fromMap(Map<String, dynamic> map) => Todo(
@@ -186,6 +193,7 @@ class Todo {
             DateTime.now(),
         doneAt: DateTime.tryParse((map['doneAt'] ?? '') as String),
         focusOnly: map['focusOnly'] == true,
+        remindBefore: (map['remindBefore'] as num?)?.toInt(),
       );
 }
 

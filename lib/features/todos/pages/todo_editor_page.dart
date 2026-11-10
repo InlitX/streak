@@ -99,6 +99,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   final _bodyFocus = FocusNode();
   late String _date = widget.todo?.date ?? widget.date;
   late int? _minutes = widget.todo?.minutes;
+  late int? _remindBefore = widget.todo?.remindBefore;
   late int? _estimate = widget.todo?.estimate;
   late bool _focusOnly = widget.todo?.focusOnly ?? false;
   bool _focusSetEstimate = false;
@@ -139,6 +140,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
         _body.text.trim(),
         _date,
         _minutes,
+        _remindBefore,
         _estimate,
         _focusOnly,
         _priority.name,
@@ -225,6 +227,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
     final empty = text.isEmpty && steps.isEmpty && photos.isEmpty;
     final date = _date;
     final minutes = _minutes;
+    final remindBefore = minutes == null ? null : _remindBefore;
     final estimate = _estimate;
     final focusOnly = _focusOnly && estimate != null;
     final priority = _priority;
@@ -245,6 +248,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
             text: text,
             date: date,
             minutes: minutes,
+            remindBefore: remindBefore,
             estimate: estimate,
             focusOnly: focusOnly,
             priority: priority,
@@ -271,6 +275,8 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
       date: date,
       minutes: minutes,
       clearMinutes: minutes == null,
+      remindBefore: remindBefore,
+      clearRemindBefore: remindBefore == null,
       estimate: estimate,
       clearEstimate: estimate == null,
       focusOnly: focusOnly,
@@ -333,7 +339,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   Future<void> _pickDate() async {
     final today = AppClock.today();
     final current = switch (_date) {
-      '' => 5,
+      '' => 6,
       _ when _minutes != null => 3,
       _ when _date == today.dayKey => 0,
       _ when _date == today.addDays(1).dayKey => 1,
@@ -356,6 +362,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
         LucideIcons.sunrise,
         LucideIcons.calendarDays,
         LucideIcons.clock,
+        LucideIcons.bellRing,
         LucideIcons.repeat,
         LucideIcons.calendarX,
       ],
@@ -364,6 +371,11 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
         context.l10n.tomorrow,
         [context.l10n.pick_a_date, if (picked != null) picked].join(' · '),
         [context.l10n.todo_time, if (time != null) time].join(' · '),
+        [
+          context.l10n.todo_remind_before,
+          if (_remindBefore case final before? when minutes != null)
+            formatMinutes(before.toDouble()),
+        ].join(' · '),
         [
           context.l10n.todo_repeat,
           if (_repeat case final repeat? when _date.isNotEmpty)
@@ -387,11 +399,14 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
           case 3:
             await _pickTime();
           case 4:
+            await _pickRemind();
+          case 5:
             await _pickRepeat();
           default:
             _edit(() {
               _date = '';
               _minutes = null;
+              _remindBefore = null;
               _repeat = null;
             });
         }
@@ -420,6 +435,25 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
     );
     if (picked == null || !mounted) return;
     _edit(() => _minutes = picked.hour * 60 + picked.minute);
+  }
+
+  Future<void> _pickRemind() async {
+    if (_minutes == null) await _pickTime();
+    if (_minutes == null || !mounted) return;
+    const choices = [5, 15, 30, 60, 1440];
+    final current = _remindBefore;
+    await showOptionSheet(
+      context,
+      title: context.l10n.todo_remind_before,
+      options: [
+        context.l10n.todo_remind_at_time,
+        for (final minutes in choices)
+          context.l10n.todo_remind_label(formatMinutes(minutes.toDouble())),
+      ],
+      index: current == null ? 0 : choices.indexOf(current) + 1,
+      onSelected: (index) =>
+          _edit(() => _remindBefore = index == 0 ? null : choices[index - 1]),
+    );
   }
 
   void _setDate(DateTime day) => _edit(() {
@@ -790,6 +824,15 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                                     ink: ink,
                                     onTap: _pickDate,
                                   ),
+                                if (_remindBefore != null && _minutes != null)
+                                  _Chip(
+                                    icon: LucideIcons.bellRing,
+                                    label: context.l10n.todo_remind_label(
+                                      formatMinutes(_remindBefore!.toDouble()),
+                                    ),
+                                    ink: ink,
+                                    onTap: _pickRemind,
+                                  ),
                                 if (_repeat != null && _date.isNotEmpty)
                                   _Chip(
                                     icon: LucideIcons.repeat,
@@ -833,7 +876,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                           builder: (context, box) => FittedBox(
                             fit: BoxFit.scaleDown,
                             child: SizedBox(
-                              width: box.maxWidth < 360 ? 360 : box.maxWidth,
+                              width: box.maxWidth < 430 ? 430 : box.maxWidth,
                               child: Row(
                           children: [
                             _Tool(
@@ -893,6 +936,13 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                               ink: ink,
                               active: _date.isNotEmpty,
                               onTap: _pickDate,
+                            ),
+                            _Tool(
+                              icon: LucideIcons.clock,
+                              label: context.l10n.todo_time,
+                              ink: ink,
+                              active: _minutes != null,
+                              onTap: _pickTime,
                             ),
                           ],
                         ),

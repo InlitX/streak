@@ -42,6 +42,9 @@ class ReminderSchedule {
   static int todoNotificationId(String todoId) =>
       todoIdBase + todoId.hashCode.abs() % 100000000;
 
+  static int todoEarlyId(String todoId) =>
+      todoNotificationId(todoId) + 100000000;
+
   static DateTime? todoFireAt({
     required DateTime now,
     required bool done,

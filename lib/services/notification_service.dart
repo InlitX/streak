@@ -910,10 +910,13 @@ class NotificationService {
   Future<void> _scheduleTodo(Todo todo) async {
     if (!_ready) await initialize();
     final id = ReminderSchedule.todoNotificationId(todo.id);
+    final early = ReminderSchedule.todoEarlyId(todo.id);
     await _cancel(id);
+    await _cancel(early);
 
+    final now = DateTime.now();
     final at = ReminderSchedule.todoFireAt(
-      now: DateTime.now(),
+      now: now,
       done: todo.done,
       due: todo.due,
       minutes: todo.minutes,
@@ -921,12 +924,7 @@ class NotificationService {
     if (at == null) return;
 
     final strings = await localizations();
-    await _zonedSchedule(
-      id,
-      todo.title,
-      todo.body.isEmpty ? strings.todos : todo.body,
-      tz.TZDateTime.from(at, tz.local),
-      NotificationDetails(
+    final details = NotificationDetails(
         android: AndroidNotificationDetails(
           _channelId,
           _channelName,
@@ -955,8 +953,29 @@ class NotificationService {
                 ],
               )
             : null,
-      ),
-      payload: '$_todoPayload${todo.id}',
+      );
+    final payload = '$_todoPayload${todo.id}';
+    final before = todo.remindBefore;
+    if (before != null && before > 0) {
+      final soon = at.subtract(Duration(minutes: before));
+      if (soon.isAfter(now)) {
+        await _zonedSchedule(
+          early,
+          todo.title,
+          strings.todo_due_in(formatMinutes(before.toDouble())),
+          tz.TZDateTime.from(soon, tz.local),
+          details,
+          payload: payload,
+        );
+      }
+    }
+    await _zonedSchedule(
+      id,
+      todo.title,
+      todo.body.isEmpty ? strings.todos : todo.body,
+      tz.TZDateTime.from(at, tz.local),
+      details,
+      payload: payload,
     );
   }
 
@@ -964,6 +983,7 @@ class NotificationService {
     try {
       if (!_ready) await initialize();
       await _cancel(ReminderSchedule.todoNotificationId(todoId));
+      await _cancel(ReminderSchedule.todoEarlyId(todoId));
     } catch (e) {
       debugPrint('Cancelling to-do $todoId failed: $e');
     }
