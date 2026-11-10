@@ -11,6 +11,7 @@ import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
+import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/pages/notes_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -30,6 +31,14 @@ class AllNotesPage extends StatefulWidget {
 
 class _AllNotesPageState extends State<AllNotesPage> {
   late String? _habitId = widget.habitId;
+  final _search = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +51,17 @@ class _AllNotesPageState extends State<AllNotesPage> {
       for (final habit in habits.habits)
         if (notes.hasAny(habit.id)) habit,
     ];
-    final entries = notes.byDate(habitId: _habitId);
+    final all = notes.byDate(habitId: _habitId);
+    final query = _query.trim().toLowerCase();
+    final entries = query.isEmpty
+        ? all
+        : [
+            for (final note in all)
+              if (note.text.toLowerCase().contains(query) ||
+                  (habits.byId(note.habitId)?.name.toLowerCase().contains(query) ??
+                      false))
+                note,
+          ];
 
     final items = <Object>[];
     var day = '';
@@ -106,6 +125,15 @@ class _AllNotesPageState extends State<AllNotesPage> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: MinimalTitle(title: context.l10n.notes_all),
               ),
+            if (all.isNotEmpty || query.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                child: AppTextField(
+                  hint: context.l10n.notes_search,
+                  controller: _search,
+                  onChanged: (value) => setState(() => _query = value),
+                ),
+              ),
             if (tagged.length > 1)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
@@ -116,7 +144,12 @@ class _AllNotesPageState extends State<AllNotesPage> {
                 ),
               ),
             Expanded(
-              child: items.isEmpty
+              child: items.isEmpty && query.isNotEmpty
+                  ? AppEmptyState(
+                      icon: LucideIcons.searchX,
+                      title: context.l10n.todo_search_empty,
+                    )
+                  : items.isEmpty
                   ? AppEmptyState(
                       icon: LucideIcons.notebookPen,
                       title: context.l10n.notes_empty_all,
