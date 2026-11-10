@@ -91,7 +91,7 @@ class _CheckTile extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: tint.withValues(alpha: marked ? 1 : 0.16),
+            color: marked ? tint : context.colors.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(
               circle ? size / 2 : size * 0.28,
             ),
@@ -99,7 +99,7 @@ class _CheckTile extends StatelessWidget {
           child: Icon(
             negative ? LucideIcons.ban : Icons.check_rounded,
             size: size * 0.5,
-            color: marked ? tint.ink : tint.withValues(alpha: 0.85),
+            color: marked ? tint.ink : context.tokens.muted,
           ),
         ),
       ),
@@ -763,6 +763,7 @@ class _GridMonthCalendar extends StatelessWidget {
                 final date = first.addDays(w * 7 + d);
                 final inMonth = date.month == today.month;
                 final future = date.isAfter(today);
+                final pending = date == today && !habit.isCompletedOn(date);
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(1),
@@ -788,6 +789,12 @@ class _GridMonthCalendar extends StatelessWidget {
                               borderRadius: BorderRadius.circular(
                                 circle ? 999 : 3,
                               ),
+                              border: pending
+                                  ? Border.all(
+                                      color: habit.color.shownIn(context),
+                                      width: 1.6,
+                                    )
+                                  : null,
                             ),
                           ),
                         ),
