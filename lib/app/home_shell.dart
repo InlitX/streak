@@ -12,6 +12,7 @@ import 'package:streak/core/express/express_shapes.dart';
 import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/minimal/minimal_nav.dart';
 import 'package:streak/core/minimal/minimal_type.dart';
@@ -110,9 +111,15 @@ class _HomeShellState extends State<HomeShell>
     final focus = context.read<FocusController>();
     final habits = context.read<HabitsController>();
     final todos = context.read<TodosController>();
-    focus.onRoundSaved = (session) {
+    focus.onRoundSaved = (session) async {
       unawaited(creditFocusTodo(todos, focus.todoId, session));
-      unawaited(creditFocusRound(habits, focus, session));
+      final day = session.countedOn;
+      final before = habits.byId(session.habitId)?.isCompletedOn(day) ?? true;
+      await creditFocusRound(habits, focus, session);
+      final habit = habits.byId(session.habitId);
+      if (before || habit == null || !habit.isCompletedOn(day)) return;
+      if (!mounted) return;
+      AppSnackbar.success(context, context.l10n.focus_goal_reached(habit.name));
     };
     _waitForNextDay();
     unawaited(HealthSteps.sync(habits));
