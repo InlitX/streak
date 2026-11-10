@@ -17,8 +17,6 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.cornerRadius
-import androidx.glance.appwidget.lazy.LazyColumn
-import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -118,6 +116,7 @@ class TodosWidget : GlanceAppWidget() {
                         Card(
                             context, card, density, shown, size.width.value - left - PAD_DP,
                             GlanceModifier.defaultWeight().fillMaxHeight(), look.compact,
+                            size.height.value - PAD_DP * 2,
                         )
                     }
                 }
@@ -142,6 +141,7 @@ class TodosWidget : GlanceAppWidget() {
                     Card(
                         context, card, density, shown, size.width.value - PAD_DP * 2,
                         GlanceModifier.fillMaxWidth().defaultWeight(), look.compact,
+                        size.height.value - PAD_DP * 2 - 52f,
                     )
                 }
             }
@@ -182,6 +182,7 @@ class TodosWidget : GlanceAppWidget() {
         width: Float,
         modifier: GlanceModifier,
         compact: Boolean,
+        height: Float,
     ) {
         Column(
             modifier = modifier
@@ -201,11 +202,25 @@ class TodosWidget : GlanceAppWidget() {
                 )
                 Drawn(WidgetDraw.text(context, empty, 13f, card.muted, 600, width - 24f), density, empty)
             } else {
-                LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                    items(todos.size) { i -> Box(edge) { TodoRow(context, card, density, todos[i], width - 24f, compact) } }
+                var room = height - 39f
+                val fit = todos.takeWhile { todo ->
+                    val row = rowHeight(context, todo, compact)
+                    (room >= row).also { room -= row }
+                }.ifEmpty { todos.take(1) }.take(10)
+                Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                    for (todo in fit) Box(edge) { TodoRow(context, card, density, todo, width - 24f, compact) }
                 }
             }
         }
+    }
+
+    private fun rowHeight(context: Context, todo: JSONObject, compact: Boolean): Float {
+        if (compact) return 26f
+        val done = todo.optBoolean("done", false)
+        if (done) return 34f
+        val day = todo.optLong("day", -1L)
+        val overdue = day >= 0L && day < TodosPayload.todayEpochDay()
+        return if (trailing(context, todo, overdue).isEmpty()) 34f else 42f
     }
 
     @Composable
