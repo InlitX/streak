@@ -648,6 +648,16 @@
   "todo_date": "Date",
   "todo_no_date": "No date",
   "todo_time": "Time",
+  "todo_remind_before": "Remind me before",
+  "todo_remind_at_time": "Only at the time",
+  "todo_remind_label": "{time} before",
+  "@todo_remind_label": {
+    "placeholders": { "time": { "type": "String" } }
+  },
+  "todo_due_in": "In {time}",
+  "@todo_due_in": {
+    "placeholders": { "time": { "type": "String" } }
+  },
   "todo_repeat": "Repeat",
   "todo_repeat_never": "Don't repeat",
   "todo_repeat_workdays": "Monday to Friday",
@@ -790,6 +800,10 @@
   "focus_end": "End",
   "focus_pick_habit": "What are you focusing on?",
   "focus_change_habit": "Change habit",
+  "focus_goal_reached": "{habit}: goal reached",
+  "@focus_goal_reached": {
+    "placeholders": { "habit": { "type": "String" } }
+  },
   "today_week_strip": "Week strip",
   "today_week_strip_sub": "The seven days of the week at the top of Today. Tap a day to see its habits, swipe to see past weeks.",
   "shortcuts_title": "Keyboard shortcuts",
@@ -1417,6 +1431,7 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "notes_all": "All notes",
+  "notes_search": "Search notes",
   "notes_empty_all": "No notes yet",
   "quant_preset_time": "Time",
   "style_express": "Express",
@@ -1594,6 +1609,26 @@
   "app_lock_biometric": "Fingerprint or face",
   "difficulty_option": "Habit difficulty",
   "difficulty_option_sub": "Let harder habits count for more in the day's progress",
+  "second_chances": "Second chances",
+  "second_chances_sub": "Every 30 days in a row earn a chance, up to 3. If you miss a day, it is spent and your streak goes on",
+  "chances_left": "{count, plural, =1{1 chance saved} other{{count} chances saved}}",
+  "@chances_left": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "chances_next": "{days, plural, =1{1 more day to earn a chance} other{{days} more days to earn a chance}}",
+  "@chances_next": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "chance_used": "Streak saved on {date}",
+  "@chance_used": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "chance_used_notice": "A second chance kept your {habit} streak going",
+  "@chance_used_notice": {
+    "placeholders": { "habit": { "type": "String" } }
+  },
+  "chances_info": "Life happens. For every 30 days in a row you earn a second chance, and you can keep up to 3. If you miss a day, one is spent and your streak goes on. Two missed days in a row still break it. Your stats stay honest: the missed day still counts as missed.",
+  "chances_ok": "Got it",
   "todo_save_another": "Save and add another",
   "todo_add_subtask": "Add subtask",
   "pin_paste": "Paste code",
