@@ -73,8 +73,8 @@ Future<bool?> showAppConfirmDialog(
                         textScaler: MediaQuery.textScalerOf(dialogContext),
                       )..layout())
                           .width;
-                  final stacked = wide(cancelText) > (box.maxWidth - 12) / 2 - 24 ||
-                      wide(confirmLabel) > (box.maxWidth - 12) / 2 - 24;
+                  final room = (box.maxWidth - 12) / 2 - 40;
+                  final stacked = wide(cancelText) > room || wide(confirmLabel) > room;
                   final cancel = TextButton(
                     onPressed: () => Navigator.of(dialogContext).pop(false),
                     style: TextButton.styleFrom(
