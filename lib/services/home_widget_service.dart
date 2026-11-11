@@ -225,6 +225,13 @@ class HomeWidgetService {
       habits.values.where((habit) => !habit.isArchived).toList()
         ..sort((a, b) => a.order.compareTo(b.order));
 
+  @visibleForTesting
+  static bool scheduledOn(Habit habit, DateTime day) {
+    if (habit.isPausedOn(day) || !habit.isScheduledOn(day)) return false;
+    return !day.atMidnight.isBefore(habit.createdAt.atMidnight) ||
+        habit.isCompletedOn(day);
+  }
+
   static Map<String, List<int>> _focusTotals(DateTime now, int weekStart) {
     final today = now.subtract(Duration(hours: AppClock.cutoffHour)).atMidnight;
     final todayIndex = today.epochDay;
@@ -305,7 +312,7 @@ class HomeWidgetService {
             .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
             .toList(),
         'scheduled': window
-            .map((d) => !habit.isPausedOn(d) && habit.isScheduledOn(d))
+            .map((d) => scheduledOn(habit, d))
             .toList(),
         'heatmap': _levelsOf(habit, today),
         'earlier': {
@@ -314,7 +321,7 @@ class HomeWidgetService {
               .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
               .toList(),
           'scheduled': earlier
-              .map((d) => !habit.isPausedOn(d) && habit.isScheduledOn(d))
+              .map((d) => scheduledOn(habit, d))
               .toList(),
         },
       };
