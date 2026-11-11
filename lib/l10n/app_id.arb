@@ -14,5 +14,103 @@
   "language": "Bahasa",
   "settings": "Pengaturan",
   "system": "Sistem",
-  "today": "Hari ini"
+  "today": "Hari ini",
+  "app_tagline": "Pelacak Kebiasaan",
+  "stats": "Statistik",
+  "discard_changes": "Abaikan perubahan?",
+  "discard_changes_body": "Perubahan yang Anda lakukan pada kebiasaan ini akan hilang.",
+  "discard": "Buang",
+  "todo_discard_body": "Perubahan yang Anda buat pada daftar tugas ini akan hilang.",
+  "todo_delete_title": "{count, plural, =1{Hapus tugas ini?} other{Hapus {count} tugas?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todo_delete_body": "Anda akan memiliki beberapa detik untuk membatalkannya.",
+  "keep_editing": "Lanjutkan pengeditan",
+  "no_habits_yet": "Belum punya kebiasaan",
+  "all_done_today": "Semua sudah selesai hari ini!",
+  "x_of_y_completed": "{selesai} of {total} selesai",
+  "@x_of_y_completed": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "empty_title": "Mulailah rentetan kemenangan pertama Anda",
+  "empty_body": "Ciptakan kebiasaan dan pilih satu hari untuk mencatatnya. Langkah kecil, setiap hari.",
+  "add_habit": "Tambahkan kebiasaan",
+  "onb1_title": "Bangun rentetan kemenangan nyata",
+  "onb1_body": "Catat kebiasaan Anda hanya dengan satu sentuhan dan saksikan momentum Anda tumbuh dari hari ke hari.",
+  "onb2_title": "Tetap pada jalur yang benar",
+  "onb2_body": "Tetapkan tujuan harian, mingguan, atau bulanan dengan pengingat cerdas agar tidak ada yang terlewat.",
+  "onb3_title": "Lihat kemajuan Anda",
+  "onb3_body": "Statistik yang lengkap dan tabel tahunan menunjukkan dengan tepat seberapa jauh Anda telah melangkah.",
+  "skip": "lewati",
+  "next": "Lanjutkan",
+  "get_started": "Mulai",
+  "onb_kicker": "Selamat Datang di",
+  "onb_blurb": "Pengecekan kecil harian yang kemudian menjadi kebiasaan yang Anda pertahankan.",
+  "onb_free_title": "Gratis, selamanya",
+  "onb_free_body": "Tanpa iklan, tanpa langganan, tanpa fitur terkunci.",
+  "onb_private_title": "Pribadi dan offline",
+  "onb_private_body": "Semua data tetap tersimpan di perangkat Anda. Tidak perlu akun.",
+  "onb_yours_title": "Data Anda adalah milik Anda",
+  "onb_yours_body": "Cadangkan atau bawa bersama Anda kapan pun Anda mau.",
+  "onb_step": "Langkah{langkah} of {total}",
+  "@onb_step": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "done_today": "Selesai hari ini",
+  "best_streak": "Rentetan terbaik",
+  "active_habits": "Kebiasaan aktif",
+  "total_logs": "Jumlah total log",
+  "last_7_days": "7 hari terakhir",
+  "last_30_days": "30 hari terakhir",
+  "your_habits": "Kebiasaan Anda",
+  "stats_empty": "Tambahkan kebiasaan untuk melihat statistik Anda",
+  "completion_rate_short": "Konsistensi",
+  "completion_rate": "Tingkat penyelesaian",
+  "appearance": "Penampilan",
+  "week_starts_on": "Minggu dimulai",
+  "mon": "Senin",
+  "sat": "Sabtu",
+  "sun": "Minggu",
+  "data": "Data",
+  "export_backup": "Ekspor cadangan",
+  "export_backup_sub": "Simpan semua kebiasaan ke dalam sebuah file",
+  "auto_backup": "Pencadangan otomatis",
+  "auto_backup_sub": "Mati",
+  "auto_backup_off": "Mati",
+  "auto_backup_daily": "Setiap hari",
+  "auto_backup_weekly": "Setiap minggu",
+  "auto_backup_where": "Saat Anda membuka aplikasi, Streak menyimpan cadangan lengkap: file .zip berisi semuanya, termasuk foto dan musik, dan file .json. Selain itu, ia juga membuat salinan yang mudah dibaca yang dapat Anda buka di editor mana pun. Beberapa cadangan terakhir disimpan.",
+  "auto_backup_folder": "Folder",
+  "auto_backup_folder_default": "Di dalam aplikasi (akan terhapus jika Anda menghapus instalasinya)",
+  "auto_backup_folder_set": "Folder tersimpan",
+  "auto_backup_folder_failed": "Folder itu tidak dapat ditulis",
+  "auto_backup_no_permission": "Izin penyimpanan ditolak",
+  "auto_backup_run_now": "Cadangkan sekarang",
+  "refresh_now": "Segarkan",
+  "refresh_now_sub": "Pindahkan apa yang ditinggalkan perangkat Anda yang lain di dalam folder tersebut",
+  "data_folder": "Folder data",
+  "data_folder_documents": "Dokumen",
+  "data_folder_app": "Lanjutkan ke aplikasi",
+  "data_folder_pick": "Pilih folder",
+  "data_folder_inside": "Pilih folder di luar folder saat ini.",
+  "data_folder_taken": "Folder itu sudah berisi data Streak."
 }
