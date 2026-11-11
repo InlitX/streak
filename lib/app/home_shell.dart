@@ -415,6 +415,7 @@ class _HomeShellState extends State<HomeShell>
                           ExpressNavItem(
                             icon: _iconOf(tab),
                             label: _labelOf(context, tab),
+                            iconOnly: tab == _Tab.settings,
                           ),
                       ],
                       index: tabs.indexOf(current),

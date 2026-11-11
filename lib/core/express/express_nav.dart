@@ -5,10 +5,15 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/express/express_shapes.dart';
 
 class ExpressNavItem {
-  const ExpressNavItem({required this.icon, required this.label});
+  const ExpressNavItem({
+    required this.icon,
+    required this.label,
+    this.iconOnly = false,
+  });
 
   final IconData icon;
   final String label;
+  final bool iconOnly;
 }
 
 class ExpressNavBar extends StatelessWidget {
@@ -44,18 +49,41 @@ class ExpressNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < items.length; i++)
-            _NavPill(
-              item: items[i],
-              selected: i == index,
-              onTap: () => onSelect(i),
-            ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, box) {
+          final labeled = index >= 0 &&
+              index < items.length &&
+              !items[index].iconOnly &&
+              _widthWithLabel(context, items[index].label) <= box.maxWidth;
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < items.length; i++)
+                _NavPill(
+                  item: items[i],
+                  selected: i == index,
+                  labeled: labeled,
+                  onTap: () => onSelect(i),
+                ),
+            ],
+          );
+        },
       ),
     );
+  }
+
+  double _widthWithLabel(BuildContext context, String label) {
+    final text = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: ExpressType.headline.at(14, weight: 800),
+      ),
+      maxLines: 1,
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+    )..layout();
+    final shown = text.width.clamp(0.0, 92.0);
+    return items.length * 51 + 6 + 9 + shown;
   }
 }
 
@@ -63,11 +91,13 @@ class _NavPill extends StatelessWidget {
   const _NavPill({
     required this.item,
     required this.selected,
+    required this.labeled,
     required this.onTap,
   });
 
   final ExpressNavItem item;
   final bool selected;
+  final bool labeled;
   final VoidCallback onTap;
 
   @override
@@ -89,7 +119,7 @@ class _NavPill extends StatelessWidget {
           duration: Express.normal,
           curve: Express.bouncy,
           height: 48,
-          padding: EdgeInsets.symmetric(horizontal: selected ? 18 : 15),
+          padding: EdgeInsets.symmetric(horizontal: selected && labeled ? 18 : 15),
           decoration: BoxDecoration(
             color: selected ? scheme.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(24),
@@ -107,7 +137,7 @@ class _NavPill extends StatelessWidget {
                 child: AnimatedSize(
                   duration: Express.normal,
                   curve: Express.emphasized,
-                  child: selected
+                  child: selected && labeled
                       ? Padding(
                           padding: const EdgeInsets.only(left: 9),
                           child: ConstrainedBox(
