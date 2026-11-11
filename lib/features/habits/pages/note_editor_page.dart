@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -331,13 +332,14 @@ class _PhotoStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (isMobile)
         _AddTile(
           icon: LucideIcons.camera,
           label: context.l10n.note_take_photo,
           accent: accent,
           onTap: onCamera,
         ),
-        const SizedBox(width: 10),
+        if (isMobile) const SizedBox(width: 10),
         _AddTile(
           icon: LucideIcons.image,
           label: context.l10n.note_pick_photo,

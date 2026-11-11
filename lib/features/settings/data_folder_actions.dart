@@ -16,7 +16,8 @@ class DataFolderActions {
   const DataFolderActions._();
 
   static bool get available =>
-      (Platform.isWindows || Platform.isLinux) && !isFlatpak;
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS) &&
+      !isFlatpak;
 
   static Future<void> pick(BuildContext context) {
     final l10n = context.l10n;

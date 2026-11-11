@@ -91,7 +91,7 @@ class _FocusPageState extends State<FocusPage> with ShortcutHost {
     if (context.read<SettingsController>().focusKeepAwake) {
       WakelockPlus.enable();
     }
-    if ((Platform.isWindows || Platform.isLinux) &&
+    if (!isMobile &&
         context.read<SettingsController>().focusFullscreen) {
       _immersive = true;
       DesktopWindow.setFullscreen(true);

@@ -208,6 +208,7 @@ class NotificationService {
       InitializationSettings(
         android: android,
         iOS: darwin,
+        macOS: darwin,
         windows: windows,
         linux: linux,
       ),
@@ -259,6 +260,18 @@ class NotificationService {
 
   Future<bool> requestNotifications() async {
     if (Platform.isLinux || Platform.isWindows) return true;
+    if (Platform.isMacOS) {
+      try {
+        return await _plugin
+                .resolvePlatformSpecificImplementation<
+                    MacOSFlutterLocalNotificationsPlugin>()
+                ?.requestPermissions(alert: true, badge: true, sound: true) ??
+            false;
+      } catch (e) {
+        debugPrint('Notification permission request failed: $e');
+        return false;
+      }
+    }
     try {
       if (await Permission.notification.isGranted) return true;
       return (await Permission.notification.request()).isGranted;
@@ -297,7 +310,9 @@ class NotificationService {
     await _cancelExcept(habit.id, live);
   }
 
-  static int get _intervalWindow => Platform.isIOS ? 8 : 24;
+  static int get _intervalWindow => _darwin ? 8 : 24;
+
+  static bool get _darwin => Platform.isIOS || Platform.isMacOS;
 
   Future<Set<int>> _schedule(Habit habit, Reminder reminder) async {
     final strings = await localizations();
@@ -507,7 +522,7 @@ class NotificationService {
   }
 
   bool _repeatsDaily(Habit habit, Reminder reminder) =>
-      Platform.isIOS &&
+      _darwin &&
       reminder.days.length == 7 &&
       Iterable<int>.generate(7, (i) => i + 1).every(habit.ringsOnWeekday);
 
@@ -601,7 +616,7 @@ class NotificationService {
       from: _firstMoment(habit),
       due: (day) => !habit.isOffDay(day),
       slots: slots,
-      limit: Platform.isIOS ? 8 : ReminderSchedule.slotsPerReminder,
+      limit: _darwin ? 8 : ReminderSchedule.slotsPerReminder,
     );
     final ids = <int>{};
     for (final (index, at) in moments.indexed) {
@@ -799,6 +814,10 @@ class NotificationService {
           categoryIdentifier: _categoryFor(habit),
           threadIdentifier: habit.id,
         ),
+        macOS: DarwinNotificationDetails(
+          categoryIdentifier: _categoryFor(habit),
+          threadIdentifier: habit.id,
+        ),
       );
   }
 
@@ -942,6 +961,7 @@ class NotificationService {
           ],
         ),
         iOS: const DarwinNotificationDetails(categoryIdentifier: _categoryTodo),
+        macOS: const DarwinNotificationDetails(categoryIdentifier: _categoryTodo),
         windows: Platform.isWindows
             ? WindowsNotificationDetails(
                 audio: _windowsSound,
