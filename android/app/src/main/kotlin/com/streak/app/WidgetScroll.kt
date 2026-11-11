@@ -1,5 +1,6 @@
 package com.streak.app
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -40,7 +41,7 @@ object WidgetScroll {
 
     fun move(context: Context, id: Int, dir: Int, per: Int, total: Int) {
         val now = offset(context, id, total, per)
-        val next = (now + dir * maxOf(1, per - 1)).coerceIn(0, maxOf(0, total - per))
+        val next = (now + dir * per).coerceIn(0, maxOf(0, total - per))
         prefs(context).edit().putInt("offset_$id", next).apply()
     }
 
@@ -48,7 +49,13 @@ object WidgetScroll {
         prefs(context).edit().remove("offset_$id").apply()
     }
 
-    fun rows(room: Float, row: Float): Int = maxOf(1, (room / row).toInt())
+    fun rows(room: Float, row: Float, gap: Float = 0f): Int = maxOf(1, ((room + gap) / row).toInt())
+
+    fun extra(context: Context, id: Int, shown: Float): Float {
+        val tall = AppWidgetManager.getInstance(context).getAppWidgetOptions(id)
+            .getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0)
+        return maxOf(0f, tall - shown)
+    }
 
     private fun intent(context: Context, id: Int, dir: Int, per: Int, total: Int): Intent =
         Intent(context, WidgetActionReceiver::class.java).apply {

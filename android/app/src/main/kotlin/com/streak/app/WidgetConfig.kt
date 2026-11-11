@@ -20,6 +20,7 @@ data class WidgetLook(
     val band: Boolean = true,
     val today: Boolean = false,
     val colors: Boolean = true,
+    val arrows: Boolean = false,
 )
 
 object WidgetConfig {
@@ -103,6 +104,7 @@ object WidgetConfig {
             band = p.getBoolean("band_$k", true),
             today = p.getBoolean("statsToday_$k", false),
             colors = p.getBoolean("habitColors_$k", true),
+            arrows = p.getBoolean("arrows_$k", false),
         )
     }
 
@@ -122,6 +124,7 @@ object WidgetConfig {
             .putBoolean("band_$id", look.band)
             .putBoolean("statsToday_$id", look.today)
             .putBoolean("habitColors_$id", look.colors)
+            .putBoolean("arrows_$id", look.arrows)
             .commit()
     }
 
@@ -211,6 +214,7 @@ object WidgetConfig {
             .remove("band_$id")
             .remove("statsToday_$id")
             .remove("habitColors_$id")
+            .remove("arrows_$id")
             .apply()
     }
 

@@ -436,6 +436,10 @@ class WidgetConfigActivity : ComponentActivity() {
                                     look = look.copy(compact = it)
                                 }
                                 Line()
+                                ToggleRow(tr("cfg_arrows", "Scroll with buttons"), tr("cfg_arrows_hint", "Arrows instead of swiping the list"), look.arrows) {
+                                    look = look.copy(arrows = it)
+                                }
+                                Line()
                                 Inset {
                                     Label(tr("cfg_buttons", "Buttons"))
                                     Spacer(Modifier.height(12.dp))
@@ -470,6 +474,10 @@ class WidgetConfigActivity : ComponentActivity() {
                                 Line()
                                 ToggleRow(tr("cfg_compact", "Compact"), tr("cfg_compact_todos_hint", "Smaller rows, time next to the task"), look.compact) {
                                     look = look.copy(compact = it)
+                                }
+                                Line()
+                                ToggleRow(tr("cfg_arrows", "Scroll with buttons"), tr("cfg_arrows_hint", "Arrows instead of swiping the list"), look.arrows) {
+                                    look = look.copy(arrows = it)
                                 }
                             }
                             if (type == WType.STATS) {

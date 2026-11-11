@@ -17,6 +17,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.cornerRadius
+import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -117,7 +119,7 @@ class TodosWidget : GlanceAppWidget() {
                         Card(
                             context, card, density, shown, size.width.value - left - PAD_DP,
                             GlanceModifier.defaultWeight().fillMaxHeight(), look.compact,
-                            size.height.value - PAD_DP * 2, appWidgetId,
+                            size.height.value - PAD_DP * 2, appWidgetId, look.arrows,
                         )
                     }
                 }
@@ -142,7 +144,7 @@ class TodosWidget : GlanceAppWidget() {
                     Card(
                         context, card, density, shown, size.width.value - PAD_DP * 2,
                         GlanceModifier.fillMaxWidth().defaultWeight(), look.compact,
-                        size.height.value - PAD_DP * 2 - 52f, appWidgetId,
+                        size.height.value - PAD_DP * 2 - 52f, appWidgetId, look.arrows,
                     )
                 }
             }
@@ -185,6 +187,7 @@ class TodosWidget : GlanceAppWidget() {
         compact: Boolean,
         height: Float,
         appWidgetId: Int,
+        arrows: Boolean,
     ) {
         Column(
             modifier = modifier
@@ -203,7 +206,12 @@ class TodosWidget : GlanceAppWidget() {
                     "Nothing left for today",
                 )
                 Drawn(WidgetDraw.text(context, empty, 13f, card.muted, 600, width - 24f), density, empty)
+            } else if (!arrows) {
+                LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                    items(todos.size) { i -> Box(edge) { TodoRow(context, card, density, todos[i], width - 24f, compact) } }
+                }
             } else {
+                val tall = height + WidgetScroll.extra(context, appWidgetId, LocalSize.current.height.value)
                 fun page(from: Int, space: Float): List<JSONObject> {
                     var room = space
                     return todos.drop(from).takeWhile { todo ->
@@ -212,9 +220,9 @@ class TodosWidget : GlanceAppWidget() {
                     }.ifEmpty { todos.drop(from).take(1) }
                 }
                 val from = WidgetScroll.offset(context, appWidgetId, todos.size, 1)
-                val whole = page(from, height - 39f)
+                val whole = page(from, tall - 39f)
                 val more = from > 0 || whole.size < todos.size - from
-                val fit = (if (more) page(from, height - 39f - WidgetScroll.FOOTER) else whole).take(10)
+                val fit = (if (more) page(from, tall - 39f - WidgetScroll.FOOTER) else whole).take(10)
                 Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
                     for (todo in fit) Box(edge) { TodoRow(context, card, density, todo, width - 24f, compact) }
                 }

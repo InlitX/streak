@@ -17,6 +17,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionSendBroadcast
 import androidx.glance.appwidget.cornerRadius
+import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -141,9 +143,16 @@ class HabitWidget : GlanceAppWidget() {
             }
             if (shown.isEmpty()) {
                 EmptyNote(WidgetText.get(context, "todos_empty", "Nothing left for today"), style)
+            } else if (!look.arrows) {
+                LazyColumn(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                    items(shown.size) { index ->
+                        Box(edge) { HabitRow(context, style, grid, density, shown[index], keys, index == shown.size - 1, pastFirst, look) }
+                    }
+                }
             } else {
-                val more = shown.size > WidgetScroll.rows(room, grid.row + grid.gap)
-                val per = WidgetScroll.rows(if (more) room - WidgetScroll.FOOTER else room, grid.row + grid.gap)
+                val space = room + WidgetScroll.extra(context, appWidgetId, size.height.value)
+                val more = shown.size > WidgetScroll.rows(space, grid.row + grid.gap, grid.gap)
+                val per = WidgetScroll.rows(if (more) space - WidgetScroll.FOOTER else space, grid.row + grid.gap, grid.gap)
                 val from = WidgetScroll.offset(context, appWidgetId, shown.size, per)
                 val fit = shown.drop(from).take(per)
                 Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
