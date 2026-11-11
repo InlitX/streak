@@ -446,6 +446,8 @@
   "rate_github_sub": "Apoya el proyecto con una estrella",
   "buy_coffee": "Invítame un café",
   "buy_coffee_sub": "Ayuda a mantener la app gratis",
+  "support_thanks_title": "Gracias por estar aquí 🤍",
+  "support_thanks_body": "Streak es gratis y lo será siempre, sin anuncios ni nada escondido.\n\nSi te ayuda con tus hábitos, invitarme a un café me alegra el día ☕\nY si no puedes, no pasa nada: una estrella en GitHub también ⭐",
   "view_source": "Ver código en GitHub",
   "about_title": "Construido para ti. Gratis, para siempre.",
   "about_footer": "Hecho con ☕ y mucho tiempo libre.",
