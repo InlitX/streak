@@ -1,0 +1,10 @@
+Streak 2.9.0
+
+- Second chances: spend a chance instead of your streak when you miss a day
+- Start date for avoid habits
+- Search habits in Today and search all your notes
+- Undo after checking a past day; swipe the week strip to past weeks
+- To-dos: reminders before the due time and a completion sound
+- Focus: notice when a round reaches the habit goal
+- Widgets: check habits without opening the app, optional scroll buttons
+- Fixes and updated languages

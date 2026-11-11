@@ -1,0 +1,10 @@
+Streak 2.9.0
+
+- Segundas oportunidades: si fallas un día, gastas una en vez de la racha
+- Fecha de inicio en los hábitos a evitar
+- Buscar hábitos en Hoy y buscar en todas tus notas
+- Deshacer al marcar un día pasado; deslizar la tira a semanas anteriores
+- Tareas: aviso antes de la hora y sonido al completar
+- Focus: aviso cuando una ronda llega a la meta del hábito
+- Widgets: marcar hábitos sin abrir la app, botones de desplazamiento opcionales
+- Correcciones e idiomas actualizados
