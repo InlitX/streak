@@ -11,6 +11,18 @@ import kotlinx.coroutines.launch
 class WidgetActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == WidgetScroll.ACTION) {
+            val id = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
+            WidgetScroll.move(
+                context,
+                id,
+                intent.getIntExtra(WidgetScroll.EXTRA_DIR, 1),
+                intent.getIntExtra(WidgetScroll.EXTRA_PER, 1),
+                intent.getIntExtra(WidgetScroll.EXTRA_TOTAL, 0),
+            )
+            repaintGlance(context)
+            return
+        }
         if (intent.action == ACTION_TOGGLE_TODO) {
             toggleTodo(context, intent)
             return

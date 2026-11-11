@@ -141,11 +141,17 @@ class HabitWidget : GlanceAppWidget() {
             }
             if (shown.isEmpty()) {
                 EmptyNote(WidgetText.get(context, "todos_empty", "Nothing left for today"), style)
-            } else Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
-                val fit = shown.take(10)
-                fit.forEachIndexed { index, habit ->
-                    Box(edge) { HabitRow(context, style, grid, density, habit, keys, index == fit.size - 1, pastFirst, look) }
+            } else {
+                val more = shown.size > WidgetScroll.rows(room, grid.row + grid.gap)
+                val per = WidgetScroll.rows(if (more) room - WidgetScroll.FOOTER else room, grid.row + grid.gap)
+                val from = WidgetScroll.offset(context, appWidgetId, shown.size, per)
+                val fit = shown.drop(from).take(per)
+                Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
+                    fit.forEachIndexed { index, habit ->
+                        Box(edge) { HabitRow(context, style, grid, density, habit, keys, index == fit.size - 1, pastFirst, look) }
+                    }
                 }
+                if (more) WidgetScroll.Arrows(context, style.content, appWidgetId, density, from, per, shown.size, PAD)
             }
         }
     }

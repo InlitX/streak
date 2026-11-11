@@ -124,10 +124,17 @@ class TodayWidget : GlanceAppWidget() {
                     Box(edge) { Week(context, style, data, inner) }
                     Spacer(GlanceModifier.height(12.dp))
                 }
-                val fit = due.take(10)
+                val top = if (look.header) maxOf(scale.ring, scale.title * 1.3f + scale.subtitle * 1.4f) * WidgetDraw.textScale(context) + 10f else 0f
+                val room = size.height.value - scale.pad * 2 - top - (if (week) CHIP_DP + 18f else 0f)
+                val step = scale.row + scale.gap
+                val more = due.size > WidgetScroll.rows(room, step)
+                val per = WidgetScroll.rows(if (more) room - WidgetScroll.FOOTER else room, step)
+                val from = WidgetScroll.offset(context, appWidgetId, due.size, per)
+                val fit = due.drop(from).take(per)
                 Column(modifier = GlanceModifier.fillMaxWidth().defaultWeight()) {
                     for (habit in fit) Box(edge) { HabitRow(context, style, scale, inner, density, habit, look) }
                 }
+                if (more) WidgetScroll.Arrows(context, style.content, appWidgetId, density, from, per, due.size, scale.pad)
             }
         }
     }
