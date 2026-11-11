@@ -113,6 +113,8 @@ class HomeWidgetService {
           'cfg_compact': l10n.widget_cfg_compact,
           'cfg_compact_hint': l10n.widget_cfg_compact_hint,
           'cfg_compact_todos_hint': l10n.widget_cfg_compact_todos_hint,
+          'cfg_arrows': l10n.widget_cfg_arrows,
+          'cfg_arrows_hint': l10n.widget_cfg_arrows_hint,
           'cfg_today_band': l10n.widget_cfg_today_band,
           'cfg_habit_colors': l10n.widget_cfg_habit_colors,
           'cfg_habit_colors_hint': l10n.widget_cfg_habit_colors_hint,

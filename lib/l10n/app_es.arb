@@ -1155,6 +1155,8 @@
   "widget_cfg_compact": "Compacto",
   "widget_cfg_compact_hint": "Filas más pequeñas, racha junto al nombre",
   "widget_cfg_compact_todos_hint": "Filas más pequeñas, hora junto a la tarea",
+  "widget_cfg_arrows": "Desplazar con botones",
+  "widget_cfg_arrows_hint": "Flechas en vez de deslizar la lista",
   "widget_cfg_today_band": "Resaltar hoy",
   "widget_cfg_habit_colors": "Colores de los hábitos",
   "widget_cfg_habit_colors_hint": "Cada barra enseña el tiempo de cada hábito con su color",

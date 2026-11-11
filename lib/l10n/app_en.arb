@@ -1303,6 +1303,8 @@
   "widget_cfg_compact": "Compact",
   "widget_cfg_compact_hint": "Smaller rows, streak next to the name",
   "widget_cfg_compact_todos_hint": "Smaller rows, time next to the task",
+  "widget_cfg_arrows": "Scroll with buttons",
+  "widget_cfg_arrows_hint": "Arrows instead of swiping the list",
   "widget_cfg_today_band": "Highlight today",
   "widget_cfg_habit_colors": "Habit colors",
   "widget_cfg_habit_colors_hint": "Each bar shows the time of each habit in its color",
