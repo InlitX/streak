@@ -1114,7 +1114,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       ],
       if (_kind == HabitKind.negative) ...[
         const SizedBox(height: 10),
-        CompactNote(text: context.l10n.kind_negative_hint, color: _color),
+        NegativeHint(color: _color),
         const SizedBox(height: 10),
         _avoidSinceRow(),
         const SizedBox(height: 10),
