@@ -1,0 +1,66 @@
+name: macOS build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to attach to, e.g. v2.9.0. Empty = artifact only'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  FLUTTER_VERSION: '3.41.9'
+
+jobs:
+  macos:
+    name: Build and attach
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build macOS
+        run: flutter build macos --release
+
+      - name: Sign for local use
+        run: codesign --force --deep --sign - build/macos/Build/Products/Release/Streak.app
+
+      - name: Package
+        run: |
+          mkdir -p dmg
+          cp -R build/macos/Build/Products/Release/Streak.app dmg/
+          ln -s /Applications dmg/Applications
+          hdiutil create -volname Streak -srcfolder dmg -ov -format UDZO Streak-macos.dmg
+          ditto -c -k --keepParent build/macos/Build/Products/Release/Streak.app Streak-macos.zip
+
+      - name: Upload the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Streak-macos
+          path: |
+            Streak-macos.dmg
+            Streak-macos.zip
+          if-no-files-found: error
+
+      - name: Add it to the release
+        if: inputs.tag != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: |
+            Streak-macos.dmg
+            Streak-macos.zip
