@@ -1733,5 +1733,12 @@
   "quant_preset_steps": "Adım",
   "health_steps_denied": "Streak, izin vermediğiniz zaman adımlarınızı okuyamaz",
   "health_permission": "İzin",
-  "health_unit_steps": "adım"
+  "health_unit_steps": "adım",
+  "todo_delete_body": "Geri almak için birkaç saniyeniz olacak.",
+  "import_card_body": "Alışkanlıklarınızı ve geçmişinizi diğer uygulamalardan getirin",
+  "month_fixed_day_hint": "Her ay aynı tarih için Aralık'ı seç ve her 1 ayda bir olarak ayarlayın",
+  "export_habit": "Bu alışkanlığı dışarı aktar",
+  "habit_links": "Otomasyonlar için bağlantılar",
+  "habit_links_off": "Tasker, bir kısayol veya NFC etiketi gibi uygulamalar, bir bağlantı açarak alışkanlıklarınızı işaretlesin. Açana kadar kapalı kalır.",
+  "todo_sort_name": "A dan Z kadar"
 }

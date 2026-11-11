@@ -699,7 +699,7 @@
   },
   "focus": "专注",
   "wipe_data_warning": "此操作将删除此手机上的所有习惯、笔记、专注记录和设置。该操作无法撤销，除非您有可导入的备份文件。",
-  "auto_backup_where": "打开应用时会自动创建完整备份，并额外保存一份可用任意编辑器打开的习惯数据。仅保留最近 5 个备份。",
+  "auto_backup_where": "打开应用时，会保存一份完整备份：一个包含所有内容（包括照片和音乐）的 .zip 文件，以及一个 .json 文件。还会生成一份可读副本，你可以用任何编辑器打开。最近几次备份会被保留。",
   "widget_demo_run": "跑步",
   "widget_cfg_style_classic": "经典",
   "archived_habits_sub": "可恢复或永久删除",
@@ -1490,5 +1490,36 @@
   "habit_time_sub": "习惯将在这个时间显示在「计划」页。但它仍会显示在「今日」页一整天。",
   "todo_delete_body": "你只有几秒钟的时间撤销它。",
   "any_step": "完成任一步骤就算完成",
-  "any_step_sub": "无需做完所有步骤，勾选任一步骤当天就算完成。"
+  "any_step_sub": "无需做完所有步骤，勾选任一步骤当天就算完成。",
+  "import_card_body": "从其他应用导入你的习惯和历史记录",
+  "clean_days": "保持天数",
+  "reminder_habit_days_hint": "它会在需要执行该习惯的日子提醒你。",
+  "focus_label": "标签",
+  "focus_label_none": "无标签",
+  "focus_label_new": "新建标签",
+  "focus_label_hint": "数学、阅读、工作……",
+  "focus_label_remove": "删除标签",
+  "focus_label_remove_body": "{label} 会从列表中删除。你过去的记录仍会保留该标签。",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "删除",
+  "by_label": "按标签",
+  "tracking_hide": "仅隐藏追踪记录",
+  "tracking_hide_sub": "仅追踪的习惯不会显示在此列表中。",
+  "tracking_show": "仅显示追踪 ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "month_fixed_day_hint": "若要每月固定在同一天，请选择“间隔”，并将其设为每 1 个月",
+  "reminders_ready_title": "提醒已启用",
+  "reminder_sound_default": "默认"
 }

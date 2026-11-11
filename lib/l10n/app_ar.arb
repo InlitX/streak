@@ -1229,5 +1229,27 @@
       }
     }
   },
-  "today_filter": "إظهار"
+  "today_filter": "إظهار",
+  "import_card_body": "إجلب عاداتك و سجلك من التطبيقات الأخرى",
+  "every_n_minutes": "كل {n} دقيقة",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "every_hours_minutes": "كل {n} ح {n}دقيقة",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_focus_only": "فقط مع حصص التركيز",
+  "focus_change_habit": "غير العادة"
 }
