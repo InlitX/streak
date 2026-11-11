@@ -72,6 +72,7 @@ flutter:
   assets:
     - assets/profile_default.jpg
     - assets/icon.png
+    - assets/support-cat.png
     - assets/sounds/
     - assets/backgrounds/
     - assets/island/

@@ -16,6 +16,7 @@ import 'package:streak/features/settings/pages/about_page.dart';
 import 'package:streak/features/settings/pages/app_style_page.dart';
 import 'package:streak/features/settings/pages/archived_habits_page.dart';
 import 'package:streak/features/settings/settings_actions.dart';
+import 'package:streak/features/settings/widgets/support_thanks.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/import_apps_card.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
@@ -884,6 +885,7 @@ class _SupportPage extends StatelessWidget {
             ),
           ],
         ),
+        const SupportThanks(),
       ],
     );
   }

@@ -26,6 +26,7 @@ import 'package:streak/features/settings/widgets/import_apps_card.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/features/settings/widgets/color_theme_sheet.dart';
 import 'package:streak/features/settings/widgets/settings_sheets.dart';
+import 'package:streak/features/settings/widgets/support_thanks.dart';
 import 'package:streak/features/settings/widgets/widget_style_list.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -141,12 +142,14 @@ class _ClassicSection extends StatelessWidget {
     required this.label,
     required this.children,
     this.lead,
+    this.after,
   });
 
   final String title;
   final String label;
   final List<Widget> children;
   final Widget? lead;
+  final Widget? after;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +162,7 @@ class _ClassicSection extends StatelessWidget {
           if (lead != null) Entrance(index: 1, child: lead!),
           if (lead != null) const SizedBox(height: 12),
           Entrance(index: 1, child: Card(child: Column(children: children))),
+          if (after != null) Entrance(index: 2, child: after!),
         ],
       ),
     );
@@ -932,6 +936,7 @@ class _ClassicSupportPage extends StatelessWidget {
     return _ClassicSection(
       title: context.l10n.support,
       label: context.l10n.support_sub,
+      after: const SupportThanks(),
       children: [
         NavRow(
           icon: LucideIcons.userPlus,
