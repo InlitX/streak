@@ -1239,7 +1239,7 @@
       }
     }
   },
-  "every_hours_minutes": "كل {n} ح {n}دقيقة",
+  "every_hours_minutes": "كل {h} س {m} دقيقة",
   "@every_hours_minutes": {
     "placeholders": {
       "h": {
