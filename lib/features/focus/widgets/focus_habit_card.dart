@@ -286,6 +286,19 @@ class _QuickHabit extends StatelessWidget {
   }
 }
 
+List<Habit> focusOrder(List<Habit> habits) {
+  final today = AppClock.now();
+  int rank(Habit habit) {
+    final focused = habit.isTimeAmount || habit.focusOnly;
+    final done = habit.isCompletedOn(today);
+    return (focused ? 0 : 2) + (done ? 1 : 0);
+  }
+
+  return [
+    for (var r = 0; r < 4; r++) ...habits.where((h) => rank(h) == r),
+  ];
+}
+
 Future<String?> showFocusHabitPicker(
   BuildContext context, {
   required List<Habit> habits,

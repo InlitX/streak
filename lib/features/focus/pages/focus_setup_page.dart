@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
-import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/routing/app_navigator.dart';
@@ -174,24 +173,11 @@ class _FocusSetupPageState extends State<FocusSetupPage> with ShortcutHost {
   Future<void> _openHabits(List<Habit> habits) async {
     final id = await showFocusHabitPicker(
       context,
-      habits: _focusOrder(habits),
+      habits: focusOrder(habits),
       selectedId: _habitId,
     );
     if (id == null || !mounted) return;
     _choose(context.read<HabitsController>().byId(id));
-  }
-
-  List<Habit> _focusOrder(List<Habit> habits) {
-    final today = AppClock.now();
-    int rank(Habit habit) {
-      final focused = habit.isTimeAmount || habit.focusOnly;
-      final done = habit.isCompletedOn(today);
-      return (focused ? 0 : 2) + (done ? 1 : 0);
-    }
-
-    return [
-      for (var r = 0; r < 4; r++) ...habits.where((h) => rank(h) == r),
-    ];
   }
 
   List<Habit?> _quick(List<Habit> habits) {
@@ -205,7 +191,7 @@ class _FocusSetupPageState extends State<FocusSetupPage> with ShortcutHost {
       if (habit == null || !seen.add(habit.id)) continue;
       picked.add(habit);
     }
-    for (final habit in _focusOrder(habits)) {
+    for (final habit in focusOrder(habits)) {
       if (picked.length >= 3) break;
       if (seen.add(habit.id)) picked.add(habit);
     }

@@ -321,7 +321,7 @@ class _FocusPageState extends State<FocusPage> with ShortcutHost {
   Future<void> _switchHabit(HabitsController habits) async {
     final id = await showFocusHabitPicker(
       context,
-      habits: habits.habits,
+      habits: focusOrder(habits.habits),
       selectedId: _focus.habitId,
     );
     if (id == null || !mounted) return;
