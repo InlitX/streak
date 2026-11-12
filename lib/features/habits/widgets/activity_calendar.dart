@@ -8,6 +8,7 @@ import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -181,13 +182,16 @@ class _CalendarCell extends StatelessWidget {
         !outOfScope &&
         (negative || (habit.capsAmount && (habit.completions[date.dayKey]?.count ?? 0) > 0));
     final paused = isCurrentMonth && !outOfScope && habit.isNeutralOn(date);
+    final mark = isCurrentMonth && !outOfScope ? dayMarkOf(habit, date) : null;
     final tappable = isCurrentMonth && !future;
     final danger = context.tokens.danger;
     final count = future ? 0.0 : (habit.completions[date.dayKey]?.count ?? 0);
     final quantity = habit.kind == HabitKind.quantitative;
 
     final Color? fillColor;
-    if (paused) {
+    if (mark != null) {
+      fillColor = Colors.transparent;
+    } else if (paused) {
       fillColor = context.tokens.info.withValues(alpha: 0.5);
     } else if (isCurrentMonth && relapsed) {
       fillColor = danger;
@@ -214,7 +218,9 @@ class _CalendarCell extends StatelessWidget {
             (ratioFill && count > 0));
 
     final Color textColor;
-    if (filledStrong) {
+    if (mark != null) {
+      textColor = mark.ink(context);
+    } else if (filledStrong) {
       textColor = (relapsed ? danger : habit.color.shownIn(context)).computeLuminance() > 0.5
           ? Colors.black
           : Colors.white;
@@ -243,7 +249,10 @@ class _CalendarCell extends StatelessWidget {
           onLongPress: isCurrentMonth && onLongPress != null
               ? () => onLongPress!(date)
               : null,
-          child: AnimatedContainer(
+          child: DayMarkTile(
+            mark: mark,
+            radius: 10,
+            child: AnimatedContainer(
             duration: const Duration(milliseconds: 280),
             height: quantity ? 44 : 38,
             decoration: BoxDecoration(
@@ -261,6 +270,8 @@ class _CalendarCell extends StatelessWidget {
                   '${date.day}',
                   style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
                 ),
+                if (mark != null)
+                  mark.glyph(context, 12),
                 if (quantity && isCurrentMonth && count > 0)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -284,6 +295,7 @@ class _CalendarCell extends StatelessWidget {
                 ],
               ],
             ),
+          ),
           ),
         ),
       ),

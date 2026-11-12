@@ -56,6 +56,14 @@ void main() {
     expect(habit.savedDays, isEmpty);
   });
 
+  test('saved days stay marked after a later break', () {
+    final habit = _habit(120, {80, 10, 9});
+    expect(habit.isChanceDay(_ago(80)), isTrue);
+    expect(habit.isChanceDay(_ago(10)), isFalse);
+    expect(habit.isChanceDay(_ago(9)), isFalse);
+    expect(habit.savedDays, isEmpty);
+  });
+
   test('turned off keeps the old rule', () {
     Habit.secondChances = false;
     final habit = _habit(40, {5});

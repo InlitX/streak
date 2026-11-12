@@ -411,6 +411,9 @@ class Habit {
 
   bool get isOnVacation => vacations.any((v) => v.isOngoing);
 
+  bool isVacationOn(DateTime date) =>
+      isNeutralOn(date) && vacations.any((v) => v.contains(date));
+
   bool isNeutralOn(DateTime date) =>
       !date.atMidnight.isBefore(startedAt) &&
       isPausedOn(date) &&
@@ -705,14 +708,28 @@ class Habit {
           interval == HabitInterval.weekdays ||
           interval == HabitInterval.everyXDays);
 
-  late final ({int current, int best, int left, List<DateTime> saved})?
-      _chances = _chanceRun();
+  late final ({
+    int current,
+    int best,
+    int left,
+    List<DateTime> saved,
+    Set<int> used,
+  })? _chances = _chanceRun();
 
   int get chancesLeft => _chances?.left ?? 0;
 
   List<DateTime> get savedDays => _chances?.saved ?? const [];
 
-  ({int current, int best, int left, List<DateTime> saved})? _chanceRun() {
+  bool isChanceDay(DateTime date) =>
+      _chances?.used.contains(date.epochDay) ?? false;
+
+  ({
+    int current,
+    int best,
+    int left,
+    List<DateTime> saved,
+    Set<int> used,
+  })? _chanceRun() {
     if (!usesChances) return null;
     final today = AppClock.today();
     final daily = interval == HabitInterval.daily;
@@ -721,6 +738,7 @@ class Habit {
     var bank = 0;
     var missed = false;
     var saved = <DateTime>[];
+    final used = <int>{};
     for (var day = startedAt; !day.isAfter(today); day = day.addDays(1)) {
       if (isNeutralOn(day) || (!daily && !isScheduledOn(day))) continue;
       if (daily ? isCompletedOn(day) : isSatisfiedOn(day)) {
@@ -735,8 +753,10 @@ class Habit {
         bank--;
         missed = true;
         saved.add(day);
+        used.add(day.epochDay);
         continue;
       }
+      if (missed && saved.isNotEmpty) used.remove(saved.last.epochDay);
       run = 0;
       bank = 0;
       missed = false;
@@ -747,6 +767,7 @@ class Habit {
       best: best,
       left: bank,
       saved: saved,
+      used: used,
     );
   }
 

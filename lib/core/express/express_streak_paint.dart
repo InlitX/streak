@@ -1,18 +1,42 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 
 enum ExpressDayState {
   done,
   relapse,
   covered,
+  chance,
+  vacation,
   neutral,
   off,
   empty,
   future,
   blank,
 }
+
+extension ExpressDayMark on ExpressDayState {
+  bool get kept =>
+      this == ExpressDayState.done ||
+      this == ExpressDayState.chance ||
+      this == ExpressDayState.vacation;
+
+  DayMark? get mark => switch (this) {
+    ExpressDayState.chance => DayMark.chance,
+    ExpressDayState.vacation => DayMark.vacation,
+    _ => null,
+  };
+}
+
+ExpressDayState? expressMarkState(Habit habit, DateTime date) =>
+    switch (dayMarkOf(habit, date)) {
+      DayMark.chance => ExpressDayState.chance,
+      DayMark.vacation => ExpressDayState.vacation,
+      null => null,
+    };
 
 class ExpressStreakInk {
   const ExpressStreakInk({
@@ -66,7 +90,7 @@ void paintStreakRow(
 
   for (var i = 0; i < states.length; i++) {
     final state = states[i];
-    if (state == ExpressDayState.done || state == ExpressDayState.blank) {
+    if (state.kept || state == ExpressDayState.blank) {
       continue;
     }
     final height = thickness - gap;
@@ -84,12 +108,12 @@ void paintStreakRow(
   final grow = 0.94 + 0.06 * progress.clamp(0.0, 1.2);
   var i = 0;
   while (i < states.length) {
-    if (states[i] != ExpressDayState.done) {
+    if (!states[i].kept) {
       i++;
       continue;
     }
     var end = i;
-    while (end + 1 < states.length && states[end + 1] == ExpressDayState.done) {
+    while (end + 1 < states.length && states[end + 1].kept) {
       end++;
     }
 
@@ -103,13 +127,34 @@ void paintStreakRow(
       height: height,
     );
 
+    final pill = RRect.fromRectAndRadius(rect, Radius.circular(height / 2));
     canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(height / 2)),
+      pill,
       Paint()
         ..shader = LinearGradient(
           colors: [ink.color.withValues(alpha: 0.82), ink.color],
         ).createShader(rect),
     );
+    canvas.save();
+    canvas.clipRRect(pill);
+    for (var k = i; k <= end; k++) {
+      final mark = states[k].mark;
+      if (mark == null) continue;
+      var last = k;
+      while (last < end && states[last + 1].mark == mark) {
+        last++;
+      }
+      final from = math.max(area.left + cell * k, rect.left);
+      final to = math.min(area.left + cell * (last + 1), rect.right);
+      k = last;
+      paintDayMark(
+        canvas,
+        RRect.fromLTRBR(from, rect.top, to, rect.bottom, Radius.zero),
+        mark,
+        rim: false,
+      );
+    }
+    canvas.restore();
     i = end + 1;
   }
 }

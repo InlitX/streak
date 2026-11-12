@@ -11,6 +11,7 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -72,6 +73,8 @@ class _ExpressMonthCalendarState extends State<ExpressMonthCalendar>
     if (date.isAfter(_today)) return ExpressDayState.future;
     if (widget.habit.isRelapseOn(date)) return ExpressDayState.relapse;
     if (widget.habit.isCompletedOn(date)) return ExpressDayState.done;
+    final marked = expressMarkState(widget.habit, date);
+    if (marked != null) return marked;
     if (widget.habit.isCoveredOn(date)) return ExpressDayState.covered;
     if (widget.habit.isNeutralOn(date)) return ExpressDayState.neutral;
     if (widget.habit.isOffDay(date)) return ExpressDayState.off;
@@ -213,6 +216,8 @@ class ExpressMonthStrip extends StatelessWidget {
       if (date.isAfter(today)) return ExpressDayState.future;
       if (habit.isRelapseOn(date)) return ExpressDayState.relapse;
       if (habit.isCompletedOn(date)) return ExpressDayState.done;
+      final marked = expressMarkState(habit, date);
+      if (marked != null) return marked;
       if (habit.isCoveredOn(date)) return ExpressDayState.covered;
       if (habit.isNeutralOn(date)) return ExpressDayState.neutral;
       if (habit.isOffDay(date)) return ExpressDayState.off;
@@ -273,6 +278,8 @@ class _MonthCell extends StatelessWidget {
         ? (habit.color.shownIn(context).computeLuminance() > 0.55 ? Colors.black : Colors.white)
         : relapse
         ? Colors.white
+        : state.mark != null
+        ? state.mark!.ink(context)
         : future
         ? context.tokens.muted.withValues(alpha: 0.45)
         : context.colors.onSurface;
@@ -303,6 +310,8 @@ class _MonthCell extends StatelessWidget {
                   tabular: true,
                 ),
               ),
+              if (state.mark case final mark?)
+                mark.glyph(context, 10),
               if (habit.kind == HabitKind.quantitative &&
                   !future &&
                   (habit.completions[date.dayKey]?.count ?? 0) > 0)

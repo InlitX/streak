@@ -7,6 +7,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 import 'package:streak/features/habits/widgets/day_stamp.dart';
 import 'package:streak/features/habits/widgets/heatmap_path.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
@@ -26,6 +27,8 @@ Color heatmapCellColor(
   final scheme = context.colors;
   final today = AppClock.today();
   final beforeCreation = date.atMidnight.isBefore(habit.startedAt);
+  final mark = beforeCreation ? null : dayMarkOf(habit, date);
+  if (mark != null) return mark.fill;
 
   if (!beforeCreation && !date.isAfter(today) && habit.isNeutralOn(date)) {
     return context.tokens.info.withValues(alpha: 0.5);
@@ -171,7 +174,10 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
         final date = start.addDays(i);
         final future = date.isAfter(_today);
         final fill = _cell(context, date);
-        final ink = fill.a < 0.55
+        final mark = dayMarkOf(widget.habit, date);
+        final ink = mark != null
+            ? mark.ink(context)
+            : fill.a < 0.55
             ? context.tokens.muted
             : (fill.computeLuminance() > 0.55 ? Colors.black : Colors.white);
 
@@ -205,13 +211,21 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                             : null,
                       ),
                       child: ExcludeSemantics(
-                        child: MediaQuery.withClampedTextScaling(
-                          maxScaleFactor: 1.15,
-                          child: DayStamp(
-                            date: date,
-                            label: labels[i].replaceAll('.', '').toUpperCase(),
-                            compact: compact,
-                            color: future ? ink.withValues(alpha: 0.45) : ink,
+                        child: DayMarkTile(
+                          mark: mark,
+                          radius: widget.circle ? 16 : 11,
+                          child: DayMarkCorner(
+                            mark: mark,
+                            inset: widget.circle ? 5 : 3,
+                            child: MediaQuery.withClampedTextScaling(
+                              maxScaleFactor: 1.15,
+                              child: DayStamp(
+                                date: date,
+                                label: labels[i].replaceAll('.', '').toUpperCase(),
+                                compact: compact,
+                                color: future ? ink.withValues(alpha: 0.45) : ink,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -310,6 +324,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                         alpha: 0.4,
                       )
                     : _cell(context, date, inScope: inScope);
+                final mark = inScope ? dayMarkOf(widget.habit, date) : null;
                 return Padding(
                   padding: EdgeInsets.only(bottom: gap),
                   child: _tappable(
@@ -326,6 +341,9 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                               ? _todayRing(context, fill, 1.5)
                               : null,
                         ),
+                        child: mark == null
+                            ? null
+                            : DayMarkTile(mark: mark, radius: radius),
                       ),
                     ),
                   ),
@@ -418,6 +436,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                         alpha: 0.4,
                       )
                     : _cell(context, date);
+                final mark = inMonth ? dayMarkOf(widget.habit, date) : null;
                 final decoration = BoxDecoration(
                   color: fill,
                   borderRadius: BorderRadius.circular(widget.circle ? 999 : 9),
@@ -425,9 +444,21 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
                       ? _todayRing(context, fill, widget.compact ? 1.2 : 1.5)
                       : null,
                 );
-                final number = inMonth && side >= 20
-                    ? _dayNumber(context, date, fill, side, future: future)
+                final shown = inMonth && side >= 20
+                    ? DayMarkCorner(
+                        mark: mark,
+                        size: (side * 0.28).clamp(8.0, 11.0),
+                        inset: widget.circle ? side * 0.12 : 2,
+                        child: _dayNumber(context, date, fill, side, future: future),
+                      )
                     : null;
+                final number = mark == null
+                    ? shown
+                    : DayMarkTile(
+                        mark: mark,
+                        radius: widget.circle ? side / 2 : 9,
+                        child: shown,
+                      );
                 return SizedBox(
                   width: side,
                   height: side,
@@ -492,6 +523,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
   }
 
   Widget _yearCell(BuildContext context, DateTime date, double cell) {
+    final mark = dayMarkOf(widget.habit, date);
+    final radius = widget.circle ? cell / 2 : 3.0;
     return _tappable(
       date: date,
       enabled: true,
@@ -501,8 +534,9 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: _cell(context, date),
-            borderRadius: BorderRadius.circular(widget.circle ? cell / 2 : 3),
+            borderRadius: BorderRadius.circular(radius),
           ),
+          child: mark == null ? null : DayMarkTile(mark: mark, radius: radius),
         ),
       ),
     );

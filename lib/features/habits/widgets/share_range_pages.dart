@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -72,6 +73,7 @@ class SharePanelHeader extends StatelessWidget {
 
 Color shareDayFill(Habit habit, DateTime date, Color accent) {
   if (date.isAfter(AppClock.now())) return Colors.transparent;
+  if (dayMarkOf(habit, date) case final mark?) return mark.fill.withValues(alpha: 0.8);
   if (habit.isNeutralOn(date)) return const Color(0xFF3F6CA8);
   if (habit.isRelapseOn(date)) return const Color(0xFF9E3B3B);
   return habit.isCompletedOn(date) ? accent : Colors.transparent;

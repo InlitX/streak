@@ -7,6 +7,7 @@ import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/day_marks.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/note_widgets.dart';
@@ -67,6 +68,8 @@ class _ExpressStreakRowState extends State<ExpressStreakRow>
     if (date.isAfter(today)) return ExpressDayState.future;
     if (widget.habit.isRelapseOn(date)) return ExpressDayState.relapse;
     if (widget.habit.isCompletedOn(date)) return ExpressDayState.done;
+    final marked = expressMarkState(widget.habit, date);
+    if (marked != null) return marked;
     if (widget.habit.isCoveredOn(date)) return ExpressDayState.covered;
     if (widget.habit.isNeutralOn(date)) return ExpressDayState.neutral;
     if (widget.habit.isOffDay(date)) return ExpressDayState.off;
@@ -165,6 +168,8 @@ class _DayCell extends StatelessWidget {
         ? ink
         : relapse
         ? Colors.white
+        : state.mark != null
+        ? state.mark!.ink(context)
         : future
         ? context.tokens.muted.withValues(alpha: 0.45)
         : context.tokens.muted;
@@ -195,7 +200,12 @@ class _DayCell extends StatelessWidget {
                     tabular: true,
                   ),
                 ),
-                if (label != null)
+                if (state.mark case final mark?)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: mark.glyph(context, 12),
+                  )
+                else if (label != null)
                   Text(
                     label!,
                     maxLines: 1,
