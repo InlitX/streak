@@ -1533,5 +1533,13 @@
   "app_lock_biometric_sub": "La huella, la cara o el bloqueo que ya usas en el móvil",
   "todo_repeat_last_day": "El último día",
   "todo_sort_time": "Por fecha y hora",
-  "todo_sort_name": "De la A a la Z"
+  "todo_sort_name": "De la A a la Z",
+  "reminder_after_miss": "Solo tras un fallo",
+  "reminder_after_miss_desc": "Suena una vez, el siguiente día que toca, solo si el anterior salió mal. Si hoy ya lo hiciste, no suena.",
+  "reminder_after_miss_hint": "Déjalo vacío para recibir unas palabras amables",
+  "reminder_after_miss_short": "Tras un fallo",
+  "notif_comeback": "La última vez no salió, y no pasa nada. Si lo haces hoy, vuelves a estar en marcha.",
+  "notif_comeback_chance": "Una segunda oportunidad salvó tu racha. Hoy cuenta.",
+  "notif_comeback_hard": "Últimamente cuesta. Una meta más pequeña también cuenta, y puedes cambiarla cuando quieras.",
+  "notif_comeback_avoid": "Un tropiezo no borra lo que llevas. Hoy empiezas de nuevo."
 }

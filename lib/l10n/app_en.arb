@@ -1776,5 +1776,13 @@
   "app_lock_biometric_sub": "The fingerprint, face or lock you already use on this phone",
   "todo_repeat_last_day": "On the last day",
   "todo_sort_time": "By date and time",
-  "todo_sort_name": "A to Z"
+  "todo_sort_name": "A to Z",
+  "reminder_after_miss": "Only after a missed day",
+  "reminder_after_miss_desc": "Rings once, on the next day the habit is due, only if the last one went wrong. Never if you've already done it today.",
+  "reminder_after_miss_hint": "Leave empty for a few kind words",
+  "reminder_after_miss_short": "After a missed day",
+  "notif_comeback": "Last time didn't happen, and that's okay. Doing it today puts you right back on track.",
+  "notif_comeback_chance": "A second chance kept your streak alive. Today counts.",
+  "notif_comeback_hard": "This one has been tough lately. A smaller goal still counts, and you can change it anytime.",
+  "notif_comeback_avoid": "One slip doesn't erase your progress. Today is a fresh start."
 }
