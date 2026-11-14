@@ -1,3 +1,5 @@
+import 'dart:ui' show PointMode;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_palette.dart';
@@ -177,12 +179,15 @@ class _DotsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    for (var y = _gap; y < size.height; y += _gap) {
-      for (var x = _gap; x < size.width; x += _gap) {
-        canvas.drawCircle(Offset(x, y), _radius, paint);
-      }
-    }
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = _radius * 2
+      ..strokeCap = StrokeCap.round;
+    final dots = [
+      for (var y = _gap; y < size.height; y += _gap)
+        for (var x = _gap; x < size.width; x += _gap) Offset(x, y),
+    ];
+    canvas.drawPoints(PointMode.points, dots, paint);
   }
 
   @override
