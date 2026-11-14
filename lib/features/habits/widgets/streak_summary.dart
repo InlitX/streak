@@ -29,7 +29,10 @@ class StreakSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final negative = habit.kind == HabitKind.negative;
     final (period, count) = periodTotal(context, habit, mode);
-    return Row(
+    final express = context.watch<SettingsController>().isExpressStyle;
+    final row = Row(
+      crossAxisAlignment:
+          express ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
       children: [
         if (habit.tracking)
           Expanded(
@@ -74,6 +77,8 @@ class StreakSummary extends StatelessWidget {
         ),
       ],
     );
+    if (express) return row;
+    return IntrinsicHeight(child: row);
   }
 }
 
@@ -100,6 +105,7 @@ class _StatBox extends StatelessWidget {
         radius: Express.cardRadius,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ExpressBlob(
               size: 34,
@@ -108,16 +114,19 @@ class _StatBox extends StatelessWidget {
               child: Icon(icon, color: iconColor, size: 16),
             ),
             const SizedBox(height: 10),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                value,
-                style: ExpressType.display.at(
-                  19,
-                  height: 1,
-                  spacing: -0.3,
-                  color: scheme.onSurface,
-                  tabular: true,
+            SizedBox(
+              height: MediaQuery.textScalerOf(context).scale(19),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  value,
+                  style: ExpressType.display.at(
+                    19,
+                    height: 1,
+                    spacing: -0.3,
+                    color: scheme.onSurface,
+                    tabular: true,
+                  ),
                 ),
               ),
             ),
@@ -140,20 +149,28 @@ class _StatBox extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: iconColor, size: 22),
             const SizedBox(height: 10),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: scheme.onSurface,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                value,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: scheme.onSurface,
+                ),
               ),
             ),
             const SizedBox(height: 2),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: context.tokens.muted),
             ),
           ],
