@@ -47,6 +47,7 @@ class DayTimelinePage extends StatefulWidget {
 
 class _DayTimelinePageState extends State<DayTimelinePage> {
   late DateTime _day = AppClock.today();
+  late DateTime _today = _day;
   final _celebration = ValueNotifier(0);
   final _scrolled = ValueNotifier(false);
   final _completing = <String>{};
@@ -290,6 +291,13 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
   Widget build(BuildContext context) {
     final page = _page;
     if (page != null && !TickerMode.valuesOf(context).enabled) return page;
+    final today = AppClock.today();
+    if (!today.isSameDay(_today)) {
+      if (_anchor(today) != _anchor(_day)) _flip++;
+      _direction = 0;
+      _day = today;
+      _today = today;
+    }
     final habits = context.watch<HabitsController>().habits;
     final weekStart = context.watch<SettingsController>().weekStart;
     final dueTodos = _todosOf(context);
