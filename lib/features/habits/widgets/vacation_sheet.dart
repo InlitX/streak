@@ -14,7 +14,8 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 
 String vacationSummary(BuildContext context, Habit habit) {
   if (habit.isOnVacation) return context.l10n.paused;
-  final days = [...habit.restDays]..sort();
+  final days = [...habit.restDays]
+    ..sort((a, b) => (a - Habit.weekStart + 7) % 7 - (b - Habit.weekStart + 7) % 7);
   if (days.isEmpty) return context.l10n.off;
   final labels = WeekdayLabels.shortMonFirst(
     Localizations.localeOf(context).languageCode,

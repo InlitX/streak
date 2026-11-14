@@ -10,6 +10,7 @@ import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/time_picker.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/widgets/minimal_form_fields.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
@@ -351,7 +352,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 else
                 Row(
                   children: List.generate(7, (i) {
-                    final day = i + 1;
+                    final day = (Habit.weekStart - 1 + i) % 7 + 1;
                     final active = _days.contains(day);
                     return Expanded(
                       child: Padding(
@@ -374,8 +375,9 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                               ),
                               child: Center(
                                 child: Text(
-                                  WeekdayLabels.shortMonFirst(
+                                  WeekdayLabels.shortFrom(
                                     Localizations.localeOf(context).languageCode,
+                                    Habit.weekStart,
                                   )[i],
                                   style: TextStyle(
                                     color: active

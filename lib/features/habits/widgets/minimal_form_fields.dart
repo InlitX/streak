@@ -7,6 +7,7 @@ import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
+import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 
@@ -332,13 +333,14 @@ class CompactWeekdays extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = this.accent ?? context.colors.primary;
-    final labels = WeekdayLabels.shortMonFirst(
+    final labels = WeekdayLabels.shortFrom(
       Localizations.localeOf(context).languageCode,
+      Habit.weekStart,
     );
 
     return Row(
       children: List.generate(7, (i) {
-        final day = i + 1;
+        final day = (Habit.weekStart - 1 + i) % 7 + 1;
         final active = selected.contains(day);
         return Expanded(
           child: Padding(

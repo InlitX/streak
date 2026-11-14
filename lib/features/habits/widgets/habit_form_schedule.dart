@@ -121,7 +121,7 @@ class IntervalSelector extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: List.generate(7, (i) {
-              final day = i + 1;
+              final day = (Habit.weekStart - 1 + i) % 7 + 1;
               final active = weekdays.contains(day);
               return Expanded(
                 child: Padding(
@@ -147,8 +147,9 @@ class IntervalSelector extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            WeekdayLabels.shortMonFirst(
+                            WeekdayLabels.shortFrom(
                               Localizations.localeOf(context).languageCode,
+                              Habit.weekStart,
                             )[i],
                             style: TextStyle(
                               color: active
