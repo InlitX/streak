@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/core/express/express_switch.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/core/i18n/date_labels.dart';
@@ -22,10 +23,12 @@ class ReminderEditorSheet extends StatefulWidget {
     super.key,
     this.initial,
     this.followsHabit = false,
+    this.canFollowMisses = false,
   });
 
   final Reminder? initial;
   final bool followsHabit;
+  final bool canFollowMisses;
 
   @override
   State<ReminderEditorSheet> createState() => _ReminderEditorSheetState();
@@ -46,6 +49,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
   late int _everyMinutes;
   TimeOfDay? _until;
   late int _snooze;
+  late bool _afterMiss;
 
   @override
   void initState() {
@@ -62,6 +66,19 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
     final until = initial?.untilMinute;
     if (until != null) _until = TimeOfDay(hour: until ~/ 60, minute: until % 60);
     _snooze = initial?.snoozeMinutes ?? Reminder.defaultSnoozeMinutes;
+    _afterMiss = initial?.afterMiss ?? false;
+  }
+
+  bool get _offersAfterMiss => widget.canFollowMisses || _afterMiss;
+
+  void _setAfterMiss(bool on) {
+    setState(() {
+      _afterMiss = on;
+      if (!on) return;
+      _intervalMode = false;
+      _everyMinutes = 0;
+      _until = null;
+    });
   }
 
   @override
@@ -222,6 +239,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             : _until!.hour * 60 + _until!.minute,
         anchorEpochDay: anchor,
         snoozeMinutes: _snooze,
+        afterMiss: _afterMiss,
       ),
     );
   }
@@ -263,8 +281,14 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                 ],
               ),
               const SizedBox(height: 8),
+              if (_offersAfterMiss) ...[
+                _AfterMissRow(value: _afterMiss, onChanged: _setAfterMiss),
+                SizedBox(height: _afterMiss && !widget.followsHabit ? 0 : 16),
+              ],
               if (widget.followsHabit)
                 _HabitDaysNote(minimal: minimal)
+              else if (_afterMiss)
+                const SizedBox.shrink()
               else if (minimal)
                 Row(
                   children: [
@@ -395,6 +419,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                     );
                   }),
                 ),
+                if (!_afterMiss) ...[
                 const SizedBox(height: 16),
                 Text(context.l10n.repeat_hours,
                     style: sheetBodyStyle(context, size: 13)),
@@ -420,6 +445,7 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
                     ),
                   ],
                 ),
+                ],
               ],
             const SizedBox(height: 20),
             Text(context.l10n.time,
@@ -485,7 +511,9 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             const SizedBox(height: 8),
             AppTextField(
               controller: _message,
-              hint: context.l10n.reminder_message_hint,
+              hint: _afterMiss
+                  ? context.l10n.reminder_after_miss_hint
+                  : context.l10n.reminder_message_hint,
             ),
             const SizedBox(height: 24),
             SizedBox(
@@ -506,6 +534,48 @@ class _ReminderEditorSheetState extends State<ReminderEditorSheet> {
             ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AfterMissRow extends StatelessWidget {
+  const _AfterMissRow({required this.value, required this.onChanged});
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final express = context.watch<SettingsController>().isExpressStyle;
+    return Semantics(
+      toggled: value,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onChanged(!value),
+        child: Row(
+          children: [
+            Icon(LucideIcons.sprout, size: 20, color: context.tokens.muted),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(context.l10n.reminder_after_miss,
+                      style: sheetHeadingStyle(context)),
+                  const SizedBox(height: 2),
+                  Text(context.l10n.reminder_after_miss_desc,
+                      style: sheetBodyStyle(context, size: 12.5)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            if (express)
+              ExpressSwitch(value: value, onChanged: onChanged)
+            else
+              Switch(value: value, onChanged: onChanged),
+          ],
         ),
       ),
     );

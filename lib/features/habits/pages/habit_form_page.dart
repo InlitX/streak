@@ -566,6 +566,8 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         builder: (_) => ReminderEditorSheet(
           initial: initial,
           followsHabit: _remindersFollowHabit,
+          canFollowMisses:
+              Habit.missFollowable(_kind, _interval, tracking: _tracking),
         ),
       );
     } finally {

@@ -37,6 +37,9 @@ class ReminderTile extends StatelessWidget {
 
   String _daysLabel(BuildContext context) {
     final days = _dayNames(context);
+    if (reminder.afterMiss) {
+      return '$days · ${context.l10n.reminder_after_miss_short}';
+    }
     if (!reminder.isHourly) return days;
     return '$days · ${reminderEveryLabel(context, reminder.everyMinutes)}';
   }
