@@ -10,6 +10,7 @@ class Reminder {
     this.untilMinute,
     this.anchorEpochDay,
     this.snoozeMinutes = defaultSnoozeMinutes,
+    this.afterMiss = false,
   });
 
   static const defaultSnoozeMinutes = 15;
@@ -33,6 +34,8 @@ class Reminder {
 
   final int snoozeMinutes;
 
+  final bool afterMiss;
+
   bool get isInterval => everyDays >= 2;
 
   bool get isHourly => everyMinutes >= 1;
@@ -49,6 +52,7 @@ class Reminder {
         'untilMinute': untilMinute,
         'anchorEpochDay': anchorEpochDay,
         'snoozeMinutes': snoozeMinutes,
+        'afterMiss': afterMiss,
       };
 
   factory Reminder.fromMap(Map<String, dynamic> map) => Reminder(
@@ -64,5 +68,6 @@ class Reminder {
         anchorEpochDay: map['anchorEpochDay'] as int?,
         snoozeMinutes:
             (map['snoozeMinutes'] ?? defaultSnoozeMinutes) as int,
+        afterMiss: (map['afterMiss'] ?? false) as bool,
       );
 }

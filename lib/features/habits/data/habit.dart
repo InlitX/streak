@@ -36,6 +36,8 @@ extension HabitIntervalLabel on HabitInterval {
 
 enum ScheduleUnit { days, weeks, months }
 
+enum ComebackTone { gentle, chance, hard, avoid }
+
 enum HabitKind { positive, negative, quantitative }
 
 enum QuantKind { generic, water, reading, time }
@@ -722,6 +724,79 @@ class Habit {
 
   bool isChanceDay(DateTime date) =>
       _chances?.used.contains(date.epochDay) ?? false;
+
+  static bool missFollowable(
+    HabitKind kind,
+    HabitInterval interval, {
+    bool tracking = false,
+  }) =>
+      !tracking &&
+      (kind == HabitKind.negative ||
+          interval == HabitInterval.daily ||
+          interval == HabitInterval.weekdays ||
+          interval == HabitInterval.everyXDays);
+
+  bool get canFollowMisses =>
+      missFollowable(kind, interval, tracking: tracking);
+
+  bool get followsMisses =>
+      canFollowMisses && reminders.any((reminder) => reminder.afterMiss);
+
+  static const hardSlips = 4;
+  static const hardSpanDays = 14;
+
+  bool countsOn(DateTime date) =>
+      kind == HabitKind.negative ? !isPausedOn(date) : !isOffDay(date);
+
+  DateTime? dueBefore(DateTime date) {
+    var cursor = date.atMidnight;
+    for (var step = 0; step < 400; step++) {
+      cursor = cursor.addDays(-1);
+      if (cursor.isBefore(startedAt)) return null;
+      if (countsOn(cursor)) return cursor;
+    }
+    return null;
+  }
+
+  bool slipsOn(DateTime date) {
+    final day = date.atMidnight;
+    if (day.isBefore(startedAt) ||
+        day.isAfter(AppClock.today()) ||
+        !countsOn(day)) {
+      return false;
+    }
+    return kind == HabitKind.negative
+        ? isRelapseOn(day)
+        : !isSatisfiedOn(day) && !isCoveredOn(day);
+  }
+
+  ComebackTone? comebackOn(DateTime date) {
+    if (!canFollowMisses) return null;
+    final day = date.atMidnight;
+    final today = AppClock.today();
+    if (day.isBefore(today) || !countsOn(day)) return null;
+    if (day.isAtSameMomentAs(today) &&
+        (kind == HabitKind.negative ? isRelapseOn(day) : isCompletedOn(day))) {
+      return null;
+    }
+    final missed = dueBefore(day);
+    if (missed == null || !slipsOn(missed)) return null;
+    final earlier = dueBefore(missed);
+    if (earlier != null && slipsOn(earlier)) return null;
+    if (kind == HabitKind.negative) return ComebackTone.avoid;
+    if (_savedByChance(missed, earlier)) return ComebackTone.chance;
+    var slips = 0;
+    for (var back = 0; back < hardSpanDays; back++) {
+      if (slipsOn(missed.addDays(-back))) slips++;
+    }
+    return slips >= hardSlips ? ComebackTone.hard : ComebackTone.gentle;
+  }
+
+  bool _savedByChance(DateTime missed, DateTime? earlier) {
+    if (!usesChances) return false;
+    if (missed.isBefore(AppClock.today())) return isChanceDay(missed);
+    return chancesLeft > 0 && (earlier == null || !isChanceDay(earlier));
+  }
 
   ({
     int current,
