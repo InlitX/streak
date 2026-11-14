@@ -1776,5 +1776,34 @@
   "island_p_archway": "Арка",
   "island_p_banner": "Баннер",
   "island_p_bench": "Скамейка",
-  "island_p_blue_railing": "Синие перила"
+  "island_p_blue_railing": "Синие перила",
+  "every_n_minutes": "Каждые {n} мин",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "every_hours_minutes": "Каждые {h} ч {m} мин",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "habits_search": "Искать привычку",
+  "focus_change_habit": "Изменить привычку",
+  "shortcuts_title": "Сочетания клавиш",
+  "shortcuts_next_tab": "Следующая вкладка",
+  "shortcuts_prev_tab": "Предыдущая вкладка",
+  "shortcuts_settings": "Открыть настрйоки",
+  "shortcuts_save": "Сохранить",
+  "shortcuts_new_project": "Новый проект",
+  "shortcuts_new": "Новая привычка или задача",
+  "shortcuts_group_create": "Создать и редактировать"
 }
