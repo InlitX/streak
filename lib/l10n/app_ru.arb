@@ -140,7 +140,7 @@
   "kind_negative": "Избегать",
   "kind_quantitative": "Количество",
   "kind_locked_hint": "Тип нельзя изменить после создания привычки.",
-  "kind_negative_hint": "По умолчанию каждый день засчитывается как чистый — серия растёт сама по себе. Нажимайте на отметку, только если сорвались; этот день станет красным, и отметку можно будет отменить.",
+  "kind_negative_hint": "Каждый день по умолчанию считается чистым: ваша серия растет сама собой.Нажимайте на галочку только в том случае, если вы оступились; этот день станет красным, и вы сможете отменить действие",
   "quant_preset_water": "Вода",
   "quant_preset_reading": "Чтение",
   "quant_preset_generic": "Своё",
@@ -1514,7 +1514,7 @@
   "todo_repeat_from_done": "Считать от момента выполнения",
   "todo_sort_high_first": "С высоким приоритетом первые",
   "todo_sort_low_first": "С низким приоритетом первые",
-  "todo_sort": "Порядок приоритета",
+  "todo_sort": "Сортировка задач",
   "todo_project_empty": "В этой папке пока ничего нет",
   "todo_mark_done": "Выполнить",
   "todo_mark_open": "«Не» выполнить",
@@ -1805,5 +1805,56 @@
   "shortcuts_save": "Сохранить",
   "shortcuts_new_project": "Новый проект",
   "shortcuts_new": "Новая привычка или задача",
-  "shortcuts_group_create": "Создать и редактировать"
+  "shortcuts_group_create": "Создать и редактировать",
+  "import_card_body": "Перенесите свои привычки и историю из других приложений",
+  "day_marked": "Маркер {дата}",
+  "@day_marked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "day_unmarked": "Не отмечено {Дата}",
+  "@day_unmarked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "support_thanks_title": "Спасибо, что вы здесь 🤍",
+  "support_thanks_body": "Streak бесплатен и всегда будет бесплатным без рекламы и скрытых платежей. Если это поможет вам выработать полезные привычки, покупка кофе сделает мой день лучше. А если нет, не волнуйтесь: звезда на GitHub тоже сделает.",
+  "avoid_since": "С",
+  "todo_remind_before": "Напомни мне перед",
+  "todo_remind_at_time": "В данный момент",
+  "todo_remind_label": "{time} до",
+  "@todo_remind_label": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_due_in": "В {time}",
+  "@todo_due_in": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_focus_only": "Только флкус сессия",
+  "todo_focus_only_body": "\"{name}\" завершается после окончания {minutes} фокус сессии",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_completed": "Завершено"
 }
