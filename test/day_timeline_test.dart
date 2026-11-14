@@ -115,6 +115,18 @@ void main() {
     expect(find.byType(TimelineBlock), findsOneWidget);
   });
 
+  testWidgets('a new day moves the plan to the new today', (tester) async {
+    addTearDown(() => AppClock.cutoffHour = 0);
+    await pumpScreen(tester, const DayTimelinePage());
+    expect(find.byTooltip('Today'), findsNothing);
+
+    AppClock.cutoffHour = 24;
+    _controller(tester).notifyListeners();
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Today'), findsNothing);
+  });
+
   testWidgets('Today hides the day button until planning is on',
       (tester) async {
     await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
