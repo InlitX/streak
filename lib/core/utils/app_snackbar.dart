@@ -8,8 +8,12 @@ enum _Kind { success, error, info, warning }
 class AppSnackbar {
   const AppSnackbar._();
 
-  static void success(BuildContext context, String message) =>
-      _show(context, message, _Kind.success);
+  static void success(
+    BuildContext context,
+    String message, {
+    Duration? duration,
+  }) =>
+      _show(context, message, _Kind.success, duration: duration);
 
   static void action(
     BuildContext context,

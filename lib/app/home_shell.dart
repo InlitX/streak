@@ -120,7 +120,11 @@ class _HomeShellState extends State<HomeShell>
       final habit = habits.byId(session.habitId);
       if (before || habit == null || !habit.isCompletedOn(day)) return;
       if (!mounted) return;
-      AppSnackbar.success(context, context.l10n.focus_goal_reached(habit.name));
+      AppSnackbar.success(
+        context,
+        context.l10n.focus_goal_reached(habit.name),
+        duration: const Duration(seconds: 10),
+      );
     };
     _waitForNextDay();
     WidgetsBinding.instance.addPostFrameCallback((_) => _announceChances());
