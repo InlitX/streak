@@ -475,6 +475,7 @@ class HabitsController extends ChangeNotifier {
     final today = AppClock.now();
     if (habit.reminders.isNotEmpty &&
         (habit.fromLastDone ||
+            habit.followsMisses ||
             habit.silencesRemindersOn(today) !=
                 updated.silencesRemindersOn(today))) {
       _refreshReminders(habit.id);

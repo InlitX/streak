@@ -316,6 +316,7 @@ class NotificationService {
 
   Future<Set<int>> _schedule(Habit habit, Reminder reminder) async {
     final strings = await localizations();
+    if (reminder.afterMiss) return _scheduleAfterMiss(habit, reminder, strings);
     final body = _bodyFor(habit, reminder, strings);
     if (habit.interval == HabitInterval.everyXDays) {
       return _scheduleOnHabitDays(habit, reminder, body, strings);
@@ -365,6 +366,66 @@ class NotificationService {
       body = '$body\n$line';
     }
     return body;
+  }
+
+  String _comebackBody(
+      Habit habit, Reminder reminder, ComebackTone tone, AppLocalizations strings) {
+    final message = reminder.message.trim();
+    var body = message.isNotEmpty
+        ? message
+        : switch (tone) {
+            ComebackTone.gentle => strings.notif_comeback,
+            ComebackTone.chance => strings.notif_comeback_chance,
+            ComebackTone.hard => strings.notif_comeback_hard,
+            ComebackTone.avoid => strings.notif_comeback_avoid,
+          };
+    final name = LocalStore.setting('profileName', '').trim();
+    if (name.isNotEmpty) body = strings.notif_greeting(name) + body;
+    return body;
+  }
+
+  Future<Set<int>> _scheduleAfterMiss(
+      Habit habit, Reminder reminder, AppLocalizations strings) async {
+    final ids = <int>{};
+    if (!habit.canFollowMisses) return ids;
+    final followsHabit = habit.kind != HabitKind.negative &&
+        habit.interval == HabitInterval.everyXDays;
+    final now = tz.TZDateTime.now(tz.local);
+    final today = AppClock.today();
+    final days = <DateTime>[today];
+    for (var step = 1; step <= ReminderSchedule.habitDaysHorizon; step++) {
+      final day = today.addDays(step);
+      if (habit.countsOn(day)) {
+        days.add(day);
+        break;
+      }
+    }
+    for (final (slot, day) in days.indexed) {
+      if (!followsHabit && !reminder.days.contains(day.weekday)) continue;
+      final tone = habit.comebackOn(day);
+      if (tone == null) continue;
+      final at = tz.TZDateTime(
+        tz.local,
+        day.year,
+        day.month,
+        day.day,
+        reminder.hour,
+        reminder.minute,
+      );
+      if (!at.isAfter(now)) continue;
+      final id = _notificationId(habit.id, reminder.id, slot);
+      final body = _comebackBody(habit, reminder, tone, strings);
+      ids.add(id);
+      await _zonedSchedule(
+        id,
+        habit.name,
+        body,
+        at,
+        await _details(habit, body, strings, reminder: reminder),
+        payload: habit.id,
+      );
+    }
+    return ids;
   }
 
   static final _random = Random();
@@ -1232,6 +1293,7 @@ class NotificationActions {
       await LocalStore.writeHabit(updated);
       habits[habitId] = updated;
       if (habit.fromLastDone ||
+          habit.followsMisses ||
           habit.silencesRemindersOn(today) !=
               updated.silencesRemindersOn(today)) {
         await NotificationService().scheduleFor(updated);

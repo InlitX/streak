@@ -60,7 +60,9 @@ class WidgetActionService {
       await LocalStore.writeHabit(habit);
       final before = quiet[id];
       if (before == null ||
-          (!habit.fromLastDone && before == habit.silencesRemindersOn(today))) {
+          (!habit.fromLastDone &&
+              !habit.followsMisses &&
+              before == habit.silencesRemindersOn(today))) {
         continue;
       }
       try {
