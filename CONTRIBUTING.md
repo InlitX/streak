@@ -38,9 +38,9 @@ Comment on the issue to use these commands:
 
 **Nobody is assigned until the maintainer approves the issue** with `/approved`,
 no matter how many claims or comments it has. Once it is approved, the first
-person who claimed it is assigned automatically, and later claims on an approved,
-unassigned issue are assigned straight away. If an issue is not approved, it
-won't be worked on.
+person who claimed it is assigned automatically (the maintainer can also pick
+someone directly), and later claims on an approved, unassigned issue are assigned
+straight away. If an issue is not approved, it won't be worked on.
 
 Streak is made by a student, so reviews can take a while. Thanks for your patience!
 
