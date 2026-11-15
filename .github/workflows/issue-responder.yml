@@ -1,0 +1,32 @@
+name: Issue Responder
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  respond:
+    # Don't answer issues opened by the owner.
+    if: github.event.issue.user.login != github.repository_owner
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Welcome the author
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = [
+              `**Thanks for opening this issue, @${issue.user.login}!** 🙌`,
+              '',
+              '- **Duplicate?** If there is already an issue about this, please comment there instead (extra details, or just "it happens to me too").',
+              '- **Response time:** Streak is made by a student, so replies can take a while, but every issue gets read. Thanks for your patience!',
+              '- **Want to work on it?** Comment `/claim`. Nobody is assigned until the maintainer approves the issue: if it is approved, it is yours; if not, it won\'t be done.',
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body,
+            });
