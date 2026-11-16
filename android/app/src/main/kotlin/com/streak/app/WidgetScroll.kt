@@ -30,6 +30,7 @@ object WidgetScroll {
     const val EXTRA_PER = "scrollPer"
     const val EXTRA_TOTAL = "scrollTotal"
     const val EXTRA_DIR = "scrollDir"
+    const val EXTRA_WRAP = "scrollWrap"
     private const val PREFS = "StreakWidgetScroll"
     private const val BUTTON = 30f
     const val FOOTER = 34f
@@ -44,6 +45,28 @@ object WidgetScroll {
         val next = (now + dir * per).coerceIn(0, maxOf(0, total - per))
         prefs(context).edit().putInt("offset_$id", next).apply()
     }
+
+    fun spot(context: Context, id: Int, total: Int): Int =
+        if (total <= 0) 0 else Math.floorMod(prefs(context).getInt("spot_$id", 0), total)
+
+    fun turn(context: Context, id: Int, dir: Int, total: Int) {
+        if (total <= 0) return
+        prefs(context).edit().putInt("spot_$id", Math.floorMod(spot(context, id, total) + dir, total)).apply()
+    }
+
+    fun turnAction(context: Context, id: Int, dir: Int, total: Int) = actionSendBroadcast(
+        Intent(context, WidgetActionReceiver::class.java).apply {
+            action = ACTION
+            putExtra(WidgetActionReceiver.EXTRA_WIDGET_ID, id)
+            putExtra(EXTRA_DIR, dir)
+            putExtra(EXTRA_TOTAL, total)
+            putExtra(EXTRA_WRAP, true)
+            data = Uri.parse("streak://turn/$id/$dir")
+        }
+    )
+
+    fun sideArrow(context: Context, color: Int, under: Int, left: Boolean, button: Float): Bitmap =
+        arrow(context, color, left, true, button, under)
 
     fun forget(context: Context, id: Int) {
         prefs(context).edit().remove("offset_$id").apply()
@@ -67,13 +90,17 @@ object WidgetScroll {
             data = Uri.parse("streak://scroll/$id/$dir")
         }
 
-    private fun arrow(context: Context, color: Int, up: Boolean): Bitmap {
+    private fun arrow(context: Context, color: Int, up: Boolean, turned: Boolean = false, button: Float = BUTTON, under: Int? = null): Bitmap {
         val density = WidgetDraw.density(context)
-        val side = (BUTTON * density).toInt()
+        val side = (button * density).toInt()
         val bitmap = Bitmap.createBitmap(side, side, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Paint.Style.FILL
+        if (under != null) {
+            paint.color = under
+            canvas.drawCircle(side / 2f, side / 2f, side / 2f, paint)
+        }
         paint.color = (color and 0x00FFFFFF) or (0x33 shl 24)
         canvas.drawCircle(side / 2f, side / 2f, side / 2f, paint)
         paint.style = Paint.Style.STROKE
@@ -82,6 +109,7 @@ object WidgetScroll {
         paint.strokeCap = Paint.Cap.ROUND
         paint.strokeJoin = Paint.Join.ROUND
         val c = side / 2f
+        if (turned) canvas.rotate(-90f, c, c)
         val w = 5.5f * density
         val h = 2.8f * density
         val path = Path()

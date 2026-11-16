@@ -13,7 +13,12 @@ class WidgetActionReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == WidgetScroll.ACTION) {
             val id = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
-            WidgetScroll.move(
+            if (intent.getBooleanExtra(WidgetScroll.EXTRA_WRAP, false)) WidgetScroll.turn(
+                context,
+                id,
+                intent.getIntExtra(WidgetScroll.EXTRA_DIR, 1),
+                intent.getIntExtra(WidgetScroll.EXTRA_TOTAL, 0),
+            ) else WidgetScroll.move(
                 context,
                 id,
                 intent.getIntExtra(WidgetScroll.EXTRA_DIR, 1),
