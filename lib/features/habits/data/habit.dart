@@ -83,6 +83,7 @@ class Habit {
     this.focusOnly = false,
     this.tracking = false,
     this.healthSteps = false,
+    this.todoLink = '',
     this.anyAmount = false,
     this.atMost = false,
     this.anySteps = false,
@@ -294,6 +295,8 @@ class Habit {
   final bool healthSteps;
 
   bool get readsSteps => healthSteps && kind == HabitKind.quantitative;
+
+  final String todoLink;
 
   final bool anyAmount;
 
@@ -1102,6 +1105,7 @@ class Habit {
     bool? focusOnly,
     bool? tracking,
     bool? healthSteps,
+    String? todoLink,
     bool? anyAmount,
     bool? atMost,
     bool? anySteps,
@@ -1162,6 +1166,7 @@ class Habit {
       focusOnly: focusOnly ?? this.focusOnly,
       tracking: tracking ?? this.tracking,
       healthSteps: healthSteps ?? this.healthSteps,
+      todoLink: todoLink ?? this.todoLink,
       anyAmount: anyAmount ?? this.anyAmount,
       atMost: atMost ?? this.atMost,
       anySteps: anySteps ?? this.anySteps,
@@ -1238,6 +1243,7 @@ class Habit {
         'focusOnly': focusOnly,
         'tracking': tracking,
         if (healthSteps) 'healthSteps': true,
+        if (todoLink.isNotEmpty) 'todoLink': todoLink,
         'anyAmount': anyAmount,
         if (atMost) 'atMost': true,
         'anySteps': anySteps,
@@ -1326,6 +1332,7 @@ class Habit {
         focusOnly: (map['focusOnly'] ?? false) as bool,
         tracking: (map['tracking'] ?? false) as bool,
         healthSteps: map['healthSteps'] == true,
+        todoLink: (map['todoLink'] ?? '') as String,
         anyAmount: (map['anyAmount'] ?? false) as bool,
         atMost: map['atMost'] == true,
         anySteps: (map['anySteps'] ?? false) as bool,

@@ -22,6 +22,8 @@ class TodosController extends ChangeNotifier {
 
   final _notifications = NotificationService();
 
+  Future<void> Function(Todo? before, Todo? after, List<Todo> todos)? onDone;
+
   late List<Todo> _todos;
   bool _lowFirst = LocalStore.setting('todoLowFirst', false);
   TodoSort _sort = todoSortOf(LocalStore.setting('todoSortBy', 0));
@@ -154,6 +156,7 @@ class TodosController extends ChangeNotifier {
     final index = _counts.at[todo.id];
     if (index == null) return;
     final before = _todos[index];
+    if (before.done != todo.done) unawaited(onDone?.call(before, todo, all));
     final dropped = [
       ...before.photos.where((p) => !todo.photos.contains(p)),
       if (before.cover.isNotEmpty && before.cover != todo.cover) before.cover,
@@ -187,7 +190,9 @@ class TodosController extends ChangeNotifier {
       clearDoneAt: !done,
     );
     if (done) CheckSound.play();
+    final before = _todos[index];
     _todos[index] = updated;
+    unawaited(onDone?.call(before, updated, all));
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(updated);
@@ -202,6 +207,7 @@ class TodosController extends ChangeNotifier {
     _todos[index] = next;
     _todos.add(record);
     notifyListeners();
+    unawaited(onDone?.call(null, record, all));
     TodosWidgetService.syncSoon(_todos);
     await LocalStore.writeTodo(next);
     await LocalStore.writeTodo(record);

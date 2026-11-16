@@ -10,7 +10,9 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_links.dart';
 import 'package:streak/features/habits/data/reminder.dart';
 import 'package:streak/features/habits/data/substep.dart';
+import 'package:streak/features/habits/data/todo_credit.dart';
 import 'package:streak/features/habits/data/vacation.dart';
+import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/backup_archive.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/check_sound.dart';
@@ -172,6 +174,7 @@ class HabitsController extends ChangeNotifier {
     bool focusOnly = false,
     bool tracking = false,
     bool healthSteps = false,
+    String todoLink = '',
     bool anyAmount = false,
     bool atMost = false,
     bool anySteps = false,
@@ -222,6 +225,7 @@ class HabitsController extends ChangeNotifier {
       focusOnly: focusOnly,
       tracking: tracking,
       healthSteps: healthSteps,
+      todoLink: todoLink,
       anyAmount: anyAmount,
       atMost: atMost,
       anySteps: anySteps,
@@ -270,6 +274,18 @@ class HabitsController extends ChangeNotifier {
     if (habit == null) return;
     if (habit.blocksManualCheck(date, fromFocus: fromFocus)) return;
     await _apply(habit, CompletionOps.toggle(habit, date), chime: !fromFocus);
+  }
+
+  Future<void> creditTodo(Todo? before, Todo? after, List<Todo> todos) async {
+    final linked = {
+      for (final habit in _habits.values)
+        if (habit.todoLink.isNotEmpty) habit.id: habit,
+    };
+    if (linked.isEmpty) return;
+    final touched = TodoCredit.apply(linked, todos, before: before, after: after);
+    for (final id in touched) {
+      await _apply(_habits[id]!, linked[id]!.completions, chime: false);
+    }
   }
 
   Future<void> logRelapse(String id, DateTime date, {double? spent}) async {

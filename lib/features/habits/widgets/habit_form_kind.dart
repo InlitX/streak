@@ -11,6 +11,7 @@ import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
+import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/features/habits/widgets/flag_group.dart';
@@ -20,6 +21,8 @@ import 'package:streak/features/habits/widgets/quant_preset_grid.dart';
 import 'package:streak/features/habits/widgets/saved_money.dart';
 import 'package:streak/features/habits/widgets/substep_draft.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 
 class KindSelector extends StatelessWidget {
   const KindSelector({
@@ -483,6 +486,71 @@ Future<double?> pickBookPages(
       min: 1,
       accent: color,
     );
+
+class TodoLinkField extends StatelessWidget {
+  const TodoLinkField({
+    super.key,
+    required this.link,
+    required this.color,
+    required this.onChanged,
+    this.compact = false,
+  });
+
+  final String link;
+  final Color color;
+  final ValueChanged<String> onChanged;
+  final bool compact;
+
+  Future<void> _pick(BuildContext context) {
+    final tags = context.read<TodoTagsController>().tags;
+    return showOptionSheet(
+      context,
+      title: context.l10n.todo_link,
+      options: [for (final tag in tags) tag.name],
+      icons: [for (final tag in tags) CategoryIcons.resolve(tag.icon)],
+      index: tags.indexWhere((tag) => tag.id == link),
+      onSelected: (index) => onChanged(tags[index].id),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tag = context.watch<TodoTagsController>().byId(link);
+    return FlagGroup(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HabitFlagToggle(
+              icon: LucideIcons.listChecks,
+              title: context.l10n.todo_link,
+              hint: context.l10n.todo_link_sub,
+              value: tag != null,
+              color: color,
+              onChanged: (on) => on ? _pick(context) : onChanged(''),
+              compact: compact,
+            ),
+            if (tag != null)
+              FlagDetail(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: ActionChip(
+                    avatar: Icon(
+                      CategoryIcons.resolve(tag.icon),
+                      size: 15,
+                      color: tag.color,
+                    ),
+                    label: Text(tag.name),
+                    onPressed: () => _pick(context),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 class FocusOnlyToggle extends StatelessWidget {
   const FocusOnlyToggle({

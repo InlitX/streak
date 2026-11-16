@@ -173,8 +173,9 @@ void _run() {
         ChangeNotifierProvider(create: (_) => FocusController()),
         ChangeNotifierProvider(create: (_) => IslandController()),
         ChangeNotifierProvider(
-          create: (_) {
+          create: (context) {
             final controller = HabitsController();
+            context.read<TodosController>().onDone = controller.creditTodo;
             HomeWidgetService.sync(controller.asMap);
             WidgetsBinding.instance.addPostFrameCallback(
               (_) => controller.rescheduleReminders(),

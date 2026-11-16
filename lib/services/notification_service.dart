@@ -16,6 +16,7 @@ import 'package:streak/features/habits/data/completion.dart';
 import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/data/todo_credit.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/services/reminder_schedule.dart';
 import 'package:streak/l10n/app_localizations.dart';
@@ -130,8 +131,10 @@ class NotificationService {
     if (id == null || id.isEmpty) return;
     if (id.startsWith(_todoPayload)) {
       if (actionId == actionTodoDone) {
-        NotificationActions.apply(actionId!, id)
-            .then((_) => onTodosChanged?.call());
+        NotificationActions.apply(actionId!, id).then((_) {
+          onTodosChanged?.call();
+          onHabitsChanged?.call();
+        });
       } else {
         openFromPayload(id);
       }
@@ -1320,12 +1323,26 @@ class NotificationActions {
       await LocalStore.writeTodo(record);
       await NotificationService().scheduleTodo(next);
       await TodosWidgetService.sync(todos);
+      await _creditTodo(todos, null, record);
       return;
     }
-    final done = todos[index].copyWith(done: true, doneAt: DateTime.now());
+    final before = todos[index];
+    final done = before.copyWith(done: true, doneAt: DateTime.now());
     todos[index] = done;
     await LocalStore.writeTodo(done);
     await TodosWidgetService.sync(todos);
+    await _creditTodo(todos, before, done);
+  }
+
+  static Future<void> _creditTodo(List<Todo> todos, Todo? before, Todo after) async {
+    await LocalStore.reloadHabits();
+    final habits = LocalStore.readHabits();
+    final touched = TodoCredit.apply(habits, todos, before: before, after: after);
+    if (touched.isEmpty) return;
+    for (final id in touched) {
+      await LocalStore.writeHabit(habits[id]!);
+    }
+    await HomeWidgetService.sync(habits, renderIcons: false);
   }
 }
 

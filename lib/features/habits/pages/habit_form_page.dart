@@ -45,6 +45,7 @@ import 'package:streak/features/habits/widgets/reminder_editor_sheet.dart';
 import 'package:streak/features/habits/widgets/reminder_sound_picker.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/services/health_steps.dart';
 import 'package:streak/services/notification_service.dart';
 import 'package:streak/services/reminder_sounds.dart';
@@ -109,6 +110,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   bool _anyAmount = false;
   bool _atMost = false;
   bool _healthSteps = false;
+  String _todoLink = '';
   bool _trackSpent = false;
   int _cleanGoal = 0;
   double _totalGoal = 0;
@@ -235,6 +237,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       _anyAmount = habit.anyAmount;
       _atMost = habit.atMost;
       _healthSteps = habit.readsSteps;
+      _todoLink = habit.todoLink;
       _trackSpent = habit.trackSpent;
       _cleanGoal = habit.cleanGoal;
       _totalGoal = habit.totalGoal;
@@ -288,6 +291,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         _anyAmount,
         _atMost,
         _healthSteps,
+        _todoLink,
         _trackSpent,
         _cleanGoal,
         _totalGoal,
@@ -443,6 +447,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           focusOnly: focusOnly,
           tracking: _tracking,
           healthSteps: healthSteps,
+          todoLink: _linksTodos ? _todoLink : '',
           anyAmount: quantitative && _anyAmount && !_atMost,
           atMost: quantitative && _atMost,
           anySteps: substeps.isNotEmpty && _anySteps,
@@ -502,6 +507,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         focusOnly: focusOnly,
         tracking: _tracking,
         healthSteps: healthSteps,
+        todoLink: _linksTodos ? _todoLink : '',
         anyAmount: quantitative && _anyAmount && !_atMost,
         atMost: quantitative && _atMost,
         anySteps: substeps.isNotEmpty && _anySteps,
@@ -788,6 +794,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           color: _color,
           onChanged: (v) => setState(() => _focusOnly = v),
         ),
+        if (_showsTodoLink) _todoLinkField(),
         ]),
       ],
       if (_kind == HabitKind.positive) ...[
@@ -1141,6 +1148,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           compact: true,
           onChanged: (v) => setState(() => _focusOnly = v),
         ),
+        if (_showsTodoLink) _todoLinkField(compact: true),
         ]),
       ],
       if (_kind == HabitKind.positive) ...[
@@ -1381,6 +1389,26 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         onChanged: (day) => setState(() => _avoidSince = day),
       );
 
+  bool get _linksTodos =>
+      !_tracking &&
+      switch (_kind) {
+        HabitKind.positive => !_focusOnly,
+        HabitKind.quantitative =>
+          _quantKind != QuantKind.time && !(_quantKind == QuantKind.generic && _healthSteps),
+        HabitKind.negative => false,
+      };
+
+  bool get _showsTodoLink =>
+      _linksTodos &&
+      (_todoLink.isNotEmpty || !context.watch<TodoTagsController>().isEmpty);
+
+  Widget _todoLinkField({bool compact = false}) => TodoLinkField(
+        link: _todoLink,
+        color: _color,
+        compact: compact,
+        onChanged: (value) => setState(() => _todoLink = value),
+      );
+
   Widget _totalGoalField({bool compact = false}) => TotalGoalField(
         goal: _totalGoal,
         compact: compact,
@@ -1559,6 +1587,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 color: _color,
                 onChanged: (v) => setState(() => _focusOnly = v),
               ),
+              if (_showsTodoLink) _todoLinkField(),
               ]),
             ],
             if (_kind == HabitKind.positive) ...[
