@@ -123,6 +123,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   Timer? _pending;
   late final AppLifecycleListener _life;
   late final String _opened;
+  late final String _openedUndone;
 
   void _edit(VoidCallback change) {
     setState(change);
@@ -135,7 +136,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
     _pending = Timer(const Duration(milliseconds: 600), _persist);
   }
 
-  String _snapshot() => jsonEncode([
+  String _snapshot({bool? done}) => jsonEncode([
         _title.text.trim(),
         _body.text.trim(),
         _date,
@@ -146,7 +147,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
         _priority.name,
         _paper,
         _cover,
-        _done,
+        done ?? _done,
         _pinned,
         _repeat?.toMap(),
         _photos,
@@ -159,6 +160,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   void initState() {
     super.initState();
     _opened = _snapshot();
+    _openedUndone = _snapshot(done: false);
     _todos = context.read<TodosController>();
     _life = AppLifecycleListener(onInactive: _persist);
     _title.addListener(_schedule);
@@ -314,7 +316,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   }
 
   Future<void> _close() async {
-    if (_snapshot() == _opened) {
+    if (_snapshot() == _opened || _snapshot(done: false) == _openedUndone) {
       Navigator.of(context).pop();
       return;
     }
@@ -324,6 +326,10 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
       message: context.l10n.todo_discard_body,
       confirmLabel: context.l10n.discard,
       cancelLabel: context.l10n.keep_editing,
+      extraLabel: context.l10n.save,
+      onExtra: () {
+        if (mounted) Navigator.of(context).pop();
+      },
       icon: LucideIcons.undo2,
     );
     if (discard != true || !mounted) return;
@@ -674,6 +680,12 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                             ),
                             const Spacer(),
                             _Tool(
+                              icon: LucideIcons.squarePlus,
+                              label: context.l10n.todo_add,
+                              ink: ink,
+                              onTap: _add,
+                            ),
+                            _Tool(
                               icon: _pinned
                                   ? LucideIcons.pinOff
                                   : LucideIcons.pin,
@@ -876,15 +888,9 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                           builder: (context, box) => FittedBox(
                             fit: BoxFit.scaleDown,
                             child: SizedBox(
-                              width: box.maxWidth < 430 ? 430 : box.maxWidth,
+                              width: box.maxWidth < 364 ? 364 : box.maxWidth,
                               child: Row(
                           children: [
-                            _Tool(
-                              icon: LucideIcons.squarePlus,
-                              label: context.l10n.todo_add,
-                              ink: ink,
-                              onTap: _add,
-                            ),
                             _Tool(
                               icon: LucideIcons.palette,
                               label: context.l10n.todo_paper,
