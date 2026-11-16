@@ -1682,6 +1682,8 @@
   "avoid_balance": "Balance",
   "total_goal": "Total goal",
   "total_goal_sub": "A target for the whole habit, like 1000 pages or 50 times",
+  "todo_link": "Count to-dos",
+  "todo_link_sub": "Checking a to-do from a project or tag counts for this habit.",
   "total_goal_left": "{amount} to go",
   "@total_goal_left": {
     "placeholders": { "amount": { "type": "String" } }

@@ -1481,6 +1481,8 @@
   "avoid_balance": "Balance",
   "total_goal": "Meta total",
   "total_goal_sub": "Una cifra para todo el hábito, como 1000 páginas o 50 veces",
+  "todo_link": "Contar tareas",
+  "todo_link_sub": "Marcar una tarea de un proyecto o etiqueta cuenta para este hábito.",
   "total_goal_left": "Faltan {amount}",
   "total_goal_of": "de {amount}",
   "book": "Libro",
