@@ -29,6 +29,8 @@
     <application
         android:label="Streak"
         android:name="${applicationName}"
+        android:appComponentFactory="com.streak.app.StreakComponentFactory"
+        tools:replace="android:appComponentFactory"
         android:icon="@mipmap/ic_launcher">
 
         <!-- Keep the notification icon statically referenced so the release
@@ -260,6 +262,10 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".ReminderStepReceiver"
+            android:exported="false" />
 
         <receiver
             android:name=".WidgetActionReceiver"

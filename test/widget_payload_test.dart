@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
+import 'package:streak/features/habits/data/completion_ops.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/data/substep.dart';
 import 'package:streak/services/home_widget_service.dart';
 
 import 'support/app_harness.dart';
@@ -122,5 +124,33 @@ void main() {
     payload = await _payloadOf([testHabit(id: 'a', name: 'Read')]);
     expect(payload['dayCutoff'], 3);
     expect(payload['todayKey'], AppClock.now().dayKey);
+  });
+
+  test('a habit with steps sends them with the ones done today', () async {
+    final today = AppClock.today();
+    var habit = testHabit(
+      id: 'a',
+      name: 'Meals',
+      substeps: const [
+        Substep(id: 's1', title: 'Breakfast'),
+        Substep(id: 's2', title: 'Lunch'),
+        Substep(id: 's3', title: 'Dinner'),
+      ],
+    );
+    habit = habit.copyWith(
+      completions: CompletionOps.setStep(habit, today, 's2', true),
+    );
+
+    final payload = await _payloadOf([habit, testHabit(id: 'b', name: 'Read')]);
+    final habits = payload['habits'] as List;
+
+    expect(habits[0]['steps'], [
+      ['s1', 'Breakfast'],
+      ['s2', 'Lunch'],
+      ['s3', 'Dinner'],
+    ]);
+    expect(habits[0]['stepsDone'], ['s2']);
+    expect(habits[0]['stepsNeeded'], 3);
+    expect((habits[1] as Map).containsKey('steps'), isFalse);
   });
 }

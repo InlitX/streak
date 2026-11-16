@@ -310,6 +310,15 @@ class HomeWidgetService {
         'anyAmount': habit.acceptsAnyAmount,
         'atMost': habit.capsAmount,
         'incrementAmount': habit.incrementAmount,
+        if (habit.hasSubsteps) ...{
+          'steps': [
+            for (final step in habit.substeps) [step.id, step.title],
+          ],
+          'stepsDone': [...?habit.completions[today.dayKey]?.steps],
+          'stepsNeeded': habit.anySteps
+              ? habit.stepsNeeded.clamp(1, habit.substeps.length)
+              : habit.substeps.length,
+        },
         'counts': window
             .map((d) => habit.completions[d.dayKey]?.count ?? 0.0)
             .toList(),

@@ -182,6 +182,8 @@ class WidgetActionService {
           ? CompletionOps.clearRelapse(habit, target)
           : CompletionOps.logRelapse(habit, target),
       'progress' => CompletionOps.addProgress(habit, target, delta),
+      'step' => CompletionOps.setStep(
+          habit, target, uri.queryParameters['step'] ?? '', true),
       _ => CompletionOps.toggle(habit, target),
     };
 
