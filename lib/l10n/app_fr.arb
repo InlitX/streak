@@ -1389,5 +1389,7 @@
     }
   },
   "shortcuts_group_nav": "Naviguer",
-  "shortcuts_group_create": "Créer et modifier"
+  "shortcuts_group_create": "Créer et modifier",
+  "data_folder_app": "Dossier de l'app",
+  "import_card_body": "Récupère tes habitudes et ton historique"
 }
