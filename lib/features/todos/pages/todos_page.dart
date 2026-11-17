@@ -10,6 +10,7 @@ import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/routing/back_handlers.dart';
+import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
@@ -68,7 +69,8 @@ class _TodosPageState extends State<TodosPage>
   bool _showCompleted = false;
   bool _searching = false;
   late bool _folders = context.read<TodoTagsController>().projects.isNotEmpty &&
-      context.read<SettingsController>().todoPapers;
+      context.read<SettingsController>().todoPapers &&
+      LocalStore.setting('todoFolders', true);
   String _query = '';
   String? _tagFilter;
   String? _projectFilter;
@@ -791,13 +793,14 @@ class _TodosPageState extends State<TodosPage>
           if (papers)
           _HeaderAction(
             glass: classic,
-            tooltip: context.l10n.todo_tags,
+            tooltip: context.l10n.todo_switch_view,
             icon: Icon(_folders ? LucideIcons.list : LucideIcons.folder,
                 size: 20),
             onTap: () => !_folders && _projectFilter != null
                 ? _closeFolder()
                 : setState(() {
               _folders = !_folders;
+              unawaited(LocalStore.writeSetting('todoFolders', _folders));
               if (_folders) {
                 _tagFilter = null;
                 _projectFilter = null;

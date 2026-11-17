@@ -227,12 +227,12 @@ void main() {
     });
     await pumpScreen(tester, const TodosPage());
 
-    await tester.tap(find.byTooltip('Tags'));
+    await tester.tap(find.byTooltip('Change view'));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(TodoTagChip, 'urgent'), findsOneWidget);
     expect(find.widgetWithText(TodoTagChip, 'later'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Tags'));
+    await tester.tap(find.byTooltip('Change view'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('School'));
     await tester.pumpAndSettle();
