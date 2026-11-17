@@ -99,6 +99,8 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
 
   static const _monthGapMax = 12.0;
 
+  static const _monthCellWide = 52.0;
+
   final _scroll = ScrollController();
   bool _scrolled = false;
 
@@ -388,10 +390,10 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
         final maxGap = path ? heatmapPathGap : _monthGapMax;
         if (gap > maxGap) {
           gap = maxGap;
-          side = (constraints.maxWidth - gap * 6) / 7;
+          side = ((constraints.maxWidth - gap * 6) / 7).clamp(0.0, _monthCellWide);
         }
 
-        return Column(
+        return SizedBox(width: side * 7 + gap * 6, child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (!widget.compact)
@@ -481,7 +483,7 @@ class _HabitHeatmapState extends State<HabitHeatmap> {
           ),
         ),
       ],
-        );
+        ));
       },
     );
   }
