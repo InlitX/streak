@@ -38,8 +38,6 @@ Habit _linked(String link, {HabitKind kind = HabitKind.positive, bool focusOnly 
 
 Todo _check(Todo todo) => todo.copyWith(done: true, doneAt: AppClock.wallNow());
 
-Todo _uncheck(Todo todo) => todo.copyWith(done: false, clearDoneAt: true);
-
 void main() {
   final today = AppClock.today();
 
