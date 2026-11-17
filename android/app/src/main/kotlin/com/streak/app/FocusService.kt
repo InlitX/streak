@@ -137,6 +137,7 @@ class FocusService : Service() {
                 .setContentText(state.optString("endBody"))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setSilent(FocusBridge.attached)
                 .setAutoCancel(true)
                 .setContentIntent(open())
                 .build(),

@@ -18,6 +18,8 @@ object FocusBridge {
 
     private var channel: MethodChannel? = null
 
+    val attached: Boolean get() = channel != null
+
     fun attach(context: Context, methodChannel: MethodChannel) {
         channel = methodChannel
         methodChannel.setMethodCallHandler { call, result ->
