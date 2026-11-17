@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/home_shell.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/minimal/minimal_nav.dart';
+import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
@@ -122,5 +124,31 @@ void main() {
     expect(find.byType(HomePage), findsOneWidget);
     expect(find.byType(StatisticsPage), findsNothing);
     expect(find.byType(SettingsPage), findsNothing);
+  });
+
+  testWidgets('the second chance notice waits and opens the habit',
+      (tester) async {
+    final today = AppClock.today();
+    await seedHabits(tester, [
+      testHabit(
+        id: 'a',
+        name: 'Read',
+        done: [for (var i = 2; i <= 32; i++) today.addDays(-i)],
+      ),
+    ]);
+    await pumpScreen(tester, const HomeShell());
+    await tester.pumpAndSettle();
+
+    final notice = find.textContaining('Read');
+    expect(find.byType(SnackBar), findsOneWidget);
+    await tester.pump(const Duration(seconds: 30));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    await tester.tap(
+      find.descendant(of: find.byType(SnackBar), matching: notice),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(HabitDetailsPage), findsOneWidget);
   });
 }

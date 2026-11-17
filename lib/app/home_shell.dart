@@ -28,6 +28,7 @@ import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/day_timeline_page.dart';
+import 'package:streak/features/habits/pages/habit_details_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/today_intro.dart';
@@ -123,7 +124,7 @@ class _HomeShellState extends State<HomeShell>
       AppSnackbar.success(
         context,
         context.l10n.focus_goal_reached(habit.name),
-        duration: const Duration(seconds: 10),
+        sticky: true,
       );
     };
     _waitForNextDay();
@@ -153,7 +154,13 @@ class _HomeShellState extends State<HomeShell>
     }
     if (saved == null) return;
     unawaited(LocalStore.writeSetting('chanceNoticeDay', latest));
-    AppSnackbar.info(context, context.l10n.chance_used_notice(saved.name));
+    final id = saved.id;
+    AppSnackbar.info(
+      context,
+      context.l10n.chance_used_notice(saved.name),
+      onTap: () => AppNavigator.push(HabitDetailsPage(habitId: id), fade: true),
+      sticky: true,
+    );
   }
 
   void _waitForNextDay() {
