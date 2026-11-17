@@ -93,7 +93,12 @@ class _ExpressLineChartState extends State<ExpressLineChart>
     final goal = widget.goal;
     final peak = values.reduce(math.max);
     final ceiling = goal == null || goal < peak ? peak : goal;
-    final scale = axisScale(ceiling, lines: 3, headroom: 0.35);
+    final scale = axisScale(
+      ceiling,
+      lines: 3,
+      headroom: 0.35,
+      whole: widget.format == null && widget.axisFormat == null,
+    );
     final minX = _start;
     final maxX = _start + _span - 1;
     final onColor = color.computeLuminance() > 0.5

@@ -9,6 +9,7 @@ import 'package:streak/core/widgets/hold_repeat_button.dart';
 import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/reminder.dart';
+import 'package:streak/features/habits/widgets/habit_form_kind.dart';
 import 'package:streak/features/habits/widgets/reminder_tile.dart';
 
 Color minimalOutline(BuildContext context) =>
@@ -544,30 +545,6 @@ class CompactNote extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(LucideIcons.info, size: 15, color: color.withValues(alpha: 0.8)),
-          const SizedBox(width: 9),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 12.5,
-                height: 1.4,
-                color: context.tokens.muted,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      FormInfoRow(icon: LucideIcons.info, color: color, text: text);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/widgets/setting_info.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 
 Widget settingsDivider(BuildContext context) => Divider(
@@ -92,13 +93,6 @@ class SettingRow extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle!,
-                    style: TextStyle(fontSize: 13, color: context.tokens.muted),
-                  ),
-                ],
                 if (stacked) ...[
                   const SizedBox(height: 10),
                   shown,
@@ -111,8 +105,17 @@ class SettingRow extends StatelessWidget {
         ],
       ),
     );
-    if (enabled) return row;
-    return IgnorePointer(child: Opacity(opacity: 0.45, child: row));
+    if (!enabled) {
+      return IgnorePointer(child: Opacity(opacity: 0.45, child: row));
+    }
+    if (subtitle == null) return row;
+    return SettingInfo(
+      icon: icon,
+      title: title,
+      text: subtitle!,
+      control: trailing,
+      builder: (context, open) => InkWell(onTap: open, child: row),
+    );
   }
 
   static const _titleStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
@@ -191,15 +194,11 @@ class NavRow extends StatelessWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (subtitle != null)
-                  Text(subtitle!, style: TextStyle(color: context.tokens.muted)),
                 const SizedBox(height: 4),
                 shown!,
               ],
             )
-          : subtitle == null
-          ? null
-          : Text(subtitle!, style: TextStyle(color: context.tokens.muted)),
+          : null,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -209,7 +208,7 @@ class NavRow extends StatelessWidget {
               size: 18, color: context.tokens.muted),
         ],
       ),
-      onTap: onTap,
+      onTap: SheetNote.wrap(subtitle, onTap),
     );
   }
 }
@@ -265,12 +264,9 @@ class LinkRow extends StatelessWidget {
         title,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
-      subtitle: subtitle == null
-          ? null
-          : Text(subtitle!, style: TextStyle(color: context.tokens.muted)),
       trailing:
           Icon(LucideIcons.chevronRight, size: 18, color: context.tokens.muted),
-      onTap: onTap,
+      onTap: SheetNote.wrap(subtitle, onTap),
     );
   }
 }
@@ -310,7 +306,7 @@ class PickerRow extends StatelessWidget {
     return Semantics(
       button: true,
       child: InkWell(
-        onTap: onTap,
+        onTap: SheetNote.wrap(subtitle, onTap),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -328,16 +324,6 @@ class PickerRow extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        subtitle!,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: context.tokens.muted,
-                        ),
-                      ),
-                    ],
                     if (stacked && shown != null) ...[
                       const SizedBox(height: 4),
                       shown,

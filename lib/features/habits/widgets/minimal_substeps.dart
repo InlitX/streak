@@ -33,6 +33,7 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
     for (final step in _steps) {
       step.controller.dispose();
     }
+    _focus.dispose();
     super.dispose();
   }
 
@@ -42,15 +43,15 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
             .toList(),
       );
 
+  String? _fresh;
+  final _focus = FocusNode();
+
   void _add() {
     setState(() {
-      _steps.add(
-        SubstepDraft(
-          DateTime.now().microsecondsSinceEpoch.toString(),
-          TextEditingController(),
-        ),
-      );
+      _fresh = DateTime.now().microsecondsSinceEpoch.toString();
+      _steps.add(SubstepDraft(_fresh!, TextEditingController()));
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
     _emit();
   }
 
@@ -100,6 +101,7 @@ class _CompactSubstepsEditorState extends State<CompactSubstepsEditor> {
                   child: AppTextField(
                     hint: context.l10n.step_hint,
                     controller: _steps[i].controller,
+                    focusNode: _steps[i].id == _fresh ? _focus : null,
                     onChanged: (_) => _emit(),
                   ),
                 ),

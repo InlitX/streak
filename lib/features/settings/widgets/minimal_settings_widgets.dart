@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:streak/core/widgets/setting_info.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
@@ -79,11 +80,29 @@ class SoftRow extends StatelessWidget {
     final muted = context.tokens.muted;
     final stacked = stackedValue(context, value);
     final bare = bareRows(context);
+    if (onTap == null && trailing != null && subtitle != null) {
+      return SettingInfo(
+        icon: icon,
+        title: title,
+        text: subtitle!,
+        control: trailing!,
+        builder: (context, open) => _row(context, muted, stacked, bare, open),
+      );
+    }
+    return _row(context, muted, stacked, bare, SheetNote.wrap(subtitle, onTap));
+  }
 
+  Widget _row(
+    BuildContext context,
+    Color muted,
+    bool stacked,
+    bool bare,
+    VoidCallback? tap,
+  ) {
     return Semantics(
       button: true,
       child: MinimalPress(
-        onTap: onTap,
+        onTap: tap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
           child: Row(
@@ -103,13 +122,6 @@ class SoftRow extends StatelessWidget {
                         color: context.colors.onSurface,
                       ),
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        subtitle!,
-                        style: TextStyle(fontSize: 12.5, color: muted),
-                      ),
-                    ],
                     if (stacked) ...[
                       const SizedBox(height: 4),
                       Text(
@@ -172,6 +184,7 @@ Future<void> showOptionSheet(
   required ValueChanged<int> onSelected,
   List<IconData>? icons,
 }) {
+  final note = SheetNote.take();
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -189,6 +202,7 @@ Future<void> showOptionSheet(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: sheetTitleStyle(sheet)),
+            if (note != null) sheetNote(sheet, note),
             const SizedBox(height: 10),
             Flexible(
               child: SingleChildScrollView(

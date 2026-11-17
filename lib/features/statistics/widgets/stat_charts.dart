@@ -86,7 +86,12 @@ class ValueBars extends StatelessWidget {
     final goal = this.goal;
     final maxV = values.isEmpty ? 0.0 : values.reduce((a, b) => a > b ? a : b);
     final ceiling = goal == null || goal < maxV ? maxV : goal;
-    final scale = axisScale(ceiling, lines: 3, headroom: 0.12);
+    final scale = axisScale(
+      ceiling,
+      lines: 3,
+      headroom: 0.12,
+      whole: axisFormat == null && values.every((v) => v == v.roundToDouble()),
+    );
     final maxY = scale.maxY;
 
     return SizedBox(

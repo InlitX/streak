@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/setting_info.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_type.dart';
@@ -189,9 +190,10 @@ class ExpressTile extends StatelessWidget {
     final radius = ExpressSlot.of(context, BorderRadius.circular(20));
     final stacked = stackedValue(context, value);
     final bare = bareRows(context);
+    final brief = BriefRows.on(context);
 
     return ExpressSquish(
-      onTap: onTap,
+      onTap: brief ? SheetNote.wrap(subtitle, onTap) : onTap,
       child: Container(
         decoration: BoxDecoration(
           color: expressSurface(context),
@@ -225,7 +227,7 @@ class ExpressTile extends StatelessWidget {
                       color: scheme.onSurface,
                     ),
                   ),
-                  if (subtitle != null)
+                  if (subtitle != null && !brief)
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(

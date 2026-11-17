@@ -169,6 +169,7 @@ class AppTheme {
         color: container,
         elevation: 0,
         margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
       bottomSheetTheme: BottomSheetThemeData(
@@ -285,6 +286,7 @@ class AppTheme {
         shadowColor: Colors.black.withValues(alpha: 0.35),
         surfaceTintColor: Colors.transparent,
         margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
           side: minimal ? BorderSide.none : cardEdge(isDark),

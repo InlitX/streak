@@ -22,7 +22,7 @@ class FlagGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var i = 0; i < children.length; i++) ...[
-          if (i > 0) Divider(height: 1, thickness: 1, indent: 62, color: line),
+          if (i > 0) Divider(height: 1, thickness: 1, indent: 62, endIndent: 14, color: line),
           children[i],
         ],
       ],

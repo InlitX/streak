@@ -49,8 +49,10 @@ double axisStep(double maxValue, int lines) {
   double maxValue, {
   int lines = 3,
   double headroom = 0.3,
+  bool whole = false,
 }) {
-  final step = axisStep(maxValue, lines);
+  final raw = axisStep(maxValue, lines);
+  final step = whole ? math.max(1.0, raw.ceilToDouble()) : raw;
   final top = maxValue <= 0 ? step : (maxValue / step).ceil() * step;
   return (step: step, top: top, maxY: top + step * headroom);
 }

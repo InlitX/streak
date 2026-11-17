@@ -54,7 +54,11 @@ class TrendChart extends StatelessWidget {
     final goal = this.goal;
     final maxValue = values.reduce((a, b) => a > b ? a : b);
     final ceiling = goal == null || goal < maxValue ? maxValue : goal;
-    final scale = axisScale(ceiling, lines: 3);
+    final scale = axisScale(
+      ceiling,
+      lines: 3,
+      whole: this.format == null && axisFormat == null,
+    );
     final maxY = scale.maxY;
     final format = DateFormat.MMMd(Localizations.localeOf(context).toString());
     final average = values.reduce((a, b) => a + b) / values.length;
@@ -216,7 +220,7 @@ class HourArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxValue = values.isEmpty ? 0 : values.reduce((a, b) => a > b ? a : b);
-    final scale = axisScale(maxValue.toDouble(), lines: 2);
+    final scale = axisScale(maxValue.toDouble(), lines: 2, whole: true);
     final maxY = scale.maxY;
     var peak = 0;
     for (var i = 1; i < values.length; i++) {
@@ -353,7 +357,12 @@ class MonthlyLine extends StatelessWidget {
     final last = year >= now.year ? now.month - 1 : 11;
     final shown = values.take(last + 1).toList();
     final maxValue = shown.fold(0, math.max);
-    final scale = axisScale(maxValue.toDouble(), lines: 3, headroom: 0.45);
+    final scale = axisScale(
+      maxValue.toDouble(),
+      lines: 3,
+      headroom: 0.45,
+      whole: true,
+    );
     final step = scale.step;
     final maxY = scale.maxY;
     final average = shown.isEmpty

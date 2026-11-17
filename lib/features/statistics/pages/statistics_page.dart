@@ -331,7 +331,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
         },
         ),
       ),
-          HeaderBlur(scrolled: _scrolled),
+          HeaderBlur(
+            scrolled: _scrolled,
+            height: MediaQuery.paddingOf(context).top + kToolbarHeight * 2 + 40,
+          ),
         ],
       ),
     );

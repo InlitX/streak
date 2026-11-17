@@ -60,21 +60,9 @@ Future<bool?> showAppConfirmDialog(
                 body,
               ],
               const SizedBox(height: 22),
-              LayoutBuilder(
-                builder: (context, box) {
+              Builder(
+                builder: (context) {
                   final cancelText = cancelLabel ?? dialogContext.l10n.cancel;
-                  double wide(String text) => (TextPainter(
-                        text: TextSpan(
-                          text: text,
-                          style: sheetActionStyle(dialogContext),
-                        ),
-                        maxLines: 1,
-                        textDirection: Directionality.of(dialogContext),
-                        textScaler: MediaQuery.textScalerOf(dialogContext),
-                      )..layout())
-                          .width;
-                  final room = (box.maxWidth - 12) / 2 - 40;
-                  final stacked = wide(cancelText) > room || wide(confirmLabel) > room;
                   final cancel = TextButton(
                     onPressed: () => Navigator.of(dialogContext).pop(false),
                     style: TextButton.styleFrom(
@@ -97,7 +85,7 @@ Future<bool?> showAppConfirmDialog(
                     onPressed: () => Navigator.of(dialogContext).pop(true),
                     style: FilledButton.styleFrom(
                       backgroundColor: accent,
-                      foregroundColor: accent.ink,
+                      foregroundColor: danger ? Colors.white : accent.ink,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -112,18 +100,9 @@ Future<bool?> showAppConfirmDialog(
                   if (single) {
                     return SizedBox(width: double.infinity, child: confirm);
                   }
-                  if (stacked) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [confirm, const SizedBox(height: 10), cancel],
-                    );
-                  }
-                  return Row(
-                    children: [
-                      Expanded(child: cancel),
-                      const SizedBox(width: 12),
-                      Expanded(child: confirm),
-                    ],
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [confirm, const SizedBox(height: 10), cancel],
                   );
                 },
               ),

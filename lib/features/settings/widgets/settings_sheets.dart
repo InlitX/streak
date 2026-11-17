@@ -7,6 +7,7 @@ import 'package:streak/core/i18n/app_locale.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/responsive.dart';
+import 'package:streak/core/widgets/setting_info.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
 import 'package:streak/services/app_icon_service.dart';
 import 'package:streak/features/habits/widgets/color_picker.dart';
@@ -28,6 +29,7 @@ Future<void> showSheet(BuildContext context, WidgetBuilder builder) {
 }
 
 Future<void> showAccentSheet(BuildContext context) {
+  final note = SheetNote.take();
   return showSheet(
     context,
     (_) => SafeArea(
@@ -38,7 +40,7 @@ Future<void> showAccentSheet(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SheetTitle(context.l10n.accent_color),
+            SheetTitle(context.l10n.accent_color, subtitle: note),
             const SizedBox(height: 16),
             FutureBuilder<Color?>(
               future: AppIconService.systemAccent(),
@@ -58,6 +60,7 @@ Future<void> showAccentSheet(BuildContext context) {
 }
 
 Future<void> showBackgroundSheet(BuildContext context) {
+  final note = SheetNote.take();
   return showSheet(
     context,
     (_) => SafeArea(
@@ -68,7 +71,7 @@ Future<void> showBackgroundSheet(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SheetTitle(context.l10n.app_background),
+            SheetTitle(context.l10n.app_background, subtitle: note),
             const SizedBox(height: 18),
             Consumer<SettingsController>(
               builder: (inner, s, __) => Row(
@@ -105,6 +108,7 @@ Future<void> showBackgroundSheet(BuildContext context) {
 }
 
 Future<void> showLanguageSheet(BuildContext context) {
+  final note = SheetNote.take();
   final locales = shippedLocales;
   return showSheet(
     context,
@@ -117,7 +121,7 @@ Future<void> showLanguageSheet(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SheetTitle(context.l10n.language),
+              SheetTitle(context.l10n.language, subtitle: note),
               const SizedBox(height: 8),
               Flexible(
                 child: ListView(
