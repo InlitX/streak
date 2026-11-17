@@ -11,6 +11,7 @@ import 'package:streak/core/icons/habit_icons.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/statistics/data/habit_stats.dart';
 import 'package:streak/l10n/app_localizations.dart';
 import 'package:streak/services/widget_icon_service.dart';
 
@@ -391,6 +392,8 @@ class HomeWidgetService {
                 weight,
         'total': due.length,
         'bestStreak': bestStreak,
+        'perfectStreak':
+            HabitStats.perfectStreakOf(counted, AppClock.today()).current,
         'weekDone': weekDone,
       },
       'timestamp': DateTime.now().millisecondsSinceEpoch,

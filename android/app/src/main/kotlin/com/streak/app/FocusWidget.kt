@@ -60,6 +60,8 @@ class FocusWidget : GlanceAppWidget() {
         val density = WidgetDraw.density(context)
         val label = (side * 0.1f).coerceIn(13f, 18f)
         val button = (side * 0.2f).coerceIn(30f, 42f)
+        val halo = if (style.dark) Color.Black else Color.White
+        val arrow = (side * 0.15f).coerceIn(22f, 28f)
         val start = pick?.optString("id")?.takeIf { it.isNotEmpty() }?.let { "focusStart:$it" } ?: "focusStart"
 
         WidgetSurface(style) {
@@ -88,15 +90,34 @@ class FocusWidget : GlanceAppWidget() {
                     Drawn(WidgetDraw.text(context, caption, label, style.content, 800, room), density, caption)
                     Spacer(GlanceModifier.height(6.dp))
                     val small = label * 0.85f
-                    val halo = if (style.dark) Color.Black else Color.White
                     val week = "${WidgetText.get(context, "label_week", "Week")}  ${duration(totals[1])}"
-                    Drawn(WidgetDraw.haloText(context, week, small, style.muted, halo, 650, room), density, week)
+                    val weekArt = WidgetDraw.haloText(context, week, small, style.muted, halo, 650, room)
                     val month = "${WidgetText.get(context, "label_month", "Month")}  ${duration(totals[2])}"
-                    Drawn(WidgetDraw.haloText(context, month, small, style.muted, halo, 650, room), density, month)
-                    if (picks.isNotEmpty()) {
-                        Spacer(GlanceModifier.height(2.dp))
+                    val monthArt = WidgetDraw.haloText(context, month, small, style.muted, halo, 650, room)
+                    val free = size.height.value - pad * 2.1f - 8f - arrow -
+                        (WidgetDraw.text(context, today, big, style.content, 800, room - button - 6f).height +
+                            WidgetDraw.text(context, caption, label, style.content, 800, room).height) / density
+                    val shows = if (picks.isEmpty()) 2 else when {
+                        free >= (weekArt.height + monthArt.height) / density -> 2
+                        free >= weekArt.height / density -> 1
+                        else -> 0
+                    }
+                    if (shows > 0) Drawn(weekArt, density, week)
+                    if (shows > 1) Drawn(monthArt, density, month)
+                    if (picks.isEmpty() && single != null) {
+                        val name = single.optString("name")
+                        Drawn(
+                            WidgetDraw.haloText(context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted, halo, 600, room),
+                            density,
+                            name,
+                        )
+                    }
+                }
+                if (picks.isNotEmpty()) Box(
+                    modifier = GlanceModifier.fillMaxSize().padding(start = pad.dp, end = pad.dp, bottom = (pad * 0.6f).dp),
+                    contentAlignment = Alignment.BottomStart,
+                ) {
                         val name = pick?.optString("name") ?: WidgetText.get(context, "cfg_all_habits", "All habits")
-                        val arrow = (side * 0.15f).coerceIn(22f, 28f)
                         val ink = style.content.toArgb()
                         val under = halo.copy(alpha = 0.85f).toArgb()
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -117,14 +138,6 @@ class FocusWidget : GlanceAppWidget() {
                                 Drawn(WidgetScroll.sideArrow(context, ink, under, false, arrow), density, "next")
                             }
                         }
-                    } else if (single != null) {
-                        val name = single.optString("name")
-                        Drawn(
-                            WidgetDraw.haloText(context, name, (side * 0.08f).coerceIn(11f, 14f), style.muted, halo, 600, room),
-                            density,
-                            name,
-                        )
-                    }
                 }
                 Box(
                     modifier = GlanceModifier.fillMaxSize().padding(pad.dp),

@@ -45,7 +45,10 @@ class StatsWidget : GlanceAppWidget() {
     private fun Content(context: Context, style: WidgetStyle, appWidgetId: Int) {
         val data = WidgetPayload.forWidget(context, appWidgetId)
         val single = WidgetPayload.single(context, appWidgetId, data)
-        val streak = single?.optInt("streak") ?: longest(data)
+        val perfect = data?.optJSONObject("summary")?.takeIf {
+            WidgetConfig.habits(context, appWidgetId).isEmpty() && it.has("perfectStreak")
+        }?.optInt("perfectStreak")
+        val streak = single?.optInt("streak") ?: perfect ?: longest(data)
         val art = WidgetConfig.art(context, appWidgetId)
 
         val size = LocalSize.current
