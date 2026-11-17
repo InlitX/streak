@@ -104,6 +104,8 @@ Everything stays on your device. No account, no ads.
 - **Fill in the past**: tap any day to add or remove it
 - **Day notes**: long-press a day to write what happened, or attach a photo
 - **Vacation mode** pauses a habit without breaking anything
+- A **to-do list** with projects and tags, and habits that count the to-dos
+  you check off
 
 </td>
 <td width="50%" valign="top">
@@ -112,6 +114,8 @@ Everything stays on your device. No account, no ads.
 
 - GitHub-style **activity grid**, by week, month or the whole year
 - **Month calendar**, with your week starting on Monday, Saturday or Sunday
+- A **week strip** on Today: tap a day to see how it went, swipe back in time
+- A **perfect day streak** for the days you finish everything
 - **Completions per month**, so you can see the shape of a whole year
 - **Streak evolution** charted over time, watching the line climb
 - **"When are you most consistent?"** finds the hours you actually show up
@@ -159,8 +163,11 @@ Everything stays on your device. No account, no ads.
 
 - Reminders per habit, on the days you choose or every N days, each with a
   short encouraging line
-- **Done**, **Snooze** and **Add amount** buttons right in the notification
-- **Four home-screen widgets**: habit, today, stats and activity grid
+- **Done**, **Snooze** and **Add amount** buttons right in the notification,
+  and checklist steps you can tick from there
+- **Keep reminding** a habit after it's done, if you want the nudges anyway
+- **Seven home-screen widgets**: habit, today, to-do, focus, focus board,
+  stats and activity grid
 - Each widget styled on its own, with color or photo, opacity and border
 - Choose which figures the **stats widget** shows, and how they sit together
 - Tick a day straight from a widget, it saves without opening the app
