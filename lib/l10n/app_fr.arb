@@ -2,7 +2,7 @@
   "widget_cfg_brightness": "Luminosité",
   "focus_end_keep": "Continuer",
   "motiv_almost": "Presque ! Percévérez",
-  "share_friends_sub": "Envoyer leur l'application",
+  "share_friends_sub": "Envoie-leur l'app",
   "about_story": "Cette application est née d'une frustration avec les traqueurs d'habitude. La plupart limitent combien d'habitudes vous pouvez créer, cachent les caractéristiques de base derrière un accès payant, vous traquent ou vous bombardent avec des pubs. J'ai donc décidé de construire Streak : complètement libre, pas de pubs, pas de paiements, pas de suivi. Tout fonctionne localement — vos données sont à vous. Open source, sans piège.",
   "about_app": "A propos de cette application",
   "description_hint": "Note optionnelle",
@@ -59,7 +59,7 @@
   "new_category": "Nouvelle catégorie",
   "message_copied": "Message copié",
   "kind_negative_hint": "Les jours sont marqués vierges par défaut — ton streak grandit tout seul. Appuie sur la coche si tu échoues;ce jour deviendra rouge mais tu peux toujours annuler.",
-  "monthly": "Mensuellement",
+  "monthly": "Mensuel",
   "share_background": "Arrière-fond",
   "focus_sessions": "Sessions",
   "focus_amount_added": "{amount} ajouté.s à {habit}",
@@ -184,7 +184,7 @@
   "share_failed": "Impossible de créer l'image",
   "share_swipe_hint": "Swipe la carte pour voyager dans le temps",
   "new_reminder": "Nouveau rappel",
-  "quant_daily_goal": "But du jour",
+  "quant_daily_goal": "Objectif du jour",
   "import_merge": "Fusionner",
   "focus_free_session": "Session libre",
   "relapses": "Rechute",
@@ -320,8 +320,8 @@
     }
   },
   "snooze_duration": "Répéter dans",
-  "delete_habit": "Supprimer l ' habitude",
-  "times_per_week": "{n} fois par mois",
+  "delete_habit": "Supprimer l'habitude",
+  "times_per_week": "{n} fois par semaine",
   "@times_per_week": {
     "placeholders": {
       "n": {
@@ -331,7 +331,7 @@
   },
   "end_vacation": "Finir les vacances",
   "notes": "Notes",
-  "notif_greeting": "Bonjour{name}, ",
+  "notif_greeting": "Bonjour {name}, ",
   "@notif_greeting": {
     "placeholders": {
       "name": {
@@ -459,7 +459,7 @@
   "focus": "Focus",
   "mon": "Lun",
   "quant_unit_ml": "ml",
-  "wipe_data_warning": "Ceci efface toutes les habitudes, notes, séances de focus et paramètres de ce téléphone. Ca ne pourra pas être annulé à moins que vous ayez un fichier de sauvegarde à importer après.",
+  "wipe_data_warning": "Cela efface toutes les habitudes, notes, sessions focus et paramètres de ce téléphone. C'est irréversible, sauf si tu as un fichier de sauvegarde à importer ensuite.",
   "auto_backup_where": "Lorsque vous ouvrez l'application, Streak effectue une sauvegarde complète: un fichier .zip contenant tout le contenu, photos et musique comprises, ainsi qu'un fichier .json. L'application génère également une copie lisible que vous pouvez ouvrir dans n'importe quel éditeur. Les dernières sauvegardes sont conservées.",
   "streaks": "Streaks",
   "widget_demo_run": "Courir",
@@ -607,7 +607,7 @@
     }
   },
   "notes_enable_sub": "Joindre des notes à un jour d'habitude",
-  "wipe_data_sure_body": "Dernière chance. Sans sauvegarde, ses données seront partis pour de bon.",
+  "wipe_data_sure_body": "Dernière chance. Sans sauvegarde, ces données seront perdues pour de bon.",
   "completion_rate": "Taux de réussite",
   "archive": "Archiver",
   "completions": "Achèvements",
@@ -667,7 +667,7 @@
   "color": "Couleur",
   "widget_cfg_add": "Ajouter un widget",
   "emojis_tab": "Emojis",
-  "sched_interval": "Interval",
+  "sched_interval": "Intervalle",
   "change_photo": "Changer de photo",
   "appearance_sub": "Thème, couleur et arrière-fond",
   "widget_cfg_show_activity": "Afficher l'activité de",
@@ -925,7 +925,7 @@
   "quotes_app": "De l'application",
   "clear_progress": "Supprimer progrès",
   "currency": "Devise",
-  "clear_progress_done": "Progrès supprimé",
+  "clear_progress_done": "Progrès effacé",
   "quote_11": "La discipline égale la liberté.",
   "quotes_empty_sub": "Écrivez-vous et ils se présenteront aujourd'hui.",
   "quote_2": "La régularité bat l'intensité.",
@@ -984,7 +984,7 @@
   },
   "currency_custom": "Personnalisé",
   "quant_best_day": "Meilleur jour",
-  "quant_stats_empty": "Notez un montant et ce sera additionné ici, même jours au l'objectif n'était pas atteint.",
+  "quant_stats_empty": "Note une quantité et elle s'additionnera ici, même les jours où l'objectif n'est pas atteint.",
   "quant_goal_days": "Objectif atteint",
   "todo_upcoming": "À venir",
   "quotes_my_list": "Mes citations",
@@ -1110,7 +1110,7 @@
   "island_how_check": "10 points pour chaque habitude validée",
   "island_p_banner": "Bannière",
   "period_last_month": "Le mois dernier",
-  "today_only_sub": "Maquer les habitudes qui be sont pas programmer pour aujourd'hui",
+  "today_only_sub": "Masquer les habitudes qui ne sont pas prévues pour aujourd'hui",
   "focus_period_sessions": "{count, plural, =0{No sessions} =1{1 session} other{{count} sessions}}",
   "@focus_period_sessions": {
     "placeholders": {
@@ -1389,5 +1389,76 @@
     }
   },
   "shortcuts_group_nav": "Naviguer",
-  "shortcuts_group_create": "Créer et modifier"
+  "shortcuts_group_create": "Créer et modifier",
+  "data_folder_app": "Dossier de l'app",
+  "import_card_body": "Récupère tes habitudes et ton historique",
+  "reminder_habit_days": "Les jours de l'habitude",
+  "reminder_habit_days_hint": "Sonne les jours prévus pour l'habitude.",
+  "focus_label_remove_body": "{label} quitte la liste. Tes sessions passées la conservent.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "tracking_hide": "Masquer le suivi seul",
+  "tracking_hide_sub": "Les habitudes uniquement suivies restent hors de cette liste",
+  "tracking_show": "Afficher le suivi seul ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "month_fixed_day_hint": "Pour la même date chaque mois, choisis Intervalle et règle-le sur 1 mois",
+  "reminders_ready_body": "Streak te le rappellera ici.",
+  "reminder_sound": "Son",
+  "reminder_sound_default": "Par défaut",
+  "reminder_sound_hint": "Appuie sur un son pour l'écouter. Les rappels de cette habitude l'utiliseront.",
+  "day_marked": "{date} coché",
+  "@day_marked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "day_unmarked": "{date} décoché",
+  "@day_unmarked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "duplicate_habit": "Dupliquer l'habitude",
+  "export_habit": "Exporter l'habitude",
+  "habit_links": "Liens d'automatisation",
+  "habit_links_off": "Permets à des apps comme Tasker, un raccourci ou un tag NFC de cocher tes habitudes via un lien. Désactivé tant que tu ne l'actives pas.",
+  "habit_links_on": "Toute app sur ce téléphone peut ouvrir ces liens, pour toutes tes habitudes. Appuie sur un lien pour le copier.",
+  "habit_link_done": "Marquer comme fait",
+  "habit_link_undo": "Effacer la journée",
+  "habit_link_add": "Ajouter {amount}",
+  "@habit_link_add": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_link_relapse": "Noter une rechute",
+  "habit_link_focus": "Lancer une session focus",
+  "habit_link_open": "Ouvrir l'habitude",
+  "habit_duplicated": "{name} ajoutée",
+  "@habit_duplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "repeat_until": "Jusqu'à",
+  "end_of_day": "Fin de la journée"
 }

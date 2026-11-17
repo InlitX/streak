@@ -2066,7 +2066,7 @@
   },
   "habit_link_done": "완료 표시",
   "check_sound": "완료 소리",
-  "check_sound_sub": "습관을 완료했을 때 부드러운 차임 소리를 재생해요. 폰이 무음이면 재생하지 않아요.",
+  "check_sound_sub": "습관이나 할 일을 완료했을 때 부드러운 차임 소리를 재생해요. 폰이 무음이면 재생하지 않아요.",
   "todo_delete_title": "{count, plural, =1{이 할 일을 삭제할까요?} other{할 일 {count}개를 삭제할까요?}}",
   "@todo_delete_title": {
     "placeholders": {
@@ -2170,6 +2170,54 @@
   "shortcuts_save": "저장",
   "shortcuts_toggle": "타이머 시작 또는 중지",
   "shortcuts_start": "집중 시간 시작",
-  "today_week_strip_sub": "오늘 탭의 상단에 한 주의 7일을 표시해요. 날짜를 눌러 습관을 확인하세요.",
-  "today_week_strip": "주간 띠"
+  "today_week_strip_sub": "오늘 탭의 상단에 한 주의 7일을 표시해요. 날짜를 눌러 습관을 확인하고, 밀어서 지난 주들을 볼 수 있어요.",
+  "today_week_strip": "주간 띠",
+  "day_marked": "{date} 표시함",
+  "@day_marked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "day_unmarked": "{date} 표시 해제함",
+  "@day_unmarked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "support_thanks_title": "여기 와 주셔서 감사해요 🤍",
+  "support_thanks_body": "Streak는 숨겨진 부분이나 광고 없이 무료이며, 앞으로도 그럴 거예요.\n\n만약 습관을 만드는 데 도움이 되었다면, 커피 한 잔이 큰 도움이 돼요 ☕\n커피가 아니더라도, GitHub에서 별을 남겨주시면 감사드릴게요 ⭐",
+  "widget_cfg_arrows": "버튼으로 스크롤",
+  "widget_cfg_arrows_hint": "목록을 미는 대신 화살표 사용",
+  "second_chances": "두 번째 기회",
+  "second_chances_sub": "연속 30일마다 기회를 1번 받아 3번까지 쌓아둘 수 있어요. 하루를 놓쳐도 기회를 1번 쓰고 연속 기록을 유지해요.",
+  "chances_left": "{count, plural, other{기회 {count}번 남음}}",
+  "@chances_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chances_next": "{days, plural, other{다음 기회까지 {days}일 남음­}}",
+  "@chances_next": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "habits_search": "습관 검색",
+  "focus_goal_reached": "{habit}: 목표를 달성했어요",
+  "@focus_goal_reached": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "notes_search": "노트 검색"
 }
