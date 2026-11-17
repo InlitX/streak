@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
 import 'package:streak/features/habits/widgets/today_week_strip.dart';
@@ -121,5 +122,25 @@ void main() {
         .toList();
     expect(texts.contains('${first.day}'), isTrue);
     expect(first.weekday, DateTime.sunday);
+  });
+
+  testWidgets('a finished day keeps its number', (tester) async {
+    await seedHabits(tester, [
+      testHabit(id: 'a', name: 'Read', done: [today]),
+    ]);
+    await pumpScreen(
+      tester,
+      const HomePage(),
+      settings: {'todayWeekStrip': true, 'weekStart': 1},
+    );
+    final strip = find.byType(TodayWeekStrip);
+    expect(
+      find.descendant(of: strip, matching: find.text('${today.day}')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: strip, matching: find.byIcon(LucideIcons.check)),
+      findsNothing,
+    );
   });
 }

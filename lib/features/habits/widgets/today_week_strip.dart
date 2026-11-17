@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
@@ -28,6 +27,7 @@ class TodayWeekStrip extends StatefulWidget {
 
 class _TodayWeekStripState extends State<TodayWeekStrip> {
   int _back = 0;
+  double _dir = 1;
 
   DateTime get _earliest => widget.habits.isEmpty
       ? AppClock.today()
@@ -38,6 +38,7 @@ class _TodayWeekStripState extends State<TodayWeekStrip> {
   void _swipe(DragEndDetails details, DateTime first) {
     final velocity = details.primaryVelocity ?? 0;
     if (velocity.abs() < 200) return;
+    _dir = velocity > 0 ? 1 : -1;
     final rtl = Directionality.of(context) == ui.TextDirection.rtl;
     final older = rtl ? velocity < 0 : velocity > 0;
     if (older) {
@@ -65,8 +66,21 @@ class _TodayWeekStripState extends State<TodayWeekStrip> {
       onHorizontalDragEnd: (details) => _swipe(details, first),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 6),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 180),
+        child: ClipRect(
+          child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 260),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, animation) {
+            final incoming = child.key == ValueKey(_back);
+            return SlideTransition(
+              position: Tween(
+                begin: Offset(incoming ? -_dir : _dir, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
           child: Row(
             key: ValueKey(_back),
             children: [
@@ -84,6 +98,7 @@ class _TodayWeekStripState extends State<TodayWeekStrip> {
                   ),
                 ),
             ],
+          ),
           ),
         ),
       ),
@@ -157,17 +172,18 @@ class _Day extends StatelessWidget {
                     outline: isToday ? accent : Colors.transparent,
                   ),
                   child: Center(
-                    child: complete
-                        ? Icon(LucideIcons.check, size: 17, color: ink)
-                        : Text(
+                    child: Text(
                             '${day.day}',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight:
-                                  isToday ? FontWeight.w800 : FontWeight.w600,
-                              color: isToday || due > 0
-                                  ? scheme.onSurface
-                                  : muted,
+                              fontWeight: isToday || complete
+                                  ? FontWeight.w800
+                                  : FontWeight.w600,
+                              color: complete
+                                  ? ink
+                                  : isToday || due > 0
+                                      ? scheme.onSurface
+                                      : muted,
                             ),
                           ),
                   ),
