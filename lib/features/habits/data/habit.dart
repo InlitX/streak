@@ -84,6 +84,7 @@ class Habit {
     this.tracking = false,
     this.healthSteps = false,
     this.todoLink = '',
+    this.keepReminding = false,
     this.anyAmount = false,
     this.atMost = false,
     this.anySteps = false,
@@ -298,6 +299,8 @@ class Habit {
 
   final String todoLink;
 
+  final bool keepReminding;
+
   final bool anyAmount;
 
   final bool atMost;
@@ -323,7 +326,7 @@ class Habit {
         };
 
   bool silencesRemindersOn(DateTime date) =>
-      kind != HabitKind.negative && isCompletedOn(date);
+      !keepReminding && kind != HabitKind.negative && isCompletedOn(date);
 
   final int startMinute;
   final int durationMinutes;
@@ -1106,6 +1109,7 @@ class Habit {
     bool? tracking,
     bool? healthSteps,
     String? todoLink,
+    bool? keepReminding,
     bool? anyAmount,
     bool? atMost,
     bool? anySteps,
@@ -1167,6 +1171,7 @@ class Habit {
       tracking: tracking ?? this.tracking,
       healthSteps: healthSteps ?? this.healthSteps,
       todoLink: todoLink ?? this.todoLink,
+      keepReminding: keepReminding ?? this.keepReminding,
       anyAmount: anyAmount ?? this.anyAmount,
       atMost: atMost ?? this.atMost,
       anySteps: anySteps ?? this.anySteps,
@@ -1244,6 +1249,7 @@ class Habit {
         'tracking': tracking,
         if (healthSteps) 'healthSteps': true,
         if (todoLink.isNotEmpty) 'todoLink': todoLink,
+        if (keepReminding) 'keepReminding': true,
         'anyAmount': anyAmount,
         if (atMost) 'atMost': true,
         'anySteps': anySteps,
@@ -1333,6 +1339,7 @@ class Habit {
         tracking: (map['tracking'] ?? false) as bool,
         healthSteps: map['healthSteps'] == true,
         todoLink: (map['todoLink'] ?? '') as String,
+        keepReminding: map['keepReminding'] == true,
         anyAmount: (map['anyAmount'] ?? false) as bool,
         atMost: map['atMost'] == true,
         anySteps: (map['anySteps'] ?? false) as bool,

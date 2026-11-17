@@ -16,6 +16,7 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/utils/cover_storage.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/core/widgets/app_text_field.dart';
 import 'package:streak/core/widgets/section_label.dart';
@@ -111,6 +112,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   bool _atMost = false;
   bool _healthSteps = false;
   String _todoLink = '';
+  bool _keepReminding = false;
   bool _trackSpent = false;
   int _cleanGoal = 0;
   double _totalGoal = 0;
@@ -238,6 +240,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       _atMost = habit.atMost;
       _healthSteps = habit.readsSteps;
       _todoLink = habit.todoLink;
+      _keepReminding = habit.keepReminding;
       _trackSpent = habit.trackSpent;
       _cleanGoal = habit.cleanGoal;
       _totalGoal = habit.totalGoal;
@@ -292,6 +295,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         _atMost,
         _healthSteps,
         _todoLink,
+        _keepReminding,
         _trackSpent,
         _cleanGoal,
         _totalGoal,
@@ -448,6 +452,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           tracking: _tracking,
           healthSteps: healthSteps,
           todoLink: _linksTodos ? _todoLink : '',
+          keepReminding: _keepsReminding && _keepReminding,
           anyAmount: quantitative && _anyAmount && !_atMost,
           atMost: quantitative && _atMost,
           anySteps: substeps.isNotEmpty && _anySteps,
@@ -508,6 +513,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         tracking: _tracking,
         healthSteps: healthSteps,
         todoLink: _linksTodos ? _todoLink : '',
+        keepReminding: _keepsReminding && _keepReminding,
         anyAmount: quantitative && _anyAmount && !_atMost,
         atMost: quantitative && _atMost,
         anySteps: substeps.isNotEmpty && _anySteps,
@@ -641,6 +647,26 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         ],
       ];
 
+  bool get _keepsReminding =>
+      _kind != HabitKind.negative &&
+      _reminders.isNotEmpty &&
+      context.read<SettingsController>().quietWhenDone;
+
+  List<Widget> _keepRow({bool compact = false}) => [
+        if (_keepsReminding) ...[
+          SizedBox(height: compact ? 7 : 8),
+          HabitFlagToggle(
+            icon: LucideIcons.bellRing,
+            title: context.l10n.keep_reminding,
+            hint: context.l10n.keep_reminding_sub,
+            value: _keepReminding,
+            color: _color,
+            compact: compact,
+            onChanged: (v) => setState(() => _keepReminding = v),
+          ),
+        ],
+      ];
+
   Widget _buildExpress(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -677,11 +703,11 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 760),
-          child: ListView(
+          child: TopFade(controller: _scroll, child: ListView(
             controller: _scroll,
             padding: context.pagePadding(18, 8, 18, 140),
             children: _expressFields(context),
-          ),
+          )),
         ),
       ),
     );
@@ -891,6 +917,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         ),
       AddReminderButton(onTap: _addReminder),
       ..._soundRow(),
+      ..._keepRow(),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 26),
         SectionLabel(context.l10n.checklist),
@@ -988,7 +1015,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           const SizedBox(width: 8),
         ],
       ),
-      body: ListView(
+      body: TopFade(controller: _scroll, child: ListView(
         controller: _scroll,
         padding: context.pagePadding(20, 0, 20, 32),
         children: [
@@ -999,7 +1026,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           ),
           ..._minimalFields(context),
         ],
-      ),
+      )),
     );
   }
 
@@ -1036,7 +1063,9 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       ),
       if (_kindLocked) ...[
         const SizedBox(height: 8),
-        CompactNote(text: context.l10n.kind_locked_hint, color: _color),
+        FlagGroup(children: [
+          CompactNote(text: context.l10n.kind_locked_hint, color: _color),
+        ]),
       ],
       if (_kind == HabitKind.quantitative) ...[
         const SizedBox(height: 10),
@@ -1280,6 +1309,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         ),
       CompactAddButton(label: context.l10n.add_reminder, onTap: _addReminder),
       ..._soundRow(compact: true),
+      ..._keepRow(compact: true),
       if (_kind == HabitKind.positive && !_focusOnly) ...[
         const SizedBox(height: 16),
         SectionLabel(context.l10n.checklist),
@@ -1482,7 +1512,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
             const SizedBox(width: 8),
           ],
         ),
-        body: ListView(
+        body: TopFade(controller: _scroll, child: ListView(
           controller: _scroll,
           padding: context.pagePadding(16, 16, 16, 16),
           children: [
@@ -1687,6 +1717,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
               ),
             AddReminderButton(onTap: _addReminder),
             ..._soundRow(),
+            ..._keepRow(),
             if (_kind == HabitKind.positive && !_focusOnly) ...[
               const SizedBox(height: 20),
               SectionLabel(context.l10n.checklist),
@@ -1761,7 +1792,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
               ),
             const SizedBox(height: 24),
           ],
-        ),
+        )),
     );
   }
 }
