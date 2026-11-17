@@ -33,7 +33,7 @@
   "keep_editing": "Lanjutkan pengeditan",
   "no_habits_yet": "Belum punya kebiasaan",
   "all_done_today": "Semua sudah selesai hari ini!",
-  "x_of_y_completed": "{selesai} of {total} selesai",
+  "x_of_y_completed": "{done} dari {total} selesai",
   "@x_of_y_completed": {
     "placeholders": {
       "done": {
@@ -64,7 +64,7 @@
   "onb_private_body": "Semua data tetap tersimpan di perangkat Anda. Tidak perlu akun.",
   "onb_yours_title": "Data Anda adalah milik Anda",
   "onb_yours_body": "Cadangkan atau bawa bersama Anda kapan pun Anda mau.",
-  "onb_step": "Langkah{langkah} of {total}",
+  "onb_step": "Langkah {step} dari {total}",
   "@onb_step": {
     "placeholders": {
       "step": {

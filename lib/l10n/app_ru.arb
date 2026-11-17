@@ -1807,7 +1807,7 @@
   "shortcuts_new": "Новая привычка или задача",
   "shortcuts_group_create": "Создать и редактировать",
   "import_card_body": "Перенесите свои привычки и историю из других приложений",
-  "day_marked": "Маркер {дата}",
+  "day_marked": "Отмечено {date}",
   "@day_marked": {
     "placeholders": {
       "date": {
@@ -1815,7 +1815,7 @@
       }
     }
   },
-  "day_unmarked": "Не отмечено {Дата}",
+  "day_unmarked": "Не отмечено {date}",
   "@day_unmarked": {
     "placeholders": {
       "date": {
