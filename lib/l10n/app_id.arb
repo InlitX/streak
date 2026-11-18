@@ -112,5 +112,99 @@
   "data_folder_app": "Lanjutkan ke aplikasi",
   "data_folder_pick": "Pilih folder",
   "data_folder_inside": "Pilih folder di luar folder saat ini.",
-  "data_folder_taken": "Folder itu sudah berisi data Streak."
+  "data_folder_taken": "Folder itu sudah berisi data Streak.",
+  "data_folder_denied": "Streak tidak dapat menulis ke folder tersebut.",
+  "data_folder_move_title": "Pindahkan data Anda",
+  "data_folder_move_body": "Streak akan ditutup dan memindahkan data Anda ke {path}. Buka kembali aplikasi tersebut setelah ditutup. Jika terjadi masalah, data Anda akan tetap berada di tempat semula.",
+  "@data_folder_move_body": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "data_folder_move_confirm": "Pindahkan dan tutup",
+  "refresh_brought": "Kebiasaan Anda sudah diperbarui",
+  "refresh_nothing": "Tidak ada yang baru di folder",
+  "import_backup": "Impor Cadangan",
+  "import_backup_sub": "Pulihkan kebiasaan dari file",
+  "import_from_app": "Impor dari aplikasi lain",
+  "import_from_app_sub": "Loop Habit Tracker, HabitKit…",
+  "import_card_body": "Impor kebiasaan dan riwayat dari aplikasi lain",
+  "import_from_app_done": "Mengimpor {habits} kebiasaan ({days} hari) dari {source}",
+  "@import_from_app_done": {
+    "placeholders": {
+      "habits": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "import_failed": "Tidak dapat mengimpor file tersebut",
+  "about": "Tentang",
+  "backup_saved": "Cadangan disimpan",
+  "export_cancelled": "Ekspor dibatalkan",
+  "habits_imported": "Kebiasaan berhasil diimpor",
+  "new_habit": "Kebiasaan Baru",
+  "edit_habit": "Edit Kebiasaan",
+  "name": "Nama",
+  "name_hint": "misalnya: Lari pagi",
+  "description": "Deskripsi",
+  "description_hint": "Catatan opsional",
+  "icon": "Ikon",
+  "color": "Warna",
+  "category": "Kategori",
+  "category_health": "Kesehatan",
+  "category_fitness": "Kebugaran",
+  "category_mindfulness": "Kesadaran Diri",
+  "category_productivity": "Produktivitas",
+  "category_learning": "Belajar",
+  "category_finance": "Keuangan",
+  "count_days": "{count, plural, =1{1 hari} other{{count} hari}}",
+  "@count_days": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_weeks": "{count, plural, =1{1 minggu} other{{count} minggu}}",
+  "@count_weeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "count_months": "{count, plural, =1{1 bulan} other{{count} bulan}}",
+  "@count_months": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streak_unit_week": "{count}minggu",
+  "@streak_unit_week": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "streak_unit_month": "{count}bulan",
+  "@streak_unit_month": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_kind": "Jenis Kebiasaan",
+  "kind_positive": "Normal"
 }
