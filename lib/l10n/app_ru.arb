@@ -1329,7 +1329,7 @@
   "celebration_sub": "То, что вы видите, когда отмечаете привычку",
   "check_sound": "Звук при завершении",
   "quotes_sub": "Какие цитаты показываются на «Сегодня»",
-  "check_sound_sub": "Мягкий звук при выполнении привычки. Беззвучно, если телефон в беззвучном режиме.",
+  "check_sound_sub": "Мягкий звон при выполнении привычки или задачи. Беззвучно, если телефон в беззвучном режиме.",
   "start_view_sub": "Вкладка «Сегодня» открывается в виде",
   "week_start_sub": "Первый столбец каждой сетки",
   "focus_edit_session": "Изменить сессию",
@@ -1679,7 +1679,7 @@
   },
   "plan_todos": "Задачи в Плане",
   "plan_todos_sub": "Отобразить задачи, запланированные на этот день, под списком привычек",
-  "habit_time_sub": "В данный момент помещает привычку в раздел «План». Она по-прежнему отображается в разделе «Сегодня» в течение всего дня.",
+  "habit_time_sub": "Назначает определённое время для привычки в разделе План. Она по-прежнему отображается в разделе Сегодня в течение всего дня.",
   "day_timeline_empty_todos": "Укажите дату для задачи, и она появится здесь.",
   "today_fold_other": "В остальные дни {count}",
   "@today_fold_other": {
@@ -1774,7 +1774,7 @@
   "island_p_agave": "Агава",
   "island_p_altar": "Храм",
   "island_p_archway": "Арка",
-  "island_p_banner": "Баннер",
+  "island_p_banner": "Знамя",
   "island_p_bench": "Скамейка",
   "island_p_blue_railing": "Синие перила",
   "every_n_minutes": "Каждые {n} мин",
@@ -1801,7 +1801,7 @@
   "shortcuts_title": "Сочетания клавиш",
   "shortcuts_next_tab": "Следующая вкладка",
   "shortcuts_prev_tab": "Предыдущая вкладка",
-  "shortcuts_settings": "Открыть настрйоки",
+  "shortcuts_settings": "Открыть настройки",
   "shortcuts_save": "Сохранить",
   "shortcuts_new_project": "Новый проект",
   "shortcuts_new": "Новая привычка или задача",
@@ -1824,7 +1824,7 @@
     }
   },
   "support_thanks_title": "Спасибо, что вы здесь 🤍",
-  "support_thanks_body": "Streak бесплатен и всегда будет бесплатным без рекламы и скрытых платежей. Если это поможет вам выработать полезные привычки, покупка кофе сделает мой день лучше. А если нет, не волнуйтесь: звезда на GitHub тоже сделает.",
+  "support_thanks_body": "Streak бесплатен и всегда будет бесплатным, без рекламы и скрытых платежей.\n\nЕсли это поможет вам выработать полезные привычки, покупка кофе сделает мой день лучше ☕\nА если нет, не волнуйтесь: звезда на GitHub тоже сделает⭐",
   "avoid_since": "С",
   "todo_remind_before": "Напомни мне перед",
   "todo_remind_at_time": "В данный момент",
@@ -1856,5 +1856,153 @@
       }
     }
   },
-  "todo_completed": "Завершено"
+  "todo_completed": "Завершено",
+  "todo_switch_view": "Изменить вид",
+  "focus_goal_reached": "{habit}: цель достигнута",
+  "@focus_goal_reached": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "today_week_strip": "Полоса с неделей",
+  "today_week_strip_sub": "Неделя показывается над Сегодня. Нажмите на день, чтобы увидеть привычки, свайп - прошлые недели.",
+  "shortcuts_sub": "Все сочетания клавиш",
+  "shortcuts_hint": "Этот список можно открыть в любой момент с помощью {keys}",
+  "@shortcuts_hint": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
+  "shortcuts_back": "Назад или закрыть",
+  "shortcuts_help": "Показать этот список",
+  "shortcuts_group_nav": "Навигация",
+  "shortcuts_group_focus": "Фокус",
+  "shortcuts_go_tab": "Перейти на вкладку 1-5",
+  "shortcuts_search": "Найти задачи",
+  "shortcuts_toggle": "Старт или пауза таймера",
+  "shortcuts_start": "Начать эту сессию",
+  "habit_time_more": "Добавить другое время",
+  "habit_time_again": "Снова",
+  "edit_profile": "Изменить профиль",
+  "focus_days_row": "{count, plural, =1{1 день} other{{count} дней подряд}}",
+  "@focus_days_row": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widget_cfg_arrows": "Проматывать кнопками",
+  "widget_cfg_arrows_hint": "Стрелки вместо свайпа",
+  "notes_search": "Найти заметки",
+  "island_p_bougainvillea": "Бугенвиллея",
+  "island_p_boulder": "Валун",
+  "island_p_crop_patch": "Грядка",
+  "island_p_cube_house": "Кубический дом",
+  "island_p_cypress": "Кипарис",
+  "island_p_dry_grass": "Сухая трава",
+  "island_p_flat_stone": "Плоский камень",
+  "island_p_flower_pot": "Цветочный горшок",
+  "island_p_garden_bed": "Клумба",
+  "island_p_hanging_lantern": "Висячий фонарь",
+  "island_p_hay_bale": "Тюк сена",
+  "island_p_house": "Домик",
+  "island_p_lantern_post": "Фонарный столб",
+  "island_p_large_rock": "Большой камень",
+  "island_p_main_chapel": "Главная часовня",
+  "island_p_mossy_stone": "Замшелый камень",
+  "island_p_olive": "Олива",
+  "island_p_pebbles": "Галька",
+  "island_p_pergola_house": "Дом с перголой",
+  "island_p_pottery_jar": "Глиняный кувшин",
+  "island_p_rocks": "Камни",
+  "island_p_signpost": "Указатель",
+  "island_p_small_bridge": "Деревянный мост",
+  "island_p_stone_basin": "Каменный бассейн",
+  "island_p_stone_lantern": "Каменный фонарь",
+  "island_p_stone_pile": "Пирамида камней",
+  "island_p_terrace_house": "Дом с террасой",
+  "island_p_terracotta_pot": "Терракотовый горшок",
+  "island_p_tower_chapel": "Колокольня",
+  "island_p_two_story": "Двухэтажный дом",
+  "island_p_veg_garden": "Огород",
+  "island_p_villa": "Вилла",
+  "island_p_water_bucket": "Ведро воды",
+  "island_p_well": "Колодец",
+  "island_p_windmill": "Мельница",
+  "island_reset": "Начать остров заново",
+  "island_reset_sub": "Всё будет разрушено, и все баллы вернутся на ваш баланс.",
+  "island_coins": "Монеты",
+  "island_g_pueblo": "Деревня",
+  "island_g_cala": "Бухта",
+  "island_how_todo": "4 за каждую завершённую задачу",
+  "island_how_streak": "Бонус, когда привычка достигает 7, 30, 100 и 365 дней",
+  "island_zoom_hint": "Потяните пальцем, чтобы сдвинуть. Щипок - масштаб, скручивание - поворот.",
+  "island_t_teal": "бирюзовый",
+  "island_t_clay": "терракотовый",
+  "island_t_white": "белый",
+  "island_t_coral": "коралловый",
+  "island_t_lilac": "сиреневый",
+  "island_t_autumn": "осень",
+  "island_t_deep": "тёмный",
+  "island_t_silver": "серебряный",
+  "island_g_huerta": "Фруктовый сад",
+  "island_turn": "Повернуть",
+  "gamification": "Геймификация",
+  "island_default_name": "Мой остров",
+  "island_rename": "Назовите ваш остров",
+  "island_only_affordable": "Только то, что мне по карману",
+  "island_nothing_here": "Здесь пока ничего нет",
+  "island_g_mirador": "Обзорная площадка",
+  "island_g_caleta": "Бухточка",
+  "island_goal": "Так это выглядит, когда всё построено.",
+  "island_reset_go": "Начать заново",
+  "island_beta": "Это первая попытка геймификации, и она ещё на стадии бета-теста. Может быть, она вырастет, изменится или исчезнет - в зависимости от того, как вы все будете её использовать.",
+  "gamification_beta": "Геймификация (бета)",
+  "heatmap_rolling": "Последние 12 месяцев",
+  "heatmap_rolling_sub": "Годовая сетка заканчивается сегодня, а не 31 декабря",
+  "second_chances": "Второй шанс",
+  "second_chances_sub": "Получите шанс за каждые 30 дней без перерыва, не больше 3-х. Если вы пропускаете день, шанс тратится, и серия не прерывается",
+  "chances_left": "{count, plural, =1{1 шанс сохранён} other{{count} шанса сохранено}}",
+  "@chances_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chances_next": "{days, plural, =1{ещё 1 день, чтобы заработать шанс} other{ещё {days} дней, чтобы заработать шанс}}",
+  "@chances_next": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "chance_used": "Серия сохранена {date}",
+  "@chance_used": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "chance_used_notice": "Второй шанс продолжил вашу серию {habit}",
+  "@chance_used_notice": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "chances_info": "Жизнь случается. За каждые 30 дней без перерывов вы получаете второй шанс; вы можете хранить 3. Если вы пропускаете день, один шанс тратится, чтобы продолжить серию. Два пропущенных дня подряд прерывают серию в любом случае. Статистика остаётся честной: пропуск засчитывается как пропуск.",
+  "chances_ok": "Понятно",
+  "quant_preset_steps": "",
+  "performance": "Производительность",
+  "performance_sub": "Облегчённое приложение для старых или слабых телефонов",
+  "widgets_sub": "Стиль виджетов - для телефонов без редактора виджетов"
 }
