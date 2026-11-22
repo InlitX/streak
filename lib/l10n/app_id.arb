@@ -206,5 +206,150 @@
     }
   },
   "habit_kind": "Jenis Kebiasaan",
-  "kind_positive": "Normal"
+  "kind_positive": "Normal",
+  "kind_negative": "Hindari",
+  "kind_quantitative": "Jumlah",
+  "kind_locked_hint": "Jenis tidak dapat diubah setelah kebiasaan dibuat.",
+  "kind_negative_hint": "Setiap hari dianggap bersih secara default: rangkaianmu bertambah sendiri. Ketuk tanda centang hanya jika kamu tergelincir; hari itu akan berubah menjadi merah dan kamu bisa membatalkannya.",
+  "cost_per_day": "Biaya per hari",
+  "cost_note": "Opsional. Kosongkan saja jika kebiasaan ini tidak mengeluarkan uang.",
+  "currency": "Mata Uang",
+  "currency_custom": "Kustom",
+  "currency_hint": "Simbol atau kode",
+  "money_saved": "Uang yang dihemat",
+  "clean_days": "Hari bersih",
+  "quant_preset_water": "Air",
+  "quant_preset_reading": "Membaca",
+  "quant_preset_generic": "Kustom",
+  "quant_unit_hint": "Satuan (mis. ml, halaman, repetisi)",
+  "quant_unit_ml": "ml",
+  "quant_unit_pages": "halaman",
+  "quant_edit_title": "Jumlah hari ini",
+  "quant_daily_goal": "Target harian",
+  "quant_tap_amount": "Jumlah per ketukan",
+  "quant_per_day": "Jumlah per hari",
+  "quant_goal_days": "Target tercapai",
+  "quant_stats_empty": "Catat jumlah dan jumlahnya akan terakumulasi di sini, bahkan di hari-hari ketika kamu tidak mencapai target.",
+  "frequency": "Frekuensi",
+  "pick_one_day": "Pilih minimal satu hari",
+  "reminder_habit_days": "Pada hari-hari kebiasaan",
+  "reminder_habit_days_hint": "Berbunyi pada hari-hari ketika kebiasaan harus dilakukan.",
+  "focus_label": "Label",
+  "focus_label_none": "Tanpa label",
+  "focus_label_new": "Label baru",
+  "focus_label_hint": "Matematika, membaca, kerja...",
+  "focus_label_remove": "Hapus label",
+  "focus_label_remove_body": "{label} keluar dari daftar. Sesi Anda sebelumnya tetap mempertahankannya.",
+  "@focus_label_remove_body": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "focus_label_remove_confirm": "Hapus",
+  "by_label": "Berdasarkan label",
+  "tracking_hide": "Sembunyikan pelacakan saja",
+  "tracking_hide_sub": "Kebiasaan yang hanya Anda lacak tidak masuk ke daftar ini",
+  "tracking_show": "Tampilkan hanya pelacakan ({count})",
+  "@tracking_show": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daily": "Harian",
+  "weekly": "Mingguan",
+  "monthly": "Bulanan",
+  "sched_days": "Hari",
+  "sched_interval": "Interval",
+  "times_per_week": "{n} kali per minggu",
+  "@times_per_week": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "month_fixed_day_hint": "Untuk tanggal yang sama setiap bulan, pilih Interval dan atur ke setiap 1 bulan",
+  "times_per_month": "{n} kali per bulan",
+  "@times_per_month": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_week_short": "{n}×/minggu",
+  "@freq_per_week_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "freq_per_month_short": "{n}×/bulan",
+  "@freq_per_month_short": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "reminders": "Pengingat",
+  "reminders_ready_title": "Pengingat aktif",
+  "reminders_ready_body": "Streak akan mengingatkanmu di sini.",
+  "add_reminder": "Tambah pengingat",
+  "reminder_sound": "Suara",
+  "reminder_sound_default": "Default",
+  "reminder_sound_hint": "Ketuk suara untuk mendengarkannya. Pengingat untuk kebiasaan ini akan menggunakannya.",
+  "delete_habit": "Hapus kebiasaan",
+  "archive_habit": "Arsipkan kebiasaan",
+  "archive": "Arsipkan",
+  "share_friends": "Bagikan ke teman",
+  "share_friends_sub": "Kirimkan aplikasi ini kepada mereka",
+  "share_friends_message": "Menjaga streak tetap hidup dengan Streak — pelacak kebiasaan offline ringan, gratis, tanpa akun dan tanpa iklan. Yuk buat punyamu: https://inlitx.github.io/streak/",
+  "copy_message": "Salin pesan",
+  "message_copied": "Pesan tersalin",
+  "app_lock": "Kunci aplikasi",
+  "app_lock_sub": "Minta sidik jari atau wajahmu untuk membuka Streak",
+  "app_lock_unavailable": "Ponsel ini tidak memiliki biometrik yang diatur",
+  "app_lock_failed": "Tidak dapat memverifikasi bahwa itu kamu",
+  "app_lock_title": "Streak terkunci",
+  "app_lock_unlock": "Buka kunci",
+  "app_lock_delay": "Kunci setelah",
+  "app_lock_delay_instant": "Segera",
+  "app_lock_delay_seconds": "{value} detik",
+  "@app_lock_delay_seconds": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "note_photos": "Foto",
+  "note_take_photo": "Kamera",
+  "note_pick_photo": "Galeri",
+  "journey": "Perjalanan",
+  "journey_sub": "{count, plural, =1{1 foto} other{{count} foto}}",
+  "@journey_sub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journey_empty": "Belum ada foto",
+  "journey_empty_sub": "Tambahkan foto ke catatan dan foto akan muncul di sini.",
+  "archive_habit_body": "Pindahkan \"{name}\" ke arsip? Riwayatnya tetap disimpan dan Anda dapat memulihkannya dari Pengaturan.",
+  "@archive_habit_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archived_habits": "Kebiasaan yang diarsipkan",
+  "archived_habits_sub": "Pulihkan atau hapus secara permanen"
 }
