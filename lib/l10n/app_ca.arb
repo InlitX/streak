@@ -1,5 +1,5 @@
 {
-  "app_tagline": "Seguiment d'hàbits",
+  "app_tagline": "Seguiment dels hàbits",
   "today": "Avui",
   "stats": "Estadístiques",
   "settings": "Configuració",
@@ -68,7 +68,7 @@
   "auto_backup_where": "En obrir l'app se'n guarda una còpia completa: un .zip amb tot, fotos i música incloses, i un .json. També s'escriu una còpia llegible que podeu obrir amb qualsevol editor. Es conserven les darreres còpies.",
   "widgets_hint": "Si la pantalla d'inici no obre l'editor quan afegeixes un giny o el mantens premut, canvia'n l'estil aquí. Això s'aplica a tots els ginys d'aquest tipus que no s'hagin personalitzat individualment.",
   "about_inline": "Streak és una aplicació de codi obert per fer seguiment dels teus hàbits. Sense comptes, sense límits, sense pagaments. Tot es queda al teu telèfon.\n\nQualsevol persona pot consultar el codi, millorar-lo o utilitzar-lo lliurement.",
-  "kind_negative_hint": "Cada dia compta com a net per defecte: la teva ratxa creix sola. Toca el check només si recau; aquell dia es pinta de vermell i pots desfer-ho.",
+  "kind_negative_hint": "Per defecte, cada dia compta com a dia net: la teva ratxa augmenta sola. Toca la marca de verificació només si tens una recaiguda; aquell dia es posarà de color vermell i podràs desfer l'acció.",
   "island_beta": "Aquesta és una primera aproximació a la gamificació i encara es troba en fase beta. Pot evolucionar, canviar de forma o ser substituïda completament, segons com la feu servir.",
   "data_folder_move_body": "Streak es tancarà i mourà les teves dades a {path}. Torna a obrir-lo un cop s'hagi tancat. Si alguna cosa falla, les teves dades romandran on són.",
   "@data_folder_move_body": {
@@ -2085,7 +2085,7 @@
   "hide_clean": "Amaga els dies nets",
   "hide_clean_sub": "Els hàbits d'evitar només apareixen els dies que deixes de fer-ho",
   "check_sound": "So en completar",
-  "check_sound_sub": "Un so suau quan completes un hàbit. Silenciós quan el telèfon està en silenci.",
+  "check_sound_sub": "Un so suau quan completes un hàbit o una tasca. Silenciós quan el telèfon està en silenci.",
   "book_at_page": "Pàgina en què em trobo",
   "book_read_before": "Vegades ja llegit",
   "import_card_body": "Porta els teus hàbits i el teu historial d'altres aplicacions",
@@ -2169,5 +2169,106 @@
   "shortcuts_search": "Cerca tasques",
   "shortcuts_save": "Desa",
   "shortcuts_toggle": "Inicia o posa en pausa el temporitzador",
-  "shortcuts_start": "Inicia la sessió"
+  "shortcuts_start": "Inicia la sessió",
+  "day_marked": "Marcat el {date}",
+  "@day_marked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "day_unmarked": "Sense marcar {date}",
+  "@day_unmarked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_switch_view": "Canvia la vista",
+  "support_thanks_title": "Gràcies per ser aquí 🤍",
+  "support_thanks_body": "Streak és gratuït i ho serà sempre; sense anuncis ni res ocult.\n\nSi t'ajuda a crear hàbits, convidar-me a un cafè em farà molta il·lusió ☕\nI si no pots, no et preocupis: una estrella a GitHub també serveix ⭐",
+  "avoid_since": "Des de",
+  "todo_remind_before": "Recorda-m'ho abans",
+  "todo_remind_at_time": "Només en aquell moment",
+  "todo_remind_label": "{time} abans",
+  "@todo_remind_label": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_due_in": "En {time}",
+  "@todo_due_in": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_completed": "Completat",
+  "habits_search": "Hàbits de cerca",
+  "focus_goal_reached": "{habit}: objectiu assolit",
+  "@focus_goal_reached": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "today_week_strip": "Franja setmanal",
+  "today_week_strip_sub": "Els set dies de la setmana a la part superior de «Avui». Toca un dia per veure'n els hàbits; fes lliscar el dit per veure les setmanes anteriors.",
+  "widget_cfg_arrows": "Desplaçar-se amb botons",
+  "widget_cfg_arrows_hint": "Fletxes en lloc de lliscar la llista",
+  "notes_search": "Cerca notes",
+  "second_chances": "Segones oportunitats",
+  "second_chances_sub": "Per cada 30 dies consecutius, guanyes una oportunitat, fins a un màxim de 3. Si saltes un dia, aquesta es perd, però la teva ratxa continua",
+  "chances_left": "{count, plural, =1{1 oportunitat salvada} other{{count} oportunitats salvades}}",
+  "@chances_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chances_next": "{days, plural, =1{1 dia més per aconseguir una oportunitat} other{{days} dies més per aconseguir una oportunitat}}",
+  "@chances_next": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "chance_used": "Ratxa desada el {date}",
+  "@chance_used": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "chance_used_notice": "Una segona oportunitat va mantenir el teu {habit} ratxa en marxa",
+  "@chance_used_notice": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "chances_info": "La vida passa. Per cada 30 dies seguits, guanyes una segona oportunitat; en pots acumular fins a 3. Si un dia no compleixes, en gastes una i la teva ratxa continua. Si falles dos dies seguits, la ratxa es trenca. Les teves estadístiques es mantenen fidels a la realitat: el dia que has fallat continua comptant com a dia perdut.",
+  "chances_ok": "Entesos",
+  "keep_reminding": "Continua recordant",
+  "keep_reminding_sub": "Avui continuen arribant recordatoris, fins i tot després que tot hagi acabat",
+  "todo_link": "Compta les tasques pendents",
+  "todo_link_sub": "Marcar una tasca d'un projecte o amb una etiqueta compta per a aquest hàbit.",
+  "reminder_after_miss": "Només després d'un dia perdut",
+  "reminder_after_miss_desc": "Sona una vegada; l'endemà toca fer-ho, però només si l'última vegada va sortir malament. Mai si ja ho has fet avui.",
+  "reminder_after_miss_hint": "Deixa-ho buit per escriure-hi unes paraules amables",
+  "reminder_after_miss_short": "Després d'un dia perdut",
+  "notif_comeback": "L'última vegada no va passar, i no passa res. Fer-ho avui et torna a posar al bon camí.",
+  "notif_comeback_chance": "Una segona oportunitat ha mantingut viva la teva ratxa. Avui compta.",
+  "notif_comeback_hard": "Darrerament ha estat complicat. Un objectiu més petit també compta, i el pots canviar en qualsevol moment.",
+  "notif_comeback_avoid": "Una relliscada no esborra el teu progrés. Avui és un nou començament."
 }
