@@ -351,5 +351,27 @@
     }
   },
   "archived_habits": "Kebiasaan yang diarsipkan",
-  "archived_habits_sub": "Pulihkan atau hapus secara permanen"
+  "archived_habits_sub": "Pulihkan atau hapus secara permanen",
+  "archived_empty": "Tidak ada yang diarsipkan",
+  "archived_empty_sub": "Kebiasaan yang Anda hapus akan masuk ke sini, beserta seluruh riwayatnya.",
+  "restore": "Pulihkan",
+  "restored": "Kebiasaan dipulihkan",
+  "delete_forever": "Hapus permanen",
+  "delete_forever_body": "Hapus \"{name}\" beserta seluruh riwayatnya? Tindakan ini tidak dapat dibatalkan.",
+  "@delete_forever_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleted_forever": "Kebiasaan dihapus",
+  "clear_progress": "Hapus progres",
+  "clear_progress_sub": "Riwayat, catatan, dan sesi fokus",
+  "clear_progress_warning": "Tindakan ini akan menghapus semua hari yang dicatat, catatan, dan sesi fokus, tetapi kebiasaan, jadwal, dan pengaturan Anda tetap tersimpan. Tindakan ini tidak dapat dibatalkan kecuali Anda memiliki file cadangan untuk diimpor setelahnya.",
+  "clear_progress_confirm": "Hapus progres",
+  "clear_progress_done": "Progres dihapus",
+  "wipe_data": "Hapus semua data",
+  "wipe_data_sub": "Kebiasaan, catatan, sesi fokus, dan pengaturan",
+  "wipe_data_warning": "Tindakan ini akan menghapus semua kebiasaan, catatan, sesi fokus, dan pengaturan di ponsel ini. Tindakan ini tidak dapat dibatalkan kecuali Anda memiliki file cadangan untuk diimpor setelahnya."
 }
