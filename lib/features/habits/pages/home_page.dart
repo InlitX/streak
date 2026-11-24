@@ -75,13 +75,22 @@ class HomePage extends StatefulWidget {
 
 const _sinkDelay = Duration(milliseconds: 2500);
 
+Route<void>? _newHabitForm;
+
+void _openNewHabit() {
+  if (_newHabitForm?.isActive ?? false) return;
+  final route = AppNavigator.route<void>(
+    const HabitFormPage(),
+    fullscreenDialog: true,
+  );
+  _newHabitForm = route;
+  AppNavigator.pushRoute(route);
+}
+
 class _HomePageState extends State<HomePage> with ShortcutHost {
   @override
   Map<AppShortcut, VoidCallback> get shortcuts => {
-        AppShortcut.create: () => AppNavigator.push(
-              const HabitFormPage(),
-              fullscreenDialog: true,
-            ),
+        AppShortcut.create: _openNewHabit,
       };
 
   final _confetti = ValueNotifier(0);
@@ -428,10 +437,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
               child: ExpressFab(
                 icon: LucideIcons.plus,
                 label: context.l10n.add_habit,
-                onPressed: () => AppNavigator.push(
-                  const HabitFormPage(),
-                  fullscreenDialog: true,
-                ),
+                onPressed: _openNewHabit,
               ),
             )
           : null,
@@ -541,18 +547,12 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                   GlassIconButton(
                     icon: LucideIcons.plus,
                     tooltip: context.l10n.add_habit,
-                    onTap: () => AppNavigator.push(
-                      const HabitFormPage(),
-                      fullscreenDialog: true,
-                    ),
+                    onTap: _openNewHabit,
                   )
                 else
                   GlassPill(
                     tint: context.colors.primary,
-                    onTap: () => AppNavigator.push(
-                      const HabitFormPage(),
-                      fullscreenDialog: true,
-                    ),
+                    onTap: _openNewHabit,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -634,10 +634,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                     ? const SizedBox.shrink()
                     : minimal || bigText
                     ? IconButton(
-                        onPressed: () => AppNavigator.push(
-                          const HabitFormPage(),
-                          fullscreenDialog: true,
-                        ),
+                        onPressed: _openNewHabit,
                         icon: Icon(
                           LucideIcons.circlePlus,
                           size: 26,
@@ -645,10 +642,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                         ),
                       )
                     : FilledButton.icon(
-                        onPressed: () => AppNavigator.push(
-                          const HabitFormPage(),
-                          fullscreenDialog: true,
-                        ),
+                        onPressed: _openNewHabit,
                         icon: const Icon(LucideIcons.plus, size: 16),
                         label: Text(
                           context.l10n.new_label,
@@ -1350,10 +1344,7 @@ class _EmptyState extends StatelessWidget {
       title: context.l10n.empty_title,
       message: context.l10n.empty_body,
       action: FilledButton.icon(
-        onPressed: () => AppNavigator.push(
-          const HabitFormPage(),
-          fullscreenDialog: true,
-        ),
+        onPressed: _openNewHabit,
         icon: const Icon(LucideIcons.plus, size: 18),
         label: Text(context.l10n.add_habit),
         style: FilledButton.styleFrom(

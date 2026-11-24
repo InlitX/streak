@@ -4,8 +4,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/app/home_shell.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/minimal/minimal_nav.dart';
+import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
+import 'package:streak/features/habits/pages/habit_form_page.dart';
 import 'package:streak/features/habits/pages/home_page.dart';
+import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/settings/pages/settings_page.dart';
 import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
@@ -113,6 +116,103 @@ void main() {
     await tester.tap(find.text('Stats').first);
     await tester.pumpAndSettle();
     expect(find.byType(StatisticsPage), findsOneWidget);
+  });
+
+  testWidgets('a wide window keeps a single new habit form open',
+      (tester) async {
+    await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
+    await pumpScreen(tester, const HomeShell());
+
+    tester.view.physicalSize = const Size(1500, 940);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpAndSettle();
+
+    final add = find.byIcon(LucideIcons.plus).first;
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Drink water');
+    await tester.pump();
+
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    expect(find.byType(HabitFormPage, skipOffstage: false), findsOneWidget);
+    expect(find.text('Drink water'), findsWidgets);
+  });
+
+  testWidgets('adding a habit while a page covers the new form changes nothing',
+      (tester) async {
+    final read = testHabit(id: 'a', name: 'Read');
+    await seedHabits(tester, [read]);
+    await pumpScreen(tester, const HomeShell());
+
+    tester.view.physicalSize = const Size(1500, 940);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpAndSettle();
+
+    final add = find.byIcon(LucideIcons.plus).first;
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Drink water');
+    await tester.pump();
+
+    AppNavigator.push(HabitFormPage(habit: read), fullscreenDialog: true);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Read more');
+    await tester.pump();
+
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(HabitFormPage, skipOffstage: false), findsNWidgets(2));
+    expect(find.text('Read more'), findsWidgets);
+
+    Navigator.of(tester.element(find.text('Read more').first)).maybePop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Discard'));
+    await tester.pumpAndSettle();
+    expect(find.text('Read more'), findsNothing);
+
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    expect(find.byType(HabitFormPage, skipOffstage: false), findsOneWidget);
+    expect(find.text('Drink water'), findsWidgets);
+  });
+
+  testWidgets('adding a habit keeps a note draft open above the new form',
+      (tester) async {
+    await seedHabits(tester, [testHabit(id: 'a', name: 'Read')]);
+    await pumpScreen(tester, const HomeShell());
+
+    tester.view.physicalSize = const Size(1500, 940);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpAndSettle();
+
+    final add = find.byIcon(LucideIcons.plus).first;
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Drink water');
+    await tester.pump();
+
+    AppNavigator.push(NoteEditorPage(
+      habitId: 'a',
+      dayKey: AppClock.today().dayKey,
+      accent: Colors.teal,
+    ));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.descendant(
+        of: find.byType(NoteEditorPage),
+        matching: find.byType(TextField),
+      ).first,
+      'my note',
+    );
+    await tester.pump();
+
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    expect(find.byType(NoteEditorPage), findsOneWidget);
+    expect(find.text('my note'), findsWidgets);
+    expect(find.byType(HabitFormPage, skipOffstage: false), findsOneWidget);
   });
 
   testWidgets('minimal drops the bar and keeps only the home', (tester) async {
