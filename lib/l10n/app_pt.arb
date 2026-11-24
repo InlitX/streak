@@ -2049,5 +2049,7 @@
   "color_part_success": "Concluído",
   "color_part_warning": "Aviso",
   "color_part_danger": "Erro",
-  "color_part_info": "Informação"
+  "color_part_info": "Informação",
+  "todo_delete_body": "Você terá alguns segundos para desfazer a ação.",
+  "import_card_body": "Traga seus hábitos e seu histórico de outros aplicativos"
 }
