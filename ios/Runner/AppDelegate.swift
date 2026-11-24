@@ -90,7 +90,7 @@ class StreakLinks: NSObject, FlutterSceneLifeCycleDelegate {
 
   func scene(
     _ scene: UIScene, willConnectTo session: UISceneSession,
-    options connectionOptions: UISceneConnectionOptions?
+    options connectionOptions: UIScene.ConnectionOptions?
   ) -> Bool {
     for context in connectionOptions?.urlContexts ?? [] {
       if case let (key, value)? = target(of: context.url) {
