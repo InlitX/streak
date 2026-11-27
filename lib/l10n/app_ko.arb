@@ -2193,7 +2193,7 @@
   "widget_cfg_arrows": "버튼으로 스크롤",
   "widget_cfg_arrows_hint": "목록을 미는 대신 화살표 사용",
   "second_chances": "두 번째 기회",
-  "second_chances_sub": "연속 30일마다 기회를 1번 받아 3번까지 쌓아둘 수 있어요. 하루를 놓쳐도 기회를 1번 쓰고 연속 기록을 유지해요.",
+  "second_chances_sub": "연속 30일마다 기회를 1번 받아 3번까지 쌓아둘 수 있어요. 하루를 놓쳐도 기회를 1번 쓰고 연속 기록을 유지해요",
   "chances_left": "{count, plural, other{기회 {count}번 남음}}",
   "@chances_left": {
     "placeholders": {
@@ -2219,5 +2219,56 @@
       }
     }
   },
-  "notes_search": "노트 검색"
+  "notes_search": "노트 검색",
+  "todo_switch_view": "보기 변경",
+  "chances_ok": "확인",
+  "keep_reminding_sub": "완료 후에도 오늘 알림을 계속 받아요",
+  "keep_reminding": "계속 알림",
+  "notif_comeback_avoid": "한 번 실수했다고 진척이 날아가지는 않아요. 오늘 새 마음으로 시작해 봐요.",
+  "notif_comeback": "최근에는 달성하지 못했지만 괜찮아요. 오늘 한다면 제자리로 돌려놓을 수 있어요.",
+  "notif_comeback_chance": "두 번째 기회로 연속 기록을 유지했어요. 오늘도 기록에 포함돼요.",
+  "notif_comeback_hard": "요즘 좀 힘이 드셨군요. 목표가 작더라도 여전히 의미가 있고, 언제든 바꿀 수 있어요.",
+  "reminder_after_miss_short": "놓친 날 후에",
+  "reminder_after_miss": "놓친 날 후에만",
+  "reminder_after_miss_desc": "습관을 이루지 못한 채 기한을 맞이한 다음 날, 한 번 울려요. 오늘 이미 완료했다면 절대 울리지 않아요.",
+  "reminder_after_miss_hint": "따뜻한 한 마디를 들으려면 비워 두세요",
+  "avoid_since": "시작일",
+  "todo_remind_before": "미리 알림",
+  "todo_remind_at_time": "제시간에만",
+  "todo_remind_label": "{time} 전",
+  "@todo_remind_label": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_completed": "완료",
+  "chance_used": "{date}에 연속 기록을 지켰어요",
+  "@chance_used": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "chance_used_notice": "두 번째 기회로 {habit} 연속 기록을 지켰어요",
+  "@chance_used_notice": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_link_sub": "특정 프로젝트나 태그의 할 일을 완료하면 이 습관에 반영해요.",
+  "todo_link": "할 일 반영",
+  "todo_due_in": "{time} 남음",
+  "@todo_due_in": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "chances_info": "살다 보면 예상치 못한 일도 생기죠. 30일 연속으로 기록을 달성할 때마다 '두 번째 기회'가 하나씩 주어지며, 최대 3개까지 보유할 수 있어요. 하루를 놓치면 기회 하나를 쓰고 연속 기록을 그대로 유지해요. 단, 이틀 연속으로 놓치면 연속 기록이 끊어져요. 통계는 그대로 기록되므로, 놓친 날은 그대로 놓친 것으로 남아요."
 }
