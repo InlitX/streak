@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:targetCellWidth="2"
@@ -14,4 +15,6 @@
     android:description="@string/widget_description"
     android:initialLayout="@layout/widget_loading"
     android:previewLayout="@layout/widget_preview_focus"
-    android:previewImage="@drawable/widget_preview_shot_focus" />
+    android:previewImage="@drawable/widget_preview_shot_focus"
+    app:widgetStyle="colorful"
+    app:widgetSize="small" />

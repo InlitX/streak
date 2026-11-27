@@ -72,6 +72,13 @@ object WidgetConfig {
         prefs(context).edit().putBoolean("art_$id", value).commit()
     }
 
+    fun blur(context: Context, id: Int): Boolean =
+        prefs(context).getBoolean("blur_${source(context, id)}", false)
+
+    fun setBlur(context: Context, id: Int, value: Boolean) {
+        prefs(context).edit().putBoolean("blur_$id", value).commit()
+    }
+
     fun todosAll(context: Context, id: Int): Boolean =
         prefs(context).getBoolean("todosAll_${source(context, id)}", false)
 
@@ -197,6 +204,7 @@ object WidgetConfig {
             .remove("image_$id")
             .remove("todosAll_$id")
             .remove("art_$id")
+            .remove("blur_$id")
             .remove("span_$id")
             .remove("round_$id")
             .remove("habits_$id")

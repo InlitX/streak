@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -159,6 +160,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 initialBgLight = WidgetConfig.bgLight(this, appWidgetId),
                 initialTodosAll = WidgetConfig.todosAll(this, appWidgetId),
                 initialArt = WidgetConfig.art(this, appWidgetId),
+                initialBlur = WidgetConfig.blur(this, appWidgetId),
                 initialSpan = WidgetConfig.span(this, appWidgetId),
                 initialLook = WidgetConfig.look(this, appWidgetId, round = type == WType.HABIT),
                 initialChosen = WidgetConfig.habits(this, appWidgetId),
@@ -189,11 +191,17 @@ class WidgetConfigActivity : ComponentActivity() {
 
     private fun tr(key: String, fallback: String) = WidgetText.get(this, key, fallback)
 
+    private val canBlur: Boolean
+        get() = type != WType.HEATMAP &&
+            Build.MANUFACTURER.equals("samsung", ignoreCase = true) &&
+            Build.VERSION.SDK_INT >= 35
+
     private fun save(
         bg: Int, opacity: Int, border: Boolean, borderWidth: Int,
         habitId: String?, allColor: Int, layout: Int,
         followSystem: Boolean, bgLight: Int, todosAll: Boolean,
         chosen: Set<String>, art: Boolean, span: Int, look: WidgetLook,
+        blur: Boolean,
     ) {
         val image = if (bgModeState.value == 1) imageState.value else null
         WidgetConfig.set(
@@ -204,6 +212,7 @@ class WidgetConfigActivity : ComponentActivity() {
         if (type == WType.TODOS) WidgetConfig.setTodosAll(this, appWidgetId, todosAll)
         if (type == WType.STATS || type == WType.TODOS || type == WType.FOCUS) WidgetConfig.setArt(this, appWidgetId, art)
         if (type == WType.HABIT) WidgetConfig.setSpan(this, appWidgetId, span)
+        if (canBlur) WidgetConfig.setBlur(this, appWidgetId, blur && image == null)
         if (type == WType.HABIT || type == WType.TODAY || type == WType.TODOS || type == WType.STATS || type == WType.FOCUS) WidgetConfig.setLook(this, appWidgetId, look)
         if (filters) WidgetConfig.setHabits(this, appWidgetId, chosen)
         if (type == WType.HEATMAP) {
@@ -314,6 +323,7 @@ class WidgetConfigActivity : ComponentActivity() {
         initialBgLight: Int,
         initialTodosAll: Boolean,
         initialArt: Boolean,
+        initialBlur: Boolean,
         initialSpan: Int,
         initialLook: WidgetLook,
         initialChosen: Set<String>,
@@ -332,6 +342,7 @@ class WidgetConfigActivity : ComponentActivity() {
         var lightCustom by remember { mutableStateOf(false) }
         var todosAll by remember { mutableStateOf(initialTodosAll) }
         var art by remember { mutableStateOf(initialArt) }
+        var blur by remember { mutableStateOf(initialBlur) }
         var span by remember { mutableStateOf(initialSpan) }
         var look by remember { mutableStateOf(initialLook) }
         var chosen by remember { mutableStateOf(initialChosen) }
@@ -601,6 +612,14 @@ class WidgetConfigActivity : ComponentActivity() {
                                 opacity = it.toInt()
                             }
                         }
+                        if (mode == 0 && canBlur) {
+                            Line()
+                            ToggleRow(
+                                tr("cfg_blur", "Blur the background"),
+                                tr("cfg_blur_sub", "Blurs the wallpaper behind the widget. Lower the opacity to see it."),
+                                blur,
+                            ) { blur = it }
+                        }
                     }
 
                     Group(tr("cfg_border", "Border")) {
@@ -637,6 +656,7 @@ class WidgetConfigActivity : ComponentActivity() {
                                 save(
                                     bg, opacity, border, borderWidth, habitId, allColor, layout,
                                     followSystem, bgLight, todosAll, chosen, art, span, look,
+                                    blur,
                                 )
                             },
                         contentAlignment = Alignment.Center,

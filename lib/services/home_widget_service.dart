@@ -98,6 +98,8 @@ class HomeWidgetService {
           'cfg_todos_all': l10n.widget_cfg_todos_all,
           'cfg_todos_hint': l10n.widget_cfg_todos_hint,
           'cfg_show_art': l10n.widget_cfg_show_art,
+          'cfg_blur': l10n.widget_cfg_blur,
+          'cfg_blur_sub': l10n.widget_cfg_blur_sub,
           'cfg_show_header': l10n.widget_cfg_show_header,
           'cfg_show_icons': l10n.widget_cfg_show_icons,
           'cfg_show_cards': l10n.widget_cfg_show_cards,

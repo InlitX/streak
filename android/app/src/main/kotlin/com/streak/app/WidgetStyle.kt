@@ -19,6 +19,7 @@ import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.ContentScale
@@ -37,6 +38,7 @@ data class WidgetStyle(
     val cell: Color,
     val imagePath: String?,
     val scrim: Color,
+    val blur: Boolean = false,
 ) {
     val dark: Boolean get() = content == Color.White
 
@@ -54,6 +56,7 @@ data class WidgetStyle(
                 return image(image, opacity, border, bw)
             }
             return from(WidgetConfig.bgFor(context, id), opacity, border, bw)
+                .copy(blur = WidgetConfig.blur(context, id))
         }
 
         fun loadFor(context: Context, glanceId: GlanceId): WidgetStyle =
@@ -152,6 +155,7 @@ fun WidgetSurface(
                 Box(
                     modifier = GlanceModifier
                         .fillMaxSize()
+                        .then(if (style.blur) GlanceModifier.appWidgetBackground() else GlanceModifier)
                         .background(ColorProvider(style.background))
                         .cornerRadius(radius),
                 ) {}
