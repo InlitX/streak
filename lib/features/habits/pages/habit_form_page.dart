@@ -154,6 +154,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   bool get _needsUnit =>
       _kind == HabitKind.quantitative &&
       _quantKind != QuantKind.time &&
+      !_scale &&
       _unitLabel.text.trim().isEmpty;
 
   Future<void> _reveal(FocusNode node) async {
@@ -353,8 +354,14 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
   bool get _remindersFollowHabit =>
       _kind != HabitKind.negative && _interval == HabitInterval.everyXDays;
 
+  bool get _scale =>
+      _kind == HabitKind.quantitative && _quantKind == QuantKind.scale;
+
   void _applyQuantPreset(QuantKind preset) {
     setState(() {
+      if (_quantKind == QuantKind.scale && preset != QuantKind.scale) {
+        _noGoal = false;
+      }
       _quantKind = preset;
       _healthSteps = false;
       switch (preset) {
@@ -374,6 +381,13 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           _quantIncrement = 5;
           break;
         case QuantKind.generic:
+          break;
+        case QuantKind.scale:
+          _unitLabel.clear();
+          _noGoal = true;
+          _atMost = false;
+          _anyAmount = false;
+          _quantIncrement = 1;
           break;
       }
     });
@@ -449,7 +463,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           bookCoverPath: quantitative ? _bookCover : widget.habit!.bookCoverPath,
           bookPages: _readsBook ? _bookPages : 0,
           focusOnly: focusOnly,
-          tracking: _tracking,
+          tracking: _tracking || _scale,
           healthSteps: healthSteps,
           todoLink: _linksTodos ? _todoLink : '',
           keepReminding: _keepsReminding && _keepReminding,
@@ -510,7 +524,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
         bookCoverPath: quantitative ? bookCover : '',
         bookPages: _readsBook ? _bookPages : 0,
         focusOnly: focusOnly,
-        tracking: _tracking,
+        tracking: _tracking || _scale,
         healthSteps: healthSteps,
         todoLink: _linksTodos ? _todoLink : '',
         keepReminding: _keepsReminding && _keepReminding,
@@ -767,7 +781,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           step: _quantStep,
         ),
         const SizedBox(height: 12),
-        FlagGroup(children: [
+        if (!_scale) FlagGroup(children: [
         NoGoalToggle(
           value: _noGoal,
           color: _color,
@@ -811,7 +825,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           onCleanGoal: (v) => setState(() => _cleanGoal = v),
         ),
       ],
-      if (_kind != HabitKind.negative) ...[
+      if (_kind != HabitKind.negative && !_scale) ...[
         const SizedBox(height: 12),
         FlagGroup(children: [
         _totalGoalField(),
@@ -939,7 +953,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       if (_offersTracking || _offersDifficulty) ...[
         const SizedBox(height: 12),
         FlagGroup(children: [
-        if (_offersTracking) TrackingToggle(
+        if (_offersTracking && !_scale) TrackingToggle(
           value: _tracking,
           color: _color,
           onChanged: (v) => setState(() => _tracking = v),
@@ -1081,7 +1095,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 onSelected: _applyQuantPreset,
                 onSteps: _pickSteps,
               ),
-              if (_quantKind != QuantKind.time) ...[
+              if (_quantKind != QuantKind.time && !_scale) ...[
                 const SizedBox(height: 14),
                 AppTextField(
                   hint: context.l10n.quant_unit_hint,
@@ -1091,7 +1105,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 ),
               ],
               if (!_noGoal) const SizedBox(height: 10),
-              if (!_noGoal) CompactStepperRow(
+              if (!_noGoal && !_scale) CompactStepperRow(
                 label: context.l10n.quant_daily_goal,
                 value: _quantTarget,
                 unit: _quantUnit,
@@ -1102,8 +1116,8 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 clock: _quantKind == QuantKind.time,
                 onChanged: (v) => setState(() => _quantTarget = v),
               ),
-              const SizedBox(height: 8),
-              CompactStepperRow(
+              if (!_scale) const SizedBox(height: 8),
+              if (!_scale) CompactStepperRow(
                 label: context.l10n.quant_tap_amount,
                 value: _quantIncrement,
                 unit: _quantUnit,
@@ -1118,7 +1132,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           ),
         ),
         const SizedBox(height: 16),
-        FlagGroup(children: [
+        if (!_scale) FlagGroup(children: [
         NoGoalToggle(
           value: _noGoal,
           color: _color,
@@ -1167,7 +1181,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
           onCleanGoal: (v) => setState(() => _cleanGoal = v),
         ),
       ],
-      if (_kind != HabitKind.negative) ...[
+      if (_kind != HabitKind.negative && !_scale) ...[
         const SizedBox(height: 10),
         FlagGroup(children: [
         _totalGoalField(compact: true),
@@ -1332,7 +1346,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       if (_offersTracking || _offersDifficulty) ...[
         const SizedBox(height: 16),
         FlagGroup(children: [
-        if (_offersTracking) TrackingToggle(
+        if (_offersTracking && !_scale) TrackingToggle(
           value: _tracking,
           color: _color,
           compact: true,
@@ -1424,7 +1438,9 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
       switch (_kind) {
         HabitKind.positive => !_focusOnly,
         HabitKind.quantitative =>
-          _quantKind != QuantKind.time && !(_quantKind == QuantKind.generic && _healthSteps),
+          _quantKind != QuantKind.time &&
+          _quantKind != QuantKind.scale &&
+          !(_quantKind == QuantKind.generic && _healthSteps),
         HabitKind.negative => false,
       };
 
@@ -1562,7 +1578,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 step: _quantStep,
               ),
               const SizedBox(height: 12),
-              FlagGroup(children: [
+              if (!_scale) FlagGroup(children: [
               NoGoalToggle(
                 value: _noGoal,
                 color: _color,
@@ -1608,7 +1624,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
                 onCleanGoal: (v) => setState(() => _cleanGoal = v),
               ),
             ],
-            if (_kind != HabitKind.negative) ...[
+            if (_kind != HabitKind.negative && !_scale) ...[
               const SizedBox(height: 12),
               FlagGroup(children: [
               _totalGoalField(),
@@ -1739,7 +1755,7 @@ class _HabitFormPageState extends State<HabitFormPage> with ShortcutHost {
             if (_offersTracking || _offersDifficulty) ...[
               const SizedBox(height: 20),
               FlagGroup(children: [
-              if (_offersTracking) TrackingToggle(
+              if (_offersTracking && !_scale) TrackingToggle(
                 value: _tracking,
                 color: _color,
                 onChanged: (v) => setState(() => _tracking = v),

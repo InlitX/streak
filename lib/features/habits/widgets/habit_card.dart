@@ -11,6 +11,7 @@ import 'package:streak/core/extensions/color_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
@@ -531,6 +532,18 @@ class _ActionButton extends StatelessWidget {
               ratio: ratio.clamp(0.0, 1.0),
               done: doneToday,
               onTap: addProgress,
+              onLongPress: addCustom,
+            );
+          case QuantKind.scale:
+            final level = scaleLevelOf(count);
+            final empty = context.tokens.muted.withValues(alpha: 0.6);
+            return _ArtButton(
+              size: const Size(34, 34),
+              painter: (_) => ScaleFacePainter(level: level, empty: empty),
+              color: level > 0 ? scaleColor(level) : empty,
+              ratio: level > 0 ? 1 : 0,
+              done: false,
+              onTap: addCustom,
               onLongPress: addCustom,
             );
           case QuantKind.generic:

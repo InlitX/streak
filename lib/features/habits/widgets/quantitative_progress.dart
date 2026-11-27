@@ -13,6 +13,7 @@ import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/widgets/check_seal.dart';
 import 'package:streak/features/habits/widgets/health_steps_widgets.dart';
 import 'package:streak/features/habits/widgets/reading_books.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
@@ -63,6 +64,42 @@ class QuantitativeProgress extends StatelessWidget {
       await controller.addProgress(habit.id, today, delta);
     }
 
+    if (habit.isScale) {
+      final level = scaleLevelOf(count);
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 18, 12, 14),
+          child: Column(
+            children: [
+              Text(
+                context.l10n.scale_pick_title,
+                style: TextStyle(fontSize: 14, color: context.tokens.muted),
+              ),
+              const SizedBox(height: 14),
+              ScaleFaceRow(
+                selected: level,
+                onPick: (picked) async {
+                  if (level == 0 &&
+                      !await confirmUnscheduledDay(
+                        context,
+                        habit: habit,
+                        date: today,
+                      )) {
+                    return;
+                  }
+                  await controller.setProgress(
+                    habit.id,
+                    today,
+                    picked == level ? 0 : picked.toDouble(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
@@ -83,7 +120,7 @@ class QuantitativeProgress extends StatelessWidget {
                   color: habit.progressFor(count)
                       .solidColor(habit.color.shownIn(context)),
                 ),
-              QuantKind.generic => _GenericRing(
+              QuantKind.generic || QuantKind.scale => _GenericRing(
                   progress: habit.progressFor(count),
                   color: habit.color.shownIn(context),
                 ),

@@ -181,7 +181,19 @@ class WidgetActionService {
       'relapse' => habit.completions.containsKey(target.dayKey)
           ? CompletionOps.clearRelapse(habit, target)
           : CompletionOps.logRelapse(habit, target),
+      'progress' when habit.isScale => CompletionOps.addProgress(
+          habit,
+          target,
+          _nextLevel(habit, target),
+        ),
       'progress' => CompletionOps.addProgress(habit, target, delta),
+      'scale' => CompletionOps.addProgress(
+          habit,
+          target,
+          (int.tryParse(uri.queryParameters['level'] ?? '') ?? 0)
+                  .clamp(0, 5) -
+              (habit.completions[target.dayKey]?.count ?? 0),
+        ),
       'step' => CompletionOps.setStep(
           habit, target, uri.queryParameters['step'] ?? '', true),
       _ => CompletionOps.toggle(habit, target),
@@ -189,5 +201,10 @@ class WidgetActionService {
 
     habits[habitId] = habit.copyWith(completions: completions);
     return habitId;
+  }
+
+  static double _nextLevel(Habit habit, DateTime day) {
+    final level = (habit.completions[day.dayKey]?.count ?? 0).round();
+    return (level >= 5 ? 1 : level + 1) - level.toDouble();
   }
 }

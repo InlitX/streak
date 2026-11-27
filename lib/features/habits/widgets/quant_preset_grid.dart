@@ -6,7 +6,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/services/health_steps.dart';
 
-enum _Preset { water, reading, time, steps, generic }
+enum _Preset { water, reading, time, steps, generic, scale }
 
 class QuantPresetGrid extends StatefulWidget {
   const QuantPresetGrid({
@@ -46,6 +46,7 @@ class _QuantPresetGridState extends State<QuantPresetGrid> {
         QuantKind.reading => _Preset.reading,
         QuantKind.time => _Preset.time,
         QuantKind.generic => widget.steps ? _Preset.steps : _Preset.generic,
+        QuantKind.scale => _Preset.scale,
       };
 
   Future<void> _pickSteps() async {
@@ -69,6 +70,7 @@ class _QuantPresetGridState extends State<QuantPresetGrid> {
         _Preset.time => widget.onSelected(QuantKind.time),
         _Preset.steps => _pickSteps(),
         _Preset.generic => widget.onSelected(QuantKind.generic),
+        _Preset.scale => widget.onSelected(QuantKind.scale),
       };
 
   String _label(_Preset preset) => switch (preset) {
@@ -77,6 +79,7 @@ class _QuantPresetGridState extends State<QuantPresetGrid> {
         _Preset.time => context.l10n.quant_preset_time,
         _Preset.steps => context.l10n.quant_preset_steps,
         _Preset.generic => context.l10n.quant_preset_generic,
+        _Preset.scale => context.l10n.quant_preset_scale,
       };
 
   String? _unit(_Preset preset) => switch (preset) {
@@ -85,6 +88,7 @@ class _QuantPresetGridState extends State<QuantPresetGrid> {
         _Preset.time => context.l10n.unit_min_short,
         _Preset.steps => context.l10n.health_unit_steps,
         _Preset.generic => null,
+        _Preset.scale => context.l10n.quant_unit_scale,
       };
 
   @override
@@ -95,6 +99,7 @@ class _QuantPresetGridState extends State<QuantPresetGrid> {
       _Preset.time,
       if (_access != HealthAccess.unsupported || widget.steps) _Preset.steps,
       _Preset.generic,
+      _Preset.scale,
     ];
     final gap = widget.plain ? 7.0 : 8.0;
     Widget tile(_Preset preset) => _PresetTile(
@@ -260,7 +265,58 @@ class _PresetArt extends StatelessWidget {
           size: const Size(32, 32),
           painter: DialPainter(fill: fill, color: color),
         ),
+      _Preset.scale => CustomPaint(
+          size: const Size(30, 30),
+          painter: _FacePainter(fill: fill, color: color),
+        ),
     };
     return SizedBox(width: 34, height: 36, child: Center(child: art));
   }
+}
+
+class _FacePainter extends CustomPainter {
+  _FacePainter({required this.fill, required this.color});
+
+  final double fill;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final r = size.shortestSide / 2;
+    final c = size.center(Offset.zero);
+    final light = color.computeLuminance() > 0.82;
+    final pale = light
+        ? Color.lerp(color, Colors.black, 0.30)!
+        : Color.lerp(color, Colors.white, 0.80)!;
+    final ink = Color.lerp(color, Colors.black, 0.30)!;
+    final amount = fill.clamp(0.0, 1.0);
+    canvas.drawCircle(c, r, Paint()..color = pale);
+    canvas.drawCircle(c, r * (0.62 + 0.38 * amount), Paint()..color = color);
+    final eye = Paint()..color = ink;
+    for (final dx in [-r * 0.34, r * 0.34]) {
+      canvas.drawOval(
+        Rect.fromCenter(
+          center: Offset(c.dx + dx, c.dy - r * 0.18),
+          width: r * 0.17,
+          height: r * 0.24,
+        ),
+        eye,
+      );
+    }
+    final y = c.dy + r * 0.28;
+    canvas.drawPath(
+      Path()
+        ..moveTo(c.dx - r * 0.4, y)
+        ..quadraticBezierTo(c.dx, y + r * 0.32, c.dx + r * 0.4, y),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = r * 0.14
+        ..strokeCap = StrokeCap.round
+        ..color = ink,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_FacePainter old) =>
+      old.fill != fill || old.color != color;
 }

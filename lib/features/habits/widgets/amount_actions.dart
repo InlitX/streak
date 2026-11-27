@@ -6,12 +6,14 @@ import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 
 Future<void> addCustomAmount(BuildContext context, Habit habit) async {
   if (habit.kind != HabitKind.quantitative) return;
+  if (habit.isScale) return logScale(context, habit);
 
   final today = AppClock.now();
   if (!await confirmUnscheduledDay(context, habit: habit, date: today)) return;

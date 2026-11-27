@@ -16,6 +16,7 @@ import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
@@ -285,6 +286,23 @@ class _QuantWave extends StatelessWidget {
     final unit = habit.isTimeAmount || habit.unitLabel.isEmpty
         ? ''
         : ' ${habit.unitLabel}';
+    if (habit.isScale) {
+      final level = scaleLevelOf(count);
+      return Row(
+        children: [
+          ScaleFace(level: level, size: 22),
+          const SizedBox(width: 8),
+          Text(
+            level > 0 ? scaleLabel(context, level) : context.l10n.scale_pick_title,
+            style: ExpressType.body.at(
+              12.5,
+              weight: 700,
+              color: level > 0 ? context.colors.onSurface : context.tokens.muted,
+            ),
+          ),
+        ],
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,6 +368,8 @@ class ExpressAction extends StatelessWidget {
     if (!await confirmUnscheduledDay(context, habit: habit, date: today)) {
       return;
     }
+    if (!context.mounted) return;
+    if (habit.isScale) return pickScaleLevel(context, habit, today);
     await controller.addProgress(habit.id, today, habit.incrementAmount);
   }
 

@@ -501,21 +501,34 @@ class TodoLinkField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final bool compact;
 
+  List<String> get _ids => link.isEmpty ? const [] : link.split(',');
+
   Future<void> _pick(BuildContext context) {
-    final tags = context.read<TodoTagsController>().tags;
+    final picked = _ids;
+    final tags = context
+        .read<TodoTagsController>()
+        .tags
+        .where((tag) => !picked.contains(tag.id))
+        .toList();
+    if (tags.isEmpty) return Future.value();
     return showOptionSheet(
       context,
       title: context.l10n.todo_link,
       options: [for (final tag in tags) tag.name],
       icons: [for (final tag in tags) CategoryIcons.resolve(tag.icon)],
-      index: tags.indexWhere((tag) => tag.id == link),
-      onSelected: (index) => onChanged(tags[index].id),
+      index: -1,
+      onSelected: (index) => onChanged([...picked, tags[index].id].join(',')),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final tag = context.watch<TodoTagsController>().byId(link);
+    final controller = context.watch<TodoTagsController>();
+    final linked = [
+      for (final id in _ids)
+        if (controller.byId(id) case final tag?) tag,
+    ];
+    final more = controller.tags.length > linked.length;
     return FlagGroup(
       children: [
         Column(
@@ -525,23 +538,39 @@ class TodoLinkField extends StatelessWidget {
               icon: LucideIcons.listChecks,
               title: context.l10n.todo_link,
               hint: context.l10n.todo_link_sub,
-              value: tag != null,
+              value: linked.isNotEmpty,
               color: color,
               onChanged: (on) => on ? _pick(context) : onChanged(''),
               compact: compact,
             ),
-            if (tag != null)
+            if (linked.isNotEmpty)
               FlagDetail(
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: ActionChip(
-                    avatar: Icon(
-                      CategoryIcons.resolve(tag.icon),
-                      size: 15,
-                      color: tag.color,
-                    ),
-                    label: Text(tag.name),
-                    onPressed: () => _pick(context),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final tag in linked)
+                        InputChip(
+                          avatar: Icon(
+                            CategoryIcons.resolve(tag.icon),
+                            size: 15,
+                            color: tag.color,
+                          ),
+                          label: Text(tag.name),
+                          deleteIcon: const Icon(LucideIcons.x, size: 15),
+                          onDeleted: () => onChanged(
+                            [for (final t in linked) if (t.id != tag.id) t.id].join(','),
+                          ),
+                        ),
+                      if (more)
+                        ActionChip(
+                          avatar: const Icon(LucideIcons.plus, size: 15),
+                          label: Text(context.l10n.todo_link_more),
+                          onPressed: () => _pick(context),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -1088,12 +1117,13 @@ class QuantitativeFields extends StatelessWidget {
   double get _step => switch (quantKind) {
         QuantKind.water => 50,
         QuantKind.time => 5,
-        QuantKind.reading || QuantKind.generic => 1,
+        QuantKind.reading || QuantKind.generic || QuantKind.scale => 1,
       };
 
   @override
   Widget build(BuildContext context) {
     final time = quantKind == QuantKind.time;
+    final scale = quantKind == QuantKind.scale;
     final unit =
         time ? context.l10n.unit_min_short : unitController.text.trim();
     return Card(
@@ -1109,7 +1139,7 @@ class QuantitativeFields extends StatelessWidget {
               onSelected: onPresetSelected,
               onSteps: onSteps,
             ),
-            if (!time) ...[
+            if (!time && !scale) ...[
               const SizedBox(height: 16),
               AppTextField(
                 hint: context.l10n.quant_unit_hint,
@@ -1118,8 +1148,8 @@ class QuantitativeFields extends StatelessWidget {
                 onChanged: (_) => onUnitChanged(),
               ),
             ],
-            if (showGoal) const SizedBox(height: 12),
-            if (showGoal) _QuantityStepperRow(
+            if (showGoal && !scale) const SizedBox(height: 12),
+            if (showGoal && !scale) _QuantityStepperRow(
               label: context.l10n.quant_daily_goal,
               value: target,
               unit: unit,
@@ -1128,8 +1158,8 @@ class QuantitativeFields extends StatelessWidget {
               clock: time,
               onChanged: onTargetChanged,
             ),
-            const SizedBox(height: 8),
-            _QuantityStepperRow(
+            if (!scale) const SizedBox(height: 8),
+            if (!scale) _QuantityStepperRow(
               label: context.l10n.quant_tap_amount,
               value: increment,
               unit: unit,

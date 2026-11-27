@@ -16,6 +16,7 @@ import 'package:streak/features/habits/pages/note_editor_page.dart';
 import 'package:streak/features/habits/pages/notes_page.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/habits/state/notes_controller.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/habit_checklist.dart';
 import 'package:streak/features/habits/widgets/miss_reasons.dart';
@@ -199,6 +200,25 @@ class _DayStatus extends StatelessWidget {
     if (habit == null) return const SizedBox.shrink();
     final color = habit.color.shownIn(context);
     final count = habit.completions[date.dayKey]?.count ?? 0;
+    if (habit.isScale) {
+      final level = scaleLevelOf(count);
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.07),
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: ScaleFaceRow(
+          selected: level,
+          size: 38,
+          onPick: (picked) => context.read<HabitsController>().setProgress(
+                habit.id,
+                date,
+                picked == level ? 0 : picked.toDouble(),
+              ),
+        ),
+      );
+    }
     final negative = habit.kind == HabitKind.negative;
     final quantity = habit.kind == HabitKind.quantitative;
     final counted = !negative && !habit.hasSubsteps && (quantity || habit.perDayTarget > 1);

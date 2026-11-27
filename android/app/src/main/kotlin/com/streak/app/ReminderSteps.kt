@@ -36,7 +36,12 @@ class ReminderReceiver : ScheduledNotificationReceiver() {
         }
         val habitId = json.optString("payload")
         if (habitId.isEmpty() || !json.has("id")) return
-        ReminderSteps.show(context, goAsync(), json.optInt("id"), habitId)
+        val id = json.optInt("id")
+        if (ReminderScale.applies(context, habitId)) {
+            ReminderScale.show(context, goAsync(), id, habitId)
+        } else {
+            ReminderSteps.show(context, goAsync(), id, habitId)
+        }
     }
 }
 

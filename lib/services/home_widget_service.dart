@@ -301,6 +301,7 @@ class HomeWidgetService {
         'cover': habit.coverPath,
         'completions': window.map(habit.isCompletedOn).toList(),
         'kind': habit.kind.index,
+        if (habit.isScale) 'scale': true,
         'focusOnly': habit.needsFocusSession,
         'streak': habit.currentStreak,
         'best': habit.longestStreak,

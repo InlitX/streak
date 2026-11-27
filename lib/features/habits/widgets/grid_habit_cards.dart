@@ -14,6 +14,7 @@ import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/scrolling_text.dart';
 import 'package:streak/features/habits/data/habit.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/widgets/relapse_dialog.dart';
 import 'package:streak/features/habits/widgets/amount_actions.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -126,7 +127,8 @@ class _QuantTile extends StatelessWidget {
     if (!context.mounted) return;
     final allowed =
         await confirmUnscheduledDay(context, habit: habit, date: today);
-    if (!allowed) return;
+    if (!allowed || !context.mounted) return;
+    if (habit.isScale) return pickScaleLevel(context, habit, today);
     await controller.addProgress(habit.id, today, habit.incrementAmount);
   }
 

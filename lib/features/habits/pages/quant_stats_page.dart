@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:streak/features/habits/widgets/avoid_stats.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,10 @@ import 'package:streak/features/settings/widgets/settings_rows.dart';
 import 'package:streak/features/habits/pages/express_quant_stats_page.dart';
 import 'package:streak/features/habits/pages/habit_stats_page.dart';
 import 'package:streak/features/habits/pages/minimal_quant_stats_page.dart';
+import 'package:streak/features/habits/pages/scale_stats_page.dart';
 import 'package:streak/core/express/express_surface.dart';
 import 'package:streak/features/habits/widgets/quant_range_bars.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/statistics/widgets/stat_kit.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
 
@@ -36,6 +39,9 @@ class _QuantStatsPageState extends State<QuantStatsPage> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsController>();
+    final scale =
+        context.watch<HabitsController>().byId(widget.habitId)?.isScale ?? false;
+    if (scale) return ScaleStatsPage(habitId: widget.habitId);
     if (settings.isExpressStyle) {
       return ExpressQuantStatsPage(habitId: widget.habitId);
     }
@@ -248,6 +254,30 @@ class QuantStatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final totals = QuantStats.totalsOf(habit, AppClock.now());
     final unit = habit.isTimeAmount ? '' : habit.unitLabel;
+    final scale = habit.isScale;
+    final todayLevel =
+        scaleLevelOf(habit.completions[AppClock.today().dayKey]?.count ?? 0);
+    final first = (
+      icon: scale ? LucideIcons.smile : LucideIcons.sigma,
+      value: scale
+          ? (todayLevel == 0 ? '-' : scaleLabel(context, todayLevel))
+          : habit.amountText(totals.total),
+      label: scale
+          ? context.l10n.today
+          : (unit.isEmpty ? context.l10n.total : unit),
+    );
+    final average = scale
+        ? (totals.loggedDays == 0
+            ? '-'
+            : '${NumberFormat('0.0', Localizations.localeOf(context).toString()).format(totals.average)} / $scaleLevels')
+        : habit.amountText(totals.average);
+    final third = (
+      icon: scale ? LucideIcons.calendarCheck : LucideIcons.circleCheck,
+      value: '${scale ? totals.loggedDays : totals.goalDays}',
+      label: scale
+          ? context.l10n.quant_logged_days
+          : context.l10n.quant_goal_days,
+    );
 
     if (context.watch<SettingsController>().isExpressStyle) {
       return ExpressCard(
@@ -256,21 +286,23 @@ class QuantStatsRow extends StatelessWidget {
         child: ExpressMiniRow(
           children: [
             ExpressMiniStat(
-              icon: LucideIcons.sigma,
-              value: habit.amountText(totals.total),
-              label: unit.isEmpty ? context.l10n.total : unit,
+              icon: first.icon,
+              value: first.value,
+              label: first.label,
               tint: habit.color.shownIn(context),
             ),
             ExpressMiniStat(
               icon: LucideIcons.activity,
-              value: habit.amountText(totals.average),
-              label: context.l10n.quant_average,
+              value: average,
+              label: scale
+                  ? context.l10n.scale_average
+                  : context.l10n.quant_average,
               tint: context.tokens.info,
             ),
             ExpressMiniStat(
-              icon: LucideIcons.circleCheck,
-              value: '${totals.goalDays}',
-              label: context.l10n.quant_goal_days,
+              icon: third.icon,
+              value: third.value,
+              label: third.label,
               tint: context.tokens.success,
             ),
           ],
@@ -288,11 +320,11 @@ class QuantStatsRow extends StatelessWidget {
             children: [
               Expanded(
                 child: MiniStat(
-                  icon: LucideIcons.sigma,
+                  icon: first.icon,
                   color: habit.color.shownIn(context),
-                  value: habit.amountText(totals.total),
-                  unit: unit,
-                  label: context.l10n.total,
+                  value: first.value,
+                  unit: scale ? '' : unit,
+                  label: scale ? context.l10n.today : context.l10n.total,
                 ),
               ),
               const SizedBox(width: 12),
@@ -300,18 +332,20 @@ class QuantStatsRow extends StatelessWidget {
                 child: MiniStat(
                   icon: LucideIcons.activity,
                   color: context.tokens.info,
-                  value: habit.amountText(totals.average),
-                  unit: unit,
-                  label: context.l10n.quant_average,
+                  value: average,
+                  unit: scale ? '' : unit,
+                  label: scale
+                      ? context.l10n.scale_average
+                      : context.l10n.quant_average,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: MiniStat(
-                  icon: LucideIcons.circleCheck,
+                  icon: third.icon,
                   color: context.tokens.success,
-                  value: '${totals.goalDays}',
-                  label: context.l10n.quant_goal_days,
+                  value: third.value,
+                  label: third.label,
                 ),
               ),
             ],
