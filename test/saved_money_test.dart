@@ -53,7 +53,7 @@ void main() {
     final habit = _habit(
       kind: HabitKind.negative,
       daysOld: 3,
-      relapses: [today.subtract(const Duration(days: 40))],
+      relapses: [today.addDays(-40)],
     );
 
     expect(habit.cleanDays, 40);

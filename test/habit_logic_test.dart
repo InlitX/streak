@@ -275,7 +275,7 @@ void main() {
     });
 
     test('tapping a negative before it existed logs the relapse', () {
-      final before = today.subtract(const Duration(days: 40));
+      final before = today.addDays(-40);
       final habit = _base(kind: HabitKind.negative, createdAt: today);
 
       final tapped = CompletionOps.toggle(habit, before);
@@ -289,7 +289,7 @@ void main() {
     });
 
     test('a negative reaches back to its oldest relapse', () {
-      final before = today.subtract(const Duration(days: 40));
+      final before = today.addDays(-40);
       final habit = _base(kind: HabitKind.negative, createdAt: today).copyWith(
         completions: {
           before.dayKey: Completion(date: before.dayKey, count: 1, hour: 9),
@@ -298,7 +298,7 @@ void main() {
 
       expect(habit.startedAt, before.atMidnight);
       expect(habit.isCompletedOn(before), isFalse);
-      expect(habit.isCompletedOn(before.add(const Duration(days: 1))), isTrue);
+      expect(habit.isCompletedOn(before.addDays(1)), isTrue);
       expect(habit.isCompletedOn(before.subtract(const Duration(days: 1))),
           isFalse);
       expect(habit.currentStreak, 40);
@@ -350,7 +350,7 @@ void main() {
     });
 
     test('a relapse mistakenly stored before createdAt can be tapped away', () {
-      final before = today.subtract(const Duration(days: 40));
+      final before = today.addDays(-40);
       final habit = _base(
         kind: HabitKind.negative,
         createdAt: today,
