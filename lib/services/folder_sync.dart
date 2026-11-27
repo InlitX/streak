@@ -166,7 +166,7 @@ class FolderSync {
     for (final category in data.categories) {
       await LocalStore.mergeCategory(category);
     }
-    brought += await _island(data.settings);
+    brought += await mergeIsland(data.settings);
     bool orphan(String habitId) =>
         LocalStore.habit(habitId) == null && LocalStore.deletedAt(habitId) != null;
     brought += await _records(data.notes.where((n) => !orphan(n.habitId)), stamps,
@@ -180,7 +180,7 @@ class FolderSync {
     return brought;
   }
 
-  static Future<int> _island(Map<String, Object?> theirs) async {
+  static Future<int> mergeIsland(Map<String, Object?> theirs) async {
     final owned = {
       ...LocalStore.setting<List<dynamic>>('islandOwned', const []).whereType<String>(),
     };

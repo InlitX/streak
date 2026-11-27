@@ -12,6 +12,7 @@ import 'package:streak/core/database/local_store.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/features/desk_island/desk_island_host.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -29,6 +30,7 @@ import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/folder_sync.dart';
 import 'package:streak/services/home_widget_service.dart';
@@ -156,7 +158,7 @@ Future<void> _startup() async {
 
 void _run() {
   AppShortcuts.install();
-  runApp(
+  (DeskIslandHost.supported ? runWidget : runApp)(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsController()),
@@ -184,7 +186,9 @@ void _run() {
           },
         ),
       ],
-      child: const StreakApp(),
+      child: DeskIslandHost.supported
+          ? const DeskIslandViews(app: StreakApp())
+          : const StreakApp(),
     ),
   );
 }
@@ -298,6 +302,7 @@ Future<void> widgetActionEntrypoint() async {
     await HomeWidgetService.sync(habits, renderIcons: false);
     await TodosWidgetService.sync(todos);
     await NotificationService().rescheduleTodos(todos);
+    await BackupService.runAutoIfDue();
   } catch (e) {
     debugPrint('Widget action entrypoint failed: $e');
   }

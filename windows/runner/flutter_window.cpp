@@ -48,6 +48,13 @@ bool FlutterWindow::OnCreate() {
     SetFullscreen(*on);
     result->Success();
   });
+  island_channel_ =
+      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+          flutter_controller_->engine()->messenger(), "streak/island",
+          &flutter::StandardMethodCodec::GetInstance());
+  island_channel_->SetMethodCallHandler([this](const auto& call, auto result) {
+    HandleIsland(call, std::move(result));
+  });
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
@@ -60,6 +67,76 @@ bool FlutterWindow::OnCreate() {
   flutter_controller_->ForceRedraw();
 
   return true;
+}
+
+void FlutterWindow::HandleIsland(
+    const flutter::MethodCall<flutter::EncodableValue>& call,
+    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+  const auto& method = call.method_name();
+  const auto* args = call.arguments();
+  if (method == "open") {
+    if (!island_) {
+      int64_t id = 0;
+      if (const auto* low = std::get_if<int32_t>(args)) id = *low;
+      if (const auto* wide = std::get_if<int64_t>(args)) id = *wide;
+      island_ = std::make_unique<IslandWindow>(
+          FlutterDesktopEngineForId(id), [this](const char* event, bool on) {
+            if (island_channel_) {
+              island_channel_->InvokeMethod(
+                  event, std::make_unique<flutter::EncodableValue>(on));
+            }
+          });
+      if (!island_->Create()) {
+        island_ = nullptr;
+        result->Error("island", "Could not create the island window");
+        return;
+      }
+    }
+    result->Success(flutter::EncodableValue(island_->view_id()));
+    return;
+  }
+  if (method == "close") {
+    island_ = nullptr;
+    result->Success();
+    return;
+  }
+  if (method == "app") {
+    BringToFront();
+    result->Success();
+    return;
+  }
+  if (!island_) {
+    result->Success();
+    return;
+  }
+  if (method == "shape") {
+    std::vector<POINT> points;
+    if (const auto* list = std::get_if<std::vector<int32_t>>(args)) {
+      for (size_t i = 0; i + 1 < list->size(); i += 2) {
+        points.push_back({(*list)[i], (*list)[i + 1]});
+      }
+    }
+    island_->SetShape(points);
+  } else if (method == "keyboard") {
+    const auto* take = std::get_if<bool>(args);
+    island_->TakeKeyboard(take != nullptr && *take);
+  } else if (method == "size") {
+    if (const auto* list = std::get_if<std::vector<int32_t>>(args)) {
+      if (list->size() == 2) island_->SetSize((*list)[0], (*list)[1]);
+    }
+  } else {
+    result->NotImplemented();
+    return;
+  }
+  result->Success();
+}
+
+void FlutterWindow::BringToFront() {
+  HWND hwnd = GetHandle();
+  if (hwnd == nullptr) return;
+  if (IsIconic(hwnd)) ShowWindow(hwnd, SW_RESTORE);
+  if (!IsWindowVisible(hwnd)) ShowWindow(hwnd, SW_SHOW);
+  SetForegroundWindow(hwnd);
 }
 
 void FlutterWindow::SetFullscreen(bool on) {
@@ -145,6 +222,8 @@ void FlutterWindow::Refit() {
 
 void FlutterWindow::OnDestroy() {
   window_channel_ = nullptr;
+  island_channel_ = nullptr;
+  island_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }

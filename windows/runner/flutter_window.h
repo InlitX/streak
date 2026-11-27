@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "island_window.h"
 #include "win32_window.h"
 
 class FlutterWindow : public Win32Window {
@@ -26,12 +27,18 @@ class FlutterWindow : public Win32Window {
   void SavePlacement();
   void Reveal();
   void Refit();
+  void HandleIsland(const flutter::MethodCall<flutter::EncodableValue>& call,
+                    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+  void BringToFront();
 
   flutter::DartProject project_;
 
   std::unique_ptr<flutter::FlutterViewController> flutter_controller_;
   std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>>
       window_channel_;
+  std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>>
+      island_channel_;
+  std::unique_ptr<IslandWindow> island_;
   bool fullscreen_ = false;
   bool maximized_ = false;
   LONG windowed_style_ = 0;

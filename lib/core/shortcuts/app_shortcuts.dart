@@ -36,6 +36,7 @@ class AppShortcuts {
   static final _entries = <_Entry>[];
   static var _installed = false;
   static var _sheetOpen = false;
+  static var quiet = false;
 
   static String get primaryLabel => Platform.isMacOS ? '⌘' : 'Ctrl';
 
@@ -78,7 +79,7 @@ class AppShortcuts {
   ];
 
   static bool _onKey(KeyEvent event) {
-    if (event is! KeyDownEvent) return false;
+    if (event is! KeyDownEvent || quiet) return false;
     final keys = HardwareKeyboard.instance;
     final mac = Platform.isMacOS;
     final primary = mac ? keys.isMetaPressed : keys.isControlPressed;

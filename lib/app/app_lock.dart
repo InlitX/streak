@@ -66,6 +66,8 @@ class AppLockGate extends StatefulWidget {
 
   final Widget child;
 
+  static final locked = ValueNotifier<bool>(false);
+
   @override
   State<AppLockGate> createState() => _AppLockGateState();
 }
@@ -119,6 +121,7 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
       _unlock();
     } else {
       setState(() => _locked = false);
+      AppLockGate.locked.value = false;
     }
   }
 
@@ -130,6 +133,7 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
   void _cover() {
     if (_locked) return;
     setState(() => _locked = true);
+    AppLockGate.locked.value = true;
   }
 
   Future<void> _unlock() async {
@@ -144,6 +148,7 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
   void _open() {
     _leftAt = null;
     setState(() => _locked = false);
+    AppLockGate.locked.value = false;
   }
 
   @override
