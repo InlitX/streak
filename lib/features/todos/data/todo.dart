@@ -72,10 +72,11 @@ class Todo {
     return day.add(Duration(minutes: minutes!));
   }
 
-  bool get repeats => repeat != null && due != null;
+  bool get repeats => repeat != null && due != null && !repeat!.isOver;
 
   Todo nextTime(DateTime today, {bool skipping = false}) => copyWith(
         date: repeat!.after(due!, today: today, skipping: skipping).dayKey,
+        repeat: repeat!.advanced,
         steps: [for (final step in steps) step.copyWith(done: false)],
       );
 

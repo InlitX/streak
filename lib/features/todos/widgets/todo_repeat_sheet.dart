@@ -13,6 +13,7 @@ import 'package:streak/features/todos/data/todo_repeat.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
 
 String todoRepeatLabel(BuildContext context, TodoRepeat repeat) {
+  if (repeat.spaced) return context.l10n.todo_repeat_spaced;
   if (repeat.isWorkdays) return context.l10n.todo_repeat_workdays;
   final every = repeat.every;
   return switch (repeat.unit) {
@@ -110,7 +111,7 @@ class _RepeatSheetState extends State<_RepeatSheet> {
 
   bool _matches(TodoRepeat preset) {
     final repeat = _repeat;
-    if (repeat == null || repeat.fromDone) return false;
+    if (repeat == null || repeat.fromDone || repeat.spaced) return false;
     return repeat.copyWith(day: 0) == preset;
   }
 
@@ -162,7 +163,44 @@ class _RepeatSheetState extends State<_RepeatSheet> {
                   selected: preset == null ? repeat == null : _matches(preset),
                   onTap: () => _set(preset),
                 ),
-              if (repeat != null) ...[
+              _OptionRow(
+                label: context.l10n.todo_repeat_spaced,
+                icon: LucideIcons.brain,
+                selected: repeat?.spaced ?? false,
+                onTap: () => _set(
+                  repeat != null && repeat.spaced
+                      ? repeat
+                      : const TodoRepeat(unit: RepeatUnit.days, spaced: true),
+                ),
+              ),
+              if (repeat != null && repeat.spaced) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(33, 0, 0, 6),
+                  child: Text(
+                    context.l10n.todo_repeat_spaced_sub,
+                    style: TextStyle(fontSize: 13, height: 1.35, color: context.tokens.muted),
+                  ),
+                ),
+                if (repeat.stage > 0)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(33, 0, 0, 6),
+                    child: Text(
+                      context.l10n.todo_repeat_spaced_stage(
+                        repeat.stage.clamp(0, TodoRepeat.spacedGaps.length),
+                        TodoRepeat.spacedGaps.length,
+                      ),
+                      style: sheetLabelStyle(context),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                SheetAction(
+                  icon: LucideIcons.calendarDays,
+                  label: context.l10n.todo_repeat_starts,
+                  badge: todoDateLabel(context, _due),
+                  onTap: _pickStart,
+                ),
+              ],
+              if (repeat != null && !repeat.spaced) ...[
                 const SizedBox(height: 8),
                 SheetAction(
                   icon: LucideIcons.calendarDays,

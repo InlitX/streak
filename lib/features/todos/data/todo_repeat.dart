@@ -13,6 +13,8 @@ class TodoRepeat {
     this.day = 0,
     this.fromDone = false,
     this.lastDay = false,
+    this.spaced = false,
+    this.stage = 0,
   });
 
   final RepeatUnit unit;
@@ -22,6 +24,14 @@ class TodoRepeat {
   final int day;
   final bool fromDone;
   final bool lastDay;
+  final bool spaced;
+  final int stage;
+
+  static const spacedGaps = [1, 2, 4, 7, 15, 30, 60];
+
+  bool get isOver => spaced && stage >= spacedGaps.length;
+
+  TodoRepeat get advanced => spaced ? copyWith(stage: stage + 1) : this;
 
   static const workdays = [1, 2, 3, 4, 5];
 
@@ -39,6 +49,8 @@ class TodoRepeat {
     int? day,
     bool? fromDone,
     bool? lastDay,
+    bool? spaced,
+    int? stage,
   }) =>
       TodoRepeat(
         unit: unit ?? this.unit,
@@ -48,6 +60,8 @@ class TodoRepeat {
         day: day ?? this.day,
         fromDone: fromDone ?? this.fromDone,
         lastDay: lastDay ?? this.lastDay,
+        spaced: spaced ?? this.spaced,
+        stage: stage ?? this.stage,
       );
 
   TodoRepeat anchoredTo(DateTime due) => copyWith(
@@ -59,6 +73,11 @@ class TodoRepeat {
       );
 
   DateTime after(DateTime due, {required DateTime today, bool skipping = false}) {
+    if (spaced) {
+      final base = skipping ? due.atMidnight : today.atMidnight;
+      final next = base.addDays(spacedGaps[stage.clamp(0, spacedGaps.length - 1)]);
+      return next.isAfter(today) ? next : today.atMidnight.addDays(1);
+    }
     final from = fromDone && !skipping ? today : due.atMidnight;
     var next = _step(from, due);
     var guard = 0;
@@ -128,6 +147,8 @@ class TodoRepeat {
         if (day > 0) 'day': day,
         if (fromDone) 'fromDone': true,
         if (lastDay) 'lastDay': true,
+        if (spaced) 'spaced': true,
+        if (stage > 0) 'stage': stage,
       };
 
   factory TodoRepeat.fromMap(Map<String, dynamic> map) => TodoRepeat(
@@ -144,6 +165,8 @@ class TodoRepeat {
         day: ((map['day'] ?? 0) as num).toInt().clamp(0, 31),
         fromDone: map['fromDone'] == true,
         lastDay: map['lastDay'] == true,
+        spaced: map['spaced'] == true,
+        stage: ((map['stage'] ?? 0) as num).toInt().clamp(0, spacedGaps.length),
       );
 
   @override
@@ -155,6 +178,8 @@ class TodoRepeat {
       other.day == day &&
       other.fromDone == fromDone &&
       other.lastDay == lastDay &&
+      other.spaced == spaced &&
+      other.stage == stage &&
       other.weekdays.length == weekdays.length &&
       other.weekdays.every(weekdays.contains);
 
@@ -166,6 +191,8 @@ class TodoRepeat {
         day,
         fromDone,
         lastDay,
+        spaced,
+        stage,
         Object.hashAllUnordered(weekdays),
       );
 }
