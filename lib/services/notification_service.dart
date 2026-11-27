@@ -45,6 +45,7 @@ class NotificationService {
   static const actionDone = 'habit_done';
   static const actionSnooze = 'habit_snooze';
   static const actionAdd = 'habit_add';
+  static const actionScale = 'habit_scale_';
   static const actionTodoDone = 'todo_done';
 
   static const _amountInput = 'amount';
@@ -64,7 +65,8 @@ class NotificationService {
   static const _categoryNegative = 'habit_negative';
   static const _categoryTodo = 'todo';
 
-  static String _categoryFor(Habit habit) => habit.kind == HabitKind.negative
+  static String _categoryFor(Habit habit) =>
+      habit.kind == HabitKind.negative || habit.isScale
       ? _categoryNegative
       : takesAmount(habit)
           ? _categoryAmount
@@ -356,7 +358,7 @@ class NotificationService {
         ? message
         : (quotesOff ? '' : _quoteOf(strings));
     final name = LocalStore.setting('profileName', '').trim();
-    if (name.isNotEmpty && body.isNotEmpty) {
+    if (name.isNotEmpty && message.isEmpty && body.isNotEmpty) {
       body = strings.notif_greeting(name) + body;
     }
     final streak = habit.currentStreak;
@@ -383,7 +385,9 @@ class NotificationService {
             ComebackTone.avoid => strings.notif_comeback_avoid,
           };
     final name = LocalStore.setting('profileName', '').trim();
-    if (name.isNotEmpty) body = strings.notif_greeting(name) + body;
+    if (name.isNotEmpty && message.isEmpty) {
+      body = strings.notif_greeting(name) + body;
+    }
     return body;
   }
 
@@ -461,15 +465,18 @@ class NotificationService {
   tz.TZDateTime _firstMoment(Habit habit) {
     final now = tz.TZDateTime.now(tz.local);
     if (!_quietToday(habit)) return now;
-    final today = AppClock.today();
-    final tomorrow = tz.TZDateTime(
+    var day = AppClock.today().addDays(1);
+    for (var i = 0; i < 62 && habit.silencesRemindersOn(day); i++) {
+      day = day.addDays(1);
+    }
+    final next = tz.TZDateTime(
       tz.local,
-      today.year,
-      today.month,
-      today.day + 1,
+      day.year,
+      day.month,
+      day.day,
       AppClock.cutoffHour,
     );
-    return tomorrow.isAfter(now) ? tomorrow : now;
+    return next.isAfter(now) ? next : now;
   }
 
   Future<void> dismissShown(Habit habit) async {
@@ -642,23 +649,27 @@ class NotificationService {
       return {id};
     }
     final ids = <int>{};
-    for (var week = 1; week <= ReminderSchedule.quietWeeks; week++) {
+    var week = 0;
+    for (var turn = 1; week < ReminderSchedule.quietWeeks && turn <= 70; turn++) {
+      final at = tz.TZDateTime.from(
+        DateTime(
+          next.year,
+          next.month,
+          next.day + (daily ? 1 : 7) * turn,
+          next.hour,
+          next.minute,
+        ),
+        tz.local,
+      );
+      if (at.isBefore(from)) continue;
+      week++;
       final quietId = ReminderSchedule.quietId(id, week);
       ids.add(quietId);
       await _zonedSchedule(
         quietId,
         habit.name,
         body,
-        tz.TZDateTime.from(
-          DateTime(
-            next.year,
-            next.month,
-            next.day + (daily ? 1 : 7) * week,
-            next.hour,
-            next.minute,
-          ),
-          tz.local,
-        ),
+        at,
         await _details(habit, body, strings, reminder: reminder),
         payload: habit.id,
       );
@@ -763,7 +774,7 @@ class NotificationService {
     AppLocalizations strings,
   ) async {
     if (!Platform.isWindows) return null;
-    final amount = takesAmount(habit);
+    final amount = takesAmount(habit) && !habit.isScale;
     return WindowsNotificationDetails(
       audio: _windowsSound,
       images: await _windowsLogo(habit),
@@ -774,7 +785,21 @@ class NotificationService {
             placeHolderContent: strings.notif_action_add_hint,
           ),
       ],
-      actions: [
+      actions: habit.isScale
+          ? [
+              for (final (level, label) in [
+                (1, strings.scale_1),
+                (2, strings.scale_2),
+                (3, strings.scale_3),
+                (4, strings.scale_4),
+                (5, strings.scale_5),
+              ])
+                WindowsAction(
+                  content: label,
+                  arguments: _windowsArguments('$actionScale$level', habit),
+                ),
+            ]
+          : [
         if (habit.kind != HabitKind.negative)
           WindowsAction(
             content: strings.notif_action_done,
@@ -847,14 +872,14 @@ class NotificationService {
               ? reminder.everyMinutes * Duration.millisecondsPerMinute
               : null,
           actions: [
-            if (habit.kind != HabitKind.negative)
+            if (habit.kind != HabitKind.negative && !habit.isScale)
               AndroidNotificationAction(
                 actionDone,
                 strings.notif_action_done,
                 showsUserInterface: false,
                 cancelNotification: true,
               ),
-            if (takesAmount(habit))
+            if (takesAmount(habit) && !habit.isScale)
               AndroidNotificationAction(
                 actionAdd,
                 strings.notif_action_add,
@@ -1231,7 +1256,8 @@ class NotificationActions {
       actionId == NotificationService.actionDone ||
       actionId == NotificationService.actionSnooze ||
       actionId == NotificationService.actionAdd ||
-      actionId == NotificationService.actionTodoDone;
+      actionId == NotificationService.actionTodoDone ||
+      (actionId?.startsWith(NotificationService.actionScale) ?? false);
 
   static Future<void> apply(
     String actionId,
@@ -1266,7 +1292,20 @@ class NotificationActions {
           habit.isTimeAmount ? clockMinutes(text) : double.tryParse(text);
 
       final Map<String, Completion> completions;
-      if (actionId == NotificationService.actionAdd) {
+      final level = actionId.startsWith(NotificationService.actionScale)
+          ? int.tryParse(
+              actionId.substring(NotificationService.actionScale.length),
+            )
+          : null;
+      if (level != null) {
+        if (!habit.isScale) return;
+        final current = habit.completions[today.dayKey]?.count ?? 0;
+        completions = CompletionOps.addProgress(
+          habit,
+          today,
+          level.clamp(1, 5) - current,
+        );
+      } else if (actionId == NotificationService.actionAdd) {
         if (amount == null || amount <= 0) return;
         completions = CompletionOps.addProgress(habit, today, amount);
       } else if (habit.isCompletedOn(today)) {
