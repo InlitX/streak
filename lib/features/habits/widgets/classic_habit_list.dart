@@ -5,6 +5,7 @@ import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/widgets/keep_built.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/widgets/pane_mark.dart';
 import 'package:streak/core/widgets/stacked_corners.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -12,6 +13,7 @@ import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/widgets/habit_card.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/habit_entrance.dart';
+import 'package:streak/features/habits/widgets/habit_grid.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
 import 'package:streak/features/habits/widgets/swipe_check.dart';
 import 'package:streak/core/extensions/color_extensions.dart';
@@ -49,7 +51,72 @@ class ClassicHabitList extends StatelessWidget {
   final ValueChanged<Habit>? onSwipe;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, box) {
+          final columns =
+              reordering || !hasRoom(context) ? 1 : habitColumns(box.maxWidth);
+          return columns > 1 ? _grid(context, columns) : _list(context);
+        },
+      );
+
+  Widget _grid(BuildContext context, int columns) {
+    final compact = context.watch<SettingsController>().compactCards;
+    return HabitGrid(
+      columns: columns,
+      header: header,
+      count: habits.length,
+      fold: fold,
+      moreCount: more.length,
+      gap: compact ? 4 : 12,
+      padding: context.pagePadding(
+        16,
+        8 + MediaQuery.paddingOf(context).top,
+        16,
+        104,
+      ),
+      cell: (context, extra, slot, spot) {
+        final habit = (extra ? more : habits)[slot];
+        final corners = compact
+            ? spot.corners(const Radius.circular(22), const Radius.circular(8))
+            : BorderRadius.circular(24);
+        return HabitEntrance(
+          key: ValueKey(habit.id),
+          index: slot,
+          child: Opacity(
+            opacity: extra ? 0.6 : 1,
+            child: SlotTransition(
+              leaving: leaving.contains(habit.id),
+              child: PaneMark(
+                id: habit.id,
+                tint: habit.color.shownIn(context),
+                corners: corners,
+                child: SwipeCheck(
+                  done: habit.isCompletedOn(AppClock.today()),
+                  tint: habit.color.shownIn(context),
+                  corners: corners,
+                  onSwipe: onSwipe == null ? null : () => onSwipe!(habit),
+                  child: KeepBuilt(
+                    keys: [habit, mode, compact, corners, AppClock.today()],
+                    build: () => HabitCard(
+                      habit: habit,
+                      mode: mode,
+                      corners: compact ? corners : null,
+                      onOpen: () => onOpen(habit),
+                      onToggleToday: () => onToggleToday(habit),
+                      onToggleDay: (date) => onToggleDay(habit, date),
+                      onLongPress: () => onLongPress(habit),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _list(BuildContext context) {
     return ReorderableListView.builder(
       padding: context.pagePadding(
         16,

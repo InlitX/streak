@@ -20,11 +20,22 @@ const detailWidth = 900.0;
 
 const columnsWidth = 1000.0;
 
+const tabletSide = 600.0;
+
+bool isTablet(BuildContext context) =>
+    (Platform.isAndroid || Platform.isIOS) &&
+    MediaQuery.sizeOf(context).shortestSide >= tabletSide;
+
+bool hasRoom(BuildContext context) =>
+    !(Platform.isAndroid || Platform.isIOS) || isTablet(context);
+
+bool _roomy(BuildContext context) => !Platform.isAndroid || isTablet(context);
+
 bool isWideLayout(BuildContext context) =>
-    !Platform.isAndroid && MediaQuery.sizeOf(context).width >= splitWidth;
+    _roomy(context) && MediaQuery.sizeOf(context).width >= splitWidth;
 
 bool hasSideRail(BuildContext context) =>
-    !Platform.isAndroid && MediaQuery.sizeOf(context).width >= railWidth;
+    _roomy(context) && MediaQuery.sizeOf(context).width >= railWidth;
 
 bool isCompactRail(BuildContext context) =>
     MediaQuery.sizeOf(context).width < wideWidth;

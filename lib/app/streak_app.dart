@@ -87,7 +87,10 @@ class _DesktopFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid || (shell && hasSideRail(context))) return child;
+    if ((Platform.isAndroid && !isTablet(context)) ||
+        (shell && hasSideRail(context))) {
+      return child;
+    }
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: phoneWidth),

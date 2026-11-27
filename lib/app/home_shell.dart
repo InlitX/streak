@@ -268,6 +268,11 @@ class _HomeShellState extends State<HomeShell>
 
   void _back(List<_Tab> tabs, _Tab current) {
     if (BackHandlers.handle()) return;
+    final pane = AppNavigator.paneKey.currentState;
+    if (pane != null && pane.canPop()) {
+      pane.pop();
+      return;
+    }
     if (current != _Tab.today) {
       _select(tabs, _Tab.today);
       return;
@@ -357,6 +362,7 @@ class _HomeShellState extends State<HomeShell>
         _SplitScaffold(
         full: current == _Tab.stats,
         single: !wide,
+        tablet: isTablet(context),
         rail: _rail(context, tabs, current, settings.appStyle),
         page: FadeThrough(
           animation: _swap,
@@ -367,7 +373,7 @@ class _HomeShellState extends State<HomeShell>
                 TickerMode(
                   enabled: tab == current,
                   child: _visited.contains(tab)
-                      ? _pageOf(tab)
+                      ? _framed(context, tab)
                       : const SizedBox.shrink(),
                 ),
             ],
@@ -426,7 +432,6 @@ class _HomeShellState extends State<HomeShell>
                           ExpressNavItem(
                             icon: _iconOf(tab),
                             label: _labelOf(context, tab),
-                            iconOnly: tab == _Tab.settings,
                           ),
                       ],
                       index: tabs.indexOf(current),
@@ -449,6 +454,16 @@ class _HomeShellState extends State<HomeShell>
     );
   }
 }
+
+Widget _framed(BuildContext context, _Tab tab) =>
+    tab == _Tab.settings && isTablet(context)
+        ? Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: _pageOf(tab),
+            ),
+          )
+        : _pageOf(tab);
 
 Widget _pageOf(_Tab tab) => switch (tab) {
       _Tab.today => const HomePage(),
@@ -502,12 +517,14 @@ class _SplitScaffold extends StatefulWidget {
     required this.page,
     this.full = false,
     this.single = false,
+    this.tablet = false,
   });
 
   final Widget? rail;
   final Widget page;
   final bool full;
   final bool single;
+  final bool tablet;
 
   @override
   State<_SplitScaffold> createState() => _SplitScaffoldState();
@@ -555,7 +572,37 @@ class _SplitScaffoldState extends State<_SplitScaffold> {
                 : ColoredBox(color: tint, child: widget.rail!),
             const _Line(),
           ],
-          if (widget.single)
+          if (widget.tablet && widget.single)
+            Expanded(child: widget.page)
+          else if (widget.tablet && !widget.full) ...[
+            Expanded(child: widget.page),
+            ValueListenableBuilder<bool>(
+              valueListenable: AppNavigator.paneOpen,
+              builder: (context, open, pane) {
+                final width =
+                    isCompactRail(context) ? compactPaneWidth : paneWidth;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 320),
+                  curve: Curves.easeOutCubic,
+                  width: open ? width + 1 : 0,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: AlignmentDirectional.centerStart,
+                      minWidth: width + 1,
+                      maxWidth: width + 1,
+                      child: pane,
+                    ),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  const _Line(),
+                  Expanded(child: _DetailPane()),
+                ],
+              ),
+            ),
+          ] else if (widget.single)
             Expanded(
               child: Center(
                 child: ConstrainedBox(
@@ -612,6 +659,7 @@ class _DetailPane extends StatelessWidget {
   Widget build(BuildContext context) {
     return Navigator(
       key: AppNavigator.paneKey,
+      observers: [_PaneWatch()],
       onGenerateRoute: (settings) => PageRouteBuilder<void>(
         settings: settings,
         transitionDuration: Duration.zero,
@@ -623,6 +671,26 @@ class _DetailPane extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PaneWatch extends NavigatorObserver {
+  void _sync() => WidgetsBinding.instance.addPostFrameCallback((_) {
+        final open = navigator?.canPop() ?? false;
+        AppNavigator.paneOpen.value = open;
+        if (!open) AppNavigator.paneItem.value = null;
+      });
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) => _sync();
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) => _sync();
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) => _sync();
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) => _sync();
 }
 
 class _DetailPlaceholder extends StatelessWidget {

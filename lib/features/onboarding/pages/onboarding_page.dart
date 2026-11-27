@@ -47,7 +47,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
         children: [
           Positioned.fill(child: _Glow(accent: accent)),
           SafeArea(
-            child: Column(
+            child: Center(child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560),
+              child: Column(
               children: [
                 _TopBar(
                   page: _page,
@@ -129,6 +131,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
               ],
             ),
+            )),
           ),
         ],
       ),

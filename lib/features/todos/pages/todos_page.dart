@@ -6,8 +6,10 @@ import 'package:streak/core/shortcuts/app_shortcuts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/routing/back_handlers.dart';
 import 'package:streak/core/database/local_store.dart';
@@ -186,7 +188,10 @@ class _TodosPageState extends State<TodosPage>
 
   Future<void> _toggle(Todo todo) async {
     final todos = context.read<TodosController>();
-    if (todo.done) return todos.toggle(todo.id);
+    if (todo.done) {
+      if (!await confirmUndo(context, todo.title) || !mounted) return;
+      return todos.toggle(todo.id);
+    }
     if (!await allowManualTodo(context, todo) || !mounted) return;
     if (!_completing.add(todo.id)) return;
     setState(() {});
@@ -442,7 +447,7 @@ class _TodosPageState extends State<TodosPage>
         for (final section in sections)
           for (final todo in section.todos)
             if (todo.pinned == pinned)
-              (todo, section.group == TodoGroup.overdue),
+              (todo, isTodoLate(todo, AppClock.today())),
     ];
     final showDone = _showCompleted || _query.isNotEmpty;
 
@@ -534,6 +539,132 @@ class _TodosPageState extends State<TodosPage>
     );
   }
 
+  Widget _board(
+    TodosController todos,
+    List<TodoSection> sections,
+    List<Todo> completed,
+    bool minimal,
+    bool express,
+    int columns,
+  ) {
+    final showDone = _showCompleted || _query.isNotEmpty;
+    final lanes = [for (var i = 0; i < columns; i++) <TodoSection>[]];
+    final weights = List.filled(columns, 0);
+    for (final section in sections) {
+      var lane = 0;
+      for (var i = 1; i < columns; i++) {
+        if (weights[i] < weights[lane]) lane = i;
+      }
+      lanes[lane].add(section);
+      weights[lane] +=
+          2 + (_folded.contains(section.group) ? 0 : section.todos.length * 2);
+    }
+    Widget section(TodoSection section) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TodoSectionHeader(
+              label: todoGroupLabel(context, section.group),
+              count: section.todos.length,
+              danger: section.group == TodoGroup.overdue,
+              folded: _folded.contains(section.group),
+              onTap: () => setState(() {
+                if (!_folded.remove(section.group)) {
+                  _folded.add(section.group);
+                }
+              }),
+            ),
+            if (!_folded.contains(section.group))
+              for (final (index, todo) in section.todos.indexed)
+                TodoDeal(
+                  key: ValueKey(todo.id),
+                  home: null,
+                  index: index,
+                  child: _tile(
+                    todo,
+                    index,
+                    section.todos.length,
+                    express,
+                    overdue: isTodoLate(todo, AppClock.today()),
+                  ),
+                ),
+            const SizedBox(height: 10),
+          ],
+        );
+    Widget row(List<Widget> cells) => Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < cells.length; i++) ...[
+              if (i > 0) const SizedBox(width: 18),
+              Expanded(child: cells[i]),
+            ],
+          ],
+        );
+    final doneLanes = [for (var i = 0; i < columns; i++) <Widget>[]];
+    if (showDone) {
+      for (final (index, todo) in completed.indexed) {
+        final lane = index % columns;
+        doneLanes[lane].add(
+          AnimatedOpacity(
+            key: ValueKey('done-${todo.id}'),
+            opacity: _collapsing ? 0 : 1,
+            duration: const Duration(milliseconds: 200),
+            child: _tile(
+              todo,
+              doneLanes[lane].length,
+              (completed.length - lane + columns - 1) ~/ columns,
+              express,
+            ),
+          ),
+        );
+      }
+    }
+    return ListView(
+      key: const ValueKey('board'),
+      padding: context.pagePadding(
+        minimal ? 22 : 16,
+        minimal || express ? 0 : 8,
+        minimal ? 22 : 16,
+        minimal ? 96 : 148,
+      ),
+      children: [
+        if (minimal)
+          MinimalTitle(
+            title: context.l10n.todos,
+            subtitle: context.l10n.todo_left(todos.pendingCount),
+          ),
+        if (express)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 18),
+            child: ExpressHeadline(
+              title: context.l10n.todos,
+              subtitle: context.l10n.todo_left(todos.pendingCount),
+            ),
+          ),
+        row([
+          for (final lane in lanes)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [for (final part in lane) section(part)],
+            ),
+        ]),
+        if (completed.isNotEmpty)
+          TodoCompletedHeader(
+            count: completed.length,
+            expanded: showDone,
+            onTap: _toggleCompleted,
+          ),
+        if (showDone)
+          row([
+            for (final lane in doneLanes)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: lane,
+              ),
+          ]),
+      ],
+    );
+  }
+
   Widget _list(
     TodosController todos,
     List<TodoSection> sections,
@@ -590,7 +721,7 @@ class _TodosPageState extends State<TodosPage>
                     index,
                     section.todos.length,
                     express,
-                    overdue: section.group == TodoGroup.overdue,
+                    overdue: isTodoLate(todo, AppClock.today()),
                   ),
                 ),
           ),
@@ -938,7 +1069,19 @@ class _TodosPageState extends State<TodosPage>
                           ))
                     : papers
                     ? _papers(sections, completed)
-                    : _list(todos, sections, completed, minimal, express)),
+                    : LayoutBuilder(
+                        builder: (context, box) => box.maxWidth >= 700 &&
+                                hasRoom(context)
+                            ? _board(
+                                todos,
+                                sections,
+                                completed,
+                                minimal,
+                                express,
+                                box.maxWidth >= 1320 ? 3 : 2,
+                              )
+                            : _list(todos, sections, completed, minimal, express),
+                      )),
                 ),
                       if (classic && !_folders)
                         HeaderBlur(scrolled: _scrolled, height: 30),

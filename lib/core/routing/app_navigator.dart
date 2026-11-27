@@ -16,6 +16,8 @@ class AppNavigator {
 
   static final paneItem = ValueNotifier<String?>(null);
 
+  static final paneOpen = ValueNotifier<bool>(false);
+
   static NavigatorState? get _pane {
     final root = key.currentState;
     if (root == null || root.canPop()) return null;

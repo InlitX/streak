@@ -51,6 +51,7 @@ import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/minimal_habit_list.dart';
 import 'package:streak/features/habits/widgets/slot_transition.dart';
 import 'package:streak/features/habits/widgets/today_progress.dart';
+import 'package:streak/features/habits/widgets/today_tiles.dart';
 import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/vacation_sheet.dart';
@@ -777,7 +778,71 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                       onFilter: openFilter,
                       allDone: allDone,
                     )
-                  : Column(
+                  : TodayHeaderSwitch(
+                      wide: minimal
+                          ? null
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const DailyQuote(),
+                                const SizedBox(height: 12),
+                                if (settings.showTodayProgress) ...[
+                                  IntrinsicHeight(
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: TodayProgress(
+                                            done: done,
+                                            total: total,
+                                            ratio: ratio,
+                                          ),
+                                        ),
+                                        if (settings.focusEnabled) ...[
+                                          const SizedBox(width: 12),
+                                          const Expanded(flex: 2, child: FocusTodayTile()),
+                                        ],
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          flex: 2,
+                                          child: PerfectStreakTile(habits: all),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 18),
+                                ],
+                                Row(
+                                  children: [
+                                    if (settings.cardActivity &&
+                                        settings.viewSwitcher) ...[
+                                      SizedBox(
+                                        width: 380,
+                                        child: _ViewSelector(
+                                          mode: _mode,
+                                          onChanged: _changeMode,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                    ],
+                                    Expanded(
+                                      child: _CategoryBar(
+                                        categories: categories,
+                                        selected: _category,
+                                        onSelected: _pickCategory,
+                                        filtered: todayFiltered(settings) ||
+                                            _search.isNotEmpty,
+                                        onFilter: openFilter,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                if (allDone) const TodayAllDone(),
+                              ],
+                            ),
+                      narrow: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (!minimal) const DailyQuote(),
@@ -803,6 +868,7 @@ class _HomePageState extends State<HomePage> with ShortcutHost {
                         const SizedBox(height: 14),
                         if (allDone) const TodayAllDone(),
                       ],
+                    ),
                     );
 
               final strip = settings.todayWeekStrip && !_reordering

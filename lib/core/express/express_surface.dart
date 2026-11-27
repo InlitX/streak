@@ -188,8 +188,8 @@ class ExpressTile extends StatelessWidget {
     final scheme = context.colors;
     final accent = tint ?? scheme.primary;
     final radius = ExpressSlot.of(context, BorderRadius.circular(20));
-    final stacked = stackedValue(context, value);
     final bare = bareRows(context);
+    final stacked = _stacked(context, bare);
     final brief = BriefRows.on(context);
 
     return ExpressSquish(
@@ -275,6 +275,23 @@ class ExpressTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _stacked(BuildContext context, bool bare) {
+    final value = this.value;
+    if (value == null) return false;
+    final painter = TextPainter(
+      text: TextSpan(
+        text: value,
+        style: ExpressType.headline.at(14.5, weight: 800),
+      ),
+      textScaler: MediaQuery.textScalerOf(context),
+      textDirection: Directionality.of(context),
+      maxLines: 1,
+    )..layout();
+    final width = MediaQuery.sizeOf(context).width.clamp(0.0, 760.0);
+    final room = width - 72 - (bare ? 0 : 54);
+    return painter.width > room * 0.5;
   }
 }
 
