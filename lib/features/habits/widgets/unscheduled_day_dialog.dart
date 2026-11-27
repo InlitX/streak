@@ -29,7 +29,9 @@ Future<bool> confirmUnscheduledDay(
             DateFormat.MMMMEEEEd(locale).format(date),
           )
         : context.l10n.unscheduled_body(
-            DateFormat.EEEE(locale).format(date),
+            habit.interval == HabitInterval.weekdays
+                ? DateFormat.EEEE(locale).format(date)
+                : DateFormat.MMMMEEEEd(locale).format(date),
           ),
     confirmLabel: context.l10n.unscheduled_confirm,
     icon: LucideIcons.calendarOff,
