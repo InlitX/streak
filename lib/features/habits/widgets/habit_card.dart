@@ -28,6 +28,7 @@ import 'package:streak/features/habits/widgets/focus_only_dialog.dart';
 import 'package:streak/features/habits/widgets/unscheduled_day_dialog.dart';
 import 'package:streak/features/habits/widgets/water_cup.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/core/widgets/flame_mark.dart';
 import 'package:streak/app/theme/app_theme.dart';
 import 'package:streak/core/widgets/glass.dart';
 
@@ -692,6 +693,7 @@ class _TodayButtonState extends State<_TodayButton>
 
   @override
   Widget build(BuildContext context) {
+    final flame = context.watch<SettingsController>().isFlameCheck;
     return GestureDetector(
       onTap: widget.onTap,
       child: AnimatedBuilder(
@@ -701,7 +703,18 @@ class _TodayButtonState extends State<_TodayButton>
           final scale = 1 + 0.18 * (t < 0.5 ? t * 2 : (1 - t) * 2);
           return Transform.scale(scale: scale, child: child);
         },
-        child: AnimatedContainer(
+        child: flame
+            ? SizedBox.square(
+                dimension: 44,
+                child: Center(
+                  child: FlameMark(
+                    lit: widget.done,
+                    color: widget.color,
+                    size: 40,
+                  ),
+                ),
+              )
+            : AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOut,
           width: 44,

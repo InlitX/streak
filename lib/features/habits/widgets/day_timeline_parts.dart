@@ -6,6 +6,7 @@ import 'package:streak/core/extensions/clock_extensions.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
+import 'package:streak/core/widgets/flame_mark.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/data/habit_note.dart';
@@ -499,6 +500,9 @@ class TimelineCheck extends StatelessWidget {
     final progress = habit.progressFor(count, goal: habit.pastGoalOn(date));
     final color = _quant ? progress.activeColor(habit.color.shownIn(context)) : habit.color.shownIn(context);
     final circle = context.watch<SettingsController>().isCircleCheck;
+    final flame = habit.kind == HabitKind.positive &&
+        !habit.needsFocusSession &&
+        context.watch<SettingsController>().isFlameCheck;
 
     return Semantics(
       button: true,
@@ -531,6 +535,9 @@ class TimelineCheck extends StatelessWidget {
                     ),
                   ),
                 ),
+              if (flame)
+                FlameMark(lit: done, color: color, size: 34)
+              else
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 width: _quant ? 28 : 34,

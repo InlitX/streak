@@ -415,6 +415,9 @@ class ExpressAction extends StatelessWidget {
         size: size,
         circle: context.watch<SettingsController>().isCircleCheck,
         restAlpha: habit.kind == HabitKind.positive ? 0.3 : 0.7,
+        flame: habit.kind == HabitKind.positive &&
+            !habit.needsFocusSession &&
+            context.watch<SettingsController>().isFlameCheck,
         onTap: onTap,
         onLongPress: habit.kind == HabitKind.quantitative
             ? () => unawaited(addCustomAmount(context, habit))

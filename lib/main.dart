@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show AppExitResponse;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -30,6 +31,7 @@ import 'package:streak/features/statistics/pages/statistics_page.dart';
 import 'package:streak/features/todos/pages/todos_page.dart';
 import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/state/todos_controller.dart';
+import 'package:streak/core/widgets/flame_mark.dart';
 import 'package:streak/services/backup_service.dart';
 import 'package:streak/services/focus_service.dart';
 import 'package:streak/services/folder_sync.dart';
@@ -43,6 +45,14 @@ import 'package:streak/services/widget_action_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LicenseRegistry.addLicense(
+    () => Stream.value(
+      const LicenseEntryWithLineBreaks(
+        ['Fluent UI System Icons'],
+        fluentIconsLicense,
+      ),
+    ),
+  );
   try {
     await _startup();
   } catch (e, s) {

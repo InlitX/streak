@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/widgets/flame_mark.dart';
 
 class ExpressCheck extends StatefulWidget {
   const ExpressCheck({
@@ -14,6 +15,7 @@ class ExpressCheck extends StatefulWidget {
     this.icon = LucideIcons.check,
     this.circle = true,
     this.restAlpha = 0.7,
+    this.flame = false,
   });
 
   final bool done;
@@ -24,6 +26,7 @@ class ExpressCheck extends StatefulWidget {
   final IconData icon;
   final bool circle;
   final double restAlpha;
+  final bool flame;
 
   @override
   State<ExpressCheck> createState() => _ExpressCheckState();
@@ -89,7 +92,7 @@ class _ExpressCheckState extends State<ExpressCheck>
             return Stack(
               alignment: Alignment.center,
               children: [
-                if (t > 0 && t < 1)
+                if (t > 0 && t < 1 && !widget.flame)
                   Transform.scale(
                     scale: 1 + burst * 0.55,
                     child: Opacity(
@@ -111,7 +114,9 @@ class _ExpressCheckState extends State<ExpressCheck>
               ],
             );
           },
-          child: AnimatedContainer(
+          child: widget.flame
+              ? FlameMark(lit: done, color: color, size: widget.size)
+              : AnimatedContainer(
             duration: Express.normal,
             curve: Express.bouncy,
             width: widget.size,
