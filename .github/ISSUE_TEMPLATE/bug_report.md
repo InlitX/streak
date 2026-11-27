@@ -7,7 +7,7 @@ labels: bug
 **What's wrong?**
 
 
-**Your phone** (model + Android version):
+**Your device** (model + OS and version, e.g. Pixel 8, Android 16 or MacBook Air, macOS 26):
 
 **Photo or video** (if you can, drag it here):
 
