@@ -35,11 +35,13 @@ class TrendChart extends StatelessWidget {
     this.goal,
     this.format,
     this.axisFormat,
+    this.dates,
   });
 
   final List<double> values;
   final Color color;
   final DateTime startDate;
+  final List<DateTime>? dates;
   final String suffix;
   final double height;
   final double? goal;
@@ -47,6 +49,9 @@ class TrendChart extends StatelessWidget {
   final String Function(double value)? axisFormat;
 
   final bool stepped;
+
+  DateTime _dateAt(int index) =>
+      dates?[index] ?? startDate.add(Duration(days: index));
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +118,7 @@ class TrendChart extends StatelessWidget {
                     for (final spot in spots)
                       LineTooltipItem(
                         '${label(spot.y)}\n'
-                        '${format.format(startDate.add(Duration(days: spot.x.toInt())))}',
+                        '${format.format(_dateAt(spot.x.toInt()))}',
                         _Chrome.tooltipText(context),
                       ),
                   ],
@@ -193,9 +198,9 @@ class TrendChart extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(format.format(startDate), style: statLabel(context)),
+            Text(format.format(_dateAt(0)), style: statLabel(context)),
             Text(
-              format.format(startDate.add(Duration(days: values.length - 1))),
+              format.format(_dateAt(values.length - 1)),
               style: statLabel(context),
             ),
           ],
