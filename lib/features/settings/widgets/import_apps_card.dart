@@ -14,6 +14,7 @@ const importApps = [
   'HabitBull',
   'Habitify',
   'Habit Builder',
+  'HabitNow',
   'CSV',
 ];
 

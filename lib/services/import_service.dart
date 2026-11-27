@@ -127,6 +127,10 @@ class ImportService {
     final text = _decode(bytes);
     final trimmed = text.trimLeft();
 
+    if (_looksLikeHabitNow(trimmed)) {
+      return _build(_parseHabitNow(trimmed), 'HabitNow');
+    }
+
     if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
       final decoded = _decodeJson(text);
       if (decoded != null) {
@@ -786,6 +790,75 @@ class ImportService {
       if (!avoid && status == 'completed') habit.mark(date, 1);
     }
     return habit;
+  }
+
+  static bool _looksLikeHabitNow(String text) =>
+      RegExp(r'^D\d{14}').hasMatch(text) && text.contains('{H');
+
+  static List<_RawHabit> _parseHabitNow(String text) {
+    final sections = <String, String>{};
+    for (final match in RegExp(r'\{([A-Z])([^{]*)').allMatches(text)) {
+      sections[match.group(1)!] = match.group(2)!;
+    }
+    List<List<String>> records(String? body) => [
+          for (final row in (body ?? '').split('|'))
+            if (row.isNotEmpty) row.split(';'),
+        ];
+    String at(List<String> row, int i) => i < row.length ? row[i].trim() : '';
+
+    final byId = <String, _RawHabit>{};
+    final timers = <String>{};
+    for (final row in records(sections['H'])) {
+      final id = at(row, 0);
+      if (id.isEmpty) continue;
+      final timer = at(row, 10) == '02';
+      final goal = num.tryParse(at(row, 13)) ?? 0;
+      final numeric = timer || goal > 0;
+      final target = timer ? goal / 60 : goal;
+      final habit = _RawHabit(
+        at(row, 3),
+        kind: numeric ? HabitKind.quantitative : HabitKind.positive,
+        target: numeric && target > 0 ? target : 1,
+        unit: timer ? 'min' : at(row, 11),
+        archived: at(row, 8) == '1',
+        description: at(row, 7),
+      );
+      final start = _habitNowDate(at(row, 6));
+      if (start != null) habit.seen(start);
+      byId[id] = habit;
+      if (timer) timers.add(id);
+    }
+
+    for (final row in records(sections['X'])) {
+      final id = at(row, 0);
+      final habit = byId[id];
+      final day = _habitNowDate(at(row, 1));
+      if (habit == null || day == null) continue;
+      final status = at(row, 2);
+      if (habit.kind != HabitKind.quantitative) {
+        if (status == 'fa' || status == 'fd') habit.mark(day, 1);
+        continue;
+      }
+      final value = num.tryParse(at(row, 3)) ??
+          (status == 'fc' ? 0 : num.tryParse(at(row, 4)) ?? habit.target);
+      habit.mark(day, timers.contains(id) ? value / 60 : value);
+    }
+    return byId.values.toList();
+  }
+
+  static DateTime? _habitNowDate(String raw) {
+    if (raw.length != 4) return null;
+    final parts = [
+      for (final char in raw.toLowerCase().split(''))
+        int.tryParse(char, radix: 36),
+    ];
+    if (parts.contains(null)) return null;
+    final year = 2000 + (parts[0]! - 9) * 10 + parts[1]!;
+    final month = parts[2]! + 1;
+    final day = parts[3]!;
+    if (year < 2000 || month > 12 || day < 1 || day > 31) return null;
+    final date = DateTime(year, month, day);
+    return date.month == month ? date : null;
   }
 
   static bool _isStreakBackup(dynamic decoded) {
