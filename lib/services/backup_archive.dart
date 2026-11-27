@@ -23,6 +23,7 @@ const backupSettingKeys = {
   'customTheme',
   'customQuotes',
   'deskIsland',
+  'minimizeToTray',
   'dayCutoff',
   'difficultyOption',
   'focusAlert',

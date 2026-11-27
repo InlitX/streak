@@ -236,7 +236,11 @@ class _ClassicAppearancePage extends StatelessWidget {
           title: context.l10n.check_style,
           subtitle: context.l10n.check_style_sub,
           trailing: Segmented(
-            options: [context.l10n.square, context.l10n.circle],
+            options: [
+              context.l10n.square,
+              context.l10n.circle,
+              context.l10n.check_flame,
+            ],
             index: settings.checkStyle,
             onChanged: settings.setCheckStyle,
           ),
@@ -712,6 +716,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                         options: [context.l10n.off, context.l10n.on],
                         index: settings.deskIsland ? 1 : 0,
                         onChanged: (i) => settings.setDeskIsland(i == 1),
+                      ),
+                    ),
+                    settingsDivider(context),
+                    SettingRow(
+                      icon: LucideIcons.minimize2,
+                      title: context.l10n.tray_minimize,
+                      subtitle: context.l10n.tray_minimize_sub,
+                      trailing: Segmented(
+                        options: [context.l10n.off, context.l10n.on],
+                        index: settings.minimizeToTray ? 1 : 0,
+                        onChanged: (i) => settings.setMinimizeToTray(i == 1),
                       ),
                     ),
                     settingsDivider(context),

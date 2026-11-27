@@ -107,6 +107,7 @@ class SettingsController extends ChangeNotifier {
     _appLockMode = LocalStore.setting('appLockMode', 0);
     _islandEnabled = LocalStore.setting('islandEnabled', true);
     _deskIsland = LocalStore.setting('deskIsland', true);
+    _minimizeToTray = LocalStore.setting('minimizeToTray', false);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
         List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
@@ -210,6 +211,7 @@ class SettingsController extends ChangeNotifier {
   late bool _notesEnabled;
   late bool _islandEnabled;
   late bool _deskIsland;
+  late bool _minimizeToTray;
   late bool _trackingOption;
   late bool _showTodayProgress;
   late bool _todayWeekStrip;
@@ -270,6 +272,7 @@ class SettingsController extends ChangeNotifier {
 
   int get checkStyle => _checkStyle;
   bool get isCircleCheck => _checkStyle == 1;
+  bool get isFlameCheck => _checkStyle == 2;
 
   String get currency => _currency;
 
@@ -859,6 +862,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setDeskIsland(bool value) async {
     _deskIsland = value;
     await LocalStore.writeSetting('deskIsland', value);
+    notifyListeners();
+  }
+
+  bool get minimizeToTray => _minimizeToTray;
+
+  Future<void> setMinimizeToTray(bool value) async {
+    _minimizeToTray = value;
+    await LocalStore.writeSetting('minimizeToTray', value);
     notifyListeners();
   }
 

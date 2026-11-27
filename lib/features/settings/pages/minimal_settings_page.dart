@@ -311,11 +311,16 @@ class _AppearancePage extends StatelessWidget {
               value: [
                 context.l10n.square,
                 context.l10n.circle,
+                context.l10n.check_flame,
               ][settings.checkStyle],
               onTap: () => showOptionSheet(
                 context,
                 title: context.l10n.check_style,
-                options: [context.l10n.square, context.l10n.circle],
+                options: [
+                  context.l10n.square,
+                  context.l10n.circle,
+                  context.l10n.check_flame,
+                ],
                 index: settings.checkStyle,
                 onSelected: settings.setCheckStyle,
               ),
@@ -598,6 +603,16 @@ class _PreferencesPage extends StatelessWidget {
                 trailing: _SoftSwitch(
                   value: settings.deskIsland,
                   onChanged: settings.setDeskIsland,
+                ),
+              ),
+            if (DeskIslandHost.supported)
+              SoftRow(
+                icon: LucideIcons.minimize2,
+                title: context.l10n.tray_minimize,
+                subtitle: context.l10n.tray_minimize_sub,
+                trailing: _SoftSwitch(
+                  value: settings.minimizeToTray,
+                  onChanged: settings.setMinimizeToTray,
                 ),
               ),
             SoftRow(

@@ -423,7 +423,11 @@ List<Widget> _appearanceTiles(BuildContext context) {
     context.l10n.light,
     context.l10n.dark,
   ];
-  final checks = [context.l10n.square, context.l10n.circle];
+  final checks = [
+    context.l10n.square,
+    context.l10n.circle,
+    context.l10n.check_flame,
+  ];
   final icons = [
     context.l10n.icon_default,
     context.l10n.icon_neutral,
@@ -738,6 +742,14 @@ List<Widget> _preferenceTiles(BuildContext context) {
             subtitle: context.l10n.desk_island_sub,
             value: settings.deskIsland,
             onChanged: settings.setDeskIsland,
+          ),
+        if (DeskIslandHost.supported)
+          _Toggle(
+            icon: LucideIcons.minimize2,
+            title: context.l10n.tray_minimize,
+            subtitle: context.l10n.tray_minimize_sub,
+            value: settings.minimizeToTray,
+            onChanged: settings.setMinimizeToTray,
           ),
         _Toggle(
           icon: LucideIcons.timer,

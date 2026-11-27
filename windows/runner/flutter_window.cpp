@@ -1,10 +1,12 @@
 #include "flutter_window.h"
 
 #include <flutter/standard_method_codec.h>
+#include <shellapi.h>
 
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+#include "resource.h"
 
 namespace {
 constexpr UINT_PTR kShowFallbackTimer = 1;
@@ -13,6 +15,20 @@ constexpr UINT_PTR kRefitTimer = 2;
 constexpr UINT kRefitMs = 600;
 constexpr wchar_t kWindowKey[] = L"Software\\Streak";
 constexpr wchar_t kPlacementValue[] = L"WindowPlacement";
+constexpr UINT kTrayMessage = WM_APP + 1;
+constexpr UINT kTrayId = 1;
+constexpr UINT kTrayOpen = 1;
+constexpr UINT kTrayQuit = 2;
+
+std::wstring WideFromUtf8(const std::string& text) {
+  if (text.empty()) return std::wstring();
+  int length = MultiByteToWideChar(CP_UTF8, 0, text.data(),
+                                   static_cast<int>(text.size()), nullptr, 0);
+  std::wstring wide(length, L'\0');
+  MultiByteToWideChar(CP_UTF8, 0, text.data(), static_cast<int>(text.size()),
+                      wide.data(), length);
+  return wide;
+}
 }
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
@@ -40,6 +56,11 @@ bool FlutterWindow::OnCreate() {
           flutter_controller_->engine()->messenger(), "streak/window",
           &flutter::StandardMethodCodec::GetInstance());
   window_channel_->SetMethodCallHandler([this](const auto& call, auto result) {
+    if (call.method_name() == "tray") {
+      SetTray(call.arguments());
+      result->Success();
+      return;
+    }
     const auto* on = std::get_if<bool>(call.arguments());
     if (call.method_name() != "fullscreen" || on == nullptr) {
       result->NotImplemented();
@@ -134,9 +155,98 @@ void FlutterWindow::HandleIsland(
 void FlutterWindow::BringToFront() {
   HWND hwnd = GetHandle();
   if (hwnd == nullptr) return;
+  if (in_tray_) {
+    ShowFromTray();
+    return;
+  }
   if (IsIconic(hwnd)) ShowWindow(hwnd, SW_RESTORE);
   if (!IsWindowVisible(hwnd)) ShowWindow(hwnd, SW_SHOW);
   SetForegroundWindow(hwnd);
+}
+
+void FlutterWindow::SetTray(const flutter::EncodableValue* args) {
+  const auto* map = std::get_if<flutter::EncodableMap>(args);
+  if (map == nullptr) return;
+  auto text = [map](const char* key) -> std::wstring {
+    auto found = map->find(flutter::EncodableValue(key));
+    if (found == map->end()) return std::wstring();
+    const auto* value = std::get_if<std::string>(&found->second);
+    return value == nullptr ? std::wstring() : WideFromUtf8(*value);
+  };
+  auto on = map->find(flutter::EncodableValue("on"));
+  if (on != map->end()) {
+    const auto* flag = std::get_if<bool>(&on->second);
+    tray_enabled_ = flag != nullptr && *flag;
+  }
+  std::wstring open = text("open");
+  std::wstring quit = text("quit");
+  if (!open.empty()) tray_open_ = open;
+  if (!quit.empty()) tray_quit_ = quit;
+  if (!tray_enabled_ && in_tray_) ShowFromTray();
+}
+
+void FlutterWindow::HideToTray() {
+  HWND hwnd = GetHandle();
+  if (hwnd == nullptr || in_tray_) return;
+  SavePlacement();
+  ShowWindow(hwnd, SW_HIDE);
+  in_tray_ = true;
+  AddTrayIcon();
+}
+
+void FlutterWindow::ShowFromTray() {
+  HWND hwnd = GetHandle();
+  RemoveTrayIcon();
+  in_tray_ = false;
+  if (hwnd == nullptr) return;
+  ShowWindow(hwnd, SW_SHOW);
+  if (IsIconic(hwnd)) ShowWindow(hwnd, SW_RESTORE);
+  SetForegroundWindow(hwnd);
+}
+
+void FlutterWindow::AddTrayIcon() {
+  NOTIFYICONDATAW data = {sizeof(data)};
+  data.hWnd = GetHandle();
+  data.uID = kTrayId;
+  data.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+  data.uCallbackMessage = kTrayMessage;
+  data.hIcon = static_cast<HICON>(LoadImageW(
+      GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_APP_ICON), IMAGE_ICON,
+      GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), 0));
+  wcscpy_s(data.szTip, L"Streak");
+  Shell_NotifyIconW(NIM_ADD, &data);
+  if (data.hIcon != nullptr) DestroyIcon(data.hIcon);
+}
+
+void FlutterWindow::RemoveTrayIcon() {
+  NOTIFYICONDATAW data = {sizeof(data)};
+  data.hWnd = GetHandle();
+  data.uID = kTrayId;
+  Shell_NotifyIconW(NIM_DELETE, &data);
+}
+
+void FlutterWindow::ShowTrayMenu() {
+  HWND hwnd = GetHandle();
+  HMENU menu = CreatePopupMenu();
+  if (menu == nullptr) return;
+  AppendMenuW(menu, MF_STRING, kTrayOpen, tray_open_.c_str());
+  AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
+  AppendMenuW(menu, MF_STRING, kTrayQuit, tray_quit_.c_str());
+  SetMenuDefaultItem(menu, kTrayOpen, FALSE);
+  POINT cursor;
+  GetCursorPos(&cursor);
+  SetForegroundWindow(hwnd);
+  UINT picked = TrackPopupMenu(menu, TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_NONOTIFY,
+                               cursor.x, cursor.y, 0, hwnd, nullptr);
+  PostMessage(hwnd, WM_NULL, 0, 0);
+  DestroyMenu(menu);
+  if (picked == kTrayOpen) {
+    ShowFromTray();
+  } else if (picked == kTrayQuit) {
+    RemoveTrayIcon();
+    in_tray_ = false;
+    PostMessage(hwnd, WM_CLOSE, 0, 0);
+  }
 }
 
 void FlutterWindow::SetFullscreen(bool on) {
@@ -221,6 +331,10 @@ void FlutterWindow::Refit() {
 }
 
 void FlutterWindow::OnDestroy() {
+  if (in_tray_) {
+    RemoveTrayIcon();
+    in_tray_ = false;
+  }
   window_channel_ = nullptr;
   island_channel_ = nullptr;
   island_ = nullptr;
@@ -235,6 +349,32 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (message == WM_SYSCOMMAND && (wparam & 0xFFF0) == SC_MINIMIZE &&
+      tray_enabled_) {
+    HideToTray();
+    return 0;
+  }
+  if (message == kTrayMessage) {
+    switch (LOWORD(lparam)) {
+      case WM_LBUTTONUP:
+      case WM_LBUTTONDBLCLK:
+        ShowFromTray();
+        break;
+      case WM_RBUTTONUP:
+      case WM_CONTEXTMENU:
+        ShowTrayMenu();
+        break;
+    }
+    return 0;
+  }
+  if (message == kShowFromTray) {
+    BringToFront();
+    return 0;
+  }
+  if (message == taskbar_created_ && in_tray_) {
+    AddTrayIcon();
+    return 0;
+  }
   if (message == WM_CLOSE) {
     SavePlacement();
   }

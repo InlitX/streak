@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/features/desk_island/desk_island_app.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/services/desktop_window.dart';
 
 class DeskIslandHost {
   const DeskIslandHost._();
@@ -141,6 +142,9 @@ class _DeskIslandViewsState extends State<DeskIslandViews>
       (s) => s.deskIsland && s.onboardingDone,
     );
     DeskIslandHost.want(on);
+    DesktopWindow.setTray(
+      context.select<SettingsController, bool>((s) => s.minimizeToTray),
+    );
     final island = DeskIslandHost.view.value;
     return ViewCollection(
       views: [

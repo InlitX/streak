@@ -13,6 +13,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   if (::GetLastError() == ERROR_ALREADY_EXISTS) {
     HWND running = ::FindWindowW(L"FLUTTER_RUNNER_WIN32_WINDOW", L"Streak");
     if (running) {
+      if (!::IsWindowVisible(running)) {
+        ::PostMessageW(running, kShowFromTray, 0, 0);
+        return EXIT_SUCCESS;
+      }
       if (::IsIconic(running)) ::ShowWindow(running, SW_RESTORE);
       if (!::IsZoomed(running)) {
         RECT frame;
