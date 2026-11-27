@@ -19,6 +19,7 @@ List<String> todoPriorityLabels(BuildContext context) => [
     ];
 
 String todoGroupLabel(BuildContext context, TodoGroup group) => switch (group) {
+      TodoGroup.pinned => context.l10n.todo_pinned,
       TodoGroup.overdue => context.l10n.todo_overdue,
       TodoGroup.today => context.l10n.today,
       TodoGroup.tomorrow => context.l10n.tomorrow,

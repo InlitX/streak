@@ -58,6 +58,18 @@ void main() {
     expect(sections.single.group, TodoGroup.someday);
   });
 
+  test('pinned to-dos sit in their own group at the very top', () {
+    final sections = groupPending([
+      _todo('now', due: today),
+      _todo('loose').copyWith(pinned: true),
+      _todo('late', due: today.subtract(const Duration(days: 1))).copyWith(pinned: true),
+    ], today);
+
+    expect(sections.map((s) => s.group).toList(), [TodoGroup.pinned, TodoGroup.today]);
+    expect(sections.first.todos.map((t) => t.id), ['late', 'loose']);
+    expect(isTodoLate(sections.first.todos.first, today), isTrue);
+  });
+
   test('completed to-dos never reach the pending groups', () {
     final sections = groupPending([
       _todo('open', due: today),

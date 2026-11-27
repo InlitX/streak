@@ -1,7 +1,7 @@
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/features/todos/data/todo.dart';
 
-enum TodoGroup { overdue, today, tomorrow, upcoming, someday }
+enum TodoGroup { pinned, overdue, today, tomorrow, upcoming, someday }
 
 enum TodoSort { urgency, time, name }
 
@@ -24,7 +24,9 @@ List<TodoSection> groupPending(
   final buckets = <TodoGroup, List<Todo>>{};
   for (final todo in todos) {
     if (todo.done) continue;
-    buckets.putIfAbsent(_groupOf(todo, today), () => []).add(todo);
+    buckets
+        .putIfAbsent(todo.pinned ? TodoGroup.pinned : _groupOf(todo, today), () => [])
+        .add(todo);
   }
   for (final bucket in buckets.values) {
     bucket.sort(switch (sort) {
@@ -46,6 +48,9 @@ List<Todo> sortCompleted(List<Todo> todos) {
   return list;
 }
 
+bool isTodoLate(Todo todo, DateTime today) =>
+    !todo.done && todo.due != null && todo.due!.epochDay < today.epochDay;
+
 TodoGroup _groupOf(Todo todo, DateTime today) {
   final due = todo.due;
   if (due == null) return TodoGroup.someday;
@@ -60,6 +65,7 @@ int _byUrgency(Todo a, Todo b, bool lowFirst) {
   if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
   final first = a.due;
   final second = b.due;
+  if ((first == null) != (second == null)) return first == null ? 1 : -1;
   if (first != null && second != null && !first.isSameDay(second)) {
     return first.compareTo(second);
   }
@@ -87,6 +93,7 @@ int _byTime(Todo a, Todo b) {
   if (a.pinned != b.pinned) return a.pinned ? -1 : 1;
   final first = a.due;
   final second = b.due;
+  if ((first == null) != (second == null)) return first == null ? 1 : -1;
   if (first != null && second != null && !first.isSameDay(second)) {
     return first.compareTo(second);
   }

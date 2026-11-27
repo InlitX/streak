@@ -167,9 +167,13 @@ class TodoTile extends StatelessWidget {
               ),
             ),
             if (todo.pinned)
-              const Padding(
-                padding: EdgeInsetsDirectional.only(start: 8),
-                child: TodoPin(scale: 0.8),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 8),
+                child: Icon(
+                  LucideIcons.pin,
+                  size: 19,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
           ],
         )),
