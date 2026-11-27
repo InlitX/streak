@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/features/desk_island/desk_island_host.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_dirs.dart';
 import 'package:streak/core/shortcuts/app_shortcuts.dart';
+import 'package:streak/core/widgets/number_keypad_dialog.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/features/settings/data_folder_actions.dart';
 import 'package:streak/features/settings/pages/about_page.dart';
@@ -588,6 +590,16 @@ class _PreferencesPage extends StatelessWidget {
         SectionLabel(context.l10n.prefs_features),
         SoftCard(
           children: [
+            if (DeskIslandHost.supported)
+              SoftRow(
+                icon: LucideIcons.panelTopOpen,
+                title: context.l10n.desk_island,
+                subtitle: context.l10n.desk_island_sub,
+                trailing: _SoftSwitch(
+                  value: settings.deskIsland,
+                  onChanged: settings.setDeskIsland,
+                ),
+              ),
             SoftRow(
               icon: LucideIcons.timer,
               title: context.l10n.focus,
@@ -597,6 +609,25 @@ class _PreferencesPage extends StatelessWidget {
                 onChanged: settings.setFocusEnabled,
               ),
             ),
+            if (settings.focusEnabled)
+              SoftRow(
+                icon: LucideIcons.target,
+                title: context.l10n.focus_daily_goal,
+                subtitle: context.l10n.focus_daily_goal_sub,
+                value: settings.focusDailyGoal == 0
+                    ? context.l10n.off
+                    : context.l10n.minutes_short('${settings.focusDailyGoal}'),
+                onTap: () async {
+                  final value = await showNumberKeypadDialog(
+                    context,
+                    title: context.l10n.focus_daily_goal,
+                    value: settings.focusDailyGoal.toDouble(),
+                    unit: context.l10n.unit_min_short,
+                    min: 0,
+                  );
+                  if (value != null) settings.setFocusDailyGoal(value.round());
+                },
+              ),
             SoftRow(
               icon: LucideIcons.notebookPen,
               title: context.l10n.notes,
@@ -623,6 +654,16 @@ class _PreferencesPage extends StatelessWidget {
                 value: SettingsActions.todoStyles(context)[
                     settings.todoPapers ? 1 : 0],
                 onTap: () => SettingsActions.pickTodoStyle(context),
+              ),
+            if (settings.todosEnabled)
+              SoftRow(
+                icon: LucideIcons.wandSparkles,
+                title: context.l10n.smart_titles,
+                subtitle: context.l10n.smart_titles_sub,
+                trailing: _SoftSwitch(
+                  value: settings.smartTitles,
+                  onChanged: settings.setSmartTitles,
+                ),
               ),
             SoftRow(
               icon: LucideIcons.palmtree,
@@ -703,6 +744,15 @@ class _PreferencesPage extends StatelessWidget {
                 value: settings.quietWhenDone,
                 onChanged: (v) =>
                     SettingsActions.toggleQuietWhenDone(context, v),
+              ),
+            ),
+            SoftRow(
+              icon: LucideIcons.shieldCheck,
+              title: context.l10n.confirm_undo,
+              subtitle: context.l10n.confirm_undo_sub,
+              trailing: _SoftSwitch(
+                value: settings.confirmUndo,
+                onChanged: settings.setConfirmUndo,
               ),
             ),
           ],

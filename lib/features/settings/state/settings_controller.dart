@@ -87,6 +87,7 @@ class SettingsController extends ChangeNotifier {
     _animations = LocalStore.setting('animations', true);
     _todosEnabled = LocalStore.setting('todosEnabled', true);
     _todoPapers = LocalStore.setting('todoPapers', true);
+    _smartTitles = LocalStore.setting('smartTitles', false);
     _sortCompletedLast = LocalStore.setting('sortCompletedLast', true);
     _todayOnly = LocalStore.setting('todayOnly', false);
     _hideDone = LocalStore.setting('hideDone', false);
@@ -98,12 +99,14 @@ class SettingsController extends ChangeNotifier {
     _showTodayProgress = LocalStore.setting('showTodayProgress', true);
     _todayWeekStrip = LocalStore.setting('todayWeekStrip', false);
     _quietWhenDone = LocalStore.setting('quietWhenDone', true);
+    _confirmUndo = LocalStore.setting('confirmUndo', false);
     _difficultyOption = LocalStore.setting('difficultyOption', false);
     Habit.weighDifficulty = _difficultyOption;
     _secondChances = LocalStore.setting('secondChances', true);
     Habit.secondChances = _secondChances;
     _appLockMode = LocalStore.setting('appLockMode', 0);
     _islandEnabled = LocalStore.setting('islandEnabled', true);
+    _deskIsland = LocalStore.setting('deskIsland', true);
     _quoteSource = LocalStore.setting('quoteSource', 0);
     _customQuotes =
         List<String>.from(LocalStore.setting('customQuotes', const <String>[]));
@@ -188,6 +191,7 @@ class SettingsController extends ChangeNotifier {
   late int _planContent;
   late bool _planMonth;
   late bool _todoPapers;
+  late bool _smartTitles;
   late bool _swipeCards;
   late bool _cardActivity;
   late bool _viewSwitcher;
@@ -205,10 +209,12 @@ class SettingsController extends ChangeNotifier {
   late bool _hideClean;
   late bool _notesEnabled;
   late bool _islandEnabled;
+  late bool _deskIsland;
   late bool _trackingOption;
   late bool _showTodayProgress;
   late bool _todayWeekStrip;
   late bool _quietWhenDone;
+  late bool _confirmUndo;
   late bool _difficultyOption;
   late bool _secondChances;
   late int _appLockMode;
@@ -477,6 +483,14 @@ class SettingsController extends ChangeNotifier {
     _todoPapers = value;
     notifyListeners();
     await LocalStore.writeSetting('todoPapers', value);
+  }
+
+  bool get smartTitles => _smartTitles;
+
+  Future<void> setSmartTitles(bool value) async {
+    _smartTitles = value;
+    notifyListeners();
+    await LocalStore.writeSetting('smartTitles', value);
   }
 
   bool get todosEnabled => _todosEnabled;
@@ -840,6 +854,14 @@ class SettingsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get deskIsland => _deskIsland;
+
+  Future<void> setDeskIsland(bool value) async {
+    _deskIsland = value;
+    await LocalStore.writeSetting('deskIsland', value);
+    notifyListeners();
+  }
+
   bool get trackingOption => _trackingOption;
 
   Future<void> setTrackingOption(bool value) async {
@@ -869,6 +891,14 @@ class SettingsController extends ChangeNotifier {
   Future<void> setQuietWhenDone(bool value) async {
     _quietWhenDone = value;
     await LocalStore.writeSetting('quietWhenDone', value);
+    notifyListeners();
+  }
+
+  bool get confirmUndo => _confirmUndo;
+
+  Future<void> setConfirmUndo(bool value) async {
+    _confirmUndo = value;
+    await LocalStore.writeSetting('confirmUndo', value);
     notifyListeners();
   }
 

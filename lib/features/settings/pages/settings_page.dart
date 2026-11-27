@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/features/desk_island/desk_island_host.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
@@ -51,7 +53,7 @@ class ClassicSettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settings)),
-      body: ListView(
+      body: ScrollTopFade(child: ListView(
         padding: context.pagePadding(16, 16, 16, 104),
         children: [
           Entrance(
@@ -131,7 +133,7 @@ class ClassicSettingsPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }
@@ -155,7 +157,7 @@ class _ClassicSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: ListView(
+      body: ScrollTopFade(child: ListView(
         padding: context.pagePadding(16, 8, 16, 24),
         children: [
           Entrance(child: SectionLabel(label)),
@@ -164,7 +166,7 @@ class _ClassicSection extends StatelessWidget {
           Entrance(index: 1, child: Card(child: Column(children: children))),
           if (after != null) Entrance(index: 2, child: after!),
         ],
-      ),
+      )),
     );
   }
 }
@@ -320,7 +322,7 @@ class _ClassicWidgetsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.widgets)),
-      body: ListView(
+      body: ScrollTopFade(child: ListView(
         padding: context.pagePadding(16, 8, 16, 24),
         children: [
           Padding(
@@ -334,7 +336,7 @@ class _ClassicWidgetsPage extends StatelessWidget {
           ),
           const WidgetStyleList(),
         ],
-      ),
+      )),
     );
   }
 }
@@ -348,7 +350,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.preferences)),
-      body: ListView(
+      body: ScrollTopFade(child: ListView(
         padding: context.pagePadding(16, 8, 16, 24),
         children: [
           Entrance(child: SectionLabel(context.l10n.prefs_general)),
@@ -679,6 +681,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                           SettingsActions.toggleQuietWhenDone(context, i == 1),
                     ),
                   ),
+                  settingsDivider(context),
+                  SettingRow(
+                    icon: LucideIcons.shieldCheck,
+                    title: context.l10n.confirm_undo,
+                    subtitle: context.l10n.confirm_undo_sub,
+                    trailing: Segmented(
+                      options: [context.l10n.off, context.l10n.on],
+                      index: settings.confirmUndo ? 1 : 0,
+                      onChanged: (i) => settings.setConfirmUndo(i == 1),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -690,6 +703,19 @@ class _ClassicPreferencesPage extends StatelessWidget {
             child: Card(
               child: Column(
                 children: [
+                  if (DeskIslandHost.supported) ...[
+                    SettingRow(
+                      icon: LucideIcons.panelTopOpen,
+                      title: context.l10n.desk_island,
+                      subtitle: context.l10n.desk_island_sub,
+                      trailing: Segmented(
+                        options: [context.l10n.off, context.l10n.on],
+                        index: settings.deskIsland ? 1 : 0,
+                        onChanged: (i) => settings.setDeskIsland(i == 1),
+                      ),
+                    ),
+                    settingsDivider(context),
+                  ],
                   SettingRow(
                     icon: LucideIcons.timer,
                     title: context.l10n.focus,
@@ -756,6 +782,17 @@ class _ClassicPreferencesPage extends StatelessWidget {
                       value: SettingsActions.todoStyles(context)[
                           settings.todoPapers ? 1 : 0],
                       onTap: () => SettingsActions.pickTodoStyle(context),
+                    ),
+                    settingsDivider(context),
+                    SettingRow(
+                      icon: LucideIcons.wandSparkles,
+                      title: context.l10n.smart_titles,
+                      subtitle: context.l10n.smart_titles_sub,
+                      trailing: Segmented(
+                        options: [context.l10n.off, context.l10n.on],
+                        index: settings.smartTitles ? 1 : 0,
+                        onChanged: (i) => settings.setSmartTitles(i == 1),
+                      ),
                     ),
                   ],
                   settingsDivider(context),
@@ -846,7 +883,7 @@ class _ClassicPreferencesPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

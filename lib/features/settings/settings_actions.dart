@@ -81,6 +81,8 @@ class SettingsActions {
     if (error == null) {
       if (replace) await context.read<SettingsController>().reloadFromStore();
       if (!context.mounted) return;
+      if (replace) controller.recount();
+      context.read<IslandController>().reload();
       context.read<NotesController>().reload();
       context.read<FocusController>().reload();
       context.read<TodosController>().reload();

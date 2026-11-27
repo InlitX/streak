@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:streak/features/desk_island/desk_island_host.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/express/express_motion.dart';
 import 'package:streak/core/widgets/setting_info.dart';
@@ -730,6 +731,14 @@ List<Widget> _preferenceTiles(BuildContext context) {
     SectionLabel(context.l10n.prefs_features),
     ExpressGroup(
       children: [
+        if (DeskIslandHost.supported)
+          _Toggle(
+            icon: LucideIcons.panelTopOpen,
+            title: context.l10n.desk_island,
+            subtitle: context.l10n.desk_island_sub,
+            value: settings.deskIsland,
+            onChanged: settings.setDeskIsland,
+          ),
         _Toggle(
           icon: LucideIcons.timer,
           title: context.l10n.focus,
@@ -778,6 +787,14 @@ List<Widget> _preferenceTiles(BuildContext context) {
             value: SettingsActions.todoStyles(context)[
                 settings.todoPapers ? 1 : 0],
             onTap: () => SettingsActions.pickTodoStyle(context),
+          ),
+        if (settings.todosEnabled)
+          _Toggle(
+            icon: LucideIcons.wandSparkles,
+            title: context.l10n.smart_titles,
+            subtitle: context.l10n.smart_titles_sub,
+            value: settings.smartTitles,
+            onChanged: settings.setSmartTitles,
           ),
         _Toggle(
           icon: LucideIcons.palmtree,
@@ -841,6 +858,13 @@ List<Widget> _preferenceTiles(BuildContext context) {
           subtitle: context.l10n.quiet_when_done_sub,
           value: settings.quietWhenDone,
           onChanged: (v) => SettingsActions.toggleQuietWhenDone(context, v),
+        ),
+        _Toggle(
+          icon: LucideIcons.shieldCheck,
+          title: context.l10n.confirm_undo,
+          subtitle: context.l10n.confirm_undo_sub,
+          value: settings.confirmUndo,
+          onChanged: settings.setConfirmUndo,
         ),
         ExpressTile(
           icon: LucideIcons.quote,
