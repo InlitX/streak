@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:streak/core/utils/amount_format.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -10,6 +11,7 @@ import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/extensions/inset_extensions.dart';
 import 'package:streak/core/i18n/l10n.dart';
+import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/core/icons/habit_glyph.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/widgets/app_empty_state.dart';
@@ -17,6 +19,7 @@ import 'package:streak/core/widgets/celebration_overlay.dart';
 import 'package:streak/core/widgets/entrance.dart';
 import 'package:streak/core/widgets/section_label.dart';
 import 'package:streak/core/widgets/glass.dart';
+import 'package:streak/features/habits/widgets/scale_faces.dart';
 import 'package:streak/features/habits/data/day_plan.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
@@ -87,7 +90,11 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
 
   Future<void> _toggleTodo(Todo todo) async {
     final todos = context.read<TodosController>();
-    if (todo.done) return todos.toggle(todo.id);
+    if (todos.byId(todo.id)?.date != todo.date) return _openTodo(todo);
+    if (todo.done) {
+      if (!await confirmUndo(context, todo.title) || !mounted) return;
+      return todos.toggle(todo.id);
+    }
     if (!await allowManualTodo(context, todo) || !mounted) return;
     if (!_completing.add(todo.id)) return;
     setState(() {});
@@ -100,8 +107,9 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
   Future<void> _newTodo() => openTodoEditor(context, date: _day.dayKey);
 
   Future<void> _openTodo(Todo todo) async {
-    final deleted = await openTodoEditor(context, todo: todo);
-    if (deleted == true && mounted) discardTodo(context, todo);
+    final real = context.read<TodosController>().byId(todo.id) ?? todo;
+    final deleted = await openTodoEditor(context, todo: real);
+    if (deleted == true && mounted) discardTodo(context, real);
   }
 
   void _addNote(Habit habit) => AppNavigator.push(
@@ -119,6 +127,11 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     if (!await confirmUnscheduledDay(context, habit: habit, date: _day)) return;
 
     final wasDone = habit.isCompletedOn(_day);
+    if (habit.isScale) {
+      if (!mounted) return;
+      await pickScaleLevel(context, habit, _day);
+      return;
+    }
     if (habit.kind == HabitKind.quantitative) {
       await controller.addProgress(habit.id, _day, habit.incrementAmount);
     } else {
@@ -147,7 +160,7 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
     final settings = context.watch<SettingsController>();
     if (!settings.planTodos) return const [];
     return context.select<TodosController, List<Todo>>(
-      (todos) => todos.dueOn(_day),
+      (todos) => todos.plannedOn(_day),
     ).toList()
       ..sort((a, b) => a.done != b.done
           ? (a.done ? 1 : -1)
@@ -436,7 +449,9 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                     }
                     return false;
                   },
-                  child: Stack(
+                  child: ScrollTopFade(
+                    enabled: express || minimal,
+                    child: Stack(
                     children: [
                 plan.isEmpty && todos.isEmpty
                     ? AppEmptyState(
@@ -456,7 +471,46 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                               16,
                               pushed ? 28 : 148,
                             ),
-                            sliver: SliverMainAxisGroup(
+                            sliver: SliverLayoutBuilder(
+                              builder: (context, box) => box.crossAxisExtent >= 700 &&
+                                      hasRoom(context) &&
+                                      todos.isNotEmpty &&
+                                      rows.isNotEmpty
+                                  ? SliverCrossAxisGroup(
+                                      slivers: [
+                                        SliverCrossAxisExpanded(
+                                          flex: 1,
+                                          sliver: SliverPadding(
+                                            padding: const EdgeInsetsDirectional.only(end: 12),
+                                            sliver: SliverList.builder(
+                                              itemCount: rows.length,
+                                              itemBuilder: (context, i) => rows[i](),
+                                            ),
+                                          ),
+                                        ),
+                                        SliverCrossAxisExpanded(
+                                          flex: 1,
+                                          sliver: SliverPadding(
+                                            padding: EdgeInsetsDirectional.only(
+                                              start: 12,
+                                              top: plan.slots.isEmpty ? 22 : 0,
+                                            ),
+                                            sliver: SliverMainAxisGroup(
+                                              slivers: [
+                                                SliverToBoxAdapter(
+                                                  child: SectionLabel(
+                                                    context.l10n.todos,
+                                                    trailing: _EstimateTotal(todos: todos),
+                                                  ),
+                                                ),
+                                                _todos(todos, rows.length),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : SliverMainAxisGroup(
                               slivers: [
                                 SliverList.builder(
                                   itemCount: rows.length,
@@ -478,12 +532,14 @@ class _DayTimelinePageState extends State<DayTimelinePage> {
                                 ],
                               ],
                             ),
+                            ),
                           ),
                         ],
                       ),
                       if (!express && !minimal)
                         HeaderBlur(scrolled: _scrolled, height: 30),
                     ],
+                  ),
                   ),
                 ),
               ),

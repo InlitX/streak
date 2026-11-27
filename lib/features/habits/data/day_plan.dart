@@ -38,7 +38,7 @@ class DayPlan {
       !habit.isArchived &&
       habit.kind != HabitKind.negative &&
       !day.atMidnight.isBefore(habit.startedAt) &&
-      habit.isScheduledOn(day) &&
+      habit.isExpectedOn(day) &&
       !habit.isPausedOn(day) &&
       !habit.isDoneAheadOn(day);
 

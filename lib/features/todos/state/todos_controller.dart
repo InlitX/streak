@@ -84,6 +84,7 @@ class TodosController extends ChangeNotifier {
   void reload() {
     final before = {for (final todo in _todos) todo.id: todo};
     _todos = LocalStore.readTodos();
+    _sort = todoSortOf(LocalStore.setting('todoSortBy', 0));
     notifyListeners();
     TodosWidgetService.syncSoon(_todos);
     unawaited(_rescheduleChanged(before));
@@ -291,6 +292,28 @@ class TodosController extends ChangeNotifier {
   int get looseCount => _counts.projects[''] ?? 0;
 
   List<Todo> dueOn(DateTime day) => _counts.days[day.epochDay] ?? const [];
+
+  List<Todo> plannedOn(DateTime day) {
+    final exact = dueOn(day);
+    final today = AppClock.today();
+    final target = day.atMidnight;
+    if (!target.isAfter(today)) return exact;
+    final ahead = <Todo>[];
+    for (final todo in _todos) {
+      if (todo.done || !todo.repeats || !todo.due!.isBefore(target)) continue;
+      var shadow = todo;
+      for (var guard = 0; guard < 400 && shadow.repeats; guard++) {
+        final at = shadow.due!.isBefore(today) ? today : shadow.due!;
+        shadow = shadow.nextTime(at);
+        final next = shadow.due!;
+        if (!next.isBefore(target)) {
+          if (next.epochDay == target.epochDay) ahead.add(shadow);
+          break;
+        }
+      }
+    }
+    return ahead.isEmpty ? exact : [...exact, ...ahead];
+  }
 
   Future<void> clearCompleted() async {
     final done = _todos.where((t) => t.done).toList();
