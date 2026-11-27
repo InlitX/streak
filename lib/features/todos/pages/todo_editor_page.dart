@@ -19,7 +19,9 @@ import 'package:streak/core/widgets/cover_image.dart';
 import 'package:streak/core/widgets/time_picker.dart';
 import 'package:streak/features/habits/data/category.dart';
 import 'package:streak/features/habits/widgets/habit_time_fields.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/settings/widgets/minimal_settings_widgets.dart';
+import 'package:streak/features/todos/data/smart_title.dart';
 import 'package:streak/features/todos/data/todo.dart';
 import 'package:streak/features/todos/data/todo_repeat.dart';
 import 'package:streak/features/todos/state/todo_tags_controller.dart';
@@ -109,6 +111,8 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
   late bool _done = widget.todo?.done ?? false;
   late bool _pinned = widget.todo?.pinned ?? false;
   late TodoRepeat? _repeat = widget.todo?.repeat;
+  SmartWords? _words;
+  SmartTitle? _smart;
   late final List<String> _photos = [...?widget.todo?.photos];
   late List<String> _tags = [...?widget.todo?.tags];
   late String _project = widget.todo?.project ?? widget.project;
@@ -129,6 +133,42 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
     setState(change);
     _schedule();
   }
+
+  void _suggest() {
+    if (_done || !context.read<SettingsController>().smartTitles) {
+      if (_smart != null) setState(() => _smart = null);
+      return;
+    }
+    final words = _words ??= SmartWords.of(
+      context.l10n,
+      Localizations.localeOf(context).toString(),
+    );
+    final smart = parseSmartTitle(_title.text, DateTime.now(), words);
+    if (smart == null && _smart == null) return;
+    setState(() => _smart = smart);
+  }
+
+  void _applySmart() {
+    final smart = _smart;
+    if (smart == null) return;
+    _title.value = TextEditingValue(
+      text: smart.title,
+      selection: TextSelection.collapsed(offset: smart.title.length),
+    );
+    _edit(() {
+      _smart = null;
+      _date = smart.date.dayKey;
+      if (smart.minutes != null) _minutes = smart.minutes;
+      if (smart.repeat != null) _repeat = smart.repeat;
+    });
+  }
+
+  String _smartLabel(BuildContext context, SmartTitle smart) => [
+        todoDateLabel(context, smart.date),
+        if (smart.minutes case final m?)
+          TimeOfDay(hour: m ~/ 60, minute: m % 60).format(context),
+        if (smart.repeat case final repeat?) todoRepeatLabel(context, repeat),
+      ].join(' · ');
 
   void _schedule() {
     if (_gone) return;
@@ -164,6 +204,7 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
     _todos = context.read<TodosController>();
     _life = AppLifecycleListener(onInactive: _persist);
     _title.addListener(_schedule);
+    _title.addListener(_suggest);
     _body.addListener(_schedule);
     for (final item in _items) {
       item.controller.addListener(_schedule);
@@ -484,10 +525,11 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
           ? null
           : () => _edit(() {
                 final current = _repeat;
-                if (current == null) return;
+                if (current == null || current.isOver) return;
                 _date = current
                     .after(parseDayKey(_date), today: today, skipping: true)
                     .dayKey;
+                _repeat = current.advanced;
               }),
     );
   }
@@ -744,7 +786,10 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                               inputFormatters: [
                                 FilteringTextInputFormatter.deny('\n'),
                               ],
-                              onSubmitted: (_) => _bodyFocus.requestFocus(),
+                              onSubmitted: (_) {
+                                _applySmart();
+                                _bodyFocus.requestFocus();
+                              },
                               style: TextStyle(
                                 fontSize: 23,
                                 fontWeight: FontWeight.w600,
@@ -755,6 +800,29 @@ class _TodoEditorPageState extends State<TodoEditorPage> with ShortcutHost {
                                 decorationColor: soft,
                               ),
                               decoration: _bare(context.l10n.todo_title_hint, soft),
+                            ),
+                            AnimatedSize(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeOutCubic,
+                              alignment: Alignment.topLeft,
+                              child: _smart == null
+                                  ? const SizedBox(width: double.infinity)
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Tooltip(
+                                          message: context.l10n.smart_apply,
+                                          child: _Chip(
+                                            icon: LucideIcons.wandSparkles,
+                                            label: _smartLabel(context, _smart!),
+                                            ink: ink,
+                                            tint: context.colors.primary,
+                                            onTap: _applySmart,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                             ),
                             const SizedBox(height: 8),
                             TextField(
