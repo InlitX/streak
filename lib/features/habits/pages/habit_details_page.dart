@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_daily_bars.dart';
 import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/focus/state/focus_actions.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/focus/widgets/focus_defaults_sheet.dart';
@@ -249,7 +251,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
           body: _SolidNavBar(child: _DetailBackground(
             coverPath: habit.coverPath,
             clarity: habit.coverClarity,
-            child: ListView(
+            child: ScrollTopFade(child: ListView(
               padding: context.pagePadding(16, 16, 16, 16),
               children: [
                 if (minimal) MinimalDetailHeader(habit: habit),
@@ -283,7 +285,9 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   QuantitativeProgress(habit: habit),
                   const SizedBox(height: 20),
                   SectionLabel(
-                    context.l10n.quant_per_day,
+                    habit.isScale
+                        ? context.l10n.scale_per_day
+                        : context.l10n.quant_per_day,
                     trailing: QuantStatsLink(habit: habit),
                   ),
                   QuantDailyBars(habit: habit),
@@ -299,7 +303,9 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                   ),
                   const SizedBox(height: 20),
                 ],
-                if (settings.focusEnabled && !habit.needsFocusSession) ...[
+                if (settings.focusEnabled &&
+                    !habit.needsFocusSession &&
+                    !habit.isScale) ...[
                   if (minimal)
                     MinimalFocusRow(habit: habit)
                   else
@@ -391,7 +397,7 @@ class _HabitDetailsPageState extends State<HabitDetailsPage> {
                 else
                   _VacationTile(habit: habit),
               ],
-            ),
+            )),
           )),
         );
       },
@@ -915,32 +921,26 @@ class _FocusTile extends StatelessWidget {
                   background: habit.color.shownIn(context),
                   resting: ExpressShape.cookie,
                   pressed: ExpressShape.flower,
-                  onPressed: () => AppNavigator.push(
-                    focus.isActive
-                        ? const FocusPage()
-                        : FocusPage(
-                            startHabitId: habit.id,
-                            startMinutes: habit.focusMinutes,
-                            breakMinutes: habit.focusBreakMinutes,
-                          ),
-                    fade: true,
-                    name: FocusPage.routeName,
+                  onPressed: () => pushFocus(
+                    context,
+                    FocusPage(
+                      startHabitId: habit.id,
+                      startMinutes: habit.focusMinutes,
+                      breakMinutes: habit.focusBreakMinutes,
+                    ),
                   ),
                 )
               else
                 IconButton(
                   tooltip: context.l10n.focus_start,
                   icon: Icon(LucideIcons.circlePlay, color: habit.color.shownIn(context)),
-                  onPressed: () => AppNavigator.push(
-                    focus.isActive
-                        ? const FocusPage()
-                        : FocusPage(
-                            startHabitId: habit.id,
-                            startMinutes: habit.focusMinutes,
-                            breakMinutes: habit.focusBreakMinutes,
-                          ),
-                    fade: true,
-                    name: FocusPage.routeName,
+                  onPressed: () => pushFocus(
+                    context,
+                    FocusPage(
+                      startHabitId: habit.id,
+                      startMinutes: habit.focusMinutes,
+                      breakMinutes: habit.focusBreakMinutes,
+                    ),
                   ),
                 ),
             ],

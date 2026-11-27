@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/widgets/setting_info.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -28,13 +29,13 @@ class MinimalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 52, leading: leading),
-      body: ListView(
+      body: ScrollTopFade(child: ListView(
         padding: context.pagePadding(22, 0, 22, 40),
         children: [
           MinimalTitle(title: title, subtitle: subtitle),
           ...children,
         ],
-      ),
+      )),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:streak/core/widgets/top_fade.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:streak/core/express/express_button.dart';
 import 'package:streak/core/express/express_motion.dart';
@@ -163,15 +164,26 @@ class ExpressScaffold extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 760),
-          child: ListView(
-            padding: context.pagePadding(18, 0, 18, bottomPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ExpressHeadline(title: title, subtitle: subtitle),
-              const SizedBox(height: 22),
+              Padding(
+                padding: context.pagePadding(18, 0, 18, 0).copyWith(bottom: 8),
+                child: ExpressHeadline(title: title, subtitle: subtitle),
+              ),
+              Expanded(
+                child: ScrollTopFade(
+          child: ListView(
+            padding: context.pagePadding(18, 14, 18, bottomPadding),
+            children: [
               for (var i = 0; i < children.length; i++)
                 reveal
                     ? ExpressReveal(index: i, child: children[i])
                     : children[i],
+            ],
+          ),
+                ),
+              ),
             ],
           ),
         ),

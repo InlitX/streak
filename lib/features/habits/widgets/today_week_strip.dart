@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_shapes.dart';
+import 'package:streak/core/express/express_surface.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/i18n/date_labels.dart';
 import 'package:streak/features/habits/data/habit.dart';
@@ -60,13 +63,16 @@ class _TodayWeekStripState extends State<TodayWeekStrip> {
     final scheme = context.colors;
     final accent = settings.isMinimalStyle ? scheme.onSurface : scheme.primary;
     final ink = settings.isMinimalStyle ? scheme.surface : scheme.onPrimary;
+    final express = settings.isExpressStyle;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onHorizontalDragEnd: (details) => _swipe(details, first),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: ClipRect(
+        padding: EdgeInsets.only(bottom: express ? 12 : 6),
+        child: _ExpressFrame(
+          express: express,
+          child: ClipRect(
           child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 260),
           switchInCurve: Curves.easeOutCubic,
@@ -94,16 +100,34 @@ class _TodayWeekStripState extends State<TodayWeekStrip> {
                     today: today,
                     accent: accent,
                     ink: ink,
+                    express: express,
                     onTap: widget.onSelected,
                   ),
                 ),
             ],
           ),
           ),
+          ),
         ),
       ),
     );
   }
+}
+
+class _ExpressFrame extends StatelessWidget {
+  const _ExpressFrame({required this.express, required this.child});
+
+  final bool express;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => express
+      ? ExpressCard(
+          radius: 28,
+          padding: const EdgeInsets.fromLTRB(6, 12, 6, 12),
+          child: child,
+        )
+      : child;
 }
 
 class _Day extends StatelessWidget {
@@ -115,6 +139,7 @@ class _Day extends StatelessWidget {
     required this.today,
     required this.accent,
     required this.ink,
+    required this.express,
     required this.onTap,
   });
 
@@ -125,7 +150,48 @@ class _Day extends StatelessWidget {
   final DateTime today;
   final Color accent;
   final Color ink;
+  final bool express;
   final ValueChanged<DateTime> onTap;
+
+  Widget _expressDay(BuildContext context, bool isToday, bool complete, double ratio) {
+    final scheme = context.colors;
+    final number = Text(
+      '${day.day}',
+      style: ExpressType.headline.at(
+        15,
+        weight: isToday || complete ? 800 : 600,
+        color: complete
+            ? ink
+            : isToday
+                ? accent
+                : due > 0
+                    ? scheme.onSurface
+                    : context.tokens.muted,
+      ),
+    );
+    if (complete || isToday) {
+      return ExpressBlob(
+        size: 40,
+        shape: complete ? ExpressShape.flower : ExpressShape.cookie,
+        color: complete ? accent : accent.withValues(alpha: 0.16 + ratio * 0.3),
+        child: Center(child: number),
+      );
+    }
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: CustomPaint(
+        painter: _RingPainter(
+          ratio: ratio,
+          complete: false,
+          accent: accent,
+          track: scheme.onSurface.withValues(alpha: 0.10),
+          outline: Colors.transparent,
+        ),
+        child: Center(child: number),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +219,22 @@ class _Day extends StatelessWidget {
               Text(
                 label,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
-                  color: isToday ? scheme.onSurface : muted,
-                ),
+                style: express
+                    ? ExpressType.body.at(
+                        11.5,
+                        weight: isToday ? 800 : 600,
+                        color: isToday ? accent : muted,
+                      )
+                    : TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: isToday ? FontWeight.w800 : FontWeight.w600,
+                        color: isToday ? scheme.onSurface : muted,
+                      ),
               ),
               const SizedBox(height: 6),
+              if (express)
+                _expressDay(context, isToday, complete, ratio)
+              else
               SizedBox(
                 width: 38,
                 height: 38,

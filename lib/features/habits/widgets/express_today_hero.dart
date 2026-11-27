@@ -15,6 +15,7 @@ import 'package:streak/features/habits/widgets/daily_quote.dart';
 import 'package:streak/features/habits/widgets/habit_heatmap.dart';
 import 'package:streak/features/habits/widgets/today_filter_sheet.dart';
 import 'package:streak/features/habits/widgets/today_intro.dart';
+import 'package:streak/features/habits/widgets/today_tiles.dart';
 
 class ExpressTodayHero extends StatelessWidget {
   const ExpressTodayHero({
@@ -338,7 +339,77 @@ class ExpressTodayHeader extends StatelessWidget {
   final bool allDone;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      TodayHeaderSwitch(wide: _wide(context), narrow: _narrow(context));
+
+  Widget _wide(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ExpressTodayHero(
+          habits: habits,
+          done: done,
+          total: total,
+          ratio: ratio,
+          showProgress: showProgress,
+        ),
+        const SizedBox(height: 18),
+        Row(
+          children: [
+            if (showModes) ...[
+              SizedBox(
+                width: 380,
+                child: ExpressTabs(
+                  labels: [
+                    context.l10n.week,
+                    context.l10n.month,
+                    context.l10n.year,
+                  ],
+                  index: mode.index.clamp(0, 2),
+                  onChanged: (i) => onMode(HeatmapMode.values[i]),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+            Expanded(
+              child: ExpressChipBar(
+                children: [
+                  if (categories.isNotEmpty)
+                    ExpressChip(
+                      label: context.l10n.all,
+                      active: category == null,
+                      onTap: () => onCategory(null),
+                      onLongPress: () => showCategoryOrderSheet(context),
+                    ),
+                  for (final name in categories)
+                    ExpressChip(
+                      label: context.categoryLabel(name),
+                      active: category == name,
+                      onTap: () => onCategory(name),
+                      onLongPress: () => showCategoryOrderSheet(context),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Semantics(
+              label: context.l10n.today_filter,
+              child: ExpressChip(
+                label: '',
+                icon: LucideIcons.listFilter,
+                active: filtered,
+                onTap: onFilter,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (allDone) const TodayAllDone(),
+      ],
+    );
+  }
+
+  Widget _narrow(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

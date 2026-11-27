@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/home_shell.dart';
 import 'package:streak/app/theme/app_tokens.dart';
+import 'package:streak/core/express/express_type.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/utils/responsive.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
@@ -69,6 +70,7 @@ class _StyleOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = context.colors.primary;
+    final express = context.watch<SettingsController>().isExpressStyle;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final outline = isDark ? const Color(0xFF2E2E32) : const Color(0xFFDCDCE3);
 
@@ -91,7 +93,7 @@ class _StyleOption extends StatelessWidget {
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF141416) : Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(express ? 24 : 18),
                     border: Border.all(
                       color: selected ? accent : outline,
                       width: selected ? 1.8 : 1,
@@ -105,7 +107,7 @@ class _StyleOption extends StatelessWidget {
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
+                    borderRadius: BorderRadius.circular(express ? 19 : 13),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: isDark
@@ -125,12 +127,18 @@ class _StyleOption extends StatelessWidget {
             const SizedBox(height: 12),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 240),
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: selected ? 16 : 15,
-                    fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
-                    letterSpacing: -0.2,
-                    color: selected ? accent : context.tokens.muted,
-                  ),
+              style: express
+                  ? ExpressType.headline.at(
+                      selected ? 16 : 15,
+                      weight: selected ? 800 : 650,
+                      color: selected ? accent : context.tokens.muted,
+                    )
+                  : Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontSize: selected ? 16 : 15,
+                      fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+                      letterSpacing: -0.2,
+                      color: selected ? accent : context.tokens.muted,
+                    ),
               child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
             ),
             const SizedBox(height: 6),
@@ -197,6 +205,7 @@ class _LegendRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = context.colors.primary;
+    final express = context.watch<SettingsController>().isExpressStyle;
 
     return Semantics(
       button: true,
@@ -207,12 +216,17 @@ class _LegendRow extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 280),
           curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+          padding: express
+              ? const EdgeInsets.fromLTRB(20, 18, 18, 18)
+              : const EdgeInsets.fromLTRB(16, 14, 16, 14),
           decoration: BoxDecoration(
             color: selected
                 ? accent.withValues(alpha: 0.12)
-                : context.colors.surfaceContainerHigh.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(selected ? 22 : 16),
+                : context.colors.surfaceContainerHigh
+                    .withValues(alpha: express ? 1 : 0.5),
+            borderRadius: BorderRadius.circular(
+              express ? (selected ? 30 : 22) : (selected ? 22 : 16),
+            ),
             border: Border.all(
               color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
             ),
@@ -226,21 +240,36 @@ class _LegendRow extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.2,
-                        color: selected ? accent : context.colors.onSurface,
-                      ),
+                      style: express
+                          ? ExpressType.headline.at(
+                              17,
+                              weight: 750,
+                              color: selected
+                                  ? accent
+                                  : context.colors.onSurface,
+                            )
+                          : TextStyle(
+                              fontSize: 15.5,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.2,
+                              color:
+                                  selected ? accent : context.colors.onSurface,
+                            ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: context.tokens.muted,
-                      ),
+                      style: express
+                          ? ExpressType.body.at(
+                              13.5,
+                              height: 1.4,
+                              color: context.tokens.muted,
+                            )
+                          : TextStyle(
+                              fontSize: 13,
+                              height: 1.4,
+                              color: context.tokens.muted,
+                            ),
                     ),
                   ],
                 ),
