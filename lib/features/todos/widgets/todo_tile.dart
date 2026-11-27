@@ -11,7 +11,6 @@ import 'package:streak/features/todos/state/todo_tags_controller.dart';
 import 'package:streak/features/todos/widgets/todo_check.dart';
 import 'package:streak/features/todos/widgets/todo_deal.dart';
 import 'package:streak/features/todos/widgets/todo_labels.dart';
-import 'package:streak/features/todos/widgets/todo_sticker.dart';
 
 class TodoTile extends StatelessWidget {
   const TodoTile({
@@ -132,10 +131,14 @@ class TodoTile extends StatelessWidget {
                             color: muted,
                           ),
                         if (todo.priority != TodoPriority.none)
-                          TodoSticker(
-                            priority: todo.priority,
-                            turn: TodoSticker.turnFor(todo.id),
-                            scale: 0.9,
+                          _MetaLabel(
+                            icon: switch (todo.priority) {
+                              TodoPriority.low => LucideIcons.coffee,
+                              TodoPriority.medium => LucideIcons.hourglass,
+                              _ => LucideIcons.flame,
+                            },
+                            label: todoPriorityLabels(context)[todo.priority.index],
+                            color: accent,
                           ),
                         if (todo.steps.isNotEmpty)
                           _MetaLabel(
