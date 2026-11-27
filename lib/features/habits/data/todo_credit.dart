@@ -16,9 +16,9 @@ class TodoCredit {
           (habit.kind == HabitKind.quantitative && !habit.isTimeAmount));
 
   static bool links(Habit habit, Todo todo) {
-    final link = habit.todoLink;
-    if (link.isEmpty || !linkable(habit)) return false;
-    return todo.project == link || todo.tags.contains(link);
+    final links = habit.todoLinks;
+    if (links.isEmpty || !linkable(habit)) return false;
+    return links.any((link) => todo.project == link || todo.tags.contains(link));
   }
 
   static DateTime dayOf(Todo todo) {

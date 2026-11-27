@@ -50,6 +50,18 @@ void main() {
     expect(habits['h']!.isCompletedOn(today), isTrue);
   });
 
+  test('a habit linked to two tags counts a to-do from either, once', () {
+    final habits = {'h': _linked('cleaning,organizing', kind: HabitKind.quantitative)};
+    final first = _todo('a', tags: ['cleaning']);
+    final both = _todo('b', tags: ['cleaning', 'organizing']);
+    final other = _todo('c', tags: ['cooking']);
+    TodoCredit.apply(habits, [first], before: first, after: _check(first));
+    TodoCredit.apply(habits, [both], before: both, after: _check(both));
+    TodoCredit.apply(habits, [other], before: other, after: _check(other));
+
+    expect(habits['h']!.completions[today.dayKey]?.count, 2);
+  });
+
   test('a to-do with the linked tag counts too', () {
     final habits = {'h': _linked('reading')};
     final todo = _todo('a', tags: ['reading']);
@@ -171,7 +183,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Books I want to read').last);
       await tester.pumpAndSettle();
-      expect(find.widgetWithText(ActionChip, 'Books I want to read'), findsOneWidget);
+      expect(find.widgetWithText(InputChip, 'Books I want to read'), findsOneWidget);
 
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
