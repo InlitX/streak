@@ -164,6 +164,24 @@ class BackupService {
     return path;
   }
 
+  static Future<bool> runAutoIfDue() async {
+    final every = LocalStore.setting('autoBackup', 0);
+    if (every == 0) return false;
+    final last = DateTime.tryParse(LocalStore.setting('autoBackupAt', ''));
+    final due = last?.add(Duration(days: every == 1 ? 1 : 7));
+    if (due != null && DateTime.now().isBefore(due)) return false;
+    final path = await runAuto(
+      folder: LocalStore.setting('autoBackupFolder', ''),
+      readable: LocalStore.setting('readableCopy', true),
+    );
+    if (path == null) return false;
+    await LocalStore.writeSetting(
+      'autoBackupAt',
+      DateTime.now().toIso8601String(),
+    );
+    return true;
+  }
+
   static Future<String?> runAuto({
     String folder = '',
     bool readable = true,
