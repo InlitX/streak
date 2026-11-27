@@ -104,8 +104,10 @@ Everything stays on your device. No account, no ads.
 - **Fill in the past**: tap any day to add or remove it
 - **Day notes**: long-press a day to write what happened, or attach a photo
 - **Vacation mode** pauses a habit without breaking anything
-- A **to-do list** with projects and tags, and habits that count the to-dos
-  you check off
+- A **to-do list** with projects, tags, pinned to-dos and an optional
+  **spaced review** repeat, and habits that count the to-dos you check off
+- **Smart dates**: type "tomorrow 6pm" or "every monday" in a to-do title and
+  tap the suggestion
 
 </td>
 <td width="50%" valign="top">
@@ -138,6 +140,8 @@ Everything stays on your device. No account, no ads.
 - Calm scenes as a background, or a photo of your own
 - Tick off subtasks without leaving the timer, and keep the screen awake
 - A **daily focus goal**, plus a history of every session you finish
+- On Windows, a **desk island** at the top of the screen with the timer,
+  today's habits and your to-dos
 
 </td>
 <td width="50%" valign="top">
@@ -153,6 +157,8 @@ Everything stays on your device. No account, no ads.
 - Cover photos, categories, drag-to-reorder, profile name and photo
 - Three launcher icons, so Streak matches the rest of your home screen
 - A burst of confetti the day you finish everything
+- **Tablets** get a layout of their own: a side rail, habits in columns and
+  to-dos laid out as a board
 
 </td>
 </tr>
