@@ -541,9 +541,11 @@ class _PerfectStreakCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = streak > 0
-        ? context.l10n.streak_on('$streak')
-        : context.l10n.streak_off;
+    final text = context.watch<SettingsController>().quoteSource == 3
+        ? context.l10n.count_days(streak)
+        : streak > 0
+            ? context.l10n.streak_on('$streak')
+            : context.l10n.streak_off;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 15),

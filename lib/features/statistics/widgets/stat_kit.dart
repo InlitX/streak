@@ -1,3 +1,5 @@
+import 'dart:ui' show PointMode;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
@@ -74,6 +76,10 @@ class _StatRevealState extends State<StatReveal>
     vsync: this,
     duration: const Duration(milliseconds: 520),
   );
+  late final CurvedAnimation _curve = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOutCubic,
+  );
 
   ScrollPosition? _position;
   bool _shown = false;
@@ -90,6 +96,7 @@ class _StatRevealState extends State<StatReveal>
   @override
   void dispose() {
     _position?.removeListener(_check);
+    _curve.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -108,19 +115,16 @@ class _StatRevealState extends State<StatReveal>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        final t = Curves.easeOutCubic.transform(_controller.value);
-        return Opacity(
-          opacity: t,
-          child: Transform.translate(
-            offset: Offset(0, (1 - t) * 22),
-            child: child,
-          ),
-        );
-      },
-      child: KeyedSubtree(key: ValueKey(_shown), child: widget.child),
+    return FadeTransition(
+      opacity: _curve,
+      child: AnimatedBuilder(
+        animation: _curve,
+        builder: (context, child) => Transform.translate(
+          offset: Offset(0, (1 - _curve.value) * 22),
+          child: child,
+        ),
+        child: KeyedSubtree(key: ValueKey(_shown), child: widget.child),
+      ),
     );
   }
 }
@@ -136,10 +140,12 @@ class DotField extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: CustomPaint(
-            painter: _DotFieldPainter(
-              color: context.tokens.muted.withValues(alpha: 0.22),
-              spacing: spacing,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: _DotFieldPainter(
+                color: context.tokens.muted.withValues(alpha: 0.22),
+                spacing: spacing,
+              ),
             ),
           ),
         ),
@@ -157,12 +163,15 @@ class _DotFieldPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    for (var y = spacing / 2; y < size.height; y += spacing) {
-      for (var x = spacing / 2; x < size.width; x += spacing) {
-        canvas.drawCircle(Offset(x, y), 0.9, paint);
-      }
-    }
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.8
+      ..strokeCap = StrokeCap.round;
+    final points = <Offset>[
+      for (var y = spacing / 2; y < size.height; y += spacing)
+        for (var x = spacing / 2; x < size.width; x += spacing) Offset(x, y),
+    ];
+    canvas.drawPoints(PointMode.points, points, paint);
   }
 
   @override
@@ -386,12 +395,19 @@ class MiniStat extends StatelessWidget {
                 const SizedBox(height: 10),
                 _StatValue(value: value, unit: unit),
                 const SizedBox(height: 4),
-                Text(
-                  label,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: statLabel(context),
-                ),
+                if (label.trim().contains(' '))
+                  Text(
+                    label,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: statLabel(context),
+                  )
+                else
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(label, maxLines: 1, style: statLabel(context)),
+                  ),
               ],
             ),
     );
@@ -408,7 +424,11 @@ class _StatValue extends StatelessWidget {
   Widget build(BuildContext context) {
     final unit = this.unit;
     if (unit == null || unit.isEmpty) {
-      return AnimatedStatNumber(value: value, style: statNumber(context, 22));
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: AlignmentDirectional.centerStart,
+        child: AnimatedStatNumber(value: value, style: statNumber(context, 22)),
+      );
     }
     return FittedBox(
       fit: BoxFit.scaleDown,
