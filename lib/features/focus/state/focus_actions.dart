@@ -1,5 +1,4 @@
 import 'package:provider/provider.dart';
-import 'package:streak/core/extensions/date_extensions.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -31,7 +30,7 @@ Future<void> applyFocusAction(FocusAction action) async {
     return;
   }
 
-  final today = AppClock.now();
+  final today = session.countedOn;
   if (!session.completed || habit.kind != HabitKind.positive) return;
   if (habit.isCompletedOn(today)) return;
   habits.toggle(habit.id, today, fromFocus: true);
@@ -57,7 +56,7 @@ Future<void> creditFocusRound(
   final habit = habits.byId(session.habitId);
   if (habit == null) return;
   if (habit.isTimeAmount) return countFocusTime(habits, focus, session);
-  final day = on ?? AppClock.now();
+  final day = on ?? session.countedOn;
   if (!session.completed || habit.kind != HabitKind.positive) return;
   if (habit.isCompletedOn(day)) return;
   await habits.toggle(habit.id, day, fromFocus: true);

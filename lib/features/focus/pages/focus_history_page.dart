@@ -186,7 +186,7 @@ class _FocusHistoryPageState extends State<FocusHistoryPage> {
 
     final days = <String, List<FocusSession>>{};
     for (final session in sessions) {
-      days.putIfAbsent(session.startedAt.dayKey, () => []).add(session);
+      days.putIfAbsent(session.countedOn.dayKey, () => []).add(session);
     }
 
     return PopScope(

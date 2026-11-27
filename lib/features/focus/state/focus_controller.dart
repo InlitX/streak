@@ -791,12 +791,12 @@ class FocusController extends ChangeNotifier {
       .fold(0, (sum, session) => sum + session.seconds);
 
   int secondsForDay(DateTime day) => _sessions
-      .where((s) => s.startedAt.dayKey == day.dayKey)
+      .where((s) => s.countedOn.dayKey == day.dayKey)
       .fold(0, (sum, session) => sum + session.seconds);
 
   int secondsForHabitSince(String habitId, DateTime from) => _sessions
       .where((s) =>
-          s.habitId == habitId && !s.startedAt.atMidnight.isBefore(from))
+          s.habitId == habitId && !s.countedOn.atMidnight.isBefore(from))
       .fold(0, (sum, session) => sum + session.seconds);
 
   List<FocusSession> sessionsForHabitOnDay(String habitId, DateTime day) =>

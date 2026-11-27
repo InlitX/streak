@@ -33,9 +33,8 @@ class FocusSession {
 
   double get overrun => measured ? span / (targetMinutes * 60) - 1 : 0;
 
-  DateTime get countedOn => startedAt
-      .add(Duration(seconds: seconds > 0 ? seconds - 1 : 0))
-      .subtract(Duration(hours: AppClock.cutoffHour));
+  DateTime get countedOn =>
+      startedAt.subtract(Duration(hours: AppClock.cutoffHour));
 
   List<FocusSession> split() {
     final pieces = <FocusSession>[];
