@@ -255,7 +255,7 @@ class _FocusPageState extends State<FocusPage> with ShortcutHost {
     final reached = focus.reachedTarget || focus.isFlow;
     final checked =
         habit?.completions[AppClock.now().dayKey]?.steps ?? const <String>{};
-    final pending = habit == null
+    final pending = habit == null || habit.kind != HabitKind.positive
         ? focus.pendingTasks
         : habit.substeps.where((step) => !checked.contains(step.id)).length;
     final draft = focus.draft;
@@ -398,7 +398,7 @@ class _FocusPageState extends State<FocusPage> with ShortcutHost {
                     : isMobile
                     ? 156.0
                     : 232.0;
-                final tasks = habit == null
+                final tasks = habit == null || habit.kind != HabitKind.positive
                     ? FocusFreeTaskList(focus: focus, maxHeight: listHeight)
                     : FocusTaskList(habit: habit, maxHeight: listHeight);
 
