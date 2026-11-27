@@ -15,13 +15,26 @@ import 'package:streak/features/settings/state/settings_controller.dart';
 
 bool canMissOn(Habit habit, DateTime date) {
   final day = date.atMidnight;
-  return habit.kind != HabitKind.negative &&
-      !habit.tracking &&
+  if (habit.kind == HabitKind.negative) {
+    return !day.isAfter(AppClock.today()) &&
+        !day.isBefore(habit.startedAt) &&
+        habit.completions.containsKey(day.dayKey);
+  }
+  return !habit.tracking &&
       day.isBefore(AppClock.today()) &&
       !day.isBefore(habit.startedAt) &&
       !habit.isCompletedOn(day) &&
       !habit.isNeutralOn(day);
 }
+
+List<String> _relapsePresets(BuildContext context) => [
+      context.l10n.relapse_stress,
+      context.l10n.relapse_bored,
+      context.l10n.relapse_craving,
+      context.l10n.relapse_social,
+      context.l10n.relapse_mood,
+      context.l10n.miss_tired,
+    ];
 
 List<String> _presets(BuildContext context) => [
       context.l10n.miss_overslept,
@@ -80,7 +93,12 @@ class _MissReasonPickerState extends State<MissReasonPicker> {
     if (habit == null || !canMissOn(habit, widget.date)) return const SizedBox.shrink();
     final color = habit.color.shownIn(context);
     final chosen = habit.missReasons[widget.date.dayKey];
-    final options = {..._presets(context), ...habit.missReasons.values};
+    final options = {
+      ...habit.kind == HabitKind.negative
+          ? _relapsePresets(context)
+          : _presets(context),
+      ...habit.missReasons.values,
+    };
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -89,7 +107,12 @@ class _MissReasonPickerState extends State<MissReasonPicker> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
-            child: Text(context.l10n.miss_reason_title, style: sheetLabelStyle(context)),
+            child: Text(
+              habit.kind == HabitKind.negative
+                  ? context.l10n.relapse_reason_title
+                  : context.l10n.miss_reason_title,
+              style: sheetLabelStyle(context),
+            ),
           ),
           Wrap(
             spacing: 8,
@@ -146,20 +169,23 @@ class MissReasonsTile extends StatelessWidget {
     if (tally.isEmpty) return const SizedBox.shrink();
     final settings = context.watch<SettingsController>();
     final summary = tally.entries.take(3).map((e) => '${e.key} ${e.value}').join('  ·  ');
-    void open() => _showMissReasons(context, tally);
+    final title = habit.kind == HabitKind.negative
+        ? context.l10n.relapse_reasons
+        : context.l10n.miss_reasons;
+    void open() => _showMissReasons(context, tally, title);
 
     final Widget tile;
     if (settings.isExpressStyle) {
       tile = ExpressTile(
         icon: LucideIcons.messageCircleQuestion,
-        title: context.l10n.miss_reasons,
+        title: title,
         subtitle: summary,
         onTap: open,
       );
     } else if (settings.isMinimalStyle) {
       tile = MinimalList(
         children: [
-          MinimalRow(label: context.l10n.miss_reasons, caption: summary, onTap: open, last: true),
+          MinimalRow(label: title, caption: summary, onTap: open, last: true),
         ],
       );
     } else {
@@ -168,7 +194,7 @@ class MissReasonsTile extends StatelessWidget {
           onTap: open,
           leading: Icon(LucideIcons.messageCircleQuestion, size: 22, color: context.colors.primary),
           title: Text(
-            context.l10n.miss_reasons,
+            title,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: context.colors.onSurface),
           ),
           subtitle: Text(
@@ -185,7 +211,11 @@ class MissReasonsTile extends StatelessWidget {
   }
 }
 
-Future<void> _showMissReasons(BuildContext context, Map<String, int> tally) {
+Future<void> _showMissReasons(
+  BuildContext context,
+  Map<String, int> tally,
+  String title,
+) {
   final total = tally.values.fold<int>(0, (sum, n) => sum + n);
   return showModalBottomSheet<void>(
     context: context,
@@ -199,7 +229,7 @@ Future<void> _showMissReasons(BuildContext context, Map<String, int> tally) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SheetTitle(sheet.l10n.miss_reasons),
+            SheetTitle(title),
             const SizedBox(height: 8),
             for (final entry in tally.entries)
               Padding(
