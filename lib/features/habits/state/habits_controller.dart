@@ -437,7 +437,7 @@ class HabitsController extends ChangeNotifier {
   Future<void> setRestDays(String id, List<int> days) async {
     final habit = _habits[id];
     if (habit == null) return;
-    await update(habit.copyWith(restDays: days));
+    await update(habit.copyWith(restDays: days).rememberRestDays(habit));
   }
 
   Future<void> toggleVacationDay(String id, DateTime date) async {
@@ -729,6 +729,8 @@ class HabitsController extends ChangeNotifier {
         if (value == null || !backupSettingKeys.contains(entry.key)) continue;
         await LocalStore.writeSetting(entry.key, value);
       }
+    } else {
+      await FolderSync.mergeIsland(data.settings);
     }
     for (final habit in data.habits) {
       final current = _habits[habit.id];

@@ -40,7 +40,7 @@ enum ComebackTone { gentle, chance, hard, avoid }
 
 enum HabitKind { positive, negative, quantitative }
 
-enum QuantKind { generic, water, reading, time }
+enum QuantKind { generic, water, reading, time, scale }
 
 class Habit {
   Habit({
@@ -96,6 +96,7 @@ class Habit {
     this.substeps = const [],
     this.vacations = const [],
     this.restDays = const [],
+    this.pastRestDays = const {},
     this.missReasons = const {},
     this.pastGoals = const {},
     this.archivedAt,
@@ -164,6 +165,28 @@ class Habit {
     final nth = (start.day - 1) ~/ 7;
     if (nth < 4) return (day.day - 1) ~/ 7 == nth;
     return day.day + 7 > DateTime(day.year, day.month + 1, 0).day;
+  }
+
+  bool isExpectedOn(DateTime date) {
+    final day = date.atMidnight;
+    final today = AppClock.today();
+    if (interval != HabitInterval.everyXDays ||
+        !fromLastDone ||
+        scheduleEvery <= 0 ||
+        !day.isAfter(today)) {
+      return isScheduledOn(day);
+    }
+    final start = (scheduleStart ?? createdAt).atMidnight;
+    if (day.isBefore(start)) return false;
+    final last = _lastDoneBefore(day.epochDay);
+    var due = last == null || last < start.epochDay
+        ? start
+        : _nextDueAfter(epochDayDate(last));
+    if (due.isBefore(today)) due = today;
+    for (var guard = 0; due.isBefore(day) && guard < 2000; guard++) {
+      due = _nextDueAfter(due);
+    }
+    return due.epochDay == day.epochDay;
   }
 
   bool _dueSinceLastDone(DateTime day, DateTime start) {
@@ -299,6 +322,9 @@ class Habit {
 
   final String todoLink;
 
+  List<String> get todoLinks =>
+      todoLink.isEmpty ? const [] : todoLink.split(',');
+
   final bool keepReminding;
 
   final bool anyAmount;
@@ -326,7 +352,14 @@ class Habit {
         };
 
   bool silencesRemindersOn(DateTime date) =>
-      !keepReminding && kind != HabitKind.negative && isCompletedOn(date);
+      !keepReminding &&
+      kind != HabitKind.negative &&
+      (isCompletedOn(date) || _periodMetOn(date));
+
+  bool _periodMetOn(DateTime date) =>
+      (interval == HabitInterval.weekly || interval == HabitInterval.monthly) &&
+      !isPausedOn(date) &&
+      (_periodDone[_periodOf(date.atMidnight)] ?? 0) >= targetFrequency;
 
   final int startMinute;
   final int durationMinutes;
@@ -345,8 +378,14 @@ class Habit {
   bool get isTimeAmount =>
       kind == HabitKind.quantitative && quantKind == QuantKind.time;
 
-  String amountText(double value) =>
-      isTimeAmount ? formatMinutes(value) : formatAmount(value);
+  bool get isScale =>
+      kind == HabitKind.quantitative && quantKind == QuantKind.scale;
+
+  String amountText(double value) => isTimeAmount
+      ? formatMinutes(value)
+      : isScale
+          ? '${value.round()}/5'
+          : formatAmount(value);
 
   bool get needsFocusSession =>
       focusOnly && (kind == HabitKind.positive || isTimeAmount) && substeps.isEmpty;
@@ -359,6 +398,31 @@ class Habit {
   final List<VacationPeriod> vacations;
 
   final List<int> restDays;
+
+  final Map<String, List<int>> pastRestDays;
+
+  late final List<(int, List<int>)> _restSteps = [
+    for (final entry in pastRestDays.entries) (dayKeyEpoch(entry.key), entry.value),
+  ]..sort((a, b) => a.$1.compareTo(b.$1));
+
+  List<int> _restDaysAt(int epochDay) {
+    for (final (until, days) in _restSteps) {
+      if (epochDay < until) return days;
+    }
+    return restDays;
+  }
+
+  Habit rememberRestDays(Habit before) {
+    final old = before.restDays.toSet();
+    if (old.length == restDays.toSet().length && old.containsAll(restDays)) {
+      return this;
+    }
+    final today = AppClock.today();
+    if (!startedAt.isBefore(today)) return this;
+    final key = today.dayKey;
+    if (pastRestDays.containsKey(key)) return this;
+    return copyWith(pastRestDays: {...pastRestDays, key: before.restDays});
+  }
 
   final Map<String, String> missReasons;
 
@@ -404,7 +468,8 @@ class Habit {
   double get effectiveTarget =>
       hasSubsteps ? substeps.length.toDouble() : perDayTarget;
 
-  bool isRestDay(DateTime date) => restDays.contains(date.weekday);
+  bool isRestDay(DateTime date) =>
+      _restDaysAt(date.epochDay).contains(date.weekday);
 
   bool ringsOnWeekday(int weekday) =>
       !restDays.contains(weekday) &&
@@ -1001,7 +1066,7 @@ class Habit {
   }
 
   bool _pausedOn(int epochDay, List<(int, int)> breaks) {
-    if (restDays.contains((epochDay + 3) % 7 + 1)) return true;
+    if (_restDaysAt(epochDay).contains((epochDay + 3) % 7 + 1)) return true;
     for (final (from, to) in breaks) {
       if (epochDay >= from && epochDay <= to) return true;
     }
@@ -1121,6 +1186,7 @@ class Habit {
     List<Substep>? substeps,
     List<VacationPeriod>? vacations,
     List<int>? restDays,
+    Map<String, List<int>>? pastRestDays,
     Map<String, String>? missReasons,
     Map<String, double>? pastGoals,
     DateTime? archivedAt,
@@ -1184,6 +1250,7 @@ class Habit {
       substeps: substeps ?? this.substeps,
       vacations: vacations ?? this.vacations,
       restDays: restDays ?? this.restDays,
+      pastRestDays: pastRestDays ?? this.pastRestDays,
       missReasons: missReasons ?? this.missReasons,
       pastGoals: pastGoals ?? this.pastGoals,
       archivedAt: clearArchived ? null : (archivedAt ?? this.archivedAt),
@@ -1262,6 +1329,7 @@ class Habit {
         'substeps': substeps.map((s) => s.toMap()).toList(),
         'vacations': vacations.map((v) => v.toMap()).toList(),
         'restDays': restDays,
+        if (pastRestDays.isNotEmpty) 'pastRestDays': pastRestDays,
         if (missReasons.isNotEmpty) 'missReasons': missReasons,
         if (pastGoals.isNotEmpty) 'pastGoals': pastGoals,
         if (archivedAt != null) 'archivedAt': archivedAt!.toIso8601String(),
@@ -1352,7 +1420,8 @@ class Habit {
             if (time is List && time.length == 2)
               ((time[0] as num).toInt(), (time[1] as num).toInt()),
         ],
-        substeps: map['substeps'] == null
+        substeps: map['substeps'] == null ||
+                (map['kind'] ?? 0) != HabitKind.positive.index
             ? const []
             : (map['substeps'] as List)
                 .map((s) => Substep.fromMap(Map<String, dynamic>.from(s as Map)))
@@ -1365,6 +1434,14 @@ class Habit {
                 .toList(),
         restDays:
             (map['restDays'] as List?)?.map((e) => e as int).toList() ?? const [],
+        pastRestDays: map['pastRestDays'] == null
+            ? const {}
+            : (map['pastRestDays'] as Map).map(
+                (key, value) => MapEntry(
+                  key as String,
+                  (value as List).map((e) => e as int).toList(),
+                ),
+              ),
         missReasons: map['missReasons'] == null
             ? const {}
             : Map<String, String>.from(map['missReasons'] as Map),
