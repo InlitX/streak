@@ -25,7 +25,7 @@
   "my_heatmap": "Meu mapa de calor",
   "new_category": "Nova categoria",
   "onb1_body": "Registre um hábito com um toque e veja sua sequência crescer dia após dia.",
-  "kind_negative_hint": "Todos os dias contam como concluídos por padrão, então sua sequência cresce automaticamente. Toque na marca de verificação apenas se você falhar. Esse dia ficará vermelho, e você poderá desfazer a ação.",
+  "kind_negative_hint": "Todos os dias contam como concluídos por padrão: sua sequência cresce automaticamente. Toque na marca de verificação apenas se você falhar. Esse dia ficará vermelho, e você poderá desfazer a ação.",
   "monthly": "Mensal",
   "view_source": "Ver código-fonte no GitHub",
   "add_image": "Adicionar imagem",
@@ -675,7 +675,7 @@
   "focus_keep_awake": "Mantenha a tela ligada",
   "data_sub": "Backups, arquivamento e importação",
   "note_time_optional": "Horário (opcional)",
-  "focus_pause": "Pausa",
+  "focus_pause": "Parar",
   "unit_hours": "horas",
   "focus_end_tasks": "{count} tarefas ainda não foram verificadas.",
   "@focus_end_tasks": {
@@ -1378,13 +1378,13 @@
   "todo_list_item": "Item da lista",
   "todo_title_hint": "Título",
   "todo_body_hint": "Nota",
-  "todo_sort": "Ordem de prioridade",
+  "todo_sort": "Ordenar tarefas",
   "todo_sort_high_first": "Maior prioridade primeiro",
   "todo_sort_low_first": "Menor prioridade primeiro",
   "todo_project_empty": "Ainda não há nada nesta pasta",
   "todo_background": "Plano de fundo",
   "todo_background_pick": "Escolher uma foto",
-  "todo_deleted": "Nota excluída",
+  "todo_deleted": "Tarefa excluída",
   "todo_mark_done": "Marcar como concluída",
   "todo_mark_open": "Marcar como não concluída",
   "todo_pin": "Fixar",
@@ -1398,7 +1398,7 @@
       }
     }
   },
-  "todo_deleted_many": "{count, plural, =1{Nota excluída} other{{count} notas excluídas}}",
+  "todo_deleted_many": "{count, plural, =1{Tarefa excluída} other{{count} tarefas excluídas}}",
   "@todo_deleted_many": {
     "placeholders": {
       "count": {
@@ -2049,5 +2049,227 @@
   "color_part_success": "Concluído",
   "color_part_warning": "Aviso",
   "color_part_danger": "Erro",
-  "color_part_info": "Informação"
+  "color_part_info": "Informação",
+  "todo_delete_body": "Você terá alguns segundos para desfazer a ação.",
+  "import_card_body": "Traga seus hábitos e seu histórico de outros aplicativos",
+  "todo_delete_title": "{count, plural, =1{Excluir esta tarefa?} other{Excluir {count} tarefas?}}",
+  "@todo_delete_title": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "month_fixed_day_hint": "Para a mesma data todo mês, escolha um intervalo e defina-o para cada 1 mês",
+  "day_marked": "Concluiu {date}",
+  "@day_marked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "day_unmarked": "Não concluído {date}",
+  "@day_unmarked": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "export_habit": "Exportar este hábito",
+  "habit_links": "Links para automações",
+  "habit_links_off": "Permita aplicativos como o Tasker, um atalho ou uma etiqueta NFC concluir seus hábitos ao abrir um link. Fica desligado até você ligar.",
+  "habit_links_on": "Qualquer aplicativo neste celular pode abrir estes links, para todos os hábitos. Toque em um para copiá-lo.",
+  "habit_link_done": "Marcar como concluído",
+  "habit_link_undo": "Limpar o dia",
+  "habit_link_add": "Adicionar {amount}",
+  "@habit_link_add": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "habit_link_relapse": "Registrar uma recaída",
+  "habit_link_focus": "Começar uma sessão de foco",
+  "habit_link_open": "Abrir o hábito",
+  "habit_link_day": "Para um outro dia, adicione &day=31-10-2026 no final.",
+  "every_n_minutes": "Todo {n} min",
+  "@every_n_minutes": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "every_hours_minutes": "Toda {h} h {m} min",
+  "@every_hours_minutes": {
+    "placeholders": {
+      "h": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_switch_view": "Mudar visualização",
+  "support_thanks_title": "Obrigado por estar aqui 🤍",
+  "support_thanks_body": "O Streak é gratuito e sempre vai ser, sem anúncios e nada escondido.\n\nSe ele te ajuda a construir seus hábitos, me comprar um café faz o meu dia ☕\nE se você não consegue, não se preocupe: uma estrela no GitHub também faz ⭐",
+  "at_most": "No máximo",
+  "at_most_sub": "A meta é um limite. Um dia é concluído quando você registra algo e fica acima ou abaixo dele.",
+  "avoid_since": "Desde",
+  "todo_remind_before": "Me lembre antes",
+  "todo_remind_at_time": "Apenas na hora",
+  "todo_remind_label": "{time} antes",
+  "@todo_remind_label": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_due_in": "Em {time}",
+  "@todo_due_in": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_repeat_starts": "Começa em",
+  "todo_focus_only": "Apenas com uma sessão de foco",
+  "todo_focus_only_body": "\"{name}\" é concluído ao finalizar uma sessão de foco de {minutes} minutos.",
+  "@todo_focus_only_body": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "todo_completed": "Completado",
+  "habits_search": "Pesquisar hábitos",
+  "focus_change_habit": "Mudar hábito",
+  "focus_goal_reached": "{habit}: meta alcançada",
+  "@focus_goal_reached": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "today_week_strip": "Faixa semanal",
+  "today_week_strip_sub": "Os sete dias da semana no topo de Hoje. Toque em um dia para ver os hábitos dele, deslize para ver as semanas passadas.",
+  "shortcuts_title": "Atalhos de teclado",
+  "shortcuts_sub": "Todos os atalhos em um relance",
+  "shortcuts_hint": "Abra essa lista a qualquer momento com {keys}",
+  "@shortcuts_hint": {
+    "placeholders": {
+      "keys": {
+        "type": "String"
+      }
+    }
+  },
+  "shortcuts_group_nav": "Navegar",
+  "shortcuts_group_create": "Criar e editar",
+  "shortcuts_group_focus": "Foco",
+  "shortcuts_go_tab": "Ir para aba 1 de 5",
+  "shortcuts_next_tab": "Próxima aba",
+  "shortcuts_prev_tab": "Aba anterior",
+  "shortcuts_settings": "Abrir ajustes",
+  "shortcuts_back": "Voltar ou fechar",
+  "shortcuts_help": "Exibir esta lista",
+  "shortcuts_new": "Novo hábito ou tarefa",
+  "shortcuts_new_project": "Novo projeto",
+  "shortcuts_search": "Pesquisar tarefas",
+  "shortcuts_save": "Salvar",
+  "shortcuts_toggle": "Iniciar ou parar o cronômetro",
+  "shortcuts_start": "Começar a sessão",
+  "focus_simple_view": "Visão simples",
+  "focus_double_tap_tip": "Toque duplo no relógio para voltar",
+  "habit_time_more": "Adicionar uma outra hora",
+  "habit_time_again": "De novo",
+  "edit_profile": "Editar perfil",
+  "hide_clean": "Esconder dias limpos",
+  "hide_clean_sub": "Evitar hábitos que aparecem apenas nos dias que você recai",
+  "check_sound": "Som quando conclui",
+  "check_sound_sub": "Um toque suave quando você termina um hábito ou uma tarefa. Silencioso quando seu celular está no modo silencioso.",
+  "widget_cfg_arrows": "Role com botões",
+  "widget_cfg_arrows_hint": "Setas ao invés de deslizar a lista",
+  "widget_cfg_habit_colors": "Cores de hábitos",
+  "widget_cfg_habit_colors_hint": "Cada barra exibe o tempo de cada hábito na cor dele",
+  "notes_search": "Pesquisar notas",
+  "second_chances": "Segundas chances",
+  "second_chances_sub": "A cada 30 dias consecutivos, ganhe uma chance, até um máximo de 3. Se você perder um dia, a chance é perdida e sua sequência continua",
+  "chances_left": "{count, plural, =1{1 chance salva} other{{count} chances salvas}}",
+  "@chances_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chances_next": "{days, plural, =1{mais 1 dia para ganhar uma chance} other{mais {days} dias para ganhar uma chance}}",
+  "@chances_next": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "chance_used": "Sequência salva em {date}",
+  "@chance_used": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "chance_used_notice": "Uma segunda chance manteve a sequência do hábito {habit}",
+  "@chance_used_notice": {
+    "placeholders": {
+      "habit": {
+        "type": "String"
+      }
+    }
+  },
+  "chances_info": "A vida acontece. A cada 30 dias consecutivos, você ganha uma segunda chance, podendo manter até 3. Se você perder um dia, um dia é perdido e sua sequência continua. Dois dias perdidos seguidos ainda quebram a sequência. Suas estatísticas permanecem as mesmas: o dia perdido ainda conta como perdido.",
+  "chances_ok": "Entendi",
+  "keep_reminding": "Continuar relembrando",
+  "keep_reminding_sub": "Lembretes continuam vindo hoje mesmo depois de concluídos",
+  "todo_link": "Contar tarefas",
+  "todo_link_sub": "Concluir uma tarefa de um projeto ou etiqueta conta para este hábito.",
+  "book_at_page": "Página que estou",
+  "book_read_before": "Vezes já lido",
+  "notif_quote_1": "Hoje é um ótimo dia para manter a sequência viva! 🔥",
+  "notif_quote_2": "Mais um dia, mais um passo perto de quem você quer se tornar.",
+  "notif_quote_3": "Seu eu do futuro vai te agradecer.",
+  "notif_quote_4": "Pequenos passos, grandes mudanças. Vamos!",
+  "notif_quote_5": "Consistência supera talento.",
+  "notif_quote_6": "Não tem que estar perfeito, só precisa acontecer.",
+  "notif_quote_7": "Dois minutos hoje equivalem a uma hora amanhã.",
+  "notif_quote_8": "Sequências são construídas um dia por vez.",
+  "notif_quote_9": "Faça por você. Você merece.",
+  "notif_quote_10": "O momento perfeito é agora.",
+  "notif_quote_11": "Toda conclusão conta. Adicione mais uma.",
+  "notif_quote_12": "A disciplina de hoje é a liberdade de amanhã.",
+  "notif_quote_13": "Continue aparecendo. É aí que a mágica acontece.",
+  "notif_quote_14": "A dificuldade é o que torna tudo gratificante.",
+  "notif_quote_15": "Um hábito de cada vez, é assim que uma vida muda.",
+  "app_lock_biometric_sub": "A impressão digital, o reconhecimento facial ou o desbloqueio que você já usa neste celular",
+  "todo_repeat_last_day": "No último dia",
+  "todo_sort_time": "Por data e hora",
+  "todo_sort_name": "A-a-Z",
+  "reminder_after_miss": "Apenas depois de um dia perdido",
+  "reminder_after_miss_desc": "Toca uma vez, o hábito deve ser repetido no dia seguinte, a menos que o anterior tenha falhado. Nunca o faça se já o tiver feito hoje.",
+  "reminder_after_miss_hint": "Deixe em branco algumas palavras gentis",
+  "reminder_after_miss_short": "Depois de um dia perdido",
+  "notif_comeback": "Da última vez não deu certo, e tudo bem. Fazer isso hoje te coloca de volta nos trilhos.",
+  "notif_comeback_chance": "Uma segunda chance manteve sua sequência ativa. Hoje conta.",
+  "notif_comeback_hard": "Essa tem sido difícil ultimamente. Uma meta menor ainda conta, e você pode mudá-la a qualquer momento.",
+  "notif_comeback_avoid": "Um deslize não apaga seu progresso. Hoje é um novo começo."
 }
