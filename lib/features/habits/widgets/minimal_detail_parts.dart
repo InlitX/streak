@@ -13,6 +13,7 @@ import 'package:streak/core/minimal/minimal_type.dart';
 import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/focus/pages/focus_stats_page.dart';
 import 'package:streak/features/focus/widgets/focus_setup_parts.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
@@ -205,16 +206,13 @@ class _PlayButton extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           unawaited(
-            AppNavigator.push(
-              active
-                  ? const FocusPage()
-                  : FocusPage(
-                      startHabitId: habit.id,
-                      startMinutes: habit.focusMinutes,
-                      breakMinutes: habit.focusBreakMinutes,
-                    ),
-              fade: true,
-              name: FocusPage.routeName,
+            pushFocus(
+              context,
+              FocusPage(
+                startHabitId: habit.id,
+                startMinutes: habit.focusMinutes,
+                breakMinutes: habit.focusBreakMinutes,
+              ),
             ),
           );
         },

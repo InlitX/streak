@@ -9,9 +9,9 @@ import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/minimal/minimal_kit.dart';
 import 'package:streak/core/utils/amount_format.dart';
 import 'package:streak/core/widgets/sheet_type.dart';
-import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/state/habits_controller.dart';
@@ -379,16 +379,13 @@ void startFocusTimer(BuildContext context, Habit habit, FocusTimer timer) {
       ),
     );
   }
-  AppNavigator.push(
-    focus.isActive
-        ? const FocusPage()
-        : FocusPage(
-            startHabitId: habit.id,
-            startMinutes: timer.minutes,
-            breakMinutes: timer.breakMinutes,
-          ),
-    fade: true,
-    name: FocusPage.routeName,
+  pushFocus(
+    context,
+    FocusPage(
+      startHabitId: habit.id,
+      startMinutes: timer.minutes,
+      breakMinutes: timer.breakMinutes,
+    ),
   );
 }
 

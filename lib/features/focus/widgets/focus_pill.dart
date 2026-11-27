@@ -4,11 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:streak/app/theme/app_tokens.dart';
 import 'package:streak/core/i18n/l10n.dart';
 import 'package:streak/core/routing/app_navigator.dart';
+import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/data/focus_session.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
 import 'package:streak/features/focus/pages/focus_setup_page.dart';
 import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/habits/state/habits_controller.dart';
 import 'package:streak/features/settings/state/settings_controller.dart';
+import 'package:streak/features/todos/state/todos_controller.dart';
 import 'package:streak/core/widgets/glass.dart';
 
 class FocusPill extends StatelessWidget {
@@ -121,3 +124,32 @@ void openFocus(BuildContext context) => context.read<FocusController>().isActive
         name: FocusPage.routeName,
       )
     : AppNavigator.push(const FocusSetupPage(), fullscreenDialog: true);
+
+Future<void> pushFocus(BuildContext context, FocusPage start) async {
+  final focus = context.read<FocusController>();
+  if (focus.isActive) {
+    final same = start.startTodoId.isNotEmpty
+        ? focus.todoId == start.startTodoId
+        : start.startHabitId == null ||
+            (focus.todoId.isEmpty && focus.habitId == start.startHabitId);
+    if (!same) {
+      final name = context.read<TodosController>().byId(focus.todoId)?.title ??
+          context.read<HabitsController>().byId(focus.habitId)?.name ??
+          (focus.label.isEmpty ? context.l10n.focus_free_session : focus.label);
+      final open = await showAppConfirmDialog(
+        context,
+        title: context.l10n.focus_busy_title,
+        message: context.l10n.focus_busy_body(name),
+        confirmLabel: context.l10n.focus_busy_open,
+        icon: LucideIcons.timer,
+        danger: false,
+      );
+      if (open != true || !context.mounted) return;
+    }
+  }
+  await AppNavigator.push(
+    focus.isActive ? const FocusPage() : start,
+    fade: true,
+    name: FocusPage.routeName,
+  );
+}

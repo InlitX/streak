@@ -7,9 +7,10 @@ import 'package:streak/core/routing/app_navigator.dart';
 import 'package:streak/core/utils/app_snackbar.dart';
 import 'package:streak/core/widgets/app_confirm_dialog.dart';
 import 'package:streak/features/focus/pages/focus_page.dart';
-import 'package:streak/features/focus/state/focus_controller.dart';
+import 'package:streak/features/focus/widgets/focus_pill.dart';
 import 'package:streak/features/habits/data/habit.dart';
 import 'package:streak/features/habits/pages/habit_details_page.dart';
+import 'package:streak/features/settings/state/settings_controller.dart';
 import 'package:streak/features/todos/data/todo.dart';
 
 Future<bool> allowManualCheck(
@@ -33,6 +34,10 @@ Future<bool> allowManualCheck(
     return cleared == true;
   }
 
+  if (habit.kind == HabitKind.positive && habit.isCompletedOn(date)) {
+    return confirmUndo(context, habit.name);
+  }
+
   if (!habit.blocksManualCheck(date)) return true;
 
   if (date.dayKey != AppClock.now().dayKey) {
@@ -50,17 +55,28 @@ Future<bool> allowManualCheck(
   );
   if (confirmed != true || !context.mounted) return false;
 
-  AppNavigator.push(
-    context.read<FocusController>().isActive
-        ? const FocusPage()
-        : FocusPage(
-            startHabitId: habit.id,
-            startMinutes: habit.focusMinutes,
-            breakMinutes: habit.focusBreakMinutes,
-          ),
-    name: FocusPage.routeName,
+  await pushFocus(
+    context,
+    FocusPage(
+      startHabitId: habit.id,
+      startMinutes: habit.focusMinutes,
+      breakMinutes: habit.focusBreakMinutes,
+    ),
   );
   return false;
+}
+
+Future<bool> confirmUndo(BuildContext context, String name) async {
+  if (!context.read<SettingsController>().confirmUndo) return true;
+  final undone = await showAppConfirmDialog(
+    context,
+    title: context.l10n.confirm_undo_title,
+    message: context.l10n.confirm_undo_body(name),
+    confirmLabel: context.l10n.undo,
+    icon: LucideIcons.undo2,
+    danger: false,
+  );
+  return undone == true;
 }
 
 Future<bool> allowManualTodo(BuildContext context, Todo todo) async {
@@ -78,15 +94,13 @@ Future<bool> allowManualTodo(BuildContext context, Todo todo) async {
   );
   if (confirmed != true || !context.mounted) return false;
 
-  AppNavigator.push(
-    context.read<FocusController>().isActive
-        ? const FocusPage()
-        : FocusPage(
-            startMinutes: todo.estimate,
-            startLabel: todo.title,
-            startTodoId: todo.id,
-          ),
-    name: FocusPage.routeName,
+  await pushFocus(
+    context,
+    FocusPage(
+      startMinutes: todo.estimate,
+      startLabel: todo.title,
+      startTodoId: todo.id,
+    ),
   );
   return false;
 }
