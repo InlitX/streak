@@ -1,0 +1,11 @@
+Streak 2.11.0
+
+- Windows: isla en lo alto de la pantalla, minimizar a la bandeja opcional
+- Diseño para tablets con barra lateral y hábitos en columnas
+- Hábitos de escala: puntúa tu día del 1 al 5 con caritas
+- Check con llama y motivos al recaer en hábitos a evitar
+- Tareas: fechas inteligentes, fijadas arriba y repaso espaciado
+- Importar desde HabitNow
+- Desenfoque opcional en widgets de Samsung
+- Focus cuenta cada sesión el día en que empieza
+- Correcciones, idiomas actualizados y japonés

@@ -1,0 +1,11 @@
+Streak 2.11.0
+
+- Windows: desk island at the top of the screen, optional minimize to tray
+- Tablet layout with a side rail and habits in columns
+- Scale habits: rate your day 1 to 5 with faces
+- Flame check style, reasons when you slip on avoid habits
+- To-dos: smart dates in titles, pinned section, spaced review repeat
+- Import from HabitNow
+- Optional widget blur on Samsung
+- Focus sessions count for the day they started
+- Fixes and updated languages, Japanese is new
