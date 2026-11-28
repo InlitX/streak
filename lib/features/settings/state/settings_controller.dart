@@ -810,7 +810,7 @@ class SettingsController extends ChangeNotifier {
   }
 
   Future<void> addFocusTrack(String encoded) async {
-    if (_focusTracks.length >= 10) return;
+    if (_focusTracks.length >= 30) return;
     _focusTracks = [..._focusTracks, encoded];
     await LocalStore.writeSetting('focusTracks', _focusTracks);
     notifyListeners();
